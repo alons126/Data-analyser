@@ -72,6 +72,7 @@ private:
 
     double Neutron_Momentum_cut = 9999.; // from clas12ana
     string SName;
+    bool nResTestMode;
 
 public:
 

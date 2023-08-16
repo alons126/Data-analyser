@@ -12,6 +12,7 @@
 NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double ParticleMomTh,
                                      const string &SavePath, double DeltaSlices, bool VaryingDelta, bool nRes_test) {
     SlicesSavePath = SavePath, delta = DeltaSlices;
+    nResTestMode = nRes_test;
 
     double Delta = delta, SliceLowerLim = ParticleMomTh, SliceUpperLim;
     SetUpperMomCut(SampleName, NucleonCutsDirectory);
@@ -79,7 +80,7 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
             hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
-            if (!nRes_test){
+            if (!nRes_test) {
                 hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
                                            -0.75, 0.75, hSliceNumOfBin);
             } else {
@@ -400,13 +401,15 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const str
 //<editor-fold desc="LogResDataToFile function">
 void NeutronResolution::LogResDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
                                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
-    string SaveDateDir = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/";
+    if (!nResTestMode) {
+        string SaveDateDir = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/";
 
 //    system(("rm -r " + SaveDateDir).c_str());
-    system(("mkdir -p " + SaveDateDir).c_str());
+        system(("mkdir -p " + SaveDateDir).c_str());
 
-    LogFitDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
-    LogHistDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+        LogFitDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+        LogHistDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+    }
 }
 //</editor-fold>
 
@@ -587,12 +590,12 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 //        //TODO: rename as correction, not shift
 //        double Smearing;
 //
-//        if (findSubstring(SName,"C12_simulation_6GeV_T5")) {
-//            Smearing = Rand->Gaus(1, 0.0738 * Momentum - 0.0304); // new shift between 1 and 3 GeV/c
-////            Smearing = Rand->Gaus(1, 0.0583 * Momentum - 0.0045); // old shift between 0.4 to 4.09 GeV/c
+//        if (findSubstring(SName, "C12_simulation_6GeV_T5")) {
+////            Smearing = Rand->Gaus(1, 0.0738 * Momentum - 0.0304); // new shift between 1 and 3 GeV/c
+//            Smearing = Rand->Gaus(1, 0.0583 * Momentum - 0.0045); // old shift between 0.4 to 4.09 GeV/c
 //        } else {
-//            Smearing = Rand->Gaus(1, 0.0683 * Momentum - 0.0262); // new shift between 1 and 3 GeV/c
-////            Smearing = Rand->Gaus(1, 0.0681 * Momentum - 0.0229); // old shift between 0.4 to 4.09 GeV/c
+////            Smearing = Rand->Gaus(1, 0.0683 * Momentum - 0.0262); // new shift between 1 and 3 GeV/c
+//            Smearing = Rand->Gaus(1, 0.0681 * Momentum - 0.0229); // old shift between 0.4 to 4.09 GeV/c
 //        }
 //
 //        double SmearedMomentum = Smearing * Momentum;; // minus for protons and plus for protons
@@ -679,7 +682,7 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
         //TODO: rename as correction, not shift
         double shift;
 
-        if (findSubstring(SName,"C12_simulation_6GeV_T5")) {
+        if (findSubstring(SName, "C12_simulation_6GeV_T5")) {
 //            shift = 0.0579 * Momentum - 0.0146; // new shift between 1 and 3 GeV/c
             shift = 0.0583 * Momentum - 0.0127; // old shift between 0.4 to 4.09 GeV/c
         } else {

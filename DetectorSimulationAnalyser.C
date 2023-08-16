@@ -124,7 +124,7 @@ void EventAnalyser() {
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = true; // Enforce TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Enforce TL event selection on reco. plots
 
     bool limless_mom_eff_plots = false;
     bool Enable_FD_photons = false; // keep as false to decrease RES and DIS
@@ -187,10 +187,10 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -288,6 +288,9 @@ void EventAnalyser() {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
             } else {
+//                Efficiency_Status = "Eff1_noBetaCutT";
+//                Efficiency_Status = "Eff1_new_noBetaCutT";
+//                Efficiency_Status = "Eff1_new";
                 Efficiency_Status = "Eff1";
             }
         }
@@ -693,7 +696,7 @@ void EventAnalyser() {
 
     /* Other setup variables */
     bool wider_margin = true;
-    bool debug_plots = true; // Print out clas12ana debugging plots
+    bool debug_plots = false; // Print out clas12ana debugging plots
     //</editor-fold>
 
 // Normalization setup -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -9927,7 +9930,7 @@ void EventAnalyser() {
             // Setting kinematical cuts ---------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Setting kinematical cuts">
-            /* Good neutrons are within momentum kin cuts (lower -> efficiency; upper -> beta fit) -> momentum kin cut before neutron shifting */
+            /* Good neutrons are within momentum kin cuts (below l. KC -> efficiency; above u. KC -> beta fit) -> momentum kin cut before neutron shifting */
             /* We want to compare FD neutrons with FD protons in the same momentum region -> additional momentum kin cut after neutron shifting */
             /* Fiducial cuts -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
             bool FD_Theta_Cut_1n = ((P_n_1n_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
@@ -11949,14 +11952,14 @@ void EventAnalyser() {
 
             /* Determining leading and recoil particles (leading = particle with greater momentum) */
             if (P_nFD_nFDpCD_3v.Mag() >= P_pCD_nFDpCD_3v.Mag()) {
-                P_nL_nFDpCD_3v = P_nFD_nFDpCD_3v;
+                P_nL_nFDpCD_3v = P_nFD_nFDpCD_3v; // FD neutron is leading
                 P_nR_nFDpCD_3v = P_pCD_nFDpCD_3v;
-                m_L = m_n;
+                m_L = m_n; // FD neutron is leading
                 m_R = m_p;
             } else {
-                P_nL_nFDpCD_3v = P_pCD_nFDpCD_3v;
+                P_nL_nFDpCD_3v = P_pCD_nFDpCD_3v; // CD proton is leading
                 P_nR_nFDpCD_3v = P_nFD_nFDpCD_3v;
-                m_L = m_p;
+                m_L = m_p; // CD proton is leading
                 m_R = m_n;
             }
 
@@ -12060,7 +12063,7 @@ void EventAnalyser() {
             // Setting kinematical cuts ---------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Setting kinematical cuts">
-            /* Good neutrons are within momentum kin cuts (lower -> efficiency; upper -> beta fit) -> momentum kin cut before neutron shifting */
+            /* Good neutrons are within momentum kin cuts (below l. KC -> efficiency; above u. KC -> beta fit) -> momentum kin cut before neutron shifting */
             /* We want to compare FD neutrons with FD protons in the same momentum region -> additional momentum kin cut after neutron shifting */
             /* Fiducial cuts -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
             bool FD_Theta_Cut_nFDpCD = ((P_nFD_nFDpCD_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
