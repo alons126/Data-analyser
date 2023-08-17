@@ -594,14 +594,14 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 ////            Smearing = Rand->Gaus(1, 0.0738 * Momentum - 0.0304); // new shift between 1 and 3 GeV/c
 //            Smearing = Rand->Gaus(1, 0.0583 * Momentum - 0.0045); // old shift between 0.4 to 4.09 GeV/c
 //        } else {
-////            Smearing = Rand->Gaus(1, 0.0683 * Momentum - 0.0262); // new shift between 1 and 3 GeV/c
-//            Smearing = Rand->Gaus(1, 0.0681 * Momentum - 0.0229); // old shift between 0.4 to 4.09 GeV/c
+////            Smearing = Rand->Gaus(1, 0.0694 * Momentum - 0.0236); // new shift between 1 and 3 GeV/c
+//            Smearing = Rand->Gaus(1, 0.0571 * Momentum - 0.0034); // old shift between 0.4 to 4.09 GeV/c
 //        }
 //
 //        double SmearedMomentum = Smearing * Momentum;; // minus for protons and plus for protons
 //
 //        if (Printout) {
-//            cout << "\n\nSmearing (0.0583 * Momentum - 0.0127) = " << Smearing << "\n";
+//            cout << "\n\nSmearing = " << Smearing << "\n";
 //            cout << "Momentum = " << Momentum << "\n";
 //            cout << "SmearedMomentum = " << SmearedMomentum << "\n\n";
 //        }
@@ -686,8 +686,8 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
 //            shift = 0.0579 * Momentum - 0.0146; // new shift between 1 and 3 GeV/c
             shift = 0.0583 * Momentum - 0.0127; // old shift between 0.4 to 4.09 GeV/c
         } else {
-//            shift = 0.0694 * Momentum - 0.0236; // new shift between 1 and 3 GeV/c
-            shift = 0.0571 * Momentum - 0.0034; // old shift between 0.4 to 4.09 GeV/c
+//            shift = 0.0683 * Momentum - 0.0262; // new shift between 1 and 3 GeV/c
+            shift = 0.0681 * Momentum - 0.023; // old shift between 0.4 to 4.09 GeV/c
         }
 
         double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons

@@ -131,11 +131,11 @@ private:
     std::string Momentum_Parent_Directory = "01_Cuts_plots/06_Momentum_plots";
     vector<std::string> Momentum_Daughter_Folders = {"",
                                                      "01_1e_cut",
-                                                     "02_1p","02_1p/Analysis_plots_1p",
-                                                     "03_1n","03_1n/Analysis_plots_1n",
+                                                     "02_1p", "02_1p/Analysis_plots_1p",
+                                                     "03_1n", "03_1n/Analysis_plots_1n",
                                                      "04_2p",
-                                                     "05_pFDpCD","05_pFDpCD/Analysis_plots_pFDpCD",
-                                                     "06_nFDpCD","06_nFDpCD/Analysis_plots_nFDpCD"
+                                                     "05_pFDpCD", "05_pFDpCD/Analysis_plots_pFDpCD",
+                                                     "06_nFDpCD", "06_nFDpCD/Analysis_plots_nFDpCD"
     };
     //</editor-fold>
 
@@ -263,8 +263,10 @@ private:
                                                   "05_pFDpCD/04_Theta_pFD_pFDpCD_plots", "05_pFDpCD/05_Phi_pFD_pFDpCD_plots",
                                                   "05_pFDpCD/06_Theta_pFD_VS_Phi_pFD_pFDpCD_plots", "05_pFDpCD/07_Theta_pCD_pFDpCD_plots",
                                                   "05_pFDpCD/08_Phi_pCD_pFDpCD_plots", "05_pFDpCD/09_Theta_pCD_VS_Phi_pCD_pFDpCD_plots",
-                                                  "05_pFDpCD/10_Theta_tot_pFDpCD_plots", "05_pFDpCD/11_Phi_tot_pFDpCD_plots", "05_pFDpCD/12_Theta_tot_VS_Phi_tot_pFDpCD_plots",
-                                                  "05_pFDpCD/13_Theta_rel_pFDpCD_plots", "05_pFDpCD/14_Phi_rel_pFDpCD_plots", "05_pFDpCD/15_Theta_rel_VS_Phi_rel_pFDpCD_plots",
+                                                  "05_pFDpCD/10_Theta_tot_pFDpCD_plots", "05_pFDpCD/11_Phi_tot_pFDpCD_plots",
+                                                  "05_pFDpCD/12_Theta_tot_VS_Phi_tot_pFDpCD_plots",
+                                                  "05_pFDpCD/13_Theta_rel_pFDpCD_plots", "05_pFDpCD/14_Phi_rel_pFDpCD_plots",
+                                                  "05_pFDpCD/15_Theta_rel_VS_Phi_rel_pFDpCD_plots",
                                                   "05_pFDpCD/16_Opening_angles_pFDpCD_plots", "05_pFDpCD/16_Opening_angles_pFDpCD_plots/00_Theta_pFD_pCD_by_interaction",
                                                   "05_pFDpCD/17_Ghost_tracks_handling_pFDpCD_plots",
                                                   "05_pFDpCD/17_Ghost_tracks_handling_pFDpCD_plots/01_CFoF_hits_pFDpCD_plots",
@@ -277,8 +279,10 @@ private:
                                                   "06_nFDpCD/04_Theta_nFD_nFDpCD_plots", "06_nFDpCD/05_Phi_nFD_nFDpCD_plots",
                                                   "06_nFDpCD/06_Theta_nFD_VS_Phi_nFD_nFDpCD_plots", "06_nFDpCD/07_Theta_pCD_nFDpCD_plots",
                                                   "06_nFDpCD/08_Phi_pCD_nFDpCD_plots", "06_nFDpCD/09_Theta_pCD_VS_Phi_pCD_nFDpCD_plots",
-                                                  "06_nFDpCD/10_Theta_tot_nFDpCD_plots", "06_nFDpCD/11_Phi_tot_nFDpCD_plots", "06_nFDpCD/12_Theta_tot_VS_Phi_tot_nFDpCD_plots",
-                                                  "06_nFDpCD/13_Theta_rel_nFDpCD_plots", "06_nFDpCD/14_Phi_rel_nFDpCD_plots", "06_nFDpCD/15_Theta_rel_VS_Phi_rel_nFDpCD_plots",
+                                                  "06_nFDpCD/10_Theta_tot_nFDpCD_plots", "06_nFDpCD/11_Phi_tot_nFDpCD_plots",
+                                                  "06_nFDpCD/12_Theta_tot_VS_Phi_tot_nFDpCD_plots",
+                                                  "06_nFDpCD/13_Theta_rel_nFDpCD_plots", "06_nFDpCD/14_Phi_rel_nFDpCD_plots",
+                                                  "06_nFDpCD/15_Theta_rel_VS_Phi_rel_nFDpCD_plots",
                                                   "06_nFDpCD/16_Opening_angles_nFDpCD_plots", "06_nFDpCD/16_Opening_angles_nFDpCD_plots/00_Theta_nFD_pCD_by_interaction",
                                                   "06_nFDpCD/17_Ghost_tracks_handling_nFDpCD_plots/02_Double_detection_nFDpCD_plots",
                                                   "06_nFDpCD/17_Ghost_tracks_handling_nFDpCD_plots/02_Double_detection_nFDpCD_plots/00_Double_detection_monitoring_nFDpCD_plots",
@@ -381,13 +385,15 @@ private:
                                                  "02_1p/01_Ecal_rec_by_reaction_1p/00_All_interactions",
                                                  "02_1p/01_Ecal_rec_by_reaction_1p/01_QEL_only", "02_1p/01_Ecal_rec_by_reaction_1p/02_MEC_only",
                                                  "02_1p/01_Ecal_rec_by_reaction_1p/03_RES_only", "02_1p/01_Ecal_rec_by_reaction_1p/04_DIS_only",
-                                                 "02_1p/02_Ecal_rec_vs_TKI_1p", "02_1p/03_Chi2_for_Ecal_above_Ebeam_1p",
+                                                 "02_1p/02_Ecal_rec_vs_Mom_1p", "02_1p/03_Ecal_rec_vs_Ang_1p",
+                                                 "02_1p/04_Ecal_rec_vs_TKI_1p", "02_1p/05_Chi2_for_Ecal_above_Ebeam_1p",
 
                                                  "03_1n",
                                                  "03_1n/01_Ecal_rec_by_reaction_1n/00_All_interactions",
                                                  "03_1n/01_Ecal_rec_by_reaction_1n/01_QEL_only", "03_1n/01_Ecal_rec_by_reaction_1n/02_MEC_only",
                                                  "03_1n/01_Ecal_rec_by_reaction_1n/03_RES_only", "03_1n/01_Ecal_rec_by_reaction_1n/04_DIS_only",
-                                                 "03_1n/02_Ecal_rec_vs_TKI_1n", "03_1n/03_Chi2_for_Ecal_above_Ebeam_1n",
+                                                 "03_1n/02_Ecal_rec_vs_Mom_1n", "03_1n/03_Ecal_rec_vs_Ang_1n",
+                                                 "03_1n/04_Ecal_rec_vs_TKI_1n", "03_1n/05_Chi2_for_Ecal_above_Ebeam_1n",
 
                                                  "04_2p",
                                                  "04_2p/01_Ecal_rec_by_reaction_2p/00_All_interactions", "04_2p/01_Ecal_rec_by_reaction_2p/01_QEL_only",
@@ -398,14 +404,16 @@ private:
                                                  "05_pFDpCD",
                                                  "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/00_All_interactions", "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/01_QEL_only",
                                                  "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/02_MEC_only", "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/03_RES_only",
-                                                 "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/04_DIS_only", "05_pFDpCD/02_Ecal_rec_vs_TKI_pFDpCD",
-                                                 "05_pFDpCD/03_Chi2_for_Ecal_above_Ebeam_pFDpCD",
+                                                 "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/04_DIS_only",
+                                                 "05_pFDpCD/02_Ecal_rec_vs_Mom_pFDpCD", "05_pFDpCD/03_Ecal_rec_vs_Ang_pFDpCD",
+                                                 "05_pFDpCD/04_Ecal_rec_vs_TKI_pFDpCD", "05_pFDpCD/05_Chi2_for_Ecal_above_Ebeam_pFDpCD",
 
                                                  "06_nFDpCD",
                                                  "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/00_All_interactions", "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/01_QEL_only",
                                                  "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/02_MEC_only", "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/03_RES_only",
-                                                 "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/04_DIS_only", "06_nFDpCD/02_Ecal_rec_vs_TKI_nFDpCD",
-                                                 "06_nFDpCD/03_Chi2_for_Ecal_above_Ebeam_nFDpCD"
+                                                 "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/04_DIS_only",
+                                                 "06_nFDpCD/02_Ecal_rec_vs_Mom_nFDpCD", "06_nFDpCD/03_Ecal_rec_vs_Ang_nFDpCD",
+                                                 "06_nFDpCD/04_Ecal_rec_vs_TKI_nFDpCD", "06_nFDpCD/05_Chi2_for_Ecal_above_Ebeam_nFDpCD"
     };
     //</editor-fold>
 

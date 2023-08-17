@@ -867,10 +867,14 @@ Directories::Directories(std::string plots_path) {
                                                   Find(Ecal_Daughter_Folders, "02_1p/01_Ecal_rec_by_reaction_1p/03_RES_only") + "/";
     Ecal_Directory_map["Ecal_DIS_1p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                   Find(Ecal_Daughter_Folders, "02_1p/01_Ecal_rec_by_reaction_1p/04_DIS_only") + "/";
+    Ecal_Directory_map["Ecal_rec_vs_Mom_1p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                         Find(Ecal_Daughter_Folders, "02_1p/02_Ecal_rec_vs_Mom_1p") + "/";
+    Ecal_Directory_map["Ecal_rec_vs_Ang_1p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                         Find(Ecal_Daughter_Folders, "02_1p/03_Ecal_rec_vs_Ang_1p") + "/";
     Ecal_Directory_map["Ecal_rec_vs_TKI_1p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                         Find(Ecal_Daughter_Folders, "02_1p/02_Ecal_rec_vs_TKI_1p") + "/";
+                                                         Find(Ecal_Daughter_Folders, "02_1p/04_Ecal_rec_vs_TKI_1p") + "/";
     Ecal_Directory_map["Chi2_Ecal_test_1p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                        Find(Ecal_Daughter_Folders, "02_1p/03_Chi2_for_Ecal_above_Ebeam_1p") + "/";
+                                                        Find(Ecal_Daughter_Folders, "02_1p/05_Chi2_for_Ecal_above_Ebeam_1p") + "/";
 
     Ecal_Directory_map["Ecal_stack_1n_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                     Find(Ecal_Daughter_Folders, "03_1n") + "/";
@@ -884,10 +888,14 @@ Directories::Directories(std::string plots_path) {
                                                   Find(Ecal_Daughter_Folders, "03_1n/01_Ecal_rec_by_reaction_1n/03_RES_only") + "/";
     Ecal_Directory_map["Ecal_DIS_1n_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                   Find(Ecal_Daughter_Folders, "03_1n/01_Ecal_rec_by_reaction_1n/04_DIS_only") + "/";
+    Ecal_Directory_map["Ecal_rec_vs_Mom_1n_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                             Find(Ecal_Daughter_Folders, "03_1n/02_Ecal_rec_vs_Mom_1n") + "/";
+    Ecal_Directory_map["Ecal_rec_vs_Ang_1n_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                             Find(Ecal_Daughter_Folders, "03_1n/03_Ecal_rec_vs_Ang_1n") + "/";
     Ecal_Directory_map["Ecal_rec_vs_TKI_1n_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                         Find(Ecal_Daughter_Folders, "03_1n/02_Ecal_rec_vs_TKI_1n") + "/";
+                                                         Find(Ecal_Daughter_Folders, "03_1n/04_Ecal_rec_vs_TKI_1n") + "/";
     Ecal_Directory_map["Chi2_Ecal_test_1n_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                        Find(Ecal_Daughter_Folders, "03_1n/03_Chi2_for_Ecal_above_Ebeam_1n") + "/";
+                                                        Find(Ecal_Daughter_Folders, "03_1n/05_Chi2_for_Ecal_above_Ebeam_1n") + "/";
 
     Ecal_Directory_map["Ecal_stack_2p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                     Find(Ecal_Daughter_Folders, "04_2p") + "/";
@@ -918,10 +926,14 @@ Directories::Directories(std::string plots_path) {
                                                       Find(Ecal_Daughter_Folders, "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/03_RES_only") + "/";
     Ecal_Directory_map["Ecal_DIS_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                       Find(Ecal_Daughter_Folders, "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/04_DIS_only") + "/";
+    Ecal_Directory_map["Ecal_rec_vs_Mom_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                             Find(Ecal_Daughter_Folders, "05_pFDpCD/02_Ecal_rec_vs_Mom_pFDpCD") + "/";
+    Ecal_Directory_map["Ecal_rec_vs_Ang_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                             Find(Ecal_Daughter_Folders, "05_pFDpCD/03_Ecal_rec_vs_Ang_pFDpCD") + "/";
     Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                             Find(Ecal_Daughter_Folders, "05_pFDpCD/02_Ecal_rec_vs_TKI_pFDpCD") + "/";
+                                                             Find(Ecal_Daughter_Folders, "05_pFDpCD/04_Ecal_rec_vs_TKI_pFDpCD") + "/";
     Ecal_Directory_map["Chi2_Ecal_test_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                            Find(Ecal_Daughter_Folders, "05_pFDpCD/03_Chi2_for_Ecal_above_Ebeam_pFDpCD") + "/";
+                                                            Find(Ecal_Daughter_Folders, "05_pFDpCD/05_Chi2_for_Ecal_above_Ebeam_pFDpCD") + "/";
 
     Ecal_Directory_map["Ecal_stack_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                         Find(Ecal_Daughter_Folders, "06_nFDpCD") + "/";
@@ -935,10 +947,14 @@ Directories::Directories(std::string plots_path) {
                                                       Find(Ecal_Daughter_Folders, "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/03_RES_only") + "/";
     Ecal_Directory_map["Ecal_DIS_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                       Find(Ecal_Daughter_Folders, "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/04_DIS_only") + "/";
+    Ecal_Directory_map["Ecal_rec_vs_Mom_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                             Find(Ecal_Daughter_Folders, "06_nFDpCD/02_Ecal_rec_vs_Mom_nFDpCD") + "/";
+    Ecal_Directory_map["Ecal_rec_vs_Ang_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                             Find(Ecal_Daughter_Folders, "06_nFDpCD/03_Ecal_rec_vs_Ang_nFDpCD") + "/";
     Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                             Find(Ecal_Daughter_Folders, "06_nFDpCD/02_Ecal_rec_vs_TKI_nFDpCD") + "/";
+                                                             Find(Ecal_Daughter_Folders, "06_nFDpCD/04_Ecal_rec_vs_TKI_nFDpCD") + "/";
     Ecal_Directory_map["Chi2_Ecal_test_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                            Find(Ecal_Daughter_Folders, "06_nFDpCD/03_Chi2_for_Ecal_above_Ebeam_nFDpCD") + "/";
+                                                            Find(Ecal_Daughter_Folders, "06_nFDpCD/05_Chi2_for_Ecal_above_Ebeam_nFDpCD") + "/";
     //</editor-fold>
 
     //<editor-fold desc="TKI plots directories">

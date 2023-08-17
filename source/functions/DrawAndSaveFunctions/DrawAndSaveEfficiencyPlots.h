@@ -340,6 +340,19 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     Efficiency_plot->SetStats(0);
     Histogram_list->Add(Efficiency_plot);
     Canvas->SaveAs((Efficiency_plot_SaveName).c_str());
+
+    Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.6);
+    Canvas->SaveAs((Efficiency_plot_SaveName.substr(0, Efficiency_plot_SaveName.find_last_of(".png") - 3) + "_ZoomIn1.png").c_str());
+
+    Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.3);
+    Canvas->SaveAs((Efficiency_plot_SaveName.substr(0, Efficiency_plot_SaveName.find_last_of(".png") - 3) + "_ZoomIn2.png").c_str());
+
+    Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.1);
+    Canvas->SaveAs((Efficiency_plot_SaveName.substr(0, Efficiency_plot_SaveName.find_last_of(".png") - 3) + "_ZoomIn3.png").c_str());
+
+    Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.05);
+    Canvas->SaveAs((Efficiency_plot_SaveName.substr(0, Efficiency_plot_SaveName.find_last_of(".png") - 3) + "_ZoomIn4.png").c_str());
+
     Canvas->Clear();
     //</editor-fold>
 
@@ -646,14 +659,6 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
 
     Efficiency_plot->GetYaxis()->SetRangeUser(0., 1.);
 
-/*
-    if (EfficiencyFS == "1n") {
-        Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.4);
-    } else {
-        Efficiency_plot->GetYaxis()->SetRangeUser(0., 1.);
-    }
-*/
-
     if (plot_errorbars) { Efficiency_plot->Sumw2(); }
 
     if (rebin_plots) { Efficiency_plot->Rebin(2); }
@@ -663,6 +668,19 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
 
     Histogram_list->Add(Efficiency_plot);
     Canvas->SaveAs((Efficiency_plot_SaveName).c_str());
+
+    Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.6);
+    Canvas->SaveAs((Efficiency_plot_SaveName.substr(0, Efficiency_plot_SaveName.find_last_of(".png") - 3) + "_ZoomIn1.png").c_str());
+
+    Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.3);
+    Canvas->SaveAs((Efficiency_plot_SaveName.substr(0, Efficiency_plot_SaveName.find_last_of(".png") - 3) + "_ZoomIn2.png").c_str());
+
+    Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.1);
+    Canvas->SaveAs((Efficiency_plot_SaveName.substr(0, Efficiency_plot_SaveName.find_last_of(".png") - 3) + "_ZoomIn3.png").c_str());
+
+    Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.05);
+    Canvas->SaveAs((Efficiency_plot_SaveName.substr(0, Efficiency_plot_SaveName.find_last_of(".png") - 3) + "_ZoomIn4.png").c_str());
+
     Canvas->Clear();
     //</editor-fold>
 
