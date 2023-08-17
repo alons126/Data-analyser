@@ -599,9 +599,6 @@ void EventAnalyser() {
 
     /* Resolution plots */
     bool Resolution_plots = true;
-
-    /* Final state ratio plots */
-    bool FSR_plots = true;
     //</editor-fold>
 
 //    //<editor-fold desc="Plot selector - selected plots">
@@ -671,11 +668,14 @@ void EventAnalyser() {
 //    /* Resolution plots */
 ////    bool Resolution_plots = true;
 //    bool Resolution_plots = false;
-//
-//    /* Final state ratio plots */
-//    bool FSR_plots = true;
-////    bool FSR_plots = false;
 //    //</editor-fold>/
+
+    /* Final state ratio plots */
+    bool FSR_plots = true;
+
+    /* Other setup variables */
+    bool wider_margin = true;
+    bool debug_plots = false; // Print out clas12ana debugging plots
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -691,9 +691,6 @@ void EventAnalyser() {
     if (!plot_and_fit_MomRes) { Resolution_plots = false; }
     //</editor-fold>
 
-    /* Other setup variables */
-    bool wider_margin = true;
-    bool debug_plots = false; // Print out clas12ana debugging plots
     //</editor-fold>
 
 // Normalization setup -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -5339,12 +5336,25 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. momentum (1p)">
+    TH2D *hEcal_vs_P_e_1p = new TH2D("E_{cal} vs. P_{e} (All Int., 1p)", "E_{cal} vs. P_{e} (All Int., 1p);P_{e} [GeV/c];E_{cal} [GeV];",
+                                     numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    string hEcal_vs_P_e_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_1p_Directory"];
+
     TH2D *hEcal_vs_P_p_1p = new TH2D("E_{cal} vs. P_{p} (All Int., 1p)", "E_{cal} vs. P_{p} (All Int., 1p);P_{p} [GeV/c];E_{cal} [GeV];",
                                      numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_p_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_1p_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. angles (1p)">
+    TH2D *hEcal_vs_Theta_e_1p = new TH2D("E_{cal} vs. #theta_{e} (All Int., 1p)",
+                                         "E_{cal} vs. #theta_{e} (All Int., 1p);#theta_{e} [Deg];E_{cal} [GeV];",
+                                         numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_e_1p = new TH2D("E_{cal} vs. #phi_{e} (All Int., 1p)",
+                                       "E_{cal} vs. #phi_{e} (All Int., 1p);#phi_{e} [Deg];E_{cal} [GeV];",
+                                       numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    string hEcal_vs_Theta_e_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1p_Directory"];
+    string hEcal_vs_Phi_e_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1p_Directory"];
+
     TH2D *hEcal_vs_Theta_p_1p = new TH2D("E_{cal} vs. #theta_{p} (All Int., 1p)",
                                          "E_{cal} vs. #theta_{p} (All Int., 1p);#theta_{p} [Deg];E_{cal} [GeV];",
                                          numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
@@ -5395,12 +5405,25 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. momentum (1n)">
+    TH2D *hEcal_vs_P_e_1n = new TH2D("E_{cal} vs. P_{e} (All Int., 1n)", "E_{cal} vs. P_{e} (All Int., 1n);P_{e} [GeV/c];E_{cal} [GeV];",
+                                     numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    string hEcal_vs_P_e_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_1n_Directory"];
+
     TH2D *hEcal_vs_P_n_1n = new TH2D("E_{cal} vs. P_{n} (All Int., 1n)", "E_{cal} vs. P_{n} (All Int., 1n);P_{n} [GeV/c];E_{cal} [GeV];",
                                      numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_n_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_1n_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. angles (1n)">
+    TH2D *hEcal_vs_Theta_e_1n = new TH2D("E_{cal} vs. #theta_{e} (All Int., 1n)",
+                                         "E_{cal} vs. #theta_{e} (All Int., 1n);#theta_{e} [Deg];E_{cal} [GeV];",
+                                         numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_e_1n = new TH2D("E_{cal} vs. #phi_{e} (All Int., 1n)",
+                                       "E_{cal} vs. #phi_{e} (All Int., 1n);#phi_{e} [Deg];E_{cal} [GeV];",
+                                       numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    string hEcal_vs_Theta_e_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1n_Directory"];
+    string hEcal_vs_Phi_e_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1n_Directory"];
+
     TH2D *hEcal_vs_Theta_n_1n = new TH2D("E_{cal} vs. #theta_{n} (All Int., 1n)",
                                          "E_{cal} vs. #theta_{n} (All Int., 1n);#theta_{n} [Deg];E_{cal} [GeV];",
                                          numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
@@ -5498,6 +5521,10 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. momentum (pFDpCD)">
+    TH2D *hEcal_vs_P_e_pFDpCD = new TH2D("E_{cal} vs. P_{e} (All Int., pFDpCD)", "E_{cal} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];E_{cal} [GeV];",
+                                         numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    string hEcal_vs_P_e_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_pFDpCD_Directory"];
+
     TH2D *hEcal_vs_P_pFD_pFDpCD = new TH2D("E_{cal} vs. P_{pFD} (All Int., pFDpCD)", "E_{cal} vs. P_{pFD} (All Int., pFDpCD);P_{pFD} [GeV/c];E_{cal} [GeV];",
                                            numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_pCD_pFDpCD = new TH2D("E_{cal} vs. P_{pCD} (All Int., pFDpCD)", "E_{cal} vs. P_{pCD} (All Int., pFDpCD);P_{pCD} [GeV/c];E_{cal} [GeV];",
@@ -5507,6 +5534,15 @@ void EventAnalyser() {
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. angles (pFDpCD)">
+    TH2D *hEcal_vs_Theta_e_pFDpCD = new TH2D("E_{cal} vs. #theta_{e} (All Int., pFDpCD)",
+                                             "E_{cal} vs. #theta_{e} (All Int., pFDpCD);#theta_{e} [Deg];E_{cal} [GeV];",
+                                             numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_e_pFDpCD = new TH2D("E_{cal} vs. #phi_{e} (All Int., pFDpCD)",
+                                           "E_{cal} vs. #phi_{e} (All Int., pFDpCD);#phi_{e} [Deg];E_{cal} [GeV];",
+                                           numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    string hEcal_vs_Theta_e_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_pFDpCD_Directory"];
+    string hEcal_vs_Phi_e_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_pFDpCD_Directory"];
+
     TH2D *hEcal_vs_Theta_pFD_pFDpCD = new TH2D("E_{cal} vs. #theta_{pFD} (All Int., pFDpCD)",
                                                "E_{cal} vs. #theta_{pFD} (All Int., pFDpCD);#theta_{pFD} [Deg];E_{cal} [GeV];",
                                                numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
@@ -5581,6 +5617,10 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. momentum (nFDpCD)">
+    TH2D *hEcal_vs_P_e_nFDpCD = new TH2D("E_{cal} vs. P_{e} (All Int., nFDpCD)", "E_{cal} vs. P_{e} (All Int., nFDpCD);P_{e} [GeV/c];E_{cal} [GeV];",
+                                         numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    string hEcal_vs_P_e_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_nFDpCD_Directory"];
+
     TH2D *hEcal_vs_P_nFD_nFDpCD = new TH2D("E_{cal} vs. P_{nFD} (All Int., nFDpCD)", "E_{cal} vs. P_{nFD} (All Int., nFDpCD);P_{nFD} [GeV/c];E_{cal} [GeV];",
                                            numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_pCD_nFDpCD = new TH2D("E_{cal} vs. P_{pCD} (All Int., nFDpCD)", "E_{cal} vs. P_{pCD} (All Int., nFDpCD);P_{pCD} [GeV/c];E_{cal} [GeV];",
@@ -5590,6 +5630,15 @@ void EventAnalyser() {
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. angles (nFDpCD)">
+    TH2D *hEcal_vs_Theta_e_nFDpCD = new TH2D("E_{cal} vs. #theta_{e} (All Int., nFDpCD)",
+                                             "E_{cal} vs. #theta_{e} (All Int., nFDpCD);#theta_{e} [Deg];E_{cal} [GeV];",
+                                             numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_e_nFDpCD = new TH2D("E_{cal} vs. #phi_{e} (All Int., nFDpCD)",
+                                           "E_{cal} vs. #phi_{e} (All Int., nFDpCD);#phi_{e} [Deg];E_{cal} [GeV];",
+                                           numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    string hEcal_vs_Theta_e_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_nFDpCD_Directory"];
+    string hEcal_vs_Phi_e_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_nFDpCD_Directory"];
+
     TH2D *hEcal_vs_Theta_nFD_nFDpCD = new TH2D("E_{cal} vs. #theta_{nFD} (All Int., nFDpCD)",
                                                "E_{cal} vs. #theta_{nFD} (All Int., nFDpCD);#theta_{nFD} [Deg];E_{cal} [GeV];",
                                                numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
@@ -9735,6 +9784,9 @@ void EventAnalyser() {
                                  / (P_T_e_1p_3v.Mag() * P_T_p_1p_3v.Mag())) * 180.0 / pi;                                       // P_T_p_1p_3v.Pz() = 0; dPhi_T_1p in deg
                 hdPhi_T_1p->Fill(dPhi_T_1p, Weight_1p);
 
+                hEcal_vs_P_e_1p->Fill(P_e_1p_3v.Mag(), Ecal_1p, Weight_1p);
+                hEcal_vs_Theta_e_1p->Fill(Theta_e_1p, Ecal_1p, Weight_1p);
+                hEcal_vs_Phi_e_1p->Fill(Phi_e_1p, Ecal_1p, Weight_1p);
                 hEcal_vs_P_p_1p->Fill(P_p_1p_3v.Mag(), Ecal_1p, Weight_1p);
                 hEcal_vs_Theta_p_1p->Fill(Theta_p_1p, Ecal_1p, Weight_1p);
                 hEcal_vs_Phi_p_1p->Fill(Phi_p_1p, Ecal_1p, Weight_1p);
@@ -10582,6 +10634,9 @@ void EventAnalyser() {
                                  / (P_T_e_1n_3v.Mag() * P_T_n_1n_3v.Mag())) * 180.0 / pi;                                       // P_T_n_1n_3v.Pz() = 0; dPhi_T_1n in deg
                 hdPhi_T_1n->Fill(dPhi_T_1n, Weight_1n);
 
+                hEcal_vs_P_e_1n->Fill(P_e_1n_3v.Mag(), Ecal_1n, Weight_1n);
+                hEcal_vs_Theta_e_1n->Fill(Theta_e_1n, Ecal_1n, Weight_1n);
+                hEcal_vs_Phi_e_1n->Fill(Phi_e_1n, Ecal_1n, Weight_1n);
                 hEcal_vs_P_n_1n->Fill(P_n_1n_3v.Mag(), Ecal_1n, Weight_1n);
                 hEcal_vs_Theta_n_1n->Fill(Theta_n_1n, Ecal_1n, Weight_1n);
                 hEcal_vs_Phi_n_1n->Fill(Phi_n_1n, Ecal_1n, Weight_1n);
@@ -11928,6 +11983,9 @@ void EventAnalyser() {
                 hdPhi_T_L_pFDpCD->Fill(dPhi_T_L_pFDpCD, Weight_pFDpCD);
                 hdPhi_T_tot_pFDpCD->Fill(dPhi_T_tot_pFDpCD, Weight_pFDpCD);
 
+                hEcal_vs_P_e_pFDpCD->Fill(P_e_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
+                hEcal_vs_Theta_e_pFDpCD->Fill(Theta_e_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                hEcal_vs_Phi_e_pFDpCD->Fill(Phi_e_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
                 hEcal_vs_P_pFD_pFDpCD->Fill(P_pFD_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
                 hEcal_vs_P_pCD_pFDpCD->Fill(P_pCD_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
                 hEcal_vs_Theta_pFD_pFDpCD->Fill(Theta_pFD_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
@@ -12721,6 +12779,9 @@ void EventAnalyser() {
                 hdPhi_T_L_nFDpCD->Fill(dPhi_T_L_nFDpCD, Weight_nFDpCD);
                 hdPhi_T_tot_nFDpCD->Fill(dPhi_T_tot_nFDpCD, Weight_nFDpCD);
 
+                hEcal_vs_P_e_nFDpCD->Fill(P_e_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
+                hEcal_vs_Theta_e_nFDpCD->Fill(Theta_e_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                hEcal_vs_Phi_e_nFDpCD->Fill(Phi_e_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
                 hEcal_vs_P_nFD_nFDpCD->Fill(P_nFD_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
                 hEcal_vs_P_pCD_nFDpCD->Fill(P_pCD_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
                 hEcal_vs_Theta_nFD_nFDpCD->Fill(Theta_nFD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
@@ -16618,51 +16679,65 @@ void EventAnalyser() {
 //  Ecal vs. momentum plots (CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Ecal vs. momentum plots (1p)">
-        histPlotter2D(c1, hEcal_vs_P_p_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_p_1p_Dir, "01_hEcal_vs_P_p_1p", true);
+        histPlotter2D(c1, hEcal_vs_P_e_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_e_1p_Dir, "01_hEcal_vs_P_e_1p", false);
+        histPlotter2D(c1, hEcal_vs_P_p_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_p_1p_Dir, "02_hEcal_vs_P_p_1p", false);
         //</editor-fold>
 
         //<editor-fold desc="Ecal vs. momentum plots (1n)">
-        histPlotter2D(c1, hEcal_vs_P_n_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_n_1n_Dir, "01_hEcal_vs_P_n_1n", true);
+        histPlotter2D(c1, hEcal_vs_P_e_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_e_1n_Dir, "01_hEcal_vs_P_e_1n", false);
+        histPlotter2D(c1, hEcal_vs_P_n_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_n_1n_Dir, "02_hEcal_vs_P_n_1n", false);
         //</editor-fold>
 
         //<editor-fold desc="Ecal vs. momentum plots (pFDpCD)">
-        histPlotter2D(c1, hEcal_vs_P_pFD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_pFD_pFDpCD_Dir, "01_Ecal_vs_P_pFD_pFDpCD", true);
-        histPlotter2D(c1, hEcal_vs_P_pCD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_pCD_pFDpCD_Dir, "02_Ecal_vs_P_pCD_pFDpCD", true);
+        histPlotter2D(c1, hEcal_vs_P_e_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_e_pFDpCD_Dir, "01_Ecal_vs_P_e_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_P_pFD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_pFD_pFDpCD_Dir, "02_Ecal_vs_P_pFD_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_P_pCD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_pCD_pFDpCD_Dir, "03_Ecal_vs_P_pCD_pFDpCD", false);
         //</editor-fold>
 
         //<editor-fold desc="Ecal vs. momentum plots (nFDpCD)">
-        histPlotter2D(c1, hEcal_vs_P_nFD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_nFD_nFDpCD_Dir, "01_Ecal_vs_P_nFD_nFDpCD", true);
-        histPlotter2D(c1, hEcal_vs_P_pCD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_pCD_nFDpCD_Dir, "02_Ecal_vs_P_pCD_nFDpCD", true);
+        histPlotter2D(c1, hEcal_vs_P_e_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_e_nFDpCD_Dir, "01_Ecal_vs_P_e_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_P_nFD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_nFD_nFDpCD_Dir, "02_Ecal_vs_P_nFD_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_P_pCD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_P_pCD_nFDpCD_Dir, "03_Ecal_vs_P_pCD_nFDpCD", false);
         //</editor-fold>
 
 //  Ecal vs. angles plots (CD & FD) -------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Ecal vs. angles plots (1p)">
-        histPlotter2D(c1, hEcal_vs_Theta_p_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_p_1p_Dir, "01_Ecal_vs_Theta_p_1p", true);
-        histPlotter2D(c1, hEcal_vs_Phi_p_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_p_1p_Dir, "02_Ecal_vs_Phi_p_1p", true);
+        histPlotter2D(c1, hEcal_vs_Theta_e_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_e_1p_Dir, "01a_Ecal_vs_Theta_e_1p", false);
+        histPlotter2D(c1, hEcal_vs_Phi_e_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_e_1p_Dir, "01b_Ecal_vs_Phi_e_1p", false);
+        histPlotter2D(c1, hEcal_vs_Theta_p_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_p_1p_Dir, "02a_Ecal_vs_Theta_p_1p", false);
+        histPlotter2D(c1, hEcal_vs_Phi_p_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_p_1p_Dir, "02b_Ecal_vs_Phi_p_1p", false);
         //</editor-fold>
 
         //<editor-fold desc="Ecal vs. angles plots (1n)">
-        histPlotter2D(c1, hEcal_vs_Theta_n_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_n_1n_Dir, "01_Ecal_vs_Theta_n_1n", true);
-        histPlotter2D(c1, hEcal_vs_Phi_n_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_n_1n_Dir, "02_Ecal_vs_Phi_n_1n", true);
+        histPlotter2D(c1, hEcal_vs_Theta_e_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_e_1n_Dir, "01a_Ecal_vs_Theta_e_1n", false);
+        histPlotter2D(c1, hEcal_vs_Phi_e_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_e_1n_Dir, "01b_Ecal_vs_Phi_e_1n", false);
+        histPlotter2D(c1, hEcal_vs_Theta_n_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_n_1n_Dir, "01_Ecal_vs_Theta_n_1n", false);
+        histPlotter2D(c1, hEcal_vs_Phi_n_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_n_1n_Dir, "02_Ecal_vs_Phi_n_1n", false);
         //</editor-fold>
 
         //<editor-fold desc="Ecal vs. angles plots (pFDpCD)">
-        histPlotter2D(c1, hEcal_vs_Theta_pFD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_pFD_pFDpCD_Dir, "01_Ecal_vs_Theta_pFD_pFDpCD",
-                      true);
-        histPlotter2D(c1, hEcal_vs_Phi_pFD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_pFD_pFDpCD_Dir, "02_Ecal_vs_Phi_pFD_pFDpCD", true);
-        histPlotter2D(c1, hEcal_vs_Theta_pCD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_pCD_pFDpCD_Dir, "03_Ecal_vs_Theta_pCD_pFDpCD",
-                      true);
-        histPlotter2D(c1, hEcal_vs_Phi_pCD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_pCD_pFDpCD_Dir, "04_Ecal_vs_Phi_pCD_pFDpCD", true);
+        histPlotter2D(c1, hEcal_vs_Theta_e_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_e_pFDpCD_Dir, "01a_Ecal_vs_Theta_e_pFDpCD",
+                      false);
+        histPlotter2D(c1, hEcal_vs_Phi_e_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_e_pFDpCD_Dir, "01b_Ecal_vs_Phi_e_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_Theta_pFD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_pFD_pFDpCD_Dir, "02a_Ecal_vs_Theta_pFD_pFDpCD",
+                      false);
+        histPlotter2D(c1, hEcal_vs_Phi_pFD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_pFD_pFDpCD_Dir, "02b_Ecal_vs_Phi_pFD_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_Theta_pCD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_pCD_pFDpCD_Dir, "03a_Ecal_vs_Theta_pCD_pFDpCD",
+                      false);
+        histPlotter2D(c1, hEcal_vs_Phi_pCD_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_pCD_pFDpCD_Dir, "03b_Ecal_vs_Phi_pCD_pFDpCD", false);
         //</editor-fold>
 
         //<editor-fold desc="Ecal vs. angles plots (nFDpCD)">
-        histPlotter2D(c1, hEcal_vs_Theta_nFD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_nFD_nFDpCD_Dir, "01_Ecal_vs_Theta_nFD_nFDpCD",
-                      true);
-        histPlotter2D(c1, hEcal_vs_Phi_nFD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_nFD_nFDpCD_Dir, "02_Ecal_vs_Phi_nFD_nFDpCD", true);
-        histPlotter2D(c1, hEcal_vs_Theta_pCD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_pCD_nFDpCD_Dir, "03_Ecal_vs_Theta_pCD_nFDpCD",
-                      true);
-        histPlotter2D(c1, hEcal_vs_Phi_pCD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_pCD_nFDpCD_Dir, "04_Ecal_vs_Phi_pCD_nFDpCD", true);
+        histPlotter2D(c1, hEcal_vs_Theta_e_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_e_nFDpCD_Dir, "01a_Ecal_vs_Theta_e_nFDpCD",
+                      false);
+        histPlotter2D(c1, hEcal_vs_Phi_e_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_e_nFDpCD_Dir, "01b_Ecal_vs_Phi_e_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_Theta_nFD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_nFD_nFDpCD_Dir, "02a_Ecal_vs_Theta_nFD_nFDpCD",
+                      false);
+        histPlotter2D(c1, hEcal_vs_Phi_nFD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_nFD_nFDpCD_Dir, "02b_Ecal_vs_Phi_nFD_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_Theta_pCD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Theta_pCD_nFDpCD_Dir, "03a_Ecal_vs_Theta_pCD_nFDpCD",
+                      false);
+        histPlotter2D(c1, hEcal_vs_Phi_pCD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_Phi_pCD_nFDpCD_Dir, "03b_Ecal_vs_Phi_pCD_nFDpCD", false);
         //</editor-fold>
 
 //  Ecal vs. dP_T plots (CD & FD) ---------------------------------------------------------------------------------------------------------------------------------------
