@@ -145,9 +145,19 @@ void EventAnalyser() {
     double DeltaSlices = 0.05;
     bool nRes_test = false;
 
-//    if (!calculate_2p) { calculate_pFDpCD = false; }
-    if (isData) { calculate_truth_level = false; }
+    /* Ecal test */
+    //TODO: finish this debugging code
+    bool Ecal_test = false; // test event with Ecal > beamE (master ON/OFF switch)
+    bool Ecal_test_print_status = false;
+    bool Ecal_test_print_nPDG = false;
+
+    //<editor-fold desc="Auto-disable variables">
+    //    if (!calculate_2p) { calculate_pFDpCD = false; }
+    if (isData) { calculate_truth_level = false; } // no TL calculation when running on data
     if (!calculate_truth_level) { TL_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
+    if (!Ecal_test) { Ecal_test_print_status = Ecal_test_print_nPDG = false; }
+    //</editor-fold>
+
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -288,7 +298,11 @@ void EventAnalyser() {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
             } else {
-                Efficiency_Status = "Eff1";
+                if (Ecal_test) {
+                    Efficiency_Status = "EcalT";
+                } else {
+                    Efficiency_Status = "Eff1";
+                }
             }
         }
         //</editor-fold>
@@ -5337,7 +5351,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal vs. momentum (1p)">
     TH2D *hEcal_vs_P_e_1p = new TH2D("E_{cal} vs. P_{e} (All Int., 1p)", "E_{cal} vs. P_{e} (All Int., 1p);P_{e} [GeV/c];E_{cal} [GeV];",
-                                     numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                     numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_e_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_1p_Directory"];
 
     TH2D *hEcal_vs_P_p_1p = new TH2D("E_{cal} vs. P_{p} (All Int., 1p)", "E_{cal} vs. P_{p} (All Int., 1p);P_{p} [GeV/c];E_{cal} [GeV];",
@@ -5406,7 +5420,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal vs. momentum (1n)">
     TH2D *hEcal_vs_P_e_1n = new TH2D("E_{cal} vs. P_{e} (All Int., 1n)", "E_{cal} vs. P_{e} (All Int., 1n);P_{e} [GeV/c];E_{cal} [GeV];",
-                                     numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                     numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_e_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_1n_Directory"];
 
     TH2D *hEcal_vs_P_n_1n = new TH2D("E_{cal} vs. P_{n} (All Int., 1n)", "E_{cal} vs. P_{n} (All Int., 1n);P_{n} [GeV/c];E_{cal} [GeV];",
@@ -5522,7 +5536,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal vs. momentum (pFDpCD)">
     TH2D *hEcal_vs_P_e_pFDpCD = new TH2D("E_{cal} vs. P_{e} (All Int., pFDpCD)", "E_{cal} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];E_{cal} [GeV];",
-                                         numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                         numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_e_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_pFDpCD_Directory"];
 
     TH2D *hEcal_vs_P_pFD_pFDpCD = new TH2D("E_{cal} vs. P_{pFD} (All Int., pFDpCD)", "E_{cal} vs. P_{pFD} (All Int., pFDpCD);P_{pFD} [GeV/c];E_{cal} [GeV];",
@@ -5618,7 +5632,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal vs. momentum (nFDpCD)">
     TH2D *hEcal_vs_P_e_nFDpCD = new TH2D("E_{cal} vs. P_{e} (All Int., nFDpCD)", "E_{cal} vs. P_{e} (All Int., nFDpCD);P_{e} [GeV/c];E_{cal} [GeV];",
-                                         numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                         numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_e_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_nFDpCD_Directory"];
 
     TH2D *hEcal_vs_P_nFD_nFDpCD = new TH2D("E_{cal} vs. P_{nFD} (All Int., nFDpCD)", "E_{cal} vs. P_{nFD} (All Int., nFDpCD);P_{nFD} [GeV/c];E_{cal} [GeV];",
@@ -9768,6 +9782,15 @@ void EventAnalyser() {
                 } else if (dis) {
                     hEcal_DIS_1p->Fill(Ecal_1p, Weight_1p); // Fill Ecal for DIS only
                 }
+
+                if (!Ecal_test || (Ecal_1p > beamE)) {
+                    hEcal_vs_P_e_1p->Fill(P_e_1p_3v.Mag(), Ecal_1p, Weight_1p);
+                    hEcal_vs_Theta_e_1p->Fill(Theta_e_1p, Ecal_1p, Weight_1p);
+                    hEcal_vs_Phi_e_1p->Fill(Phi_e_1p, Ecal_1p, Weight_1p);
+                    hEcal_vs_P_p_1p->Fill(P_p_1p_3v.Mag(), Ecal_1p, Weight_1p);
+                    hEcal_vs_Theta_p_1p->Fill(Theta_p_1p, Ecal_1p, Weight_1p);
+                    hEcal_vs_Phi_p_1p->Fill(Phi_p_1p, Ecal_1p, Weight_1p);
+                }
                 //</editor-fold>
 
                 hP_pFD_APID_1p.hFill(ProtonMomBKC_1p, Weight_1p);                                                                                       // FD proton (1p)
@@ -9784,12 +9807,6 @@ void EventAnalyser() {
                                  / (P_T_e_1p_3v.Mag() * P_T_p_1p_3v.Mag())) * 180.0 / pi;                                       // P_T_p_1p_3v.Pz() = 0; dPhi_T_1p in deg
                 hdPhi_T_1p->Fill(dPhi_T_1p, Weight_1p);
 
-                hEcal_vs_P_e_1p->Fill(P_e_1p_3v.Mag(), Ecal_1p, Weight_1p);
-                hEcal_vs_Theta_e_1p->Fill(Theta_e_1p, Ecal_1p, Weight_1p);
-                hEcal_vs_Phi_e_1p->Fill(Phi_e_1p, Ecal_1p, Weight_1p);
-                hEcal_vs_P_p_1p->Fill(P_p_1p_3v.Mag(), Ecal_1p, Weight_1p);
-                hEcal_vs_Theta_p_1p->Fill(Theta_p_1p, Ecal_1p, Weight_1p);
-                hEcal_vs_Phi_p_1p->Fill(Phi_p_1p, Ecal_1p, Weight_1p);
                 hEcal_vs_dAlpha_T_1p->Fill(dAlpha_T_1p, Ecal_1p, Weight_1p);
                 hEcal_vs_dP_T_1p->Fill(dP_T_1p_3v.Mag(), Ecal_1p, Weight_1p);
 
@@ -10616,6 +10633,15 @@ void EventAnalyser() {
                 } else if (dis) {
                     hEcal_DIS_1n->Fill(Ecal_1n, Weight_1n); // Fill Ecal for DIS only
                 }
+
+                if (!Ecal_test || (Ecal_1n > beamE)) {
+                    hEcal_vs_P_e_1n->Fill(P_e_1n_3v.Mag(), Ecal_1n, Weight_1n);
+                    hEcal_vs_Theta_e_1n->Fill(Theta_e_1n, Ecal_1n, Weight_1n);
+                    hEcal_vs_Phi_e_1n->Fill(Phi_e_1n, Ecal_1n, Weight_1n);
+                    hEcal_vs_P_n_1n->Fill(P_n_1n_3v.Mag(), Ecal_1n, Weight_1n);
+                    hEcal_vs_Theta_n_1n->Fill(Theta_n_1n, Ecal_1n, Weight_1n);
+                    hEcal_vs_Phi_n_1n->Fill(Phi_n_1n, Ecal_1n, Weight_1n);
+                }
                 //</editor-fold>
 
                 hP_nFD_APID_1n.hFill(NeutronMomBKC_1n, Weight_1n);                                                                             // Leading FD neutron (1n)
@@ -10634,12 +10660,6 @@ void EventAnalyser() {
                                  / (P_T_e_1n_3v.Mag() * P_T_n_1n_3v.Mag())) * 180.0 / pi;                                       // P_T_n_1n_3v.Pz() = 0; dPhi_T_1n in deg
                 hdPhi_T_1n->Fill(dPhi_T_1n, Weight_1n);
 
-                hEcal_vs_P_e_1n->Fill(P_e_1n_3v.Mag(), Ecal_1n, Weight_1n);
-                hEcal_vs_Theta_e_1n->Fill(Theta_e_1n, Ecal_1n, Weight_1n);
-                hEcal_vs_Phi_e_1n->Fill(Phi_e_1n, Ecal_1n, Weight_1n);
-                hEcal_vs_P_n_1n->Fill(P_n_1n_3v.Mag(), Ecal_1n, Weight_1n);
-                hEcal_vs_Theta_n_1n->Fill(Theta_n_1n, Ecal_1n, Weight_1n);
-                hEcal_vs_Phi_n_1n->Fill(Phi_n_1n, Ecal_1n, Weight_1n);
                 hEcal_vs_dAlpha_T_1n->Fill(dAlpha_T_1n, Ecal_1n, Weight_1n);
                 hEcal_vs_dP_T_1n->Fill(dP_T_1n_3v.Mag(), Ecal_1n, Weight_1n);
 
@@ -11953,6 +11973,18 @@ void EventAnalyser() {
                 } else if (dis) {
                     hEcal_DIS_pFDpCD->Fill(Ecal_pFDpCD, Weight_pFDpCD); // Fill Ecal for DIS only
                 }
+
+                if (!Ecal_test || (Ecal_pFDpCD > beamE)) {
+                    hEcal_vs_P_e_pFDpCD->Fill(P_e_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_Theta_e_pFDpCD->Fill(Theta_e_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_Phi_e_pFDpCD->Fill(Phi_e_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_P_pFD_pFDpCD->Fill(P_pFD_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_P_pCD_pFDpCD->Fill(P_pCD_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_Theta_pFD_pFDpCD->Fill(Theta_pFD_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_Phi_pFD_pFDpCD->Fill(Phi_pFD_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_Theta_pCD_pFDpCD->Fill(Theta_pCD_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_Phi_pCD_pFDpCD->Fill(Phi_pCD_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                }
                 //</editor-fold>
 
                 hdP_T_L_pFDpCD->Fill(dP_T_L_pFDpCD_3v.Mag(), Weight_pFDpCD);
@@ -11983,15 +12015,6 @@ void EventAnalyser() {
                 hdPhi_T_L_pFDpCD->Fill(dPhi_T_L_pFDpCD, Weight_pFDpCD);
                 hdPhi_T_tot_pFDpCD->Fill(dPhi_T_tot_pFDpCD, Weight_pFDpCD);
 
-                hEcal_vs_P_e_pFDpCD->Fill(P_e_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
-                hEcal_vs_Theta_e_pFDpCD->Fill(Theta_e_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
-                hEcal_vs_Phi_e_pFDpCD->Fill(Phi_e_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
-                hEcal_vs_P_pFD_pFDpCD->Fill(P_pFD_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
-                hEcal_vs_P_pCD_pFDpCD->Fill(P_pCD_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
-                hEcal_vs_Theta_pFD_pFDpCD->Fill(Theta_pFD_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
-                hEcal_vs_Phi_pFD_pFDpCD->Fill(Phi_pFD_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
-                hEcal_vs_Theta_pCD_pFDpCD->Fill(Theta_pCD_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
-                hEcal_vs_Phi_pCD_pFDpCD->Fill(Phi_pCD_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
                 hEcal_vs_dAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
                 hEcal_vs_dAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
                 hEcal_vs_dP_T_L_pFDpCD->Fill(dP_T_L_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
@@ -12749,6 +12772,18 @@ void EventAnalyser() {
                 } else if (dis) {
                     hEcal_DIS_nFDpCD->Fill(Ecal_nFDpCD, Weight_nFDpCD); // Fill Ecal for DIS only
                 }
+
+                if (!Ecal_test || (Ecal_nFDpCD > beamE)) {
+                    hEcal_vs_P_e_nFDpCD->Fill(P_e_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_Theta_e_nFDpCD->Fill(Theta_e_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_Phi_e_nFDpCD->Fill(Phi_e_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_P_nFD_nFDpCD->Fill(P_nFD_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_P_pCD_nFDpCD->Fill(P_pCD_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_Theta_nFD_nFDpCD->Fill(Theta_nFD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_Phi_nFD_nFDpCD->Fill(Phi_nFD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_Theta_pCD_nFDpCD->Fill(Theta_pCD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_Phi_pCD_nFDpCD->Fill(Phi_pCD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                }
                 //</editor-fold>
 
                 hdP_T_L_nFDpCD->Fill(dP_T_L_nFDpCD_3v.Mag(), Weight_nFDpCD);
@@ -12779,15 +12814,6 @@ void EventAnalyser() {
                 hdPhi_T_L_nFDpCD->Fill(dPhi_T_L_nFDpCD, Weight_nFDpCD);
                 hdPhi_T_tot_nFDpCD->Fill(dPhi_T_tot_nFDpCD, Weight_nFDpCD);
 
-                hEcal_vs_P_e_nFDpCD->Fill(P_e_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
-                hEcal_vs_Theta_e_nFDpCD->Fill(Theta_e_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
-                hEcal_vs_Phi_e_nFDpCD->Fill(Phi_e_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
-                hEcal_vs_P_nFD_nFDpCD->Fill(P_nFD_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
-                hEcal_vs_P_pCD_nFDpCD->Fill(P_pCD_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
-                hEcal_vs_Theta_nFD_nFDpCD->Fill(Theta_nFD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
-                hEcal_vs_Phi_nFD_nFDpCD->Fill(Phi_nFD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
-                hEcal_vs_Theta_pCD_nFDpCD->Fill(Theta_pCD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
-                hEcal_vs_Phi_pCD_nFDpCD->Fill(Phi_pCD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
                 hEcal_vs_dAlpha_T_L_nFDpCD->Fill(dAlpha_T_L_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
                 hEcal_vs_dAlpha_T_tot_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
                 hEcal_vs_dP_T_L_nFDpCD->Fill(dP_T_L_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
