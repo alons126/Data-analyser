@@ -124,7 +124,7 @@ void EventAnalyser() {
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = true; // Enforce TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Enforce TL event selection on reco. plots
 
     bool limless_mom_eff_plots = false;
     bool Enable_FD_photons = false; // keep as false to decrease RES and DIS
@@ -143,7 +143,7 @@ void EventAnalyser() {
     bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
-    bool nRes_test = false;
+    bool nRes_test = true;
 
     /* Ecal test */
     //TODO: finish this debugging code
@@ -303,7 +303,7 @@ void EventAnalyser() {
                     Efficiency_Status = "EcalT";
                 } else {
 //                    Efficiency_Status = "Eff1_OldAMaps";
-                    Efficiency_Status = "Eff1_pol1test";
+                    Efficiency_Status = "Eff1_pol1Test";
                 }
             }
         }
