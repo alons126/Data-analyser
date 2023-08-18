@@ -498,8 +498,9 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
                                      {2.8, 4},
                                      {4,   5},
                                      {5,   6}};
-        } else { // Old sample (24M)
-            ElectronMomBinsLimits = {{0.4, 0.8},
+        } else { // New sample (24M)
+            ElectronMomBinsLimits = {{0.4, 0.6},
+                                     {0.6, 0.8},
                                      {0.8, 1.2},
                                      {1.2, 1.6},
                                      {1.6, 2.2},
