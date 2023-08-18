@@ -20,8 +20,9 @@
 // AMaps constructors ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="AMaps generation constructor">
-AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath,
+AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath,
              int nOfMomBins, int hnsNumOfXBins, int hnsNumOfYBins, int hesNumOfXBins, int hesNumOfYBins) {
+    SName = SampleName;
     AMapSavePath = SavePath;
     HistNucSliceNumOfXBins = hnsNumOfXBins;
     HistNucSliceNumOfYBins = hnsNumOfYBins;
@@ -411,7 +412,7 @@ void AMaps::SetBins(double beamE) {
 //<editor-fold desc="SetElectronBins function">
 void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double beamE) {
     bool InvertedPrintOut = false;
-    bool RegPrintOut = false;
+    bool RegPrintOut = true;
 
     if (reformat_e_bins) {
         double InvertedPLowerLim = (1 / beamE);
@@ -490,19 +491,24 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
 
         if (RegPrintOut) { exit(0); }
     } else if (equi_P_e_bins) {
-        ElectronMomBinsLimits = {{0.4, 1.6},
-                                 {1.6, 2.2},
-                                 {2.2, 2.8},
-                                 {2.8, 4},
-                                 {4,   5},
-                                 {5,   6}};
-//        ElectronMomBinsLimits = {{0.4, 1},
-//                                 {1,   1.6},
-//                                 {1.6, 2.2},
-//                                 {2.2, 2.8},
-//                                 {2.8, 4},
-//                                 {4,   5},
-//                                 {5,   6}};
+        if (findSubstring(SName, "C12_simulation_6GeV_T5")) { // Old sample
+            ElectronMomBinsLimits = {{0.4, 1.6},
+                                     {1.6, 2.2},
+                                     {2.2, 2.8},
+                                     {2.8, 4},
+                                     {4,   5},
+                                     {5,   6}};
+        } else { // Old sample (24M)
+            ElectronMomBinsLimits = {{0.4, 0.8},
+                                     {0.8, 1.2},
+                                     {1.2, 1.6},
+                                     {1.6, 2.2},
+                                     {2.2, 2.8},
+                                     {2.8, 4},
+                                     {4,   5},
+                                     {5,   6}};
+        }
+
         int NumOfElectronMomBins = ElectronMomBinsLimits.size();
 
         if (RegPrintOut) {
