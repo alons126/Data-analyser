@@ -412,7 +412,7 @@ void AMaps::SetBins(double beamE) {
 //<editor-fold desc="SetElectronBins function">
 void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double beamE) {
     bool InvertedPrintOut = false;
-    bool RegPrintOut = true;
+    bool RegPrintOut = false;
 
     if (reformat_e_bins) {
         double InvertedPLowerLim = (1 / beamE);
