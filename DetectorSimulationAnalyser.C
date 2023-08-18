@@ -143,7 +143,7 @@ void EventAnalyser() {
     bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
-    bool nRes_test = true;
+    bool nRes_test = false;
 
     /* Ecal test */
     //TODO: finish this debugging code
