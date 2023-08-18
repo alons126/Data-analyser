@@ -303,7 +303,7 @@ void EventAnalyser() {
                     Efficiency_Status = "EcalT";
                 } else {
 //                    Efficiency_Status = "Eff1_OldAMaps";
-                    Efficiency_Status = "Eff1_pol1Test";
+                    Efficiency_Status = "Eff1_pol3Test";
                 }
             }
         }
