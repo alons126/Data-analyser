@@ -149,13 +149,14 @@ void EventAnalyser() {
     //TODO: finish this debugging code
     bool Ecal_test = false; // test event with Ecal > beamE (master ON/OFF switch)
     bool Ecal_test_print_status = false;
+    bool Ecal_test_print_Edep = false;
     bool Ecal_test_print_nPDG = false;
 
     //<editor-fold desc="Auto-disable variables">
     //    if (!calculate_2p) { calculate_pFDpCD = false; }
     if (isData) { calculate_truth_level = false; } // no TL calculation when running on data
     if (!calculate_truth_level) { TL_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
-    if (!Ecal_test) { Ecal_test_print_status = Ecal_test_print_nPDG = false; }
+//    if (!Ecal_test) { Ecal_test_print_status = Ecal_test_print_nPDG = false; }
     //</editor-fold>
 
     //</editor-fold>
@@ -1036,6 +1037,13 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 // Cut parameters plots
 // ======================================================================================================================================================================
+
+    hPlot1D hMass2_all_n_1n_FD = hPlot1D("1n", "", "Mass^{2} all n", "Mass^{2} all n", "Mass^{2} [GeV]", plots_path + "/",
+                                         "01_Mass2_all_n_1n_FD", -0.5, 6, numTH1Dbins);
+    hPlot1D hMass2_VN_1n_FD = hPlot1D("1n", "", "Mass^{2} NV", "Mass^{2} NV", "Mass^{2} [GeV]", plots_path + "/",
+                                          "02_Mass2_VN_1n_FD", -0.5, 6, numTH1Dbins);
+    hPlot1D hMass2_ph_1n_FD = hPlot1D("1n", "", "Mass^{2} ph", "Mass^{2} ph", "Mass^{2} [GeV]", plots_path + "/",
+                                          "02_Mass2_ph_1n_FD", -0.5, 6, numTH1Dbins);
 
     //<editor-fold desc="Cut parameters plots">
 
@@ -10034,6 +10042,12 @@ void EventAnalyser() {
             double Theta_p_e_p_n_1n, Theta_q_p_n_1n;
             double EoP_e_1n = (e_1n->cal(clas12::PCAL)->getEnergy() + e_1n->cal(ECIN)->getEnergy() + e_1n->cal(ECOUT)->getEnergy()) / P_e_1n_3v.Mag();
 
+            double Beta_n_1n = n_1n->par()->getBeta();
+            double Beta_n2_1n = Beta_n_1n * Beta_n_1n;
+            double Pmiss_1n = q_1n_3v.Mag();
+            double Pmiss2_1n = Pmiss_1n * Pmiss_1n;
+            double Mass2 = (Pmiss2_1n * (1 - Beta_n2_1n)) / Beta_n2_1n;
+
             /* Setting Q2 (1n) */
             TLorentzVector e_out_1n, Q_1n;
             double Q2_1n;
@@ -10111,6 +10125,17 @@ void EventAnalyser() {
             //<editor-fold desc="Applying neutron veto and Fillings 1n histograms">
             if (NeutronPassVeto_1n && Pass_Kin_Cuts_1n) {
                 ++num_of_events_1n_inFD_AV;
+
+
+                hMass2_all_n_1n_FD.hFill(Mass2, Weight_1n);
+
+                if (n_1n->par()->getPid() == 2112) {
+                    hMass2_VN_1n_FD.hFill(Mass2, Weight_1n);
+                } else if (n_1n->par()->getPid() == 22) {
+                    hMass2_ph_1n_FD.hFill(Mass2, Weight_1n);
+                }
+
+
 
                 //<editor-fold desc="Filling cut variable plots (1n)">
                 /* Filling Nphe plots (1n) */
@@ -10641,6 +10666,24 @@ void EventAnalyser() {
                     hEcal_vs_P_n_1n->Fill(P_n_1n_3v.Mag(), Ecal_1n, Weight_1n);
                     hEcal_vs_Theta_n_1n->Fill(Theta_n_1n, Ecal_1n, Weight_1n);
                     hEcal_vs_Phi_n_1n->Fill(Phi_n_1n, Ecal_1n, Weight_1n);
+
+////                    double EoP_e = (electrons[0]->cal(clas12::PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e;
+//                    if (Ecal_test_print_Edep) {
+//                        double E_dep_PCAL = e_1n->cal(clas12::PCAL)->getEnergy();
+//                        double E_dep_ECIN = e_1n->cal(clas12::ECIN)->getEnergy();
+//                        double E_dep_ECOUT = e_1n->cal(clas12::ECOUT)->getEnergy();
+//
+//                        cout << "\n\nE_dep_PCAL = " << E_dep_PCAL << "\n";
+//                        cout << "E_dep_ECIN + E_dep_ECOUT = " << E_dep_ECIN + E_dep_ECOUT << "\n\n";
+//
+//                        if (E_dep_PCAL < 0.06) {
+//                            cout << "BAD ELECTRON!!!!!\n\n";
+//                        } else {
+//                            cout << "good electron :)\n\n";
+//                        }
+//
+//                        cout << "\n\n";
+//                    }
                 }
                 //</editor-fold>
 
@@ -12783,6 +12826,43 @@ void EventAnalyser() {
                     hEcal_vs_Phi_nFD_nFDpCD->Fill(Phi_nFD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
                     hEcal_vs_Theta_pCD_nFDpCD->Fill(Theta_pCD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
                     hEcal_vs_Phi_pCD_nFDpCD->Fill(Phi_pCD_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+
+                    //                    double EoP_e = (electrons[0]->cal(clas12::PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e;
+                    if (Ecal_test_print_Edep) {
+                        double E_dep_PCAL = e_nFDpCD->cal(clas12::PCAL)->getEnergy();
+                        double E_dep_ECIN = e_nFDpCD->cal(clas12::ECIN)->getEnergy();
+                        double E_dep_ECOUT = e_nFDpCD->cal(clas12::ECOUT)->getEnergy();
+
+                        cout << "\n\nE_dep_PCAL = " << E_dep_PCAL << "\n";
+                        cout << "E_dep_ECIN + E_dep_ECOUT = " << E_dep_ECIN + E_dep_ECOUT << "\n";
+                        cout << "Ecal_nFDpCD = " << Ecal_nFDpCD << "\n";
+                        cout << "e status = " << e_nFDpCD->par()->getStatus() << "\n";
+                        cout << "e charge = " << e_nFDpCD->par()->getCharge() << "\n";
+                        cout << "e beta = " << e_nFDpCD->par()->getBeta() << "\n\n";
+                        cout << "e theta = " << e_nFDpCD->getTheta() << "\n";
+                        cout << "nFD theta = " << nFD_nFDpCD->getTheta() * 180.0 / pi << "\n";
+                        cout << "pCD theta = " << pCD_nFDpCD->getTheta() * 180.0 / pi << "\n\n";
+                        cout << "e phi = " << e_nFDpCD->getPhi() * 180.0 / pi << "\n";
+                        cout << "nFD phi = " << nFD_nFDpCD->getPhi() * 180.0 / pi << "\n";
+                        cout << "pCD phi = " << pCD_nFDpCD->getPhi() * 180.0 / pi << "\n\n";
+                        cout << "e P = " << e_nFDpCD->par()->getP() << "\n";
+                        cout << "nFD P = " << P_nFD_nFDpCD_3v.Mag() << "\n";
+                        cout << "pCD P = " << P_pCD_nFDpCD_3v.Mag() << "\n\n";
+                        cout << "e E = " << E_e_nFDpCD << "\n";
+                        cout << "nFD E = " << E_nFD_nFDpCD << "\n";
+                        cout << "pCD E = " << E_pCD_nFDpCD << "\n\n";
+                        cout << "e E = " << E_e_nFDpCD << "\n";
+                        cout << "nFD T = " << E_nFD_nFDpCD - m_n << "\n";
+                        cout << "pCD T = " << E_pCD_nFDpCD - m_p << "\n\n";
+
+                        if (E_dep_PCAL < 0.06) {
+                            cout << "BAD ELECTRON!!!!!\n\n";
+                        } else {
+                            cout << "good electron :)\n\n";
+                        }
+
+                        cout << "\n\n";
+                    }
                 }
                 //</editor-fold>
 
@@ -12863,6 +12943,10 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 // Cut parameters plots
 // ======================================================================================================================================================================
+
+    hMass2_all_n_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Nphe_plots, true, 1., 9999, 9999, 0, false);
+    hMass2_VN_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Nphe_plots, true, 1., 9999, 9999, 0, false);
+    hMass2_ph_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Nphe_plots, true, 1., 9999, 9999, 0, false);
 
     //<editor-fold desc="Cut parameters plots">
 
