@@ -140,10 +140,10 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
-    bool nRes_test = true;
+    bool nRes_test = false;
 
     /* Ecal test */
     //TODO: finish this debugging code
@@ -201,7 +201,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -304,7 +304,7 @@ void EventAnalyser() {
                 } else {
 //                    Efficiency_Status = "Eff1_OldAMaps";
 //                    Efficiency_Status = "Eff1_pol3Test";
-                    Efficiency_Status = "Eff1";
+                    Efficiency_Status = "Eff1_test";
                 }
             }
         }
@@ -688,7 +688,7 @@ void EventAnalyser() {
 //    //</editor-fold>/
 
     /* Final state ratio plots */
-    bool FSR_plots = false;
+    bool FSR_plots = true;
 
     /* Other setup variables */
     bool wider_margin = true;
@@ -7560,6 +7560,23 @@ void EventAnalyser() {
         auto electrons_det = c12->getByID(11);
         if (electrons_det.size() == 1) { ++num_of_events_with_exactly_1e_from_file; }
 
+//        auto Sort = p_1p->sort();
+//        auto TL_p_1p_test = p_1p->mc();
+        for(auto p : c12->getDetParticles()) {
+            if (p->mc()->isMatched()) {//this particle has an mc match
+                cout << p->par()->getEntry() << " rec pid " << p->par()->getPid() << " " << p->mc()->getPid() << " mcindex " << " " << p->mc()->getMatch()->getQuality()
+                     << " " << p->mc()->getMatch()->getMCindex() << endl;
+//                if(p->mc()->getMatch()->getQuality()>0.9){
+//                    hPDiff->Fill(p->getMCPDiff());
+//                    hThDiff->Fill(p->getMCThetaDiff()*TMath::RadToDeg());
+//                    hPhDiff->Fill(p->getMCPhiDiff()*TMath::RadToDeg());
+//                }
+            exit(0);
+
+            }
+        }
+
+
         clasAna.Run(c12);
 
         /* allParticles vector from clas12ana (my addition). Used mostly for 1n & nFDpCD.  */
@@ -9940,6 +9957,19 @@ void EventAnalyser() {
                     auto mcpbank_pRes = c12->mcparts();
                     const Int_t Ngen_pRes = mcpbank_pRes->getRows();
 
+
+//                    auto Sort = p_1p->sort();
+//                    auto TL_p_1p_test = p_1p->mc();
+//
+//                    cout << "\n\n\np_1p PID:" << p_1p->getPid() << "\n";
+//                    cout << "TL PID:" << TL_p_1p_test->getPid() << "\n";
+//                    cout << "\np_1p P:" << BoolToString(p_1p->mc()->isMatched()) << "\n";
+////                    cout << "TL P:" << TL_p_1p_test->getP() << "\n";
+////                    cout << "\np_1p P:" << p_1p->getP() << "\n";
+////                    cout << "TL P:" << TL_p_1p_test->getP() << "\n";
+////                    cout << "\n\np_1p theta:" << p_1p->getTheta() * 180 / pi << "\n";
+////                    cout << "TL theta:" << TL_p_1p_test->getTheta() * 180 / pi << "\n";
+
                     for (Int_t i = 0; i < Ngen_pRes; i++) {
                         mcpbank_pRes->setEntry(i);
 
@@ -10881,6 +10911,12 @@ void EventAnalyser() {
                             }
 
                             if (nRes_Pass_dThetaCut && nRes_Pass_dPhiCut) {
+
+//                                auto TL_n_1n_test = n_1n->mc();
+//
+//                                cout << "\n\nn_1n theta:" << n_1n->getTheta() * 180 / pi << "\n";
+//                                cout << "TL theta:" << TL_n_1n_test->getTheta() * 180 / pi << "\n";
+
                                 /* Plots for TL neutrons passing matching cuts */
                                 hTheta_nFD_TL_MatchedN_1n.hFill(TLNeutronTheta, Weight);
                                 hPhi_nFD_TL_MatchedN_1n.hFill(TLNeutronPhi, Weight);
