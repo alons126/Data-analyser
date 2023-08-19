@@ -198,10 +198,10 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -304,7 +304,8 @@ void EventAnalyser() {
                 } else {
 //                    Efficiency_Status = "Eff1_OldAMaps";
 //                    Efficiency_Status = "Eff1_pol3Test";
-                    Efficiency_Status = "Eff1_test";
+//                    Efficiency_Status = "Eff1_test";
+                    Efficiency_Status = "Eff1";
                 }
             }
         }
@@ -7560,7 +7561,8 @@ void EventAnalyser() {
         auto electrons_det = c12->getByID(11);
         if (electrons_det.size() == 1) { ++num_of_events_with_exactly_1e_from_file; }
 
-//        auto Sort = p_1p->sort();
+        //<editor-fold desc="match test beta">
+        //        auto Sort = p_1p->sort();
 //        auto TL_p_1p_test = p_1p->mc();
 
         cout << "\n\n";
@@ -7580,7 +7582,7 @@ void EventAnalyser() {
         }
 
         cout << "\n\n";
-
+        //</editor-fold>
 
         clasAna.Run(c12);
 
