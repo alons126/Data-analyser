@@ -140,10 +140,10 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
-    bool nRes_test = true;
+    bool nRes_test = false;
 
     /* Ecal test */
     //TODO: finish this debugging code
@@ -201,7 +201,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -305,7 +305,7 @@ void EventAnalyser() {
 //                    Efficiency_Status = "Eff1_OldAMaps";
 //                    Efficiency_Status = "Eff1_pol3Test";
 //                    Efficiency_Status = "Eff1_test";
-                    Efficiency_Status = "Eff1_test";
+                    Efficiency_Status = "Eff1";
                 }
             }
         }
@@ -7561,28 +7561,28 @@ void EventAnalyser() {
         auto electrons_det = c12->getByID(11);
         if (electrons_det.size() == 1) { ++num_of_events_with_exactly_1e_from_file; }
 
-        //<editor-fold desc="match test beta">
-        //        auto Sort = p_1p->sort();
-//        auto TL_p_1p_test = p_1p->mc();
-
-        cout << "\n\n";
-
-        for (auto p: c12->getDetParticles()) {
-            if (p->mc()->isMatched()) {//this particle has an mc match
-                cout << "rec entry: " << p->par()->getEntry()
-                     << ", rec pid: " << p->par()->getPid()
-                     << ", mc pid: " << p->mc()->getPid()
-                     << ", mc index: " << p->mc()->getMatch()->getMCindex() << endl;
-//                if(p->mc()->getMatch()->getQuality()>0.9){
-//                    hPDiff->Fill(p->getMCPDiff());
-//                    hThDiff->Fill(p->getMCThetaDiff()*TMath::RadToDeg());
-//                    hPhDiff->Fill(p->getMCPhiDiff()*TMath::RadToDeg());
-//                }
-            }
-        }
-
-        cout << "\n\n";
-        //</editor-fold>
+//        //<editor-fold desc="match test beta">
+//        //        auto Sort = p_1p->sort();
+////        auto TL_p_1p_test = p_1p->mc();
+//
+//        cout << "\n\n";
+//
+//        for (auto p: c12->getDetParticles()) {
+//            if (p->mc()->isMatched()) {//this particle has an mc match
+//                cout << "rec entry: " << p->par()->getEntry()
+//                     << ", rec pid: " << p->par()->getPid()
+//                     << ", mc pid: " << p->mc()->getPid()
+//                     << ", mc index: " << p->mc()->getMatch()->getMCindex() << endl;
+////                if(p->mc()->getMatch()->getQuality()>0.9){
+////                    hPDiff->Fill(p->getMCPDiff());
+////                    hThDiff->Fill(p->getMCThetaDiff()*TMath::RadToDeg());
+////                    hPhDiff->Fill(p->getMCPhiDiff()*TMath::RadToDeg());
+////                }
+//            }
+//        }
+//
+//        cout << "\n\n";
+//        //</editor-fold>
 
         clasAna.Run(c12);
 
