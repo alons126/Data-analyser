@@ -594,8 +594,8 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 //            Smearing = Rand->Gaus(1, 0.0738 * Momentum - 0.0304); // new smear between 1 and 3 GeV/c
             Smearing = Rand->Gaus(1, 0.0583 * Momentum - 0.0045); // old smear between 0.4 to 4.09 GeV/c
         } else { // New sample
-//            Smearing = Rand->Gaus(1, 0.0694 * Momentum - 0.0236); // new smear between 1 and 3 GeV/c
-            Smearing = Rand->Gaus(1, 0.0571 * Momentum - 0.0034); // old smear between 0.4 to 4.09 GeV/c
+            Smearing = Rand->Gaus(1, 0.0694 * Momentum - 0.0236); // new smear between 1 and 3 GeV/c
+//            Smearing = Rand->Gaus(1, 0.0571 * Momentum - 0.0034); // old smear between 0.4 to 4.09 GeV/c
 //            Smearing = Rand->Gaus(1, -0.0134 * Momentum * Momentum * Momentum + 0.0778 * Momentum * Momentum - 0.074 * Momentum +
 //                                     0.0596); // old smear between 0.4 to 4.09 GeV/c
         }
