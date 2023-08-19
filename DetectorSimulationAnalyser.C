@@ -7562,19 +7562,24 @@ void EventAnalyser() {
 
 //        auto Sort = p_1p->sort();
 //        auto TL_p_1p_test = p_1p->mc();
-        for(auto p : c12->getDetParticles()) {
+
+        cout << "\n\n";
+
+        for (auto p: c12->getDetParticles()) {
             if (p->mc()->isMatched()) {//this particle has an mc match
-                cout << p->par()->getEntry() << " rec pid " << p->par()->getPid() << " " << p->mc()->getPid() << " mcindex " << " " << p->mc()->getMatch()->getQuality()
-                     << " " << p->mc()->getMatch()->getMCindex() << endl;
+                cout << "rec entry: " << p->par()->getEntry()
+                     << ", rec pid: " << p->par()->getPid()
+                     << ", mc pid: " << p->mc()->getPid()
+                     << ", mc index: " << p->mc()->getMatch()->getMCindex() << endl;
 //                if(p->mc()->getMatch()->getQuality()>0.9){
 //                    hPDiff->Fill(p->getMCPDiff());
 //                    hThDiff->Fill(p->getMCThetaDiff()*TMath::RadToDeg());
 //                    hPhDiff->Fill(p->getMCPhiDiff()*TMath::RadToDeg());
 //                }
-            exit(0);
-
             }
         }
+
+        cout << "\n\n";
 
 
         clasAna.Run(c12);
