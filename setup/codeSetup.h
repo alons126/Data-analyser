@@ -126,8 +126,8 @@ std::string file_name = "general_file";
 std::string AnalyseFilePath = "volatile/clas12/asportes/simulationFiles/C12_G18_02a_00_000_Q204_598636MeV";
 std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_99*_torus-1.0.hipo";
-//std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV*.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_99*_torus-1.0.hipo";
+std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV*.hipo";
 //</editor-fold>
 
 ////<editor-fold desc="C12 5.98636GeV Q208 (ifarm MC files - Justin's MC files)">
