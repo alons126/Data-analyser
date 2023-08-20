@@ -689,7 +689,7 @@ void EventAnalyser() {
 //    //</editor-fold>/
 
     /* Final state ratio plots */
-    bool FSR_plots = true;
+    bool FSR_plots = false;
 
     /* Other setup variables */
     bool wider_margin = true;
