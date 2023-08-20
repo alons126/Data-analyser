@@ -140,10 +140,10 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
-    bool nRes_test = true;
+    bool nRes_test = false;
 
     /* Ecal test */
     //TODO: finish this debugging code
@@ -304,7 +304,7 @@ void EventAnalyser() {
                 } else {
 //                    Efficiency_Status = "Eff1_OldAMaps";
 //                    Efficiency_Status = "Eff1_pol3Test";
-                    Efficiency_Status = "Eff1_test";
+                    Efficiency_Status = "Eff1_test_test";
 //                    Efficiency_Status = "Eff1";
                 }
             }
