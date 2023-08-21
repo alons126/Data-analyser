@@ -239,9 +239,18 @@ void NeutronResolution::SetUpperMomCut(const string &SampleName, const string &N
 
 //<editor-fold desc="hFillResPlots function">
 void NeutronResolution::hFillResPlots(double Momentum, double Resolution, double Weight) {
+    bool Printout = false;
+
     for (int i = 0; i < NumberOfSlices; i++) {
         if ((Momentum >= ResSlicesLimits.at(i).at(0)) && (Momentum < ResSlicesLimits.at(i).at(1))) {
             ResSlices.at(i).hFill(Resolution, Weight);
+
+            if (Printout) {
+                cout << "\n\nResSlicesLimits.at(i).at(0) = " << ResSlicesLimits.at(i).at(0) << "\n";
+                cout << "Momentum = " << Momentum << "\n";
+                cout << "ResSlicesLimits.at(i).at(1) = " << ResSlicesLimits.at(i).at(1) << "\n";
+            }
+
             break; // no need to keep the loop going after filling histogram
         }
     }
@@ -293,14 +302,18 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
         hSlice->Sumw2();
 
         if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
-            FittedSlices.push_back(i); // Log slices that are been fitted
+            FittedSlices.push_back(i); // Log slices that were fitted
 
             double FitUlim, FitLlim;
 
-            if (Particle == "Neutron") {
-                FitUlim = 1., FitLlim = -1.;
-            } else if (Particle == "Proton") {
-                FitUlim = 0.5, FitLlim = -0.5;
+            if (nResTestMode) { // In smear & shift test mode
+                FitUlim = 1., FitLlim = -1.; // For both neutrons and protons
+            } else {
+                if (Particle == "Neutron") {
+                    FitUlim = 1., FitLlim = -1.;
+                } else if (Particle == "Proton") {
+                    FitUlim = 0.5, FitLlim = -0.5;
+                }
             }
 
             TF1 *func = new TF1("fit", CFitFunction, FitLlim, FitUlim, 3); // create a function with 3 parameters in the range [-3,3]
@@ -313,21 +326,24 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             func->SetParameters(SliceMax, SliceMean, 0.5); // start fit with histogram's max and mean
             func->SetParNames("Constant", "Mean_value", "Sigma");
 
-            if (Particle == "Neutron") {
+            if (nResTestMode) { // In smear & shift test mode
                 func->SetParLimits(1, -1.5, 1.5); // Mean limits
                 func->SetParLimits(2, 0.001, 0.35); // Sigma limits
-//            func->SetParLimits(2, 0.001, 0.325); // Sigma limits
-//            func->SetParLimits(2, 0.001, 0.25); // Sigma limits
-            } else if (Particle == "Proton") {
-                func->SetParLimits(1, -1.5, 1.5); // Mean limits
-                func->SetParLimits(2, 0.0000000001, 0.35); // Sigma limits
+            } else {
+                if (Particle == "Neutron") {
+                    func->SetParLimits(1, -1.5, 1.5); // Mean limits
+                    func->SetParLimits(2, 0.001, 0.35); // Sigma limits
+                } else if (Particle == "Proton") {
+                    func->SetParLimits(1, -1.5, 1.5); // Mean limits
+                    func->SetParLimits(2, 0.0000000001, 0.35); // Sigma limits
+                }
             }
 
             hSlice->Fit("fit");
 
             double FitAmp = func->GetParameter(0);  // get p0
             double FitMean = func->GetParameter(1); // get p1
-            double FitStd = func->GetParameter(2);  // get p2
+            double FitStd = func->GetParameter(2);  // get p3
 
             ResSlicesFitVar.at(i).SetMean(func->GetParameter(1));
             ResSlicesFitVar.at(i).SetUpperCut(func->GetParameter(2));
@@ -344,9 +360,12 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             FitParam->SetTextFont(0);
             FitParam->SetFillColor(0);
             FitParam->SetTextAlign(12);
-            FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 8)).c_str());
-            FitParam->AddText(("Fit mean = " + to_string_with_precision(FitMean, 8)).c_str());
-            FitParam->AddText(("Fit std = " + to_string_with_precision(FitStd, 8)).c_str());
+            FitParam->AddText(("Fit amp = " + to_string(FitAmp)).c_str());
+            FitParam->AddText(("Fit mean = " + to_string(FitMean)).c_str());
+            FitParam->AddText(("Fit std = " + to_string(FitStd)).c_str());
+//            FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 8)).c_str());
+//            FitParam->AddText(("Fit mean = " + to_string_with_precision(FitMean, 8)).c_str());
+//            FitParam->AddText(("Fit std = " + to_string_with_precision(FitStd, 8)).c_str());
             ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
             FitParam->Draw("same");
 
@@ -584,83 +603,100 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
     if (!apply_nucleon_SmearAndShift) {
         return Momentum;
     } else {
+        if (SmearMode == "slices") {
 
-        //<editor-fold desc="Proton shift from excel linear fit">
-        //TODO: automate the proton mom shift into this class for future uses
-        //TODO: rename as correction, not shift
-        double Smearing;
+            //<editor-fold desc="Original (smearing from loaded nRes fit variables)">
+            if (Momentum < SliceUpperMomLim) { // NOTE: changed according to upper neutron mom. th.
+//            if (Momentum <= SliceUpperMomLim) { // NOTE: changed according to upper neutron mom. th.
+                for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
+                    if ((Loaded_res_slice.GetSliceLowerb() < Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
+//                    if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
+//                    if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
+                        double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
 
-        if (findSubstring(SName, "C12_simulation_6GeV_T5")) { // Old sample
-//            Smearing = Rand->Gaus(1, 0.0738 * Momentum - 0.0304); // new smear between 1 and 3 GeV/c
-            Smearing = Rand->Gaus(1, 0.0583 * Momentum - 0.0045); // old smear between 0.4 to 4.09 GeV/c
-        } else { // New sample
-//            Smearing = Rand->Gaus(1, 0.0694 * Momentum - 0.0236); // new smear between 1 and 3 GeV/c
-            Smearing = Rand->Gaus(1, 0.0571 * Momentum - 0.0034); // old smear between 0.4 to 4.09 GeV/c
-//            Smearing = Rand->Gaus(1, -0.0134 * Momentum * Momentum * Momentum + 0.0778 * Momentum * Momentum - 0.074 * Momentum +
-//                                     0.0596); // old smear between 0.4 to 4.09 GeV/c
-        }
+                        if (Printout) {
+                            cout << "\n\nLoaded_res_slice.GetUpperCut() = " << Loaded_res_slice.GetUpperCut() << "\n";
+                            cout << "Momentum = " << Momentum << "\n";
+                            cout << "Smearing = " << Smearing << "\n";
+                            cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
+                        }
 
-        double SmearedMomentum = Smearing * Momentum;; // minus for protons and plus for protons
+                        return Smearing * Momentum;
+                    }
+                }
+            } else {
+                double Smearing = Rand->Gaus(1, Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut());
 
-        if (Printout) {
-            cout << "\n\nSmearing = " << Smearing << "\n";
-            cout << "Momentum = " << Momentum << "\n";
-            cout << "SmearedMomentum = " << SmearedMomentum << "\n\n";
-        }
+                if (Printout) {
+                    cout << "\n\nLoaded_Res_Slices_FitVar.GetUpperCut() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut() << "\n";
+                    cout << "Loaded_res_slice.GetSliceLowerb() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceLowerb() << "\n";
+                    cout << "Loaded_res_slice.GetSliceUpperb() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceUpperb() << "\n";
+                    cout << "Momentum = " << Momentum << "\n";
+                    cout << "Smearing = " << Smearing << "\n";
+                    cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
+                }
 
-        return SmearedMomentum;
-        //</editor-fold>
+                return Smearing * Momentum;
+            }
 
-//        //<editor-fold desc="Original (smearing from loaded nRes fit variables)">
-//        if (Momentum <= SliceUpperMomLim) { // NOTE: changed according to upper neutron mom. th.
-//            for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
-//                if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-//                    double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
+            //        //<editor-fold desc="Original smearing code by slices">
+//        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
+//            if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
+//                double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
 //
-//                    if (Printout) {
-//                        cout << "\n\nLoaded_res_slice.GetUpperCut() = " << Loaded_res_slice.GetUpperCut() << "\n";
-//                        cout << "Momentum = " << Momentum << "\n";
-//                        cout << "Smearing = " << Smearing << "\n";
-//                        cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
-//                    }
-//
-//                    return Smearing * Momentum;
+//                if (Printout) {
+//                    cout << "\n\nLoaded_res_slice.GetUpperCut() = " << Loaded_res_slice.GetUpperCut() << "\n";
+//                    cout << "Momentum = " << Momentum << "\n";
+//                    cout << "Smearing = " << Smearing << "\n";
+//                    cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
 //                }
-//            }
-//        } else {
-//            double Smearing = Rand->Gaus(1, Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut());
 //
-//            if (Printout) {
-//                cout << "\n\nLoaded_Res_Slices_FitVar.GetUpperCut() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut() << "\n";
-//                cout << "Loaded_res_slice.GetSliceLowerb() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceLowerb() << "\n";
-//                cout << "Loaded_res_slice.GetSliceUpperb() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceUpperb() << "\n";
-//                cout << "Momentum = " << Momentum << "\n";
-//                cout << "Smearing = " << Smearing << "\n";
-//                cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
+//                return Smearing * Momentum;
 //            }
-//
-//            return Smearing * Momentum;
 //        }
-//
-////        //<editor-fold desc="Original">
-////        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
-////            if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-////                double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
-////
-////                if (Printout) {
-////                    cout << "\n\nLoaded_res_slice.GetUpperCut() = " << Loaded_res_slice.GetUpperCut() << "\n";
-////                    cout << "Momentum = " << Momentum << "\n";
-////                    cout << "Smearing = " << Smearing << "\n";
-////                    cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
-////                }
-////
-////                return Smearing * Momentum;
-////            }
-////        }
-////        //</editor-fold>
-//
 //        //</editor-fold>
 
+            //</editor-fold>
+
+        } else if ((SmearMode == "pol1") || (SmearMode == "pol3")) {
+            /* Proton smear from *excel* linear fit */
+            //TODO: automate the proton mom smear into this class for future uses
+            double Smearing;
+
+            if (findSubstring(SName, "C12_simulation_6GeV_T5")) { // Old sample
+                if (SmearMode == "pol1") {
+//                    Smearing = Rand->Gaus(1, 0.0738 * Momentum - 0.0304); // new smear between 1 and 3 GeV/c
+                    Smearing = Rand->Gaus(1, 0.0583 * Momentum - 0.0045); // old smear between 0.4 to 4.09 GeV/c
+                } else {
+                    cout << "NeutronResolution::PSmear: SmearMode illegal! Exiting", exit(0);
+                }
+            } else { // New sample (24M)
+                if (SmearMode == "pol1") {
+//                    Smearing = Rand->Gaus(1, 0.0694 * Momentum - 0.0236); // new smear between 1 and 3 GeV/c
+                    Smearing = Rand->Gaus(1, 0.0571 * Momentum - 0.0034); // old smear between 0.4 to 4.09 GeV/c
+                } else if (SmearMode == "pol3") {
+                    double Momentum2 = Momentum * Momentum;
+                    double Momentum3 = Momentum * Momentum * Momentum;
+
+                    Smearing = Rand->Gaus(1, -0.0134 * Momentum3 + 0.0778 * Momentum2 - 0.074 * Momentum + 0.0596); // old smear between 0.4 to 4.09 GeV/c
+                } else {
+                    cout << "NeutronResolution::PSmear: SmearMode illegal! Exiting", exit(0);
+                }
+            }
+
+            double SmearedMomentum = Smearing * Momentum; // minus for protons and plus for protons
+
+            if (Printout) {
+                cout << "\n\nSmearMode = " << SmearMode << "\n";
+                cout << "Smearing = " << Smearing << "\n";
+                cout << "Momentum = " << Momentum << "\n";
+                cout << "SmearedMomentum = " << SmearedMomentum << "\n\n";
+            }
+
+            return SmearedMomentum;
+        } else {
+            cout << "NeutronResolution::PSmear: SmearMode illegal! Exiting", exit(0);
+        }
     }
 
     return Momentum;
@@ -678,51 +714,68 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
     if (!apply_nucleon_SmearAndShift) {
         return Momentum;
     } else {
+        if (ShiftMode == "slices") {
 
-        //<editor-fold desc="Neutron shift from excel linear fit">
-        //TODO: automate the neutron mom shift into this class for future uses
-        //TODO: rename as correction, not shift
-        double shift;
+            //<editor-fold desc="Original (shift from loaded nRes fit variables)">
+            for (DSCuts Loaded_res_slice: Loaded_Res_Slices_HistVar) {
+                if ((Loaded_res_slice.GetSliceLowerb() < Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
+//                if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
+                    double ShiftedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
 
-        if (findSubstring(SName, "C12_simulation_6GeV_T5")) { // Old sample
-//            shift = 0.0579 * Momentum - 0.0146; // new shift between 1 and 3 GeV/c
-            shift = 0.0583 * Momentum - 0.0127; // old shift between 0.4 to 4.09 GeV/c
-        } else { // New sample
-//            shift = 0.0683 * Momentum - 0.0262; // new shift between 1 and 3 GeV/c
-            shift = 0.0681 * Momentum - 0.023; // old shift between 0.4 to 4.09 GeV/c
-//            shift = -0.0013 * Momentum * Momentum * Momentum + 0.0189 * Momentum * Momentum + 0.0107 * Momentum + 0.0204; // old shift between 0.4 to 4.09 GeV/c
+                    if (Printout) {
+                        cout << "\n\nLoaded_res_slice.GetMean() = " << Loaded_res_slice.GetMean() << "\n";
+                        cout << "Momentum = " << Momentum << "\n";
+                        cout << "shift = " << Loaded_res_slice.GetMean() << "\n";
+                        cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
+                    }
+
+                    return ShiftedMomentum;
+                }
+            }
+            //</editor-fold>
+
+        } else if ((ShiftMode == "pol1") || (ShiftMode == "pol3")) {
+            /* Neutron shift from *excel* linear fit */
+            //TODO: automate the neutron mom shift into this class for future uses
+            //TODO: rename as correction, not shift
+            double shift;
+
+            if (findSubstring(SName, "C12_simulation_6GeV_T5")) { // Old sample
+                if (ShiftMode == "pol1") {
+//                    shift = 0.0579 * Momentum - 0.0146; // new shift between 1 and 3 GeV/c
+                    shift = 0.0583 * Momentum - 0.0127; // old shift between 0.4 to 4.09 GeV/c
+                } else {
+                    cout << "NeutronResolution::NShift: ShiftMode illegal! Exiting", exit(0);
+                }
+            } else { // New sample (24M)
+                if (ShiftMode == "pol1") {
+//                    shift = 0.0683 * Momentum - 0.0262; // new shift between 1 and 3 GeV/c
+                    shift = 0.0681 * Momentum - 0.023; // old shift between 0.4 to 4.09 GeV/c
+                } else if (ShiftMode == "pol3") {
+                    double Momentum2 = Momentum * Momentum;
+                    double Momentum3 = Momentum * Momentum * Momentum;
+
+                    shift = -0.0013 * Momentum3 + 0.0189 * Momentum2 + 0.0107 * Momentum + 0.0204; // old shift between 0.4 to 4.09 GeV/c
+                } else {
+                    cout << "NeutronResolution::NShift: ShiftMode illegal! Exiting", exit(0);
+                }
+            }
+
+            double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
+
+            if (Printout) {
+                cout << "\n\nShiftMode = " << ShiftMode << "\n";
+                cout << "Shift = " << shift << "\n";
+                cout << "Momentum = " << Momentum << "\n";
+                cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
+            }
+
+            return ShiftedMomentum;
+        } else {
+            cout << "NeutronResolution::NShift: ShiftMode illegal! Exiting", exit(0);
         }
-
-        double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
-
-        if (Printout) {
-            cout << "\n\nshift = " << shift << "\n";
-            cout << "Momentum = " << Momentum << "\n";
-            cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
-        }
-
-        return ShiftedMomentum;
-        //</editor-fold>
-
-//        //<editor-fold desc="Original (shift from loaded nRes fit variables)">
-//        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_HistVar) {
-//            if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-//                double ShiftedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
-//
-//                if (Printout) {
-//                    cout << "\n\nLoaded_res_slice.GetMean() = " << Loaded_res_slice.GetMean() << "\n";
-//                    cout << "Momentum = " << Momentum << "\n";
-//                    cout << "shift = " << Loaded_res_slice.GetMean() << "\n";
-//                    cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
-//                }
-//
-//                return ShiftedMomentum;
-//            }
-//        }
-//        //</editor-fold>
-
     }
 
-//    return Momentum;
+    return Momentum;
 }
 //</editor-fold>

@@ -42,6 +42,15 @@ using namespace std;
 
 class NeutronResolution {
 private:
+    bool nResTestMode;
+//    string SmearMode = "slices"; // Smear by resolution fit width values from slices
+    string SmearMode = "pol1";     // Smear by fitted linear function to resolution Gaussian width
+//    string SmearMode = "pol3";   // Smear by fitted 3rd degree polynomial function to resolution Gaussian width
+//    string ShiftMode = "slices"; // Shift by resolution fit width values from slices
+    string ShiftMode = "pol1";     // Shift by fitted linear function to resolution Gaussian mean
+//    string ShiftMode = "pol3";   // Shift by fitted 3rd degree polynomial function to resolution Gaussian mean
+
+
     vector<hPlot1D> ResSlices;
     vector<vector<double>> ResSlicesLimits;
     vector<DSCuts> ResSlicesFitVar;
@@ -72,7 +81,6 @@ private:
 
     double Neutron_Momentum_cut = 9999.; // from clas12ana
     string SName;
-    bool nResTestMode;
 
 public:
 

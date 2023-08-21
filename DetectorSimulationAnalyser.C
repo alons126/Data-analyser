@@ -197,11 +197,11 @@ void EventAnalyser() {
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_weights = false;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -10918,12 +10918,6 @@ void EventAnalyser() {
                             }
 
                             if (nRes_Pass_dThetaCut && nRes_Pass_dPhiCut) {
-
-//                                auto TL_n_1n_test = n_1n->mc();
-//
-//                                cout << "\n\nn_1n theta:" << n_1n->getTheta() * 180 / pi << "\n";
-//                                cout << "TL theta:" << TL_n_1n_test->getTheta() * 180 / pi << "\n";
-
                                 /* Plots for TL neutrons passing matching cuts */
                                 hTheta_nFD_TL_MatchedN_1n.hFill(TLNeutronTheta, Weight);
                                 hPhi_nFD_TL_MatchedN_1n.hFill(TLNeutronPhi, Weight);
