@@ -10,9 +10,11 @@
 
 //<editor-fold desc="NeutronResolution constructor">
 NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double ParticleMomTh,
-                                     const string &SavePath, double DeltaSlices, bool VaryingDelta, bool nRes_test) {
-    SlicesSavePath = SavePath, delta = DeltaSlices;
+                                     const string &SavePath, double DeltaSlices, bool VaryingDelta, const string &SmearM, const string &ShiftM, bool nRes_test) {
+    SlicesSavePath = SavePath;
+    delta = DeltaSlices;
     nResTestMode = nRes_test;
+    SmearMode = SmearM, ShiftMode = ShiftM;
 
     double Delta = delta, SliceLowerLim = ParticleMomTh, SliceUpperLim;
     SetUpperMomCut(SampleName, NucleonCutsDirectory);
@@ -761,7 +763,8 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
                 }
             }
 
-            double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
+            double ShiftedMomentum = Momentum * (1 - shift); // minus for protons and plus for neutrons
+//            double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
 
             if (Printout) {
                 cout << "\n\nShiftMode = " << ShiftMode << "\n";

@@ -601,9 +601,9 @@
 //
 //    if (plot_and_fit_MomRes) {
 //        nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, n_mom_th.GetLowerCut(),
-//                                 directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"], DeltaSlices, VaryingDelta);
+//                                 directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta);
 //        pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, p_mom_th.GetLowerCut(),
-//                                 directories.Resolution_Directory_map["Momentum_resolution_slices_1p_Directory"], DeltaSlices, VaryingDelta);
+//                                 directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta);
 //    } else {
 //        nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str(),
 //                              SampleName, NucleonCutsDirectory);

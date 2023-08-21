@@ -43,6 +43,7 @@ using namespace std;
 class NeutronResolution {
 private:
     bool nResTestMode;
+
 //    string SmearMode = "slices"; // Smear by resolution fit width values from slices
     string SmearMode = "pol1";     // Smear by fitted linear function to resolution Gaussian width
 //    string SmearMode = "pol3";   // Smear by fitted 3rd degree polynomial function to resolution Gaussian width
@@ -91,7 +92,7 @@ public:
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double nMomTh, const string &SavePath = "./",
-                      double DeltaSlices = 0.2, bool VaryingDelta = false, bool nRes_test = false);
+                      double DeltaSlices = 0.2, bool VaryingDelta = false, const string &SmearM = "pol1", const string &ShiftM = "pol1", bool nRes_test = false);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -146,6 +147,12 @@ public:
     void SetHistSliceUpperLim(double hsUpperLim) { hSliceUpperLim = hsUpperLim; };
 
     void SetHistSliceLowerLim(double hsLowerLim) { hSliceLowerLim = hsLowerLim; };
+
+    void SetSmearMode(const string &SmearM) { SmearMode = SmearM; };
+
+    void SetShiftMode(const string &ShiftM) { ShiftMode = ShiftM; };
+
+    void SetSmearAndShiftModes(const string &SmearM, const string &ShiftM) { SmearMode = SmearM, ShiftMode = ShiftM; };
 
 };
 

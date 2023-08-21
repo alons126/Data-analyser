@@ -1120,14 +1120,14 @@ Directories::Directories(std::string plots_path) {
                                                           Find(Resolution_Daughter_Folders, "02_1p") + "/";
     Resolution_Directory_map["Momentum_resolution_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                                    Find(Resolution_Daughter_Folders, "02_1p/01_Momentum_resolution_plots_1p") + "/";
-    Resolution_Directory_map["Momentum_resolution_slices_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+    Resolution_Directory_map["pRes_plots_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                                           Find(Resolution_Daughter_Folders, "02_1p/02_Proton_resolution_plots_1p") + "/";
 
     Resolution_Directory_map["Resolution_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                           Find(Resolution_Daughter_Folders, "03_1n") + "/";
     Resolution_Directory_map["Momentum_resolution_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                                    Find(Resolution_Daughter_Folders, "03_1n/01_Momentum_resolution_plots_1n") + "/";
-    Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+    Resolution_Directory_map["nRes_plots_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                                           Find(Resolution_Daughter_Folders, "03_1n/02_Neutron_resolution_plots_1n") + "/";
 
 //    Resolution_Directory_map["Resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +

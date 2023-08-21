@@ -124,7 +124,7 @@ void EventAnalyser() {
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = true; // Enforce TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
     bool limless_mom_eff_plots = false;
     bool Enable_FD_photons = false; // keep as false to decrease RES and DIS
@@ -140,10 +140,11 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
-    bool VaryingDelta = true;
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     double DeltaSlices = 0.05;
-    bool nRes_test = false;
+    bool VaryingDelta = true;
+    string SmearMode = "pol1", ShiftMode = "pol1";
+    bool nRes_test = true; // false by default
 
     /* Ecal test */
     //TODO: finish this debugging code
@@ -201,7 +202,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -305,7 +306,7 @@ void EventAnalyser() {
 //                    Efficiency_Status = "Eff1_OldAMaps";
 //                    Efficiency_Status = "Eff1_pol3Test";
 //                    Efficiency_Status = "Eff1_test";
-                    Efficiency_Status = "Eff1";
+                    Efficiency_Status = "Eff1_MinusTest";
                 }
             }
         }
@@ -941,9 +942,9 @@ void EventAnalyser() {
 
     if (plot_and_fit_MomRes) {
         nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, n_mom_th.GetLowerCut(),
-                                 directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"], DeltaSlices, VaryingDelta, nRes_test);
+                                 directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode, ShiftMode, nRes_test);
         pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, p_mom_th.GetLowerCut(),
-                                 directories.Resolution_Directory_map["Momentum_resolution_slices_1p_Directory"], DeltaSlices, VaryingDelta, nRes_test);
+                                 directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode, ShiftMode, nRes_test);
 
         if (nRes_test) {
             nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str(),
@@ -952,6 +953,7 @@ void EventAnalyser() {
                                   SampleName, NucleonCutsDirectory);
         }
     } else {
+        nRes.SetSmearAndShiftModes(SmearMode, ShiftMode);
         nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str(),
                               SampleName, NucleonCutsDirectory);
         nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_hist_param_-_" + SampleName + ".par").c_str(),
