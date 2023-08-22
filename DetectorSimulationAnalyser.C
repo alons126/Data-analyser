@@ -141,9 +141,9 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     bool plot_and_fit_MomRes = true; // Generate nRes plots
-    double DeltaSlices = 0.05;
-    bool VaryingDelta = true;
-    string SmearMode = "pol1", ShiftMode = "pol1";
+    const double DeltaSlices = 0.05;
+    const bool VaryingDelta = true;
+    const string SmearMode = "pol1", ShiftMode = "pol1";
     bool nRes_test = true; // false by default
 
     /* Ecal test */
@@ -202,7 +202,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -303,10 +303,8 @@ void EventAnalyser() {
                 if (Ecal_test) {
                     Efficiency_Status = "EcalT";
                 } else {
-//                    Efficiency_Status = "Eff1_OldAMaps";
-//                    Efficiency_Status = "Eff1_pol3Test";
-//                    Efficiency_Status = "Eff1_test";
-                    Efficiency_Status = "Eff1_MinusTest";
+//                    Efficiency_Status = "Eff1_FLIPED";
+                    Efficiency_Status = "Eff1_PercentageT";
                 }
             }
         }
@@ -7563,29 +7561,6 @@ void EventAnalyser() {
         auto electrons_det = c12->getByID(11);
         if (electrons_det.size() == 1) { ++num_of_events_with_exactly_1e_from_file; }
 
-//        //<editor-fold desc="match test beta">
-//        //        auto Sort = p_1p->sort();
-////        auto TL_p_1p_test = p_1p->mc();
-//
-//        cout << "\n\n";
-//
-//        for (auto p: c12->getDetParticles()) {
-//            if (p->mc()->isMatched()) {//this particle has an mc match
-//                cout << "rec entry: " << p->par()->getEntry()
-//                     << ", rec pid: " << p->par()->getPid()
-//                     << ", mc pid: " << p->mc()->getPid()
-//                     << ", mc index: " << p->mc()->getMatch()->getMCindex() << endl;
-////                if(p->mc()->getMatch()->getQuality()>0.9){
-////                    hPDiff->Fill(p->getMCPDiff());
-////                    hThDiff->Fill(p->getMCThetaDiff()*TMath::RadToDeg());
-////                    hPhDiff->Fill(p->getMCPhiDiff()*TMath::RadToDeg());
-////                }
-//            }
-//        }
-//
-//        cout << "\n\n";
-//        //</editor-fold>
-
         clasAna.Run(c12);
 
         /* allParticles vector from clas12ana (my addition). Used mostly for 1n & nFDpCD.  */
@@ -7664,6 +7639,144 @@ void EventAnalyser() {
 
         bool basic_event_selection = (single_electron && no_carged_Kaons && no_carged_pions && no_deuterons && (Enable_FD_photons || (PhotonsFD_ind.size() == 0)));
         //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Reco-MC match tests">
+
+//        //<editor-fold desc="Electrons outside clas12ana (successful test!)">
+//        if (electrons_det.size() > 0) {
+//
+//        cout << "\n\n";
+//
+//            auto Reco_electrons_MT = c12->getByID(11)[0];
+//            auto TL_electrons_MT = Reco_electrons_MT->mc();
+//
+//            cout << "Reco_electrons_MT->par()->getPid() = " << Reco_electrons_MT->par()->getPid() << "\n";
+//            cout << "TL_electrons_MT->getPid() = " << TL_electrons_MT->getPid() << "\n\n";
+//
+//            cout << "Reco_electrons_MT->getTheta() = " << Reco_electrons_MT->getTheta() << "\n";
+//            cout << "TL_electrons_MT->getTheta() = " << TL_electrons_MT->getTheta() << "\n\n";
+//
+//        cout << "\n\n";
+//
+//        }
+//        //</editor-fold>
+
+//        //<editor-fold desc="Electrons inside clas12ana (successful test!)">
+//        if (electrons.size() > 0) {
+//            cout << "====================================================\n\n";
+//
+//            auto Reco_electrons_MT = electrons[0];
+//            auto TL_electrons_MT = Reco_electrons_MT->mc();
+//
+//            cout << "Reco_electrons_MT->par()->getPid() = " << Reco_electrons_MT->par()->getPid() << "\n";
+//            cout << "TL_electrons_MT->getPid() = " << TL_electrons_MT->getPid() << "\n\n";
+//
+//            cout << "Reco_electrons_MT->getP() = " << Reco_electrons_MT->getP() << "\n";
+//            cout << "TL_electrons_MT->getP() = " << TL_electrons_MT->getP() << "\n\n";
+//
+//            cout << "Reco_electrons_MT->getTheta() = " << Reco_electrons_MT->getTheta() * 180.0 / pi << "\n";
+//            cout << "TL_electrons_MT->getTheta() = " << TL_electrons_MT->getTheta() * 180.0 / pi << "\n\n";
+//
+//            cout << "Reco_electrons_MT->getPhi() = " << Reco_electrons_MT->getPhi() * 180.0 / pi << "\n";
+//            cout << "TL_electrons_MT->getPhi() = " << TL_electrons_MT->getPhi() * 180.0 / pi << "\n\n";
+//
+//            cout << "\n\n";
+//        }
+//        //</editor-fold>
+
+//        //<editor-fold desc="Protons outside clas12ana (...)">
+//        auto protons_det = c12->getByID(2212);
+//
+//        if (protons_det.size() > 0) {
+//            cout << "====================================================\n\n";
+//
+//            mcmatch_ptr MCMatch;
+//            auto mcpbank_MCMTest = c12->mcparts();
+//            const Int_t Ngen_MCMTest = mcpbank_MCMTest->getRows();
+//
+////            int Reco_ind = protons_det[0]->getIndex();
+////            int TL_ind = mcpbank_MCMTest->match_to(Reco_ind);
+////            cout << "Reco_ind = " << Reco_ind << "\n";
+////            cout << "TL_ind = " << TL_ind << "\n\n";
+//
+//            for (Int_t i = 0; i < protons_det.size(); i++) {
+//                int Reco_ind = protons_det[i]->getIndex();
+//                mcpbank_MCMTest->setEntry(Reco_ind);
+//
+//                int Reco_Proton_PID = protons_det[i]->par()->getPid();
+//                int TL_Proton_PID = mcpbank_MCMTest->getPid();
+//
+//                if (Reco_Proton_PID == TL_Proton_PID) {
+//                    cout << "Reco_Proton_PID = " << Reco_Proton_PID << "\n";
+//                    cout << "TL_Proton_PID = " << TL_Proton_PID << "\n\n";
+//
+//                    cout << "protons_det[i]->getP() = " << protons_det[i]->getP() << "\n";
+//                    cout << "mcpbank_MCMTest->getP() = " << mcpbank_MCMTest->getP() << "\n\n";
+//
+//                    cout << "protons_det[i]->getTheta() = " << protons_det[i]->getTheta() * 180.0 / pi << "\n";
+//                    cout << "mcpbank_MCMTest->getTheta() = " << mcpbank_MCMTest->getTheta() * 180.0 / pi << "\n\n";
+//
+//                    cout << "protons_det[i]->getPhi() = " << protons_det[i]->getPhi() * 180.0 / pi << "\n";
+//                    cout << "mcpbank_MCMTest->getPhi() = " << mcpbank_MCMTest->getPhi() * 180.0 / pi << "\n\n";
+//                }
+//            }
+//
+////            auto Reco_Protons_MT = protons_det[0];
+////            auto TL_Protons_MT = Reco_Protons_MT->mc();
+////            auto Reco_Protons_MT = protons_det[0];
+////            auto TL_Protons_MT = Reco_Protons_MT->mc();
+//
+////            cout << "Reco_Protons_MT->par()->getPid() = " << Reco_Protons_MT->par()->getPid() << "\n";
+////            cout << "TL_Protons_MT->getPid() = " << TL_Protons_MT->getPid() << "\n\n";
+////
+////            cout << "Reco_Protons_MT->getP() = " << Reco_Protons_MT->getP() << "\n";
+////            cout << "TL_Protons_MT->getP() = " << TL_Protons_MT->getP() << "\n\n";
+////
+////            cout << "Reco_Protons_MT->getTheta() = " << Reco_Protons_MT->getTheta() * 180.0 / pi << "\n";
+////            cout << "TL_Protons_MT->getTheta() = " << TL_Protons_MT->getTheta() * 180.0 / pi << "\n\n";
+////
+////            cout << "Reco_Protons_MT->getPhi() = " << Reco_Protons_MT->getPhi() * 180.0 / pi << "\n";
+////            cout << "TL_Protons_MT->getPhi() = " << TL_Protons_MT->getPhi() * 180.0 / pi << "\n\n";
+//
+//            cout << "\n\n";
+//        }
+//        //</editor-fold>
+
+//        //<editor-fold desc="Protons inside clas12ana (...)">
+//        if (Protons_ind.size() > 0) {
+//            mcmatch_ptr MCMatch;
+//            auto mcpbank_MCMTest = c12->mcparts();
+//            const Int_t Ngen_MCMTest = mcpbank_MCMTest->getRows();
+//
+//            for (Int_t i = 0; i < Protons_ind.size(); i++) {
+//                int Reco_ind = protons[Protons_ind.at(i)]->getIndex();
+//                mcpbank_MCMTest->setEntry(Reco_ind);
+//
+//                int Reco_Proton_PID = protons[Protons_ind.at(i)]->par()->getPid();
+//                int TL_Proton_PID = mcpbank_MCMTest->getPid();
+//
+//                if (Reco_Proton_PID == TL_Proton_PID) {
+//                    cout << "====================================================\n\n";
+//
+//                    cout << "Reco_Proton_PID = " << Reco_Proton_PID << "\n";
+//                    cout << "TL_Proton_PID = " << TL_Proton_PID << "\n\n";
+//
+//                    cout << "protons[Protons_ind.at(i)]->getP() = " << protons[Protons_ind.at(i)]->getP() << "\n";
+//                    cout << "mcpbank_MCMTest->getP() = " << mcpbank_MCMTest->getP() << "\n\n";
+//
+//                    cout << "protons[Protons_ind.at(i)]->getTheta() = " << protons[Protons_ind.at(i)]->getTheta() * 180.0 / pi << "\n";
+//                    cout << "mcpbank_MCMTest->getTheta() = " << mcpbank_MCMTest->getTheta() * 180.0 / pi << "\n\n";
+//
+//                    cout << "protons[Protons_ind.at(i)]->getPhi() = " << protons[Protons_ind.at(i)]->getPhi() * 180.0 / pi << "\n";
+//                    cout << "mcpbank_MCMTest->getPhi() = " << mcpbank_MCMTest->getPhi() * 180.0 / pi << "\n\n";
+//                }
+//            }
+//
+//            cout << "\n\n";
+//        }
+//        //</editor-fold>
 
         //</editor-fold>
 
@@ -9966,19 +10079,6 @@ void EventAnalyser() {
                     auto mcpbank_pRes = c12->mcparts();
                     const Int_t Ngen_pRes = mcpbank_pRes->getRows();
 
-
-//                    auto Sort = p_1p->sort();
-//                    auto TL_p_1p_test = p_1p->mc();
-//
-//                    cout << "\n\n\np_1p PID:" << p_1p->getPid() << "\n";
-//                    cout << "TL PID:" << TL_p_1p_test->getPid() << "\n";
-//                    cout << "\np_1p P:" << BoolToString(p_1p->mc()->isMatched()) << "\n";
-////                    cout << "TL P:" << TL_p_1p_test->getP() << "\n";
-////                    cout << "\np_1p P:" << p_1p->getP() << "\n";
-////                    cout << "TL P:" << TL_p_1p_test->getP() << "\n";
-////                    cout << "\n\np_1p theta:" << p_1p->getTheta() * 180 / pi << "\n";
-////                    cout << "TL theta:" << TL_p_1p_test->getTheta() * 180 / pi << "\n";
-
                     for (Int_t i = 0; i < Ngen_pRes; i++) {
                         mcpbank_pRes->setEntry(i);
 
@@ -10852,7 +10952,115 @@ void EventAnalyser() {
 
                 hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight_1n);
 
-                //<editor-fold desc="Fill resolution histograms (1n)">
+//                //<editor-fold desc="Fill resolution histograms (1n)">
+//                if (plot_and_fit_MomRes) {
+//
+////                    cout << "====================================================\n\n";
+////
+////                    auto Reco_n_MT = n_1n;
+////                    auto TL_n_MT = Reco_n_MT->mc();
+////
+////                    if (TL_n_MT->getPid() == 2112) {
+////                        cout << "Reco_n_MT->par()->getPid() = " << Reco_n_MT->par()->getPid() << "\n";
+////                        cout << "TL_n_MT->getPid() = " << TL_n_MT->getPid() << "\n\n";
+////
+////                        cout << "Reco_n_MT->getP() = " << Reco_n_MT->getP() << "\n";
+////                        cout << "TL_n_MT->getP() = " << TL_n_MT->getP() << "\n\n";
+////
+////                        cout << "Reco_n_MT->getTheta() = " << Reco_n_MT->getTheta() * 180.0 / pi << "\n";
+////                        cout << "TL_n_MT->getTheta() = " << TL_n_MT->getTheta() * 180.0 / pi << "\n\n";
+////
+////                        cout << "Reco_n_MT->getPhi() = " << Reco_n_MT->getPhi() * 180.0 / pi << "\n";
+////                        cout << "TL_n_MT->getPhi() = " << TL_n_MT->getPhi() * 180.0 / pi << "\n\n";
+////                    }
+////
+////                    cout << "\n\n";
+//
+//
+////                    auto mcpbank_nRes = c12->mcparts();
+////                    const Int_t Ngen_nRes = mcpbank_nRes->getRows();
+////
+////                    for (Int_t i = 0; i < Ngen_nRes; i++) {
+////                        mcpbank_nRes->setEntry(i);
+////
+////                        /* TL neutron kinematic variables */
+////                        double TLNeutronP = rCalc(mcpbank_nRes->getPx(), mcpbank_nRes->getPy(), mcpbank_nRes->getPz());
+////                        double TLNeutronTheta = acos(mcpbank_nRes->getPz() / TLNeutronP) * 180.0 / pi;
+////                        double TLNeutronPhi = atan2(mcpbank_nRes->getPy(), mcpbank_nRes->getPx()) * 180.0 / pi;
+////
+////                        /* Reco neutron kinematic variables */
+////                        double RecoNeutronP = P_n_1n_3v.Mag();
+////                        double RecoNeutronTheta = P_n_1n_3v.Theta() * 180.0 / pi;
+////                        double RecoNeutronPhi = P_n_1n_3v.Phi() * 180.0 / pi;
+////
+////                        /* Reco-TL angle difference */
+////                        double dNeutronTheta = RecoNeutronTheta - TLNeutronTheta;
+////                        double dNeutronPhi = CalcdPhi(RecoNeutronPhi - TLNeutronPhi);
+////
+////                        auto pid = mcpbank_nRes->getPid();
+////
+////                        //<editor-fold desc="nRes cuts">
+////
+////                        //<editor-fold desc="nRes good neutron cuts">
+////                        bool nRes_TL_Pass_PIDCut = (pid == 2112);
+////
+////                        bool Reco_InFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", RecoNeutronP, RecoNeutronTheta, RecoNeutronPhi, false);
+////                        bool TL_InFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", TLNeutronP, TLNeutronTheta, TLNeutronPhi, false);
+////                        bool nRes_Pass_FiducialCuts = (Reco_InFD && TL_InFD);
+////
+////                        bool Reco_Theta_kinCut = (RecoNeutronTheta <= FD_nucleon_theta_cut.GetUpperCut());
+////                        bool TL_Theta_kinCuts = (TLNeutronTheta <= FD_nucleon_theta_cut.GetUpperCut());
+////                        bool nRes_Pass_ThetaKinCut = (Reco_Theta_kinCut && TL_Theta_kinCuts);
+////
+////                        bool nRes_Pass_Neutron_MomKinCut = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut()));
+////                        //</editor-fold>
+////
+////                        //<editor-fold desc="nRes matching cuts">
+////                        double dPhiCut = 5., dThetaCut = 2.; //TODO: add to a DSCuts variable
+////                        bool nRes_Pass_dThetaCut = (fabs(dNeutronTheta) < dThetaCut);
+////                        bool nRes_Pass_dPhiCut = (fabs(dNeutronPhi) < dPhiCut);
+////                        //</editor-fold>
+////
+////                        //</editor-fold>
+////
+////                        if (nRes_TL_Pass_PIDCut && nRes_Pass_FiducialCuts && nRes_Pass_ThetaKinCut && nRes_Pass_Neutron_MomKinCut) {
+////                            /* Plots for TL neutrons passing nRes cuts */
+////                            hdTheta_nFD_TL_BC_1n.hFill(dNeutronTheta, Weight);
+////                            hdTheta_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronTheta, Weight);
+////                            hdPhi_nFD_TL_BC_1n.hFill(dNeutronPhi, Weight);
+////                            hdPhi_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronPhi, Weight);
+////
+////                            hTheta_nFD_TL_AnResC_1n.hFill(TLNeutronTheta, Weight);
+////                            hPhi_nFD_TL_AnResC_1n.hFill(TLNeutronPhi, Weight);
+////                            hTheta_nFD_TL_VS_Phi_nFD_TL_AnResC_1n->Fill(TLNeutronPhi, TLNeutronTheta, Weight);
+////
+////                            if (nRes_Pass_dPhiCut) {
+////                                /* Plots for TL neutrons passing nRes_Pass_dPhiCut */
+////                                hdTheta_nFD_TL_AdPC_1n.hFill(dNeutronTheta, Weight);
+////                                hdTheta_nFD_TL_ZOOMIN_AdPC_1n.hFill(dNeutronTheta, Weight);
+////                                hdPhi_nFD_TL_AdPC_1n.hFill(dNeutronPhi, Weight);
+////                                hdPhi_nFD_TL_ZOOMIN_AdPC_1n.hFill(dNeutronPhi, Weight);
+////                            }
+////
+////                            if (nRes_Pass_dThetaCut && nRes_Pass_dPhiCut) {
+////                                /* Plots for TL neutrons passing matching cuts */
+////                                hTheta_nFD_TL_MatchedN_1n.hFill(TLNeutronTheta, Weight);
+////                                hPhi_nFD_TL_MatchedN_1n.hFill(TLNeutronPhi, Weight);
+////                                hTheta_nFD_TL_VS_Phi_nFD_TL_MatchedN_1n->Fill(TLNeutronPhi, TLNeutronTheta, Weight);
+////
+////                                /* Filling nRes plots */
+////                                double nResolution = (TLNeutronP - RecoNeutronP) / TLNeutronP;
+////                                nRes.hFillResPlots(TLNeutronP, nResolution, Weight);
+////
+////                                hP_nFD_Res_1n.hFill(nResolution, Weight);
+////                                hP_nFD_Res_VS_P_nFD_1n->Fill(TLNeutronP, nResolution, Weight);
+////                            }
+////                        }
+////                    }
+//                } // end of resolution calculation if
+//                //</editor-fold>
+
+                //<editor-fold desc="Old resolution code (1n)">
                 if (plot_and_fit_MomRes) {
                     auto mcpbank_nRes = c12->mcparts();
                     const Int_t Ngen_nRes = mcpbank_nRes->getRows();
@@ -10864,6 +11072,14 @@ void EventAnalyser() {
                         double TLNeutronP = rCalc(mcpbank_nRes->getPx(), mcpbank_nRes->getPy(), mcpbank_nRes->getPz());
                         double TLNeutronTheta = acos(mcpbank_nRes->getPz() / TLNeutronP) * 180.0 / pi;
                         double TLNeutronPhi = atan2(mcpbank_nRes->getPy(), mcpbank_nRes->getPx()) * 180.0 / pi;
+
+//                        /* Reco neutron kinematic variables */
+//                        double Momentum2 = TLNeutronP * TLNeutronP;
+//                        double Momentum3 = TLNeutronP * TLNeutronP * TLNeutronP;
+//                        double shift = -0.0013 * Momentum3 + 0.0189 * Momentum2 + 0.0107 * TLNeutronP + 0.0204;
+//                        double RecoNeutronP = (P_n_1n_3v.Mag() + shift*TLNeutronP);
+//                        double RecoNeutronTheta = P_n_1n_3v.Theta() * 180.0 / pi;
+//                        double RecoNeutronPhi = P_n_1n_3v.Phi() * 180.0 / pi;
 
                         /* Reco neutron kinematic variables */
                         double RecoNeutronP = P_n_1n_3v.Mag();
@@ -10931,6 +11147,8 @@ void EventAnalyser() {
 
                                 hP_nFD_Res_1n.hFill(nResolution, Weight);
                                 hP_nFD_Res_VS_P_nFD_1n->Fill(TLNeutronP, nResolution, Weight);
+
+//                                break;
                             }
                         }
                     }
@@ -18165,8 +18383,10 @@ void EventAnalyser() {
     myLogFile << "equi_P_e_bins = " << BoolToString(equi_P_e_bins) << "\n\n";
 
     myLogFile << "plot_and_fit_MomRes = " << BoolToString(plot_and_fit_MomRes) << "\n";
+    myLogFile << "DeltaSlices = " << DeltaSlices << "\n";
     myLogFile << "VaryingDelta = " << BoolToString(VaryingDelta) << "\n";
-    myLogFile << "DeltaSlices = " << DeltaSlices << "\n\n";
+    myLogFile << "SmearMode = " << SmearMode << "\n";
+    myLogFile << "ShiftMode = " << ShiftMode << "\n\n";
 
     myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
     myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n\n";

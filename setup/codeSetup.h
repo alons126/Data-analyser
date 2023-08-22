@@ -70,6 +70,14 @@ std::string file_name = "general_file";
 ////std::string AnalyseFile = AnalyseFileDir + "recon_c12_598636MeV_Q2_0_5_1*.hipo"; // only files #1 and #10
 ////</editor-fold>
 
+//<editor-fold desc="Local hipo files - C12 @ 6GeV">
+std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
+std::string AnalyseFileSample = "C12_G18_02a_00_000_Q204_598636MeV";             // my test with Justin's code; all particle data saved
+std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_*.hipo"; // only files #1 and #10
+//</editor-fold>
+
 ////<editor-fold desc="Local hipo files - C12 @ 2GeV">
 //std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 //
@@ -121,14 +129,14 @@ std::string file_name = "general_file";
 ////</editor-fold>
 
 //TODO: figure out with Adi if I should keep this sample or generate a new one with higer Q2
-//<editor-fold desc="C12 5.98636GeV Q204 (ifarm MC files - Justin's MC files)">
-/* C12 5.98636GeV (My MC files) */
-std::string AnalyseFilePath = "volatile/clas12/asportes/simulationFiles/C12_G18_02a_00_000_Q204_598636MeV";
-std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
-std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-//std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_99*_torus-1.0.hipo";
-std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV*.hipo";
-//</editor-fold>
+////<editor-fold desc="C12 5.98636GeV Q204 (ifarm MC files - Justin's MC files)">
+///* C12 5.98636GeV (My MC files) */
+//std::string AnalyseFilePath = "volatile/clas12/asportes/simulationFiles/C12_G18_02a_00_000_Q204_598636MeV";
+//std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+////std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_99*_torus-1.0.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV*.hipo";
+////</editor-fold>
 
 ////<editor-fold desc="C12 5.98636GeV Q208 (ifarm MC files - Justin's MC files)">
 ///* C12 5.98636GeV (My MC files) */

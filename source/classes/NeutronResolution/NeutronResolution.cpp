@@ -763,8 +763,8 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
                 }
             }
 
-            double ShiftedMomentum = Momentum * (1 - shift); // minus for protons and plus for neutrons
-//            double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
+//            double ShiftedMomentum = Momentum * (1 - shift);
+            double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
 
             if (Printout) {
                 cout << "\n\nShiftMode = " << ShiftMode << "\n";

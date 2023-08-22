@@ -25,6 +25,9 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
         } else if (AnalyseFileSample == "C12_simulation_G18_2GeV") {
             BeamAt2GeV = SimulationSample = true;
             sName = "C12_simulation_G18_2GeV";
+        } else if (AnalyseFileSample == "C12_G18_02a_00_000_Q204_598636MeV") {
+                BeamAt6GeV = SimulationSample = true;
+                sName = "C12_simulation_G18_Q204_6GeV";
         }
         //</editor-fold>
 
