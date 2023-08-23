@@ -1044,7 +1044,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
     Histogram1DCanvas->cd();
     std::string sNameFlag;
 
-    if (findSubstring(SampleName, "simulation")) {
+    if (findSubstring(SampleName, "sim")) {
         sNameFlag = "s";
     } else if (findSubstring(SampleName, "data")) {
         sNameFlag = "d";
@@ -1224,7 +1224,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
     Histogram1DCanvas->cd();
     std::string sNameFlag;
 
-    if (findSubstring(SampleName, "simulation")) {
+    if (findSubstring(SampleName, "sim")) {
         sNameFlag = "s";
     } else if (findSubstring(SampleName, "data")) {
         sNameFlag = "d";
@@ -1401,7 +1401,7 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
 
     std::string sNameFlag;
 
-    if (findSubstring(SampleName, "simulation")) {
+    if (findSubstring(SampleName, "sim")) {
         sNameFlag = "s";
     } else if (findSubstring(SampleName, "data")) {
         sNameFlag = "d";

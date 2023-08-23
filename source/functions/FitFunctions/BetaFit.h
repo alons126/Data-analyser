@@ -55,7 +55,7 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, 
     //<editor-fold desc="Setting sNameFlag">
     string sNameFlag;
 
-    if (findSubstring(SampleName, "simulation")) {
+    if (findSubstring(SampleName, "sim")) {
         sNameFlag = "s";
     } else if (findSubstring(SampleName, "data")) {
         sNameFlag = "d";

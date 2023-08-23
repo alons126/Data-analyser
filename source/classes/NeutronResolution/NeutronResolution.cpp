@@ -286,7 +286,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
         //<editor-fold desc="Setting sNameFlag">
         string sNameFlag;
 
-        if (findSubstring(SampleName, "simulation")) {
+        if (findSubstring(SampleName, "sim")) {
             sNameFlag = "s";
         } else if (findSubstring(SampleName, "data")) {
             sNameFlag = "d";
@@ -747,7 +747,7 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
 //                    shift = 0.0579 * Momentum - 0.0146; // new shift between 1 and 3 GeV/c
                     shift = 0.0583 * Momentum - 0.0127; // old shift between 0.4 to 4.09 GeV/c
                 } else {
-                    cout << "NeutronResolution::NShift: ShiftMode illegal! Exiting", exit(0);
+                    cout << "NeutronResolution::NShift: ShiftMode illegal (no pol3 for C12_simulation_6GeV_T5)! Exiting", exit(0);
                 }
             } else { // New sample (24M)
                 if (ShiftMode == "pol1") {
@@ -763,7 +763,6 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
                 }
             }
 
-//            double ShiftedMomentum = Momentum * (1 - shift);
             double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
 
             if (Printout) {

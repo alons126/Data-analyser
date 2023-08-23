@@ -123,7 +123,7 @@ void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, const string &Sample
     //<editor-fold desc="Setting save name">
     string sNameFlag;
 
-    if (findSubstring(SampleName, "simulation")) {
+    if (findSubstring(SampleName, "sim")) {
         sNameFlag = "s";
     } else if (findSubstring(SampleName, "data")) {
         sNameFlag = "d";

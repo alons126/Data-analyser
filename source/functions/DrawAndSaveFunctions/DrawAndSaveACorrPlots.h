@@ -174,7 +174,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const
     //<editor-fold desc="Setting save name">
     string sNameFlag;
 
-    if (findSubstring(SampleName, "simulation")) {
+    if (findSubstring(SampleName, "sim")) {
         sNameFlag = "s";
     } else if (findSubstring(SampleName, "data")) {
         sNameFlag = "d";
@@ -490,7 +490,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const
     //<editor-fold desc="Setting save name">
     string sNameFlag;
 
-    if (findSubstring(SampleName, "simulation")) {
+    if (findSubstring(SampleName, "sim")) {
         sNameFlag = "s";
     } else if (findSubstring(SampleName, "data")) {
         sNameFlag = "d";

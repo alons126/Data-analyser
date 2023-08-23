@@ -20,7 +20,7 @@ void SettingSaveNames(const string &SampleName, const string &Type, const string
                       string &Numerator_Clone_SaveName, string &Numerator_Clone_test_SaveName, string &Numerator_Clone_test_rebined_SaveName,
                       string &Denominator_Clone_SaveName, string &Denominator_Clone_test_SaveName, string &Denominator_Clone_test_rebined_SaveName,
                       string &sNameFlag, string &PlotSaveName, const string &DRegion = "") {
-    if (findSubstring(SampleName, "simulation")) {
+    if (findSubstring(SampleName, "sim")) {
         sNameFlag = "s";
     } else if (findSubstring(SampleName, "data")) {
         sNameFlag = "d";

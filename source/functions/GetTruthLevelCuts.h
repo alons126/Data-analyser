@@ -46,7 +46,7 @@ void GetTruthLevelCuts(const string &SampleName, bool calculate_truth_level, boo
                        const DSCuts &TL_e_mom_cuts, const DSCuts &TL_n_mom_cuts, const DSCuts &TL_p_mom_cuts,
                        const DSCuts &TL_pip_mom_cuts, const DSCuts &TL_pim_mom_cuts, const DSCuts &TL_pi0_mom_cuts, const DSCuts &TL_ph_mom_cuts,
                        const std::unique_ptr<clas12::clas12reader> &c12) {
-    if (calculate_truth_level && findSubstring(SampleName, "simulation") && apply_nucleon_cuts) { // run only for CLAS12 simulation & AFTER beta fit
+    if (calculate_truth_level && findSubstring(SampleName, "sim") && apply_nucleon_cuts) { // run only for CLAS12 simulation & AFTER beta fit
         auto mcpbank = c12->mcparts();
         const Int_t Ngen = mcpbank->getRows();
 

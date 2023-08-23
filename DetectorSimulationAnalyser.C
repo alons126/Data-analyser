@@ -199,10 +199,10 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -225,7 +225,8 @@ void EventAnalyser() {
 
         //<editor-fold desc="Status additions">
         if (apply_nucleon_cuts) {
-            Nucleon_Cuts_Status = "wNC_";
+//            Nucleon_Cuts_Status = "wNC_";
+            Nucleon_Cuts_Status = "NC_";
         } else {
             Nucleon_Cuts_Status = "noNC";
         }
@@ -304,29 +305,32 @@ void EventAnalyser() {
                     Efficiency_Status = "EcalT";
                 } else {
 //                    Efficiency_Status = "Eff1_FLIPED";
-                    Efficiency_Status = "Eff1_PercentageT";
+//                    Efficiency_Status = "Eff1_NewShiftT_pol2";
+                    Efficiency_Status = "Eff1";
                 }
             }
         }
         //</editor-fold>
 
         if (!apply_cuts) { // Stage 0 - no cuts
-            plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-00_NO_CUTS";
-            plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-00_NO_CUTS.txt";
+            plots_path = WorkingDirectory + "00_plots_" + SampleName + "_S00_NO_CUTS";
+            plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_S00_NO_CUTS.txt";
         } else {
             string added_names = Nucleon_Cuts_Status + FD_photons_Status + PSmearing_Status + FiducialCuts_Status + KinCuts_Status + KinWei_Status + Additional_Status
                                  + Efficiency_Status;
 
             if (!apply_chi2_cuts_1e_cut) { // Stage 1 - with cuts except PID (chi2) cuts
-                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-01_AC_woChi2";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-01_AC_woChi2.txt";
+                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_S01ACwoChi2";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_S01ACwoChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
                 if (!apply_nucleon_cuts) { // Stage 2 - set nucleon cuts (neutron beta fit & proton double detection cuts)
-                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-02_AC_" + added_names;
-                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-02_AC_" + added_names + ".txt";
+                    plots_path = WorkingDirectory + SampleName + "_S02AC" + added_names;
+//                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-02_AC_" + added_names;
+                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_S02AC" + added_names + ".txt";
                 } else {
-                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-03_AC_" + added_names;
-                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_AC_" + added_names + ".txt";
+                    plots_path = WorkingDirectory + SampleName + "_S03AC" + added_names;
+//                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-03_AC_" + added_names;
+                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_S03AC" + added_names + ".txt";
                 }
             }
         }
@@ -705,7 +709,7 @@ void EventAnalyser() {
     if (!ETrans_plots_master) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
     if (!fill_TL_plots) { Efficiency_plots = TL_after_Acceptance_Maps_plots = false; }
     if (!generate_AMaps) { Hit_maps_plots = false; }
-    if (!plot_and_fit_MomRes) { Resolution_plots = false; }
+//    if (!plot_and_fit_MomRes) { Resolution_plots = false; }
     //</editor-fold>
 
     //</editor-fold>
@@ -6225,12 +6229,12 @@ void EventAnalyser() {
     hPlot1D hP_p_BC_truth_1p = hPlot1D("1p", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03a_P_p_BC_truth_1p",
                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_AC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03b_P_p_AC_truth_1p_FD",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03b_P_p_BC_truth_1p_FD",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pFD_AC_truth_1p = hPlot1D("1p", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03b_P_pFD_AC_truth_1p",
+                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pFD_BC_truth_1p = hPlot1D("1p", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03b_P_pFD_BC_truth_1p",
+                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_pip_AC_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "04_P_piplus_AC_truth_1p",
@@ -6288,12 +6292,12 @@ void EventAnalyser() {
     hPlot1D hTheta_p_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03a_Theta_p_BC_truth_1p",
                                            Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_AC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC", "#theta^{truth}_{p} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03b_Theta_p_AC_truth_1p_FD",
-                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC", "#theta^{truth}_{p} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03b_Theta_p_BC_truth_1p_FD",
-                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_AC_truth_1p = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC", "#theta^{truth}_{p} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03b_Theta_pFD_AC_truth_1p",
+                                             Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_BC_truth_1p = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC", "#theta^{truth}_{p} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03b_Theta_pFD_BC_truth_1p",
+                                             Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pip_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
                                              "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
@@ -6351,12 +6355,12 @@ void EventAnalyser() {
     hPlot1D hPhi_p_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03a_Phi_p_BC_truth_1p",
                                          Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_AC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of FD Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03b_Phi_p_AC_truth_1p_FD",
-                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of FD Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03b_Phi_p_BC_truth_1p_FD",
-                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pFD_AC_truth_1p = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of FD Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03b_Phi_pFD_AC_truth_1p",
+                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pFD_BC_truth_1p = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of FD Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03b_Phi_pFD_BC_truth_1p",
+                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_pip_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC", "#phi^{truth}_{#pi^{+}} [Deg]",
                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "04_Phi_piplus_AC_truth_1p",
@@ -6441,12 +6445,12 @@ void EventAnalyser() {
     hPlot1D hP_n_BC_truth_1n = hPlot1D("1n", "", "TL Neutron momentum BC", "Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02a_P_n_BC_truth_1n",
                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_n_AC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL Neutron momentum AC", "FD Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
-                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02b_P_n_AC_truth_1n_FD",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_n_BC_truth_1n_FD = hPlot1D("1n", "FD", "CD TL Neutron momentum BC", "FD Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
-                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02b_P_n_BC_truth_1n_FD",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_nFD_AC_truth_1n = hPlot1D("1n", "FD", "FD TL Neutron momentum AC", "FD Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02b_P_nFD_AC_truth_1n",
+                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_nFD_BC_truth_1n = hPlot1D("1n", "FD", "CD TL Neutron momentum BC", "FD Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02b_P_nFD_BC_truth_1n",
+                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_p_AC_truth_1n = hPlot1D("1n", "", "TL Proton momentum AC", "Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03_P_p_AC_truth_1n",
@@ -6504,12 +6508,12 @@ void EventAnalyser() {
     hPlot1D hTheta_n_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC", "#theta^{truth}_{n} [Deg]",
                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02a_Theta_n_BC_truth_1n",
                                            Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_n_AC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing FD Neutron AC", "#theta^{truth}_{n} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02b_Theta_n_AC_truth_1n_FD",
-                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_n_BC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing FD Neutron BC", "#theta^{truth}_{n} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02b_Theta_n_BC_truth_1n_FD",
-                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_nFD_AC_truth_1n = hPlot1D("1n", "FD", "FD TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing FD Neutron AC", "#theta^{truth}_{n} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02b_Theta_nFD_AC_truth_1n",
+                                             Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_nFD_BC_truth_1n = hPlot1D("1n", "FD", "FD TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing FD Neutron BC", "#theta^{truth}_{n} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02b_Theta_nFD_BC_truth_1n",
+                                             Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_p_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03_Theta_p_AC_truth_1n",
@@ -6573,12 +6577,12 @@ void EventAnalyser() {
     hPlot1D hPhi_n_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC", "#phi^{truth}_{n} [Deg]",
                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02a_Phi_n_BC_truth_1n",
                                          Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_n_AC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing FD Neutron AC", "#phi^{truth}_{n} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02b_Phi_n_AC_truth_1n_FD",
-                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_n_BC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing FD Neutron BC", "#phi^{truth}_{n} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02b_Phi_n_BC_truth_1n_FD",
-                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_nFD_AC_truth_1n = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing FD Neutron AC", "#phi^{truth}_{n} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02b_Phi_nFD_AC_truth_1n",
+                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_nFD_BC_truth_1n = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing FD Neutron BC", "#phi^{truth}_{n} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02b_Phi_nFD_BC_truth_1n",
+                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_p_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03_Phi_p_AC_truth_1n",
@@ -6677,18 +6681,18 @@ void EventAnalyser() {
     hPlot1D hP_p_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03a_P_p_BC_truth_pFDpCD",
                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_AC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_p_AC_truth_pFDpCD_FD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_BC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_p_BC_truth_pFDpCD_FD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_AC_truth_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_p_AC_truth_pFDpCD_CD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_BC_truth_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_p_BC_truth_pFDpCD_CD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pFD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pFD_AC_truth_pFDpCD",
+                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pFD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pFD_BC_truth_pFDpCD",
+                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pCD_AC_truth_pFDpCD",
+                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pCD_BC_truth_pFDpCD",
+                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_pip_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "04_P_piplus_AC_truth_pFDpCD",
@@ -6746,18 +6750,18 @@ void EventAnalyser() {
     hPlot1D hTheta_p_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "03a_Theta_p_BC_truth_pFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_AC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC",
-                                                  "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                  "03b_Theta_p_AC_truth_pFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC",
-                                                  "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                  "03b_Theta_p_BC_truth_pFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_AC_truth_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "CD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing CD Proton AC",
-                                                  "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                  "03b_Theta_p_AC_truth_pFDpCD_CD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "CD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing CD Proton BC",
-                                                  "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                  "03b_Theta_p_BC_truth_pFDpCD_CD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC",
+                                                 "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                 "03b_Theta_pFD_AC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC",
+                                                 "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                 "03b_Theta_pFD_BC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing CD Proton AC",
+                                                 "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                 "03b_Theta_pCD_AC_truth_pFDpCD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing CD Proton BC",
+                                                 "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                 "03b_Theta_pCD_BC_truth_pFDpCD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pip_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
                                                  "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
@@ -6815,18 +6819,18 @@ void EventAnalyser() {
     hPlot1D hPhi_p_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03a_Phi_p_BC_truth_pFDpCD",
                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_AC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of FD Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_p_AC_truth_pFDpCD_FD",
-                                                Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of FD Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_p_BC_truth_pFDpCD_FD",
-                                                Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_AC_truth_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "CD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of CD Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_p_AC_truth_pFDpCD_CD",
-                                                Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "CD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of CD Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_p_BC_truth_pFDpCD_CD",
-                                                Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pFD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of FD Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_pFD_AC_truth_pFDpCD",
+                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pFD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of FD Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_pFD_BC_truth_pFDpCD",
+                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of CD Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_pCD_AC_truth_pFDpCD",
+                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of CD Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_pCD_BC_truth_pFDpCD",
+                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_pip_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
                                                "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
@@ -6913,12 +6917,12 @@ void EventAnalyser() {
     hPlot1D hP_n_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL Neutron momentum BC", "Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02a_P_n_BC_truth_nFDpCD",
                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_n_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL Neutron momentum AC", "FD Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_n_AC_truth_nFDpCD_FD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_n_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL Neutron momentum BC", "FD Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_n_BC_truth_nFDpCD_FD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_nFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Neutron momentum AC", "FD Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_nFD_AC_truth_nFDpCD",
+                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_nFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Neutron momentum BC", "FD Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_nFD_BC_truth_nFDpCD",
+                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_p_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL Proton momentum AC", "Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "03_P_p_AC_truth_nFDpCD",
@@ -6926,18 +6930,18 @@ void EventAnalyser() {
     hPlot1D hP_p_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "03_P_p_BC_truth_nFDpCD",
                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_p_AC_truth_nFDpCD_FD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_p_BC_truth_nFDpCD_FD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_AC_truth_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_p_AC_truth_nFDpCD_CD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_BC_truth_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_p_BC_truth_nFDpCD_CD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pFD_AC_truth_nFDpCD",
+                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pFD_BC_truth_nFDpCD",
+                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pCD_AC_truth_nFDpCD",
+                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pCD_BC_truth_nFDpCD",
+                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "04_P_piplus_AC_truth_nFDpCD",
@@ -6988,12 +6992,12 @@ void EventAnalyser() {
     hPlot1D hTheta_n_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC", "#theta^{truth}_{n} [Deg]",
                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "02a_Theta_n_BC_truth_nFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_n_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing FD Neutron AC",
-                                                  "#theta^{truth}_{n} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                  "02b_Theta_n_AC_truth_nFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_n_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing FD Neutron BC",
-                                                  "#theta^{truth}_{n} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                  "02b_Theta_n_BC_truth_nFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_nFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing FD Neutron AC",
+                                                 "#theta^{truth}_{n} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "02b_Theta_nFD_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_nFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing FD Neutron BC",
+                                                 "#theta^{truth}_{n} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "02b_Theta_nFD_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_p_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "03_Theta_p_AC_truth_nFDpCD",
@@ -7001,18 +7005,18 @@ void EventAnalyser() {
     hPlot1D hTheta_p_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "03_Theta_p_BC_truth_nFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC",
-                                                  "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                  "02b_Theta_p_AC_truth_nFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC",
-                                                  "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                  "02b_Theta_p_BC_truth_nFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_AC_truth_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "CD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing CD Proton AC",
-                                                  "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                  "02b_Theta_p_AC_truth_nFDpCD_CD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "CD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing CD Proton BC",
-                                                  "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                  "02b_Theta_p_BC_truth_nFDpCD_CD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC",
+                                                 "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "02b_Theta_pFD_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC",
+                                                 "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "02b_Theta_pFD_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing CD Proton AC",
+                                                 "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "02b_Theta_pCD_AC_truth_nFDpCD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing CD Proton BC",
+                                                 "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "02b_Theta_pCD_BC_truth_nFDpCD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
                                                  "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
@@ -7063,12 +7067,12 @@ void EventAnalyser() {
     hPlot1D hPhi_n_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC", "#phi^{truth}_{n} [Deg]",
                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02a_Phi_n_BC_truth_nFDpCD",
                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_n_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing FD Neutron AC", "#phi^{truth}_{n} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_n_AC_truth_nFDpCD_FD",
-                                                Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_n_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing FD Neutron AC", "#phi^{truth}_{n} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_n_BC_truth_nFDpCD_FD",
-                                                Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_nFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing FD Neutron AC", "#phi^{truth}_{n} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_nFD_AC_truth_nFDpCD",
+                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_nFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing FD Neutron AC", "#phi^{truth}_{n} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_nFD_BC_truth_nFDpCD",
+                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_p_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "03_Phi_p_AC_truth_nFDpCD",
@@ -7076,17 +7080,17 @@ void EventAnalyser() {
     hPlot1D hPhi_p_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "03_Phi_p_BC_truth_nFDpCD",
                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{p} of Outgoing FD Proton AC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_p_AC_truth_nFDpCD_FD",
+    hPlot1D hPhi_pFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{p} of Outgoing FD Proton AC", "#phi^{truth}_{p} [Deg]",
+                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pFD_AC_truth_nFDpCD",
                                                 Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{p} of Outgoing FD Proton BC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_p_BC_truth_nFDpCD_FD",
+    hPlot1D hPhi_pFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{p} of Outgoing FD Proton BC", "#phi^{truth}_{p} [Deg]",
+                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pFD_BC_truth_nFDpCD",
                                                 Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_AC_truth_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "CD TL #phi^{truth}_{p} AC", "#phi^{truth}_{p} of Outgoing CD Proton AC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_p_AC_truth_nFDpCD_CD",
+    hPlot1D hPhi_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #phi^{truth}_{p} AC", "#phi^{truth}_{p} of Outgoing CD Proton AC", "#phi^{truth}_{p} [Deg]",
+                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pCD_AC_truth_nFDpCD",
                                                 Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "CD TL #phi^{truth}_{p} BC", "#phi^{truth}_{p} of Outgoing CD Proton BC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_p_BC_truth_nFDpCD_CD",
+    hPlot1D hPhi_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #phi^{truth}_{p} BC", "#phi^{truth}_{p} of Outgoing CD Proton BC", "#phi^{truth}_{p} [Deg]",
+                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pCD_BC_truth_nFDpCD",
                                                 Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
@@ -7156,19 +7160,6 @@ void EventAnalyser() {
                                                          numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     //</editor-fold>
 
-    //</editor-fold>
-
-    //<editor-fold desc="Fill reference histogram">
-    TH2D *hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD;
-    string hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD_Dir;
-    int ref_hist_numOfBins = 250;
-//    int ref_hist_numOfBins = 100;
-
-    if (!apply_nucleon_cuts) {
-        hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD = new TH2D("h", "#theta_{nFD} vs. #phi_{nFD} w/ PCAL hit - ref. plot (no #(e) cut, FD);#phi_{nFD} [Deg];#theta_{nFD} [Deg]",
-                                                         ref_hist_numOfBins, Phi_lboundary, Phi_uboundary, ref_hist_numOfBins, Theta_lboundary_FD, Theta_uboundary_FD);
-        hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD_Dir = directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"];
-    }
     //</editor-fold>
 
     //</editor-fold>
@@ -7421,7 +7412,6 @@ void EventAnalyser() {
         }
 
         if (apply_ECAL_P_cuts) { // making f_ecalSFCuts = ture
-
             //todo: ask justin what are these cuts:
             //todo: ask justin for these cuts for LH2 and C12 (and other elements)
             clasAna.readEcalPPar((PIDCutsDirectory + "paramsPI_40Ca_x2.dat").c_str());
@@ -7642,144 +7632,6 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-        //<editor-fold desc="Reco-MC match tests">
-
-//        //<editor-fold desc="Electrons outside clas12ana (successful test!)">
-//        if (electrons_det.size() > 0) {
-//
-//        cout << "\n\n";
-//
-//            auto Reco_electrons_MT = c12->getByID(11)[0];
-//            auto TL_electrons_MT = Reco_electrons_MT->mc();
-//
-//            cout << "Reco_electrons_MT->par()->getPid() = " << Reco_electrons_MT->par()->getPid() << "\n";
-//            cout << "TL_electrons_MT->getPid() = " << TL_electrons_MT->getPid() << "\n\n";
-//
-//            cout << "Reco_electrons_MT->getTheta() = " << Reco_electrons_MT->getTheta() << "\n";
-//            cout << "TL_electrons_MT->getTheta() = " << TL_electrons_MT->getTheta() << "\n\n";
-//
-//        cout << "\n\n";
-//
-//        }
-//        //</editor-fold>
-
-//        //<editor-fold desc="Electrons inside clas12ana (successful test!)">
-//        if (electrons.size() > 0) {
-//            cout << "====================================================\n\n";
-//
-//            auto Reco_electrons_MT = electrons[0];
-//            auto TL_electrons_MT = Reco_electrons_MT->mc();
-//
-//            cout << "Reco_electrons_MT->par()->getPid() = " << Reco_electrons_MT->par()->getPid() << "\n";
-//            cout << "TL_electrons_MT->getPid() = " << TL_electrons_MT->getPid() << "\n\n";
-//
-//            cout << "Reco_electrons_MT->getP() = " << Reco_electrons_MT->getP() << "\n";
-//            cout << "TL_electrons_MT->getP() = " << TL_electrons_MT->getP() << "\n\n";
-//
-//            cout << "Reco_electrons_MT->getTheta() = " << Reco_electrons_MT->getTheta() * 180.0 / pi << "\n";
-//            cout << "TL_electrons_MT->getTheta() = " << TL_electrons_MT->getTheta() * 180.0 / pi << "\n\n";
-//
-//            cout << "Reco_electrons_MT->getPhi() = " << Reco_electrons_MT->getPhi() * 180.0 / pi << "\n";
-//            cout << "TL_electrons_MT->getPhi() = " << TL_electrons_MT->getPhi() * 180.0 / pi << "\n\n";
-//
-//            cout << "\n\n";
-//        }
-//        //</editor-fold>
-
-//        //<editor-fold desc="Protons outside clas12ana (...)">
-//        auto protons_det = c12->getByID(2212);
-//
-//        if (protons_det.size() > 0) {
-//            cout << "====================================================\n\n";
-//
-//            mcmatch_ptr MCMatch;
-//            auto mcpbank_MCMTest = c12->mcparts();
-//            const Int_t Ngen_MCMTest = mcpbank_MCMTest->getRows();
-//
-////            int Reco_ind = protons_det[0]->getIndex();
-////            int TL_ind = mcpbank_MCMTest->match_to(Reco_ind);
-////            cout << "Reco_ind = " << Reco_ind << "\n";
-////            cout << "TL_ind = " << TL_ind << "\n\n";
-//
-//            for (Int_t i = 0; i < protons_det.size(); i++) {
-//                int Reco_ind = protons_det[i]->getIndex();
-//                mcpbank_MCMTest->setEntry(Reco_ind);
-//
-//                int Reco_Proton_PID = protons_det[i]->par()->getPid();
-//                int TL_Proton_PID = mcpbank_MCMTest->getPid();
-//
-//                if (Reco_Proton_PID == TL_Proton_PID) {
-//                    cout << "Reco_Proton_PID = " << Reco_Proton_PID << "\n";
-//                    cout << "TL_Proton_PID = " << TL_Proton_PID << "\n\n";
-//
-//                    cout << "protons_det[i]->getP() = " << protons_det[i]->getP() << "\n";
-//                    cout << "mcpbank_MCMTest->getP() = " << mcpbank_MCMTest->getP() << "\n\n";
-//
-//                    cout << "protons_det[i]->getTheta() = " << protons_det[i]->getTheta() * 180.0 / pi << "\n";
-//                    cout << "mcpbank_MCMTest->getTheta() = " << mcpbank_MCMTest->getTheta() * 180.0 / pi << "\n\n";
-//
-//                    cout << "protons_det[i]->getPhi() = " << protons_det[i]->getPhi() * 180.0 / pi << "\n";
-//                    cout << "mcpbank_MCMTest->getPhi() = " << mcpbank_MCMTest->getPhi() * 180.0 / pi << "\n\n";
-//                }
-//            }
-//
-////            auto Reco_Protons_MT = protons_det[0];
-////            auto TL_Protons_MT = Reco_Protons_MT->mc();
-////            auto Reco_Protons_MT = protons_det[0];
-////            auto TL_Protons_MT = Reco_Protons_MT->mc();
-//
-////            cout << "Reco_Protons_MT->par()->getPid() = " << Reco_Protons_MT->par()->getPid() << "\n";
-////            cout << "TL_Protons_MT->getPid() = " << TL_Protons_MT->getPid() << "\n\n";
-////
-////            cout << "Reco_Protons_MT->getP() = " << Reco_Protons_MT->getP() << "\n";
-////            cout << "TL_Protons_MT->getP() = " << TL_Protons_MT->getP() << "\n\n";
-////
-////            cout << "Reco_Protons_MT->getTheta() = " << Reco_Protons_MT->getTheta() * 180.0 / pi << "\n";
-////            cout << "TL_Protons_MT->getTheta() = " << TL_Protons_MT->getTheta() * 180.0 / pi << "\n\n";
-////
-////            cout << "Reco_Protons_MT->getPhi() = " << Reco_Protons_MT->getPhi() * 180.0 / pi << "\n";
-////            cout << "TL_Protons_MT->getPhi() = " << TL_Protons_MT->getPhi() * 180.0 / pi << "\n\n";
-//
-//            cout << "\n\n";
-//        }
-//        //</editor-fold>
-
-//        //<editor-fold desc="Protons inside clas12ana (...)">
-//        if (Protons_ind.size() > 0) {
-//            mcmatch_ptr MCMatch;
-//            auto mcpbank_MCMTest = c12->mcparts();
-//            const Int_t Ngen_MCMTest = mcpbank_MCMTest->getRows();
-//
-//            for (Int_t i = 0; i < Protons_ind.size(); i++) {
-//                int Reco_ind = protons[Protons_ind.at(i)]->getIndex();
-//                mcpbank_MCMTest->setEntry(Reco_ind);
-//
-//                int Reco_Proton_PID = protons[Protons_ind.at(i)]->par()->getPid();
-//                int TL_Proton_PID = mcpbank_MCMTest->getPid();
-//
-//                if (Reco_Proton_PID == TL_Proton_PID) {
-//                    cout << "====================================================\n\n";
-//
-//                    cout << "Reco_Proton_PID = " << Reco_Proton_PID << "\n";
-//                    cout << "TL_Proton_PID = " << TL_Proton_PID << "\n\n";
-//
-//                    cout << "protons[Protons_ind.at(i)]->getP() = " << protons[Protons_ind.at(i)]->getP() << "\n";
-//                    cout << "mcpbank_MCMTest->getP() = " << mcpbank_MCMTest->getP() << "\n\n";
-//
-//                    cout << "protons[Protons_ind.at(i)]->getTheta() = " << protons[Protons_ind.at(i)]->getTheta() * 180.0 / pi << "\n";
-//                    cout << "mcpbank_MCMTest->getTheta() = " << mcpbank_MCMTest->getTheta() * 180.0 / pi << "\n\n";
-//
-//                    cout << "protons[Protons_ind.at(i)]->getPhi() = " << protons[Protons_ind.at(i)]->getPhi() * 180.0 / pi << "\n";
-//                    cout << "mcpbank_MCMTest->getPhi() = " << mcpbank_MCMTest->getPhi() * 180.0 / pi << "\n\n";
-//                }
-//            }
-//
-//            cout << "\n\n";
-//        }
-//        //</editor-fold>
-
-        //</editor-fold>
-
         double Weight = 1;
 
         //<editor-fold desc="Process ID">
@@ -7863,8 +7715,6 @@ void EventAnalyser() {
         bool TL_Event_Selection_1p = true, TL_Event_Selection_1n = true, TL_Event_Selection_pFDpCD = true, TL_Event_Selection_nFDpCD = true;
 
         if (calculate_truth_level && apply_nucleon_cuts && isSimulation) { // run only for CLAS12 simulation & AFTER beta fit
-//        if (calculate_truth_level && apply_nucleon_cuts && isSimulation && (!Rec_wTL_ES || (electrons.size() == 1)) {
-//        if (calculate_truth_level && apply_nucleon_cuts && isSimulation && (!TL_with_one_reco_electron || (electrons.size() == 1)) {
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
 
@@ -7930,8 +7780,6 @@ void EventAnalyser() {
                         if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
                             (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
                             TL_NeutronsFD_mom_ind.push_back(i);
-
-//                            cout << "Particle_TL_Momentum = " << Particle_TL_Momentum << "\n";
 
                             if (Particle_TL_Momentum >= TL_P_nFD_mom_max) {
                                 TL_P_nFD_mom_max = Particle_TL_Momentum;
@@ -8002,9 +7850,6 @@ void EventAnalyser() {
                 }
             }
 
-//            if (TL_P_nFD_mom_max != -1) { cout << "TL_P_nFD_mom_max = " << TL_P_nFD_mom_max << "\n\n\n"; }
-            //</editor-fold>
-
             //<editor-fold desc="Event selection for TL plots">
             /* Setting up basic TL event selection */
             bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1); // One id. FD electron above momentum threshold
@@ -8025,10 +7870,7 @@ void EventAnalyser() {
             // 1n = any number of id. FD neutron (we look at the leading nFD) & no id. protons:
             bool one_FDNeutron_1n = ((TL_NeutronsFD_ind_mom_max != -1) && // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
                                      (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-//            bool one_FDNeutron_1n = ((TL_NeutronsFD_mom_ind.size() == 1) &&
-//                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool no_protons_1n = ((TL_ProtonsCD_mom_ind.size() == 0) && (TL_ProtonsFD_mom_ind.size() == 0));
-//            bool no_protons_1n = (TL_Protons_mom_ind.size() == 0);
             TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);
 
             /* Setting up pFDpCD TL event selection */
@@ -8044,8 +7886,6 @@ void EventAnalyser() {
             bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
             bool one_FDNeutron_nFDpCD = ((TL_NeutronsFD_ind_mom_max != -1) && // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
                                          (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-//            bool one_FDNeutron_nFDpCD = ((TL_NeutronsFD_mom_ind.size() == 1) &&
-//                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool one_proton_nFDpCD = (TL_Protons_mom_ind.size() == 1);
             bool no_FDproton_nFDpCD = (TL_ProtonsFD_mom_ind.size() == 0);
             TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD);
@@ -8142,7 +7982,6 @@ void EventAnalyser() {
                                 hPhi_n_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
                                 if (n_inFD) {
-//                            if (inFD) {
                                     hTheta_nFD_vs_Phi_nFD_truth_1e_cut.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
                                 }
                             }
@@ -8169,30 +8008,19 @@ void EventAnalyser() {
                                 hP_n_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
                                 hTheta_n_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
                                 hPhi_n_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
-//                                if (ES_by_leading_FDneutron) {
-//                                    if ((TL_NeutronsFD_ind_mom_max != -1) && (i == TL_NeutronsFD_ind_mom_max)) {
-//                                        hP_n_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
-//                                        hTheta_n_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
-//                                        hPhi_n_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
-//                                    }
-//                                } else {
-//                                    hP_n_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
-//                                    hTheta_n_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
-//                                    hPhi_n_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
-//                                }
 
                                 if (n_inFD) {
                                     if (ES_by_leading_FDneutron) {
                                         if ((TL_NeutronsFD_ind_mom_max != -1) && (i == TL_NeutronsFD_ind_mom_max)) {
-                                            hP_n_AC_truth_1n_FD.hFill(Particle_TL_Momentum, Weight);
-                                            hTheta_n_AC_truth_1n_FD.hFill(Particle_TL_Theta, Weight);
-                                            hPhi_n_AC_truth_1n_FD.hFill(Particle_TL_Phi, Weight);
+                                            hP_nFD_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+                                            hTheta_nFD_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
+                                            hPhi_nFD_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
                                             hTheta_nFD_vs_Phi_nFD_truth_1n.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
                                         }
                                     } else {
-                                        hP_n_AC_truth_1n_FD.hFill(Particle_TL_Momentum, Weight);
-                                        hTheta_n_AC_truth_1n_FD.hFill(Particle_TL_Theta, Weight);
-                                        hPhi_n_AC_truth_1n_FD.hFill(Particle_TL_Phi, Weight);
+                                        hP_nFD_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+                                        hTheta_nFD_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
+                                        hPhi_nFD_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
                                         hTheta_nFD_vs_Phi_nFD_truth_1n.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
                                     }
                                 }
@@ -8203,10 +8031,9 @@ void EventAnalyser() {
                             hPhi_n_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
 
                             if (n_inFD) {
-//                            if (inFD) {
-                                hP_n_BC_truth_1n_FD.hFill(Particle_TL_Momentum, Weight);
-                                hTheta_n_BC_truth_1n_FD.hFill(Particle_TL_Theta, Weight);
-                                hPhi_n_BC_truth_1n_FD.hFill(Particle_TL_Phi, Weight);
+                                hP_nFD_BC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+                                hTheta_nFD_BC_truth_1n.hFill(Particle_TL_Theta, Weight);
+                                hPhi_nFD_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
                             }
                         }
 
@@ -8229,10 +8056,9 @@ void EventAnalyser() {
                                 hPhi_n_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
 
                                 if (n_inFD) {
-//                            if (inFD) {
-                                    hP_n_AC_truth_nFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
-                                    hTheta_n_AC_truth_nFDpCD_FD.hFill(Particle_TL_Theta, Weight);
-                                    hPhi_n_AC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+                                    hP_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                    hTheta_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+                                    hPhi_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                                     hTheta_nFD_vs_Phi_nFD_truth_nFDpCD.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
                                 }
                             }
@@ -8242,10 +8068,9 @@ void EventAnalyser() {
                             hPhi_n_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
 
                             if (n_inFD) {
-//                            if (inFD) {
-                                hP_n_BC_truth_nFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
-                                hTheta_n_BC_truth_nFDpCD_FD.hFill(Particle_TL_Theta, Weight);
-                                hPhi_n_BC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+                                hP_nFD_BC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                hTheta_nFD_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+                                hPhi_nFD_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                             }
                         }
                     } else if (particlePDGtmp == 2212) {
@@ -8256,7 +8081,6 @@ void EventAnalyser() {
                                 hPhi_p_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
                                 if (p_inFD) {
-//                            if (inFD) {
                                     hTheta_pFD_vs_Phi_pFD_truth_1e_cut.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
                                 }
                             }
@@ -8273,10 +8097,9 @@ void EventAnalyser() {
                                 hPhi_p_AC_truth_1p.hFill(Particle_TL_Phi, Weight);
 
                                 if (p_inFD) {
-//                            if (inFD) {
-                                    hP_p_AC_truth_1p_FD.hFill(Particle_TL_Momentum, Weight);
-                                    hTheta_p_AC_truth_1p_FD.hFill(Particle_TL_Theta, Weight);
-                                    hPhi_p_AC_truth_1p_FD.hFill(Particle_TL_Phi, Weight);
+                                    hP_pFD_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+                                    hTheta_pFD_AC_truth_1p.hFill(Particle_TL_Theta, Weight);
+                                    hPhi_pFD_AC_truth_1p.hFill(Particle_TL_Phi, Weight);
                                     hTheta_pFD_vs_Phi_pFD_truth_1p.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
                                 }
                             }
@@ -8286,10 +8109,9 @@ void EventAnalyser() {
                             hPhi_p_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
 
                             if (p_inFD) {
-//                        if (inFD) {
-                                hP_p_BC_truth_1p_FD.hFill(Particle_TL_Momentum, Weight);
-                                hTheta_p_BC_truth_1p_FD.hFill(Particle_TL_Theta, Weight);
-                                hPhi_p_BC_truth_1p_FD.hFill(Particle_TL_Phi, Weight);
+                                hP_pFD_BC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+                                hTheta_pFD_BC_truth_1p.hFill(Particle_TL_Theta, Weight);
+                                hPhi_pFD_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
                             }
                         }
 
@@ -8312,17 +8134,16 @@ void EventAnalyser() {
                                 hPhi_p_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
 
                                 if (p_inFD) {
-//                        if (inFD) {
-                                    hP_p_AC_truth_pFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
-                                    hTheta_p_AC_truth_pFDpCD_FD.hFill(Particle_TL_Theta, Weight);
-                                    hPhi_p_AC_truth_pFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+                                    hP_pFD_AC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                    hTheta_pFD_AC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+                                    hPhi_pFD_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
                                     hTheta_pFD_vs_Phi_pFD_truth_pFDpCD.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
                                 }
 
                                 if (inCD) {
-                                    hP_p_AC_truth_pFDpCD_CD.hFill(Particle_TL_Momentum, Weight);
-                                    hTheta_p_AC_truth_pFDpCD_CD.hFill(Particle_TL_Theta, Weight);
-                                    hPhi_p_AC_truth_pFDpCD_CD.hFill(Particle_TL_Phi, Weight);
+                                    hP_pCD_AC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                    hTheta_pCD_AC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+                                    hPhi_pCD_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
                                 }
                             }
 
@@ -8331,16 +8152,15 @@ void EventAnalyser() {
                             hPhi_p_BC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
 
                             if (p_inFD) {
-//                        if (inFD) {
-                                hP_p_BC_truth_pFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
-                                hTheta_p_BC_truth_pFDpCD_FD.hFill(Particle_TL_Theta, Weight);
-                                hPhi_p_BC_truth_pFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+                                hP_pFD_BC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                hTheta_pFD_BC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+                                hPhi_pFD_BC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
                             }
 
                             if (inCD) {
-                                hP_p_BC_truth_pFDpCD_CD.hFill(Particle_TL_Momentum, Weight);
-                                hTheta_p_BC_truth_pFDpCD_CD.hFill(Particle_TL_Theta, Weight);
-                                hPhi_p_BC_truth_pFDpCD_CD.hFill(Particle_TL_Phi, Weight);
+                                hP_pCD_BC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                hTheta_pCD_BC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+                                hPhi_pCD_BC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
                             }
                         }
 
@@ -8351,16 +8171,15 @@ void EventAnalyser() {
                                 hPhi_p_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
 
                                 if (p_inFD) {
-//                        if (inFD) {
-                                    hP_p_AC_truth_nFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
-                                    hTheta_p_AC_truth_nFDpCD_FD.hFill(Particle_TL_Theta, Weight);
-                                    hPhi_p_AC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+                                    hP_pFD_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                    hTheta_pFD_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+                                    hPhi_pFD_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                                 }
 
                                 if (inCD) {
-                                    hP_p_AC_truth_nFDpCD_CD.hFill(Particle_TL_Momentum, Weight);
-                                    hTheta_p_AC_truth_nFDpCD_CD.hFill(Particle_TL_Theta, Weight);
-                                    hPhi_p_AC_truth_nFDpCD_CD.hFill(Particle_TL_Phi, Weight);
+                                    hP_pCD_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                    hTheta_pCD_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+                                    hPhi_pCD_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                                 }
                             }
 
@@ -8369,16 +8188,15 @@ void EventAnalyser() {
                             hPhi_p_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
 
                             if (p_inFD) {
-//                        if (inFD) {
-                                hP_p_BC_truth_nFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
-                                hTheta_p_BC_truth_nFDpCD_FD.hFill(Particle_TL_Theta, Weight);
-                                hPhi_p_BC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+                                hP_pFD_BC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                hTheta_pFD_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+                                hPhi_pFD_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                             }
 
                             if (inCD) {
-                                hP_p_BC_truth_nFDpCD_CD.hFill(Particle_TL_Momentum, Weight);
-                                hTheta_p_BC_truth_nFDpCD_CD.hFill(Particle_TL_Theta, Weight);
-                                hPhi_p_BC_truth_nFDpCD_CD.hFill(Particle_TL_Phi, Weight);
+                                hP_pCD_BC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                hTheta_pCD_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+                                hPhi_pCD_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                             }
                         }
                     } else if (particlePDGtmp == 211) {
@@ -8746,21 +8564,6 @@ void EventAnalyser() {
 //  Fill All particles (All e) plots ------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="All particles plots">
-        //TODO: figure out rather or not to delete this:
-        if (!apply_nucleon_cuts) {
-            for (int i = 0; i < allParticles.size(); i++) {
-                if ((allParticles[i]->par()->getCharge() == 0) && (allParticles[i]->getRegion() == FD)) {
-                    bool PCALhit = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
-                    bool ECINhit = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
-                    bool ECOUThit = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
-
-                    if (!PCALhit && (ECINhit || ECOUThit)) {
-                        hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD->Fill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
-                    }
-                }
-            } // end of loop over electrons vector
-        }
-
         /* Declaration of electron variables for all particles analysis.
          * Variables with "tmp" will be used only in all particles plots.
          * Variables without "tmp" will be used later as well.
@@ -10952,115 +10755,7 @@ void EventAnalyser() {
 
                 hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight_1n);
 
-//                //<editor-fold desc="Fill resolution histograms (1n)">
-//                if (plot_and_fit_MomRes) {
-//
-////                    cout << "====================================================\n\n";
-////
-////                    auto Reco_n_MT = n_1n;
-////                    auto TL_n_MT = Reco_n_MT->mc();
-////
-////                    if (TL_n_MT->getPid() == 2112) {
-////                        cout << "Reco_n_MT->par()->getPid() = " << Reco_n_MT->par()->getPid() << "\n";
-////                        cout << "TL_n_MT->getPid() = " << TL_n_MT->getPid() << "\n\n";
-////
-////                        cout << "Reco_n_MT->getP() = " << Reco_n_MT->getP() << "\n";
-////                        cout << "TL_n_MT->getP() = " << TL_n_MT->getP() << "\n\n";
-////
-////                        cout << "Reco_n_MT->getTheta() = " << Reco_n_MT->getTheta() * 180.0 / pi << "\n";
-////                        cout << "TL_n_MT->getTheta() = " << TL_n_MT->getTheta() * 180.0 / pi << "\n\n";
-////
-////                        cout << "Reco_n_MT->getPhi() = " << Reco_n_MT->getPhi() * 180.0 / pi << "\n";
-////                        cout << "TL_n_MT->getPhi() = " << TL_n_MT->getPhi() * 180.0 / pi << "\n\n";
-////                    }
-////
-////                    cout << "\n\n";
-//
-//
-////                    auto mcpbank_nRes = c12->mcparts();
-////                    const Int_t Ngen_nRes = mcpbank_nRes->getRows();
-////
-////                    for (Int_t i = 0; i < Ngen_nRes; i++) {
-////                        mcpbank_nRes->setEntry(i);
-////
-////                        /* TL neutron kinematic variables */
-////                        double TLNeutronP = rCalc(mcpbank_nRes->getPx(), mcpbank_nRes->getPy(), mcpbank_nRes->getPz());
-////                        double TLNeutronTheta = acos(mcpbank_nRes->getPz() / TLNeutronP) * 180.0 / pi;
-////                        double TLNeutronPhi = atan2(mcpbank_nRes->getPy(), mcpbank_nRes->getPx()) * 180.0 / pi;
-////
-////                        /* Reco neutron kinematic variables */
-////                        double RecoNeutronP = P_n_1n_3v.Mag();
-////                        double RecoNeutronTheta = P_n_1n_3v.Theta() * 180.0 / pi;
-////                        double RecoNeutronPhi = P_n_1n_3v.Phi() * 180.0 / pi;
-////
-////                        /* Reco-TL angle difference */
-////                        double dNeutronTheta = RecoNeutronTheta - TLNeutronTheta;
-////                        double dNeutronPhi = CalcdPhi(RecoNeutronPhi - TLNeutronPhi);
-////
-////                        auto pid = mcpbank_nRes->getPid();
-////
-////                        //<editor-fold desc="nRes cuts">
-////
-////                        //<editor-fold desc="nRes good neutron cuts">
-////                        bool nRes_TL_Pass_PIDCut = (pid == 2112);
-////
-////                        bool Reco_InFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", RecoNeutronP, RecoNeutronTheta, RecoNeutronPhi, false);
-////                        bool TL_InFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", TLNeutronP, TLNeutronTheta, TLNeutronPhi, false);
-////                        bool nRes_Pass_FiducialCuts = (Reco_InFD && TL_InFD);
-////
-////                        bool Reco_Theta_kinCut = (RecoNeutronTheta <= FD_nucleon_theta_cut.GetUpperCut());
-////                        bool TL_Theta_kinCuts = (TLNeutronTheta <= FD_nucleon_theta_cut.GetUpperCut());
-////                        bool nRes_Pass_ThetaKinCut = (Reco_Theta_kinCut && TL_Theta_kinCuts);
-////
-////                        bool nRes_Pass_Neutron_MomKinCut = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut()));
-////                        //</editor-fold>
-////
-////                        //<editor-fold desc="nRes matching cuts">
-////                        double dPhiCut = 5., dThetaCut = 2.; //TODO: add to a DSCuts variable
-////                        bool nRes_Pass_dThetaCut = (fabs(dNeutronTheta) < dThetaCut);
-////                        bool nRes_Pass_dPhiCut = (fabs(dNeutronPhi) < dPhiCut);
-////                        //</editor-fold>
-////
-////                        //</editor-fold>
-////
-////                        if (nRes_TL_Pass_PIDCut && nRes_Pass_FiducialCuts && nRes_Pass_ThetaKinCut && nRes_Pass_Neutron_MomKinCut) {
-////                            /* Plots for TL neutrons passing nRes cuts */
-////                            hdTheta_nFD_TL_BC_1n.hFill(dNeutronTheta, Weight);
-////                            hdTheta_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronTheta, Weight);
-////                            hdPhi_nFD_TL_BC_1n.hFill(dNeutronPhi, Weight);
-////                            hdPhi_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronPhi, Weight);
-////
-////                            hTheta_nFD_TL_AnResC_1n.hFill(TLNeutronTheta, Weight);
-////                            hPhi_nFD_TL_AnResC_1n.hFill(TLNeutronPhi, Weight);
-////                            hTheta_nFD_TL_VS_Phi_nFD_TL_AnResC_1n->Fill(TLNeutronPhi, TLNeutronTheta, Weight);
-////
-////                            if (nRes_Pass_dPhiCut) {
-////                                /* Plots for TL neutrons passing nRes_Pass_dPhiCut */
-////                                hdTheta_nFD_TL_AdPC_1n.hFill(dNeutronTheta, Weight);
-////                                hdTheta_nFD_TL_ZOOMIN_AdPC_1n.hFill(dNeutronTheta, Weight);
-////                                hdPhi_nFD_TL_AdPC_1n.hFill(dNeutronPhi, Weight);
-////                                hdPhi_nFD_TL_ZOOMIN_AdPC_1n.hFill(dNeutronPhi, Weight);
-////                            }
-////
-////                            if (nRes_Pass_dThetaCut && nRes_Pass_dPhiCut) {
-////                                /* Plots for TL neutrons passing matching cuts */
-////                                hTheta_nFD_TL_MatchedN_1n.hFill(TLNeutronTheta, Weight);
-////                                hPhi_nFD_TL_MatchedN_1n.hFill(TLNeutronPhi, Weight);
-////                                hTheta_nFD_TL_VS_Phi_nFD_TL_MatchedN_1n->Fill(TLNeutronPhi, TLNeutronTheta, Weight);
-////
-////                                /* Filling nRes plots */
-////                                double nResolution = (TLNeutronP - RecoNeutronP) / TLNeutronP;
-////                                nRes.hFillResPlots(TLNeutronP, nResolution, Weight);
-////
-////                                hP_nFD_Res_1n.hFill(nResolution, Weight);
-////                                hP_nFD_Res_VS_P_nFD_1n->Fill(TLNeutronP, nResolution, Weight);
-////                            }
-////                        }
-////                    }
-//                } // end of resolution calculation if
-//                //</editor-fold>
-
-                //<editor-fold desc="Old resolution code (1n)">
+                //<editor-fold desc="Fill resolution histograms (1n)">
                 if (plot_and_fit_MomRes) {
                     auto mcpbank_nRes = c12->mcparts();
                     const Int_t Ngen_nRes = mcpbank_nRes->getRows();
@@ -11072,14 +10767,6 @@ void EventAnalyser() {
                         double TLNeutronP = rCalc(mcpbank_nRes->getPx(), mcpbank_nRes->getPy(), mcpbank_nRes->getPz());
                         double TLNeutronTheta = acos(mcpbank_nRes->getPz() / TLNeutronP) * 180.0 / pi;
                         double TLNeutronPhi = atan2(mcpbank_nRes->getPy(), mcpbank_nRes->getPx()) * 180.0 / pi;
-
-//                        /* Reco neutron kinematic variables */
-//                        double Momentum2 = TLNeutronP * TLNeutronP;
-//                        double Momentum3 = TLNeutronP * TLNeutronP * TLNeutronP;
-//                        double shift = -0.0013 * Momentum3 + 0.0189 * Momentum2 + 0.0107 * TLNeutronP + 0.0204;
-//                        double RecoNeutronP = (P_n_1n_3v.Mag() + shift*TLNeutronP);
-//                        double RecoNeutronTheta = P_n_1n_3v.Theta() * 180.0 / pi;
-//                        double RecoNeutronPhi = P_n_1n_3v.Phi() * 180.0 / pi;
 
                         /* Reco neutron kinematic variables */
                         double RecoNeutronP = P_n_1n_3v.Mag();
@@ -17647,8 +17334,8 @@ void EventAnalyser() {
 
         hP_p_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         hP_p_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_p_AC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_p_BC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        hP_pFD_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        hP_pFD_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
 
         hP_pip_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(), TL_pip_mom_cuts.GetUpperCut(), 0, false);
         hP_pip_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(), TL_pip_mom_cuts.GetUpperCut(), 0, false);
@@ -17665,10 +17352,10 @@ void EventAnalyser() {
         hP_ph_BC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_ph_mom_cuts.GetLowerCut(), TL_ph_mom_cuts.GetUpperCut(), 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_e_AC_truth_1p, hP_e_APID_1p_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_p_AC_truth_1p_FD, hP_pFD_APID_1p, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_pFD_AC_truth_1p, hP_pFD_APID_1p, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hP_e_AC_truth_1p, hP_e_APID_1p_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_p_AC_truth_1p_FD, hP_pFD_APID_1p, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hP_pFD_AC_truth_1p, hP_pFD_APID_1p, plots);
         //</editor-fold>
 
         //<editor-fold desc="Theta efficiency plots (1p)">
@@ -17680,8 +17367,8 @@ void EventAnalyser() {
 
         hTheta_p_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hTheta_p_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_p_AC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_p_BC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_pFD_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_pFD_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         hTheta_pip_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hTheta_pip_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
@@ -17698,10 +17385,10 @@ void EventAnalyser() {
         hTheta_ph_BC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_e_AC_truth_1p, hTheta_e_All_Int_1p_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_p_AC_truth_1p_FD, hTheta_p_All_Int_1p, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_pFD_AC_truth_1p, hTheta_p_All_Int_1p, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hTheta_e_AC_truth_1p, hTheta_e_All_Int_1p_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hTheta_p_AC_truth_1p_FD, hTheta_p_All_Int_1p, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hTheta_pFD_AC_truth_1p, hTheta_p_All_Int_1p, plots);
         //</editor-fold>
 
         //<editor-fold desc="Phi efficiency plots (1p)">
@@ -17713,8 +17400,8 @@ void EventAnalyser() {
 
         hPhi_p_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hPhi_p_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_p_AC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_p_BC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_pFD_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_pFD_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         hPhi_pip_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hPhi_pip_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
@@ -17731,10 +17418,10 @@ void EventAnalyser() {
         hPhi_ph_BC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_e_AC_truth_1p, hPhi_e_All_Int_1p_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_p_AC_truth_1p_FD, hPhi_p_All_Int_1p, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_pFD_AC_truth_1p, hPhi_p_All_Int_1p, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_e_AC_truth_1p, hPhi_e_All_Int_1p_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hPhi_p_AC_truth_1p_FD, hPhi_p_All_Int_1p, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hPhi_pFD_AC_truth_1p, hPhi_p_All_Int_1p, plots);
         //</editor-fold>
 
         //</editor-fold>
@@ -17747,8 +17434,8 @@ void EventAnalyser() {
 
         hP_n_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
         hP_n_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
-        hP_n_AC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
-        hP_n_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
+        hP_nFD_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
+        hP_nFD_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
 
         hP_p_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         hP_p_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
@@ -17768,10 +17455,10 @@ void EventAnalyser() {
         hP_ph_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_ph_mom_cuts.GetLowerCut(), TL_ph_mom_cuts.GetUpperCut(), 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_e_AC_truth_1n, hP_e_APID_1n_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_n_AC_truth_1n_FD, hP_nFD_APID_1n, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_nFD_AC_truth_1n, hP_nFD_APID_1n, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hP_e_AC_truth_1n, hP_e_APID_1n_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_n_AC_truth_1n_FD, hP_nFD_APID_1n, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hP_nFD_AC_truth_1n, hP_nFD_APID_1n, plots);
         //</editor-fold>
 
         //<editor-fold desc="Theta efficiency plots (1n)">
@@ -17780,8 +17467,8 @@ void EventAnalyser() {
 
         hTheta_n_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hTheta_n_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_n_AC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_n_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_nFD_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_nFD_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         hTheta_p_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hTheta_p_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
@@ -17801,10 +17488,10 @@ void EventAnalyser() {
         hTheta_ph_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_e_AC_truth_1n, hTheta_e_All_Int_1n_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_n_AC_truth_1n_FD, hTheta_n_All_Int_1n, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_nFD_AC_truth_1n, hTheta_n_All_Int_1n, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hTheta_e_AC_truth_1n, hTheta_e_All_Int_1n_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hTheta_n_AC_truth_1n_FD, hTheta_n_All_Int_1n, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hTheta_nFD_AC_truth_1n, hTheta_n_All_Int_1n, plots);
         //</editor-fold>
 
         //<editor-fold desc="Phi efficiency plots (1n)">
@@ -17813,8 +17500,8 @@ void EventAnalyser() {
 
         hPhi_n_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hPhi_n_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_n_AC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_n_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_nFD_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_nFD_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         hPhi_p_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hPhi_p_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
@@ -17834,10 +17521,10 @@ void EventAnalyser() {
         hPhi_ph_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_e_AC_truth_1n, hPhi_e_All_Int_1n_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_n_AC_truth_1n_FD, hPhi_n_All_Int_1n, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_nFD_AC_truth_1n, hPhi_n_All_Int_1n, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_e_AC_truth_1n, hPhi_e_All_Int_1n_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hPhi_n_AC_truth_1n_FD, hPhi_n_All_Int_1n, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hPhi_nFD_AC_truth_1n, hPhi_n_All_Int_1n, plots);
         //</editor-fold>
 
         //</editor-fold>
@@ -17853,10 +17540,10 @@ void EventAnalyser() {
 
         hP_p_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         hP_p_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_p_AC_truth_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_p_BC_truth_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_p_AC_truth_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_p_BC_truth_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        hP_pFD_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        hP_pFD_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        hP_pCD_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        hP_pCD_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
 
         hP_pip_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(), TL_pip_mom_cuts.GetUpperCut(), 0, false);
         hP_pip_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(), TL_pip_mom_cuts.GetUpperCut(), 0, false);
@@ -17874,13 +17561,13 @@ void EventAnalyser() {
 
         // Acceptance correction plots (pFDpCD, CD & FD):
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_e_AC_truth_pFDpCD, hP_e_APID_pFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_p_AC_truth_pFDpCD_FD, hP_p_APID_pFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_p_AC_truth_pFDpCD_CD, hP_p_APID_pFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_pFD_AC_truth_pFDpCD, hP_p_APID_pFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_pCD_AC_truth_pFDpCD, hP_p_APID_pFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
 
         // Efficiency plots (pFDpCD, CD & FD):
         DrawAndSaveEfficiencyPlots(SampleName, hP_e_AC_truth_pFDpCD, hP_e_APID_pFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_p_AC_truth_pFDpCD_FD, hP_p_APID_pFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_p_AC_truth_pFDpCD_CD, hP_p_APID_pFDpCD_CD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hP_pFD_AC_truth_pFDpCD, hP_p_APID_pFDpCD_FD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hP_pCD_AC_truth_pFDpCD, hP_p_APID_pFDpCD_CD, plots);
         //</editor-fold>
 
         //<editor-fold desc="Theta efficiency plots (pFDpCD)">
@@ -17892,10 +17579,10 @@ void EventAnalyser() {
 
         hTheta_p_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hTheta_p_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_p_AC_truth_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_p_BC_truth_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_p_AC_truth_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_p_BC_truth_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_pFD_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_pFD_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_pCD_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_pCD_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         hTheta_pip_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hTheta_pip_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
@@ -17912,12 +17599,12 @@ void EventAnalyser() {
         hTheta_ph_BC_truth_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_e_AC_truth_pFDpCD, hTheta_e_All_Int_pFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_p_AC_truth_pFDpCD_FD, hTheta_pFD_All_Int_pFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_p_AC_truth_pFDpCD_CD, hTheta_pCD_All_Int_pFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_pFD_AC_truth_pFDpCD, hTheta_pFD_All_Int_pFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_pCD_AC_truth_pFDpCD, hTheta_pCD_All_Int_pFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hTheta_e_AC_truth_pFDpCD, hTheta_e_All_Int_pFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hTheta_p_AC_truth_pFDpCD_FD, hTheta_pFD_All_Int_pFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hTheta_p_AC_truth_pFDpCD_CD, hTheta_pCD_All_Int_pFDpCD_CD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hTheta_pFD_AC_truth_pFDpCD, hTheta_pFD_All_Int_pFDpCD_FD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hTheta_pCD_AC_truth_pFDpCD, hTheta_pCD_All_Int_pFDpCD_CD, plots);
         //</editor-fold>
 
         //<editor-fold desc="Phi efficiency plots (pFDpCD)">
@@ -17929,10 +17616,10 @@ void EventAnalyser() {
 
         hPhi_p_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hPhi_p_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_p_AC_truth_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_p_BC_truth_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_p_AC_truth_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_p_BC_truth_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_pFD_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_pFD_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_pCD_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_pCD_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         hPhi_pip_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hPhi_pip_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
@@ -17949,12 +17636,12 @@ void EventAnalyser() {
         hPhi_ph_BC_truth_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_e_AC_truth_pFDpCD, hPhi_e_All_Int_pFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_p_AC_truth_pFDpCD_FD, hPhi_pFD_All_Int_pFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_p_AC_truth_pFDpCD_CD, hPhi_pCD_All_Int_pFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_pFD_AC_truth_pFDpCD, hPhi_pFD_All_Int_pFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_pCD_AC_truth_pFDpCD, hPhi_pCD_All_Int_pFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_e_AC_truth_pFDpCD, hPhi_e_All_Int_pFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hPhi_p_AC_truth_pFDpCD_FD, hPhi_pFD_All_Int_pFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hPhi_p_AC_truth_pFDpCD_CD, hPhi_pCD_All_Int_pFDpCD_CD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hPhi_pFD_AC_truth_pFDpCD, hPhi_pFD_All_Int_pFDpCD_FD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hPhi_pCD_AC_truth_pFDpCD, hPhi_pCD_All_Int_pFDpCD_CD, plots);
         //</editor-fold>
 
         //</editor-fold>
@@ -17967,15 +17654,15 @@ void EventAnalyser() {
 
         hP_n_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
         hP_n_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
-        hP_n_AC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
-        hP_n_BC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
+        hP_nFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
+        hP_nFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
 
         hP_p_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         hP_p_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_p_AC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_p_BC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_p_AC_truth_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_p_BC_truth_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        hP_pFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        hP_pFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        hP_pCD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        hP_pCD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
 
         hP_pip_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(), TL_pip_mom_cuts.GetUpperCut(), 0, false);
         hP_pip_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(), TL_pip_mom_cuts.GetUpperCut(), 0, false);
@@ -17992,12 +17679,12 @@ void EventAnalyser() {
         hP_ph_BC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_ph_mom_cuts.GetLowerCut(), TL_ph_mom_cuts.GetUpperCut(), 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_e_AC_truth_nFDpCD, hP_e_APID_nFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_n_AC_truth_nFDpCD_FD, hP_n_APID_nFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_p_AC_truth_nFDpCD_CD, hP_p_APID_nFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_nFD_AC_truth_nFDpCD, hP_n_APID_nFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_pCD_AC_truth_nFDpCD, hP_p_APID_nFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hP_e_AC_truth_nFDpCD, hP_e_APID_nFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_n_AC_truth_nFDpCD_FD, hP_n_APID_nFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_p_AC_truth_nFDpCD_CD, hP_p_APID_nFDpCD_CD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hP_nFD_AC_truth_nFDpCD, hP_n_APID_nFDpCD_FD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hP_pCD_AC_truth_nFDpCD, hP_p_APID_nFDpCD_CD, plots);
         //</editor-fold>
 
         //<editor-fold desc="Theta efficiency plots (nFDpCD)">
@@ -18006,15 +17693,15 @@ void EventAnalyser() {
 
         hTheta_n_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hTheta_n_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_n_AC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_n_BC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_nFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_nFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         hTheta_p_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hTheta_p_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_p_AC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_p_BC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_p_AC_truth_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hTheta_p_BC_truth_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_pFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_pFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_pCD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTheta_pCD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         hTheta_pip_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hTheta_pip_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
@@ -18031,12 +17718,12 @@ void EventAnalyser() {
         hTheta_ph_BC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_e_AC_truth_nFDpCD, hTheta_e_All_Int_nFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_n_AC_truth_nFDpCD_FD, hTheta_nFD_All_Int_nFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_p_AC_truth_nFDpCD_CD, hTheta_pCD_All_Int_nFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_nFD_AC_truth_nFDpCD, hTheta_nFD_All_Int_nFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hTheta_pCD_AC_truth_nFDpCD, hTheta_pCD_All_Int_nFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hTheta_e_AC_truth_nFDpCD, hTheta_e_All_Int_nFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hTheta_n_AC_truth_nFDpCD_FD, hTheta_nFD_All_Int_nFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hTheta_p_AC_truth_nFDpCD_CD, hTheta_pCD_All_Int_nFDpCD_CD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hTheta_nFD_AC_truth_nFDpCD, hTheta_nFD_All_Int_nFDpCD_FD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hTheta_pCD_AC_truth_nFDpCD, hTheta_pCD_All_Int_nFDpCD_CD, plots);
         //</editor-fold>
 
         //<editor-fold desc="Phi efficiency plots (nFDpCD)">
@@ -18045,15 +17732,15 @@ void EventAnalyser() {
 
         hPhi_n_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hPhi_n_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_n_AC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_n_BC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_nFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_nFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         hPhi_p_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hPhi_p_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_p_AC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_p_BC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_p_AC_truth_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-        hPhi_p_BC_truth_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_pFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_pFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_pCD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hPhi_pCD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         hPhi_pip_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hPhi_pip_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
@@ -18070,12 +17757,12 @@ void EventAnalyser() {
         hPhi_ph_BC_truth_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_e_AC_truth_nFDpCD, hPhi_e_All_Int_nFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_n_AC_truth_nFDpCD_FD, hPhi_nFD_All_Int_nFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_p_AC_truth_nFDpCD_CD, hPhi_pCD_All_Int_nFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_nFD_AC_truth_nFDpCD, hPhi_nFD_All_Int_nFDpCD_FD, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hPhi_pCD_AC_truth_nFDpCD, hPhi_pCD_All_Int_nFDpCD_CD, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_e_AC_truth_nFDpCD, hPhi_e_All_Int_nFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hPhi_n_AC_truth_nFDpCD_FD, hPhi_nFD_All_Int_nFDpCD_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hPhi_p_AC_truth_nFDpCD_CD, hPhi_pCD_All_Int_nFDpCD_CD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hPhi_nFD_AC_truth_nFDpCD, hPhi_nFD_All_Int_nFDpCD_FD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hPhi_pCD_AC_truth_nFDpCD, hPhi_pCD_All_Int_nFDpCD_CD, plots);
         //</editor-fold>
 
         //<editor-fold desc="TL fiducial plots">

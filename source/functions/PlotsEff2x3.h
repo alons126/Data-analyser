@@ -105,7 +105,7 @@ void PlotsEff2x3(string SampleName,
     //<editor-fold desc="Setting sNameFlag">
     string sNameFlag;
 
-    if (findSubstring(SampleName, "simulation")) {
+    if (findSubstring(SampleName, "sim")) {
         sNameFlag = "s";
     } else if (findSubstring(SampleName, "data")) {
         sNameFlag = "d";

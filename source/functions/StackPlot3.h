@@ -77,7 +77,7 @@ void StackPlot3(string &SampleName, TList *Histogram_list,
     //<editor-fold desc="setting sNameFlag">
     std::string sNameFlag;
 
-    if (findSubstring(SampleName, "simulation")) {
+    if (findSubstring(SampleName, "sim")) {
         sNameFlag = "s";
     } else if (findSubstring(SampleName, "data")) {
         sNameFlag = "d";
