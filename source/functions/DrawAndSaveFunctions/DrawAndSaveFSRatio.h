@@ -127,12 +127,13 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     string FSRatioPlotsT = "FSRatio";
     string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
     string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
+    string FSRatioFS = Propeties.GetFS(FSRatioRecTitle);
 
     string FSRatioXLabel = SetXAxisTitle(FSRatioRecTitle);
-    string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
+    string FSRatioYLabel = SetYAxisTitle("FSRatio", FSRatioFS, nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
 
     string FSRatioSaveDir, FSRatioTestSaveDir;
-    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_Plot.GetHistogram1DSaveNamePath(), FSRatioPlotsT, FSRatioDRegion,
+    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, FSRatioFS, pFDpCD_Plot.GetHistogram1DSaveNamePath(), FSRatioPlotsT, FSRatioDRegion,
                       FSRatioParticle, FSRatioParticleLC, FSRatioParticleShort, FSRatioType);
 
     string nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName;
@@ -142,11 +143,17 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion);
+                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
     TH1D *FSRatio_plot = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
-    FSRatio_plot->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
+
+    if (FSRatioFS == "1p" || FSRatioFS == "1n") {
+        FSRatio_plot->SetTitle((FSRatioTitle + " 1nFD/1pFD").c_str());
+    } else if (FSRatioFS == "pFDpCD" || FSRatioFS == "nFDpCD") {
+        FSRatio_plot->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
+    }
+
     FSRatio_plot->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
     FSRatio_plot->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
 
@@ -369,6 +376,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     string FSRatioPlotsT = "FSRatio";
     string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
     string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
+    string FSRatioFS = Propeties.GetFS(FSRatioRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting X axis label">
@@ -376,12 +384,12 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     //</editor-fold>
 
     //<editor-fold desc="Setting y axis label">
-    string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
+    string FSRatioYLabel = SetYAxisTitle("FSRatio", FSRatioFS, nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
     string FSRatioSaveDir, FSRatioTestSaveDir;
-    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_Plot.GetHistogram1DSaveNamePath(), FSRatioPlotsT, FSRatioDRegion,
+    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, FSRatioFS, pFDpCD_Plot.GetHistogram1DSaveNamePath(), FSRatioPlotsT, FSRatioDRegion,
                       FSRatioParticle, FSRatioParticleLC, FSRatioParticleShort, FSRatioType);
 
     //</editor-fold>
@@ -394,7 +402,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion);
+                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
     TH1D *FSRatio_plot = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
@@ -656,6 +664,7 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     string FSRatioPlotsT = "FSRatio";
     string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
     string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
+    string FSRatioFS = Propeties.GetFS(FSRatioRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting X axis label">
@@ -663,12 +672,12 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     //</editor-fold>
 
     //<editor-fold desc="Setting y axis label">
-    string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
+    string FSRatioYLabel = SetYAxisTitle("FSRatio", FSRatioFS, nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
     string FSRatioSaveDir, FSRatioTestSaveDir;
-    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_PlotSaveNamePath, FSRatioPlotsT, FSRatioDRegion,
+    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, FSRatioFS, pFDpCD_PlotSaveNamePath, FSRatioPlotsT, FSRatioDRegion,
                       FSRatioParticle, FSRatioParticleLC, FSRatioParticleShort, FSRatioType);
     //</editor-fold>
 
@@ -680,7 +689,7 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion);
+                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
     TH1D *FSRatio_plot = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
@@ -936,12 +945,13 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     string FSRatioPlotsT = "FSRatio";
     string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
     string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
+    string FSRatioFS = Propeties.GetFS(FSRatioRecTitle);
 
     string FSRatioXLabel = SetXAxisTitle(FSRatioRecTitle);
-    string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle(), FSRatioRecTitle);
+    string FSRatioYLabel = SetYAxisTitle("FSRatio", FSRatioFS, nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle(), FSRatioRecTitle);
 
     string FSRatioSaveDir, FSRatioTestSaveDir;
-    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_Plot.GetHistogram2DSaveNamePath(), FSRatioPlotsT, FSRatioDRegion,
+    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, FSRatioFS, pFDpCD_Plot.GetHistogram2DSaveNamePath(), FSRatioPlotsT, FSRatioDRegion,
                       FSRatioParticle, FSRatioParticleLC, FSRatioParticleShort, FSRatioType);
 
     string nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName;
@@ -951,7 +961,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion);
+                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
     TH2D *FSRatio_plot = (TH2D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
@@ -1227,6 +1237,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, TH
     string FSRatioPlotsT = "FSRatio";
     string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
     string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
+    string FSRatioFS = Propeties.GetFS(FSRatioRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting X axis label">
@@ -1234,12 +1245,12 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, TH
     //</editor-fold>
 
     //<editor-fold desc="Setting y axis label">
-    string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle(), FSRatioRecTitle);
+    string FSRatioYLabel = SetYAxisTitle("FSRatio", FSRatioFS, nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle(), FSRatioRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
     string FSRatioSaveDir, FSRatioTestSaveDir;
-    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_Plot.GetHistogram2DSaveNamePath(), FSRatioPlotsT, FSRatioDRegion,
+    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, FSRatioFS, pFDpCD_Plot.GetHistogram2DSaveNamePath(), FSRatioPlotsT, FSRatioDRegion,
                       FSRatioParticle, FSRatioParticleLC, FSRatioParticleShort, FSRatioType);
     //</editor-fold>
 
@@ -1251,7 +1262,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, TH
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion);
+                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
     TH2D *FSRatio_plot = (TH2D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
@@ -1467,6 +1478,7 @@ void DrawAndSaveFSRatio(const string &SampleName, TH2D *pFDpCD_Plot, const strin
     string FSRatioPlotsT = "FSRatio";
     string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
     string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
+    string FSRatioFS = Propeties.GetFS(FSRatioRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting X axis label">
@@ -1474,12 +1486,12 @@ void DrawAndSaveFSRatio(const string &SampleName, TH2D *pFDpCD_Plot, const strin
     //</editor-fold>
 
     //<editor-fold desc="Setting y axis label">
-    string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle(), FSRatioRecTitle);
+    string FSRatioYLabel = SetYAxisTitle("FSRatio", FSRatioFS, nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle(), FSRatioRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
     string FSRatioSaveDir, FSRatioTestSaveDir;
-    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_PlotSaveNamePath, FSRatioPlotsT, FSRatioDRegion,
+    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, FSRatioFS, pFDpCD_PlotSaveNamePath, FSRatioPlotsT, FSRatioDRegion,
                       FSRatioParticle, FSRatioParticleLC, FSRatioParticleShort, FSRatioType);
     //</editor-fold>
 
@@ -1491,7 +1503,7 @@ void DrawAndSaveFSRatio(const string &SampleName, TH2D *pFDpCD_Plot, const strin
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion);
+                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
     TH2D *FSRatio_plot = (TH2D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());

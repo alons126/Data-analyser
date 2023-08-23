@@ -202,7 +202,8 @@ void NeutronResolution::ReadInputParam(const char *filename) {
             //get cut identifier
             ss >> parameter;
 
-            if (parameter == "Momentum_cuts_ECAL") {
+            if (parameter == "nRes_Momentum_cut") {
+//            if (parameter == "Momentum_cuts_ECAL") {
                 ss >> parameter2;
                 stringstream ss2(parameter2);
                 string pid_v;
@@ -223,7 +224,7 @@ void NeutronResolution::ReadInputParam(const char *filename) {
     } else
         cout << "Parameter file didn't read in " << endl;
 
-    return;
+//    return;
 }
 //</editor-fold>
 

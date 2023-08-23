@@ -18,7 +18,7 @@
 
 using namespace std;
 
-string SetYAxisTitle(const string &PlotT, const string &Numerator, const string &Denominator, const string &Title = "") {
+string SetYAxisTitle(const string &PlotT, const string &FinalState, const string &Numerator, const string &Denominator, const string &Title = "") {
     string YAxisTitle;
 
     string xLabelNum = Numerator.substr(0, Numerator.find_last_of('[') - 1);
@@ -31,7 +31,11 @@ string SetYAxisTitle(const string &PlotT, const string &Numerator, const string 
         YAxisTitle = string("#alpha = ") + "#frac{1}{#epsilon_{eff}} = " + xLabelNum + "/" + xLabelDem + "^{rec}";
     } else if (PlotT == "FSRatio") {
         if (!findSubstring(Title, "vs") && !findSubstring(Title, "vs.") && !findSubstring(Title, "VS") && !findSubstring(Title, "VS.")) {
-            YAxisTitle = "nFDpCD/pFDpCD";
+            if (FinalState == "1p" || FinalState == "1n") {
+                YAxisTitle = "1nFD/1pFD";
+            } else if (FinalState == "pFDpCD" || FinalState == "nFDpCD") {
+                YAxisTitle = "nFDpCD/pFDpCD";
+            }
         } else {
             if (findSubstring(Title, "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|")) {
                 YAxisTitle = "|#vec{P}_{rel}| = |#vec{P}_{nucL} - #vec{P}_{nucR}|/2 [GeV/c]";

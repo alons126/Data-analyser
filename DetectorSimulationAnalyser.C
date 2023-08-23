@@ -134,6 +134,7 @@ void EventAnalyser() {
     bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
+    //TODO: fix potential memory leak (duplicate histograms?)
     bool generate_AMaps = false; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
@@ -199,10 +200,10 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_weights = false;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -304,8 +305,7 @@ void EventAnalyser() {
                 if (Ecal_test) {
                     Efficiency_Status = "EcalT";
                 } else {
-//                    Efficiency_Status = "Eff1_FLIPED";
-//                    Efficiency_Status = "Eff1_NewShiftT_pol2";
+//                    Efficiency_Status = "Eff1_TLTEST";
                     Efficiency_Status = "Eff1";
                 }
             }
@@ -646,10 +646,10 @@ void EventAnalyser() {
 //    bool Beta_vs_P_plots = false;
 //
 //    /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-////    bool Angle_plots_master = false; // Master angle plots selector
-////    bool Theta_e_plots = false, Phi_e_plots = false;
+////    bool Angle_plots_master = true; // Master angle plots selector
+////    bool Theta_e_plots = true, Phi_e_plots = true;
+//    bool Angle_plots_master = false; // Master angle plots selector
+//    bool Theta_e_plots = false, Phi_e_plots = false;
 //
 //    /* Q2 plots */
 ////    bool Q2_plots = true;
@@ -677,14 +677,14 @@ void EventAnalyser() {
 //    bool ToF_plots = false;
 //
 //    /* Efficiency plots */
-////    bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
-////    bool TL_after_Acceptance_Maps_plots = true;
-//    bool TL_after_Acceptance_Maps_plots = false;
+//    bool Efficiency_plots = true;
+////    bool Efficiency_plots = false;
+//    bool TL_after_Acceptance_Maps_plots = true;
+////    bool TL_after_Acceptance_Maps_plots = false;
 //
 //    /* Resolution plots */
-//    bool Hit_maps_plots = true;
-////    bool Hit_maps_plots = false;
+////    bool Hit_maps_plots = true;
+//    bool Hit_maps_plots = false;
 //
 //    /* Resolution plots */
 ////    bool Resolution_plots = true;
@@ -692,7 +692,8 @@ void EventAnalyser() {
 //    //</editor-fold>/
 
     /* Final state ratio plots */
-    bool FSR_plots = true;
+    bool FSR_1D_plots = true;
+    bool FSR_2D_plots = true;
 
     /* Other setup variables */
     bool wider_margin = true;
@@ -928,6 +929,26 @@ void EventAnalyser() {
     cout << " done.\n\n";
     //</editor-fold>
 
+// Acceptance correction data -------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Acceptance correction">
+    /* Neutron resolution fits is handled completely by the NeutronResolution class */
+    cout << "\nSetting acceptance correction data...";
+
+    bool save_ACorr_data = false;
+
+    DEfficiency eff;
+
+    TList *ACorr_data = new TList();
+    string ACorr_data_Dir = ACorrDirectory + SampleName;
+    string ACorr_data_listName = ACorr_data_Dir + "/" + "ACorr_data_-_" + SampleName + ".root";
+    const char *ACorr_DataName = ACorr_data_listName.c_str();
+
+    if (!calculate_truth_level) { save_ACorr_data = false; }
+
+    cout << " done.\n\n";
+    //</editor-fold>
+
 // Neutron resolution & proton smearing ---------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Neutron resolution">
@@ -962,26 +983,6 @@ void EventAnalyser() {
                               SampleName, NucleonCutsDirectory);
     }
     //</editor-fold>
-
-    cout << " done.\n\n";
-    //</editor-fold>
-
-// Acceptance correction data -------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Acceptance correction">
-    /* Neutron resolution fits is handled completely by the NeutronResolution class */
-    cout << "\nSetting acceptance correction data...";
-
-    bool save_ACorr_data = false;
-
-    DEfficiency eff;
-
-    TList *ACorr_data = new TList();
-    string ACorr_data_Dir = ACorrDirectory + SampleName;
-    string ACorr_data_listName = ACorr_data_Dir + "/" + "ACorr_data_-_" + SampleName + ".root";
-    const char *ACorr_DataName = ACorr_data_listName.c_str();
-
-    if (!calculate_truth_level) { save_ACorr_data = false; }
 
     cout << " done.\n\n";
     //</editor-fold>
@@ -1044,13 +1045,6 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 // Cut parameters plots
 // ======================================================================================================================================================================
-
-    hPlot1D hMass2_all_n_1n_FD = hPlot1D("1n", "", "Mass^{2} all n", "Mass^{2} all n", "Mass^{2} [GeV]", plots_path + "/",
-                                         "01_Mass2_all_n_1n_FD", -0.5, 6, numTH1Dbins);
-    hPlot1D hMass2_VN_1n_FD = hPlot1D("1n", "", "Mass^{2} NV", "Mass^{2} NV", "Mass^{2} [GeV]", plots_path + "/",
-                                      "02_Mass2_VN_1n_FD", -0.5, 6, numTH1Dbins);
-    hPlot1D hMass2_ph_1n_FD = hPlot1D("1n", "", "Mass^{2} ph", "Mass^{2} ph", "Mass^{2} [GeV]", plots_path + "/",
-                                      "02_Mass2_ph_1n_FD", -0.5, 6, numTH1Dbins);
 
     //<editor-fold desc="Cut parameters plots">
 
@@ -7081,17 +7075,17 @@ void EventAnalyser() {
                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "03_Phi_p_BC_truth_nFDpCD",
                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{p} of Outgoing FD Proton AC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pFD_AC_truth_nFDpCD",
-                                                Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pFD_AC_truth_nFDpCD",
+                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{p} of Outgoing FD Proton BC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pFD_BC_truth_nFDpCD",
-                                                Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pFD_BC_truth_nFDpCD",
+                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #phi^{truth}_{p} AC", "#phi^{truth}_{p} of Outgoing CD Proton AC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pCD_AC_truth_nFDpCD",
-                                                Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pCD_AC_truth_nFDpCD",
+                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #phi^{truth}_{p} BC", "#phi^{truth}_{p} of Outgoing CD Proton BC", "#phi^{truth}_{p} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pCD_BC_truth_nFDpCD",
-                                                Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pCD_BC_truth_nFDpCD",
+                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
                                                "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
@@ -9473,7 +9467,7 @@ void EventAnalyser() {
 
             P_e_1p_3v.SetMagThetaPhi(e_1p->getP(), e_1p->getTheta(), e_1p->getPhi());                                                              // electron 3 momentum
             q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz());                                                  // 3 momentum transfer
-            P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndShift, ProtonMomBKC_1p), p_1p->getTheta(), p_1p->getPhi());                // proton 3 momentum
+            P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndShift, ProtonMomBKC_1p), p_1p->getTheta(), p_1p->getPhi());                   // proton 3 momentum
             P_T_e_1p_3v = TVector3(P_e_1p_3v.Px(), P_e_1p_3v.Py(), 0);                                                                    // electron transverse momentum
             P_T_p_1p_3v = TVector3(P_p_1p_3v.Px(), P_p_1p_3v.Py(), 0);                                                                      // proton transverse momentum
 
@@ -10073,7 +10067,7 @@ void EventAnalyser() {
 
             P_e_1n_3v.SetMagThetaPhi(e_1n->getP(), e_1n->getTheta(), e_1n->getPhi());                                                              // electron 3 momentum
             q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                                  // 3 momentum transfer
-            P_n_1n_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift, NeutronMomBKC_1n), n_1n->getTheta(), n_1n->getPhi());              // neutron 3 momentum
+            P_n_1n_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift, NeutronMomBKC_1n), n_1n->getTheta(), n_1n->getPhi());                 // neutron 3 momentum
             P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                                            // electron t. momentum
             P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                                             // neutron t. momentum
 
@@ -10081,12 +10075,6 @@ void EventAnalyser() {
             double omega_1n = beamE - E_e_1n, W_1n = sqrt((omega_1n + m_n) * (omega_1n + m_n) - q_1n_3v.Mag2());
             double Theta_p_e_p_n_1n, Theta_q_p_n_1n;
             double EoP_e_1n = (e_1n->cal(clas12::PCAL)->getEnergy() + e_1n->cal(ECIN)->getEnergy() + e_1n->cal(ECOUT)->getEnergy()) / P_e_1n_3v.Mag();
-
-            double Beta_n_1n = n_1n->par()->getBeta();
-            double Beta_n2_1n = Beta_n_1n * Beta_n_1n;
-            double Pmiss_1n = q_1n_3v.Mag();
-            double Pmiss2_1n = Pmiss_1n * Pmiss_1n;
-            double Mass2 = (Pmiss2_1n * (1 - Beta_n2_1n)) / Beta_n2_1n;
 
             /* Setting Q2 (1n) */
             TLorentzVector e_out_1n, Q_1n;
@@ -10165,17 +10153,6 @@ void EventAnalyser() {
             //<editor-fold desc="Applying neutron veto and Fillings 1n histograms">
             if (NeutronPassVeto_1n && Pass_Kin_Cuts_1n) {
                 ++num_of_events_1n_inFD_AV;
-
-
-                hMass2_all_n_1n_FD.hFill(Mass2, Weight_1n);
-
-                if (n_1n->par()->getPid() == 2112) {
-                    hMass2_VN_1n_FD.hFill(Mass2, Weight_1n);
-                } else if (n_1n->par()->getPid() == 22) {
-                    hMass2_ph_1n_FD.hFill(Mass2, Weight_1n);
-                }
-
-
 
                 //<editor-fold desc="Filling cut variable plots (1n)">
                 /* Filling Nphe plots (1n) */
@@ -12955,10 +12932,6 @@ void EventAnalyser() {
 // Cut parameters plots
 // ======================================================================================================================================================================
 
-    hMass2_all_n_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Nphe_plots, true, 1., 9999, 9999, 0, false);
-    hMass2_VN_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Nphe_plots, true, 1., 9999, 9999, 0, false);
-    hMass2_ph_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Nphe_plots, true, 1., 9999, 9999, 0, false);
-
     //<editor-fold desc="Cut parameters plots">
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -13715,19 +13688,24 @@ void EventAnalyser() {
 // Final state ratios (nFDpCD/pFDpCD) -------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && FSR_plots) {
-            DrawAndSaveFSRatio(SampleName, hP_e_APID_pFDpCD_FD, hP_e_APID_nFDpCD_FD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_pL_pFDpCD, hP_nL_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_pR_pFDpCD, hP_nR_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_pCD_pFDpCD, hP_pCD_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_tot_pFDpCD, hP_tot_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_rel_pFDpCD, hP_rel_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_tot_mu_pFDpCD, hP_tot_mu_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_rel_mu_pFDpCD, hP_rel_mu_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_tot_minus_q_pFDpCD, hP_tot_minus_q_nFDpCD, plots);
+        if (apply_nucleon_cuts) {
+            if (FSR_1D_plots) {
+                DrawAndSaveFSRatio(SampleName, hP_e_APID_1p_FD, hP_e_APID_1n_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_pFD_APIDandPS_1p, hP_nFD_APIDandNS_1n, plots);
 
-            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+                DrawAndSaveFSRatio(SampleName, hP_e_APID_pFDpCD_FD, hP_e_APID_nFDpCD_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_pL_pFDpCD, hP_nL_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_pR_pFDpCD, hP_nR_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_pCD_pFDpCD, hP_pCD_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_tot_pFDpCD, hP_tot_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_rel_pFDpCD, hP_rel_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_tot_mu_pFDpCD, hP_tot_mu_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_rel_mu_pFDpCD, hP_rel_mu_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_tot_minus_q_pFDpCD, hP_tot_minus_q_nFDpCD, plots);
+            }
+
+            if (FSR_2D_plots && SampleName != "C12_simulation_6GeV_T5_first_10") {
                 DrawAndSaveFSRatio(SampleName, hP_pL_vs_P_pR_pFDpCD, hP_nL_vs_P_nR_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hP_pFD_vs_P_pCD_pFDpCD, hP_nFD_vs_P_pCD_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hP_tot_vs_P_rel_pFDpCD, hP_tot_vs_P_rel_nFDpCD, plots);
@@ -13797,14 +13775,12 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && FSR_plots) {
-            DrawAndSaveFSRatio(SampleName, hW_All_Int_pFDpCD, hW_All_Int_pFDpCD_Dir, hW_All_Int_nFDpCD, plots);
-//        DrawAndSaveFSRatio(SampleName, hW_QEL_pFDpCD, hW_QEL_pFDpCD_Dir, hW_QEL_nFDpCD, plots);
-//        DrawAndSaveFSRatio(SampleName, hW_MEC_pFDpCD, hW_MEC_pFDpCD_Dir, hW_MEC_nFDpCD, plots);
-//        DrawAndSaveFSRatio(SampleName, hW_RES_pFDpCD, hW_RES_pFDpCD_Dir, hW_RES_nFDpCD, plots);
-//        DrawAndSaveFSRatio(SampleName, hW_DIS_pFDpCD, hW_DIS_pFDpCD_Dir, hW_DIS_nFDpCD, plots);
+        if (apply_nucleon_cuts) {
+            if (FSR_1D_plots) {
+                DrawAndSaveFSRatio(SampleName, hW_All_Int_pFDpCD, hW_All_Int_pFDpCD_Dir, hW_All_Int_nFDpCD, plots);
+            }
 
-//            exit(0);
+//            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for W!\n\n\n";
         }
         //</editor-fold>
 
@@ -15911,29 +15887,31 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && FSR_plots) {
-            DrawAndSaveFSRatio(SampleName, hTheta_e_All_Int_pFDpCD_FD, hTheta_e_All_Int_pFDpCD_FD_Dir, hTheta_e_All_Int_nFDpCD_FD, plots);
-            DrawAndSaveFSRatio(SampleName, hPhi_e_All_Int_pFDpCD_FD, hPhi_e_All_Int_pFDpCD_FD_Dir, hPhi_e_All_Int_nFDpCD_FD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_pFD_All_Int_pFDpCD_FD, hTheta_pFD_All_Int_pFDpCD_FD_Dir, hTheta_nFD_All_Int_nFDpCD_FD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_pCD_All_Int_pFDpCD_CD, hTheta_pCD_All_Int_pFDpCD_CD_Dir, hTheta_pCD_All_Int_nFDpCD_CD, plots);
-            DrawAndSaveFSRatio(SampleName, hPhi_pFD_All_Int_pFDpCD_FD, hPhi_pFD_All_Int_pFDpCD_FD_Dir, hPhi_nFD_All_Int_nFDpCD_FD, plots);
-            DrawAndSaveFSRatio(SampleName, hPhi_pCD_All_Int_pFDpCD_CD, hPhi_pCD_All_Int_pFDpCD_CD_Dir, hPhi_pCD_All_Int_nFDpCD_CD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_tot_All_Int_pFDpCD, hTheta_tot_All_Int_pFDpCD_Dir, hTheta_tot_All_Int_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hPhi_tot_All_Int_pFDpCD, hPhi_tot_All_Int_pFDpCD_Dir, hPhi_tot_All_Int_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_rel_All_Int_pFDpCD, hTheta_rel_All_Int_pFDpCD_Dir, hTheta_rel_All_Int_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hPhi_rel_All_Int_pFDpCD, hPhi_rel_All_Int_pFDpCD_Dir, hPhi_rel_All_Int_nFDpCD, plots);
+        if (apply_nucleon_cuts) {
+            if (FSR_1D_plots) {
+                DrawAndSaveFSRatio(SampleName, hTheta_e_All_Int_pFDpCD_FD, hTheta_e_All_Int_pFDpCD_FD_Dir, hTheta_e_All_Int_nFDpCD_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hPhi_e_All_Int_pFDpCD_FD, hPhi_e_All_Int_pFDpCD_FD_Dir, hPhi_e_All_Int_nFDpCD_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_pFD_All_Int_pFDpCD_FD, hTheta_pFD_All_Int_pFDpCD_FD_Dir, hTheta_nFD_All_Int_nFDpCD_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_pCD_All_Int_pFDpCD_CD, hTheta_pCD_All_Int_pFDpCD_CD_Dir, hTheta_pCD_All_Int_nFDpCD_CD, plots);
+                DrawAndSaveFSRatio(SampleName, hPhi_pFD_All_Int_pFDpCD_FD, hPhi_pFD_All_Int_pFDpCD_FD_Dir, hPhi_nFD_All_Int_nFDpCD_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hPhi_pCD_All_Int_pFDpCD_CD, hPhi_pCD_All_Int_pFDpCD_CD_Dir, hPhi_pCD_All_Int_nFDpCD_CD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_tot_All_Int_pFDpCD, hTheta_tot_All_Int_pFDpCD_Dir, hTheta_tot_All_Int_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hPhi_tot_All_Int_pFDpCD, hPhi_tot_All_Int_pFDpCD_Dir, hPhi_tot_All_Int_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_rel_All_Int_pFDpCD, hTheta_rel_All_Int_pFDpCD_Dir, hTheta_rel_All_Int_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hPhi_rel_All_Int_pFDpCD, hPhi_rel_All_Int_pFDpCD_Dir, hPhi_rel_All_Int_nFDpCD, plots);
 
-            DrawAndSaveFSRatio(SampleName, hTheta_p_e_p_tot_pFDpCD, hTheta_p_e_p_tot_pFDpCD_Dir, hTheta_p_e_p_tot_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_p_tot_pFDpCD, hTheta_q_p_tot_pFDpCD_Dir, hTheta_q_p_tot_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_P_pL_minus_q_pR_pFDpCD, hTheta_P_pL_minus_q_pR_pFDpCD_Dir, hTheta_P_nL_minus_q_nR_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_p_e_p_tot_pFDpCD, hTheta_p_e_p_tot_pFDpCD_Dir, hTheta_p_e_p_tot_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_p_tot_pFDpCD, hTheta_q_p_tot_pFDpCD_Dir, hTheta_q_p_tot_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_P_pL_minus_q_pR_pFDpCD, hTheta_P_pL_minus_q_pR_pFDpCD_Dir, hTheta_P_nL_minus_q_nR_nFDpCD, plots);
 
-            DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_pFDpCD, hTheta_q_p_L_pFDpCD_Dir, hTheta_q_p_L_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_p_R_pFDpCD, hTheta_q_p_R_pFDpCD_Dir, hTheta_q_p_R_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_pFD_pFDpCD, hTheta_q_pFD_pFDpCD_Dir, hTheta_q_nFD_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_pCD_pFDpCD, hTheta_q_pCD_pFDpCD_Dir, hTheta_q_pCD_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_pFD_pCD_All_Int_pFDpCD, hTheta_pFD_pCD_All_Int_pFDpCD_Dir, hTheta_nFD_pCD_All_Int_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_pFDpCD, hTheta_q_p_L_pFDpCD_Dir, hTheta_q_p_L_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_p_R_pFDpCD, hTheta_q_p_R_pFDpCD_Dir, hTheta_q_p_R_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_pFD_pFDpCD, hTheta_q_pFD_pFDpCD_Dir, hTheta_q_nFD_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_pCD_pFDpCD, hTheta_q_pCD_pFDpCD_Dir, hTheta_q_pCD_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_pFD_pCD_All_Int_pFDpCD, hTheta_pFD_pCD_All_Int_pFDpCD_Dir, hTheta_nFD_pCD_All_Int_nFDpCD, plots);
+            }
 
-            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+            if (FSR_2D_plots && SampleName != "C12_simulation_6GeV_T5_first_10") {
                 DrawAndSaveFSRatio(SampleName, hTheta_e_VS_P_e_pFDpCD_FD, hTheta_e_VS_P_e_pFDpCD_FD_Dir, hTheta_e_VS_P_e_nFDpCD_FD, plots);
                 DrawAndSaveFSRatio(SampleName, hTheta_e_VS_W_pFDpCD_FD, hTheta_e_VS_W_pFDpCD_FD_Dir, hTheta_e_VS_W_nFDpCD_FD, plots);
                 DrawAndSaveFSRatio(SampleName, hPhi_e_VS_P_e_pFDpCD_FD, hPhi_e_VS_P_e_pFDpCD_FD_Dir, hPhi_e_VS_P_e_nFDpCD_FD, plots);
@@ -16038,10 +16016,12 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && FSR_plots) {
-            DrawAndSaveFSRatio(SampleName, hQ2_pFDpCD, hQ2_pFDpCD_Dir, hQ2_nFDpCD, plots);
+        if (apply_nucleon_cuts) {
+            if (FSR_1D_plots) {
+                DrawAndSaveFSRatio(SampleName, hQ2_pFDpCD, hQ2_pFDpCD_Dir, hQ2_nFDpCD, plots);
+            }
 
-            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+            if (FSR_2D_plots && SampleName != "C12_simulation_6GeV_T5_first_10") {
                 DrawAndSaveFSRatio(SampleName, hQ2_VS_W_pFDpCD, hQ2_VS_W_pFDpCD_Dir, hQ2_VS_W_nFDpCD, plots);
             }
 
@@ -16370,14 +16350,17 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && FSR_plots) {
-            DrawAndSaveFSRatio(SampleName, hE_e_All_Int_pFDpCD_FD, hE_e_All_Int_pFDpCD_FD_Dir, hE_e_All_Int_nFDpCD_FD, plots);
+        if (apply_nucleon_cuts) {
+            if (FSR_1D_plots) {
+                DrawAndSaveFSRatio(SampleName, hE_e_All_Int_pFDpCD_FD, hE_e_All_Int_pFDpCD_FD_Dir, hE_e_All_Int_nFDpCD_FD, plots);
+            }
 
-            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+            if (FSR_2D_plots && SampleName != "C12_simulation_6GeV_T5_first_10") {
                 DrawAndSaveFSRatio(SampleName, hE_e_VS_Theta_e_All_Int_pFDpCD_FD, hE_e_VS_Theta_e_All_Int_pFDpCD_FD_Dir, hE_e_VS_Theta_e_All_Int_nFDpCD_FD, plots);
             }
 
-//            exit(0);
+//            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for Q2!\n\n\n";
+//            quit();
         }
         //</editor-fold>
 
@@ -16694,10 +16677,13 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && FSR_plots) {
-            DrawAndSaveFSRatio(SampleName, hET15_All_Int_pFDpCD_FD, hET15_All_Int_pFDpCD_FD_Dir, hET15_All_Int_nFDpCD_FD, plots);
+        if (apply_nucleon_cuts) {
+            if (FSR_1D_plots) {
+                DrawAndSaveFSRatio(SampleName, hET15_All_Int_pFDpCD_FD, hET15_All_Int_pFDpCD_FD_Dir, hET15_All_Int_nFDpCD_FD, plots);
+            }
 
-//            exit(0);
+//            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for Q2!\n\n\n";
+//            quit();
         }
         //</editor-fold>
 
@@ -16970,10 +16956,12 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && FSR_plots) {
-            DrawAndSaveFSRatio(SampleName, hEcal_All_Int_pFDpCD, hEcal_All_Int_pFDpCD_Dir, hEcal_All_Int_nFDpCD, plots);
+        if (apply_nucleon_cuts) {
+            if (FSR_1D_plots) {
+                DrawAndSaveFSRatio(SampleName, hEcal_All_Int_pFDpCD, hEcal_All_Int_pFDpCD_Dir, hEcal_All_Int_nFDpCD, plots);
+            }
 
-            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+            if (FSR_2D_plots && SampleName != "C12_simulation_6GeV_T5_first_10") {
                 DrawAndSaveFSRatio(SampleName, hEcal_vs_dP_T_L_pFDpCD, hEcal_vs_dP_T_L_pFDpCD_Dir, hEcal_vs_dP_T_L_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hEcal_vs_dP_T_tot_pFDpCD, hEcal_vs_dP_T_tot_pFDpCD_Dir, hEcal_vs_dP_T_tot_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hEcal_vs_dAlpha_T_L_pFDpCD, hEcal_vs_dAlpha_T_L_pFDpCD_Dir, hEcal_vs_dAlpha_T_L_nFDpCD, plots);
@@ -16981,7 +16969,8 @@ void EventAnalyser() {
                 DrawAndSaveFSRatio(SampleName, hEcal_vs_W_pFDpCD, hEcal_vs_W_pFDpCD_Dir, hEcal_vs_W_nFDpCD, plots);
             }
 
-//            exit(0);
+//            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for Ecal!\n\n\n";
+//            quit();
         }
         //</editor-fold>
 
@@ -17154,15 +17143,17 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && FSR_plots) {
-            DrawAndSaveFSRatio(SampleName, hdP_T_L_pFDpCD, hdP_T_L_pFDpCD_Dir, hdP_T_L_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hdP_T_tot_pFDpCD, hdP_T_tot_pFDpCD_Dir, hdP_T_tot_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hdAlpha_T_L_pFDpCD, hdAlpha_T_L_pFDpCD_Dir, hdAlpha_T_L_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hdAlpha_T_tot_pFDpCD, hdAlpha_T_tot_pFDpCD_Dir, hdAlpha_T_tot_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hdPhi_T_L_pFDpCD, hdPhi_T_L_pFDpCD_Dir, hdPhi_T_L_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hdPhi_T_tot_pFDpCD, hdPhi_T_tot_pFDpCD_Dir, hdPhi_T_tot_nFDpCD, plots);
+        if (apply_nucleon_cuts) {
+            if (FSR_1D_plots) {
+                DrawAndSaveFSRatio(SampleName, hdP_T_L_pFDpCD, hdP_T_L_pFDpCD_Dir, hdP_T_L_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hdP_T_tot_pFDpCD, hdP_T_tot_pFDpCD_Dir, hdP_T_tot_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hdAlpha_T_L_pFDpCD, hdAlpha_T_L_pFDpCD_Dir, hdAlpha_T_L_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hdAlpha_T_tot_pFDpCD, hdAlpha_T_tot_pFDpCD_Dir, hdAlpha_T_tot_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hdPhi_T_L_pFDpCD, hdPhi_T_L_pFDpCD_Dir, hdPhi_T_L_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hdPhi_T_tot_pFDpCD, hdPhi_T_tot_pFDpCD_Dir, hdPhi_T_tot_nFDpCD, plots);
+            }
 
-            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+            if (FSR_2D_plots && SampleName != "C12_simulation_6GeV_T5_first_10") {
                 DrawAndSaveFSRatio(SampleName, hdP_T_L_vs_dAlpha_T_L_pFDpCD, hdP_T_L_vs_dAlpha_T_L_pFDpCD_Dir, hdP_T_L_vs_dAlpha_T_L_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hdP_T_tot_vs_dAlpha_T_tot_pFDpCD, hdP_T_tot_vs_dAlpha_T_tot_pFDpCD_Dir, hdP_T_tot_vs_dAlpha_T_tot_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hdP_T_L_vs_W_pFDpCD, hdP_T_L_vs_W_pFDpCD_Dir, hdP_T_L_vs_W_nFDpCD, plots);
@@ -17171,7 +17162,8 @@ void EventAnalyser() {
                 DrawAndSaveFSRatio(SampleName, hdAlpha_T_tot_vs_W_pFDpCD, hdAlpha_T_tot_vs_W_pFDpCD_Dir, hdAlpha_T_tot_vs_W_nFDpCD, plots);
             }
 
-//            exit(0);
+//            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for TKI!\n\n\n";
+//            quit();
         }
         //</editor-fold>
 
@@ -17198,43 +17190,6 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Efficiency histograms">
-
-    //<editor-fold desc="TL plots after Acceptance maps">
-    if (TL_after_Acceptance_Maps_plots) {
-        cout << "\n\nPlotting TL plots after Acceptance maps...\n\n";
-
-//  TL after Acceptance maps plots ---------------------------------------------------------------------------------------------------------------------------------------------
-
-        //<editor-fold desc="Truth level theta vs. phi plots (1p)">
-        hTheta_e_vs_Phi_e_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_nFD_vs_Phi_nFD_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_pFD_vs_Phi_pFD_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Truth level theta vs. phi plots (1p)">
-        hTheta_e_vs_Phi_e_truth_1p.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_pFD_vs_Phi_pFD_truth_1p.hDrawAndSave(SampleName, c1, plots, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Truth level theta vs. phi plots (1n)">
-        hTheta_e_vs_Phi_e_truth_1n.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_nFD_vs_Phi_nFD_truth_1n.hDrawAndSave(SampleName, c1, plots, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Truth level theta vs. phi plots (pFDpCD)">
-        hTheta_e_vs_Phi_e_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_pFD_vs_Phi_pFD_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Truth level theta vs. phi plots (nFDpCD)">
-        hTheta_e_vs_Phi_e_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_nFD_vs_Phi_nFD_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
-        //</editor-fold>
-
-    } else {
-        cout << "\n\nTL plots after Acceptance maps are disabled by user.\n\n";
-    }
-    //</editor-fold>
 
     //<editor-fold desc="Efficiency plots">
     if (Efficiency_plots) {
@@ -17334,8 +17289,16 @@ void EventAnalyser() {
 
         hP_p_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         hP_p_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_pFD_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_pFD_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+
+        if (!apply_kinematical_cuts) {
+            hP_pFD_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+            hP_pFD_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        } else {
+            hP_pFD_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+                                            FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+            hP_pFD_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+                                            FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+        }
 
         hP_pip_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(), TL_pip_mom_cuts.GetUpperCut(), 0, false);
         hP_pip_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(), TL_pip_mom_cuts.GetUpperCut(), 0, false);
@@ -17434,8 +17397,16 @@ void EventAnalyser() {
 
         hP_n_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
         hP_n_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
-        hP_nFD_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
-        hP_nFD_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
+
+        if (!apply_kinematical_cuts) {
+            hP_nFD_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
+            hP_nFD_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
+        } else {
+            hP_nFD_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+                                            FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+            hP_nFD_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+                                            FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+        }
 
         hP_p_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         hP_p_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
@@ -17540,8 +17511,17 @@ void EventAnalyser() {
 
         hP_p_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         hP_p_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_pFD_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_pFD_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+
+        if (!apply_kinematical_cuts) {
+            hP_pFD_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+            hP_pFD_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        } else {
+            hP_pFD_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+                                                FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+            hP_pFD_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+                                                FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+        }
+
         hP_pCD_AC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         hP_pCD_BC_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
 
@@ -17654,13 +17634,30 @@ void EventAnalyser() {
 
         hP_n_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
         hP_n_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
-        hP_nFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
-        hP_nFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
+
+        if (!apply_kinematical_cuts) {
+            hP_nFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
+            hP_nFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(), TL_n_mom_cuts.GetUpperCut(), 0, false);
+        } else {
+            hP_nFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+                                                FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+            hP_nFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+                                                FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+        }
 
         hP_p_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         hP_p_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_pFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
-        hP_pFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+
+        if (!apply_kinematical_cuts) {
+            hP_pFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+            hP_pFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+        } else {
+            hP_pFD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+                                                FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+            hP_pFD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+                                                FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+        }
+
         hP_pCD_AC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         hP_pCD_BC_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
 
@@ -17776,8 +17773,64 @@ void EventAnalyser() {
 
         //</editor-fold>
 
+//  Final state ratios ----------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Final state ratios">
+        if (apply_nucleon_cuts) {
+            if (FSR_1D_plots) {
+                DrawAndSaveFSRatio(SampleName, hP_pFD_AC_truth_1p, hP_nFD_AC_truth_1n, plots);
+//                DrawAndSaveFSRatio(SampleName, hTheta_pFD_AC_truth_1p, hTheta_nFD_AC_truth_1n, plots);
+//                DrawAndSaveFSRatio(SampleName, hPhi_pFD_AC_truth_1p, hPhi_nFD_AC_truth_1n, plots);
+
+                DrawAndSaveFSRatio(SampleName, hP_pFD_AC_truth_pFDpCD, hP_nFD_AC_truth_nFDpCD, plots);
+//                DrawAndSaveFSRatio(SampleName, hTheta_pFD_AC_truth_pFDpCD, hTheta_nFD_AC_truth_nFDpCD, plots);
+//                DrawAndSaveFSRatio(SampleName, hPhi_pFD_AC_truth_pFDpCD, hPhi_nFD_AC_truth_nFDpCD, plots);
+            }
+
+//            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for TL!\n\n\n";
+//            quit();
+        }
+        //</editor-fold>
+
     } else {
         cout << "\n\nEfficiency plots are disabled by user.\n\n";
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="TL plots after Acceptance maps">
+    if (TL_after_Acceptance_Maps_plots) {
+        cout << "\n\nPlotting TL plots after Acceptance maps...\n\n";
+
+//  TL after Acceptance maps plots ---------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Truth level theta vs. phi plots (1p)">
+        hTheta_e_vs_Phi_e_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_nFD_vs_Phi_nFD_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_pFD_vs_Phi_pFD_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Truth level theta vs. phi plots (1p)">
+        hTheta_e_vs_Phi_e_truth_1p.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_pFD_vs_Phi_pFD_truth_1p.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Truth level theta vs. phi plots (1n)">
+        hTheta_e_vs_Phi_e_truth_1n.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_nFD_vs_Phi_nFD_truth_1n.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Truth level theta vs. phi plots (pFDpCD)">
+        hTheta_e_vs_Phi_e_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_pFD_vs_Phi_pFD_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Truth level theta vs. phi plots (nFDpCD)">
+        hTheta_e_vs_Phi_e_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_nFD_vs_Phi_nFD_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nTL plots after Acceptance maps are disabled by user.\n\n";
     }
     //</editor-fold>
 
