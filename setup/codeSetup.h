@@ -74,9 +74,10 @@ std::string file_name = "general_file";
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 std::string AnalyseFileSample = "C12_G18_02a_00_000_Q204_598636MeV";             // my test with Justin's code; all particle data saved
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_9_torus-1.0.hipo"; // only files #5
-//std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_5*.hipo"; // only files #5
+std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_5*.hipo"; // only files #5
+
 //</editor-fold>
 
 ////<editor-fold desc="Local hipo files - C12 @ 2GeV">

@@ -200,10 +200,10 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -305,8 +305,9 @@ void EventAnalyser() {
                 if (Ecal_test) {
                     Efficiency_Status = "EcalT";
                 } else {
-//                    Efficiency_Status = "Eff1_TLTEST";
-                    Efficiency_Status = "Eff1";
+                    Efficiency_Status = "Eff1_TLTEST_REG";
+//                    Efficiency_Status = "Eff1_TLTEST_withOtherPart";
+//                    Efficiency_Status = "Eff1";
                 }
             }
         }
@@ -7848,7 +7849,8 @@ void EventAnalyser() {
             /* Setting up basic TL event selection */
             bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1); // One id. FD electron above momentum threshold
             bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                   // No id. cPions above momentum threshold
-            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                   // No other part. above momentum threshold
+            bool no_TL_OtherPart = true;                                                   // No other part. above momentum threshold
+//            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                   // No other part. above momentum threshold
             bool no_TL_FDpi0 = (Enable_FD_photons || (TL_pi0FD_mom_ind.size() == 0));                                // No id. pi0 in the FD above momentum threshold
             bool no_TL_FDPhotons = (Enable_FD_photons || (TL_PhotonsFD_mom_ind.size() == 0));                        // No id. photons in the FD above momentum threshold
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDpi0 && no_TL_FDPhotons);

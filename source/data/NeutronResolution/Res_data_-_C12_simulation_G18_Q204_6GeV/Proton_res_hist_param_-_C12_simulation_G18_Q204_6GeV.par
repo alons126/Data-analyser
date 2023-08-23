@@ -4,7 +4,7 @@
 
 # Proton resolution parameters are for:
 #sample:	C12_simulation_G18_Q204_6GeV
-#run_mode:	wNC_Eff1
+#run_mode:	NC_Eff1
 #delta:		0.05
 #Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma
 

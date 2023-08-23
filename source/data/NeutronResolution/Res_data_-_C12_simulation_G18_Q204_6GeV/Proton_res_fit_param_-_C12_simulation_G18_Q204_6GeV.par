@@ -4,14 +4,14 @@
 
 # Proton resolution parameters are for:
 #sample:	C12_simulation_G18_Q204_6GeV
-#run_mode:	wNC_Eff1
+#run_mode:	NC_Eff1
 #delta:		0.05
 #Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
 
 fit_Slice_#1_from_0.40_to_0.65			1:0.4:0.65:0.0319644:0.0112331
 fit_Slice_#2_from_0.65_to_0.75			2:0.65:0.75:0.02186:0.0115018
 fit_Slice_#3_from_0.75_to_0.85			3:0.75:0.85:0.001232:0.00765075
-fit_Slice_#4_from_0.85_to_0.95			4:0.85:0.95:0.00999252:0.00931601
+fit_Slice_#4_from_0.85_to_0.95			4:0.85:0.95:0.00999253:0.00931598
 fit_Slice_#5_from_0.95_to_1.05			5:0.95:1.05:0.00784255:0.00905743
 fit_Slice_#6_from_1.05_to_1.10			6:1.05:1.1:0.00705088:0.00881948
 fit_Slice_#7_from_1.10_to_1.15			7:1.1:1.15:-0.00171377:0.00298997
@@ -34,7 +34,7 @@ fit_Slice_#23_from_2.10_to_2.20			23:2.1:2.2:-0.000207501:0.000247308
 fit_Slice_#24_from_2.20_to_2.30			24:2.2:2.3:0.00188015:0.00942025
 fit_Slice_#25_from_2.30_to_2.45			25:2.3:2.45:1.20508e-06:0.000168601
 fit_Slice_#26_from_2.45_to_2.60			26:2.45:2.6:-0.00011897:0.00114543
-fit_Slice_#27_from_2.60_to_2.80			27:2.6:2.8:-0.000636334:0.00305828
+fit_Slice_#27_from_2.60_to_2.80			27:2.6:2.8:-0.000111021:0.00090841
 fit_Slice_#28_from_2.80_to_3.00			28:2.8:3:0.00170747:0.00959756
 fit_Slice_#29_from_3.00_to_3.30			29:3:3.3:8.15823e-06:0.00119514
 fit_Slice_#30_from_3.30_to_4.00			30:3.3:4:0.00105472:0.00950377
