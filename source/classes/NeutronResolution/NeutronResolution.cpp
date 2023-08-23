@@ -675,13 +675,20 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
                 }
             } else { // New sample (24M)
                 if (SmearMode == "pol1") {
+//                    Smearing = Rand->Gaus(1, 0.0694 * Momentum - 0.0237); // new smear between 1 and 3 GeV/c
+                    Smearing = Rand->Gaus(1, 0.0599 * Momentum - 0.0073); // old smear between 0.4 to 4.09 GeV/c
+                    /*
 //                    Smearing = Rand->Gaus(1, 0.0694 * Momentum - 0.0236); // new smear between 1 and 3 GeV/c
                     Smearing = Rand->Gaus(1, 0.0571 * Momentum - 0.0034); // old smear between 0.4 to 4.09 GeV/c
+*/
                 } else if (SmearMode == "pol3") {
                     double Momentum2 = Momentum * Momentum;
                     double Momentum3 = Momentum * Momentum * Momentum;
 
+                    Smearing = Rand->Gaus(1, -0.0102 * Momentum3 + 0.0617 * Momentum2 - 0.0506 * Momentum + 0.0497); // old smear between 0.4 to 4.09 GeV/c
+                    /*
                     Smearing = Rand->Gaus(1, -0.0134 * Momentum3 + 0.0778 * Momentum2 - 0.074 * Momentum + 0.0596); // old smear between 0.4 to 4.09 GeV/c
+*/
                 } else {
                     cout << "NeutronResolution::PSmear: SmearMode illegal! Exiting", exit(0);
                 }
@@ -752,13 +759,21 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
                 }
             } else { // New sample (24M)
                 if (ShiftMode == "pol1") {
+//                    shift = 0.0679 * Momentum - 0.0254; // new shift between 1 and 3 GeV/c
+                    shift = 0.0649 * Momentum - 0.0183; // old shift between 0.4 to 4.09 GeV/c
+                    /*
 //                    shift = 0.0683 * Momentum - 0.0262; // new shift between 1 and 3 GeV/c
                     shift = 0.0681 * Momentum - 0.023; // old shift between 0.4 to 4.09 GeV/c
+*/
                 } else if (ShiftMode == "pol3") {
                     double Momentum2 = Momentum * Momentum;
-                    double Momentum3 = Momentum * Momentum * Momentum;
+//                    double Momentum3 = Momentum * Momentum * Momentum;
 
+                    //TODO: add pol2 mode and move this shift there!
+                    shift = 0.0071 * Momentum2 + 0.0366 * Momentum2 + 0.0053; // old shift between 0.4 to 4.09 GeV/c
+                    /*
                     shift = -0.0013 * Momentum3 + 0.0189 * Momentum2 + 0.0107 * Momentum + 0.0204; // old shift between 0.4 to 4.09 GeV/c
+*/
                 } else {
                     cout << "NeutronResolution::NShift: ShiftMode illegal! Exiting", exit(0);
                 }
