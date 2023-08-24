@@ -77,7 +77,6 @@ std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "
 //std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_9_torus-1.0.hipo"; // only files #5
 //std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_5*.hipo"; // only files #5
-
 //</editor-fold>
 
 ////<editor-fold desc="Local hipo files - C12 @ 2GeV">
