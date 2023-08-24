@@ -70,14 +70,24 @@ std::string file_name = "general_file";
 ////std::string AnalyseFile = AnalyseFileDir + "recon_c12_598636MeV_Q2_0_5_1*.hipo"; // only files #1 and #10
 ////</editor-fold>
 
-//<editor-fold desc="Local hipo files - C12 @ 6GeV">
-std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
-std::string AnalyseFileSample = "C12_G18_02a_00_000_Q204_598636MeV";             // my test with Justin's code; all particle data saved
+////<editor-fold desc="Local hipo files - C12 @ 6GeV Q204 (24M)">
+//std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
+//std::string AnalyseFileSample = "C12_G18_02a_00_000_Q204_598636MeV";             // my test with Justin's code; all particle data saved
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+////std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_9_torus-1.0.hipo"; // only files #5
+////std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_5*.hipo"; // only files #5
+////</editor-fold>
+
+//<editor-fold desc="C12x4 5.98636GeV (ifarm DATA files - C12x4 DATA files)">
+/* C12x4 5.98636GeV DATA file on ifarm */
+std::string AnalyseFilePath = "cache/clas12/rg-m/production/pass1/6gev/Cx4/dst/recon";
+std::string AnalyseFileSample = "015186";
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 std::string AnalyseFile = AnalyseFileDir + "*.hipo";
-//std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_9_torus-1.0.hipo"; // only files #5
-//std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_5*.hipo"; // only files #5
 //</editor-fold>
+
+//<editor-fold desc="Other">
 
 ////<editor-fold desc="Local hipo files - C12 @ 2GeV">
 //std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
@@ -193,6 +203,7 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 //std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 ////</editor-fold>
+//</editor-fold>
 
 //// root files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 

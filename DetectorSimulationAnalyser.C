@@ -144,7 +144,7 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
     const string SmearMode = "pol1", ShiftMode = "pol1";
@@ -183,13 +183,13 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    bool apply_cuts = false; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -205,11 +205,11 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
+    bool apply_nBeta_fit_cuts = false;        // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -362,6 +362,7 @@ void EventAnalyser() {
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";
 
     cout << "SampleName:\t\t" << SampleName << "\n";
+    cout << "VaringSampleName:\t" << VaringSampleName << "\n";
     cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
     cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
     //</editor-fold>
@@ -18355,7 +18356,8 @@ void EventAnalyser() {
     myLogFile << "plotsInput: " << plotsInput << "\n\n";
     myLogFile << "WorkingDirectory: " << WorkingDirectory << "\n";
     myLogFile << "plots_path: " << plots_path << "\n";
-    myLogFile << "SampleName: " << SampleName << "\n\n";
+    myLogFile << "SampleName: " << SampleName << "\n";
+    myLogFile << "VaringSampleName: " << VaringSampleName << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="setup">
@@ -18995,7 +18997,8 @@ void EventAnalyser() {
     cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
     cout << "AnalyseFile:\t\t" << AnalyseFile << "\n\n";
 
-    cout << "SampleName:\t\t" << SampleName << "\n\n";
+    cout << "SampleName:\t\t" << SampleName << "\n";
+    cout << "VaringSampleName:\t" << VaringSampleName << "\n\n";
 
     cout << "apply_cuts:\t\t'" << BoolToString(apply_cuts) << "'\n";
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";

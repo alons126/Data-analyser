@@ -99,6 +99,11 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
                 BeamAt6GeV = DataSample = true;
                 sName = "LH2_data_6GeV_run_015032";
             }
+        } else if (AnalyseFilePath == "cache/clas12/rg-m/production/pass1/6gev/Cx4/dst/recon") { // Cx4, data, 6GeV, ifarm
+            if (AnalyseFileSample == "015186") {
+                BeamAt6GeV = DataSample = true;
+                sName = "C12x4_data_6GeV_run_015186";
+            }
         }
         //</editor-fold>
 
