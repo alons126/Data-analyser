@@ -26,8 +26,8 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
             BeamAt2GeV = SimulationSample = true;
             sName = "C12_simulation_G18_2GeV";
         } else if (AnalyseFileSample == "C12_G18_02a_00_000_Q204_598636MeV") {
-                BeamAt6GeV = SimulationSample = true;
-                sName = "C12_simulation_G18_Q204_6GeV";
+            BeamAt6GeV = SimulationSample = true;
+            sName = "C12_simulation_G18_Q204_6GeV";
         }
         //</editor-fold>
 
@@ -114,7 +114,25 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
     if (!SimulationSample && !DataSample) { cout << "\n\nConfigureSampleName: sample type configuration error! Exiting...\n", exit(0); }
     //</editor-fold>
 
+    ConfigureVaringSampleName(sName);
+
     return sName;
+}
+
+// ConfigureVaringSampleName function -----------------------------------------------------------------------------------------------------------------------------------------
+
+void ExperimentParameters::ConfigureVaringSampleName(const string &sn) {
+    if (findSubstring(sn, "sim")) { // Sample is simulation
+        VaringSampleName = SampleName;
+    } else if (findSubstring(sn, "data")) { // Sample is data
+        if (findSubstring(sn, "C12") && BeamAt6GeV) {
+            VaringSampleName = "C12_simulation_G18_Q204_6GeV";
+        } else {
+            cout << "\n\n\nExperimentParameters::GetVaringSampleName: no corresponding simulation sample! Exiting...", exit(0);
+        }
+    } else {
+        cout << "\n\n\nExperimentParameters::ConfigureVaringSampleName: sample can't be configured! Exiting...", exit(0);
+    }
 }
 
 // ConfigureBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------

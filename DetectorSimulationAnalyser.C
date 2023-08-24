@@ -101,6 +101,7 @@ void EventAnalyser() {
     /* Configure and get run parameters */
     ExperimentParameters Experiment(AnalyseFilePath, AnalyseFileSample);
     const string SampleName = Experiment.ConfigureSampleName(AnalyseFilePath, AnalyseFileSample); // Configure SampleName from input
+    const string VaringSampleName = Experiment.GetVaringSampleName(); // Get VaringSampleName (configured from SampleName) - for data runs!
     const double beamE = Experiment.GetBeanEnergy(); // Configure beam energy from SampleName
     const string Target = Experiment.GetTargetElement(); // Configure target (element) from SampleName
     const int TargetPDG = Experiment.GetTargetElementPDG(); // Configure target PDG from SampleName
@@ -143,7 +144,7 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
     const string SmearMode = "pol1", ShiftMode = "pol1";
@@ -158,8 +159,15 @@ void EventAnalyser() {
 
     //<editor-fold desc="Auto-disable variables">
     //    if (!calculate_2p) { calculate_pFDpCD = false; }
-    if (isData) { calculate_truth_level = false; } // no TL calculation when running on data
+
+    if (isData) {
+        calculate_truth_level = false;           // no TL calculation when running on data
+        generate_AMaps = false;                  // no AMap,WMap generation when running on data
+        plot_and_fit_MomRes = nRes_test = false; // no nRes calculation when running on data
+    }
+
     if (!calculate_truth_level) { TL_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
+
 //    if (!Ecal_test) { Ecal_test_print_status = Ecal_test_print_nPDG = false; }
     //</editor-fold>
 
@@ -582,127 +590,127 @@ void EventAnalyser() {
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
 
-//    //<editor-fold desc="Plot selector - plot all">
-//    /* Master plots variable */
-//    bool Plot_selector_master = true; // Master plot selector for analysis
-//
-//    /* Cut variable plots */
-//    bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
-//
-//    /* Beta plots */
-//    bool W_plots = true;
-//
-//    /* Beta plots */
-//    bool Beta_plots = true;
-//    bool Beta_vs_P_plots = true;
-//
-//    /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-//
-//    /* Q2 plots */
-//    bool Q2_plots = true;
-//
-//    /* E_e plots */
-//    bool E_e_plots = true;
-//
-//    /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-//
-//    /* Ecal plots */
-//    bool Ecal_plots = true;
-//
-//    /* Transverse variables plots */
-//    bool TKI_plots = true;
-//
-//    /* ToF plots */
-//    bool ToF_plots = false;
-//
-//    /* Efficiency plots */
-//    bool Efficiency_plots = true;
-//    bool TL_after_Acceptance_Maps_plots = true;
-//
-//    /* Resolution plots */
-//    bool Hit_maps_plots = true;
-//
-//    /* Resolution plots */
-//    bool Resolution_plots = true;
-//    //</editor-fold>
-
-    //<editor-fold desc="Plot selector - selected plots">
+    //<editor-fold desc="Plot selector - plot all">
     /* Master plots variable */
     bool Plot_selector_master = true; // Master plot selector for analysis
 
     /* Cut variable plots */
     bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
-//
-//    bool Momentum_plots = false;
-    bool Momentum_plots = true;
-//
+    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta plots */
-//    bool W_plots = true;
-    bool W_plots = false;
+    bool W_plots = true;
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
+    bool Beta_plots = true;
+    bool Beta_vs_P_plots = true;
 
     /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-    bool Angle_plots_master = false; // Master angle plots selector
-    bool Theta_e_plots = false, Phi_e_plots = false;
+    bool Angle_plots_master = true; // Master angle plots selector
+    bool Theta_e_plots = true, Phi_e_plots = true;
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
+    bool Q2_plots = true;
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
+    bool E_e_plots = true;
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
+    bool ETrans_plots_master = true; // Master ET plots selector
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
+    bool Ecal_plots = true;
 
     /* Transverse variables plots */
-//    bool TKI_plots = true;
-    bool TKI_plots = false;
+    bool TKI_plots = true;
 
     /* ToF plots */
-//    bool ToF_plots = true;
     bool ToF_plots = false;
 
     /* Efficiency plots */
     bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
     bool TL_after_Acceptance_Maps_plots = true;
-//    bool TL_after_Acceptance_Maps_plots = false;
 
     /* Resolution plots */
-//    bool Hit_maps_plots = true;
-    bool Hit_maps_plots = false;
+    bool Hit_maps_plots = true;
 
     /* Resolution plots */
-//    bool Resolution_plots = true;
-    bool Resolution_plots = false;
-    //</editor-fold>/
+    bool Resolution_plots = true;
+    //</editor-fold>
+
+//    //<editor-fold desc="Plot selector - selected plots">
+//    /* Master plots variable */
+//    bool Plot_selector_master = true; // Master plot selector for analysis
+//
+//    /* Cut variable plots */
+//    bool Cut_plots_master = true; // Master cut plots selector
+////    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+////
+////    bool Momentum_plots = false;
+//    bool Momentum_plots = true;
+////
+//
+//    /* Beta plots */
+////    bool W_plots = true;
+//    bool W_plots = false;
+//
+//    /* Beta plots */
+////    bool Beta_plots = true;
+//    bool Beta_plots = false;
+////    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
+//
+//    /* Angle plots */
+////    bool Angle_plots_master = true; // Master angle plots selector
+////    bool Theta_e_plots = true, Phi_e_plots = true;
+//    bool Angle_plots_master = false; // Master angle plots selector
+//    bool Theta_e_plots = false, Phi_e_plots = false;
+//
+//    /* Q2 plots */
+////    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//
+//    /* E_e plots */
+////    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//
+//    /* ET plots */
+////    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+//
+//    /* Ecal plots */
+////    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//
+//    /* Transverse variables plots */
+////    bool TKI_plots = true;
+//    bool TKI_plots = false;
+//
+//    /* ToF plots */
+////    bool ToF_plots = true;
+//    bool ToF_plots = false;
+//
+//    /* Efficiency plots */
+//    bool Efficiency_plots = true;
+////    bool Efficiency_plots = false;
+//    bool TL_after_Acceptance_Maps_plots = true;
+////    bool TL_after_Acceptance_Maps_plots = false;
+//
+//    /* Resolution plots */
+////    bool Hit_maps_plots = true;
+//    bool Hit_maps_plots = false;
+//
+//    /* Resolution plots */
+////    bool Resolution_plots = true;
+//    bool Resolution_plots = false;
+//    //</editor-fold>/
 
     /* Final state ratio plots */
-    bool FSR_1D_plots = false;
-    bool FSR_2D_plots = false;
+    bool FSR_1D_plots = true;
+    bool FSR_2D_plots = true;
 
     /* Other setup variables */
     bool wider_margin = true;
@@ -931,8 +939,8 @@ void EventAnalyser() {
         wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, directories.AMaps_Directory_map["WMaps_1e_cut_Directory"],
                       NumberNucOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
     } else {
-        aMaps = AMaps(AcceptanceMapsDirectory, SampleName);
-        wMaps = AMaps(AcceptanceWeightsDirectory, SampleName);
+        aMaps = AMaps(AcceptanceMapsDirectory, VaringSampleName);
+        wMaps = AMaps(AcceptanceWeightsDirectory, VaringSampleName);
     }
 
     cout << " done.\n\n";
@@ -986,10 +994,10 @@ void EventAnalyser() {
         }
     } else {
         nRes.SetSmearAndShiftModes(SmearMode, ShiftMode);
-        nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str(),
-                              SampleName, NucleonCutsDirectory);
-        nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_hist_param_-_" + SampleName + ".par").c_str(),
-                              SampleName, NucleonCutsDirectory);
+        nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_res_fit_param_-_" + VaringSampleName + ".par").c_str(),
+                              VaringSampleName, NucleonCutsDirectory);
+        nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_res_hist_param_-_" + VaringSampleName + ".par").c_str(),
+                              VaringSampleName, NucleonCutsDirectory);
     }
     //</editor-fold>
 
@@ -1622,19 +1630,19 @@ void EventAnalyser() {
                                            directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "04_P_piminus_1e_cut_FD", 0, beamE * 1.1, numTH1Dbins);
 
     hPlot1D hP_Kplus_1e_cut_CD = hPlot1D("1e cut", "CD", "K^{+} momentum", "K^{+} momentum P_{K^{+}}", "P_{K^{+}} [GeV/c]",
-                                           directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "05_P_Kplus_1e_cut_CD", 0, beamE * 1.1, numTH1Dbins);
+                                         directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "05_P_Kplus_1e_cut_CD", 0, beamE * 1.1, numTH1Dbins);
     hPlot1D hP_Kplus_1e_cut_FD = hPlot1D("1e cut", "FD", "K^{+} momentum", "K^{+} momentum P_{K^{+}}", "P_{K^{+}} [GeV/c]",
-                                           directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "05_P_Kplus_1e_cut_FD", 0, beamE * 1.1, numTH1Dbins);
+                                         directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "05_P_Kplus_1e_cut_FD", 0, beamE * 1.1, numTH1Dbins);
 
     hPlot1D hP_Kminus_1e_cut_CD = hPlot1D("1e cut", "CD", "K^{-} momentum", "K^{-} momentum P_{K^{-}}", "P_{K^{-}} [GeV/c]",
-                                           directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "06_P_Kminus_1e_cut_CD", 0, beamE * 1.1, numTH1Dbins);
+                                          directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "06_P_Kminus_1e_cut_CD", 0, beamE * 1.1, numTH1Dbins);
     hPlot1D hP_Kminus_1e_cut_FD = hPlot1D("1e cut", "FD", "K^{-} momentum", "K^{-} momentum P_{K^{-}}", "P_{K^{-}} [GeV/c]",
-                                           directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "06_P_Kminus_1e_cut_FD", 0, beamE * 1.1, numTH1Dbins);
+                                          directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "06_P_Kminus_1e_cut_FD", 0, beamE * 1.1, numTH1Dbins);
 
     hPlot1D hP_deuteron_1e_cut_CD = hPlot1D("1e cut", "CD", "Deuterons momentum", "Deuterons momentum P_{D}", "P_{D} [GeV/c]",
-                                           directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "07_P_deuteron_1e_cut_CD", 0, beamE * 1.1, numTH1Dbins);
+                                            directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "07_P_deuteron_1e_cut_CD", 0, beamE * 1.1, numTH1Dbins);
     hPlot1D hP_deuteron_1e_cut_FD = hPlot1D("1e cut", "FD", "Deuterons momentum", "Deuterons momentum P_{D}", "P_{D} [GeV/c]",
-                                           directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "07_P_deuteron_1e_cut_FD", 0, beamE * 1.1, numTH1Dbins);
+                                            directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "07_P_deuteron_1e_cut_FD", 0, beamE * 1.1, numTH1Dbins);
     //</editor-fold>
 
     //<editor-fold desc="Momentum threshold plots (1p)">
@@ -6109,11 +6117,11 @@ void EventAnalyser() {
                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_Kp_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL K^{+} momentum AC", "K^{+} momentum P^{truth}_{K^{+}} AC", "P^{truth}_{K^{+}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "04_P_Kplus_AC_truth_1e_cut",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "04_P_Kplus_AC_truth_1e_cut",
+                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_Kp_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL K^{+} momentum BC", "K^{+} momentum P^{truth}_{K^{+}} BC", "P^{truth}_{K^{+}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "04_P_Kplus_BC_truth_1e_cut",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "04_P_Kplus_BC_truth_1e_cut",
+                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level momentum plots for momentum thresholds (1e cut)">
@@ -6142,25 +6150,25 @@ void EventAnalyser() {
                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_piplus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #pi^{+} momentum", "FD #pi^{+} momentum P^{truth}_{#pi^{+}}", "P^{truth}_{#pi^{+}} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "04a_P_piplus_truth_1e_cut_FD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                                directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "04a_P_piplus_truth_1e_cut_FD",
+                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_piplus_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD #pi^{+} momentum", "CD #pi^{+} momentum P^{truth}_{#pi^{+}}", "P^{truth}_{#pi^{+}} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "04b_P_piplus_truth_1e_cut_CD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                                directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "04b_P_piplus_truth_1e_cut_CD",
+                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_piminus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #pi^{-} momentum", "FD #pi^{-} momentum P^{truth}_{#pi^{-}}", "P^{truth}_{#pi^{-}} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "05a_P_piminus_truth_1e_cut_FD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                                 directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "05a_P_piminus_truth_1e_cut_FD",
+                                                 Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_piminus_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD #pi^{-} momentum", "CD #pi^{-} momentum P^{truth}_{#pi^{-}}", "P^{truth}_{#pi^{-}} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "05b_P_piminus_truth_1e_cut_CD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                                 directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "05b_P_piminus_truth_1e_cut_CD",
+                                                 Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_Kplus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD K^{+} momentum", "FD K^{+} momentum P^{truth}_{K^{+}}", "P^{truth}_{K^{+}} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "06a_P_Kplus_truth_1e_cut_FD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                               directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "06a_P_Kplus_truth_1e_cut_FD",
+                                               Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_Kplus_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD K^{+} momentum", "CD K^{+} momentum P^{truth}_{K^{+}}", "P^{truth}_{K^{+}} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "06b_P_Kplus_truth_1e_cut_CD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                               directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "06b_P_Kplus_truth_1e_cut_CD",
+                                               Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_Kminus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD K^{-} momentum", "FD K^{-} momentum P^{truth}_{K^{-}}", "P^{truth}_{K^{-}} [GeV/c]",
                                                 directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "07a_P_Kminus_truth_1e_cut_FD",
@@ -6170,18 +6178,18 @@ void EventAnalyser() {
                                                 Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_deuteron_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD Deuteron momentum", "FD Deuteron momentum P^{truth}_{D}", "P^{truth}_{D} [GeV/c]",
-                                                directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "08a_P_deuteron_truth_1e_cut_FD",
-                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "08a_P_deuteron_truth_1e_cut_FD",
+                                                  Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_deuteron_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD Deuteron momentum", "CD Deuteron momentum P^{truth}_{D}", "P^{truth}_{D} [GeV/c]",
-                                                directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "08b_P_deuteron_truth_1e_cut_CD",
-                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "08b_P_deuteron_truth_1e_cut_CD",
+                                                  Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_ph_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #gamma momentum", "FD #gamma momentum P^{truth}_{#gamma}", "P^{truth}_{#gamma} [GeV/c]",
-                                                directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "09a_P_ph_truth_1e_cut_FD",
-                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                            directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "09a_P_ph_truth_1e_cut_FD",
+                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_ph_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD #gamma momentum", "CD #gamma momentum P^{truth}_{#gamma}", "P^{truth}_{#gamma} [GeV/c]",
-                                                directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "09b_P_ph_truth_1e_cut_CD",
-                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                            directories.Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"], "09b_P_ph_truth_1e_cut_CD",
+                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (1e cut)">
@@ -7511,10 +7519,10 @@ void EventAnalyser() {
                                             numTH2Dbins_nRes_Plots, 0, beamE * 1.1, numTH2Dbins_nRes_Plots, -2, 2);
     string hP_nFD_Res_VS_P_nFD_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
-    hPlot1D hReco_P_nFD_nRes_1n = hPlot1D("1p", "FD", "Reco P_{nFD} used in nRes", "Reco P_{nFD} used in nRes", "P_{nFD} [GeV/c]",
+    hPlot1D hReco_P_nFD_nRes_1n = hPlot1D("1n", "FD", "Reco P_{nFD} used in nRes", "Reco P_{nFD} used in nRes", "P_{nFD} [GeV/c]",
                                           directories.Resolution_Directory_map["Resolution_1n_Directory"], "06a_Reco_P_nFD_used_in_nRes_1n",
                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
-    hPlot1D hTL_P_nFD_nRes_1n = hPlot1D("1p", "FD", "TL P_{nFD} used in nRes", "TL P_{nFD} used in nRes", "P_{nFD} [GeV/c]",
+    hPlot1D hTL_P_nFD_nRes_1n = hPlot1D("1n", "FD", "TL P_{nFD} used in nRes", "TL P_{nFD} used in nRes", "P_{nFD} [GeV/c]",
                                         directories.Resolution_Directory_map["Resolution_1n_Directory"], "06b_TL_P_nFD_used_in_nRes_1n",
                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
     //</editor-fold>
@@ -10100,8 +10108,8 @@ void EventAnalyser() {
                         bool TL_Theta_kinCuts = (TLProtonTheta <= FD_nucleon_theta_cut.GetUpperCut());
                         bool pRes_Pass_ThetaKinCut = (Reco_Theta_kinCut && TL_Theta_kinCuts);
 
-                        bool pRes_Pass_Proton_MomKinCut = ((TLProtonP >= p_mom_th.GetLowerCut()) && (TLProtonP <= nRes.GetSliceUpperMomLim()));
-//                        bool pRes_Pass_Proton_MomKinCut = ((TLProtonP >= p_mom_th.GetLowerCut()) && (TLProtonP <= p_mom_th.GetUpperCut()));
+                        bool pRes_TL_Pass_Proton_MomKinCut = ((TLProtonP >= p_mom_th.GetLowerCut()) && (TLProtonP <= nRes.GetSliceUpperMomLim()));
+                        bool pRes_Reco_Pass_Proton_MomKinCut = ((RecoProtonP >= p_mom_th.GetLowerCut()) && (RecoProtonP <= nRes.GetSliceUpperMomLim()));
                         //</editor-fold>
 
                         //<editor-fold desc="pRes matching cuts">
@@ -10112,7 +10120,8 @@ void EventAnalyser() {
 
                         //</editor-fold>
 
-                        if (pRes_TL_Pass_PIDCut && pRes_Pass_FiducialCuts && pRes_Pass_ThetaKinCut && pRes_Pass_Proton_MomKinCut) {
+                        if (pRes_TL_Pass_PIDCut && pRes_Pass_FiducialCuts && pRes_Pass_ThetaKinCut &&
+                            pRes_TL_Pass_Proton_MomKinCut && pRes_Reco_Pass_Proton_MomKinCut) {
                             /* Plots for TL Protons passing pRes cuts */
                             hdTheta_pFD_TL_BC_1p.hFill(dProtonTheta, Weight);
                             hdTheta_pFD_TL_ZOOMIN_BC_1p.hFill(dProtonTheta, Weight);
@@ -10964,8 +10973,8 @@ void EventAnalyser() {
                         bool TL_Theta_kinCuts = (TLNeutronTheta <= FD_nucleon_theta_cut.GetUpperCut());
                         bool nRes_Pass_ThetaKinCut = (Reco_Theta_kinCut && TL_Theta_kinCuts);
 
-                        bool nRes_Pass_Neutron_MomKinCut = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= nRes.GetSliceUpperMomLim()));
-//                        bool nRes_Pass_Neutron_MomKinCut = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut()));
+                        bool nRes_TL_Pass_Neutron_MomKinCut = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= nRes.GetSliceUpperMomLim()));
+                        bool nRes_Reco_Pass_Neutron_MomKinCut = ((RecoNeutronP >= n_mom_th.GetLowerCut()) && (RecoNeutronP <= nRes.GetSliceUpperMomLim()));
                         //</editor-fold>
 
                         //<editor-fold desc="nRes matching cuts">
@@ -10976,7 +10985,8 @@ void EventAnalyser() {
 
                         //</editor-fold>
 
-                        if (nRes_TL_Pass_PIDCut && nRes_Pass_FiducialCuts && nRes_Pass_ThetaKinCut && nRes_Pass_Neutron_MomKinCut) {
+                        if (nRes_TL_Pass_PIDCut && nRes_Pass_FiducialCuts && nRes_Pass_ThetaKinCut &&
+                            nRes_TL_Pass_Neutron_MomKinCut && nRes_Reco_Pass_Neutron_MomKinCut) {
                             /* Plots for TL neutrons passing nRes cuts */
                             hdTheta_nFD_TL_BC_1n.hFill(dNeutronTheta, Weight);
                             hdTheta_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronTheta, Weight);
