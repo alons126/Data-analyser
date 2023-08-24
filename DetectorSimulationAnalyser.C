@@ -324,14 +324,16 @@ void EventAnalyser() {
         //</editor-fold>
 
         if (!apply_cuts) { // Stage 0 - no cuts
-            plots_path = WorkingDirectory + "00_plots_" + SampleName + "_S00_NO_CUTS";
+            plots_path = WorkingDirectory + SampleName + "_S00_NO_CUTS";
+//            plots_path = WorkingDirectory + "00_plots_" + SampleName + "_S00_NO_CUTS";
             plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_S00_NO_CUTS.txt";
         } else {
             string added_names = Nucleon_Cuts_Status + FD_photons_Status + PSmearing_Status + FiducialCuts_Status + KinCuts_Status + KinWei_Status + Additional_Status
                                  + Efficiency_Status;
 
             if (!apply_chi2_cuts_1e_cut) { // Stage 1 - with cuts except PID (chi2) cuts
-                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_S01ACwoChi2";
+                plots_path = WorkingDirectory + SampleName + "_S01ACwoChi2";
+//                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_S01ACwoChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_S01ACwoChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
                 if (!apply_nucleon_cuts) { // Stage 2 - set nucleon cuts (neutron beta fit & proton double detection cuts)
