@@ -454,10 +454,12 @@ private:
     std::string Eff_and_ACorr_Parent_Directory = "11_Eff_and_ACorr_plots";
     vector<std::string> Eff_and_ACorr_Daughter_Folders = {"",
                                                           "01_1e_cut",
-                                                          "01_1e_cut/01_Momentum_Eff_and_ACorr_plots_1e_cut", "01_1e_cut/02_Theta_Eff_and_ACorr_plots_1e_cut",
+                                                          "01_1e_cut/01_Momentum_Eff_and_ACorr_plots_1e_cut",
+                                                          "01_1e_cut/02_Theta_Eff_and_ACorr_plots_1e_cut",
                                                           "01_1e_cut/03_Phi_Eff_and_ACorr_plots_1e_cut",
                                                           "01_1e_cut/04_Hit_maps",
                                                           "01_1e_cut/05_Loaded_reco_ref_hit_maps",
+                                                          "01_1e_cut/05_Eff_plots_for_Momentum_th",
 
                                                           "02_1p",
                                                           "02_1p/01_Momentum_Eff_and_ACorr_plots_1p", "02_1p/02_Theta_Eff_and_ACorr_plots_1p",
