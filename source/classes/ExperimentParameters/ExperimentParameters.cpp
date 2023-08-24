@@ -103,6 +103,19 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
             if (AnalyseFileSample == "015186") {
                 BeamAt6GeV = DataSample = true;
                 sName = "C12x4_data_6GeV_run_015186";
+            } else if (AnalyseFileSample == "015187") {
+                BeamAt6GeV = DataSample = true;
+                sName = "C12x4_data_6GeV_run_015187";
+            } else if (AnalyseFileSample == "015188") {
+                BeamAt6GeV = DataSample = true;
+                sName = "C12x4_data_6GeV_run_015188";
+            }
+            } else if (AnalyseFileSample == "015189") {
+                BeamAt6GeV = DataSample = true;
+                sName = "C12x4_data_6GeV_run_015189";
+            } else if (AnalyseFileSample == "015190") {
+                BeamAt6GeV = DataSample = true;
+                sName = "C12x4_data_6GeV_run_015190";
             }
         }
         //</editor-fold>
