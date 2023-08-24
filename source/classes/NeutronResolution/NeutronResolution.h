@@ -52,12 +52,12 @@ private:
 //    string ShiftMode = "pol3";   // Shift by fitted 3rd degree polynomial function to resolution Gaussian mean
 
 
-    vector<hPlot1D> ResSlices;
-    vector<vector<double>> ResSlicesLimits;
-    vector<DSCuts> ResSlicesFitVar;
-    vector<DSCuts> ResSlicesHistVar;
-    vector<DSCuts> Loaded_Res_Slices_FitVar;
-    vector<DSCuts> Loaded_Res_Slices_HistVar;
+    vector <hPlot1D> ResSlices;
+    vector <vector<double>> ResSlicesLimits;
+    vector <DSCuts> ResSlicesFitVar;
+    vector <DSCuts> ResSlicesHistVar;
+    vector <DSCuts> Loaded_Res_Slices_FitVar;
+    vector <DSCuts> Loaded_Res_Slices_HistVar;
     vector<int> FittedSlices;
 
     double SliceUpperMomLim; // upper lim for momentum slices to be set after neutron upper momentum th.
@@ -153,6 +153,8 @@ public:
     void SetShiftMode(const string &ShiftM) { ShiftMode = ShiftM; };
 
     void SetSmearAndShiftModes(const string &SmearM, const string &ShiftM) { SmearMode = SmearM, ShiftMode = ShiftM; };
+
+    double GetSliceUpperMomLim() { return SliceUpperMomLim; };
 
 };
 

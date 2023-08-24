@@ -1663,7 +1663,7 @@ void AMaps::ReadAMapLimits(const char *filename, vector<vector<double>> &Loaded_
             }
         }
     } else {
-        cout << "\n\nReadAMap: file not found! Exiting...\n\n", exit(0);
+        cout << "\n\nAMaps::ReadAMap: file not found! Exiting...\n\n", exit(0);
     }
 }
 //</editor-fold>
@@ -1760,8 +1760,8 @@ void AMaps::ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_
             }
         }
     } else {
-        cout << "\n\nReadAMap: file:\n" << filename << "\nwas not found! Exiting...\n\n", exit(0);
-//        cout << "\n\nReadAMap: file not found! Exiting...\n\n", exit(0);
+        cout << "\n\nAMaps::ReadAMap: file:\n" << filename << "\nwas not found! Exiting...\n\n", exit(0);
+//        cout << "\n\nAMaps::ReadAMap: file not found! Exiting...\n\n", exit(0);
     }
 }
 //</editor-fold>
@@ -1796,8 +1796,8 @@ void AMaps::ReadAMap(const char *filename, vector<vector<double>> &Loaded_partic
             }
         }
     } else {
-        cout << "\n\nReadAMap: file:\n" << filename << "\nwas not found! Exiting...\n\n", exit(0);
-//        cout << "\n\nReadAMap: file not found! Exiting...\n\n", exit(0);
+        cout << "\n\nAMaps::ReadAMap: file:\n" << filename << "\nwas not found! Exiting...\n\n", exit(0);
+//        cout << "\n\nAMaps::ReadAMap: file not found! Exiting...\n\n", exit(0);
     }
 }
 //</editor-fold>

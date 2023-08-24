@@ -423,12 +423,15 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const str
 //<editor-fold desc="LogResDataToFile function">
 void NeutronResolution::LogResDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
                                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
-    if (!nResTestMode) {
-        string SaveDateDir = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/";
+    //TODO: reorder file save in test mode properly
+    string SaveDateDir = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/";
 
-//    system(("rm -r " + SaveDateDir).c_str());
+    if (!nResTestMode) {
         system(("mkdir -p " + SaveDateDir).c_str());
 
+        LogFitDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+        LogHistDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+    } else {
         LogFitDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
         LogHistDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
     }
@@ -440,6 +443,43 @@ void NeutronResolution::LogResDataToFile(const string &SampleName, const string 
 //<editor-fold desc="LogFitDataToFile function">
 void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
                                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
+
+    ofstream Neutron_res_fit_param;
+    std::string Neutron_res_fit_paramFilePath;
+
+    if (!nResTestMode) {
+        Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_res_fit_param_-_" + SampleName + ".par";
+    } else {
+        Neutron_res_fit_paramFilePath = plots_path + "/" + Particle + "_res_fit_param_-_" + SampleName + ".par";
+    }
+
+    Neutron_res_fit_param.open(Neutron_res_fit_paramFilePath);
+    Neutron_res_fit_param << "######################################################################\n";
+    Neutron_res_fit_param << "# CLAS12 analysis cuts and parameters file (after nRes Gaussian fit) #\n";
+    Neutron_res_fit_param << "######################################################################\n";
+    Neutron_res_fit_param << "\n";
+    Neutron_res_fit_param << "# " + Particle + " resolution parameters are for:\n";
+    Neutron_res_fit_param << "#sample:\t" << SampleName << "\n";
+    Neutron_res_fit_param << "#run_mode:\t" << Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status << "\n";
+    Neutron_res_fit_param << "#delta:\t\t" << delta << "\n";
+    Neutron_res_fit_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma\n";
+    Neutron_res_fit_param << "\n";
+
+    for (int FittedSlice: FittedSlices) {
+        DSCuts TempCut = ResSlicesFitVar.at(FittedSlice);
+        Neutron_res_fit_param << TempCut.GetCutVariable() << "\t\t\t" << TempCut.GetSliceNumber() << ":" << TempCut.GetSliceLowerb() << ":"
+                              << TempCut.GetSliceUpperb()
+                              << ":" << TempCut.GetMean() << ":" << TempCut.GetUpperCut() << "\n";
+    }
+
+    Neutron_res_fit_param.close();
+
+    if (!nResTestMode) {
+        /* Copy fitted parameters file to plots folder for easy download from the ifarm */
+        system(("cp " + Neutron_res_fit_paramFilePath + " " + plots_path).c_str());
+    }
+
+    /*
     ofstream Neutron_res_fit_param;
     std::string Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_res_fit_param_-_" + SampleName + ".par";
 
@@ -464,6 +504,7 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
     Neutron_res_fit_param.close();
 
     system(("cp " + Neutron_res_fit_paramFilePath + " " + plots_path).c_str()); // Copy fitted parameters file to plots folder for easy download from the ifarm
+*/
 }
 //</editor-fold>
 
@@ -472,6 +513,41 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
 //<editor-fold desc="LogHistDataToFile function">
 void NeutronResolution::LogHistDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
                                           const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
+    ofstream Neutron_res_Hist_param;
+    std::string Neutron_res_Hist_paramFilePath;
+
+    if (!nResTestMode) {
+        Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + Particle + "_res_hist_param_-_" + SampleName + ".par";
+    } else {
+        Neutron_res_Hist_paramFilePath = plots_path + "/" + Particle + "_res_hist_param_-_" + SampleName + ".par";
+    }
+
+    Neutron_res_Hist_param.open(Neutron_res_Hist_paramFilePath);
+    Neutron_res_Hist_param << "######################################################################\n";
+    Neutron_res_Hist_param << "# CLAS12 analysis cuts and parameters file (after nRes Gaussian Hist) #\n";
+    Neutron_res_Hist_param << "######################################################################\n";
+    Neutron_res_Hist_param << "\n";
+    Neutron_res_Hist_param << "# " + Particle + " resolution parameters are for:\n";
+    Neutron_res_Hist_param << "#sample:\t" << SampleName << "\n";
+    Neutron_res_Hist_param << "#run_mode:\t" << Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status << "\n";
+    Neutron_res_Hist_param << "#delta:\t\t" << delta << "\n";
+    Neutron_res_Hist_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma\n";
+    Neutron_res_Hist_param << "\n";
+
+    for (DSCuts ResSlice: ResSlicesHistVar) {
+        Neutron_res_Hist_param << ResSlice.GetCutVariable() << "\t\t\t" << ResSlice.GetSliceNumber() << ":" << ResSlice.GetSliceLowerb() << ":"
+                               << ResSlice.GetSliceUpperb()
+                               << ":" << ResSlice.GetMean() << ":" << ResSlice.GetUpperCut() << "\n";
+    }
+
+    Neutron_res_Hist_param.close();
+
+    if (!nResTestMode) {
+        /* Copy histogram parameters file to plots folder for easy download from the ifarm */
+        system(("cp " + Neutron_res_Hist_paramFilePath + " " + plots_path).c_str());
+    }
+
+    /*
     ofstream Neutron_res_Hist_param;
     std::string Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + Particle + "_res_hist_param_-_" + SampleName + ".par";
 
@@ -496,6 +572,7 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
     Neutron_res_Hist_param.close();
 
     system(("cp " + Neutron_res_Hist_paramFilePath + " " + plots_path).c_str()); // Copy histogram parameters file to plots folder for easy download from the ifarm
+*/
 }
 //</editor-fold>
 
@@ -590,7 +667,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const string &Sam
             }
         }
     } else {
-        cout << "\n\nReadResDataParam: file not found! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::ReadResDataParam: file not found! Exiting...\n\n", exit(0);
     }
 }
 //</editor-fold>
@@ -671,7 +748,7 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 //                    Smearing = Rand->Gaus(1, 0.0738 * Momentum - 0.0304); // new smear between 1 and 3 GeV/c
                     Smearing = Rand->Gaus(1, 0.0583 * Momentum - 0.0045); // old smear between 0.4 to 4.09 GeV/c
                 } else {
-                    cout << "NeutronResolution::PSmear: SmearMode illegal! Exiting", exit(0);
+                    cout << "\n\nNeutronResolution::PSmear: SmearMode illegal! Exiting...", exit(0);
                 }
             } else { // New sample (24M)
                 if (SmearMode == "pol1") {
@@ -690,7 +767,7 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
                     Smearing = Rand->Gaus(1, -0.0134 * Momentum3 + 0.0778 * Momentum2 - 0.074 * Momentum + 0.0596); // old smear between 0.4 to 4.09 GeV/c
 */
                 } else {
-                    cout << "NeutronResolution::PSmear: SmearMode illegal! Exiting", exit(0);
+                    cout << "\n\nNeutronResolution::PSmear: SmearMode illegal! Exiting...", exit(0);
                 }
             }
 
@@ -705,7 +782,7 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 
             return SmearedMomentum;
         } else {
-            cout << "NeutronResolution::PSmear: SmearMode illegal! Exiting", exit(0);
+            cout << "\n\nNeutronResolution::PSmear: SmearMode illegal! Exiting...", exit(0);
         }
     }
 
@@ -755,7 +832,7 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
 //                    shift = 0.0579 * Momentum - 0.0146; // new shift between 1 and 3 GeV/c
                     shift = 0.0583 * Momentum - 0.0127; // old shift between 0.4 to 4.09 GeV/c
                 } else {
-                    cout << "NeutronResolution::NShift: ShiftMode illegal (no pol3 for C12_simulation_6GeV_T5)! Exiting", exit(0);
+                    cout << "\n\nNeutronResolution::NShift: ShiftMode illegal (no pol3 for C12_simulation_6GeV_T5)! Exiting...", exit(0);
                 }
             } else { // New sample (24M)
                 if (ShiftMode == "pol1") {
@@ -775,7 +852,7 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
                     shift = -0.0013 * Momentum3 + 0.0189 * Momentum2 + 0.0107 * Momentum + 0.0204; // old shift between 0.4 to 4.09 GeV/c
 */
                 } else {
-                    cout << "NeutronResolution::NShift: ShiftMode illegal! Exiting", exit(0);
+                    cout << "\n\nNeutronResolution::NShift: ShiftMode illegal! Exiting...", exit(0);
                 }
             }
 
@@ -790,7 +867,7 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
 
             return ShiftedMomentum;
         } else {
-            cout << "NeutronResolution::NShift: ShiftMode illegal! Exiting", exit(0);
+            cout << "\n\nNeutronResolution::NShift: ShiftMode illegal! Exiting...", exit(0);
         }
     }
 

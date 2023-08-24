@@ -1,3 +1,0 @@
-//wsl.localhost/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/Data-analyser.dir
-//wsl.localhost/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/edit_cache.dir
-//wsl.localhost/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/rebuild_cache.dir
