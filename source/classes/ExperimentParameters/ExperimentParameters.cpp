@@ -109,7 +109,6 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
             } else if (AnalyseFileSample == "015188") {
                 BeamAt6GeV = DataSample = true;
                 sName = "C12x4_data_6GeV_run_015188";
-            }
             } else if (AnalyseFileSample == "015189") {
                 BeamAt6GeV = DataSample = true;
                 sName = "C12x4_data_6GeV_run_015189";
