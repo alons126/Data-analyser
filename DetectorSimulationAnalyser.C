@@ -450,15 +450,8 @@ void EventAnalyser() {
     //</editor-fold>
 
     /* Vertex cuts */
-    DSCuts Vz_cut;
-    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-
-    if (SampleName == "LH2_data_6GeV_run_015032") {
-        Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5);
-    } else {
-        //TODO: these are good for Ca48 simulation and data. Check cuts for other targets!
-        Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -5, 5);
-    }
+    DSCuts Vz_cut = Experiment.GetVz_cuts();
+    DSCuts dVz_cuts = Experiment.GetdVz_cuts();
 
     /* Sampling Fraction (SF) cuts (electrons only, FD) */
     DSCuts SF_cuts;

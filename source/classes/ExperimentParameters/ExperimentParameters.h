@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "../TargetParameters/TargetParameters.h"
+#include "../DSCuts/DSCuts.h"
 #include "../../functions/GeneralFunctions.h"
 
 class ExperimentParameters : public TargetParameters {
@@ -21,15 +22,26 @@ protected:
     bool BeamAt2GeV = false;
     bool BeamAt4GeV = false;
     bool BeamAt6GeV = false;
+
+    DSCuts Vz_cuts, Vz_cuts_def = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5);
+    DSCuts dVz_cuts, dVz_cuts_def = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
 public:
 
 // ConfigureSampleName function -----------------------------------------------------------------------------------------------------------------------------------------
 
     string ConfigureSampleName(const string &AnalyseFilePath, const string &AnalyseFileSample);
 
-// ConfigureVaringSampleName function -----------------------------------------------------------------------------------------------------------------------------------------
+// ConfigureVaringSampleName function -----------------------------------------------------------------------------------------------------------------------------------
 
     void ConfigureVaringSampleName(const string &sn);
+
+// ConfigureVz_cuts function --------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ConfigureVz_cuts(const string &sn);
+
+// ConfiguredVz_cuts function -------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ConfiguredVz_cuts(const string &sn);
 
 // ConfigureBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -38,6 +50,14 @@ public:
 // GetBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------------
 
     double GetBeanEnergy();
+
+// GetBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+    DSCuts GetVz_cuts() { return Vz_cuts; };
+
+// GetBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+    DSCuts GetdVz_cuts() { return dVz_cuts; };
 
 // ExperimentParameters function ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -57,7 +77,7 @@ public:
 
     bool IsBeamAt6GeV() const { return BeamAt6GeV; };
 
-    string GetVaringSampleName() {return VaringSampleName;};
+    string GetVaringSampleName() { return VaringSampleName; };
 };
 
 
