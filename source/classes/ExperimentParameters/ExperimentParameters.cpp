@@ -64,6 +64,11 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
                 BeamAt6GeV = SimulationSample = true;
                 sName = "C12_simulation_G18_Q204_6GeV";
             }
+        } else if (AnalyseFilePath == "volatile/clas12/asportes/simulationFiles/C12x4_G18_02a_00_000_Q204_598636MeV") { // C12x4, simulation, 6GeV, Q204, ifarm
+            if (AnalyseFileSample == "reconhipo") {
+                BeamAt6GeV = SimulationSample = true;
+                sName = "C12x4_simulation_G18_Q204_6GeV";
+            }
         } else if (AnalyseFilePath ==
                    "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ca48_G18_10a_02_11b_Q205_598636MeV") { // Ca48, simulation, 6GeV, Q205, ifarm
             if (AnalyseFileSample == "reconhipo") {
