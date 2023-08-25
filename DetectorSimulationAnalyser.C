@@ -120,21 +120,26 @@ void EventAnalyser() {
     //<editor-fold desc="Event selection setup">
     /* Settings to enable/disable specific FS plot calculations (Rec only): */
 
-    /* Final states to analyse */
-    bool calculate_1p = true, calculate_1n = true, calculate_2p = true;
-    bool calculate_pFDpCD = true, calculate_nFDpCD = true;
+    /* Final states to analyse (1N) */
+    const bool calculate_1p = true;
+    const bool calculate_1n = true;
+
+    /* Final states to analyse (2N) */
+    const bool calculate_2p = true;
+    const bool calculate_pFDpCD = true;
+    const bool calculate_nFDpCD = true;
 
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
     bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
-    bool limless_mom_eff_plots = false;
-    bool Enable_FD_photons = false; // keep as false to decrease RES and DIS
-    bool Enable_FD_neutrons = true; // keep as false to increse eff. plots
+    const bool limless_mom_eff_plots = false;
+    const bool Enable_FD_photons = false; // keep as false to decrease RES and DIS
+    const bool Enable_FD_neutrons = true; // keep as false to increse eff. plots
 
     //TODO: add this switch to event selection variables!
-    bool ES_by_leading_FDneutron = true;
+    const bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicate histograms?)
@@ -150,13 +155,6 @@ void EventAnalyser() {
     const string SmearMode = "pol1", ShiftMode = "pol1";
     bool nRes_test = false; // false by default
 
-    /* Ecal test */
-    //TODO: finish this debugging code
-    bool Ecal_test = false; // test event with Ecal > beamE (master ON/OFF switch)
-    bool Ecal_test_print_status = false;
-    bool Ecal_test_print_Edep = false;
-    bool Ecal_test_print_nPDG = false;
-
     //<editor-fold desc="Auto-disable variables">
     //    if (!calculate_2p) { calculate_pFDpCD = false; }
 
@@ -167,8 +165,6 @@ void EventAnalyser() {
     }
 
     if (!calculate_truth_level) { TL_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
-
-//    if (!Ecal_test) { Ecal_test_print_status = Ecal_test_print_nPDG = false; }
     //</editor-fold>
 
     //</editor-fold>
@@ -183,7 +179,7 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    const bool apply_cuts = true; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
@@ -229,7 +225,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Custom cuts naming">
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
-    bool custom_cuts_naming = true;
+    const bool custom_cuts_naming = true;
     string Nucleon_Cuts_Status, FD_photons_Status, PSmearing_Status, FiducialCuts_Status, KinCuts_Status, KinWei_Status, Additional_Status, Efficiency_Status;
 
     if (custom_cuts_naming) {
@@ -312,13 +308,7 @@ void EventAnalyser() {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
             } else {
-                if (Ecal_test) {
-                    Efficiency_Status = "EcalT";
-                } else {
-//                    Efficiency_Status = "Eff1_TLTEST_REG";
-//                    Efficiency_Status = "Eff1_TLTEST_withOtherPart";
-                    Efficiency_Status = "Eff1";
-                }
+                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
@@ -369,8 +359,7 @@ void EventAnalyser() {
     cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
     //</editor-fold>
 
-    //<editor-fold desc="Cuts output">
-    /* Print out the cuts within the run (for self-observation) */
+    //<editor-fold desc="Auto-disable variables">
     if (!apply_chi2_cuts_1e_cut) { apply_nucleon_cuts = false; }
 
     if (!apply_nucleon_cuts) { apply_nucleon_physical_cuts = false; }
@@ -378,7 +367,10 @@ void EventAnalyser() {
     if (!apply_nucleon_physical_cuts) { apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndShift = false; }
 
     if (generate_AMaps) { apply_fiducial_cuts = false; }
+    //</editor-fold>
 
+    //<editor-fold desc="Cuts output">
+    /* Print out the cuts within the run (for self-observation) */
     if (!apply_cuts) {
         cout << "Cuts are disabled:\n";
 
@@ -395,8 +387,10 @@ void EventAnalyser() {
     cout << "apply_ECAL_SF_cuts:\t\t" << BoolToString(apply_ECAL_SF_cuts) << "\n";
     cout << "apply_ECAL_P_cuts:\t\t" << BoolToString(apply_ECAL_P_cuts) << "\n";
     cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
-    cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n";
-    cout << "apply_nucleon_cuts:\t\t" << BoolToString(apply_nucleon_cuts) << "\n";
+    cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n\n";
+
+    cout << "apply_nucleon_cuts:\t\t" << BoolToString(apply_nucleon_cuts) << "\n\n";
+
     cout << "apply_nucleon_physical_cuts:\t" << BoolToString(apply_nucleon_physical_cuts) << "\n";
     cout << "apply_nBeta_fit_cuts:\t\t" << BoolToString(apply_nBeta_fit_cuts) << "\n";
     cout << "apply_fiducial_cuts:\t\t" << BoolToString(apply_fiducial_cuts) << "\n";
@@ -580,7 +574,7 @@ void EventAnalyser() {
     cout << " done.\n\n";
     //</editor-fold>
 
-// Plot setup --------------------------------------------------------------------------------------------------------------------------------------------------------
+// Plot selector --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot selector">
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
@@ -629,7 +623,7 @@ void EventAnalyser() {
     bool TL_after_Acceptance_Maps_plots = true;
 
     /* Resolution plots */
-    bool Hit_maps_plots = true;
+    bool AMaps_plots = true;
 
     /* Resolution plots */
     bool Resolution_plots = true;
@@ -696,8 +690,8 @@ void EventAnalyser() {
 ////    bool TL_after_Acceptance_Maps_plots = false;
 //
 //    /* Resolution plots */
-////    bool Hit_maps_plots = true;
-//    bool Hit_maps_plots = false;
+////    bool AMaps_plots = true;
+//    bool AMaps_plots = false;
 //
 //    /* Resolution plots */
 ////    bool Resolution_plots = true;
@@ -712,17 +706,23 @@ void EventAnalyser() {
     bool wider_margin = true;
     bool debug_plots = false; // Print out clas12ana debugging plots
 
-    //<editor-fold desc="Turn off plots by master selectors">
+    //<editor-fold desc="Auto-disable plot selector variables">
     if (!Plot_selector_master) {
         Cut_plots_master = W_plots = Beta_plots = Beta_vs_P_plots = Angle_plots_master = Q2_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
-        TKI_plots = ToF_plots = Efficiency_plots = Hit_maps_plots = Resolution_plots = false;
+        TKI_plots = ToF_plots = Efficiency_plots = AMaps_plots = Resolution_plots = false;
+        FSR_1D_plots = FSR_2D_plots = false;
     }
 
     if (!Cut_plots_master) { Nphe_plots = Chi2_plots = Vertex_plots = SF_plots = fiducial_plots = Momentum_plots = false; }
+
     if (!Angle_plots_master) { Theta_e_plots = Phi_e_plots = false; }
+
     if (!ETrans_plots_master) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
+
     if (!fill_TL_plots) { Efficiency_plots = TL_after_Acceptance_Maps_plots = false; }
-    if (!generate_AMaps) { Hit_maps_plots = false; }
+
+    if (!generate_AMaps) { AMaps_plots = false; }
+
 //    if (!plot_and_fit_MomRes) { Resolution_plots = false; }
     //</editor-fold>
 
@@ -741,10 +741,13 @@ void EventAnalyser() {
     bool norm_W_plots = false, norm_Beta_plots = false, norm_Angle_plots_master = false, norm_Q2_plots = false, norm_E_e_plots = false, norm_ET_plots = false;
     bool norm_Ecal_plots = false, norm_TKI_plots = false;
 
+    //<editor-fold desc="Auto-disable plot normalization variables">
     if (!normalize_master) { // Disable all normalizations if normalize_master == false
         norm_Nphe_plots = norm_Chi2_plots = norm_Vertex_plots = norm_SF_plots = norm_Fiducial_plots = norm_Momentum_plots = false;
         norm_Angle_plots_master = norm_Q2_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TKI_plots = false;
     }
+    //</editor-fold>
+
     //</editor-fold>
 
 // Delete setup ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -752,7 +755,7 @@ void EventAnalyser() {
     //<editor-fold desc="Delete setup">
     /* Clear files from previous runs (to prevent mix fo plots from different codes). */
 
-    bool delete_png_files = true, delete_root_files = true, delete_txt_files = true;
+    const bool delete_png_files = true, delete_root_files = true, delete_txt_files = true;
 
     /* Delete existing .txt files */
     if (delete_txt_files) { system(("find " + plots_path + " -type f -iname '*.txt' -delete").c_str()); }
@@ -845,10 +848,10 @@ void EventAnalyser() {
 
     //<editor-fold desc="Histogram limits">
     /* Nphe boundries */
-    double Nphe_boundary = 40;
+    const double Nphe_boundary = 40;
 
     /* Chi2 boundries */
-    double Chi2_boundary = 30;
+    const double Chi2_boundary = 30;
     if (apply_cuts) { Chi2_boundary = 9; }
 
     /* Vertex boundries */
@@ -864,13 +867,13 @@ void EventAnalyser() {
     if (apply_cuts) { /* dV_boundary = 7.5; */ dV_boundary = dVz_cuts.GetUpperCut() * 1.4; }
 
     /* SF boundries */
-    double SF_uboundary = 0.31, SF_lboundary = 0.16;
+    const double SF_uboundary = 0.31, SF_lboundary = 0.16;
 
     /* Momentum boundries */
-    double Momentum_lboundary = 0., Momentum_uboundary = beamE * 1.1; // Default
-    double CDMomentum_lboundary = 0., CDMomentum_uboundary = beamE / 2; // CD nucleons (pFDpCD & nFDpCD)
-    double P_nucFD_lboundary = 0., P_nucFD_uboundary = beamE * 1.1; // Default
-    double P_nucCD_lboundary = 0., P_nucCD_uboundary = beamE / 2; // CD nucleons (pFDpCD & nFDpCD)
+    const double Momentum_lboundary = 0., Momentum_uboundary = beamE * 1.1;   // Default
+    const double CDMomentum_lboundary = 0., CDMomentum_uboundary = beamE / 2; // CD nucleons (pFDpCD & nFDpCD)
+    double P_nucFD_lboundary = 0., P_nucFD_uboundary = beamE * 1.1;           // Default
+    double P_nucCD_lboundary = 0., P_nucCD_uboundary = beamE / 2;             // CD nucleons (pFDpCD & nFDpCD)
 
     if (apply_kinematical_cuts) {
         P_nucFD_lboundary = FD_nucleon_momentum_cut.GetLowerCut(), P_nucFD_uboundary = FD_nucleon_momentum_cut.GetUpperCut() * 1.1;
@@ -879,28 +882,28 @@ void EventAnalyser() {
     }
 
     /* W boundries */
-    double W_lboundary = 0.5, W_uboundary = (beamE * 1.1) / 2; // Default
+    const double W_lboundary = 0.5, W_uboundary = (beamE * 1.1) / 2; // Default
 
     /* Beta boundries */
-    double dBeta_sigma_boundary = 0.1;
-    double Beta_dist_uboundary = 1 + dBeta_sigma_boundary, Beta_dist_lboundary = 1 - dBeta_sigma_boundary;
+    const double dBeta_sigma_boundary = 0.1;
+    const double Beta_dist_uboundary = 1 + dBeta_sigma_boundary, Beta_dist_lboundary = 1 - dBeta_sigma_boundary;
 
-    double dBeta_sigma_ZOOMOUT_boundary = 0.1;
-    double Beta_dist_ZOOMOUT_uboundary = 1 + dBeta_sigma_ZOOMOUT_boundary;
-    double Beta_dist_ZOOMOUT_lboundary = 0.9;
+    const double dBeta_sigma_ZOOMOUT_boundary = 0.1;
+    const double Beta_dist_ZOOMOUT_uboundary = 1 + dBeta_sigma_ZOOMOUT_boundary;
+    const double Beta_dist_ZOOMOUT_lboundary = 0.9;
 
     double Beta_boundary = 3., P_boundary = beamE * 1.425;
     if (apply_cuts) { Beta_boundary = 1.25, P_boundary = beamE * 1.1; }
 
     /* Angle boundries */
-    double Theta_lboundary_FD = 0., Theta_uboundary_FD = 50.;
-    double Theta_lboundary_CD = 30., Theta_uboundary_CD = 155.;
-    double Opening_Ang_wide_lboundary = 0, Opening_Ang_wide_uboundary = 180.;
-    double Opening_Ang_narrow_lboundary = 0, Opening_Ang_narrow_uboundary = 100.;
-    double Phi_lboundary = -180., Phi_uboundary = 180.;
+    const double Theta_lboundary_FD = 0., Theta_uboundary_FD = 50.;
+    const double Theta_lboundary_CD = 30., Theta_uboundary_CD = 155.;
+    const double Opening_Ang_wide_lboundary = 0, Opening_Ang_wide_uboundary = 180.;
+    const double Opening_Ang_narrow_lboundary = 0, Opening_Ang_narrow_uboundary = 100.;
+    const double Phi_lboundary = -180., Phi_uboundary = 180.;
 
     /* TKI boundries */
-    double dP_T_boundary = 3.;
+    const double dP_T_boundary = 3.;
     //</editor-fold>
 
     //</editor-fold>
@@ -912,7 +915,7 @@ void EventAnalyser() {
     cout << "\nSetting Acceptance maps...";
 
     if (!calculate_truth_level) { generate_AMaps = false; }
-    if (!generate_AMaps) { Hit_maps_plots = false; }
+    if (!generate_AMaps) { AMaps_plots = false; }
     if (reformat_e_bins) { equi_P_e_bins = false; }
 
     /* Set Bins by case */
@@ -1005,13 +1008,13 @@ void EventAnalyser() {
     //<editor-fold desc="Debugging setup">
     /* Saving a printout of the number of particles in nEvents2print events. Used for clas12ana debugging. */
 
-    bool GoodProtonsMonitorPlots = true;
+    const bool GoodProtonsMonitorPlots = true;
 
     SetGPMonitoringPlots(GoodProtonsMonitorPlots, directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
                          directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"]);
 
-    bool PrintEvents = false;
-    int Ne_in_event = 1, Nf_in_event = 2, nEvents2print = 10000;
+    const bool PrintEvents = false;
+    const int Ne_in_event = 1, Nf_in_event = 2, nEvents2print = 10000;
 
     ofstream EventPrint;
     string EventPrint_save_Directory;
@@ -18093,8 +18096,8 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Acceptance maps histograms">
-    if (Hit_maps_plots) {
-//    if (Hit_maps_plots && generate_AMaps) {
+    if (AMaps_plots) {
+//    if (AMaps_plots && generate_AMaps) {
         cout << "\n\nPlotting Acceptance maps histograms...\n\n";
 
 //  Acceptance maps plots ------------------------------------------------------------------------------------------------------------------------------------------------------
