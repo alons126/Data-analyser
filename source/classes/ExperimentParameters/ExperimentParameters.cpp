@@ -191,7 +191,7 @@ void ExperimentParameters::ConfigureVz_cuts(const string &sn) {
         Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5);
     } else {
         //TODO: these are good for Ca48 simulation and data. Check cuts for other targets!
-        Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -5, 5);
+        Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -5, 5);
         //        cout << "\n\n\nExperimentParameters::ConfigureVz_cuts: Vz can't be configured! Exiting...", exit(0);
     }
 }
@@ -202,21 +202,21 @@ void ExperimentParameters::ConfiguredVz_cuts(const string &sn) {
     if (findSubstring(sn, "C12x4_data_6GeV_run_0151")) { // Sample is simulation
         //TODO: recheck vertex corr cuts with Adi
         if (findSubstring(sn, "C12x4_data_6GeV_run_015186")) {
-//            dVz_cut = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-            dVz_cut = dVz_cuts_def;
+//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
+            dVz_cuts = dVz_cuts_def;
         } else if (findSubstring(sn, "C12x4_data_6GeV_run_015187")) {
-//            dVz_cut = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-            dVz_cut = dVz_cuts_def;
+//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
+            dVz_cuts = dVz_cuts_def;
         } else if (findSubstring(sn, "C12x4_data_6GeV_run_015188")) {
-//            dVz_cut = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-            dVz_cut = dVz_cuts_def;
+//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
+            dVz_cuts = dVz_cuts_def;
         } else {
-            dVz_cut = dVz_cuts_def;
+            dVz_cuts = dVz_cuts_def;
         }
     } else if (SampleName == "LH2_data_6GeV_run_015032") {
         dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
     } else {
-        dVz_cut = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
+        dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
         //        cout << "\n\n\nExperimentParameters::ConfigureVz_cuts: Vz can't be configured! Exiting...", exit(0);
     }
 }
