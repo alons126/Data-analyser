@@ -851,8 +851,11 @@ void EventAnalyser() {
     const double Nphe_boundary = 40;
 
     /* Chi2 boundries */
-    const double Chi2_boundary = 30;
-    if (apply_cuts) { Chi2_boundary = 9; }
+    double Chi2_boundary = 30;
+
+    if (apply_cuts) {
+        Chi2_boundary = 9;
+    }
 
     /* Vertex boundries */
     double Vertex_boundary = 50, Vertex_uboundary = Vertex_boundary, Vertex_lboundary = -Vertex_boundary;
@@ -864,7 +867,11 @@ void EventAnalyser() {
     }
 
     double dV_boundary = 50;
-    if (apply_cuts) { /* dV_boundary = 7.5; */ dV_boundary = dVz_cuts.GetUpperCut() * 1.4; }
+
+    if (apply_cuts) {
+//        dV_boundary = 7.5;
+        dV_boundary = dVz_cuts.GetUpperCut() * 1.4;
+    }
 
     /* SF boundries */
     const double SF_uboundary = 0.31, SF_lboundary = 0.16;
@@ -893,7 +900,11 @@ void EventAnalyser() {
     const double Beta_dist_ZOOMOUT_lboundary = 0.9;
 
     double Beta_boundary = 3., P_boundary = beamE * 1.425;
-    if (apply_cuts) { Beta_boundary = 1.25, P_boundary = beamE * 1.1; }
+
+    if (apply_cuts) {
+        Beta_boundary = 1.25;
+        P_boundary = beamE * 1.1;
+    }
 
     /* Angle boundries */
     const double Theta_lboundary_FD = 0., Theta_uboundary_FD = 50.;
