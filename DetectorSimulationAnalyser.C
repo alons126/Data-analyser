@@ -201,11 +201,11 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = false;        // apply neutron upper mom. th.
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -315,7 +315,6 @@ void EventAnalyser() {
 
         if (!apply_cuts) { // Stage 0 - no cuts
             plots_path = WorkingDirectory + SampleName + "_S00_NO_CUTS";
-//            plots_path = WorkingDirectory + "00_plots_" + SampleName + "_S00_NO_CUTS";
             plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_S00_NO_CUTS.txt";
         } else {
             string added_names = Nucleon_Cuts_Status + FD_photons_Status + PSmearing_Status + FiducialCuts_Status + KinCuts_Status + KinWei_Status + Additional_Status
@@ -323,16 +322,13 @@ void EventAnalyser() {
 
             if (!apply_chi2_cuts_1e_cut) { // Stage 1 - with cuts except PID (chi2) cuts
                 plots_path = WorkingDirectory + SampleName + "_S01ACwoChi2";
-//                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_S01ACwoChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_S01ACwoChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
                 if (!apply_nucleon_cuts) { // Stage 2 - set nucleon cuts (neutron beta fit & proton double detection cuts)
                     plots_path = WorkingDirectory + SampleName + "_S02AC" + added_names;
-//                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-02_AC_" + added_names;
                     plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_S02AC" + added_names + ".txt";
                 } else {
                     plots_path = WorkingDirectory + SampleName + "_S03AC" + added_names;
-//                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-03_AC_" + added_names;
                     plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_S03AC" + added_names + ".txt";
                 }
             }
@@ -701,7 +697,7 @@ void EventAnalyser() {
 
     /* Final state ratio plots */
     bool FSR_1D_plots = true;
-    bool FSR_2D_plots = true;
+    bool FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
 
     /* Other setup variables */
     bool wider_margin = true;
@@ -7669,11 +7665,16 @@ void EventAnalyser() {
     clas12root::HipoChain chain;
     chain.Add(AnalyseFile.c_str());
     chain.SetReaderTags({0});
+    int HipoChainLength = chain.GetNFiles();
     auto config_c12 = chain.GetC12Reader();
     auto &c12 = chain.C12ref();
 
     auto db = TDatabasePDG::Instance();
     chain.db()->turnOffQADB();
+
+    //<editor-fold desc="Auto-disable variables accoding to HipoChain length">
+    if (HipoChainLength <= 2) { FSR_2D_plots = false; }
+    //</editor-fold>
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Setting beam particle's momentum
@@ -18364,10 +18365,13 @@ void EventAnalyser() {
     myLogFile << "filePath: " << filePath << "\n";
     myLogFile << "fileInput: " << fileInput << "\n";
     myLogFile << "plotsInput: " << plotsInput << "\n\n";
+
     myLogFile << "WorkingDirectory: " << WorkingDirectory << "\n";
     myLogFile << "plots_path: " << plots_path << "\n";
     myLogFile << "SampleName: " << SampleName << "\n";
     myLogFile << "VaringSampleName: " << VaringSampleName << "\n\n";
+
+    myLogFile << "HipoChainLength: " << HipoChainLength << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="setup">
