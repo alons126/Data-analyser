@@ -1,0 +1,13 @@
+######################################################################
+# CLAS12 analysis cuts and parameters file (after chi2 Gaussian fit) #
+######################################################################
+
+# Cuts are fitted for - C12x4_simulation_G18_Q204_6GeV
+
+# pid cuts by detector (pid:mean:sigma) - sigma_CD=3;sigma_FD=3:
+pid_cuts		2212:0.532434:5.69107:CD
+pid_cuts		2212:-0.0555412:4.16054:FD
+pid_cuts		211:0.0879551:4.6156:CD
+pid_cuts		211:0.00724297:3.37165:FD
+pid_cuts		-211:-0.0171093:4.51403:CD
+pid_cuts		-211:0.0520756:3.56988:FD

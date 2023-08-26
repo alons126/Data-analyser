@@ -1,0 +1,16 @@
+######################################################################
+# CLAS12 analysis cuts and parameters file (after Beta Gaussian fit) #
+######################################################################
+
+# Cuts are fitted for - C12x4_data_6GeV_run_015187:	noNC
+
+# Neutron momentum cuts (pid:mean:sigma) - sigma_FD=1:
+Momentum_th			2112:0:0.4:CD & FD
+
+Momentum_cuts_ECAL			2112:0:5.98636:FD-ECAL
+Momentum_cuts_ECAL_apprax			2112:0:5.98636:FD-ECAL_apprax
+
+# Proton CD-FD double detection dPhi cuts (pid:mean:sigma) - sigma=1:
+dPhi_p1_p2			2212:3.6:15:CD & FD
+dPhi_pFD_pCD			2212:-5.6:15:CD & FD
+
