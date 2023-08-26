@@ -3,7 +3,7 @@
 echo ""
 echo "- Lunching git handling script ----------------------------------------"
 echo ""
-source git_handle.sh
+source setup/git_handle.sh
 echo ""
 echo "- Re-pulling repository -----------------------------------------------"
 echo ""
