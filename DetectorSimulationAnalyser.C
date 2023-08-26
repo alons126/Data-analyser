@@ -204,8 +204,8 @@ void EventAnalyser() {
     bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = false;        // apply neutron upper mom. th.
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -555,7 +555,8 @@ void EventAnalyser() {
 
     /* General plots TList */
     TList *plots = new TList();
-    string listName = plots_path + "/" + AnalyseFileSample + plots_file_type;
+    string listName = plots_path + "/" + SampleName + plots_file_type;
+//    string listName = plots_path + "/" + AnalyseFileSample + plots_file_type;
     const char *TListName = listName.c_str();
     //</editor-fold>
 
