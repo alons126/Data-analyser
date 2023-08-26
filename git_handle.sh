@@ -1,15 +1,15 @@
 #!/bin/bash
 
-export ""
+echo ""
 git add *
-export ""
-export "- git files added -----------------------------------------------------"
-export ""
+echo ""
+echo "- git files added -----------------------------------------------------"
+echo ""
 git stash
-export ""
-export "- git files stashed ---------------------------------------------------"
-export ""
+echo ""
+echo "- git files stashed ---------------------------------------------------"
+echo ""
 git pull
-export ""
-export "- git pull completed --------------------------------------------------"
-export ""
+echo ""
+echo "- git pull completed --------------------------------------------------"
+echo ""
