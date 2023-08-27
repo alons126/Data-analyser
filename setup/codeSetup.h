@@ -85,8 +85,8 @@ std::string file_name = "general_file";
 std::string AnalyseFilePath = "volatile/clas12/asportes/simulationFiles/C12x4_G18_02a_00_000_Q204_598636MeV";
 std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-//std::string AnalyseFile = AnalyseFileDir + "recon_C12x4_G18_02a_00_000_Q204_598636MeV_99*_torus-1.0.hipo";
-std::string AnalyseFile = AnalyseFileDir + "recon_C12x4_G18_02a_00_000_Q204_598636MeV*.hipo";
+std::string AnalyseFile = AnalyseFileDir + "recon_C12x4_G18_02a_00_000_Q204_598636MeV_99*_torus-1.0.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "recon_C12x4_G18_02a_00_000_Q204_598636MeV*.hipo";
 //</editor-fold>
 
 ////<editor-fold desc="C12x4 5.98636GeV - run 015188 (ifarm DATA files - C12x4 DATA files)">
