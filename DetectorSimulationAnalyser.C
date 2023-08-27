@@ -143,13 +143,13 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicate histograms?)
-    bool generate_AMaps = true; // Generate acceptance maps
+    bool generate_AMaps = false; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
     const string SmearMode = "pol1", ShiftMode = "pol1";
@@ -18374,7 +18374,14 @@ void EventAnalyser() {
     myLogFile << "SampleName: " << SampleName << "\n";
     myLogFile << "VaringSampleName: " << VaringSampleName << "\n\n";
 
-    myLogFile << "HipoChainLength: " << HipoChainLength << "\n\n";
+    myLogFile << "isLocal:\t\t\t" << BoolToString(isLocal) << "\n";
+    myLogFile << "isSimulation:\t\t" << BoolToString(isSimulation) << "\n";
+    myLogFile << "isData:\t\t\t" << BoolToString(isData) << "\n";
+    myLogFile << "is2GeVSample:\t\t" << BoolToString(is2GeVSample) << "\n";
+    myLogFile << "is4GeVSample:\t\t" << BoolToString(is4GeVSample) << "\n";
+    myLogFile << "is6GeVSample:\t\t" << BoolToString(is6GeVSample) << "\n\n";
+
+    myLogFile << "HipoChainLength:\t\t" << HipoChainLength << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="setup">
@@ -19021,8 +19028,8 @@ void EventAnalyser() {
     cout << "apply_cuts:\t\t'" << BoolToString(apply_cuts) << "'\n";
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";
 
-    cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
-    cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n";
+    cout << "Beam Energy:\t\t" << beamE << " [GeV]\n";
+    cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n\n";
 
     cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n\n";
     //</editor-fold>
