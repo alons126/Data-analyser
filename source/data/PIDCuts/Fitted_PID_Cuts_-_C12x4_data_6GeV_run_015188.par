@@ -5,9 +5,9 @@
 # Cuts are fitted for - C12x4_data_6GeV_run_015188
 
 # pid cuts by detector (pid:mean:sigma) - sigma_CD=3;sigma_FD=3:
-pid_cuts		2212:0.816309:6.2102:CD
-pid_cuts		2212:0.349793:4.14078:FD
-pid_cuts		211:-0.0757258:5.46504:CD
-pid_cuts		211:-0.0620153:3.21557:FD
-pid_cuts		-211:-0.0964739:5.0459:CD
-pid_cuts		-211:-0.00214693:3.2491:FD
+pid_cuts		2212:0.817253:6.19003:CD
+pid_cuts		2212:0.382872:4.01662:FD
+pid_cuts		211:-0.0711875:5.4146:CD
+pid_cuts		211:-0.0475566:3.16491:FD
+pid_cuts		-211:-0.0915237:4.99278:CD
+pid_cuts		-211:0.0167905:3.15144:FD
