@@ -1,10 +1,5 @@
 #!/bin/bash
 
-echo ""
-echo "- Lunching git handling script ----------------------------------------"
-echo ""
-source setup/git_handle.sh
-echo ""
 echo "- Re-pulling repository -----------------------------------------------"
 echo ""
 git reset --hard
