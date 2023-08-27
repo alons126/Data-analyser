@@ -153,6 +153,7 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
 
     ConfigureVaringSampleName(sName);
     ConfigureVz_cuts(sName);
+    ConfiguredVz_cuts(sName);
 
     return sName;
 }
@@ -180,14 +181,14 @@ void ExperimentParameters::ConfigureVz_cuts(const string &sn) {
     //TODO: recheck vertex cuts with Adi
 
     if (sn == "C12x4_simulation_G18_Q204_6GeV") {
-        Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -10, 5);
+        Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -7., 2.);
     } else if (findSubstring(sn, "C12x4_data_6GeV_run_0151")) { // Sample is simulation
         if (findSubstring(sn, "C12x4_data_6GeV_run_015186")) {
-            Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -10, 5);
+            Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -7., 2.);
         } else if (findSubstring(sn, "C12x4_data_6GeV_run_015187")) {
-            Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -10, 5);
+            Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -7., 2.);
         } else if (findSubstring(sn, "C12x4_data_6GeV_run_015188")) {
-            Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -10, 5);
+            Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -7., 2.);
         } else {
             Vz_cuts = Vz_cuts_def;
         }
@@ -225,6 +226,7 @@ void ExperimentParameters::ConfiguredVz_cuts(const string &sn) {
     } else if (SampleName == "LH2_data_6GeV_run_015032") {
         dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
     } else {
+//        dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -2, 3);
         dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
         //        cout << "\n\n\nExperimentParameters::ConfigureVz_cuts: Vz can't be configured! Exiting...", exit(0);
     }

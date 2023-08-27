@@ -55,7 +55,7 @@ public:
 
     void Clear();
 
-    void Run(const std::unique_ptr<clas12::clas12reader> &c12);
+    void Run(const std::unique_ptr <clas12::clas12reader> &c12);
 
     void plotDebug();
 
@@ -84,7 +84,7 @@ public:
 
     TVector3 getCOM(TLorentzVector l, TLorentzVector r, TLorentzVector q);
 
-    std::vector<region_part_ptr> getByPid(int pid) {
+    std::vector <region_part_ptr> getByPid(int pid) {
         if (pid == 11)
             return electrons;
         else if (pid == 2212)
@@ -164,7 +164,7 @@ public:
         vertex_z_cuts.at(1) = max;
     };
 
-    void setVertexCorrCuts(double min, double max) {
+    void setVertexCorrCutsLim(double min, double max) {
         vertex_corr_cuts.at(0) = min;
         vertex_corr_cuts.at(1) = max;
     };
@@ -173,12 +173,12 @@ public:
 
     void getLeadRecoilSRC(TLorentzVector beam, TLorentzVector target, TLorentzVector el);
 
-    std::vector<region_part_ptr> getLeadSRC() { return lead_proton; };
+    std::vector <region_part_ptr> getLeadSRC() { return lead_proton; };
 
-    std::vector<region_part_ptr> getRecoilSRC() { return recoil_proton; };
+    std::vector <region_part_ptr> getRecoilSRC() { return recoil_proton; };
 
     //  void getByChi2Pid(std::vector<region_part_ptr> &p,double mean, double sigma);
-    std::vector<region_part_ptr> getByPid(std::vector<region_part_ptr> particles, int pid);
+    std::vector <region_part_ptr> getByPid(std::vector <region_part_ptr> particles, int pid);
     //  std::vector<region_part_ptr> getByPidChi2(int pid, double chi2);
 
     //<editor-fold desc="My addition (methods)">
@@ -208,7 +208,7 @@ public:
         }
     }; // My addition
 
-    std::vector<region_part_ptr> getParticles() { return allparticles; } // My addition
+    std::vector <region_part_ptr> getParticles() { return allparticles; } // My addition
 
     void addToAllParticles(region_part_ptr p) { allparticles.push_back(p); } // My addition
 
@@ -248,20 +248,20 @@ public:
     //</editor-fold>
 
 private:
-    std::vector<region_part_ptr> electrons;
-    std::vector<region_part_ptr> protons;
-    std::vector<region_part_ptr> deuterons;
-    std::vector<region_part_ptr> neutrals;
-    std::vector<region_part_ptr> neutrons;
-    std::vector<region_part_ptr> piplus;
-    std::vector<region_part_ptr> piminus;
-    std::vector<region_part_ptr> kplus;
-    std::vector<region_part_ptr> kminus;
-    std::vector<region_part_ptr> otherpart;
+    std::vector <region_part_ptr> electrons;
+    std::vector <region_part_ptr> protons;
+    std::vector <region_part_ptr> deuterons;
+    std::vector <region_part_ptr> neutrals;
+    std::vector <region_part_ptr> neutrons;
+    std::vector <region_part_ptr> piplus;
+    std::vector <region_part_ptr> piminus;
+    std::vector <region_part_ptr> kplus;
+    std::vector <region_part_ptr> kminus;
+    std::vector <region_part_ptr> otherpart;
 
     //SRC
-    std::vector<region_part_ptr> lead_proton;
-    std::vector<region_part_ptr> recoil_proton;
+    std::vector <region_part_ptr> lead_proton;
+    std::vector <region_part_ptr> recoil_proton;
 
     //prototype function for fitting ECAL electron cuts
     TF1 *ecal_p_fcn[2][7]; //0 upper 1 lower fiducial
@@ -293,7 +293,7 @@ private:
     vector<double> vertex_x_cuts = {-99, 99};
     vector<double> vertex_y_cuts = {-99, 99};
     vector<double> vertex_z_cuts = {-99, 99};
-    map<string, vector<double> > vertex_cuts; //map< x,y,z, {min,max}>
+    map <string, vector<double>> vertex_cuts; //map< x,y,z, {min,max}>
     vector<double> vertex_corr_cuts = {-99, 99}; //electron vertex <-> particle vertex correlation cuts
 
     double ecal_edge_cut = 14;
@@ -389,7 +389,7 @@ private:
     TH2D *dc_hit_map_b_pion[4]; //3 regions
 
     //<editor-fold desc="My addition (attributes)">
-    std::vector<region_part_ptr> allparticles; // My addition
+    std::vector <region_part_ptr> allparticles; // My addition
 
     bool f_NpheCuts = false; // My addition
 
@@ -486,9 +486,9 @@ private:
                                                               250, -180, 180, 250, 0, 50);  // My addition
 
     TH2D *hTheta_p_vs_Phi_p_AMap_DC_NO_CUTS = new TH2D("Proton_AMap_DC_NO_CUTS", "#theta_{p} vs. #phi_{p} - NO DC edge cuts;#phi_{p} [Deg];#theta_{p} [Deg]",
-                                                          250, -180, 180, 250, 0, 50);  // My addition
+                                                       250, -180, 180, 250, 0, 50);  // My addition
     TH2D *hTheta_p_vs_Phi_p_AMap_DC_WITH_CUTS = new TH2D("Proton_AMap_DC_WITH_CUTS", "#theta_{p} vs. #phi_{p} - WITH DC edge cuts;#phi_{p} [Deg];#theta_{p} [Deg]",
-                                                            150, -180, 180, 150, 0, 50);  // My addition
+                                                         150, -180, 180, 150, 0, 50);  // My addition
 
     TH2D *hTheta_vs_Phi_hit_map_ECAL_no_fiducial_cuts = new TH2D("hit_map_ECAL_no_fiducial_cuts", "ECAL #theta vs. #phi - no fiducial cuts;#phi [Deg];#theta [Deg]",
                                                                  250, -180, 180, 250, 0, 50);  // My addition
@@ -528,7 +528,7 @@ void clas12ana::Clear() {
     event_mult = 0;
 }
 
-void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
+void clas12ana::Run(const std::unique_ptr <clas12::clas12reader> &c12) {
     Clear();
 
     auto particles = c12->getDetParticles(); //particles is now a std::vector of particles for this event
@@ -1128,9 +1128,9 @@ void clas12ana::readInputParam(const char *filename) {
                 if (pid != -99) //if pid cut exists in file
                 {
                     if (detector == "FD")
-                        pid_cuts_fd.insert(pair<int, vector<double> >(pid, par));
+                        pid_cuts_fd.insert(pair < int, vector < double > > (pid, par));
                     else if (detector == "CD")
-                        pid_cuts_cd.insert(pair<int, vector<double> >(pid, par));
+                        pid_cuts_cd.insert(pair < int, vector < double > > (pid, par));
                 }
             }//end PID cuts section
 
@@ -1152,7 +1152,7 @@ void clas12ana::readInputParam(const char *filename) {
                 }
 
                 if (pid != "")
-                    vertex_cuts.insert(pair<string, vector<double> >(pid, par));
+                    vertex_cuts.insert(pair < string, vector < double > > (pid, par));
             } else if (parameter == "Momentum_cuts_ECAL") { // My addition
 //            else if (parameter == "Momentum_cuts") { // My addition
                 //TODO: organize this properly with a map for each pdg.
@@ -1172,14 +1172,7 @@ void clas12ana::readInputParam(const char *filename) {
                     count++;
                 }
 
-                if (pid != "") {
-                    Neutron_Momentum_cut = par.at(1);
-//                    cout << "\n\n\n\npar.at(0):\t\t" << par.at(0) << "\n";
-//                    cout << "par.at(1):\t\t" << par.at(1) << "\n";
-//                    cout << "Neutron_Momentum_cut:\t" << Neutron_Momentum_cut << "\n\n\n\n";
-////                    vertex_cuts.insert(pair<string, vector<double> >(pid, par));
-//                    exit(EXIT_FAILURE);
-                }
+                if (pid != "") { Neutron_Momentum_cut = par.at(1); }
             } else if (parameter == "Beta_cut_ECAL") { // My addition
                 //TODO: organize this properly with a map for each pdg.
                 ss >> parameter2;
