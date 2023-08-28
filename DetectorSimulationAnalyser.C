@@ -150,11 +150,11 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
     const string SmearMode = "pol1", ShiftMode = "pol1";
-    bool nRes_test = true; // false by default
+    bool nRes_test = false; // false by default
 
     //<editor-fold desc="Auto-disable variables">
     //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -206,12 +206,12 @@ void EventAnalyser() {
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    //TODO: automate adding upper mom. th. to nuclon cuts
+    //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -703,7 +703,7 @@ void EventAnalyser() {
 
     /* Final state ratio plots */
     bool FSR_1D_plots = true;
-    bool FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
+    bool FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
 
     /* Other setup variables */
     bool wider_margin = true;

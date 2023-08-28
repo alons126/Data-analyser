@@ -94,8 +94,8 @@ std::string file_name = "general_file";
 std::string AnalyseFilePath = "cache/clas12/rg-m/production/pass1/6gev/Cx4/dst/recon";
 std::string AnalyseFileSample = "015188";
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-std::string AnalyseFile = AnalyseFileDir + "rec_clas_015188.evio.01685-01689.hipo";
-//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015188.evio.01685-01689.hipo";
+std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //</editor-fold>
 
 //<editor-fold desc="Other">
