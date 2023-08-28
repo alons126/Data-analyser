@@ -745,27 +745,24 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 
             if (findSubstring(SName, "C12_simulation_6GeV_T5")) { // Old sample
                 if (SmearMode == "pol1") {
-//                    Smearing = Rand->Gaus(1, 0.0738 * Momentum - 0.0304); // new smear between 1 and 3 GeV/c
-                    Smearing = Rand->Gaus(1, 0.0583 * Momentum - 0.0045); // old smear between 0.4 to 4.09 GeV/c
+                    Smearing = Rand->Gaus(1, 0.0738 * Momentum - 0.0304); // new smear between 1 and 3 GeV/c
+//                    Smearing = Rand->Gaus(1, 0.0583 * Momentum - 0.0045); // old smear between 0.4 to 4.09 GeV/c
                 } else {
                     cout << "\n\nNeutronResolution::PSmear: SmearMode illegal! Exiting...", exit(0);
                 }
-            } else { // New sample (24M)
+            } else { // New sample (24M, 1-foil)
                 if (SmearMode == "pol1") {
+                    /* nRes 1 */
 //                    Smearing = Rand->Gaus(1, 0.0692 * Momentum - 0.0233); // new smear between 1 and 3 GeV/c
-                    Smearing = Rand->Gaus(1, 0.0566 * Momentum - 0.0026); // old smear between 0.4 to 4.09 GeV/c
-                    /*
-//                    Smearing = Rand->Gaus(1, 0.0694 * Momentum - 0.0236); // new smear between 1 and 3 GeV/c
-                    Smearing = Rand->Gaus(1, 0.0571 * Momentum - 0.0034); // old smear between 0.4 to 4.09 GeV/c
-*/
+////                    Smearing = Rand->Gaus(1, 0.0566 * Momentum - 0.0026); // old smear between 0.4 to 4.09 GeV/c
+
+                    /* nRes 2 */
+                    Smearing = Rand->Gaus(1, 0.0885 * Momentum - 0.0382); // new smear between 1 and 3 GeV/c
                 } else if (SmearMode == "pol3") {
                     double Momentum2 = Momentum * Momentum;
                     double Momentum3 = Momentum * Momentum * Momentum;
 
                     Smearing = Rand->Gaus(1, -0.0136 * Momentum3 + 0.0789 * Momentum2 - 0.0758 * Momentum + 0.0606); // old smear between 0.4 to 4.09 GeV/c
-                    /*
-                    Smearing = Rand->Gaus(1, -0.0134 * Momentum3 + 0.0778 * Momentum2 - 0.074 * Momentum + 0.0596); // old smear between 0.4 to 4.09 GeV/c
-*/
                 } else {
                     cout << "\n\nNeutronResolution::PSmear: SmearMode illegal! Exiting...", exit(0);
                 }
@@ -834,22 +831,15 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
                 } else {
                     cout << "\n\nNeutronResolution::NShift: ShiftMode illegal (no pol3 for C12_simulation_6GeV_T5)! Exiting...", exit(0);
                 }
-            } else { // New sample (24M)
+            } else { // New sample (24M, 1-foil)
                 if (ShiftMode == "pol1") {
 //                    shift = 0.068 * Momentum - 0.0256; // new shift between 1 and 3 GeV/c
                     shift = 0.0674 * Momentum - 0.0218; // old shift between 0.4 to 4.09 GeV/c
-                    /*
-//                    shift = 0.0683 * Momentum - 0.0262; // new shift between 1 and 3 GeV/c
-                    shift = 0.0681 * Momentum - 0.023; // old shift between 0.4 to 4.09 GeV/c
-*/
                 } else if (ShiftMode == "pol3") {
                     double Momentum2 = Momentum * Momentum;
                     double Momentum3 = Momentum * Momentum * Momentum;
 
                     shift = -0.0017 * Momentum3 + 0.0205 * Momentum2 + 0.0081 * Momentum + 0.0219; // old shift between 0.4 to 4.09 GeV/c
-                    /*
-                    shift = -0.0013 * Momentum3 + 0.0189 * Momentum2 + 0.0107 * Momentum + 0.0204; // old shift between 0.4 to 4.09 GeV/c
-*/
                 } else {
                     cout << "\n\nNeutronResolution::NShift: ShiftMode illegal! Exiting...", exit(0);
                 }

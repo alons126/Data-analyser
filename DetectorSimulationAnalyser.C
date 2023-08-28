@@ -132,7 +132,7 @@ void EventAnalyser() {
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
     const bool Enable_FD_photons = false; // keep as false to decrease RES & DIS
@@ -143,17 +143,17 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicate histograms?)
-    bool generate_AMaps = true; // Generate acceptance maps
+    bool generate_AMaps = false; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
     const string SmearMode = "pol1", ShiftMode = "pol1";
-    bool nRes_test = false; // false by default
+    bool nRes_test = true; // false by default
 
     //<editor-fold desc="Auto-disable variables">
     //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -205,11 +205,12 @@ void EventAnalyser() {
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    //TODO: automate adding upper mom. th. to nuclon cuts
     bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
