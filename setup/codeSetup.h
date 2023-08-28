@@ -89,13 +89,14 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //std::string AnalyseFile = AnalyseFileDir + "recon_C12x4_G18_02a_00_000_Q204_598636MeV*.hipo";
 ////</editor-fold>
 
-////<editor-fold desc="C12x4 5.98636GeV - run 015188 (ifarm DATA files - C12x4 DATA files)">
-///* C12x4 5.98636GeV DATA file on ifarm */
-//std::string AnalyseFilePath = "cache/clas12/rg-m/production/pass1/6gev/Cx4/dst/recon";
-//std::string AnalyseFileSample = "015188";
-//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+//<editor-fold desc="C12x4 5.98636GeV - run 015188 (ifarm DATA files - C12x4 DATA files)">
+/* C12x4 5.98636GeV DATA file on ifarm */
+std::string AnalyseFilePath = "cache/clas12/rg-m/production/pass1/6gev/Cx4/dst/recon";
+std::string AnalyseFileSample = "015188";
+std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+std::string AnalyseFile = AnalyseFileDir + "rec_clas_015188.evio.01685-01689.hipo";
 //std::string AnalyseFile = AnalyseFileDir + "*.hipo";
-////</editor-fold>
+//</editor-fold>
 
 //<editor-fold desc="Other">
 

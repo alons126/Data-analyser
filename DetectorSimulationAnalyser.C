@@ -101,6 +101,7 @@ void EventAnalyser() {
     /* Configure and get run parameters */
     ExperimentParameters Experiment(AnalyseFilePath, AnalyseFileSample);
     const string SampleName = Experiment.ConfigureSampleName(AnalyseFilePath, AnalyseFileSample); // Configure SampleName from input
+    //TODO: change VaringSampleName to simulation of a 4-foil!
     const string VaringSampleName = Experiment.GetVaringSampleName(); // Get VaringSampleName (configured from SampleName) - for data runs!
     const double beamE = Experiment.GetBeanEnergy(); // Configure beam energy from SampleName
     const string Target = Experiment.GetTargetElement(); // Configure target (element) from SampleName
@@ -132,7 +133,7 @@ void EventAnalyser() {
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
     const bool Enable_FD_photons = false; // keep as false to decrease RES & DIS
@@ -207,10 +208,10 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts
     bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -292,6 +293,8 @@ void EventAnalyser() {
                         Additional_Status = "nRes1_";
                     } else {
                         Additional_Status = "nRes2_";
+
+//                        Additional_Status = "nResStage2T_";
                     }
                 }
             } else if (generate_AMaps && plot_and_fit_MomRes) {
@@ -700,7 +703,7 @@ void EventAnalyser() {
 
     /* Final state ratio plots */
     bool FSR_1D_plots = true;
-    bool FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
+    bool FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
 
     /* Other setup variables */
     bool wider_margin = true;
@@ -2108,6 +2111,16 @@ void EventAnalyser() {
                                             "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{pL} + #vec{P}_{pR}- #vec{q}| [GeV/c]",
                                             directories.Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"],
                                             "06_P_tot_minus_q_pFDpCD", Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+
+    hPlot2D hP_tot_minus_q_vs_P_tot_pFDpCD = hPlot2D("pFDpCD", "", "#vec{P}_{tot}-#vec{q} vs. #vec{P}_{tot}", "#vec{P}_{tot}-#vec{q} vs. #vec{P}_{tot}",
+                                                     "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}| [GeV/c]",
+                                                     "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}| [GeV/c]",
+                                                     directories.Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"], "07a_P_tot_minus_q_vs_P_tot_pFDpCD",
+                                                     Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
+    hPlot2D hP_tot_minus_q_vs_q_pFDpCD = hPlot2D("pFDpCD", "", "#vec{P}_{tot}-#vec{q} vs. #vec{q}", "#vec{P}_{tot}-#vec{q} vs. #vec{q}",
+                                                 "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}| [GeV/c]", "#vec{q} [GeV/c]",
+                                                 directories.Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"], "07b_P_tot_minus_q_vs_q_pFDpCD",
+                                                 Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //<editor-fold desc="Total and Relative nucleon momenta (nFDpCD)">
@@ -2142,6 +2155,16 @@ void EventAnalyser() {
                                             "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}| [GeV/c]",
                                             directories.Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"],
                                             "06_P_tot_minus_q_nFDpCD", Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+
+    hPlot2D hP_tot_minus_q_vs_P_tot_nFDpCD = hPlot2D("nFDpCD", "", "#vec{P}_{tot}-#vec{q} vs. #vec{P}_{tot}", "#vec{P}_{tot}-#vec{q} vs. #vec{P}_{tot}",
+                                                     "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}| [GeV/c]",
+                                                     "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}| [GeV/c]",
+                                                     directories.Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"], "07a_P_tot_minus_q_vs_P_tot_nFDpCD",
+                                                     Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
+    hPlot2D hP_tot_minus_q_vs_q_nFDpCD = hPlot2D("nFDpCD", "", "#vec{P}_{tot}-#vec{q} vs. #vec{q}", "#vec{P}_{tot}-#vec{q} vs. #vec{q}",
+                                                 "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}| [GeV/c]", "#vec{q} [GeV/c]",
+                                                 directories.Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"], "07b_P_tot_minus_q_vs_q_nFDpCD",
+                                                 Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //<editor-fold desc="Leading and recoil nucleon momentum plots (pFDpCD)">
@@ -12141,6 +12164,8 @@ void EventAnalyser() {
                 hP_rel_pFDpCD.hFill(P_rel_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 hP_tot_vs_P_rel_pFDpCD.hFill(P_tot_pFDpCD_3v.Mag(), P_rel_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 hP_tot_minus_q_pFDpCD.hFill(P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
+                hP_tot_minus_q_vs_P_tot_pFDpCD.hFill(P_tot_minus_q_pFDpCD_v3.Mag(), P_tot_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                hP_tot_minus_q_vs_q_pFDpCD.hFill(P_tot_minus_q_pFDpCD_v3.Mag(), q_pFDpCD_3v.Mag(), Weight_pFDpCD);
 
                 hP_pFD_pFDpCD.hFill(P_pFD_pFDpCD_3v.Mag(), Weight_pFDpCD);                                                                          // FD proton (pFDpCD)
                 hP_pCD_pFDpCD.hFill(P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD);                                                                          // CD proton (pFDpCD)
@@ -12948,6 +12973,8 @@ void EventAnalyser() {
                 hP_rel_nFDpCD.hFill(P_rel_nFDpCD_3v.Mag(), Weight_nFDpCD);
                 hP_tot_vs_P_rel_nFDpCD.hFill(P_tot_nFDpCD_3v.Mag(), P_rel_nFDpCD_3v.Mag(), Weight_nFDpCD);
                 hP_tot_minus_q_nFDpCD.hFill(P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
+                hP_tot_minus_q_vs_P_tot_nFDpCD.hFill(P_tot_minus_q_nFDpCD_v3.Mag(), P_tot_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                hP_tot_minus_q_vs_q_nFDpCD.hFill(P_tot_minus_q_nFDpCD_v3.Mag(), q_nFDpCD_3v.Mag(), Weight_nFDpCD);
 
                 hP_nFD_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), Weight_nFDpCD);                                                                       // nFD momentum (nFDpCD)
                 hP_pCD_nFDpCD.hFill(P_pCD_nFDpCD_3v.Mag(), Weight_nFDpCD);                                                                       // pCD momentum (nFDpCD)
@@ -13901,6 +13928,8 @@ void EventAnalyser() {
         hP_rel_mu_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
         hP_tot_mu_vs_P_rel_mu_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         hP_tot_minus_q_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+        hP_tot_minus_q_vs_P_tot_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        hP_tot_minus_q_vs_q_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
         //<editor-fold desc="Total and relative momenta (nFDpCD)">
@@ -13911,6 +13940,8 @@ void EventAnalyser() {
         hP_rel_mu_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
         hP_tot_mu_vs_P_rel_mu_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         hP_tot_minus_q_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+        hP_tot_minus_q_vs_P_tot_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        hP_tot_minus_q_vs_q_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
         //<editor-fold desc="P1 vs P2 plots (2p, CD & FD)">
@@ -13954,8 +13985,8 @@ void EventAnalyser() {
                 DrawAndSaveFSRatio(SampleName, hP_tot_mu_vs_P_rel_mu_pFDpCD, hP_tot_mu_vs_P_rel_mu_nFDpCD, plots);
             }
 
-//            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for momentum!\n\n\n";
-//            quit();
+            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for momentum!\n\n\n";
+            quit();
         }
         //</editor-fold>
 
@@ -17697,10 +17728,10 @@ void EventAnalyser() {
         hP_ph_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_ph_mom_cuts.GetLowerCut(), TL_ph_mom_cuts.GetUpperCut(), 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_e_AC_truth_1n, hP_e_APID_1n_FD, plots, ACorr_data, ACorr_data_Dir);
-        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_nFD_AC_truth_1n, hP_nFD_APID_1n, plots, ACorr_data, ACorr_data_Dir);
+        eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_nFD_AC_truth_1n, hP_nFD_APIDandNS_1n, plots, ACorr_data, ACorr_data_Dir);
 
         DrawAndSaveEfficiencyPlots(SampleName, hP_e_AC_truth_1n, hP_e_APID_1n_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_nFD_AC_truth_1n, hP_nFD_APID_1n, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hP_nFD_AC_truth_1n, hP_nFD_APIDandNS_1n, plots);
         //</editor-fold>
 
         //<editor-fold desc="Theta efficiency plots (1n)">
@@ -18425,7 +18456,8 @@ void EventAnalyser() {
     myLogFile << "DeltaSlices = " << DeltaSlices << "\n";
     myLogFile << "VaryingDelta = " << BoolToString(VaryingDelta) << "\n";
     myLogFile << "SmearMode = " << SmearMode << "\n";
-    myLogFile << "ShiftMode = " << ShiftMode << "\n\n";
+    myLogFile << "ShiftMode = " << ShiftMode << "\n";
+    myLogFile << "nRes_test = " << nRes_test << "\n\n";
 
     myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
     myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n\n";
