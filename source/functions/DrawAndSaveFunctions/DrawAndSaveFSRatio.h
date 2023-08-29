@@ -138,24 +138,24 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
 
     string nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName;
     string pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName;
-    string sNameFlag, FSRatio_plot_SaveName;
+    string sNameFlag, FSRatio_plot_1D_SaveName;
 
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
+                     sNameFlag, FSRatio_plot_1D_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
-    TH1D *FSRatio_plot = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
+    TH1D *FSRatio_plot_1D = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
 
     if (FSRatioFS == "1p" || FSRatioFS == "1n") {
-        FSRatio_plot->SetTitle((FSRatioTitle + " 1nFD/1pFD").c_str());
+        FSRatio_plot_1D->SetTitle((FSRatioTitle + " 1nFD/1pFD").c_str());
     } else if (FSRatioFS == "pFDpCD" || FSRatioFS == "nFDpCD") {
-        FSRatio_plot->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
+        FSRatio_plot_1D->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
     }
 
-    FSRatio_plot->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
-    FSRatio_plot->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
+    FSRatio_plot_1D->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
+    FSRatio_plot_1D->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone_test">
     nFDpCD_Plot_Clone_test->SetLineStyle(1);
@@ -242,19 +242,20 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     pFDpCD_Plot_Clone->SetStats(1);
     //</editor-fold>
 
-    //<editor-fold desc="Plotting and saving FSRatio_plot">
+    //<editor-fold desc="Plotting and saving FSRatio_plot_1D">
     Canvas->cd();
-    FSRatio_plot->SetLineStyle(1);
-    FSRatio_plot->SetLineColor(kBlue);
+    FSRatio_plot_1D->SetLineStyle(1);
+    FSRatio_plot_1D->SetLineColor(kBlue);
 
-    if (plot_errorbars) { FSRatio_plot->Sumw2(); }
+    if (plot_errorbars) { FSRatio_plot_1D->Sumw2(); }
 
-    if (rebin_plots) { FSRatio_plot->Rebin(2); }
-    FSRatio_plot->Divide(pFDpCD_Plot_Clone);
-    FSRatio_plot->Draw();
-    FSRatio_plot->SetStats(0);
+    if (rebin_plots) { FSRatio_plot_1D->Rebin(2); }
+    FSRatio_plot_1D->Divide(pFDpCD_Plot_Clone);
+    FSRatio_plot_1D->SetMinimum(0);
+    FSRatio_plot_1D->Draw();
+    FSRatio_plot_1D->SetStats(0);
 
-    if (FSRatio_plot->GetMaximum() > 10) { FSRatio_plot->GetYaxis()->SetRangeUser(0, 10); }
+    if (FSRatio_plot_1D->GetMaximum() > 10) { FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 10); }
 
     TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
     EquiLine->SetLineWidth(2);
@@ -262,37 +263,37 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     EquiLine->Draw("same");
 
     Canvas->SetLogy(1);
-    Canvas->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Log.png").c_str());
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Log.png").c_str());
     Canvas->SetLogy(0);
 
-    Histogram_list->Add(FSRatio_plot);
-    Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
+    Histogram_list->Add(FSRatio_plot_1D);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName).c_str());
 
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 5);
-    Canvas->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range1.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1.png").c_str());
 
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 2);
-    Canvas->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range2.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2.png").c_str());
 
     Canvas->Clear();
 
     CanvasMulti->cd(3);
-    FSRatio_plot->SetLineWidth(3);
-    FSRatio_plot->Draw();
+    FSRatio_plot_1D->SetLineWidth(3);
+    FSRatio_plot_1D->Draw();
     EquiLine->SetLineWidth(3);
     EquiLine->Draw("same");
-    Histogram_list->Add(FSRatio_plot);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 5);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range1M.png").c_str());
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 2);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range2M.png").c_str());
+    Histogram_list->Add(FSRatio_plot_1D);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1M.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2M.png").c_str());
 
     CanvasMulti->Clear();
 
 //    cout << "\n\n\nFSRatioType = " << FSRatioType << "\n\n\n";
 //    cout << "\n\n\nFSRatioRecTitle = " << FSRatioRecTitle << "\n\n\n";
-//    cout << "\n\n\nFSRatio_plot_SaveName = " << FSRatio_plot_SaveName << "\n\n\n";
+//    cout << "\n\n\nFSRatio_plot_1D_SaveName = " << FSRatio_plot_1D_SaveName << "\n\n\n";
     //</editor-fold>
 
     delete Canvas;
@@ -397,18 +398,18 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     //<editor-fold desc="Setting save name">
     string nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName;
     string pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName;
-    string sNameFlag, FSRatio_plot_SaveName;
+    string sNameFlag, FSRatio_plot_1D_SaveName;
 
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
+                     sNameFlag, FSRatio_plot_1D_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
-    TH1D *FSRatio_plot = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
-    FSRatio_plot->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
-    FSRatio_plot->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
-    FSRatio_plot->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
+    TH1D *FSRatio_plot_1D = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
+    FSRatio_plot_1D->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
+    FSRatio_plot_1D->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone_test">
     nFDpCD_Plot_Clone_test->SetLineStyle(1);
@@ -523,27 +524,28 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     pFDpCD_Plot_Clone->SetStats(1);
     //</editor-fold>
 
-    //<editor-fold desc="Plotting and saving FSRatio_plot">
+    //<editor-fold desc="Plotting and saving FSRatio_plot_1D">
     Canvas->cd();
-    FSRatio_plot->SetLineStyle(1);
-    FSRatio_plot->SetLineColor(kBlue);
+    FSRatio_plot_1D->SetLineStyle(1);
+    FSRatio_plot_1D->SetLineColor(kBlue);
 
-    FSRatio_plot->GetXaxis()->SetTitleSize(0.06);
-    FSRatio_plot->GetXaxis()->SetLabelSize(0.0425);
-    FSRatio_plot->GetXaxis()->CenterTitle(true);
-    FSRatio_plot->GetYaxis()->SetTitleSize(0.06);
-    FSRatio_plot->GetYaxis()->SetLabelSize(0.0425);
-    FSRatio_plot->GetYaxis()->CenterTitle(true);
-    FSRatio_plot->SetLineWidth(2);
+    FSRatio_plot_1D->GetXaxis()->SetTitleSize(0.06);
+    FSRatio_plot_1D->GetXaxis()->SetLabelSize(0.0425);
+    FSRatio_plot_1D->GetXaxis()->CenterTitle(true);
+    FSRatio_plot_1D->GetYaxis()->SetTitleSize(0.06);
+    FSRatio_plot_1D->GetYaxis()->SetLabelSize(0.0425);
+    FSRatio_plot_1D->GetYaxis()->CenterTitle(true);
+    FSRatio_plot_1D->SetLineWidth(2);
 
-    if (plot_errorbars) { FSRatio_plot->Sumw2(); }
+    if (plot_errorbars) { FSRatio_plot_1D->Sumw2(); }
 
-    if (rebin_plots) { FSRatio_plot->Rebin(2); }
-    FSRatio_plot->Divide(pFDpCD_Plot_Clone);
-    FSRatio_plot->SetStats(0);
-    FSRatio_plot->Draw();
+    if (rebin_plots) { FSRatio_plot_1D->Rebin(2); }
+    FSRatio_plot_1D->Divide(pFDpCD_Plot_Clone);
+    FSRatio_plot_1D->SetMinimum(0);
+    FSRatio_plot_1D->Draw();
+    FSRatio_plot_1D->SetStats(0);
 
-    if (FSRatio_plot->GetMaximum() > 10) { FSRatio_plot->GetYaxis()->SetRangeUser(0, 10); }
+    if (FSRatio_plot_1D->GetMaximum() > 10) { FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 10); }
 
     TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
     EquiLine->SetLineWidth(2);
@@ -551,37 +553,37 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     EquiLine->Draw("same");
 
     Canvas->SetLogy(1);
-    Canvas->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Log.png").c_str());
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Log.png").c_str());
     Canvas->SetLogy(0);
 
-    Histogram_list->Add(FSRatio_plot);
-    Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
+    Histogram_list->Add(FSRatio_plot_1D);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName).c_str());
 
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 5);
-    Canvas->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range1.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1.png").c_str());
 
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 2);
-    Canvas->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range2.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2.png").c_str());
 
     Canvas->Clear();
 
     CanvasMulti->cd(3);
-    FSRatio_plot->SetLineWidth(3);
-    FSRatio_plot->Draw();
+    FSRatio_plot_1D->SetLineWidth(3);
+    FSRatio_plot_1D->Draw();
     EquiLine->SetLineWidth(3);
     EquiLine->Draw("same");
-    Histogram_list->Add(FSRatio_plot);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 5);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range1M.png").c_str());
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 2);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range2M.png").c_str());
+    Histogram_list->Add(FSRatio_plot_1D);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1M.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2M.png").c_str());
 
     CanvasMulti->Clear();
 
 //    cout << "\n\n\nFSRatioType = " << FSRatioType << "\n\n\n";
 //    cout << "\n\n\nFSRatioRecTitle = " << FSRatioRecTitle << "\n\n\n";
-//    cout << "\n\n\nFSRatio_plot_SaveName = " << FSRatio_plot_SaveName << "\n\n\n";
+//    cout << "\n\n\nFSRatio_plot_1D_SaveName = " << FSRatio_plot_1D_SaveName << "\n\n\n";
     // </editor-fold>
 
     delete Canvas;
@@ -684,18 +686,18 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     //<editor-fold desc="Setting save name">
     string nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName;
     string pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName;
-    string sNameFlag, FSRatio_plot_SaveName;
+    string sNameFlag, FSRatio_plot_1D_SaveName;
 
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
+                     sNameFlag, FSRatio_plot_1D_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
-    TH1D *FSRatio_plot = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
-    FSRatio_plot->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
-    FSRatio_plot->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
-    FSRatio_plot->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
+    TH1D *FSRatio_plot_1D = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
+    FSRatio_plot_1D->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
+    FSRatio_plot_1D->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone_test">
     nFDpCD_Plot_Clone_test->SetLineStyle(1);
@@ -811,27 +813,28 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     pFDpCD_Plot_Clone->SetStats(1);
     //</editor-fold>
 
-    //<editor-fold desc="Plotting and saving FSRatio_plot">
+    //<editor-fold desc="Plotting and saving FSRatio_plot_1D">
     Canvas->cd();
-    FSRatio_plot->SetLineStyle(1);
-    FSRatio_plot->SetLineColor(kBlue);
+    FSRatio_plot_1D->SetLineStyle(1);
+    FSRatio_plot_1D->SetLineColor(kBlue);
 
-    FSRatio_plot->GetXaxis()->SetTitleSize(0.06);
-    FSRatio_plot->GetXaxis()->SetLabelSize(0.0425);
-    FSRatio_plot->GetXaxis()->CenterTitle(true);
-    FSRatio_plot->GetYaxis()->SetTitleSize(0.06);
-    FSRatio_plot->GetYaxis()->SetLabelSize(0.0425);
-    FSRatio_plot->GetYaxis()->CenterTitle(true);
-    FSRatio_plot->SetLineWidth(2);
+    FSRatio_plot_1D->GetXaxis()->SetTitleSize(0.06);
+    FSRatio_plot_1D->GetXaxis()->SetLabelSize(0.0425);
+    FSRatio_plot_1D->GetXaxis()->CenterTitle(true);
+    FSRatio_plot_1D->GetYaxis()->SetTitleSize(0.06);
+    FSRatio_plot_1D->GetYaxis()->SetLabelSize(0.0425);
+    FSRatio_plot_1D->GetYaxis()->CenterTitle(true);
+    FSRatio_plot_1D->SetLineWidth(2);
 
-    if (plot_errorbars) { FSRatio_plot->Sumw2(); }
+    if (plot_errorbars) { FSRatio_plot_1D->Sumw2(); }
 
-    if (rebin_plots) { FSRatio_plot->Rebin(2); }
-    FSRatio_plot->Divide(pFDpCD_Plot_Clone);
-    FSRatio_plot->Draw();
-    FSRatio_plot->SetStats(0);
+    if (rebin_plots) { FSRatio_plot_1D->Rebin(2); }
+    FSRatio_plot_1D->Divide(pFDpCD_Plot_Clone);
+    FSRatio_plot_1D->SetMinimum(0);
+    FSRatio_plot_1D->Draw();
+    FSRatio_plot_1D->SetStats(0);
 
-    if (FSRatio_plot->GetMaximum() > 10) { FSRatio_plot->GetYaxis()->SetRangeUser(0, 10); }
+    if (FSRatio_plot_1D->GetMaximum() > 10) { FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 10); }
 
     TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
     EquiLine->SetLineWidth(2);
@@ -839,37 +842,37 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     EquiLine->Draw("same");
 
     Canvas->SetLogy(1);
-    Canvas->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Log.png").c_str());
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Log.png").c_str());
     Canvas->SetLogy(0);
 
-    Histogram_list->Add(FSRatio_plot);
-    Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
+    Histogram_list->Add(FSRatio_plot_1D);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName).c_str());
 
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 5);
-    Canvas->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range1.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1.png").c_str());
 
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 2);
-    Canvas->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range2.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2.png").c_str());
 
     Canvas->Clear();
 
     CanvasMulti->cd(3);
-    FSRatio_plot->SetLineWidth(3);
-    FSRatio_plot->Draw();
+    FSRatio_plot_1D->SetLineWidth(3);
+    FSRatio_plot_1D->Draw();
     EquiLine->SetLineWidth(3);
     EquiLine->Draw("same");
-    Histogram_list->Add(FSRatio_plot);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 5);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range1M.png").c_str());
-    FSRatio_plot->GetYaxis()->SetRangeUser(0, 2);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_Range2M.png").c_str());
+    Histogram_list->Add(FSRatio_plot_1D);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1M.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2M.png").c_str());
 
     CanvasMulti->Clear();
 
 //    cout << "\n\n\nFSRatioType = " << FSRatioType << "\n\n\n";
 //    cout << "\n\n\nFSRatioRecTitle = " << FSRatioRecTitle << "\n\n\n";
-//    cout << "\n\n\nFSRatio_plot_SaveName = " << FSRatio_plot_SaveName << "\n\n\n";
+//    cout << "\n\n\nFSRatio_plot_1D_SaveName = " << FSRatio_plot_1D_SaveName << "\n\n\n";
     //</editor-fold>
 
     delete Canvas;
@@ -956,18 +959,18 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
 
     string nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName;
     string pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName;
-    string sNameFlag, FSRatio_plot_SaveName;
+    string sNameFlag, FSRatio_plot_2D_SaveName;
 
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
+                     sNameFlag, FSRatio_plot_2D_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
-    TH2D *FSRatio_plot = (TH2D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
-    FSRatio_plot->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
-    FSRatio_plot->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
-    FSRatio_plot->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
+    TH2D *FSRatio_plot_2D = (TH2D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
+    FSRatio_plot_2D->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
+    FSRatio_plot_2D->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
+    FSRatio_plot_2D->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone_test">
     nFDpCD_Plot_Clone_test->SetStats(1);
@@ -1099,13 +1102,13 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     pFDpCD_Plot_Clone->SetStats(1);
     //</editor-fold>
 
-    //<editor-fold desc="Plotting and saving FSRatio_plot">
+    //<editor-fold desc="Plotting and saving FSRatio_plot_2D">
     Canvas->cd();
-    FSRatio_plot->Divide(pFDpCD_Plot_Clone);
-    FSRatio_plot->SetStats(0);
-    FSRatio_plot->SetMaximum(10);
-    FSRatio_plot->SetMinimum(0.1);
-    FSRatio_plot->Draw("colz");
+    FSRatio_plot_2D->Divide(pFDpCD_Plot_Clone);
+    FSRatio_plot_2D->SetStats(0);
+    FSRatio_plot_2D->SetMaximum(10);
+    FSRatio_plot_2D->SetMinimum(0.1);
+    FSRatio_plot_2D->Draw("colz");
 
     if (FSRatioType == "P_nucFD_vs_P_nucCD" || FSRatioType == "P_nucL_vs_P_nucR") {
         double Lowerlim_FSRatio = max(nFDpCD_Plot.GetLowerXlim(), nFDpCD_Plot.GetLowerYlim());
@@ -1116,20 +1119,20 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
         EquiLine2D_FSRatio->SetLineColor(kRed);
         EquiLine2D_FSRatio->Draw("same");
 
-        auto FSRatio_Plot_Clone_legend = new TLegend(0.87, 0.825, 0.87 - 0.2, 0.825 - 0.05);
-        TLegendEntry *EquiLine2D_FSRatio_entry = FSRatio_Plot_Clone_legend->AddEntry(EquiLine2D_FSRatio, "y(x) = x", "l");
-        FSRatio_Plot_Clone_legend->Draw("same");
+        auto FSRatio_plot_2D_Clone_legend = new TLegend(0.87, 0.825, 0.87 - 0.2, 0.825 - 0.05);
+        TLegendEntry *EquiLine2D_FSRatio_entry = FSRatio_plot_2D_Clone_legend->AddEntry(EquiLine2D_FSRatio, "y(x) = x", "l");
+        FSRatio_plot_2D_Clone_legend->Draw("same");
     }
 
     Canvas->SetLogz(1);
 
-    Histogram_list->Add(FSRatio_plot);
-    Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
+    Histogram_list->Add(FSRatio_plot_2D);
+    Canvas->SaveAs((FSRatio_plot_2D_SaveName).c_str());
     Canvas->Clear();
 
     CanvasMulti->cd(3);
     CanvasMulti->cd(3)->SetLogz(1);
-    FSRatio_plot->Draw("colz");
+    FSRatio_plot_2D->Draw("colz");
 
     if (FSRatioType == "P_nucFD_vs_P_nucCD" || FSRatioType == "P_nucL_vs_P_nucR") {
         double Lowerlim_FSRatio = max(nFDpCD_Plot.GetLowerXlim(), nFDpCD_Plot.GetLowerYlim());
@@ -1140,21 +1143,21 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
         EquiLine2D_FSRatio->SetLineColor(kRed);
         EquiLine2D_FSRatio->Draw("same");
 
-        auto FSRatio_Plot_Clone_legend = new TLegend(0.87, 0.825, 0.87 - 0.2, 0.825 - 0.05);
-        TLegendEntry *EquiLine2D_FSRatio_entry = FSRatio_Plot_Clone_legend->AddEntry(EquiLine2D_FSRatio, "y(x) = x", "l");
-        FSRatio_Plot_Clone_legend->Draw("same");
+        auto FSRatio_plot_2D_Clone_legend = new TLegend(0.87, 0.825, 0.87 - 0.2, 0.825 - 0.05);
+        TLegendEntry *EquiLine2D_FSRatio_entry = FSRatio_plot_2D_Clone_legend->AddEntry(EquiLine2D_FSRatio, "y(x) = x", "l");
+        FSRatio_plot_2D_Clone_legend->Draw("same");
     }
 
-    FSRatio_plot->SetStats(0);
-    FSRatio_plot->SetMaximum(10);
-    FSRatio_plot->SetMinimum(0.1);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
+    FSRatio_plot_2D->SetStats(0);
+    FSRatio_plot_2D->SetMaximum(10);
+    FSRatio_plot_2D->SetMinimum(0.1);
+    CanvasMulti->SaveAs((FSRatio_plot_2D_SaveName.substr(0, FSRatio_plot_2D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
     CanvasMulti->Clear();
     //</editor-fold>
 
 //    cout << "\n\n\nFSRatioType = " << FSRatioType << "\n\n\n";
 //    cout << "\n\n\nFSRatioRecTitle = " << FSRatioRecTitle << "\n\n\n";
-//    cout << "\n\n\nFSRatio_plot_SaveName = " << FSRatio_plot_SaveName << "\n\n\n";
+//    cout << "\n\n\nFSRatio_plot_2D_SaveName = " << FSRatio_plot_2D_SaveName << "\n\n\n";
 
     delete Canvas;
     delete CanvasMulti;
@@ -1257,18 +1260,18 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, TH
     //<editor-fold desc="Setting save name">
     string nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName;
     string pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName;
-    string sNameFlag, FSRatio_plot_SaveName;
+    string sNameFlag, FSRatio_plot_2D_SaveName;
 
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
+                     sNameFlag, FSRatio_plot_2D_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
-    TH2D *FSRatio_plot = (TH2D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
-    FSRatio_plot->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
-    FSRatio_plot->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
-    FSRatio_plot->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
+    TH2D *FSRatio_plot_2D = (TH2D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
+    FSRatio_plot_2D->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
+    FSRatio_plot_2D->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
+    FSRatio_plot_2D->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone_test">
     nFDpCD_Plot_Clone_test->GetXaxis()->SetTitleSize(0.06);
@@ -1352,39 +1355,39 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, TH
     pFDpCD_Plot_Clone->SetStats(1);
     //</editor-fold>
 
-    //<editor-fold desc="Plotting and saving FSRatio_plot">
+    //<editor-fold desc="Plotting and saving FSRatio_plot_2D">
     Canvas->cd();
-    FSRatio_plot->GetXaxis()->SetTitleSize(0.06);
-    FSRatio_plot->GetXaxis()->SetLabelSize(0.0425);
-    FSRatio_plot->GetXaxis()->CenterTitle(true);
-    FSRatio_plot->GetYaxis()->SetTitleSize(0.06);
-    FSRatio_plot->GetYaxis()->SetLabelSize(0.0425);
-    FSRatio_plot->GetYaxis()->CenterTitle(true);
+    FSRatio_plot_2D->GetXaxis()->SetTitleSize(0.06);
+    FSRatio_plot_2D->GetXaxis()->SetLabelSize(0.0425);
+    FSRatio_plot_2D->GetXaxis()->CenterTitle(true);
+    FSRatio_plot_2D->GetYaxis()->SetTitleSize(0.06);
+    FSRatio_plot_2D->GetYaxis()->SetLabelSize(0.0425);
+    FSRatio_plot_2D->GetYaxis()->CenterTitle(true);
 
-    FSRatio_plot->Divide(pFDpCD_Plot_Clone);
-    FSRatio_plot->SetStats(0);
-    FSRatio_plot->SetMaximum(10);
-    FSRatio_plot->SetMinimum(0.1);
-    FSRatio_plot->Draw("colz");
+    FSRatio_plot_2D->Divide(pFDpCD_Plot_Clone);
+    FSRatio_plot_2D->SetStats(0);
+    FSRatio_plot_2D->SetMaximum(10);
+    FSRatio_plot_2D->SetMinimum(0.1);
+    FSRatio_plot_2D->Draw("colz");
     Canvas->SetLogz(1);
 
-    Histogram_list->Add(FSRatio_plot);
-    Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
+    Histogram_list->Add(FSRatio_plot_2D);
+    Canvas->SaveAs((FSRatio_plot_2D_SaveName).c_str());
     Canvas->Clear();
 
     CanvasMulti->cd(3);
     CanvasMulti->cd(3)->SetLogz(1);
-    FSRatio_plot->Draw("colz");
-    FSRatio_plot->SetStats(0);
-    FSRatio_plot->SetMaximum(10);
-    FSRatio_plot->SetMinimum(0.1);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
+    FSRatio_plot_2D->Draw("colz");
+    FSRatio_plot_2D->SetStats(0);
+    FSRatio_plot_2D->SetMaximum(10);
+    FSRatio_plot_2D->SetMinimum(0.1);
+    CanvasMulti->SaveAs((FSRatio_plot_2D_SaveName.substr(0, FSRatio_plot_2D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
     CanvasMulti->Clear();
     //</editor-fold>
 
 //    cout << "\n\n\nFSRatioType = " << FSRatioType << "\n\n\n";
 //    cout << "\n\n\nFSRatioRecTitle = " << FSRatioRecTitle << "\n\n\n";
-//    cout << "\n\n\nFSRatio_plot_SaveName = " << FSRatio_plot_SaveName << "\n\n\n";
+//    cout << "\n\n\nFSRatio_plot_2D_SaveName = " << FSRatio_plot_2D_SaveName << "\n\n\n";
 
     delete Canvas;
     delete CanvasMulti;
@@ -1437,22 +1440,7 @@ void DrawAndSaveFSRatio(const string &SampleName, TH2D *pFDpCD_Plot, const strin
     string FSRatioParticle = Propeties.GetParticleName(FSRatioRecTitle);
     string FSRatioParticleLC = Propeties.GetParticleNameLC(FSRatioRecTitle);
     string FSRatioParticleShort = Propeties.GetParticleNameShort(FSRatioRecTitle);
-    //</editor-fold>
-
-    //<editor-fold desc="Setting stats box title">
     string FSRatioStatsTitle = SetStatsTitle(FSRatioRecTitle);
-
-    /*
-    string FSRatioStatsType;
-
-    if (findSubstring(FSRatioRecTitle, "#theta")) { // for momentum FSRatio plots
-        FSRatioStatsType = "#theta_{" + FSRatioParticleShort + "}";
-    } else if (findSubstring(FSRatioRecTitle, "#phi")) { // for momentum FSRatio plots
-        FSRatioStatsType = "#phi_{" + FSRatioParticleShort + "}";
-    }
-
-    string FSRatioStatsTitle = FSRatioStatsType;
-*/
     //</editor-fold>
 
     //<editor-fold desc="Cloning histograms">
@@ -1498,18 +1486,18 @@ void DrawAndSaveFSRatio(const string &SampleName, TH2D *pFDpCD_Plot, const strin
     //<editor-fold desc="Setting save name">
     string nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName;
     string pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName;
-    string sNameFlag, FSRatio_plot_SaveName;
+    string sNameFlag, FSRatio_plot_2D_SaveName;
 
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion, FSRatioFS);
+                     sNameFlag, FSRatio_plot_2D_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
-    TH2D *FSRatio_plot = (TH2D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
-    FSRatio_plot->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
-    FSRatio_plot->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
-    FSRatio_plot->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
+    TH2D *FSRatio_plot_2D = (TH2D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
+    FSRatio_plot_2D->SetTitle((FSRatioTitle + " nFDpCD/pFDpCD").c_str());
+    FSRatio_plot_2D->GetYaxis()->SetTitle((FSRatioYLabel).c_str());
+    FSRatio_plot_2D->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone_test">
     nFDpCD_Plot_Clone_test->GetXaxis()->SetTitleSize(0.06);
@@ -1596,39 +1584,39 @@ void DrawAndSaveFSRatio(const string &SampleName, TH2D *pFDpCD_Plot, const strin
     pFDpCD_Plot_Clone->SetStats(1);
     //</editor-fold>
 
-    //<editor-fold desc="Plotting and saving FSRatio_plot">
+    //<editor-fold desc="Plotting and saving FSRatio_plot_2D">
     Canvas->cd();
-    FSRatio_plot->GetXaxis()->SetTitleSize(0.06);
-    FSRatio_plot->GetXaxis()->SetLabelSize(0.0425);
-    FSRatio_plot->GetXaxis()->CenterTitle(true);
-    FSRatio_plot->GetYaxis()->SetTitleSize(0.06);
-    FSRatio_plot->GetYaxis()->SetLabelSize(0.0425);
-    FSRatio_plot->GetYaxis()->CenterTitle(true);
+    FSRatio_plot_2D->GetXaxis()->SetTitleSize(0.06);
+    FSRatio_plot_2D->GetXaxis()->SetLabelSize(0.0425);
+    FSRatio_plot_2D->GetXaxis()->CenterTitle(true);
+    FSRatio_plot_2D->GetYaxis()->SetTitleSize(0.06);
+    FSRatio_plot_2D->GetYaxis()->SetLabelSize(0.0425);
+    FSRatio_plot_2D->GetYaxis()->CenterTitle(true);
 
-    FSRatio_plot->Divide(pFDpCD_Plot_Clone);
-    FSRatio_plot->SetStats(0);
-    FSRatio_plot->SetMaximum(10);
-    FSRatio_plot->SetMinimum(0.1);
-    FSRatio_plot->Draw("colz");
+    FSRatio_plot_2D->Divide(pFDpCD_Plot_Clone);
+    FSRatio_plot_2D->SetStats(0);
+    FSRatio_plot_2D->SetMaximum(10);
+    FSRatio_plot_2D->SetMinimum(0.1);
+    FSRatio_plot_2D->Draw("colz");
     Canvas->SetLogz(1);
 
-    Histogram_list->Add(FSRatio_plot);
-    Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
+    Histogram_list->Add(FSRatio_plot_2D);
+    Canvas->SaveAs((FSRatio_plot_2D_SaveName).c_str());
     Canvas->Clear();
 
     CanvasMulti->cd(3);
     CanvasMulti->cd(3)->SetLogz(1);
-    FSRatio_plot->Draw("colz");
-    FSRatio_plot->SetStats(0);
-    FSRatio_plot->SetMaximum(10);
-    FSRatio_plot->SetMinimum(0.1);
-    CanvasMulti->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
+    FSRatio_plot_2D->Draw("colz");
+    FSRatio_plot_2D->SetStats(0);
+    FSRatio_plot_2D->SetMaximum(10);
+    FSRatio_plot_2D->SetMinimum(0.1);
+    CanvasMulti->SaveAs((FSRatio_plot_2D_SaveName.substr(0, FSRatio_plot_2D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
     CanvasMulti->Clear();
     //</editor-fold>
 
 //    cout << "\n\n\nFSRatioType = " << FSRatioType << "\n\n\n";
 //    cout << "\n\n\nFSRatioRecTitle = " << FSRatioRecTitle << "\n\n\n";
-//    cout << "\n\n\nFSRatio_plot_SaveName = " << FSRatio_plot_SaveName << "\n\n\n";
+//    cout << "\n\n\nFSRatio_plot_2D_SaveName = " << FSRatio_plot_2D_SaveName << "\n\n\n";
 
     delete Canvas;
     delete CanvasMulti;
