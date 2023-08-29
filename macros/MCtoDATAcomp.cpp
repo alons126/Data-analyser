@@ -28,35 +28,34 @@ void MCtoDATAcompare(int counter, TCanvas *Canvas, TCanvas *CanvasMulti, TH1D *M
 
     cout << "\n\ntest 1\n\n";
 
-//    MC_Hist->SetLineColor(kBlue);
-//    MC_Hist->SetLineStyle(0);
-//    MC_Hist->SetLineWidth(2);
-//    MC_Hist->GetYaxis()->SetRangeUser(0, 5);
+    MC_Hist->SetLineColor(kBlue);
+    MC_Hist->SetLineStyle(0);
+    MC_Hist->SetLineWidth(2);
+    MC_Hist->GetYaxis()->SetRangeUser(0, 5);
     MC_Hist->Draw();
     Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_MC_Hist.png")).c_str());
 
     cout << "\n\ntest 2\n\n";
 
-//    DATA_Hist->SetLineColor(kBlack);
-//    DATA_Hist->SetLineStyle(0);
-//    DATA_Hist->SetLineWidth(2);
-//    DATA_Hist->GetYaxis()->SetRangeUser(0, 5);
+    DATA_Hist->SetLineColor(kBlack);
+    DATA_Hist->SetLineStyle(0);
+    DATA_Hist->SetLineWidth(2);
+    DATA_Hist->GetYaxis()->SetRangeUser(0, 5);
     DATA_Hist->Draw("same");
     Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_comp_Hist.png")).c_str());
     Canvas->Clear();
 
     cout << "\n\ntest 3\n\n";
 
-//    DATA_Hist->SetLineColor(kBlack);
-//    DATA_Hist->SetLineStyle(0);
-//    DATA_Hist->SetLineWidth(2);
-//    DATA_Hist->GetYaxis()->SetRangeUser(0, 5);
+    DATA_Hist->SetLineColor(kBlack);
+    DATA_Hist->SetLineStyle(0);
+    DATA_Hist->SetLineWidth(2);
+    DATA_Hist->GetYaxis()->SetRangeUser(0, 5);
     DATA_Hist->Draw();
     Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_DATA_Hist.png")).c_str());
     Canvas->Clear();
 
     cout << "\n\ntest 4\n\n";
-
 
     exit(0);
 }
@@ -93,25 +92,27 @@ void MCtoDATAcomp() {
     Canvas->cd();
     //</editor-fold>
 
-//    int counter = 0;
+    int counter = 0;
 //    static TString classname("TH1D");
 
-    TKey *key;
+    TKey *MC_key, *DATA_key;
+    TIter MC_next((TList *) MC_file->GetListOfKeys()), DATA_next((TList *) DATA_file->GetListOfKeys());
 
-    TIter next((TList *) MC_file->GetListOfKeys());
-
-    while (key = (TKey *) next()) {
-        TH1D *MC_Histogram = (TH1D *) key->ReadObj();
+    while (MC_key = (TKey *) MC_next()) {
+        TH1D *MC_Histogram = (TH1D *) MC_key->ReadObj();
         string MC_Histogram_title = MC_Histogram->GetTitle();
+        if (!findSubstring(MC_Histogram_title, "ratio")) { continue; }
 
-        if (findSubstring(MC_Histogram_title, "ratio")) {
-            MC_Histogram->Draw();
-            Canvas->SaveAs("MC_Hist.png");
-            Canvas->Clear();
+        while (DATA_key = (TKey *) DATA_next()) {
+            TH1D *DATA_Histogram = (TH1D *) DATA_key->ReadObj();
+            string DATA_Histogram_title = DATA_Histogram->GetTitle();
+            if (!findSubstring(DATA_Histogram_title, "ratio")) { continue; }
 
-            exit(0);
-        }
-    }
+            if (findSubstring(DATA_Histogram_title, "ratio") && (MC_Histogram_title == DATA_Histogram_title)) {
+                MCtoDATAcompare(counter, Canvas, CanvasMulti, MC_Histogram, DATA_Histogram, SaveDir);
+            }
+        } // end of DATA while
+    } // end of MC while
 
 //    //<editor-fold desc="COPIED">
 //    TFile *f = TFile::Open(fname, "READ");
