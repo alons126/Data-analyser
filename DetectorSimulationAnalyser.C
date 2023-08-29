@@ -209,9 +209,9 @@ void EventAnalyser() {
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
