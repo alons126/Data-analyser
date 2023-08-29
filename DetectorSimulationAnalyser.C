@@ -107,7 +107,7 @@ void EventAnalyser() {
     const string Target = Experiment.GetTargetElement(); // Configure target (element) from SampleName
     const int TargetPDG = Experiment.GetTargetElementPDG(); // Configure target PDG from SampleName
     const bool isLocal = Experiment.SLocal();
-    const bool isSimulation = Experiment.SSample();
+    const bool isMC = Experiment.SSample();
     const bool isData = Experiment.DSample();
     const bool is2GeVSample = Experiment.IsBeamAt2GeV();
     const bool is4GeVSample = Experiment.IsBeamAt4GeV();
@@ -143,18 +143,18 @@ void EventAnalyser() {
     const bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
-    //TODO: fix potential memory leak (duplicate histograms?)
+    //TODO: fix potential memory leak (duplicated histograms?)
     bool generate_AMaps = false; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
     const string SmearMode = "pol1", ShiftMode = "pol1";
-    bool nRes_test = false; // false by default
+    bool nRes_test = true; // false by default
 
     //<editor-fold desc="Auto-disable variables">
     //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -210,8 +210,8 @@ void EventAnalyser() {
     bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
     bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_kinematical_weights = true;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -314,7 +314,8 @@ void EventAnalyser() {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
             } else {
-                Efficiency_Status = "Eff1";
+                Efficiency_Status = "Eff11";
+//                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
@@ -7913,7 +7914,7 @@ void EventAnalyser() {
         //<editor-fold desc="Filling truth level histograms (lundfile loop)">
         bool TL_Event_Selection_1p = true, TL_Event_Selection_1n = true, TL_Event_Selection_pFDpCD = true, TL_Event_Selection_nFDpCD = true;
 
-        if (calculate_truth_level && apply_nucleon_cuts && isSimulation) { // run only for CLAS12 simulation & AFTER beta fit
+        if (calculate_truth_level && apply_nucleon_cuts && isMC) { // run only for CLAS12 simulation & AFTER beta fit
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
 
@@ -13985,8 +13986,8 @@ void EventAnalyser() {
                 DrawAndSaveFSRatio(SampleName, hP_tot_mu_vs_P_rel_mu_pFDpCD, hP_tot_mu_vs_P_rel_mu_nFDpCD, plots);
             }
 
-            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for momentum!\n\n\n";
-            quit();
+//            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for momentum!\n\n\n";
+//            quit();
         }
         //</editor-fold>
 
@@ -18406,7 +18407,7 @@ void EventAnalyser() {
     myLogFile << "VaringSampleName: " << VaringSampleName << "\n\n";
 
     myLogFile << "isLocal:\t\t\t" << BoolToString(isLocal) << "\n";
-    myLogFile << "isSimulation:\t\t" << BoolToString(isSimulation) << "\n";
+    myLogFile << "isMC:\t\t" << BoolToString(isMC) << "\n";
     myLogFile << "isData:\t\t\t" << BoolToString(isData) << "\n";
     myLogFile << "is2GeVSample:\t\t" << BoolToString(is2GeVSample) << "\n";
     myLogFile << "is4GeVSample:\t\t" << BoolToString(is4GeVSample) << "\n";
