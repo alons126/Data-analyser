@@ -57,6 +57,8 @@ using namespace std;
 
 //TODO: move this into a class with the proper functions
 
+const bool Equi_z_2D = false;
+
 // DrawAndSaveFSRatio in 1D plots ---------------------------------------------------------------------------------------------------------------------------------------
 
 void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, const hPlot1D &nFDpCD_Plot, TList *Histogram_list) {
@@ -270,7 +272,13 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     Canvas->SaveAs((FSRatio_plot_1D_SaveName).c_str());
 
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
-    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1.png").c_str());
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range5.png").c_str());
+
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 4);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range4.png").c_str());
+
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 3);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range3.png").c_str());
 
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
     Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2.png").c_str());
@@ -283,11 +291,18 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     EquiLine->SetLineWidth(3);
     EquiLine->Draw("same");
     Histogram_list->Add(FSRatio_plot_1D);
+    //TODO: RegularM is useless - move or delete!
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
-    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1M.png").c_str());
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range5M.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 4);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range4M.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 3);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range3M.png").c_str());
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2M.png").c_str());
+
+
 
     CanvasMulti->Clear();
 
@@ -560,7 +575,13 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     Canvas->SaveAs((FSRatio_plot_1D_SaveName).c_str());
 
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
-    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1.png").c_str());
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range5.png").c_str());
+
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 4);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range4.png").c_str());
+
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 3);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range3.png").c_str());
 
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
     Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2.png").c_str());
@@ -573,9 +594,14 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     EquiLine->SetLineWidth(3);
     EquiLine->Draw("same");
     Histogram_list->Add(FSRatio_plot_1D);
+    //TODO: RegularM is useless - move or delete!
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
-    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1M.png").c_str());
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range5M.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 4);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range4M.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 3);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range3M.png").c_str());
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2M.png").c_str());
 
@@ -849,7 +875,13 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     Canvas->SaveAs((FSRatio_plot_1D_SaveName).c_str());
 
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
-    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1.png").c_str());
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range5.png").c_str());
+
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 4);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range4.png").c_str());
+
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 3);
+    Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range3.png").c_str());
 
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
     Canvas->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2.png").c_str());
@@ -862,9 +894,14 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     EquiLine->SetLineWidth(3);
     EquiLine->Draw("same");
     Histogram_list->Add(FSRatio_plot_1D);
+    //TODO: RegularM is useless - move or delete!
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
-    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range1M.png").c_str());
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range5M.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 4);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range4M.png").c_str());
+    FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 3);
+    CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range3M.png").c_str());
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2M.png").c_str());
 
@@ -935,6 +972,13 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH2D *pFDpCD_Plot_Clone_test_rebined = (TH2D *) Histogram2D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
 //    pFDpCD_Plot_Clone_test_rebined->Rebin(2);
+
+    double Zmax = 1.1 * max(pFDpCD_Plot_Clone->GetMaximum(), nFDpCD_Plot_Clone->GetMaximum());
+
+    if (Equi_z_2D) {
+        pFDpCD_Plot_Clone->SetMaximum(Zmax);
+        nFDpCD_Plot_Clone->SetMaximum(Zmax);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Setting variables">
@@ -1233,6 +1277,13 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, TH
     string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH2D *pFDpCD_Plot_Clone_test_rebined = (TH2D *) Histogram2D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
     if (rebin_plots) { pFDpCD_Plot_Clone_test_rebined->Rebin(2); }
+
+    double Zmax = 1.1 * max(pFDpCD_Plot_Clone->GetMaximum(), nFDpCD_Plot_Clone->GetMaximum());
+
+    if (Equi_z_2D) {
+        pFDpCD_Plot_Clone->SetMaximum(Zmax);
+        nFDpCD_Plot_Clone->SetMaximum(Zmax);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Setting title">
@@ -1459,6 +1510,13 @@ void DrawAndSaveFSRatio(const string &SampleName, TH2D *pFDpCD_Plot, const strin
     string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned test rebined";
     TH2D *pFDpCD_Plot_Clone_test_rebined = (TH2D *) pFDpCD_Plot->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
 //    if (rebin_plots) { pFDpCD_Plot_Clone_test_rebined->Rebin(2); }
+
+    double Zmax = 1.1 * max(pFDpCD_Plot_Clone->GetMaximum(), nFDpCD_Plot_Clone->GetMaximum());
+
+    if (Equi_z_2D) {
+        pFDpCD_Plot_Clone->SetMaximum(Zmax);
+        nFDpCD_Plot_Clone->SetMaximum(Zmax);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Setting title">

@@ -314,9 +314,8 @@ void EventAnalyser() {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
             } else {
-//                Efficiency_Status = "Eff11";
-                Efficiency_Status = "Eff1";
-//                Efficiency_Status = "Eff1_OG_Pmiss";
+                Efficiency_Status = "Eff1_OG";
+//                Efficiency_Status = "Eff1_EquiZ_on";
             }
         }
         //</editor-fold>
@@ -585,123 +584,123 @@ void EventAnalyser() {
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
 
-//    //<editor-fold desc="Plot selector - plot all">
-//    /* Master plots variable */
-//    bool Plot_selector_master = true; // Master plot selector for analysis
-//
-//    /* Cut variable plots */
-//    bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
-//
-//    /* Beta plots */
-//    bool W_plots = true;
-//
-//    /* Beta plots */
-//    bool Beta_plots = true;
-//    bool Beta_vs_P_plots = true;
-//
-//    /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-//
-//    /* Q2 plots */
-//    bool Q2_plots = true;
-//
-//    /* E_e plots */
-//    bool E_e_plots = true;
-//
-//    /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-//
-//    /* Ecal plots */
-//    bool Ecal_plots = true;
-//
-//    /* Transverse variables plots */
-//    bool TKI_plots = true;
-//
-//    /* ToF plots */
-//    bool ToF_plots = false;
-//
-//    /* Efficiency plots */
-//    bool Efficiency_plots = true;
-//    bool TL_after_Acceptance_Maps_plots = true;
-//
-//    /* Resolution plots */
-//    bool AMaps_plots = true;
-//
-//    /* Resolution plots */
-//    bool Resolution_plots = true;
-//    //</editor-fold>
-
-    //<editor-fold desc="Plot selector - selected plots">
+    //<editor-fold desc="Plot selector - plot all">
     /* Master plots variable */
     bool Plot_selector_master = true; // Master plot selector for analysis
 
     /* Cut variable plots */
     bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
-//
-//    bool Momentum_plots = false;
-    bool Momentum_plots = true;
-//
+    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta plots */
-//    bool W_plots = true;
-    bool W_plots = false;
+    bool W_plots = true;
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
+    bool Beta_plots = true;
+    bool Beta_vs_P_plots = true;
 
     /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-    bool Angle_plots_master = false; // Master angle plots selector
-    bool Theta_e_plots = false, Phi_e_plots = false;
+    bool Angle_plots_master = true; // Master angle plots selector
+    bool Theta_e_plots = true, Phi_e_plots = true;
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
+    bool Q2_plots = true;
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
+    bool E_e_plots = true;
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
+    bool ETrans_plots_master = true; // Master ET plots selector
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
+    bool Ecal_plots = true;
 
     /* Transverse variables plots */
-//    bool TKI_plots = true;
-    bool TKI_plots = false;
+    bool TKI_plots = true;
 
     /* ToF plots */
-//    bool ToF_plots = true;
     bool ToF_plots = false;
 
     /* Efficiency plots */
-//    bool Efficiency_plots = true;
-    bool Efficiency_plots = false;
-//    bool TL_after_Acceptance_Maps_plots = true;
-    bool TL_after_Acceptance_Maps_plots = false;
+    bool Efficiency_plots = true;
+    bool TL_after_Acceptance_Maps_plots = true;
 
     /* Resolution plots */
-//    bool AMaps_plots = true;
-    bool AMaps_plots = false;
+    bool AMaps_plots = true;
 
     /* Resolution plots */
-//    bool Resolution_plots = true;
-    bool Resolution_plots = false;
-    //</editor-fold>/
+    bool Resolution_plots = true;
+    //</editor-fold>
+
+//    //<editor-fold desc="Plot selector - selected plots">
+//    /* Master plots variable */
+//    bool Plot_selector_master = true; // Master plot selector for analysis
+//
+//    /* Cut variable plots */
+//    bool Cut_plots_master = true; // Master cut plots selector
+////    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+////
+////    bool Momentum_plots = false;
+//    bool Momentum_plots = true;
+////
+//
+//    /* Beta plots */
+////    bool W_plots = true;
+//    bool W_plots = false;
+//
+//    /* Beta plots */
+////    bool Beta_plots = true;
+//    bool Beta_plots = false;
+////    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
+//
+//    /* Angle plots */
+////    bool Angle_plots_master = true; // Master angle plots selector
+////    bool Theta_e_plots = true, Phi_e_plots = true;
+//    bool Angle_plots_master = false; // Master angle plots selector
+//    bool Theta_e_plots = false, Phi_e_plots = false;
+//
+//    /* Q2 plots */
+////    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//
+//    /* E_e plots */
+////    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//
+//    /* ET plots */
+////    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+//
+//    /* Ecal plots */
+////    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//
+//    /* Transverse variables plots */
+////    bool TKI_plots = true;
+//    bool TKI_plots = false;
+//
+//    /* ToF plots */
+////    bool ToF_plots = true;
+//    bool ToF_plots = false;
+//
+//    /* Efficiency plots */
+////    bool Efficiency_plots = true;
+//    bool Efficiency_plots = false;
+////    bool TL_after_Acceptance_Maps_plots = true;
+//    bool TL_after_Acceptance_Maps_plots = false;
+//
+//    /* Resolution plots */
+////    bool AMaps_plots = true;
+//    bool AMaps_plots = false;
+//
+//    /* Resolution plots */
+////    bool Resolution_plots = true;
+//    bool Resolution_plots = false;
+//    //</editor-fold>/
 
     /* Final state ratio plots */
     bool FSR_1D_plots = true;
