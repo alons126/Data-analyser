@@ -20,49 +20,84 @@
 #include <TROOT.h>
 
 #include "../source/functions/GeneralFunctions.h"
+#include "../source/classes/hData/hData.cpp"
 
 using namespace std;
 
-void MCtoDATAcompare(int counter, TCanvas *Canvas, TCanvas *CanvasMulti, TH1D *MC_Hist, TH1D *DATA_Hist, string SaveDir) {
+// MCtoDATAcompare function ---------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="MCtoDATAcompare function">
+void MCtoDATAcompare(int counter, TCanvas *Canvas, TCanvas *CanvasMulti, TH1D *MC_Histogram, TH1D *DATA_Histogram, string SaveDir) {
     Canvas->cd();
 
-    cout << "\n\ntest 1\n\n";
+    hData Properties;
 
-    MC_Hist->SetLineColor(kBlue);
-    MC_Hist->SetLineStyle(0);
-    MC_Hist->SetLineWidth(2);
-    MC_Hist->GetYaxis()->SetRangeUser(0, 5);
-    MC_Hist->Draw();
-    Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_MC_Hist.png")).c_str());
+    string Histogram_Type = Properties.GetType(MC_Histogram->GetTitle());
+    string Histogram_Particle = Properties.GetParticleNameShort(MC_Histogram->GetTitle());
+    string FinalState = Properties.GetFS(MC_Histogram->GetTitle());
 
-    cout << "\n\ntest 2\n\n";
+    TLine *EquiLine = new TLine(MC_Histogram->GetXaxis()->GetXmin(), 1, MC_Histogram->GetXaxis()->GetXmax(), 1);
+    EquiLine->SetLineWidth(2);
+    EquiLine->SetLineColor(kBlack);
 
-    DATA_Hist->SetLineColor(kBlack);
-    DATA_Hist->SetLineStyle(0);
-    DATA_Hist->SetLineWidth(2);
-    DATA_Hist->GetYaxis()->SetRangeUser(0, 5);
-    DATA_Hist->Draw("same");
-    Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_comp_Hist.png")).c_str());
+    MC_Histogram->SetLineColor(kRed);
+    MC_Histogram->SetLineStyle(0);
+    MC_Histogram->SetLineWidth(2);
+    MC_Histogram->GetYaxis()->SetRangeUser(0, 5);
+    MC_Histogram->Draw();
+    EquiLine->Draw("same");
+
+    if (Histogram_Particle != "") {
+        Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_MC_" + Histogram_Particle + "_" + Histogram_Type + "_" + FinalState + ".png")).c_str());
+    } else {
+        Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_MC_" + Histogram_Type + "_" + FinalState + ".png")).c_str());
+    }
+
+    DATA_Histogram->SetLineColor(kBlue);
+    DATA_Histogram->SetLineStyle(0);
+    DATA_Histogram->SetLineWidth(2);
+    DATA_Histogram->GetYaxis()->SetRangeUser(0, 5);
+    DATA_Histogram->Draw("same");
+    EquiLine->Draw("same");
+
+    auto Comparison_legend = new TLegend(0.87, 0.875, 0.87 - 0.2, 0.825 - 0.05);
+    TLegendEntry *MC_Entry = Comparison_legend->AddEntry(MC_Histogram, "Simulation", "l");
+    TLegendEntry *DATA_Entry = Comparison_legend->AddEntry(DATA_Histogram, "Data", "l");
+    Comparison_legend->Draw("same");
+
+    if (Histogram_Particle != "") {
+        Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_" + Histogram_Particle + "_" + Histogram_Type + "_Comparison" + FinalState + ".png")).c_str());
+    } else {
+        Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_" + Histogram_Type + "_Comparison" + FinalState + ".png")).c_str());
+    }
+
     Canvas->Clear();
 
-    cout << "\n\ntest 3\n\n";
+    DATA_Histogram->SetLineColor(kBlue);
+    DATA_Histogram->SetLineStyle(0);
+    DATA_Histogram->SetLineWidth(2);
+    DATA_Histogram->GetYaxis()->SetRangeUser(0, 5);
+    DATA_Histogram->Draw();
+    EquiLine->Draw("same");
 
-    DATA_Hist->SetLineColor(kBlack);
-    DATA_Hist->SetLineStyle(0);
-    DATA_Hist->SetLineWidth(2);
-    DATA_Hist->GetYaxis()->SetRangeUser(0, 5);
-    DATA_Hist->Draw();
-    Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_DATA_Hist.png")).c_str());
+    if (Histogram_Particle != "") {
+        Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_DATA_" + Histogram_Particle + "_" + Histogram_Type + "_" + FinalState + ".png")).c_str());
+    } else {
+        Canvas->SaveAs((SaveDir + "/" + (to_string(counter) + "_DATA_" + Histogram_Type + "_" + FinalState + ".png")).c_str());
+    }
+
     Canvas->Clear();
 
-    cout << "\n\ntest 4\n\n";
-
-    exit(0);
+//    exit(0);
 }
+//</editor-fold>
 
-//<editor-fold desc="og">
+// MCtoDATAcomp function ------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="MCtoDATAcomp function">
 void MCtoDATAcomp() {
     string SaveDir = "MC_to_DATA_comperison";
+    system(("rm -r " + SaveDir).c_str());
     system(("mkdir -p " + SaveDir).c_str());
 
     TFile *MC_file = new TFile("C12_simulation_G18_Q204_6GeV_plots.root");
@@ -96,12 +131,15 @@ void MCtoDATAcomp() {
 //    static TString classname("TH1D");
 
     TKey *MC_key, *DATA_key;
-    TIter MC_next((TList *) MC_file->GetListOfKeys()), DATA_next((TList *) DATA_file->GetListOfKeys());
+    TIter MC_next((TList *) MC_file->GetListOfKeys());
+//    TIter MC_next((TList *) MC_file->GetListOfKeys()), DATA_next((TList *) DATA_file->GetListOfKeys());
 
     while (MC_key = (TKey *) MC_next()) {
         TH1D *MC_Histogram = (TH1D *) MC_key->ReadObj();
         string MC_Histogram_title = MC_Histogram->GetTitle();
         if (!findSubstring(MC_Histogram_title, "ratio")) { continue; }
+
+        TIter DATA_next((TList *) DATA_file->GetListOfKeys());
 
         while (DATA_key = (TKey *) DATA_next()) {
             TH1D *DATA_Histogram = (TH1D *) DATA_key->ReadObj();
@@ -109,42 +147,14 @@ void MCtoDATAcomp() {
             if (!findSubstring(DATA_Histogram_title, "ratio")) { continue; }
 
             if (findSubstring(DATA_Histogram_title, "ratio") && (MC_Histogram_title == DATA_Histogram_title)) {
+                ++counter;
                 MCtoDATAcompare(counter, Canvas, CanvasMulti, MC_Histogram, DATA_Histogram, SaveDir);
             }
         } // end of DATA while
+
+//        cout << "\n\n\nTEST TEST TEST\n\n\n";
+
     } // end of MC while
-
-//    //<editor-fold desc="COPIED">
-//    TFile *f = TFile::Open(fname, "READ");
-//    if (!MC_file || MC_file->IsZombie()) {
-//        cout << "Unable to open " << fname << " for reading..." << endl;
-//        return;
-//    }
-//    while (key = (TKey *) next()) {
-//        TClass *cl = gROOT->GetClass(key->GetClassName());
-//        if (cl->InheritsFrom("TH1")) {
-//            // the following line is not needed if you only want
-//            // to count the histograms
-//            TH1 *h = (TH1 *) key->ReadObj();
-//            cout << "Histo found: " << h->GetName() << " - " << h->GetTitle() << endl;
-//            total++;
-//        }
-//    }
-//
-//    cout << "Found " << total << " Histograms" << endl;
-//    //</editor-fold>
-
-//<editor-fold desc="OG">
-//    for (TObject *keyAsObj_MC: *MC_file->GetListOfKeys()) {
-//        auto key_MC = (TKey*) keyAsObj_MC;
-//        if (key_MC->GetClassName() != classname) { continue; }
-//
-//        TH1D *TempHist_MC = (TH1D *) key_MC->ReadObject();
-//        string TempHistTitle_MC = TempHist_MC->GetTitle();
-//
-//        cout << "\n\n" << TempHistTitle_MC << "\n";
-//    }
-//</editor-fold>
 
     cout << "\n";
 

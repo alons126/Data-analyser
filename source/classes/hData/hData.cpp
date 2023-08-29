@@ -101,7 +101,8 @@ string hData::GetParticleNameShort(const string &Source) {
                || findSubstring(Source, "Photon")) {
         ParticleNameShort = "Photon";
     } else {
-        ParticleNameShort = "#gamma";
+        ParticleNameShort = "";
+//        ParticleNameShort = "Unknown";
     }
 
     return ParticleNameShort;
