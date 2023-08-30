@@ -290,7 +290,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     FSRatio_plot_1D->Draw();
     EquiLine->SetLineWidth(3);
     EquiLine->Draw("same");
-    Histogram_list->Add(FSRatio_plot_1D);
+//    Histogram_list->Add(FSRatio_plot_1D);
     //TODO: RegularM is useless - move or delete!
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
@@ -301,7 +301,6 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range3M.png").c_str());
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 2);
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_Range2M.png").c_str());
-
 
 
     CanvasMulti->Clear();
@@ -593,7 +592,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     FSRatio_plot_1D->Draw();
     EquiLine->SetLineWidth(3);
     EquiLine->Draw("same");
-    Histogram_list->Add(FSRatio_plot_1D);
+//    Histogram_list->Add(FSRatio_plot_1D);
     //TODO: RegularM is useless - move or delete!
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);
@@ -663,6 +662,15 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     string FSRatioParticle = Propeties.GetParticleName(FSRatioRecTitle);
     string FSRatioParticleLC = Propeties.GetParticleNameLC(FSRatioRecTitle);
     string FSRatioParticleShort = Propeties.GetParticleNameShort(FSRatioRecTitle);
+    string FSRatioFS = Propeties.GetFS(FSRatioRecTitle);
+    string FSTopology;
+
+    //TODO: remove this from code
+    if (FSRatioFS == "1p" || FSRatioFS == "1n") {
+        FSTopology = " 1N";
+    } else if (FSRatioFS == "pFDpCD" || FSRatioFS == "nFDpCD") {
+        FSTopology = " 2N";
+    }
     //</editor-fold>
 
     //<editor-fold desc="Setting stats box title">
@@ -670,19 +678,19 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     //</editor-fold>
 
     //<editor-fold desc="Cloning histograms">
-    string nFDpCD_Plot_Clone_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned";
+    string nFDpCD_Plot_Clone_StatsTitle = "FSR " + FSRatioStatsTitle + FSTopology + " - cloned";
     TH1D *nFDpCD_Plot_Clone = (TH1D *) nFDpCD_Plot->Clone((nFDpCD_Plot_Clone_StatsTitle).c_str());
-    string nFDpCD_Plot_Clone_test_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned test";
+    string nFDpCD_Plot_Clone_test_StatsTitle = "FSR " + FSRatioStatsTitle + FSTopology + " - cloned test";
     TH1D *nFDpCD_Plot_Clone_test = (TH1D *) nFDpCD_Plot->Clone((nFDpCD_Plot_Clone_test_StatsTitle).c_str());
-    string nFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned test rebined";
+    string nFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + FSRatioStatsTitle + FSTopology + " - cloned test rebined";
     TH1D *nFDpCD_Plot_Clone_test_rebined = (TH1D *) nFDpCD_Plot->Clone((nFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
     if (rebin_plots) { nFDpCD_Plot_Clone_test_rebined->Rebin(2); }
 
-    string pFDpCD_Plot_Clone_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned";
+    string pFDpCD_Plot_Clone_StatsTitle = "FSR " + FSRatioStatsTitle + FSTopology + " - cloned";
     TH1D *pFDpCD_Plot_Clone = (TH1D *) pFDpCD_Plot->Clone((pFDpCD_Plot_Clone_StatsTitle).c_str());
-    string pFDpCD_Plot_Clone_test_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned test";
+    string pFDpCD_Plot_Clone_test_StatsTitle = "FSR " + FSRatioStatsTitle + FSTopology + " - cloned test";
     TH1D *pFDpCD_Plot_Clone_test = (TH1D *) pFDpCD_Plot->Clone((pFDpCD_Plot_Clone_test_StatsTitle).c_str());
-    string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned test rebined";
+    string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + FSRatioStatsTitle + FSTopology + " - cloned test rebined";
     TH1D *pFDpCD_Plot_Clone_test_rebined = (TH1D *) pFDpCD_Plot->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
     if (rebin_plots) { pFDpCD_Plot_Clone_test_rebined->Rebin(2); }
     //</editor-fold>
@@ -692,7 +700,6 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     string FSRatioPlotsT = "FSRatio";
     string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
     string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
-    string FSRatioFS = Propeties.GetFS(FSRatioRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting X axis label">
@@ -893,7 +900,7 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     FSRatio_plot_1D->Draw();
     EquiLine->SetLineWidth(3);
     EquiLine->Draw("same");
-    Histogram_list->Add(FSRatio_plot_1D);
+//    Histogram_list->Add(FSRatio_plot_1D);
     //TODO: RegularM is useless - move or delete!
     CanvasMulti->SaveAs((FSRatio_plot_1D_SaveName.substr(0, FSRatio_plot_1D_SaveName.find_last_of(".png") - 3) + "_RegularM.png").c_str());
     FSRatio_plot_1D->GetYaxis()->SetRangeUser(0, 5);

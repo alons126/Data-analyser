@@ -407,144 +407,144 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
                     FSRTitle = Type + " ratio - ";
                 }
             } else if (Type == "leading_nuc_momentum") {
-                FSRTitle = "Leading nucleon momentum - ";
+                FSRTitle = "Leading nucleon momentum ratio- ";
             } else if (Type == "recoil_nuc_momentum") {
-                FSRTitle = "Recoil nucleon momentum - ";
+                FSRTitle = "Recoil nucleon momentum ratio - ";
             } else if (Type == "total_3momentum") {
-                FSRTitle = "Total nucleon 3-momentum - ";
+                FSRTitle = "Total nucleon 3-momentum ratio - ";
             } else if (Type == "relative_3momentum") {
-                FSRTitle = "Relative nucleon 3-momentum - ";
+                FSRTitle = "Relative nucleon 3-momentum ratio - ";
             } else if (Type == "total_4momentum") {
-                FSRTitle = "Total nucleon 4-momentum - ";
+                FSRTitle = "Total nucleon 4-momentum ratio - ";
             } else if (Type == "relative_4momentum") {
-                FSRTitle = "Relative nucleon 4-momentum - ";
+                FSRTitle = "Relative nucleon 4-momentum ratio - ";
             } else if (Type == "theta_tot") {
-                FSRTitle = "#theta_{tot} of total 3-momentum - ";
+                FSRTitle = "#theta_{tot} of total 3-momentum ratio - ";
             } else if (Type == "phi_tot") {
-                FSRTitle = "#phi_{tot} of total 3-momentum - ";
+                FSRTitle = "#phi_{tot} of total 3-momentum ratio - ";
             } else if (Type == "theta_rel") {
-                FSRTitle = "#theta_{rel} of relative 3-momentum - ";
+                FSRTitle = "#theta_{rel} of relative 3-momentum ratio - ";
             } else if (Type == "phi_rel") {
-                FSRTitle = "#phi_{rel} of relative 3-momentum - ";
+                FSRTitle = "#phi_{rel} of relative 3-momentum ratio - ";
             } else if (Type == "P_tot_minus_q") {
-                FSRTitle = "#vec{P}_{tot}-#vec{q} - ";
+                FSRTitle = "#vec{P}_{tot}-#vec{q} ratio - ";
             } else if (Type == "Opening_ang_P_nucL_minus_q_nucR") {
-                FSRTitle = "#theta_{#vec{P}_{nucL}-#vec{q},#vec{P}_{nucR}} - ";
+                FSRTitle = "#theta_{#vec{P}_{nucL}-#vec{q},#vec{P}_{nucR}} ratio - ";
             } else {
                 if (Particle == "Electron") {
                     if (Type == "momentum") {
-                        FSRTitle = Particle + " " + Type + " ratio";
+                        FSRTitle = Particle + " " + Type + " ratio - ";
                     } else {
-                        FSRTitle = Particle + " #" + Type + " ratio";
+                        FSRTitle = Particle + " #" + Type + " ratio - ";
                     }
                 } else {
                     if (DRegion == "FD") {
                         if (Type == "momentum") {
-                            FSRTitle = DRegion + " nucleon " + Type + " ratio";
+                            FSRTitle = DRegion + " nucleon " + Type + " ratio - ";
                         } else {
-                            FSRTitle = DRegion + " nucleon #" + Type + " ratio";
+                            FSRTitle = DRegion + " nucleon #" + Type + " ratio - ";
                         }
                     } else if (DRegion == "CD") {
                         if (Type == "momentum") {
-                            FSRTitle = DRegion + " proton " + Type + " ratio";
+                            FSRTitle = DRegion + " proton " + Type + " ratio - ";
                         } else {
-                            FSRTitle = DRegion + " proton #" + Type + " ratio";
+                            FSRTitle = DRegion + " proton #" + Type + " ratio - ";
                         }
                     }
                 }
             }
         } else {
             if (findSubstring(Source, "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|")) {
-                FSRTitle = "|#vec{P}_{tot}| vs. |#vec{P}_{rel}| - ";
+                FSRTitle = "|#vec{P}_{tot}| vs. |#vec{P}_{rel}| ratio - ";
             } else if (findSubstring(Source, "P_{tot}^{#mu} vs. P_{rel}^{#mu}")) {
-                FSRTitle = "P_{tot}^{#mu} vs. P_{rel}^{#mu} - ";
+                FSRTitle = "P_{tot}^{#mu} vs. P_{rel}^{#mu} ratio - ";
             } else if (findSubstring(Source, "P_{pL} vs. P_{pR}") || findSubstring(Source, "P_{nL} vs. P_{nR}")) {
-                FSRTitle = "P_{nucL} vs. P_{nucR} - ";
+                FSRTitle = "P_{nucL} vs. P_{nucR} ratio - ";
             } else if (findSubstring(Source, "P_{pFD} vs. P_{pCD}") || findSubstring(Source, "P_{nFD} vs. P_{pCD}")) {
-                FSRTitle = "P_{nucFD} vs. P_{nucCD} - ";
+                FSRTitle = "P_{nucFD} vs. P_{nucCD} ratio - ";
             } else if (findSubstring(Source, "#theta_{e} vs. P_{e}")) {
-                FSRTitle = "#theta_{e} vs. P_{e} - ";
+                FSRTitle = "#theta_{e} vs. P_{e} ratio - ";
             } else if (findSubstring(Source, "#theta_{e} vs. W")) {
-                FSRTitle = "#theta_{e} vs. W - ";
+                FSRTitle = "#theta_{e} vs. W ratio - ";
             } else if (findSubstring(Source, "#phi_{e} vs. P_{e}")) {
-                FSRTitle = "#phi_{e} vs. P_{e} - ";
+                FSRTitle = "#phi_{e} vs. P_{e} ratio - ";
             } else if (findSubstring(Source, "#phi_{e} vs. W")) {
-                FSRTitle = "#phi_{e} vs. W - ";
+                FSRTitle = "#phi_{e} vs. W ratio - ";
             } else if (findSubstring(Source, "#theta_{pFD} vs. P_{pFD}") || findSubstring(Source, "#theta_{nFD} vs. P_{nFD}")) {
                 FSRTitle = "#theta_{nucFD} vs. P_{nucFD}";
             } else if (findSubstring(Source, "#theta_{pFD} vs. W") || findSubstring(Source, "#theta_{nFD} vs. W")) {
-                FSRTitle = "#theta_{nucFD} vs. W";
+                FSRTitle = "#theta_{nucFD} vs. W ratio - ";
             } else if (findSubstring(Source, "#theta_{pCD} vs. P_{pCD}")) {
                 FSRTitle = "#theta_{nucCD} vs. P_{nucCD}";
             } else if (findSubstring(Source, "#theta_{pCD} vs. W")) {
-                FSRTitle = "#theta_{nucCD} vs. W";
+                FSRTitle = "#theta_{nucCD} vs. W ratio - ";
             } else if (findSubstring(Source, "#phi_{pFD} vs. P_{pFD}") || findSubstring(Source, "#phi_{nFD} vs. P_{nFD}")) {
                 FSRTitle = "#phi_{nucFD} vs. P_{nucFD}";
             } else if (findSubstring(Source, "#phi_{pFD} vs. W") || findSubstring(Source, "#phi_{nFD} vs. W")) {
-                FSRTitle = "#phi_{nucFD} vs. W";
+                FSRTitle = "#phi_{nucFD} vs. W ratio - ";
             } else if (findSubstring(Source, "#phi_{pCD} vs. P_{pCD}")) {
                 FSRTitle = "#phi_{nucCD} vs. P_{nucCD}";
             } else if (findSubstring(Source, "#phi_{pCD} vs. W")) {
-                FSRTitle = "#phi_{nucCD} vs. W";
+                FSRTitle = "#phi_{nucCD} vs. W ratio - ";
             } else if (findSubstring(Source, "#theta_{e} vs. #phi_{e}")) {
-                FSRTitle = "#theta_{e} vs. #phi_{e} - ";
+                FSRTitle = "#theta_{e} vs. #phi_{e} ratio - ";
             } else if (findSubstring(Source, "#theta_{pFD} vs. #phi_{pFD}") || findSubstring(Source, "#theta_{nFD} vs. #phi_{nFD}")) {
-                FSRTitle = "#theta_{nucFD} vs. #phi_{nucFD} - ";
+                FSRTitle = "#theta_{nucFD} vs. #phi_{nucFD} ratio - ";
             } else if (findSubstring(Source, "#theta_{pCD} vs. #phi_{pCD}")) {
-                FSRTitle = "#theta_{nucCD} vs. #phi_{nucCD} - ";
+                FSRTitle = "#theta_{nucCD} vs. #phi_{nucCD} ratio - ";
             } else if (findSubstring(Source, "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W")) {
-                FSRTitle = "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W - ";
+                FSRTitle = "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W ratio - ";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{tot}} vs. W")) {
-                FSRTitle = "#theta_{#vec{q},#vec{P}_{tot}} vs. W - ";
+                FSRTitle = "#theta_{#vec{q},#vec{P}_{tot}} vs. W ratio - ";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pL}} vs. W") ||
                        findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nL}} vs. W")) {
-                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucL}} vs. W - ";
+                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucL}} vs. W ratio - ";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pR}} vs. W") ||
                        findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nR}} vs. W")) {
-                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucR}} vs. W - ";
+                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucR}} vs. W ratio - ";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pFD}} vs. W") ||
                        findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nFD}} vs. W")) {
-                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucFD}} vs. W - ";
+                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucFD}} vs. W ratio - ";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pCD}} vs. W") ||
                        findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nCD}} vs. W")) {
-                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucCD}} vs. W - ";
+                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucCD}} vs. W ratio - ";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pL}} vs. r_{pL}=|#vec{P}_{pL}|/|#vec{q}|") ||
                        findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nL}} vs. r_{nL}=|#vec{P}_{nL}|/|#vec{q}|")) {
-                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucL}} vs. r_{pL}=|#vec{P}_{nucL}|/|#vec{q}| - ";
+                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucL}} vs. r_{pL}=|#vec{P}_{nucL}|/|#vec{q}| ratio - ";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pL}} vs. #theta_{#vec{q},#vec{P}_{pR}}") ||
                        findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nL}} vs. #theta_{#vec{q},#vec{P}_{nR}}")) {
-                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucL}} vs. #theta_{#vec{q},#vec{P}_{nucR}} - ";
+                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucL}} vs. #theta_{#vec{q},#vec{P}_{nucR}} ratio - ";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}}") ||
                        findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}}")) {
-                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucFD}} vs. #theta_{#vec{q},#vec{P}_{nucCD}} - ";
+                FSRTitle = "#theta_{#vec{q},#vec{P}_{nucFD}} vs. #theta_{#vec{q},#vec{P}_{nucCD}} ratio - ";
             } else if (findSubstring(Source, "#theta_{pFD,pCD} vs. W") || findSubstring(Source, "#theta_{nFD,pCD} vs. W")) {
-                FSRTitle = "#theta_{nucFD,nucCD} vs. W - ";
+                FSRTitle = "#theta_{nucFD,nucCD} vs. W ratio - ";
             } else if (findSubstring(Source, "Q^{2} vs. W")) {
-                FSRTitle = "Q^{2} vs. W - ";
+                FSRTitle = "Q^{2} vs. W ratio - ";
             } else if (findSubstring(Source, "E_{e} vs. #theta_{e}")) {
-                FSRTitle = "E_{e} vs. #theta_{e} - ";
+                FSRTitle = "E_{e} vs. #theta_{e} ratio - ";
             } else if (findSubstring(Source, "E_{cal} vs. #delta#alpha_{T,L}")) {
-                FSRTitle = "E_{cal} vs. #delta#alpha_{T,L} - ";
+                FSRTitle = "E_{cal} vs. #delta#alpha_{T,L} ratio - ";
             } else if (findSubstring(Source, "E_{cal} vs. #delta#alpha_{T,tot}")) {
-                FSRTitle = "E_{cal} vs. #delta#alpha_{T,tot} - ";
+                FSRTitle = "E_{cal} vs. #delta#alpha_{T,tot} ratio - ";
             } else if (findSubstring(Source, "E_{cal} vs. #deltaP_{T,L}")) {
-                FSRTitle = "E_{cal} vs. #deltaP_{T,L} - ";
+                FSRTitle = "E_{cal} vs. #deltaP_{T,L} ratio - ";
             } else if (findSubstring(Source, "E_{cal} vs. #deltaP_{T,tot}")) {
-                FSRTitle = "E_{cal} vs. #deltaP_{T,tot} - ";
+                FSRTitle = "E_{cal} vs. #deltaP_{T,tot} ratio - ";
             } else if (findSubstring(Source, "E_{cal} vs. W")) {
-                FSRTitle = "E_{cal} vs. W - ";
+                FSRTitle = "E_{cal} vs. W ratio - ";
             } else if (findSubstring(Source, "#deltaP_{T,L} vs. #delta#alpha_{T,L}")) {
-                FSRTitle = "#deltaP_{T,L} vs. #delta#alpha_{T,L} - ";
+                FSRTitle = "#deltaP_{T,L} vs. #delta#alpha_{T,L} ratio - ";
             } else if (findSubstring(Source, "#deltaP_{T,tot} vs. #delta#alpha_{T,tot}")) {
-                FSRTitle = "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} - ";
+                FSRTitle = "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} ratio - ";
             } else if (findSubstring(Source, "#deltaP_{T,L} vs. W")) {
-                FSRTitle = "#deltaP_{T,L} vs. W - ";
+                FSRTitle = "#deltaP_{T,L} vs. W ratio - ";
             } else if (findSubstring(Source, "#deltaP_{T,tot} vs. W")) {
-                FSRTitle = "#deltaP_{T,tot} vs. W - ";
+                FSRTitle = "#deltaP_{T,tot} vs. W ratio - ";
             } else if (findSubstring(Source, "#delta#alpha_{T,L} vs. W")) {
-                FSRTitle = "#delta#alpha_{T,L} vs. W - ";
+                FSRTitle = "#delta#alpha_{T,L} vs. W ratio - ";
             } else if (findSubstring(Source, "#delta#alpha_{T,tot} vs. W")) {
-                FSRTitle = "#delta#alpha_{T,tot} vs. W - ";
+                FSRTitle = "#delta#alpha_{T,tot} vs. W ratio - ";
             }
         }
     } else {
