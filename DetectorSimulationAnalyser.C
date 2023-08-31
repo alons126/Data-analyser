@@ -6954,10 +6954,12 @@ void EventAnalyser() {
                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pCD_AC_truth_pFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                             CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+//                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pCD_BC_truth_pFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                             CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+//                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_pip_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "04_P_piplus_AC_truth_pFDpCD",
@@ -7203,10 +7205,12 @@ void EventAnalyser() {
                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pCD_AC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                             CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+//                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pCD_BC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                             CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+//                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "04_P_piplus_AC_truth_nFDpCD",
