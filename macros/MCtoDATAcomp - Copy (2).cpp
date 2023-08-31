@@ -27,7 +27,7 @@ using namespace std;
 // MCtoDATAcompareHistograms function ---------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="MCtoDATAcompareHistograms function">
-void MCtoDATAcompareHistograms(int HistogramCounter, TCanvas *Canvas, TCanvas *CanvasMulti, TH1D *MC_Histogram, TH1D *DATA_Histogram, string SaveDirHistograms) {
+void MCtoDATAcompareHistograms(int HistogramCounter, TCanvas *Canvas, TCanvas *CanvasMulti, TH1D *MC_Histogram, TH1D *DATA_Histogram, string SaveDirRatios) {
     Canvas->cd();
 
     hData Properties;
@@ -40,88 +40,82 @@ void MCtoDATAcompareHistograms(int HistogramCounter, TCanvas *Canvas, TCanvas *C
     string Histogram_Particle = Properties.GetParticleNameShort(MC_Histogram->GetTitle());
     string FinalState = Properties.GetFS(MC_Histogram->GetTitle());
 
-    if (FinalState == "1n" || FinalState == "1p" || FinalState == "pFDpCD" || FinalState == "nFDpCD") {
-        string SavePathHistograms = SaveDirHistograms + "/" + FinalState + "/" + Histogram_Type + "/";
+    DATA_Histogram->Scale(MC_Histogram->Integral() / DATA_Histogram->Integral());
 
-        system(("mkdir -p " + SavePathHistograms).c_str());
+    MC_Histogram->SetStats(0);
+    DATA_Histogram->SetStats(0);
 
-        DATA_Histogram->Scale(MC_Histogram->Integral() / DATA_Histogram->Integral());
-
-        MC_Histogram->SetStats(0);
-        DATA_Histogram->SetStats(0);
-
-        //<editor-fold desc="Saving MC_Histogram">
-        MC_Histogram->SetLineColor(kBlue);
-        MC_Histogram->SetLineStyle(0);
-        MC_Histogram->SetLineWidth(3);
+    //<editor-fold desc="Saving MC_Histogram">
+    MC_Histogram->SetLineColor(kBlue);
+    MC_Histogram->SetLineStyle(0);
+    MC_Histogram->SetLineWidth(3);
 //    MC_Histogram->GetYaxis()->SetRangeUser(0, 5);
-        MC_Histogram->Draw();
+    MC_Histogram->Draw();
 
-        if (MC_Save) {
-            if (Histogram_Particle != "") {
-                Canvas->SaveAs((SavePathHistograms + (to_string(HistogramCounter) + "_MC_" + Histogram_Particle + "_" + Histogram_Type + "_" +
-                                                      FinalState + ".png")).c_str());
-            } else {
-                Canvas->SaveAs((SavePathHistograms + (to_string(HistogramCounter) + "_MC_" + Histogram_Type + "_" +
-                                                      FinalState + ".png")).c_str());
-            }
+    if (MC_Save) {
+        if (Histogram_Particle != "") {
+            Canvas->SaveAs((SaveDirRatios + "/" + (to_string(HistogramCounter) + "_MC_" + Histogram_Particle + "_" + Histogram_Type + "_" +
+                                                   FinalState + ".png")).c_str());
+        } else {
+            Canvas->SaveAs((SaveDirRatios + "/" + (to_string(HistogramCounter) + "_MC_" + Histogram_Type + "_" +
+                                                   FinalState + ".png")).c_str());
         }
-        //</editor-fold>
+    }
+    //</editor-fold>
 
-        //<editor-fold desc="Saving MC-DATA comparison">
-        DATA_Histogram->SetLineColor(kRed);
-        DATA_Histogram->SetLineStyle(0);
-        DATA_Histogram->SetLineWidth(2);
+    //<editor-fold desc="Saving MC-DATA comparison">
+    DATA_Histogram->SetLineColor(kRed);
+    DATA_Histogram->SetLineStyle(0);
+    DATA_Histogram->SetLineWidth(2);
 //    DATA_Histogram->GetYaxis()->SetRangeUser(0, 5);
-        DATA_Histogram->Draw("same");
+    DATA_Histogram->Draw("same");
 
-        auto Comparison_legend = new TLegend(0.87, 0.875, 0.87 - 0.2, 0.825 - 0.05);
-        TLegendEntry *MC_Entry = Comparison_legend->AddEntry(MC_Histogram, "Simulation", "l");
-        TLegendEntry *DATA_Entry = Comparison_legend->AddEntry(DATA_Histogram, "Data (scaled)", "l");
-        Comparison_legend->Draw("same");
+    auto Comparison_legend = new TLegend(0.87, 0.875, 0.87 - 0.2, 0.825 - 0.05);
+    TLegendEntry *MC_Entry = Comparison_legend->AddEntry(MC_Histogram, "Simulation", "l");
+    TLegendEntry *DATA_Entry = Comparison_legend->AddEntry(DATA_Histogram, "Data (scaled)", "l");
+    Comparison_legend->Draw("same");
 
-        if (Comparison_Save) {
-            if (Histogram_Particle != "") {
-                Canvas->SaveAs(
-                        (SavePathHistograms + (to_string(HistogramCounter) + "_" + Histogram_Particle + "_" + Histogram_Type + "_Comp" + "_" +
-                                               FinalState + ".png")).c_str());
-            } else {
-                Canvas->SaveAs((SavePathHistograms + (to_string(HistogramCounter) + "_" + Histogram_Type + "_Comp" + "_" +
-                                                      FinalState + ".png")).c_str());
-            }
+    if (Comparison_Save) {
+        if (Histogram_Particle != "") {
+            Canvas->SaveAs(
+                    (SaveDirRatios + "/" + (to_string(HistogramCounter) + "_" + Histogram_Particle + "_" + Histogram_Type + "_Comp" + "_" +
+                                            FinalState + ".png")).c_str());
+        } else {
+            Canvas->SaveAs((SaveDirRatios + "/" + (to_string(HistogramCounter) + "_" + Histogram_Type + "_Comp" + "_" +
+                                                   FinalState + ".png")).c_str());
+        }
+    }
+
+    Canvas->Clear();
+    //</editor-fold>
+
+    //<editor-fold desc="Saving DATA_Histogram">
+    DATA_Histogram->SetLineColor(kRed);
+    DATA_Histogram->SetLineStyle(0);
+    DATA_Histogram->SetLineWidth(2);
+//    DATA_Histogram->GetYaxis()->SetRangeUser(0, 5);
+
+    if (DATA_Save) {
+        DATA_Histogram->Draw();
+
+        if (Histogram_Particle != "") {
+            Canvas->SaveAs((SaveDirRatios + "/" + (to_string(HistogramCounter) + "_DATA_" + Histogram_Particle + "_" + Histogram_Type + "_" +
+                                                   FinalState + ".png")).c_str());
+        } else {
+            Canvas->SaveAs((SaveDirRatios + "/" + (to_string(HistogramCounter) + "_DATA_" + Histogram_Type + "_" +
+                                                   FinalState + ".png")).c_str());
         }
 
         Canvas->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Saving DATA_Histogram">
-        DATA_Histogram->SetLineColor(kRed);
-        DATA_Histogram->SetLineStyle(0);
-        DATA_Histogram->SetLineWidth(2);
-//    DATA_Histogram->GetYaxis()->SetRangeUser(0, 5);
-
-        if (DATA_Save) {
-            DATA_Histogram->Draw();
-
-            if (Histogram_Particle != "") {
-                Canvas->SaveAs((SavePathHistograms + (to_string(HistogramCounter) + "_DATA_" + Histogram_Particle + "_" + Histogram_Type + "_" +
-                                                      FinalState + ".png")).c_str());
-            } else {
-                Canvas->SaveAs((SavePathHistograms + (to_string(HistogramCounter) + "_DATA_" + Histogram_Type + "_" +
-                                                      FinalState + ".png")).c_str());
-            }
-
-            Canvas->Clear();
-        }
-        //</editor-fold>
+    }
+    //</editor-fold>
 
 //        cout << "\n\nMC_Histogram->GetMaximum() = " << MC_Histogram->GetMaximum() << "\n";
 //        cout << "DATA_Histogram->GetMaximum() = " << DATA_Histogram->GetMaximum() << "\n";
 //        cout << "Ymax = " << Ymax << "\n\n\n";
 
 //    exit(0);
-
-    }}
+}
 //</editor-fold>
 
 // MCtoDATAcompareRatios function ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -279,15 +273,17 @@ void MCtoDATAcomp() {
         TH1D *MC_Histogram = (TH1D *) MC_key->ReadObj();
         string MC_Histogram_title = MC_Histogram->GetTitle();
 
-        if (MC_key->GetClassName() != classname("TH1D")) { continue; }
-        if (!(!findSubstring(MC_Histogram_title, "vs") && !findSubstring(MC_Histogram_title, "vs.") &&
-              !findSubstring(MC_Histogram_title, "VS") && !findSubstring(MC_Histogram_title, "VS."))) { continue; }
-
-        if (!findSubstring(MC_Histogram_title, "nFDpCD/pFDpCD")) {
+        if (!findSubstring(MC_Histogram_title, "nFDpCD/pFDpCD") ||
+            !(!findSubstring(MC_Histogram_title, "vs") && !findSubstring(MC_Histogram_title, "vs.") &&
+              !findSubstring(MC_Histogram_title, "VS") && !findSubstring(MC_Histogram_title, "VS."))) {
             string MC_Histogram_type = Properties.GetType(MC_Histogram_title);
 
-            if (MC_Histogram_type != "" || findSubstring(MC_Histogram_title,"Leading")) {
-//            if (MC_Histogram_type != "") {
+//            if (MC_key->GetClassName() != "TH1D") { continue; }
+            if (MC_key->GetClassName() != classname("TH1D")) { continue; }
+
+            if (MC_Histogram_type != "" &&
+                (!findSubstring(MC_Histogram_title, "vs") && !findSubstring(MC_Histogram_title, "vs.") &&
+                 !findSubstring(MC_Histogram_title, "VS") && !findSubstring(MC_Histogram_title, "VS."))) {
 
                 /*
                 TH1D *DATA_Histogram = (TH1D *) DATA_file->Get(MC_Histogram->GetName());
@@ -307,21 +303,18 @@ void MCtoDATAcomp() {
                     TH1D *DATA_Histogram = (TH1D *) DATA_key->ReadObj();
                     string DATA_Histogram_title = DATA_Histogram->GetTitle();
 
-                    if (DATA_key->GetClassName() != classname("TH1D")) { continue; }
-                    if (!(!findSubstring(DATA_Histogram_title, "vs") && !findSubstring(DATA_Histogram_title, "vs.") &&
+                    if (!findSubstring(DATA_Histogram_title, "nFDpCD/pFDpCD") ||
+                        !(!findSubstring(DATA_Histogram_title, "vs") && !findSubstring(DATA_Histogram_title, "vs.") &&
                           !findSubstring(DATA_Histogram_title, "VS") && !findSubstring(DATA_Histogram_title, "VS."))) { continue; }
-                    if (findSubstring(DATA_Histogram_title, "nFDpCD/pFDpCD")) { continue; }
-
                     string DATA_Histogram_type = Properties.GetType(DATA_Histogram_title);
 
-                    if ((DATA_Histogram_type != "" || findSubstring(DATA_Histogram_title,"Leading")) &&
-                    (MC_Histogram_title == DATA_Histogram_title)) {
+                    if (DATA_key->GetClassName() != classname("TH1D")) { continue; }
+
+                    if (((DATA_Histogram_type != "") &&
+                         (!findSubstring(DATA_Histogram_title, "vs") && !findSubstring(DATA_Histogram_title, "vs.") &&
+                          !findSubstring(DATA_Histogram_title, "VS") && !findSubstring(DATA_Histogram_title, "VS."))) && (DATA_Histogram_title == DATA_Histogram_title)) {
                         ++HistogramCounter;
                         MCtoDATAcompareHistograms(HistogramCounter, Canvas, CanvasMulti, MC_Histogram, DATA_Histogram, SaveDirHistograms);
-
-//                        cout << "\n\n\nMC_Histogram_title = " << MC_Histogram_title << "\n";
-//                        cout << "DATA_Histogram_title = " << DATA_Histogram_title << "\n";
-
                         break;
                     }
                 } // end of DATA while
