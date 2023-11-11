@@ -119,8 +119,10 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     //<editor-fold desc="Setting Final state">
     string EfficiencyFS;
 
-    if (findSubstring(EfficiencyRecTitle, "1e_cut") || findSubstring(EfficiencyRecTitle, "1e cut") || findSubstring(EfficiencyRecTitle, "1e Cut")) {
-        EfficiencyFS = "1e cut";
+    if (findSubstring(EfficiencyRecTitle, "1e_cut") || findSubstring(EfficiencyRecTitle, "1e cut") ||
+        findSubstring(EfficiencyRecTitle, "1e Cut")) {
+        EfficiencyFS = "1e_cut";
+//        EfficiencyFS = "1e cut";
     } else if (findSubstring(EfficiencyRecTitle, "1p")) {
         EfficiencyFS = "1p";
     } else if (findSubstring(EfficiencyRecTitle, "1n")) {

@@ -210,6 +210,8 @@ Directories::Directories(std::string plots_path) {
 
     Momentum_Directory_map["Momentum_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
                                                           Find(Momentum_Daughter_Folders, "01_1e_cut") + "/";
+    Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
+                                                          Find(Momentum_Daughter_Folders, "01_1e_cut/01_Momentum_th_plots_1e_cut") + "/";
 
     Momentum_Directory_map["Momentum_1p_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
                                                       Find(Momentum_Daughter_Folders, "02_1p") + "/";
@@ -1036,7 +1038,7 @@ Directories::Directories(std::string plots_path) {
                                                                          Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/04_Hit_maps") + "/";
     Eff_and_ACorr_Directory_map["Loaded_reco_ref_Acceptance_Maps_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                                       Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/05_Loaded_reco_ref_hit_maps") + "/";
-    Eff_and_ACorr_Directory_map["Momentum_th_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
+    Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                                       Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/05_Eff_plots_for_Momentum_th") + "/";
 
     Eff_and_ACorr_Directory_map["Eff_and_ACorr_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/"
