@@ -225,6 +225,22 @@ void EventAnalyser() {
 //    if (generate_AMaps) { Rec_wTL_ES = false; }
     //</editor-fold>
 
+    //<editor-fold desc="Auto-disable variables">
+    if (!apply_cuts) {
+        apply_Nphe_cut = apply_chi2_cuts_1e_cut = apply_Vz_cuts = apply_dVz_cuts = false;
+        apply_ECAL_SF_cuts = apply_ECAL_P_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
+        apply_nucleon_cuts = false;
+    }
+
+    if (!apply_chi2_cuts_1e_cut) { apply_nucleon_cuts = false; }
+
+    if (!apply_nucleon_cuts) { apply_nucleon_physical_cuts = false; }
+
+    if (!apply_nucleon_physical_cuts) { apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndShift = false; }
+
+    if (generate_AMaps) { apply_fiducial_cuts = false; }
+    //</editor-fold>
+
     //<editor-fold desc="Custom cuts naming">
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
     const bool custom_cuts_naming = true;
@@ -361,23 +377,10 @@ void EventAnalyser() {
     cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
     //</editor-fold>
 
-    //<editor-fold desc="Auto-disable variables">
-    if (!apply_chi2_cuts_1e_cut) { apply_nucleon_cuts = false; }
-
-    if (!apply_nucleon_cuts) { apply_nucleon_physical_cuts = false; }
-
-    if (!apply_nucleon_physical_cuts) { apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndShift = false; }
-
-    if (generate_AMaps) { apply_fiducial_cuts = false; }
-    //</editor-fold>
-
     //<editor-fold desc="Cuts output">
     /* Print out the cuts within the run (for self-observation) */
     if (!apply_cuts) {
         cout << "Cuts are disabled:\n";
-
-        apply_Nphe_cut = apply_chi2_cuts_1e_cut = apply_Vz_cuts = apply_dVz_cuts = false;
-        apply_ECAL_SF_cuts = apply_ECAL_P_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
     } else {
         cout << "Cuts are enabled:\n";
     }
@@ -8180,7 +8183,9 @@ void EventAnalyser() {
             //<editor-fold desc="Event selection for TL plots">
             /* Setting up basic TL event selection */
             bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1); // One id. FD electron above momentum threshold
+            //TODO: Ask Adi if I should split charged pions to CD and FD?
             bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                   // No id. cPions above momentum threshold
+            //TODO: Ask Adi if I should split other particles to CD and FD?
             bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                   // No other part. above momentum threshold
             bool no_TL_FDpi0 = (Enable_FD_photons || (TL_pi0FD_mom_ind.size() == 0));                                // No id. pi0 in the FD above momentum threshold
             bool no_TL_FDPhotons = (Enable_FD_photons || (TL_PhotonsFD_mom_ind.size() == 0));                        // No id. photons in the FD above momentum threshold
@@ -10337,7 +10342,7 @@ void EventAnalyser() {
         /* 1n event selection: 1n = any number of id. FD neutrons (we look at the leading nFD), with no charged particles (except electrons) and any number of other
                                     neutrals and particles with pdg=0. */
         bool no_protons_1n = (Protons_ind.size() == 0); // there are no id. protons in both CD and FD
-        bool at_least_one_FDneutron_1n = (NeutronsFD_ind_mom_max != -1); // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
+        bool at_least_one_FDneutron_1n = (NeutronsFD_ind_mom_max != -1); // for NeutronsFD_ind_mom_max = -1 we don't have any nFD
         bool event_selection_1n = (basic_event_selection && no_protons_1n && at_least_one_FDneutron_1n);
 
         bool apply_TL_1n_ES = (!Rec_wTL_ES || TL_Event_Selection_1n);
@@ -10504,7 +10509,7 @@ void EventAnalyser() {
             //<editor-fold desc="Setting kinematical cuts">
             /* Good neutrons are within momentum kin cuts (below l. KC -> efficiency; above u. KC -> beta fit) -> momentum kin cut before neutron shifting */
             /* We want to compare FD neutrons with FD protons in the same momentum region -> additional momentum kin cut after neutron shifting */
-            /* Fiducial cuts -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
+            /* Fiducial cuts -> after neutron shifting; because we want to match the corrected neutron momentum to the proton maps! */
             bool FD_Theta_Cut_1n = ((P_n_1n_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
             bool FD_Momentum_Cut_BS_1n = ((NeutronMomBKC_1n <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                           (NeutronMomBKC_1n >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut before neutron shifting
@@ -12493,7 +12498,7 @@ void EventAnalyser() {
         /* nFDpCD event selection: nFDpCD = one id. proton in the CD, any number of id. FD neutrons (we look at the leading nFD) and any number of neutrons, other
                                             neutrals and particles with pdg=0.*/
         bool one_CDproton_nFDpCD = (Protons_ind.size() == 1 && protons[Protons_ind.at(0)]->getRegion() == CD); // there's only one id. proton + this proton is in the CD
-        bool at_least_one_FDneutron_nFDpCD = (NeutronsFD_ind_mom_max != -1); // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
+        bool at_least_one_FDneutron_nFDpCD = (NeutronsFD_ind_mom_max != -1); // for NeutronsFD_ind_mom_max = -1 we don't have any nFD
         bool event_selection_nFDpCD = (basic_event_selection && one_CDproton_nFDpCD && at_least_one_FDneutron_nFDpCD);
 
         bool apply_TL_nFDpCD_ES = (!Rec_wTL_ES || TL_Event_Selection_nFDpCD);
