@@ -9474,6 +9474,7 @@ void EventAnalyser() {
             }
         }
 
+        //TODO: find a way to loop over good protons w/o mom. th.
         for (auto &p: protons) {
             if (p->getRegion() == FD) {
                 hP_p_reco_1e_cut_FD.hFill(p->getP(), Weight);
@@ -9489,8 +9490,10 @@ void EventAnalyser() {
                 bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
 
                 if (NeutronPassVeto_Test) {
-                    hP_n_reco_1e_cut_FD.hFill(allParticles[i]->getP(), Weight);
-                    hP_n_reco_1e_cut_FD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
+                    double NeutronMomentum_1e_cut = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
+
+                    hP_n_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_n_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
                 }
             }
         }
