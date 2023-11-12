@@ -41,7 +41,7 @@ void FDNeutralParticle(vector<region_part_ptr> allParticles, vector<int> &ID_Neu
                 }
             } // end of clas12root neutron or 'photon' if
         } // end of neutral and in the FD if
-    } // end of loop over allparticle vector
+    } // end of loop over allParticles vector
 }
 
 

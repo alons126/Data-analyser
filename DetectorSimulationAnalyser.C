@@ -587,135 +587,142 @@ void EventAnalyser() {
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
 
-//    //<editor-fold desc="Plot selector - plot all">
-//    /* Master plots variable */
-//    bool Plot_selector_master = true; // Master plot selector for analysis
-//
-//    /* Cut variable plots */
-//    bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
-//
-//    /* Beta plots */
-//    bool W_plots = true;
-//
-//    /* Beta plots */
-//    bool Beta_plots = true;
-//    bool Beta_vs_P_plots = true;
-//
-//    /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-//
-//    /* Q2 plots */
-//    bool Q2_plots = true;
-//
-//    /* E_e plots */
-//    bool E_e_plots = true;
-//
-//    /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-//
-//    /* Ecal plots */
-//    bool Ecal_plots = true;
-//
-//    /* Transverse variables plots */
-//    bool TKI_plots = true;
-//
-//    /* ToF plots */
-//    bool ToF_plots = false;
-//
-//    /* Efficiency plots */
-//    bool Efficiency_plots = true;
-//    bool TL_after_Acceptance_Maps_plots = true;
-//
-//    /* Resolution plots */
-//    bool AMaps_plots = true;
-//
-//    /* Resolution plots */
-//    bool Resolution_plots = true;
-//
-//    /* Final state ratio plots */
-//    bool FSR_1D_plots = true;
-//    bool FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
-//    //</editor-fold>
-
-    //<editor-fold desc="Plot selector - selected plots">
+    //<editor-fold desc="Plot selector - plot all">
     /* Master plots variable */
     bool Plot_selector_master = true; // Master plot selector for analysis
 
     /* Cut variable plots */
     bool Cut_plots_master = true; // Master cut plots selector
-    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
-//
-    bool Momentum_plots = true;
-//    bool Momentum_plots = false;
-//
+    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta plots */
-//    bool W_plots = true;
-    bool W_plots = false;
+    bool W_plots = true;
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
+    bool Beta_plots = true;
+    bool Beta_vs_P_plots = true;
 
     /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-    bool Angle_plots_master = false; // Master angle plots selector
-    bool Theta_e_plots = false, Phi_e_plots = false;
+    bool Angle_plots_master = true; // Master angle plots selector
+    bool Theta_e_plots = true, Phi_e_plots = true;
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
+    bool Q2_plots = true;
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
+    bool E_e_plots = true;
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
+    bool ETrans_plots_master = true; // Master ET plots selector
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
+    bool Ecal_plots = true;
 
     /* Transverse variables plots */
-//    bool TKI_plots = true;
-    bool TKI_plots = false;
+    bool TKI_plots = true;
 
     /* ToF plots */
-//    bool ToF_plots = true;
     bool ToF_plots = false;
 
     /* Efficiency plots */
     bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
-//    bool TL_after_Acceptance_Maps_plots = true;
-    bool TL_after_Acceptance_Maps_plots = false;
+    bool TL_after_Acceptance_Maps_plots = true;
 
     /* Resolution plots */
-//    bool AMaps_plots = true;
-    bool AMaps_plots = false;
+    bool AMaps_plots = true;
 
     /* Resolution plots */
-//    bool Resolution_plots = true;
-    bool Resolution_plots = false;
+    bool Resolution_plots = true;
 
     /* Final state ratio plots */
-    bool FSR_1D_plots = false;
-    bool FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
-    //</editor-fold>/
+    bool FSR_1D_plots = true;
+    bool FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
+    //</editor-fold>
+
+//    //<editor-fold desc="Plot selector - selected plots">
+//    /* Master plots variable */
+//    bool Plot_selector_master = true; // Master plot selector for analysis
+//
+//    /* Cut variable plots */
+//    bool Cut_plots_master = true; // Master cut plots selector
+//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+////    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+////
+//    bool Momentum_plots = true;
+////    bool Momentum_plots = false;
+////
+//
+//    /* Beta plots */
+////    bool W_plots = true;
+//    bool W_plots = false;
+//
+//    /* Beta plots */
+////    bool Beta_plots = true;
+//    bool Beta_plots = false;
+////    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
+//
+//    /* Angle plots */
+////    bool Angle_plots_master = true; // Master angle plots selector
+////    bool Theta_e_plots = true, Phi_e_plots = true;
+//    bool Angle_plots_master = false; // Master angle plots selector
+//    bool Theta_e_plots = false, Phi_e_plots = false;
+//
+//    /* Q2 plots */
+////    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//
+//    /* E_e plots */
+////    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//
+//    /* ET plots */
+////    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+//
+//    /* Ecal plots */
+////    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//
+//    /* Transverse variables plots */
+////    bool TKI_plots = true;
+//    bool TKI_plots = false;
+//
+//    /* ToF plots */
+////    bool ToF_plots = true;
+//    bool ToF_plots = false;
+//
+//    /* Efficiency plots */
+//    bool Efficiency_plots = true;
+////    bool Efficiency_plots = false;
+////    bool TL_after_Acceptance_Maps_plots = true;
+//    bool TL_after_Acceptance_Maps_plots = false;
+//
+//    /* Resolution plots */
+////    bool AMaps_plots = true;
+//    bool AMaps_plots = false;
+//
+//    /* Resolution plots */
+////    bool Resolution_plots = true;
+//    bool Resolution_plots = false;
+//
+//    /* Final state ratio plots */
+//    bool FSR_1D_plots = false;
+//    bool FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
+//    //</editor-fold>/
 
     /* Other setup variables */
     bool wider_margin = true;
     bool debug_plots = false; // Print out clas12ana debugging plots
+
+    bool Log_scale_Vx_plots = false;
+    bool Log_scale_Vy_plots = false;
+    bool Log_scale_Vz_plots = true;
+    bool Log_scale_dVx_plots = false;
+    bool Log_scale_dVy_plots = false;
+    bool Log_scale_dVz_plots = true;
 
     //<editor-fold desc="Auto-disable plot selector variables">
     if (!Plot_selector_master) {
@@ -862,11 +869,10 @@ void EventAnalyser() {
     const double Nphe_boundary = 40;
 
     /* Chi2 boundries */
-    double Chi2_boundary = 30;
+    double Chi2_boundary = 20;
+//    double Chi2_boundary = 30;
 
-    if (apply_cuts) {
-        Chi2_boundary = 9;
-    }
+    if (apply_cuts) { Chi2_boundary = 9; }
 
     /* Vertex boundries */
     double Vertex_boundary = 20., Vertex_uboundary = Vertex_boundary, Vertex_lboundary = -Vertex_boundary;
@@ -1252,158 +1258,191 @@ void EventAnalyser() {
 
     //<editor-fold desc="Vertex plots (1e cut)">
     hPlot1D hVx_Electron_1e_cut_FD = hPlot1D("1e cut", "", "V_{x}^{e}", "V_{x}^{e} histogram", "V_{x}^{e} [cm]",
-                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"], "01_Electron_Vx", -Vertex_boundary,
-                                             Vertex_boundary, numTH1Dbins);
+                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"],
+                                             "01_Electron_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_Electron_1e_cut_FD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVy_Electron_1e_cut_FD = hPlot1D("1e cut", "", "V_{y}^{e}", "V_{y}^{e} histogram", "V_{y}^{e} [cm]",
-                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"], "02_Electron_Vy", -Vertex_boundary,
-                                             Vertex_boundary, numTH1Dbins);
+                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"],
+                                             "02_Electron_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_Electron_1e_cut_FD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVz_Electron_1e_cut_FD = hPlot1D("1e cut", "", "V_{z}^{e}", "V_{z}^{e} histogram", "V_{z}^{e} [cm]",
-                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"], "03_Electron_Vz", -Vertex_boundary,
-                                             Vertex_boundary, numTH1Dbins);
+                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"],
+                                             "03_Electron_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_Electron_1e_cut_FD.SetLogScalePlot(Log_scale_Vz_plots);
 
     hPlot1D hVx_Proton_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{p}", "V_{x}^{p} histogram", "V_{x}^{p} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"], "01_Proton_Vx", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"],
+                                           "01_Proton_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_Proton_1e_cut_CD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVx_Proton_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{x}^{p}", "V_{x}^{p} histogram", "V_{x}^{p} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"], "01_Proton_Vx", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"],
+                                           "01_Proton_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_Proton_1e_cut_FD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVy_Proton_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{y}^{p}", "V_{y}^{p} histogram", "V_{y}^{p} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"], "02_Proton_Vy", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"],
+                                           "02_Proton_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_Proton_1e_cut_CD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVy_Proton_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{y}^{p}", "V_{y}^{p} histogram", "V_{y}^{p} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"], "02_Proton_Vy", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"],
+                                           "02_Proton_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_Proton_1e_cut_FD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVz_Proton_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{z}^{p}", "V_{z}^{p} histogram", "V_{z}^{p} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"], "03_Proton_Vz", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"],
+                                           "03_Proton_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_Proton_1e_cut_CD.SetLogScalePlot(Log_scale_Vz_plots);
     hPlot1D hVz_Proton_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{p}", "V_{z}^{p} histogram", "V_{z}^{p} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"], "03_Proton_Vz", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"],
+                                           "03_Proton_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_Proton_1e_cut_FD.SetLogScalePlot(Log_scale_Vz_plots);
 
     hPlot1D hVx_Kplus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{K^{+}}", "V_{x}^{K^{+}} histogram", "V_{x}^{K^{+}} [cm]",
-                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"], "01_Kplus_Vx", -Vertex_boundary, Vertex_boundary,
-                                          numTH1Dbins);
+                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"],
+                                          "01_Kplus_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_Kplus_1e_cut_CD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVx_Kplus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{x}^{K^{+}}", "V_{x}^{K^{+}} histogram", "V_{x}^{K^{+}} [cm]",
-                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"], "01_Kplus_Vx", -Vertex_boundary, Vertex_boundary,
-                                          numTH1Dbins);
+                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"],
+                                          "01_Kplus_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_Kplus_1e_cut_FD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVy_Kplus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{y}^{K^{+}}", "V_{y}^{K^{+}} histogram", "V_{y}^{K^{+}} [cm]",
-                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"], "02_Kplus_Vy", -Vertex_boundary, Vertex_boundary,
-                                          numTH1Dbins);
+                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"],
+                                          "02_Kplus_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_Kplus_1e_cut_CD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVy_Kplus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{y}^{K^{+}}", "V_{y}^{K^{+}} histogram", "V_{y}^{K^{+}} [cm]",
-                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"], "02_Kplus_Vy", -Vertex_boundary, Vertex_boundary,
-                                          numTH1Dbins);
+                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"],
+                                          "02_Kplus_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_Kplus_1e_cut_FD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVz_Kplus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{z}^{K^{+}}", "V_{z}^{K^{+}} histogram", "V_{z}^{K^{+}} [cm]",
-                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"], "03_Kplus_Vz", -Vertex_boundary, Vertex_boundary,
-                                          numTH1Dbins);
+                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"],
+                                          "03_Kplus_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_Kplus_1e_cut_CD.SetLogScalePlot(Log_scale_Vz_plots);
     hPlot1D hVz_Kplus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{K^{+}}", "V_{z}^{K^{+}} histogram", "V_{z}^{K^{+}} [cm]",
-                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"], "03_Kplus_Vz", -Vertex_boundary, Vertex_boundary,
-                                          numTH1Dbins);
+                                          directories.Vertex_Directory_map["Vertex_Kplus_1e_cut_Vtx_Directory"],
+                                          "03_Kplus_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_Kplus_1e_cut_FD.SetLogScalePlot(Log_scale_Vz_plots);
 
     hPlot1D hVx_Kminus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{K^{-}}", "V_{x}^{K^{-}} histogram", "V_{x}^{K^{-}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"], "01_Kminus_Vx", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"],
+                                           "01_Kminus_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_Kminus_1e_cut_CD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVx_Kminus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{x}^{K^{-}}", "V_{x}^{K^{-}} histogram", "V_{x}^{K^{-}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"], "01_Kminus_Vx", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"],
+                                           "01_Kminus_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_Kminus_1e_cut_FD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVy_Kminus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{y}^{K^{-}}", "V_{y}^{K^{-}} histogram", "V_{y}^{K^{-}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"], "02_Kminus_Vy", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"],
+                                           "02_Kminus_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_Kminus_1e_cut_CD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVy_Kminus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{y}^{K^{-}}", "V_{y}^{K^{-}} histogram", "V_{y}^{K^{-}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"], "02_Kminus_Vy", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"],
+                                           "02_Kminus_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_Kminus_1e_cut_FD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVz_Kminus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{z}^{K^{-}}", "V_{z}^{K^{-}} histogram", "V_{z}^{K^{-}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"], "03_Kminus_Vz", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"],
+                                           "03_Kminus_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_Kminus_1e_cut_CD.SetLogScalePlot(Log_scale_Vz_plots);
     hPlot1D hVz_Kminus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{K^{-}}", "V_{z}^{K^{-}} histogram", "V_{z}^{K^{-}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"], "03_Kminus_Vz", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_Kminus_1e_cut_Vtx_Directory"],
+                                           "03_Kminus_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_Kminus_1e_cut_FD.SetLogScalePlot(Log_scale_Vz_plots);
 
     hPlot1D hVx_piplus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{#pi^{+}}", "V_{x}^{#pi^{+}} histogram", "V_{x}^{#pi^{+}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"], "01_piplus_Vx", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"],
+                                           "01_piplus_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_piplus_1e_cut_CD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVx_piplus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{x}^{#pi^{+}}", "V_{x}^{#pi^{+}} histogram", "V_{x}^{#pi^{+}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"], "01_piplus_Vx", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"],
+                                           "01_piplus_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_piplus_1e_cut_FD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVy_piplus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{y}^{#pi^{+}}", "V_{y}^{#pi^{+}} histogram", "V_{y}^{#pi^{+}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"], "02_piplus_Vy", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"],
+                                           "02_piplus_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_piplus_1e_cut_CD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVy_piplus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{y}^{#pi^{+}}", "V_{y}^{#pi^{+}} histogram", "V_{y}^{#pi^{+}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"], "02_piplus_Vy", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"],
+                                           "02_piplus_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_piplus_1e_cut_FD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVz_piplus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{z}^{#pi^{+}}", "V_{z}^{#pi^{+}} histogram", "V_{z}^{#pi^{+}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"], "03_piplus_Vz", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"],
+                                           "03_piplus_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_piplus_1e_cut_CD.SetLogScalePlot(Log_scale_Vz_plots);
     hPlot1D hVz_piplus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{#pi^{+}}", "V_{z}^{#pi^{+}} histogram", "V_{z}^{#pi^{+}} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"], "03_piplus_Vz", -Vertex_boundary, Vertex_boundary,
-                                           numTH1Dbins);
+                                           directories.Vertex_Directory_map["Vertex_piplus_1e_cut_Vtx_Directory"],
+                                           "03_piplus_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_piplus_1e_cut_FD.SetLogScalePlot(Log_scale_Vz_plots);
 
     hPlot1D hVx_piminus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{#pi^{-}}", "V_{x}^{#pi^{-}} histogram", "V_{x}^{#pi^{-}} [cm]",
-                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"], "01_piminus_Vx", -Vertex_boundary, Vertex_boundary,
-                                            numTH1Dbins);
+                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"],
+                                            "01_piminus_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_piminus_1e_cut_CD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVx_piminus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{x}^{#pi^{-}}", "V_{x}^{#pi^{-}} histogram", "V_{x}^{#pi^{-}} [cm]",
-                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"], "01_piminus_Vx", -Vertex_boundary, Vertex_boundary,
-                                            numTH1Dbins);
+                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"],
+                                            "01_piminus_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVx_piminus_1e_cut_FD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVy_piminus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{y}^{#pi^{-}}", "V_{y}^{#pi^{-}} histogram", "V_{y}^{#pi^{-}} [cm]",
-                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"], "02_piminus_Vy", -Vertex_boundary, Vertex_boundary,
-                                            numTH1Dbins);
+                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"],
+                                            "02_piminus_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_piminus_1e_cut_CD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVy_piminus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{y}^{#pi^{-}}", "V_{y}^{#pi^{-}} histogram", "V_{y}^{#pi^{-}} [cm]",
-                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"], "02_piminus_Vy", -Vertex_boundary, Vertex_boundary,
-                                            numTH1Dbins);
+                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"],
+                                            "02_piminus_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVy_piminus_1e_cut_FD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVz_piminus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{z}^{#pi^{-}}", "V_{z}^{#pi^{-}} histogram", "V_{z}^{#pi^{-}} [cm]",
-                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"], "03_piminus_Vz", -Vertex_boundary, Vertex_boundary,
-                                            numTH1Dbins);
+                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"],
+                                            "03_piminus_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_piminus_1e_cut_CD.SetLogScalePlot(Log_scale_Vz_plots);
     hPlot1D hVz_piminus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{#pi^{-}}", "V_{z}^{#pi^{-}} histogram", "V_{z}^{#pi^{-}} [cm]",
-                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"], "03_piminus_Vz", -Vertex_boundary, Vertex_boundary,
-                                            numTH1Dbins);
+                                            directories.Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"],
+                                            "03_piminus_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+    hVz_piminus_1e_cut_FD.SetLogScalePlot(Log_scale_Vz_plots);
     //</editor-fold>
 
     //<editor-fold desc="dV plots (1p)">
-    hPlot1D hdVx_1p = hPlot1D("1p", "", "Vertex corr. dV_{x}", "Vertex correlation dV_{x}=V^{p}_{x}-V^{e}_{x}", "dV_{x} [cm]",
+    hPlot1D hdVx_1p = hPlot1D("1p", "", "Vertex corr. dV^{p}_{x}", "Vertex correlation dV^{p}_{x}=V^{p}_{x}-V^{e}_{x}", "dV^{p}_{x} [cm]",
                               directories.Vertex_Directory_map["Vertex_dV_1p_Directory"], "01_dVx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVy_1p = hPlot1D("1p", "", "Vertex corr. dV_{y}", "Vertex correlation dV_{y}=V^{p}_{y}-V^{e}_{y}", "dV_{y} [cm]",
+    hPlot1D hdVy_1p = hPlot1D("1p", "", "Vertex corr. dV^{p}_{y}", "Vertex correlation dV^{p}_{y}=V^{p}_{y}-V^{e}_{y}", "dV^{p}_{y} [cm]",
                               directories.Vertex_Directory_map["Vertex_dV_1p_Directory"], "02_dVy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVz_1p = hPlot1D("1p", "", "Vertex corr. dV_{z}", "Vertex correlation dV_{z}=V^{p}_{z}-V^{e}_{z}", "dV_{z} [cm]",
+    hPlot1D hdVz_1p = hPlot1D("1p", "", "Vertex corr. dV^{p}_{z}", "Vertex correlation dV^{p}_{z}=V^{p}_{z}-V^{e}_{z}", "dV^{p}_{z} [cm]",
                               directories.Vertex_Directory_map["Vertex_dV_1p_Directory"], "03_dVz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     //</editor-fold>
 
     //<editor-fold desc="dV plots (1n)">
-    hPlot1D hdVx_1n = hPlot1D("1n", "", "Vertex corr. dV_{x}", "Vertex correlation dV_{x}=V^{p}_{x}-V^{e}_{x}", "dV_{x} [cm]",
+    hPlot1D hdVx_1n = hPlot1D("1n", "", "Vertex corr. dV^{n}_{x}", "Vertex correlation dV^{n}_{x}=V^{n}_{x}-V^{e}_{x}", "dV^{n}_{x} [cm]",
                               directories.Vertex_Directory_map["Vertex_dV_1n_Directory"], "01_dVx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVy_1n = hPlot1D("1n", "", "Vertex corr. dV_{y}", "Vertex correlation dV_{y}=V^{p}_{y}-V^{e}_{y}", "dV_{y} [cm]",
+    hPlot1D hdVy_1n = hPlot1D("1n", "", "Vertex corr. dV^{n}_{y}", "Vertex correlation dV^{n}_{y}=V^{n}_{y}-V^{e}_{y}", "dV^{n}_{y} [cm]",
                               directories.Vertex_Directory_map["Vertex_dV_1n_Directory"], "02_dVy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVz_1n = hPlot1D("1n", "", "Vertex corr. dV_{z}", "Vertex correlation dV_{z}=V^{p}_{z}-V^{e}_{z}", "dV_{z} [cm]",
+    hPlot1D hdVz_1n = hPlot1D("1n", "", "Vertex corr. dV^{n}_{z}", "Vertex correlation dV^{n}_{z}=V^{n}_{z}-V^{e}_{z}", "dV^{n}_{z} [cm]",
                               directories.Vertex_Directory_map["Vertex_dV_1n_Directory"], "03_dVz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     //</editor-fold>
 
     //<editor-fold desc="dV plots (2p)">
-    hPlot1D hdVx_2p = hPlot1D("2p", "", "Vertex corr. dV_{x}", "Vertex correlation dV_{x}=V^{p}_{x}-V^{e}_{x}", "dV_{x} [cm]",
+    hPlot1D hdVx_2p = hPlot1D("2p", "", "Vertex corr. dV^{p}_{x}", "Vertex correlation dV^{p}_{x}=V^{p}_{x}-V^{e}_{x}", "dV^{p}_{x} [cm]",
                               directories.Vertex_Directory_map["Vertex_dV_2p_Directory"], "01_dVx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVy_2p = hPlot1D("2p", "", "Vertex corr. dV_{y}", "Vertex correlation dV_{y}=V^{p}_{y}-V^{e}_{y}", "dV_{y} [cm]",
+    hPlot1D hdVy_2p = hPlot1D("2p", "", "Vertex corr. dV^{p}_{y}", "Vertex correlation dV^{p}_{y}=V^{p}_{y}-V^{e}_{y}", "dV^{p}_{y} [cm]",
                               directories.Vertex_Directory_map["Vertex_dV_2p_Directory"], "02_dVy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVz_2p = hPlot1D("2p", "", "Vertex corr. dV_{z}", "Vertex correlation dV_{z}=V^{p}_{z}-V^{e}_{z}", "dV_{z} [cm]",
+    hPlot1D hdVz_2p = hPlot1D("2p", "", "Vertex corr. dV^{p}_{z}", "Vertex correlation dV^{p}_{z}=V^{p}_{z}-V^{e}_{z}", "dV^{p}_{z} [cm]",
                               directories.Vertex_Directory_map["Vertex_dV_2p_Directory"], "03_dVz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     //</editor-fold>
 
     //<editor-fold desc="dV plots (pFDpCD)">
-    hPlot1D hdVx_pFDpCD = hPlot1D("pFDpCD", "", "Vertex corr. dV_{x}", "Vertex correlation dV_{x}=V^{p}_{x}-V^{e}_{x}", "dV_{x} [cm]",
+    hPlot1D hdVx_pFDpCD = hPlot1D("pFDpCD", "", "Vertex corr. dV^{p}_{x}", "Vertex correlation dV^{p}_{x}=V^{p}_{x}-V^{e}_{x}", "dV^{p}_{x} [cm]",
                                   directories.Vertex_Directory_map["Vertex_dV_pFDpCD_Directory"], "01_dVx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVy_pFDpCD = hPlot1D("pFDpCD", "", "Vertex corr. dV_{y}", "Vertex correlation dV_{y}=V^{p}_{y}-V^{e}_{y}", "dV_{y} [cm]",
+    hPlot1D hdVy_pFDpCD = hPlot1D("pFDpCD", "", "Vertex corr. dV^{p}_{y}", "Vertex correlation dV^{p}_{y}=V^{p}_{y}-V^{e}_{y}", "dV^{p}_{y} [cm]",
                                   directories.Vertex_Directory_map["Vertex_dV_pFDpCD_Directory"], "02_dVy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVz_pFDpCD = hPlot1D("pFDpCD", "", "Vertex corr. dV_{z}", "Vertex correlation dV_{z}=V^{p}_{z}-V^{e}_{z}", "dV_{z} [cm]",
+    hPlot1D hdVz_pFDpCD = hPlot1D("pFDpCD", "", "Vertex corr. dV^{p}_{z}", "Vertex correlation dV^{p}_{z}=V^{p}_{z}-V^{e}_{z}", "dV^{p}_{z} [cm]",
                                   directories.Vertex_Directory_map["Vertex_dV_pFDpCD_Directory"], "03_dVz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
 
-    hPlot1D hdVx_pFD_pFDpCD = hPlot1D("pFDpCD", "", "dV_{x} of FD proton", "Vertex corr. dV_{x}=V^{pFD}_{x}-V^{e}_{x} of FD proton", "dV_{x} [cm]",
+    hPlot1D hdVx_pFD_pFDpCD = hPlot1D("pFDpCD", "", "dV^{pFD}_{x} of FD proton", "Vertex corr. dV^{pFD}_{x}=V^{pFD}_{x}-V^{e}_{x} of FD proton", "dV^{pFD}_{x} [cm]",
                                       directories.Vertex_Directory_map["Vertex_dV_pFDpCD_Directory"], "04_dVx_pFD", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVy_pFD_pFDpCD = hPlot1D("pFDpCD", "", "dV_{y} of FD proton", "Vertex corr. dV_{y}=V^{pFD}_{y}-V^{e}_{y} of FD proton", "dV_{y} [cm]",
+    hPlot1D hdVy_pFD_pFDpCD = hPlot1D("pFDpCD", "", "dV^{pFD}_{y} of FD proton", "Vertex corr. dV^{pFD}_{y}=V^{pFD}_{y}-V^{e}_{y} of FD proton", "dV^{pFD}_{y} [cm]",
                                       directories.Vertex_Directory_map["Vertex_dV_pFDpCD_Directory"], "05_dVy_pFD", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVz_pFD_pFDpCD = hPlot1D("pFDpCD", "", "dV_{z} of FD proton", "Vertex corr. dV_{z}=V^{pFD}_{z}-V^{e}_{z} of FD proton", "dV_{z} [cm]",
+    hPlot1D hdVz_pFD_pFDpCD = hPlot1D("pFDpCD", "", "dV^{pFD}_{z} of FD proton", "Vertex corr. dV^{pFD}_{z}=V^{pFD}_{z}-V^{e}_{z} of FD proton", "dV^{pFD}_{z} [cm]",
                                       directories.Vertex_Directory_map["Vertex_dV_pFDpCD_Directory"], "06_dVz_pFD", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
 
-    hPlot1D hdVx_pCD_pFDpCD = hPlot1D("pFDpCD", "", "dV_{x} of CD proton", "Vertex corr. dV_{x}=V^{pCD}_{x}-V^{e}_{x} of CD proton", "dV_{x} [cm]",
+    hPlot1D hdVx_pCD_pFDpCD = hPlot1D("pFDpCD", "", "dV^{pCD}_{x} of CD proton", "Vertex corr. dV^{pCD}_{x}=V^{pCD}_{x}-V^{e}_{x} of CD proton", "dV^{pCD}_{x} [cm]",
                                       directories.Vertex_Directory_map["Vertex_dV_pFDpCD_Directory"], "07_dVx_pCD", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVy_pCD_pFDpCD = hPlot1D("pFDpCD", "", "dV_{y} of CD proton", "Vertex corr. dV_{y}=V^{pCD}_{y}-V^{e}_{y} of CD proton", "dV_{y} [cm]",
+    hPlot1D hdVy_pCD_pFDpCD = hPlot1D("pFDpCD", "", "dV^{pCD}_{y} of CD proton", "Vertex corr. dV^{pCD}_{y}=V^{pCD}_{y}-V^{e}_{y} of CD proton", "dV^{pCD}_{y} [cm]",
                                       directories.Vertex_Directory_map["Vertex_dV_pFDpCD_Directory"], "08_dVy_pCD", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVz_pCD_pFDpCD = hPlot1D("pFDpCD", "", "dV_{z} of CD proton", "Vertex corr. dV_{z}=V^{pCD}_{z}-V^{e}_{z} of CD proton", "dV_{z} [cm]",
+    hPlot1D hdVz_pCD_pFDpCD = hPlot1D("pFDpCD", "", "dV^{pCD}_{z} of CD proton", "Vertex corr. dV^{pCD}_{z}=V^{pCD}_{z}-V^{e}_{z} of CD proton", "dV^{pCD}_{z} [cm]",
                                       directories.Vertex_Directory_map["Vertex_dV_pFDpCD_Directory"], "09_dVz_pCD", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     //</editor-fold>
 
@@ -1415,11 +1454,11 @@ void EventAnalyser() {
     hPlot1D hdVz_nFDpCD = hPlot1D("nFDpCD", "", "Vertex corr. dV_{z}", "Vertex correlation dV_{z}=V^{p}_{z}-V^{e}_{z}", "dV_{z} [cm]",
                                   directories.Vertex_Directory_map["Vertex_dV_nFDpCD_Directory"], "03_dVz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
 
-    hPlot1D hdVx_pCD_nFDpCD = hPlot1D("nFDpCD", "", "dV_{x} of CD proton", "Vertex corr. dV_{x}=V^{pCD}_{x}-V^{e}_{x} of CD proton", "dV_{x} [cm]",
+    hPlot1D hdVx_pCD_nFDpCD = hPlot1D("nFDpCD", "", "dV^{pCD}_{x} of CD proton", "Vertex corr. dV^{pCD}_{x}=V^{pCD}_{x}-V^{e}_{x} of CD proton", "dV^{pCD}_{x} [cm]",
                                       directories.Vertex_Directory_map["Vertex_dV_nFDpCD_Directory"], "07_dVx_pCD", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVy_pCD_nFDpCD = hPlot1D("nFDpCD", "", "dV_{y} of CD proton", "Vertex corr. dV_{y}=V^{pCD}_{y}-V^{e}_{y} of CD proton", "dV_{y} [cm]",
+    hPlot1D hdVy_pCD_nFDpCD = hPlot1D("nFDpCD", "", "dV^{pCD}_{y} of CD proton", "Vertex corr. dV^{pCD}_{y}=V^{pCD}_{y}-V^{e}_{y} of CD proton", "dV^{pCD}_{y} [cm]",
                                       directories.Vertex_Directory_map["Vertex_dV_nFDpCD_Directory"], "08_dVy_pCD", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
-    hPlot1D hdVz_pCD_nFDpCD = hPlot1D("nFDpCD", "", "dV_{z} of CD proton", "Vertex corr. dV_{z}=V^{pCD}_{z}-V^{e}_{z} of CD proton", "dV_{z} [cm]",
+    hPlot1D hdVz_pCD_nFDpCD = hPlot1D("nFDpCD", "", "dV^{pCD}_{z} of CD proton", "Vertex corr. dV^{pCD}_{z}=V^{pCD}_{z}-V^{e}_{z} of CD proton", "dV^{pCD}_{z} [cm]",
                                       directories.Vertex_Directory_map["Vertex_dV_nFDpCD_Directory"], "09_dVz_pCD", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     //</editor-fold>
 
@@ -6393,7 +6432,7 @@ void EventAnalyser() {
                                            directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "01a_P_e_truth_1e_cut_FD",
                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_e_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD Electron momentum - ZOOMIN", "FD Electron momentum P^{truth}_{e} - ZOOMIN",
-                                                  "P^{truth}_{e} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+                                                  "P^{truth}_{e} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                   "01a_P_e_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_p_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD Proton momentum", "FD Proton momentum P^{truth}_{p}", "P^{truth}_{p} [GeV/c]",
@@ -6403,10 +6442,10 @@ void EventAnalyser() {
                                            directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02b_P_p_truth_1e_cut_CD",
                                            CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD Proton momentum - ZOOMIN", "FD Proton momentum P^{truth}_{p} - ZOOMIN", "P^{truth}_{p} [GeV/c]",
-                                                  directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02a_P_p_truth_1e_cut_FD_ZOOMIN",
+                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02a_P_p_truth_1e_cut_FD_ZOOMIN",
                                                   0, 1, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD Proton momentum - ZOOMIN", "CD Proton momentum P^{truth}_{p} - ZOOMIN", "P^{truth}_{p} [GeV/c]",
-                                                  directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02b_P_p_truth_1e_cut_CD_ZOOMIN",
+                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02b_P_p_truth_1e_cut_CD_ZOOMIN",
                                                   0, 1, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_n_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD Neutron momentum", "FD Neutron momentum P^{truth}_{n}", "P^{truth}_{n} [GeV/c]",
@@ -6416,10 +6455,10 @@ void EventAnalyser() {
 //                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "03b_P_n_truth_1e_cut_CD",
 //                                           CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_n_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD Neutron momentum - ZOOMIN", "FD Neutron momentum P^{truth}_{n} - ZOOMIN",
-                                                  "P^{truth}_{n} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+                                                  "P^{truth}_{n} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                   "03a_P_n_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
 //    hPlot1D hP_n_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD Neutron momentum - ZOOMIN", "CD Neutron momentum P^{truth}_{n} - ZOOMIN",
-//                                                  "P^{truth}_{n} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+//                                                  "P^{truth}_{n} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
 //                                                  "03b_P_n_truth_1e_cut_CD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_piplus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #pi^{+} momentum", "FD #pi^{+} momentum P^{truth}_{#pi^{+}}", "P^{truth}_{#pi^{+}} [GeV/c]",
@@ -6429,10 +6468,10 @@ void EventAnalyser() {
                                                 directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "04b_P_piplus_truth_1e_cut_CD",
                                                 CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_piplus_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #pi^{+} momentum - ZOOMIN", "FD #pi^{+} momentum P^{truth}_{#pi^{+}} - ZOOMIN",
-                                                       "P^{truth}_{#pi^{+}} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+                                                       "P^{truth}_{#pi^{+}} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                        "04a_P_piplus_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_piplus_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD #pi^{+} momentum - ZOOMIN", "CD #pi^{+} momentum P^{truth}_{#pi^{+}} - ZOOMIN",
-                                                       "P^{truth}_{#pi^{+}} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+                                                       "P^{truth}_{#pi^{+}} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                        "04b_P_piplus_truth_1e_cut_CD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_piminus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #pi^{-} momentum", "FD #pi^{-} momentum P^{truth}_{#pi^{-}}", "P^{truth}_{#pi^{-}} [GeV/c]",
@@ -6442,10 +6481,10 @@ void EventAnalyser() {
                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "05b_P_piminus_truth_1e_cut_CD",
                                                  CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_piminus_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #pi^{-} momentum - ZOOMIN", "FD #pi^{-} momentum P^{truth}_{#pi^{-}} - ZOOMIN",
-                                                        "P^{truth}_{#pi^{-}} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+                                                        "P^{truth}_{#pi^{-}} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                         "05a_P_piminus_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_piminus_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD #pi^{-} momentum - ZOOMIN", "CD #pi^{-} momentum P^{truth}_{#pi^{-}} - ZOOMIN",
-                                                        "P^{truth}_{#pi^{-}} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+                                                        "P^{truth}_{#pi^{-}} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                         "05b_P_piminus_truth_1e_cut_CD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
 
 //    hPlot1D hP_Kplus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD K^{+} momentum", "FD K^{+} momentum P^{truth}_{K^{+}}", "P^{truth}_{K^{+}} [GeV/c]",
@@ -6477,10 +6516,10 @@ void EventAnalyser() {
 //                                            directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "09b_P_ph_truth_1e_cut_CD",
 //                                            CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_ph_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #gamma momentum - ZOOMIN", "FD #gamma momentum P^{truth}_{#gamma} - ZOOMIN",
-                                                   "P^{truth}_{#gamma} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+                                                   "P^{truth}_{#gamma} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                    "09a_P_ph_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
 //    hPlot1D hP_ph_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD #gamma momentum - ZOOMIN", "CD #gamma momentum P^{truth}_{#gamma} - ZOOMIN",
-//                                                   "P^{truth}_{#gamma} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+//                                                   "P^{truth}_{#gamma} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
 //                                                   "09b_P_ph_truth_1e_cut_CD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
@@ -9433,13 +9472,6 @@ void EventAnalyser() {
                 hP_e_reco_1e_cut_FD.hFill(e->getP(), Weight);
                 hP_e_reco_1e_cut_FD_ZOOMIN.hFill(e->getP(), Weight);
             }
-//            if (e->getRegion() == FD) {
-//                hP_e_reco_1e_cut_FD.hFill(e->getP(), Weight);
-//                hP_e_reco_1e_cut_FD_ZOOMIN.hFill(e->getP(), Weight);
-//            } else if (e->getRegion() == CD) {
-//                hP_e_reco_1e_cut_CD.hFill(e->getP(), Weight);
-//                hP_e_reco_1e_cut_CD_ZOOMIN.hFill(e->getP(), Weight);
-//            }
         }
 
         for (auto &p: protons) {
@@ -9452,31 +9484,15 @@ void EventAnalyser() {
             }
         }
 
-//        for (auto &n: neutrons) {
-//            if (n->getRegion() == FD) {
-//                hP_n_reco_1e_cut_FD.hFill(n->getP(), Weight);
-//                hP_n_reco_1e_cut_FD_ZOOMIN.hFill(n->getP(), Weight);
-//            }
-////            if (n->getRegion() == FD) {
-////                hP_n_reco_1e_cut_FD.hFill(n->getP(), Weight);
-////                hP_n_reco_1e_cut_FD_ZOOMIN.hFill(n->getP(), Weight);
-////            } else if (n->getRegion() == CD) {
-////                hP_n_reco_1e_cut_CD.hFill(n->getP(), Weight);
-////                hP_n_reco_1e_cut_CD_ZOOMIN.hFill(n->getP(), Weight);
-////            }
-//        }
         for (int &i: FD_Neutrons) {
             if (allParticles[i]->getRegion() == FD) {
-                hP_n_reco_1e_cut_FD.hFill(allParticles[i]->getP(), Weight);
-                hP_n_reco_1e_cut_FD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
+                bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
+
+                if (NeutronPassVeto_Test) {
+                    hP_n_reco_1e_cut_FD.hFill(allParticles[i]->getP(), Weight);
+                    hP_n_reco_1e_cut_FD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
+                }
             }
-//            if (allParticles[i]->getRegion() == FD) {
-//                hP_n_reco_1e_cut_FD.hFill(allParticles[i]->getP(), Weight);
-//                hP_n_reco_1e_cut_FD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
-//            } else if (allParticles[i]->getRegion() == CD) {
-//                hP_n_reco_1e_cut_CD.hFill(allParticles[i]->getP(), Weight);
-//                hP_n_reco_1e_cut_CD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
-//            }
         }
 
         for (auto &pip: piplus) {
@@ -9499,31 +9515,11 @@ void EventAnalyser() {
             }
         }
 
-//        for (int i = 0; i < allParticles.size(); i++) {
-//            if ((allParticles[i]->par()->getPid() == 22) && (allParticles[i]->getRegion() == FD)) {
-//                hP_ph_reco_1e_cut_FD.hFill(allParticles[i]->getP(), Weight);
-//                hP_ph_reco_1e_cut_FD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
-//            }
-////            if ((allParticles[i]->par()->getPid() == 22) && (allParticles[i]->getRegion() == FD)) {
-////                hP_ph_reco_1e_cut_FD.hFill(allParticles[i]->getP(), Weight);
-////                hP_ph_reco_1e_cut_FD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
-////            } else if ((allParticles[i]->par()->getPid() == 22) && (allParticles[i]->getRegion() == CD)) {
-////                hP_ph_reco_1e_cut_CD.hFill(allParticles[i]->getP(), Weight);
-////                hP_ph_reco_1e_cut_CD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
-////            }
-//        }
         for (int &i: FD_Photons) {
             if (allParticles[i]->getRegion() == FD) {
                 hP_ph_reco_1e_cut_FD.hFill(allParticles[i]->getP(), Weight);
                 hP_ph_reco_1e_cut_FD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
             }
-//            if (allParticles[i]->getRegion() == FD) {
-//                hP_ph_reco_1e_cut_FD.hFill(allParticles[i]->getP(), Weight);
-//                hP_ph_reco_1e_cut_FD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
-//            } else if (allParticles[i]->getRegion() == CD) {
-//                hP_ph_reco_1e_cut_CD.hFill(allParticles[i]->getP(), Weight);
-//                hP_ph_reco_1e_cut_CD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
-//            }
         }
         //</editor-fold>
 
@@ -19087,7 +19083,15 @@ void EventAnalyser() {
     myLogFile << "Plot setup\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n\n";
+    myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n";
+    myLogFile << "debug_plots = " << BoolToString(debug_plots) << "\n\n";
+
+    myLogFile << "Log_scale_Vx_plots = " << BoolToString(Log_scale_Vx_plots) << "\n";
+    myLogFile << "Log_scale_Vy_plots = " << BoolToString(Log_scale_Vy_plots) << "\n";
+    myLogFile << "Log_scale_Vz_plots = " << BoolToString(Log_scale_Vz_plots) << "\n";
+    myLogFile << "Log_scale_dVx_plots = " << BoolToString(Log_scale_dVx_plots) << "\n";
+    myLogFile << "Log_scale_dVy_plots = " << BoolToString(Log_scale_dVy_plots) << "\n";
+    myLogFile << "Log_scale_dVz_plots = " << BoolToString(Log_scale_dVz_plots) << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Calculation setup">
