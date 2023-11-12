@@ -57,7 +57,7 @@ using namespace std;
 
 //TODO: move this into a class with the proper functions
 
-const bool Equi_z_2D = false;
+const bool Equi_z_2D = true;
 
 // DrawAndSaveFSRatio in 1D plots ---------------------------------------------------------------------------------------------------------------------------------------
 
