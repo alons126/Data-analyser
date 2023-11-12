@@ -134,6 +134,7 @@ void EventAnalyser() {
     bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
+
     const bool Enable_FD_photons = false; // keep as false to decrease RES & DIS
     const bool Enable_FD_neutrons = true; // keep as false to increse eff. plots
     const bool Count_FD_neurton_and_photon_hits = true;
@@ -469,18 +470,11 @@ void EventAnalyser() {
     /* DC edge cuts (fiducial cuts ,electrons only, FD) */
     DSCuts DC_edge_cuts;
 
-    /* Momentum thresholds */
+    //<editor-fold desc="Reco particles momentum thresholds">
+    /* Momentum thresholds (declarations) */
     DSCuts e_mom_th, p_mom_th, n_mom_th, pip_mom_th, pim_mom_th, ph_mom_th;
 
-    //<editor-fold desc="Momentum thresholds definition">
-//    /* If we don't enforce TL cuts, use momentum thresholds on nucleons. */
-//    e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
-//    p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.4, 9999);
-//    n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.4, 9999);
-//    pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-//    pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-//    ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
-    if (limless_mom_eff_plots) {
+    if (Rec_wTL_ES || limless_mom_eff_plots) {
         /* If we enforce TL cuts, don't use momentum thresholds on nucleons. */
         e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
         p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
@@ -18952,10 +18946,10 @@ void EventAnalyser() {
 
     myLogFile << "calculate_truth_level = " << BoolToString(calculate_truth_level) << "\n";
     myLogFile << "fill_TL_plots = " << BoolToString(fill_TL_plots) << "\n";
-    myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n";
-    myLogFile << "Enable_FD_photons = " << BoolToString(Enable_FD_photons) << "\n\n";
+    myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n\n";
 
-    myLogFile << "limless_mom_eff_plots = " << BoolToString(limless_mom_eff_plots) << "\n";
+    myLogFile << "limless_mom_eff_plots = " << BoolToString(limless_mom_eff_plots) << "\n\n";
+
     myLogFile << "Enable_FD_photons = " << BoolToString(Enable_FD_photons) << "\n";
     myLogFile << "Enable_FD_neutrons = " << BoolToString(Enable_FD_neutrons) << "\n";
     myLogFile << "Count_FD_neurton_and_photon_hits = " << BoolToString(Count_FD_neurton_and_photon_hits) << "\n";
