@@ -76,7 +76,8 @@ std::string AnalyseFileSample = "C12_G18_02a_00_000_Q204_598636MeV";            
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 //std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_9_torus-1.0.hipo"; // one file
-std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_5*.hipo"; // 111 file
+//std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_5*.hipo"; // 111 files
+std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_02a_00_000_Q204_598636MeV_2*.hipo"; // 512 files
 //</editor-fold>
 
 //TODO: figure out with Adi if I should keep this sample or generate a new one with higer Q2
