@@ -6,7 +6,9 @@
 std::string ExperimentParameters::ConfigureSampleName(const std::string &AnalyseFilePath, const std::string &AnalyseFileSample) {
     std::string sName = "unknown_sample_598636MeV"; // to set beamE = 5.98636 by default;
 
-    if (AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") { // Local samples
+    if ((AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") //Internal data drive
+        || (AnalyseFilePath == "mnt/g/e4nu/hipo_data_files")) //External drive
+    { // Local samples
         LocalSample = true;
 
         //<editor-fold desc="Local samples">
@@ -28,6 +30,9 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
         } else if (AnalyseFileSample == "C12_G18_02a_00_000_Q204_598636MeV") {
             BeamAt6GeV = SimulationSample = true;
             sName = "C12_simulation_G18_Q204_6GeV";
+        } else if (AnalyseFileSample == "C12x4_G18_02a_00_000_Q204_598636MeV") {
+            BeamAt6GeV = SimulationSample = true;
+            sName = "C12x4_simulation_G18_Q204_6GeV";
         }
         //</editor-fold>
 

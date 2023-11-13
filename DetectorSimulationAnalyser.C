@@ -180,13 +180,13 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    const bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    const bool apply_cuts = false; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -206,10 +206,10 @@ void EventAnalyser() {
     bool apply_Electron_beta_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
@@ -717,11 +717,9 @@ void EventAnalyser() {
     bool wider_margin = true;
     bool debug_plots = false; // Print out clas12ana debugging plots
 
-    bool Log_scale_Vx_plots = false;
-    bool Log_scale_Vy_plots = false;
+    bool Log_scale_Vx_plots = false, Log_scale_Vy_plots = false;
     bool Log_scale_Vz_plots = true;
-    bool Log_scale_dVx_plots = false;
-    bool Log_scale_dVy_plots = false;
+    bool Log_scale_dVx_plots = false, Log_scale_dVy_plots = false;
     bool Log_scale_dVz_plots = true;
 
     //<editor-fold desc="Auto-disable plot selector variables">
