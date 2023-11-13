@@ -180,7 +180,7 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    const bool apply_cuts = false; // master ON/OFF switch for applying cuts
+    const bool apply_cuts = true; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
@@ -211,7 +211,7 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
+    bool apply_nBeta_fit_cuts = false;        // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -335,6 +335,12 @@ void EventAnalyser() {
         } else {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
+//                Efficiency_Status = "Eff2_Limless";
+//                Efficiency_Status = "Eff2_originalFull";
+//                Efficiency_Status = "Eff2_original111test6noFC";
+//                Efficiency_Status = "Eff2_original111test5";
+//                Efficiency_Status = "Eff2_original111noFC";
+//                Efficiency_Status = "Eff2";
             } else {
                 Efficiency_Status = "Eff1";
             }
@@ -474,8 +480,10 @@ void EventAnalyser() {
     /* Momentum thresholds (declarations) */
     DSCuts e_mom_th, p_mom_th, n_mom_th, pip_mom_th, pim_mom_th, ph_mom_th;
 
+//    if (limless_mom_eff_plots) {
     if (Rec_wTL_ES || limless_mom_eff_plots) {
         /* If we enforce TL cuts, don't use momentum thresholds on nucleons. */
+        //TODO: confirm with Adi if eff plots should be limless
         e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
         p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
         n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, -9999, 9999);
@@ -697,8 +705,8 @@ void EventAnalyser() {
 //    /* Efficiency plots */
 //    bool Efficiency_plots = true;
 ////    bool Efficiency_plots = false;
-////    bool TL_after_Acceptance_Maps_plots = true;
-//    bool TL_after_Acceptance_Maps_plots = false;
+//    bool TL_after_Acceptance_Maps_plots = true;
+////    bool TL_after_Acceptance_Maps_plots = false;
 //
 //    /* Resolution plots */
 ////    bool AMaps_plots = true;
@@ -8245,11 +8253,16 @@ void EventAnalyser() {
             /* Particle index vectors (for particles above momentum threshold) */
             vector<int> TL_Electron_mom_ind, TL_Neutrons_mom_ind, TL_Protons_mom_ind, TL_piplus_mom_ind, TL_piminus_mom_ind, TL_pizero_mom_ind, TL_Photons_mom_ind;
 
-            /* Particle index vectors (for FD particles above momentum threshold) */
+            /* Particle index vectors (for particles above momentum threshold) */
             vector<int> TL_ElectronFD_mom_ind, TL_NeutronsFD_mom_ind, TL_ProtonsFD_mom_ind, TL_ProtonsCD_mom_ind, TL_pi0FD_mom_ind, TL_PhotonsFD_mom_ind;
+
+            /* Particle index vectors (for FD particles above momentum threshold and within fiducial cuts (wFC)) */
+            vector<int> TL_ElectronFD_wFC_mom_ind, TL_NeutronsFD_wFC_mom_ind, TL_ProtonsFD_wFC_mom_ind;
 
             double TL_P_nFD_max = -1, TL_P_nFD_mom_max = -1;
             int TL_NeutronsFD_ind_max = -1, TL_NeutronsFD_ind_mom_max = -1;
+            double Leading_TL_FDNeutron_Momentum, Leading_TL_FDNeutron_Theta, Leading_TL_FDNeutron_Phi;
+            bool Leading_Neutron_inFD_wFC;
 
             for (Int_t i = 0; i < Ngen; i++) {
                 mcpbank->setEntry(i);
@@ -8273,9 +8286,13 @@ void EventAnalyser() {
 
                     TL_Electron_ind.push_back(i);
 
-                    if (e_inFD) {
+                    if (inFD) {
                         if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) &&
-                            (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) { TL_ElectronFD_mom_ind.push_back(i); }
+                            (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) {
+                            TL_ElectronFD_mom_ind.push_back(i);
+
+                            if (e_inFD) { TL_ElectronFD_wFC_mom_ind.push_back(i); }
+                        }
 
                         TL_ElectronFD_ind.push_back(i);
                     }
@@ -8285,7 +8302,7 @@ void EventAnalyser() {
 
                     TL_Neutrons_ind.push_back(i);
 
-                    if (n_inFD) {
+                    if (inFD) {
                         if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
                             (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
                             TL_NeutronsFD_mom_ind.push_back(i);
@@ -8294,6 +8311,8 @@ void EventAnalyser() {
                                 TL_P_nFD_mom_max = Particle_TL_Momentum;
                                 TL_NeutronsFD_ind_mom_max = i;
                             }
+
+                            if (n_inFD) { TL_NeutronsFD_wFC_mom_ind.push_back(i); }
                         }
 
                         TL_NeutronsFD_ind.push_back(i);
@@ -8309,9 +8328,13 @@ void EventAnalyser() {
 
                     TL_Protons_ind.push_back(i);
 
-                    if (p_inFD) {
+                    if (inFD) {
                         if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
-                            (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_ProtonsFD_mom_ind.push_back(i); }
+                            (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) {
+                            TL_ProtonsFD_mom_ind.push_back(i);
+
+                            if (p_inFD) { TL_ProtonsFD_wFC_mom_ind.push_back(i); }
+                        }
 
                         TL_ProtonsFD_ind.push_back(i);
                     } else if (inCD) {
@@ -8358,11 +8381,29 @@ void EventAnalyser() {
                     TL_OtherPart_ind.push_back(i);
                 }
             }
+
+            //<editor-fold desc="Check that leading FD neutron is within FC">
+            if (TL_NeutronsFD_ind_mom_max != -1) {
+                mcpbank->setEntry(TL_NeutronsFD_ind_mom_max);
+
+                Leading_TL_FDNeutron_Momentum = rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz());
+                Leading_TL_FDNeutron_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
+                Leading_TL_FDNeutron_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
+
+                Leading_Neutron_inFD_wFC = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Neutron",
+                                                             Leading_TL_FDNeutron_Momentum, Leading_TL_FDNeutron_Theta, Leading_TL_FDNeutron_Phi);
+            } else {
+                Leading_Neutron_inFD_wFC = false;
+            }
+            //</editor-fold>
+
             //</editor-fold>
 
             //<editor-fold desc="Event selection for TL plots">
             /* Setting up basic TL event selection */
-            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1); // One id. FD electron above momentum threshold
+            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1 &&
+                                              TL_ElectronFD_mom_ind.size() == TL_ElectronFD_wFC_mom_ind.size());     // One id. FD electron above momentum threshold
+//            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size());    // One id. FD electron above momentum threshold
             //TODO: Ask Adi if I should split charged pions to CD and FD?
             bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                   // No id. cPions above momentum threshold
             //TODO: Ask Adi if I should split other particles to CD and FD?
@@ -8373,34 +8414,42 @@ void EventAnalyser() {
 
             /* Setting up 1p TL event selection */
             // 1p = one id. FD proton (any or no FD neutrons, according to the value of Enable_FD_neutrons):
-            bool TL_FD_Neutrons_1p = (Enable_FD_neutrons || (TL_NeutronsFD_mom_ind.size() == 0)); // no id. FD neutrons for Enable_FD_neutrons = false
+            bool TL_FD_Neutrons_1p = (Enable_FD_neutrons || (TL_NeutronsFD_mom_ind.size() == 0));                    // no id. FD neutrons for Enable_FD_neutrons = false
             bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1) &&
                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-            TL_Event_Selection_1p = (TL_Basic_ES && TL_FD_Neutrons_1p && one_FDproton_1p);
+            bool FDproton_wFC_1p = (TL_ProtonsFD_mom_ind.size() == TL_ProtonsFD_wFC_mom_ind.size());                 // id. FD proton is within fiducial cuts (wFC)
+            TL_Event_Selection_1p = (TL_Basic_ES && TL_FD_Neutrons_1p && one_FDproton_1p && FDproton_wFC_1p);
+//            TL_Event_Selection_1p = (TL_Basic_ES && TL_FD_Neutrons_1p && one_FDproton_1p);
 
             /* Setting up 1n TL event selection */
             // 1n = any number of id. FD neutron (we look at the leading nFD) & no id. protons:
-            bool one_FDNeutron_1n = ((TL_NeutronsFD_ind_mom_max != -1) && // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
+            bool one_FDNeutron_1n = ((TL_NeutronsFD_ind_mom_max != -1) &&                                     // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
                                      (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool no_protons_1n = ((TL_ProtonsCD_mom_ind.size() == 0) && (TL_ProtonsFD_mom_ind.size() == 0));
-            TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);
+            bool FDNeutron_wFC_1p = Leading_Neutron_inFD_wFC;                                                 // leading nFD is within fiducial cuts (wFC)
+            TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n && FDNeutron_wFC_1p);
+//            TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);
 
             /* Setting up pFDpCD TL event selection */
             // pFDpCD = One id. FD proton & one id. CD proton:
             bool one_CDproton_pFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
             bool one_FDproton_pFDpCD = ((TL_ProtonsFD_mom_ind.size() == 1) &&
                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-            bool TL_FD_Neutrons_pFDpCD = (Enable_FD_neutrons || (TL_NeutronsFD_mom_ind.size() == 0)); // no id. FD neutrons for Enable_FD_neutrons = false
-            TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_CDproton_pFDpCD && one_FDproton_pFDpCD && TL_FD_Neutrons_pFDpCD);
+            bool TL_FD_Neutrons_pFDpCD = (Enable_FD_neutrons || (TL_NeutronsFD_mom_ind.size() == 0));                // no id. FD neutrons for Enable_FD_neutrons = false
+            bool FDproton_wFC_pFDpCD = (TL_ProtonsFD_mom_ind.size() == TL_ProtonsFD_wFC_mom_ind.size());             // id. FD proton is within fiducial cuts (wFC)
+            TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_CDproton_pFDpCD && one_FDproton_pFDpCD && TL_FD_Neutrons_pFDpCD && FDproton_wFC_pFDpCD);
+//            TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_CDproton_pFDpCD && one_FDproton_pFDpCD && TL_FD_Neutrons_pFDpCD);
 
             /* Setting up nFDpCD TL event selection */
             // nFDpCD = any number of id. FD neutron (we look at the leading nFD) & one id. CD proton:
             bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
-            bool one_FDNeutron_nFDpCD = ((TL_NeutronsFD_ind_mom_max != -1) && // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
+            bool one_FDNeutron_nFDpCD = ((TL_NeutronsFD_ind_mom_max != -1) &&                                 // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
                                          (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool one_proton_nFDpCD = (TL_Protons_mom_ind.size() == 1);
             bool no_FDproton_nFDpCD = (TL_ProtonsFD_mom_ind.size() == 0);
-            TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD);
+            bool FDNeutron_wFC_nFDpCD = Leading_Neutron_inFD_wFC;                                             // leading nFD is within fiducial cuts (wFC)
+            TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && one_FDNeutron_nFDpCD && one_proton_nFDpCD && FDNeutron_wFC_nFDpCD);
+//            TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD);
             //</editor-fold>
 
             //<editor-fold desc="Fill TL histograms and AMaps">
@@ -8511,11 +8560,6 @@ void EventAnalyser() {
                                 hP_n_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
                                 hP_n_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
                             }
-
-//                            if (inCD) {
-//                                hP_n_truth_1e_cut_CD.hFill(Particle_TL_Momentum, Weight);
-//                                hP_n_truth_1e_cut_CD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
-//                            }
                         }
 
                         if (TL_Event_Selection_1p) {
@@ -8952,11 +8996,6 @@ void EventAnalyser() {
                                 hP_ph_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
                                 hP_ph_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
                             }
-
-//                            if (inCD) {
-//                                hP_ph_truth_1e_cut_CD.hFill(Particle_TL_Momentum, Weight);
-//                                hP_ph_truth_1e_cut_CD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
-//                            }
                         }
 
                         if (TL_Event_Selection_1p) {
