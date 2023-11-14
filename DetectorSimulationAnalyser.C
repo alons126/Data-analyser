@@ -334,7 +334,7 @@ void EventAnalyser() {
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
-                Efficiency_Status = "Eff2";
+                Efficiency_Status = "Eff2_512_newES";
             } else {
                 Efficiency_Status = "Eff1";
             }
@@ -511,7 +511,15 @@ void EventAnalyser() {
     DSCuts TL_n_mom_cuts = DSCuts("Momentum", "", "Neutrons", "", 0, n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut());;
     DSCuts TL_p_mom_cuts = DSCuts("Momentum", "", "Proton", "", 0, p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut());
     DSCuts TL_pip_mom_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut());
-    DSCuts TL_pim_mom_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut());
+//    DSCuts TL_FDpip_mom_cuts = DSCuts("Momentum", "FD", "Piplus", "", 0, 0.4, pip_mom_th.GetUpperCut());
+//    DSCuts TL_CDpip_mom_cuts = DSCuts("Momentum", "CD", "Piplus", "", 0, 0.2, pip_mom_th.GetUpperCut());
+    DSCuts TL_FDpip_mom_cuts = DSCuts("Momentum", "FD", "Piplus", "", 0, pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut());
+    DSCuts TL_CDpip_mom_cuts = DSCuts("Momentum", "CD", "Piplus", "", 0, pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut());
+    DSCuts TL_pim_mom_cuts = DSCuts("Momentum", "", "Piminus", "", 0, pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut());
+//    DSCuts TL_FDpim_mom_cuts = DSCuts("Momentum", "FD", "Piminus", "", 0, 0.5, pim_mom_th.GetUpperCut());
+//    DSCuts TL_CDpim_mom_cuts = DSCuts("Momentum", "CD", "Piminus", "", 0, 0.2, pim_mom_th.GetUpperCut());
+    DSCuts TL_FDpim_mom_cuts = DSCuts("Momentum", "FD", "Piminus", "", 0, pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut());
+    DSCuts TL_CDpim_mom_cuts = DSCuts("Momentum", "CD", "Piminus", "", 0, pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut());
     DSCuts TL_pi0_mom_cuts = DSCuts("Momentum", "", "Pizero", "", 0, GetPi0MomTh(ph_mom_th), 9999);
     DSCuts TL_ph_mom_cuts = DSCuts("Momentum", "", "Photons", "", 0, ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut());
 
@@ -7134,23 +7142,23 @@ void EventAnalyser() {
                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03_Phi_p_BC_truth_1n",
                                          Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_p_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{p} AC", "FD #phi^{truth}_{p} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03FD_Phi_p_AC_truth_1n_FD",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03FD_Phi_p_AC_truth_1n_FD",
+                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_p_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{p} BC", "FD #phi^{truth}_{p} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03FD_Phi_p_BC_truth_1n_FD",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03FD_Phi_p_BC_truth_1n_FD",
+                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_p_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{p} AC", "CD #phi^{truth}_{p} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03CD_Phi_p_AC_truth_1n_CD",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03CD_Phi_p_AC_truth_1n_CD",
+                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_p_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{p} BC", "CD #phi^{truth}_{p} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03CD_Phi_p_BC_truth_1n_CD",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03CD_Phi_p_BC_truth_1n_CD",
+                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_p_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{p} AC", "undet #phi^{truth}_{p} of Outgoing Proton AC",
-                                                 "#phi^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                 "03undet_Phi_p_AC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                               "#phi^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                               "03undet_Phi_p_AC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_p_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{p} BC", "undet #phi^{truth}_{p} of Outgoing Proton BC",
-                                                 "#phi^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                 "03undet_Phi_p_BC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                               "#phi^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                               "03undet_Phi_p_BC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_pip_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC", "#phi^{truth}_{#pi^{+}} [Deg]",
                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "04_Phi_piplus_AC_truth_1n",
@@ -7159,23 +7167,23 @@ void EventAnalyser() {
                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "04_Phi_piplus_BC_truth_1n",
                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pip_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{#pi^{+}} AC", "FD #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                                "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                "04FD_Phi_piplus_AC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                              "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "04FD_Phi_piplus_AC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pip_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{#pi^{+}} BC", "FD #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                                "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                "04FD_Phi_piplus_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                              "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "04FD_Phi_piplus_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pip_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{#pi^{+}} AC", "CD #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                                "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                "04CD_Phi_piplus_AC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                              "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "04CD_Phi_piplus_AC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pip_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{#pi^{+}} BC", "CD #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                                "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                "04CD_Phi_piplus_BC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                              "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "04CD_Phi_piplus_BC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pip_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{+}} AC", "undet #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                                   "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                   "04undet_Phi_piplus_AC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                                 "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                                 "04undet_Phi_piplus_AC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pip_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{+}} BC", "undet #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                                   "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                   "04undet_Phi_piplus_BC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                                 "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                                 "04undet_Phi_piplus_BC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_pim_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC", "#phi^{truth}_{#pi^{-}} [Deg]",
                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "05_Phi_piminus_AC_truth_1n",
@@ -7184,23 +7192,23 @@ void EventAnalyser() {
                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "05_Phi_piminus_BC_truth_1n",
                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pim_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{#pi^{-}} AC", "FD #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                                "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                "05FD_Phi_piminus_AC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                              "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "05FD_Phi_piminus_AC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pim_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{#pi^{-}} BC", "FD #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                                "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                "05FD_Phi_piminus_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                              "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "05FD_Phi_piminus_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pim_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{#pi^{-}} AC", "CD #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                                "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                "05CD_Phi_piminus_AC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                              "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "05CD_Phi_piminus_AC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pim_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{#pi^{-}} BC", "CD #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                                "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                "05CD_Phi_piminus_BC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                              "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "05CD_Phi_piminus_BC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pim_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{-}} AC", "undet #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                                   "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                   "05undet_Phi_piminus_AC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                                 "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                                 "05undet_Phi_piminus_AC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pim_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{-}} BC", "undet #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                                   "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                                   "05undet_Phi_piminus_BC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                                 "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                                 "05undet_Phi_piminus_BC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_pi0_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC", "#phi^{truth}_{#pi^{0}} [Deg]",
                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "06_Phi_pi0_AC_truth_1n",
@@ -8398,14 +8406,17 @@ void EventAnalyser() {
             /* Particle index vectors */
             vector<int> TL_Electron_ind, TL_Neutrons_ind, TL_Protons_ind, TL_piplus_ind, TL_piminus_ind, TL_pizero_ind, TL_Photons_ind, TL_OtherPart_ind;
 
-            /* Particle index vectors (for FD particles) */
-            vector<int> TL_ElectronFD_ind, TL_NeutronsFD_ind, TL_ProtonsFD_ind, TL_ProtonsCD_ind, TL_pi0FD_ind, TL_PhotonsFD_ind;
+            /* Particle index vectors (FD & CD) */
+            vector<int> TL_ElectronFD_ind, TL_NeutronsFD_ind, TL_ProtonsFD_ind, TL_piplusFD_ind, TL_piminusFD_ind, TL_pi0FD_ind, TL_PhotonsFD_ind;
+            vector<int> TL_ProtonsCD_ind, TL_piplusCD_ind, TL_piminusCD_ind;
 
             /* Particle index vectors (for particles above momentum threshold) */
             vector<int> TL_Electron_mom_ind, TL_Neutrons_mom_ind, TL_Protons_mom_ind, TL_piplus_mom_ind, TL_piminus_mom_ind, TL_pizero_mom_ind, TL_Photons_mom_ind;
 
-            /* Particle index vectors (for particles above momentum threshold) */
-            vector<int> TL_ElectronFD_mom_ind, TL_NeutronsFD_mom_ind, TL_ProtonsFD_mom_ind, TL_ProtonsCD_mom_ind, TL_pi0FD_mom_ind, TL_PhotonsFD_mom_ind;
+            /* Particle index vectors (for particles above momentum threshold, FD & CD) */
+            vector<int> TL_ElectronFD_mom_ind, TL_NeutronsFD_mom_ind, TL_NeutronsFD_max_mom_ind, TL_pi0FD_mom_ind, TL_PhotonsFD_mom_ind;
+            vector<int> TL_ProtonsFD_mom_ind, TL_piplusFD_mom_ind, TL_piminusFD_mom_ind;
+            vector<int> TL_ProtonsCD_mom_ind, TL_piplusCD_mom_ind, TL_piminusCD_mom_ind;
 
             /* Particle index vectors (for FD particles above momentum threshold and within fiducial cuts (wFC)) */
             vector<int> TL_ElectronFD_wFC_mom_ind, TL_NeutronsFD_wFC_mom_ind, TL_ProtonsFD_wFC_mom_ind;
@@ -8499,11 +8510,35 @@ void EventAnalyser() {
                         (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) { TL_piplus_mom_ind.push_back(i); }
 
                     TL_piplus_ind.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_FDpip_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_FDpip_mom_cuts.GetUpperCut())) { TL_piplusFD_mom_ind.push_back(i); }
+
+                        TL_piplusFD_ind.push_back(i);
+                    } else if (inCD) {
+                        if ((Particle_TL_Momentum >= TL_CDpip_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_CDpip_mom_cuts.GetUpperCut())) { TL_piplusCD_mom_ind.push_back(i); }
+
+                        TL_piplusCD_ind.push_back(i);
+                    }
                 } else if (particlePDGtmp == -211) {
                     if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) &&
                         (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) { TL_piminus_mom_ind.push_back(i); }
 
                     TL_piminus_ind.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_FDpim_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_FDpim_mom_cuts.GetUpperCut())) { TL_piminusFD_mom_ind.push_back(i); }
+
+                        TL_piminusFD_ind.push_back(i);
+                    } else if (inCD) {
+                        if ((Particle_TL_Momentum >= TL_CDpim_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_CDpim_mom_cuts.GetUpperCut())) { TL_piminusCD_mom_ind.push_back(i); }
+
+                        TL_piminusCD_ind.push_back(i);
+                    }
                 } else if (particlePDGtmp == 111) {
                     if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) &&
                         (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pizero_mom_ind.push_back(i); }
@@ -8533,6 +8568,9 @@ void EventAnalyser() {
                 }
             }
 
+            //<editor-fold desc="Handling leading FD neutron">
+            if (TL_NeutronsFD_ind_mom_max != -1) { TL_NeutronsFD_max_mom_ind.push_back(TL_NeutronsFD_ind_mom_max); }
+
             //<editor-fold desc="Check that leading FD neutron is within FC">
             if (TL_NeutronsFD_ind_mom_max != -1) {
                 mcpbank->setEntry(TL_NeutronsFD_ind_mom_max);
@@ -8550,42 +8588,58 @@ void EventAnalyser() {
 
             //</editor-fold>
 
+            //</editor-fold>
+
             //<editor-fold desc="Event selection for TL plots">
-            /* Setting up basic TL event selection for AMaps */
+
+            //<editor-fold desc="Setting up event selection for AMaps">
             bool TL_Event_Selection_1e_cut_AMaps = (TL_Electron_mom_ind.size() == 1
                                                     && TL_ElectronFD_mom_ind.size() == 1);                                // One id. FD electron above momentum threshold
+            //</editor-fold>
 
-            /* Setting up basic TL event selection */
-            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1 &&
+            //<editor-fold desc="Setting up basic TL event selection">
+            bool TL_Event_Selection_1e_cut = (TL_ElectronFD_mom_ind.size() == 1 &&
                                               TL_ElectronFD_mom_ind.size() == TL_ElectronFD_wFC_mom_ind.size());     // One id. FD electron above momentum threshold
+//            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1 &&
+//                                              TL_ElectronFD_mom_ind.size() == TL_ElectronFD_wFC_mom_ind.size());     // One id. FD electron above momentum threshold
 //            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1);    // One id. FD electron above momentum threshold
             //TODO: Ask Adi if I should split charged pions to CD and FD?
-            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                   // No id. cPions above momentum threshold
-            //TODO: Ask Adi if I should split other particles to CD and FD?
+            bool no_TL_pip = (TL_piplusFD_mom_ind.size() == 0 && TL_piplusCD_mom_ind.size() == 0);                   // No pi+ above momentum threshold (CD & FD)
+            bool no_TL_pim = (TL_piminusFD_mom_ind.size() == 0 && TL_piminusCD_mom_ind.size() == 0);                 // No pi- above momentum threshold (CD & FD)
+            bool no_TL_cPions = (no_TL_pip && no_TL_pim);                                                            // No id. cPions above momentum threshold
+//            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                 // No id. cPions above momentum threshold
             bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                   // No other part. above momentum threshold
             bool no_TL_FDpi0 = (Enable_FD_photons || (TL_pi0FD_mom_ind.size() == 0));                                // No id. pi0 in the FD above momentum threshold
             bool no_TL_FDPhotons = (Enable_FD_photons || (TL_PhotonsFD_mom_ind.size() == 0));                        // No id. photons in the FD above momentum threshold
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDpi0 && no_TL_FDPhotons);
+            //</editor-fold>
 
-            /* Setting up 1p TL event selection */
+            //<editor-fold desc="Setting up 1p TL event selection">
             // 1p = one id. FD proton (any or no FD neutrons, according to the value of Enable_FD_neutrons):
             bool TL_FD_Neutrons_1p = (Enable_FD_neutrons || (TL_NeutronsFD_mom_ind.size() == 0));                    // no id. FD neutrons for Enable_FD_neutrons = false
-            bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1) &&
+            bool no_CDproton_1p = (TL_ProtonsCD_mom_ind.size() == 0);
+            bool one_FDproton_1p = ((TL_ProtonsFD_mom_ind.size() == 1) &&
                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+//            bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1) &&
+//                                    (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool FDproton_wFC_1p = (TL_ProtonsFD_mom_ind.size() == TL_ProtonsFD_wFC_mom_ind.size());                 // id. FD proton is within fiducial cuts (wFC)
-            TL_Event_Selection_1p = (TL_Basic_ES && TL_FD_Neutrons_1p && one_FDproton_1p && FDproton_wFC_1p);
+            TL_Event_Selection_1p = (TL_Basic_ES && TL_FD_Neutrons_1p && no_CDproton_1p && one_FDproton_1p && FDproton_wFC_1p);
 //            TL_Event_Selection_1p = (TL_Basic_ES && TL_FD_Neutrons_1p && one_FDproton_1p);
+            //</editor-fold>
 
-            /* Setting up 1n TL event selection */
+            //<editor-fold desc="Setting up 1n TL event selection">
             // 1n = any number of id. FD neutron (we look at the leading nFD) & no id. protons:
             bool one_FDNeutron_1n = ((TL_NeutronsFD_ind_mom_max != -1) &&                                     // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
-                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_max_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+//            bool one_FDNeutron_1n = ((TL_NeutronsFD_ind_mom_max != -1) &&                                     // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
+//                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool no_protons_1n = ((TL_ProtonsCD_mom_ind.size() == 0) && (TL_ProtonsFD_mom_ind.size() == 0));
             bool FDNeutron_wFC_1p = Leading_Neutron_inFD_wFC;                                                 // leading nFD is within fiducial cuts (wFC)
             TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n && FDNeutron_wFC_1p);
 //            TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);
+            //</editor-fold>
 
-            /* Setting up pFDpCD TL event selection */
+            //<editor-fold desc="Setting up pFDpCD TL event selection">
             // pFDpCD = One id. FD proton & one id. CD proton:
             bool one_CDproton_pFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
             bool one_FDproton_pFDpCD = ((TL_ProtonsFD_mom_ind.size() == 1) &&
@@ -8594,17 +8648,21 @@ void EventAnalyser() {
             bool FDproton_wFC_pFDpCD = (TL_ProtonsFD_mom_ind.size() == TL_ProtonsFD_wFC_mom_ind.size());             // id. FD proton is within fiducial cuts (wFC)
             TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_CDproton_pFDpCD && one_FDproton_pFDpCD && TL_FD_Neutrons_pFDpCD && FDproton_wFC_pFDpCD);
 //            TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_CDproton_pFDpCD && one_FDproton_pFDpCD && TL_FD_Neutrons_pFDpCD);
+            //</editor-fold>
 
-            /* Setting up nFDpCD TL event selection */
+            //<editor-fold desc="Setting up nFDpCD TL event selection">
             // nFDpCD = any number of id. FD neutron (we look at the leading nFD) & one id. CD proton:
             bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
-            bool one_FDNeutron_nFDpCD = ((TL_NeutronsFD_ind_mom_max != -1) &&                                 // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
-                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-            bool one_proton_nFDpCD = (TL_Protons_mom_ind.size() == 1);
             bool no_FDproton_nFDpCD = (TL_ProtonsFD_mom_ind.size() == 0);
+            bool one_FDNeutron_nFDpCD = ((TL_NeutronsFD_ind_mom_max != -1) &&                                 // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
+                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_max_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+//            bool one_FDNeutron_nFDpCD = ((TL_NeutronsFD_ind_mom_max != -1) &&                                 // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
+//                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool FDNeutron_wFC_nFDpCD = Leading_Neutron_inFD_wFC;                                             // leading nFD is within fiducial cuts (wFC)
-            TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && one_FDNeutron_nFDpCD && one_proton_nFDpCD && FDNeutron_wFC_nFDpCD);
+            TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && no_FDproton_nFDpCD && one_FDNeutron_nFDpCD && FDNeutron_wFC_nFDpCD);
 //            TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD);
+            //</editor-fold>
+
             //</editor-fold>
 
             //<editor-fold desc="Fill TL histograms and AMaps">
