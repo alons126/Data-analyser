@@ -58,24 +58,20 @@ private:
                                                    "01_1e_cut/01_cParticles_Vtx_comp_plots/04_Kminus",
                                                    "01_1e_cut/01_cParticles_Vtx_comp_plots/05_Piplus",
                                                    "01_1e_cut/01_cParticles_Vtx_comp_plots/06_Piminus",
+                                                   "01_1e_cut/01_cParticles_Vtx_comp_plots/07_Deuteron",
+                                                   "01_1e_cut/02_cParticles_dVtx_plots/01_Protons",
+                                                   "01_1e_cut/02_cParticles_dVtx_plots/02_Kplus",
+                                                   "01_1e_cut/02_cParticles_dVtx_plots/03_Kminus",
+                                                   "01_1e_cut/02_cParticles_dVtx_plots/04_Piplus",
+                                                   "01_1e_cut/02_cParticles_dVtx_plots/05_Piminus",
+                                                   "01_1e_cut/02_cParticles_dVtx_plots/06_Deuteron",
 
                                                    "02_1p/01_dV_plots",
                                                    "03_1n/01_dV_plots",
-//                                                   "01_dV_plots/02_1e2p",
                                                    "04_2p/01_dV_plots",
                                                    "05_pFDpCD/01_dV_plots",
                                                    "06_nFDpCD/01_dV_plots"
     };
-
-    /*
-    vector<std::string> Vertex_Daughter_Folders = {"",
-                                                   "02_1p/02_dV_plots", "02_dV_plots/02_1e2p", "04_2p/02_dV_plots",
-
-                                                   "01_Vertex_components_plots/01_1e_cut/01_Electrons", "01_Vertex_components_plots/01_1e_cut/02_Protons",
-                                                   "01_Vertex_components_plots/01_1e_cut/03_Kplus", "01_Vertex_components_plots/01_1e_cut/04_Kminus",
-                                                   "01_Vertex_components_plots/01_1e_cut/05_Piplus", "01_Vertex_components_plots/01_1e_cut/06_Piminus",
-                                                   "03_1n/02_dV_plots"};
-*/
     //</editor-fold>
 
     //<editor-fold desc="Sampling Fraction (SF) plots directories">

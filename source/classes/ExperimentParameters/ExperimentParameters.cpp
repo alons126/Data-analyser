@@ -215,18 +215,18 @@ void ExperimentParameters::ConfiguredVz_cuts(const string &sn) {
     //TODO: recheck vertex corr cuts with Adi
 
     if (sn == "C12x4_simulation_G18_Q204_6GeV") {
-//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-        dVz_cuts = dVz_cuts_def;
+            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+//        dVz_cuts = dVz_cuts_def;
     } else if (findSubstring(sn, "C12x4_data_6GeV_run_0151")) { // Sample is simulation
         if (findSubstring(sn, "C12x4_data_6GeV_run_015186")) {
-//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-            dVz_cuts = dVz_cuts_def;
+            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+//        dVz_cuts = dVz_cuts_def;
         } else if (findSubstring(sn, "C12x4_data_6GeV_run_015187")) {
-//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-            dVz_cuts = dVz_cuts_def;
+            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+//        dVz_cuts = dVz_cuts_def;
         } else if (findSubstring(sn, "C12x4_data_6GeV_run_015188")) {
-//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-            dVz_cuts = dVz_cuts_def;
+            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+//        dVz_cuts = dVz_cuts_def;
         } else {
             dVz_cuts = dVz_cuts_def;
         }

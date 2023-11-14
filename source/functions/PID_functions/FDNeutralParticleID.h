@@ -64,7 +64,7 @@ int FDNeutralMaxP(vector<region_part_ptr> allParticles, vector<int> &FD_Neutrons
     int MaxPIndex = -1;
     bool PrinOut = false;
 
-    for (int &i: FD_Neutrons_within_th) { // Identify neutron above momentum threshold
+    for (int &i: FD_Neutrons_within_th) { // Identified neutron above momentum threshold
         double P_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
         if (P_temp >= P_max) {
