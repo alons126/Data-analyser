@@ -334,13 +334,7 @@ void EventAnalyser() {
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
-                Efficiency_Status = "Eff2_";
-//                Efficiency_Status = "Eff2_Limless";
-//                Efficiency_Status = "Eff2_originalFull";
-//                Efficiency_Status = "Eff2_original111test6noFC";
-//                Efficiency_Status = "Eff2_original111test5";
-//                Efficiency_Status = "Eff2_original111noFC";
-//                Efficiency_Status = "Eff2";
+                Efficiency_Status = "Eff2";
             } else {
                 Efficiency_Status = "Eff1";
             }
