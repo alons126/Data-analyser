@@ -164,9 +164,29 @@ public:
         vertex_z_cuts.at(1) = max;
     };
 
+    void setVzcutsFD(double min, double max) { // My addition!
+        vertex_z_cuts_FD.at(0) = min;
+        vertex_z_cuts_FD.at(1) = max;
+    };
+
+    void setVzcutsCD(double min, double max) { // My addition!
+        vertex_z_cuts_CD.at(0) = min;
+        vertex_z_cuts_CD.at(1) = max;
+    };
+
     void setVertexCorrCutsLim(double min, double max) {
         vertex_corr_cuts.at(0) = min;
         vertex_corr_cuts.at(1) = max;
+    };
+
+    void setVertexCorrCutsLimFD(double min, double max) { // My addition!
+        vertex_corr_cuts_FD.at(0) = min;
+        vertex_corr_cuts_FD.at(1) = max;
+    };
+
+    void setVertexCorrCutsLimCD(double min, double max) { // My addition!
+        vertex_corr_cuts_CD.at(0) = min;
+        vertex_corr_cuts_CD.at(1) = max;
     };
 
     void fillDCdebug(region_part_ptr p, TH2D **h);
@@ -291,10 +311,18 @@ private:
     map<int, vector<double> > pid_cuts_fd; // map<pid, {min,max cut}> Forward Detector (FD)
 
     vector<double> vertex_x_cuts = {-99, 99};
+    vector<double> vertex_x_cuts_FD = {-99, 99}; // My addition!
+    vector<double> vertex_x_cuts_CD = {-99, 99}; // My addition!
     vector<double> vertex_y_cuts = {-99, 99};
+    vector<double> vertex_y_cuts_FD = {-99, 99}; // My addition!
+    vector<double> vertex_y_cuts_CD = {-99, 99}; // My addition!
     vector<double> vertex_z_cuts = {-99, 99};
+    vector<double> vertex_z_cuts_FD = {-99, 99}; // My addition!
+    vector<double> vertex_z_cuts_CD = {-99, 99}; // My addition!
     map <string, vector<double>> vertex_cuts; //map< x,y,z, {min,max}>
     vector<double> vertex_corr_cuts = {-99, 99}; //electron vertex <-> particle vertex correlation cuts
+    vector<double> vertex_corr_cuts_FD = {-99, 99}; //electron vertex <-> particle vertex correlation cuts (FD only, my addition!)
+    vector<double> vertex_corr_cuts_CD = {-99, 99}; //electron vertex <-> particle vertex correlation cuts (CD only, my addition!)
 
     double ecal_edge_cut = 14;
 //    double dc_edge_cut = 5; // Justin's original
@@ -962,15 +990,45 @@ double clas12ana::getSF(region_part_ptr p) {
 
 bool clas12ana::checkVertex(region_part_ptr p) {
     //true if inside cut
-    return ((p->par()->getVx() > vertex_x_cuts.at(0) && p->par()->getVx() < vertex_x_cuts.at(1))
-            && (p->par()->getVy() > vertex_y_cuts.at(0) && p->par()->getVy() < vertex_y_cuts.at(1))
-            && (p->par()->getVz() > vertex_z_cuts.at(0) && p->par()->getVz() < vertex_z_cuts.at(1)));
+    if (p->getRegion() == FD) { // My addition!
+        return ((p->par()->getVx() > vertex_x_cuts_FD.at(0) && p->par()->getVx() < vertex_x_cuts_FD.at(1))
+                && (p->par()->getVy() > vertex_y_cuts_FD.at(0) && p->par()->getVy() < vertex_y_cuts_FD.at(1))
+                && (p->par()->getVz() > vertex_z_cuts_FD.at(0) && p->par()->getVz() < vertex_z_cuts_FD.at(1)));
+    } else if (p->getRegion() == CD) {
+        return ((p->par()->getVx() > vertex_x_cuts_CD.at(0) && p->par()->getVx() < vertex_x_cuts_CD.at(1))
+                && (p->par()->getVy() > vertex_y_cuts_CD.at(0) && p->par()->getVy() < vertex_y_cuts_CD.at(1))
+                && (p->par()->getVz() > vertex_z_cuts_CD.at(0) && p->par()->getVz() < vertex_z_cuts_CD.at(1)));
+    } else {
+        return ((p->par()->getVx() > vertex_x_cuts.at(0) && p->par()->getVx() < vertex_x_cuts.at(1))
+                && (p->par()->getVy() > vertex_y_cuts.at(0) && p->par()->getVy() < vertex_y_cuts.at(1))
+                && (p->par()->getVz() > vertex_z_cuts.at(0) && p->par()->getVz() < vertex_z_cuts.at(1)));
+    }
+
+//    //<editor-fold desc="Justin's original">
+//    //true if inside cut
+//    return ((p->par()->getVx() > vertex_x_cuts.at(0) && p->par()->getVx() < vertex_x_cuts.at(1))
+//            && (p->par()->getVy() > vertex_y_cuts.at(0) && p->par()->getVy() < vertex_y_cuts.at(1))
+//            && (p->par()->getVz() > vertex_z_cuts.at(0) && p->par()->getVz() < vertex_z_cuts.at(1)));
+//    //</editor-fold>
 
 }
 
 bool clas12ana::checkVertexCorrelation(region_part_ptr el, region_part_ptr p) {
     //true if inside cut
-    return ((p->par()->getVz() - el->par()->getVz()) > vertex_corr_cuts.at(0) && (p->par()->getVz() - el->par()->getVz()) < vertex_corr_cuts.at(1));
+
+    if (p->getRegion() == FD) { // My addition!
+        return ((p->par()->getVz() - el->par()->getVz()) > vertex_corr_cuts_FD.at(0) && (p->par()->getVz() - el->par()->getVz()) < vertex_corr_cuts_FD.at(1));
+    } else if (p->getRegion() == CD) {
+        return ((p->par()->getVz() - el->par()->getVz()) > vertex_corr_cuts_CD.at(0) && (p->par()->getVz() - el->par()->getVz()) < vertex_corr_cuts_CD.at(1));
+    } else {
+        return ((p->par()->getVz() - el->par()->getVz()) > vertex_corr_cuts.at(0) && (p->par()->getVz() - el->par()->getVz()) < vertex_corr_cuts.at(1));
+    }
+
+//    //<editor-fold desc="Justin's original">
+//    //true if inside cut
+//    return ((p->par()->getVz() - el->par()->getVz()) > vertex_corr_cuts.at(0) && (p->par()->getVz() - el->par()->getVz()) < vertex_corr_cuts.at(1));
+//    //</editor-fold>
+
 }
 
 bool clas12ana::checkPidCut(region_part_ptr p) {

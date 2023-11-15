@@ -23,8 +23,10 @@ protected:
     bool BeamAt4GeV = false;
     bool BeamAt6GeV = false;
 
-    DSCuts Vz_cuts, Vz_cuts_def = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5);
-    DSCuts dVz_cuts, dVz_cuts_def = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
+    DSCuts Vz_cuts_def = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5);
+    DSCuts Vz_cuts, Vz_cuts_FD, Vz_cuts_CD, Vz_cuts_FD_def = Vz_cuts_def, Vz_cuts_CD_def = Vz_cuts_def;
+    DSCuts dVz_cuts_def = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
+    DSCuts dVz_cuts, dVz_cuts_FD, dVz_cuts_CD, dVz_cuts_FD_def = dVz_cuts_def, dVz_cuts_CD_def = dVz_cuts_def;
 public:
 
 // ConfigureSampleName function -----------------------------------------------------------------------------------------------------------------------------------------
@@ -51,13 +53,29 @@ public:
 
     double GetBeanEnergy();
 
-// GetBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------------
+// GetVz_cuts function -----------------------------------------------------------------------------------------------------------------------------------------------
 
     DSCuts GetVz_cuts() { return Vz_cuts; };
 
-// GetBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------------
+// GetVz_cuts_FD function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+    DSCuts GetVz_cuts_FD() { return Vz_cuts_FD; };
+
+// GetVz_cuts_CD function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+    DSCuts GetVz_cuts_CD() { return Vz_cuts_CD; };
+
+// GetdVz_cuts function -----------------------------------------------------------------------------------------------------------------------------------------------
 
     DSCuts GetdVz_cuts() { return dVz_cuts; };
+
+// GetdVz_cuts_FD function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+    DSCuts GetdVz_cuts_FD() { return dVz_cuts_FD; };
+
+// GetdVz_cuts_CD function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+    DSCuts GetdVz_cuts_CD() { return dVz_cuts_CD; };
 
 // ExperimentParameters function ----------------------------------------------------------------------------------------------------------------------------------------
 

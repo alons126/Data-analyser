@@ -144,7 +144,7 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicated histograms?)
-    bool generate_AMaps = true; // Generate acceptance maps
+    bool generate_AMaps = false; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -180,13 +180,13 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    const bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    const bool apply_cuts = false; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -206,12 +206,12 @@ void EventAnalyser() {
     bool apply_Electron_beta_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
+    bool apply_nBeta_fit_cuts = false;        // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -256,7 +256,6 @@ void EventAnalyser() {
 
         //<editor-fold desc="Status additions">
         if (apply_nucleon_cuts) {
-//            Nucleon_Cuts_Status = "wNC_";
             Nucleon_Cuts_Status = "NC_";
         } else {
             Nucleon_Cuts_Status = "noNC";
@@ -457,8 +456,8 @@ void EventAnalyser() {
     //</editor-fold>
 
     /* Vertex cuts */
-    DSCuts Vz_cut = Experiment.GetVz_cuts();
-    DSCuts dVz_cuts = Experiment.GetdVz_cuts();
+    DSCuts Vz_cut = Experiment.GetVz_cuts(), Vz_cut_FD = Experiment.GetVz_cuts_FD(), Vz_cut_CD = Experiment.GetVz_cuts_CD();
+    DSCuts dVz_cuts = Experiment.GetdVz_cuts(), dVz_cuts_FD = Experiment.GetdVz_cuts_FD(), dVz_cuts_CD = Experiment.GetdVz_cuts_CD();
 
     /* Sampling Fraction (SF) cuts (electrons only, FD) */
     DSCuts SF_cuts;
@@ -743,6 +742,8 @@ void EventAnalyser() {
     if (!fill_TL_plots) { Efficiency_plots = TL_after_Acceptance_Maps_plots = false; }
 
     if (!generate_AMaps) { AMaps_plots = false; }
+
+    if (!apply_nucleon_cuts) { FSR_1D_plots = FSR_2D_plots = false; }
 
 //    if (!plot_and_fit_MomRes) { Resolution_plots = false; }
     //</editor-fold>
@@ -1399,28 +1400,28 @@ void EventAnalyser() {
     hVz_piminus_1e_cut_FD.SetLogScalePlot(Log_scale_Vz_plots);
 
     hPlot1D hVx_Deuteron_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{D}", "V_{x}^{D} histogram", "V_{x}^{D} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
-                                           "01_Deuteron_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
+                                             "01_Deuteron_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hVx_Deuteron_1e_cut_CD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVx_Deuteron_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{x}^{D}", "V_{x}^{D} histogram", "V_{x}^{D} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
-                                           "01_Deuteron_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
+                                             "01_Deuteron_Vx", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hVx_Deuteron_1e_cut_FD.SetLogScalePlot(Log_scale_Vx_plots);
     hPlot1D hVy_Deuteron_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{y}^{D}", "V_{y}^{D} histogram", "V_{y}^{D} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
-                                           "02_Deuteron_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
+                                             "02_Deuteron_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hVy_Deuteron_1e_cut_CD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVy_Deuteron_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{y}^{D}", "V_{y}^{D} histogram", "V_{y}^{D} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
-                                           "02_Deuteron_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
+                                             "02_Deuteron_Vy", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hVy_Deuteron_1e_cut_FD.SetLogScalePlot(Log_scale_Vy_plots);
     hPlot1D hVz_Deuteron_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{z}^{D}", "V_{z}^{D} histogram", "V_{z}^{D} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
-                                           "03_Deuteron_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
+                                             "03_Deuteron_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hVz_Deuteron_1e_cut_CD.SetLogScalePlot(Log_scale_Vz_plots);
     hPlot1D hVz_Deuteron_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{D}", "V_{z}^{D} histogram", "V_{z}^{D} [cm]",
-                                           directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
-                                           "03_Deuteron_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             directories.Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"],
+                                             "03_Deuteron_Vz", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hVz_Deuteron_1e_cut_FD.SetLogScalePlot(Log_scale_Vz_plots);
     //</editor-fold>
 
@@ -1447,24 +1448,24 @@ void EventAnalyser() {
     hdVz_Proton_CD_1e_cut.SetLogScalePlot(Log_scale_dVz_plots);
 
     hPlot1D hdVx_Kplus_FD_1e_cut = hPlot1D("1e cut", "FD", "Vertex corr. dV^{K^{+}}_{x}", "Vertex correlation dV^{K^{+}}_{x}=V^{K^{+}}_{x}-V^{e}_{x}",
-                                            "dV^{K^{+}}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
-                                            "01_dVx_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                           "dV^{K^{+}}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
+                                           "01_dVx_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVy_Kplus_FD_1e_cut = hPlot1D("1e cut", "FD", "Vertex corr. dV^{K^{+}}_{y}", "Vertex correlation dV^{K^{+}}_{y}=V^{K^{+}}_{y}-V^{e}_{y}",
-                                            "dV^{K^{+}}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
-                                            "02_dVy_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                           "dV^{K^{+}}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
+                                           "02_dVy_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVz_Kplus_FD_1e_cut = hPlot1D("1e cut", "FD", "Vertex corr. dV^{K^{+}}_{z}", "Vertex correlation dV^{K^{+}}_{z}=V^{K^{+}}_{z}-V^{e}_{z}",
-                                            "dV^{K^{+}}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
-                                            "03_dVz_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                           "dV^{K^{+}}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
+                                           "03_dVz_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hdVz_Kplus_FD_1e_cut.SetLogScalePlot(Log_scale_dVz_plots);
     hPlot1D hdVx_Kplus_CD_1e_cut = hPlot1D("1e cut", "CD", "Vertex corr. dV^{K^{+}}_{x}", "Vertex correlation dV^{K^{+}}_{x}=V^{K^{+}}_{x}-V^{e}_{x}",
-                                            "dV^{K^{+}}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
-                                            "01_dVx_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                           "dV^{K^{+}}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
+                                           "01_dVx_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVy_Kplus_CD_1e_cut = hPlot1D("1e cut", "CD", "Vertex corr. dV^{K^{+}}_{y}", "Vertex correlation dV^{K^{+}}_{y}=V^{K^{+}}_{y}-V^{e}_{y}",
-                                            "dV^{K^{+}}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
-                                            "02_dVy_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                           "dV^{K^{+}}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
+                                           "02_dVy_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVz_Kplus_CD_1e_cut = hPlot1D("1e cut", "CD", "Vertex corr. dV^{K^{+}}_{z}", "Vertex correlation dV^{K^{+}}_{z}=V^{K^{+}}_{z}-V^{e}_{z}",
-                                            "dV^{K^{+}}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
-                                            "03_dVz_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                           "dV^{K^{+}}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"],
+                                           "03_dVz_Kplus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hdVz_Kplus_CD_1e_cut.SetLogScalePlot(Log_scale_dVz_plots);
 
     hPlot1D hdVx_Kminus_FD_1e_cut = hPlot1D("1e cut", "FD", "Vertex corr. dV^{K^{-}}_{x}", "Vertex correlation dV^{K^{-}}_{x}=V^{K^{-}}_{x}-V^{e}_{x}",
@@ -1510,45 +1511,45 @@ void EventAnalyser() {
     hdVz_piplus_CD_1e_cut.SetLogScalePlot(Log_scale_dVz_plots);
 
     hPlot1D hdVx_piminus_FD_1e_cut = hPlot1D("1e cut", "FD", "Vertex corr. dV^{#pi^{-}}_{x}", "Vertex correlation dV^{#pi^{-}}_{x}=V^{#pi^{-}}_{x}-V^{e}_{x}",
-                                            "dV^{#pi^{-}}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
-                                            "01_dVx_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             "dV^{#pi^{-}}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
+                                             "01_dVx_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVy_piminus_FD_1e_cut = hPlot1D("1e cut", "FD", "Vertex corr. dV^{#pi^{-}}_{y}", "Vertex correlation dV^{#pi^{-}}_{y}=V^{#pi^{-}}_{y}-V^{e}_{y}",
-                                            "dV^{#pi^{-}}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
-                                            "02_dVy_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             "dV^{#pi^{-}}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
+                                             "02_dVy_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVz_piminus_FD_1e_cut = hPlot1D("1e cut", "FD", "Vertex corr. dV^{#pi^{-}}_{z}", "Vertex correlation dV^{#pi^{-}}_{z}=V^{#pi^{-}}_{z}-V^{e}_{z}",
-                                            "dV^{#pi^{-}}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
-                                            "03_dVz_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             "dV^{#pi^{-}}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
+                                             "03_dVz_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hdVz_piminus_FD_1e_cut.SetLogScalePlot(Log_scale_dVz_plots);
     hPlot1D hdVx_piminus_CD_1e_cut = hPlot1D("1e cut", "CD", "Vertex corr. dV^{#pi^{-}}_{x}", "Vertex correlation dV^{#pi^{-}}_{x}=V^{#pi^{-}}_{x}-V^{e}_{x}",
-                                            "dV^{#pi^{-}}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
-                                            "01_dVx_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             "dV^{#pi^{-}}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
+                                             "01_dVx_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVy_piminus_CD_1e_cut = hPlot1D("1e cut", "CD", "Vertex corr. dV^{#pi^{-}}_{y}", "Vertex correlation dV^{#pi^{-}}_{y}=V^{#pi^{-}}_{y}-V^{e}_{y}",
-                                            "dV^{#pi^{-}}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
-                                            "02_dVy_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             "dV^{#pi^{-}}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
+                                             "02_dVy_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVz_piminus_CD_1e_cut = hPlot1D("1e cut", "CD", "Vertex corr. dV^{#pi^{-}}_{z}", "Vertex correlation dV^{#pi^{-}}_{z}=V^{#pi^{-}}_{z}-V^{e}_{z}",
-                                            "dV^{#pi^{-}}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
-                                            "03_dVz_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                             "dV^{#pi^{-}}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"],
+                                             "03_dVz_Piminus", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hdVz_piminus_CD_1e_cut.SetLogScalePlot(Log_scale_dVz_plots);
 
     hPlot1D hdVx_Deuteron_FD_1e_cut = hPlot1D("1e cut", "FD", "Vertex corr. dV^{D}_{x}", "Vertex correlation dV^{D}_{x}=V^{D}_{x}-V^{e}_{x}",
-                                            "dV^{D}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
-                                            "01_dVx_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                              "dV^{D}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
+                                              "01_dVx_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVy_Deuteron_FD_1e_cut = hPlot1D("1e cut", "FD", "Vertex corr. dV^{D}_{y}", "Vertex correlation dV^{D}_{y}=V^{D}_{y}-V^{e}_{y}",
-                                            "dV^{D}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
-                                            "02_dVy_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                              "dV^{D}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
+                                              "02_dVy_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVz_Deuteron_FD_1e_cut = hPlot1D("1e cut", "FD", "Vertex corr. dV^{D}_{z}", "Vertex correlation dV^{D}_{z}=V^{D}_{z}-V^{e}_{z}",
-                                            "dV^{D}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
-                                            "03_dVz_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                              "dV^{D}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
+                                              "03_dVz_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hdVz_Deuteron_FD_1e_cut.SetLogScalePlot(Log_scale_dVz_plots);
     hPlot1D hdVx_Deuteron_CD_1e_cut = hPlot1D("1e cut", "CD", "Vertex corr. dV^{D}_{x}", "Vertex correlation dV^{D}_{x}=V^{D}_{x}-V^{e}_{x}",
-                                            "dV^{D}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
-                                            "01_dVx_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                              "dV^{D}_{x} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
+                                              "01_dVx_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVy_Deuteron_CD_1e_cut = hPlot1D("1e cut", "CD", "Vertex corr. dV^{D}_{y}", "Vertex correlation dV^{D}_{y}=V^{D}_{y}-V^{e}_{y}",
-                                            "dV^{D}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
-                                            "02_dVy_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                              "dV^{D}_{y} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
+                                              "02_dVy_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hPlot1D hdVz_Deuteron_CD_1e_cut = hPlot1D("1e cut", "CD", "Vertex corr. dV^{D}_{z}", "Vertex correlation dV^{D}_{z}=V^{D}_{z}-V^{e}_{z}",
-                                            "dV^{D}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
-                                            "03_dVz_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
+                                              "dV^{D}_{z} [cm]", directories.Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"],
+                                              "03_dVz_d", -Vertex_boundary, Vertex_boundary, numTH1Dbins);
     hdVz_Deuteron_CD_1e_cut.SetLogScalePlot(Log_scale_dVz_plots);
     //</editor-fold>
 
@@ -8243,6 +8244,8 @@ void EventAnalyser() {
         if (apply_Vz_cuts) {
             clasAna.setVertexCuts(); // making f_vertexCuts = ture
             clasAna.setVzcuts(Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut()); // setting Vz cuts for all (charged?) particles
+            clasAna.setVzcutsFD(Vz_cut_FD.GetLowerCut(), Vz_cut_FD.GetUpperCut()); // setting Vz cuts for all charged particles (FD only)
+            clasAna.setVzcutsCD(Vz_cut_CD.GetLowerCut(), Vz_cut_CD.GetUpperCut()); // setting Vz cuts for all charged particles (CD only)
         }
 
         // Cuts on charged particles:
@@ -8253,7 +8256,9 @@ void EventAnalyser() {
 
         if (apply_dVz_cuts) {
             clasAna.setVertexCorrCuts(); // making f_corr_vertexCuts = ture
-            clasAna.setVertexCorrCutsLim(dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut()); // setting dVz cuts?
+            clasAna.setVertexCorrCutsLim(dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut()); // setting dVz cuts (general)
+            clasAna.setVertexCorrCutsLimFD(dVz_cuts_FD.GetLowerCut(), dVz_cuts_FD.GetUpperCut()); // setting dVz cuts (FD only)
+            clasAna.setVertexCorrCutsLimCD(dVz_cuts_CD.GetLowerCut(), dVz_cuts_CD.GetUpperCut()); // setting dVz cuts (CD only)
         }
 
         if (!apply_nucleon_cuts) {
@@ -14559,49 +14564,49 @@ void EventAnalyser() {
         //<editor-fold desc="Vertex plots (1e cut, CD & FD)">
         hVx_Electron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_Electron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hVz_Electron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
+        hVz_Electron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_FD.GetLowerCut(), Vz_cut_FD.GetUpperCut(), 0, false);
 
         hVx_Proton_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVx_Proton_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_Proton_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_Proton_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hVz_Proton_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-        hVz_Proton_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
+        hVz_Proton_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_CD.GetLowerCut(), Vz_cut_CD.GetUpperCut(), 0, false);
+        hVz_Proton_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_FD.GetLowerCut(), Vz_cut_FD.GetUpperCut(), 0, false);
 
         hVx_Kplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVx_Kplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_Kplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_Kplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hVz_Kplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-        hVz_Kplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
+        hVz_Kplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_CD.GetLowerCut(), Vz_cut_CD.GetUpperCut(), 0, false);
+        hVz_Kplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_FD.GetLowerCut(), Vz_cut_FD.GetUpperCut(), 0, false);
 
         hVx_Kminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVx_Kminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_Kminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_Kminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hVz_Kminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-        hVz_Kminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
+        hVz_Kminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_CD.GetLowerCut(), Vz_cut_CD.GetUpperCut(), 0, false);
+        hVz_Kminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_FD.GetLowerCut(), Vz_cut_FD.GetUpperCut(), 0, false);
 
         hVx_piplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVx_piplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_piplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_piplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hVz_piplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-        hVz_piplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
+        hVz_piplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_CD.GetLowerCut(), Vz_cut_CD.GetUpperCut(), 0, false);
+        hVz_piplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_FD.GetLowerCut(), Vz_cut_FD.GetUpperCut(), 0, false);
 
         hVx_piminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVx_piminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_piminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_piminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hVz_piminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-        hVz_piminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
+        hVz_piminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_CD.GetLowerCut(), Vz_cut_CD.GetUpperCut(), 0, false);
+        hVz_piminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_FD.GetLowerCut(), Vz_cut_FD.GetUpperCut(), 0, false);
 
         hVx_Deuteron_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVx_Deuteron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_Deuteron_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hVy_Deuteron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hVz_Deuteron_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-        hVz_Deuteron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
+        hVz_Deuteron_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_CD.GetLowerCut(), Vz_cut_CD.GetUpperCut(), 0, false);
+        hVz_Deuteron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut_FD.GetLowerCut(), Vz_cut_FD.GetUpperCut(), 0, false);
         //</editor-fold>
 
 //  dV plots ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -14611,55 +14616,55 @@ void EventAnalyser() {
         hdVx_Proton_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_Proton_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_Proton_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_Proton_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
-        hdVz_Proton_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_Proton_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_CD.GetLowerCut(), dVz_cuts_CD.GetUpperCut(), 0, false);
+        hdVz_Proton_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_FD.GetLowerCut(), dVz_cuts_FD.GetUpperCut(), 0, false);
 
         hdVx_Kplus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVx_Kplus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_Kplus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_Kplus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_Kplus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
-        hdVz_Kplus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_Kplus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_CD.GetLowerCut(), dVz_cuts_CD.GetUpperCut(), 0, false);
+        hdVz_Kplus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_FD.GetLowerCut(), dVz_cuts_FD.GetUpperCut(), 0, false);
 
         hdVx_Kminus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVx_Kminus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_Kminus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_Kminus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_Kminus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
-        hdVz_Kminus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_Kminus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_CD.GetLowerCut(), dVz_cuts_CD.GetUpperCut(), 0, false);
+        hdVz_Kminus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_FD.GetLowerCut(), dVz_cuts_FD.GetUpperCut(), 0, false);
 
         hdVx_piplus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVx_piplus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_piplus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_piplus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_piplus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
-        hdVz_piplus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_piplus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_CD.GetLowerCut(), dVz_cuts_CD.GetUpperCut(), 0, false);
+        hdVz_piplus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_FD.GetLowerCut(), dVz_cuts_FD.GetUpperCut(), 0, false);
 
         hdVx_piminus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVx_piminus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_piminus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_piminus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_piminus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
-        hdVz_piminus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_piminus_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_CD.GetLowerCut(), dVz_cuts_CD.GetUpperCut(), 0, false);
+        hdVz_piminus_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_FD.GetLowerCut(), dVz_cuts_FD.GetUpperCut(), 0, false);
 
         hdVx_Deuteron_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVx_Deuteron_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_Deuteron_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_Deuteron_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_Deuteron_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
-        hdVz_Deuteron_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_Deuteron_CD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_CD.GetLowerCut(), dVz_cuts_CD.GetUpperCut(), 0, false);
+        hdVz_Deuteron_FD_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_FD.GetLowerCut(), dVz_cuts_FD.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (1p, CD & FD)">
         hdVx_1p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_1p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_1p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_1p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_FD.GetLowerCut(), dVz_cuts_FD.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (1n, CD & FD)">
         hdVx_1n.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_1n.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_1n.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_1n.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_FD.GetLowerCut(), dVz_cuts_FD.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (2p, CD & FD)">
@@ -14675,11 +14680,11 @@ void EventAnalyser() {
 
         hdVx_pFD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_pFD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_pFD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_pFD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_FD.GetLowerCut(), dVz_cuts_FD.GetUpperCut(), 0, false);
 
         hdVx_pCD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_pCD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_pCD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_pCD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_CD.GetLowerCut(), dVz_cuts_CD.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (nFDpCD, CD & FD)">
@@ -14689,7 +14694,7 @@ void EventAnalyser() {
 
         hdVx_pCD_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_pCD_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_pCD_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_pCD_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts_CD.GetLowerCut(), dVz_cuts_CD.GetUpperCut(), 0, false);
         //</editor-fold>
 
     } else {
@@ -20077,13 +20082,30 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-    //<editor-fold desc="Vertex cuts">
+    //<editor-fold desc="Vertex cuts (CD & FD)">
     myLogFile << "\n===========================================================================\n";
-    myLogFile << "Vertex cuts\n";
+    myLogFile << "V cuts (CD & FD)\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "Vz_cut.GetLowerCut() = " << Vz_cut.GetLowerCut() << "\n";
     myLogFile << "Vz_cut.GetUpperCut() = " << Vz_cut.GetUpperCut() << "\n";
+    myLogFile << "Vz_cut.GetLowerCut() = " << Vz_cut.GetLowerCut() << "\n\n";
+    myLogFile << "Vz_cut_FD.GetUpperCut() = " << Vz_cut_FD.GetUpperCut() << "\n";
+    myLogFile << "Vz_cut_FD.GetLowerCut() = " << Vz_cut_FD.GetLowerCut() << "\n\n";
+    myLogFile << "Vz_cut_CD.GetUpperCut() = " << Vz_cut_CD.GetUpperCut() << "\n";
+    myLogFile << "Vz_cut_CD.GetLowerCut() = " << Vz_cut_CD.GetLowerCut() << "\n\n";
+    //</editor-fold>
+
+    //<editor-fold desc="dV cuts (CD & FD)">
+    myLogFile << "\n===========================================================================\n";
+    myLogFile << "dV cuts (CD & FD)\n";
+    myLogFile << "===========================================================================\n\n";
+
+    myLogFile << "dVz_cuts.GetUpperCut() = " << dVz_cuts.GetUpperCut() << "\n";
+    myLogFile << "dVz_cuts.GetLowerCut() = " << dVz_cuts.GetLowerCut() << "\n\n";
+    myLogFile << "dVz_cuts_FD.GetUpperCut() = " << dVz_cuts_FD.GetUpperCut() << "\n";
+    myLogFile << "dVz_cuts_FD.GetLowerCut() = " << dVz_cuts_FD.GetLowerCut() << "\n\n";
+    myLogFile << "dVz_cuts_CD.GetUpperCut() = " << dVz_cuts_CD.GetUpperCut() << "\n";
+    myLogFile << "dVz_cuts_CD.GetLowerCut() = " << dVz_cuts_CD.GetLowerCut() << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Sampling Fraction (SF) cuts (electrons only, FD)">
@@ -20147,15 +20169,6 @@ void EventAnalyser() {
     myLogFile << "TL_pimCD_mom_cuts:\t{" << TL_pimCD_mom_cuts.GetLowerCut() << ", " << TL_pimCD_mom_cuts.GetUpperCut() << "}\n";
     myLogFile << "TL_pi0_mom_cuts:\t{" << TL_pi0_mom_cuts.GetLowerCut() << ", " << TL_pi0_mom_cuts.GetUpperCut() << "}\n";
     myLogFile << "TL_ph_mom_cuts:\t{" << TL_ph_mom_cuts.GetLowerCut() << ", " << TL_ph_mom_cuts.GetUpperCut() << "}\n\n";
-    //</editor-fold>
-
-    //<editor-fold desc="dV cuts (CD & FD)">
-    myLogFile << "\n===========================================================================\n";
-    myLogFile << "dV cuts (CD & FD)\n";
-    myLogFile << "===========================================================================\n\n";
-
-    myLogFile << "dVz_cuts.GetUpperCut() = " << dVz_cuts.GetUpperCut() << "\n";
-    myLogFile << "dVz_cuts.GetLowerCut() = " << dVz_cuts.GetLowerCut() << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Beta cut (1n, FD)">
