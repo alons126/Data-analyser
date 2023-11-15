@@ -144,7 +144,7 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicated histograms?)
-    bool generate_AMaps = false; // Generate acceptance maps
+    bool generate_AMaps = true; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -206,12 +206,12 @@ void EventAnalyser() {
     bool apply_Electron_beta_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = false;        // apply neutron upper mom. th.
+    bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -19659,7 +19659,7 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Saving nucleon cuts to .par file">
-    if (!apply_nucleon_cuts) { // log nucleon cuts
+    if (!apply_nucleon_cuts && apply_chi2_cuts_1e_cut) { // log nucleon cuts
         ofstream Nucleon_Cuts;
         std::string Nucleon_CutsFilePath = NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par";
 
@@ -19690,6 +19690,13 @@ void EventAnalyser() {
 
         Nucleon_Cuts << "\n";
         //</editor-fold>
+
+        if (is6GeVSample) {
+            //TODO: check if this should stay here!
+            Nucleon_Cuts << "nRes_Momentum_cut\t\t\t2112:0:4.0:FD-ECAL  # was set manually!" << "\n";
+
+            Nucleon_Cuts << "\n";
+        }
 
         //<editor-fold desc="Proton CD-FD double detection dPhi_p1_p2 cuts">
         Nucleon_Cuts << "# Proton CD-FD double detection dPhi cuts (pid:mean:sigma) - sigma=" << dphi_p1_p2_2p.FitStdFactor << ":\n";
