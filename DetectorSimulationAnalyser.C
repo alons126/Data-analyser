@@ -144,7 +144,7 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicated histograms?)
-    bool generate_AMaps = false; // Generate acceptance maps
+    bool generate_AMaps = true; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -206,12 +206,12 @@ void EventAnalyser() {
     bool apply_Electron_beta_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = false;        // apply neutron upper mom. th.
+    bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -651,11 +651,11 @@ void EventAnalyser() {
 //
 //    /* Cut variable plots */
 //    bool Cut_plots_master = true; // Master cut plots selector
-////    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+////    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
 ////
-//    bool Momentum_plots = true;
-////    bool Momentum_plots = false;
+////    bool Momentum_plots = true;
+//    bool Momentum_plots = false;
 ////
 //
 //    /* Beta plots */
@@ -700,14 +700,14 @@ void EventAnalyser() {
 //    bool ToF_plots = false;
 //
 //    /* Efficiency plots */
-//    bool Efficiency_plots = true;
-////    bool Efficiency_plots = false;
-//    bool TL_after_Acceptance_Maps_plots = true;
-////    bool TL_after_Acceptance_Maps_plots = false;
+////    bool Efficiency_plots = true;
+//    bool Efficiency_plots = false;
+////    bool TL_after_Acceptance_Maps_plots = true;
+//    bool TL_after_Acceptance_Maps_plots = false;
 //
 //    /* Resolution plots */
-////    bool AMaps_plots = true;
-//    bool AMaps_plots = false;
+//    bool AMaps_plots = true;
+////    bool AMaps_plots = false;
 //
 //    /* Resolution plots */
 ////    bool Resolution_plots = true;
@@ -19570,16 +19570,16 @@ void EventAnalyser() {
         hTL_P_e_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
 
         hProtonAMapBC.hDrawAndSave(SampleName, c1, plots, true);
-        hReco_P_pFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
-        hTL_P_pFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
-        hReco_P_pFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
-        hTL_P_pFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+        hReco_P_pFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hTL_P_pFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hReco_P_pFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hTL_P_pFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
 
         hNeutronAMapBC.hDrawAndSave(SampleName, c1, plots, true);
-        hReco_P_nFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
-        hTL_P_nFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
-        hReco_P_nFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
-        hTL_P_nFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+        hReco_P_nFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hTL_P_nFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hReco_P_nFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hTL_P_nFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
 
         hNucleonAMapBC.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
