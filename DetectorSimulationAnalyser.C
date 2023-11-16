@@ -8806,16 +8806,16 @@ void EventAnalyser() {
             //<editor-fold desc="Safty check">
             /* Safety check for leading FD neutron */
             if (ES_by_leading_FDneutron) {
-                if ((TL_NeutronsFD_max_mom_ind.size() > 0) && (TL_NeutronsFD_ind_mom_max == -1)) {
+                if ((TL_NeutronsFD_mom_ind.size() > 0) && (TL_NeutronsFD_ind_mom_max == -1)) {
                     cout << "\n\nLeading TL nFD check: leading was not assigned! Exiting...\n\n", exit(EXIT_FAILURE);
                 }
 
-                if (TL_NeutronsFD_max_mom_ind.size() == 1) {
-                    if (TL_NeutronsFD_max_mom_ind.at(0) != TL_NeutronsFD_ind_mom_max) {
+                if (TL_NeutronsFD_mom_ind.size() == 1) {
+                    if (TL_NeutronsFD_mom_ind.at(0) != TL_NeutronsFD_ind_mom_max) {
                         cout << "\n\nLeading TL nFD check: leading was assigned incorrectly! Exiting...\n\n", exit(EXIT_FAILURE);
                     }
-                } else if (TL_NeutronsFD_max_mom_ind.size() > 1) {
-                    for (int &i: TL_NeutronsFD_max_mom_ind) {
+                } else if (TL_NeutronsFD_mom_ind.size() > 1) {
+                    for (int &i: TL_NeutronsFD_mom_ind) {
                         mcpbank->setEntry(i);
 
                         double Leading_neutron_momentum = Leading_TL_FDNeutron_Momentum;
