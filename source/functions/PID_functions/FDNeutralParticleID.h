@@ -23,7 +23,7 @@ using namespace std;
  * Neutron = a neutral particle (i.e., neutron or photon) in the FD with no PCal hit and with an ECal hit.
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
-void FDNeutralParticleID(vector<region_part_ptr> allParticles,
+void FDNeutralParticleID(vector <region_part_ptr> allParticles,
                          vector<int> &FD_Neutrons_within_th, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th,
                          vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th,
                          bool apply_nucleon_cuts) {
@@ -59,10 +59,12 @@ void FDNeutralParticleID(vector<region_part_ptr> allParticles,
     } // end of loop over ID_Photons_FD vector
 }
 
-int FDNeutralMaxP(vector<region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, bool apply_nucleon_cuts) {
+int FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, bool apply_nucleon_cuts) {
     double P_max = -1;
     int MaxPIndex = -1;
-    bool PrinOut = false;
+    bool PrintLog = false;
+
+    bool PrintOut = (PrintLog && (FD_Neutrons_within_th.size() > 0));
 
     for (int &i: FD_Neutrons_within_th) { // Identified neutron above momentum threshold
         double P_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
@@ -72,10 +74,22 @@ int FDNeutralMaxP(vector<region_part_ptr> allParticles, vector<int> &FD_Neutrons
             MaxPIndex = i;
         }
 
-        if (PrinOut) { cout << "P_temp = " << P_temp << "\n"; }
+        if (PrintOut) {
+            int ParticlePDG_temp = allParticles[i]->par()->getPid();
+
+            bool PCAL_hit_temp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
+            bool ECIN_hit_temp = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+            bool ECOUT_hit_temp = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+
+            cout << "P_temp = " << P_temp << " (i = " << i << ", PDG = " << ParticlePDG_temp <<
+                 ", PCAL_hit = " << PCAL_hit_temp << ", ECIN_hit = " << ECIN_hit_temp << ", ECOUT_hit = " << ECOUT_hit_temp << ")\n";
+        }
     }
 
-    if (PrinOut) { cout << "P_max = " << P_max << "\n\n"; }
+    if (PrintOut) {
+        cout << "P_max = " << P_max << " (MaxPIndex = " << MaxPIndex << ")\n\n";
+        cout << "==========================================================\n\n\n";
+    }
 
     return MaxPIndex;
 }
