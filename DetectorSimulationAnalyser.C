@@ -131,7 +131,7 @@ void EventAnalyser() {
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -145,13 +145,13 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicated histograms?)
-    bool generate_AMaps = true; // Generate acceptance maps
+    bool generate_AMaps = false; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
     const string SmearMode = "pol1", ShiftMode = "pol1";
@@ -312,11 +312,9 @@ void EventAnalyser() {
                     Additional_Status = "nResSS_";
                 } else {
                     if (!apply_nucleon_SmearAndShift) {
-                        Additional_Status = "nRes1_";
+                        Additional_Status = "nResS1_";
                     } else {
-                        Additional_Status = "nRes2_";
-
-//                        Additional_Status = "nResStage2T_";
+                        Additional_Status = "nResS2_";
                     }
                 }
             } else if (generate_AMaps && plot_and_fit_MomRes) {
@@ -8485,7 +8483,8 @@ void EventAnalyser() {
         //<editor-fold desc="Neutral particles' identification (FD only)">
         /* Get FD neutrons and photons, according to the definitions: */
         vector<int> FD_Neutrons, FD_Photons;                                                               // FD neutrons and photons to be set by definition
-        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons);     // ORIGINAL!!!!                                     // Get FD neutrons and photons, according to the definitions
+        FDNeutralParticle(allParticles, FD_Neutrons,
+                          FD_Photons);     // ORIGINAL!!!!                                     // Get FD neutrons and photons, according to the definitions
 //        FDNeutralParticle(allParticles, electrons, FD_Neutrons, FD_Photons, Neutron_veto_cut, beamE);      // Get FD neutrons and photons, according to the definitions
 
         /* Get FD neutrons and photons above momentum threshold: */
@@ -11274,9 +11273,9 @@ void EventAnalyser() {
                         double RecoProtonTheta = P_p_1p_3v.Theta() * 180.0 / pi;
                         double RecoProtonPhi = P_p_1p_3v.Phi() * 180.0 / pi;
 
-                        /* Reco-TL angle difference */
-                        double dProtonTheta = RecoProtonTheta - TLProtonTheta;
-                        double dProtonPhi = CalcdPhi(RecoProtonPhi - TLProtonPhi);
+                        /* TL-Reco angle difference */
+                        double dProtonTheta = TLProtonTheta - RecoProtonTheta;
+                        double dProtonPhi = CalcdPhi(TLProtonPhi - RecoProtonPhi);
 
                         auto pid = mcpbank_pRes->getPid();
 
@@ -11293,8 +11292,8 @@ void EventAnalyser() {
                         bool TL_Theta_kinCuts = (TLProtonTheta <= FD_nucleon_theta_cut.GetUpperCut());
                         bool pRes_Pass_ThetaKinCut = (Reco_Theta_kinCut && TL_Theta_kinCuts);
 
-                        bool pRes_TL_Pass_Proton_MomKinCut = ((TLProtonP >= p_mom_th.GetLowerCut()) && (TLProtonP <= nRes.GetSliceUpperMomLim()));
                         bool pRes_Reco_Pass_Proton_MomKinCut = ((RecoProtonP >= p_mom_th.GetLowerCut()) && (RecoProtonP <= nRes.GetSliceUpperMomLim()));
+                        bool pRes_TL_Pass_Proton_MomKinCut = ((TLProtonP >= p_mom_th.GetLowerCut()) && (TLProtonP <= nRes.GetSliceUpperMomLim()));
                         //</editor-fold>
 
                         //<editor-fold desc="pRes matching cuts">
@@ -11306,7 +11305,7 @@ void EventAnalyser() {
                         //</editor-fold>
 
                         if (pRes_TL_Pass_PIDCut && pRes_Pass_FiducialCuts && pRes_Pass_ThetaKinCut &&
-                            pRes_TL_Pass_Proton_MomKinCut && pRes_Reco_Pass_Proton_MomKinCut) {
+                            pRes_Reco_Pass_Proton_MomKinCut && pRes_TL_Pass_Proton_MomKinCut) {
                             /* Plots for TL Protons passing pRes cuts */
                             hdTheta_pFD_TL_BC_1p.hFill(dProtonTheta, Weight);
                             hdTheta_pFD_TL_ZOOMIN_BC_1p.hFill(dProtonTheta, Weight);
@@ -12141,9 +12140,9 @@ void EventAnalyser() {
                         double RecoNeutronTheta = P_n_1n_3v.Theta() * 180.0 / pi;
                         double RecoNeutronPhi = P_n_1n_3v.Phi() * 180.0 / pi;
 
-                        /* Reco-TL angle difference */
-                        double dNeutronTheta = RecoNeutronTheta - TLNeutronTheta;
-                        double dNeutronPhi = CalcdPhi(RecoNeutronPhi - TLNeutronPhi);
+                        /* TL-Reco angle difference */
+                        double dNeutronTheta = TLNeutronTheta - RecoNeutronTheta;
+                        double dNeutronPhi = CalcdPhi(TLNeutronPhi - RecoNeutronPhi);
 
                         auto pid = mcpbank_nRes->getPid();
 
@@ -12160,8 +12159,8 @@ void EventAnalyser() {
                         bool TL_Theta_kinCuts = (TLNeutronTheta <= FD_nucleon_theta_cut.GetUpperCut());
                         bool nRes_Pass_ThetaKinCut = (Reco_Theta_kinCut && TL_Theta_kinCuts);
 
-                        bool nRes_TL_Pass_Neutron_MomKinCut = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= nRes.GetSliceUpperMomLim()));
                         bool nRes_Reco_Pass_Neutron_MomKinCut = ((RecoNeutronP >= n_mom_th.GetLowerCut()) && (RecoNeutronP <= nRes.GetSliceUpperMomLim()));
+                        bool nRes_TL_Pass_Neutron_MomKinCut = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= nRes.GetSliceUpperMomLim()));
                         //</editor-fold>
 
                         //<editor-fold desc="nRes matching cuts">
@@ -12173,7 +12172,7 @@ void EventAnalyser() {
                         //</editor-fold>
 
                         if (nRes_TL_Pass_PIDCut && nRes_Pass_FiducialCuts && nRes_Pass_ThetaKinCut &&
-                            nRes_TL_Pass_Neutron_MomKinCut && nRes_Reco_Pass_Neutron_MomKinCut) {
+                            nRes_Reco_Pass_Neutron_MomKinCut && nRes_TL_Pass_Neutron_MomKinCut) {
                             /* Plots for TL neutrons passing nRes cuts */
                             hdTheta_nFD_TL_BC_1n.hFill(dNeutronTheta, Weight);
                             hdTheta_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronTheta, Weight);
