@@ -135,6 +135,7 @@ void EventAnalyser() {
 
     const bool limless_mom_eff_plots = false;
 
+    /* FD neutrals settings */
     const bool Enable_FD_photons = false; // keep as false to decrease RES & DIS
     const bool Enable_FD_neutrons = true; // keep as false to increse eff. plots
     const bool Count_FD_neurton_and_photon_hits = true;
@@ -144,7 +145,7 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicated histograms?)
-    bool generate_AMaps = false; // Generate acceptance maps
+    bool generate_AMaps = true; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -333,11 +334,11 @@ void EventAnalyser() {
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
-                Efficiency_Status = "Eff2_test";
-//                Efficiency_Status = "Eff2";
+//                Efficiency_Status = "Eff2_test";
+                Efficiency_Status = "Eff2";
             } else {
-                Efficiency_Status = "Eff1_test";
-//                Efficiency_Status = "Eff1";
+//                Efficiency_Status = "Eff1_test";
+                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
@@ -19867,30 +19868,35 @@ void EventAnalyser() {
     myLogFile << "calculate_pFDpCD = " << BoolToString(calculate_pFDpCD) << "\n";
     myLogFile << "calculate_nFDpCD = " << BoolToString(calculate_nFDpCD) << "\n";
 
+    myLogFile << "-- Truth level calculation setup ------------------------------------------\n";
     myLogFile << "calculate_truth_level = " << BoolToString(calculate_truth_level) << "\n";
     myLogFile << "fill_TL_plots = " << BoolToString(fill_TL_plots) << "\n";
     myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n\n";
 
     myLogFile << "limless_mom_eff_plots = " << BoolToString(limless_mom_eff_plots) << "\n\n";
 
+    myLogFile << "-- FD neutrals settings ---------------------------------------------------\n";
     myLogFile << "Enable_FD_photons = " << BoolToString(Enable_FD_photons) << "\n";
     myLogFile << "Enable_FD_neutrons = " << BoolToString(Enable_FD_neutrons) << "\n";
     myLogFile << "Count_FD_neurton_and_photon_hits = " << BoolToString(Count_FD_neurton_and_photon_hits) << "\n";
 
     myLogFile << "ES_by_leading_FDneutron = " << BoolToString(ES_by_leading_FDneutron) << "\n\n";
 
+    myLogFile << "-- AMaps settings ---------------------------------------------------------\n";
     myLogFile << "generate_AMaps = " << BoolToString(generate_AMaps) << "\n";
     myLogFile << "TL_with_one_reco_electron = " << BoolToString(TL_with_one_reco_electron) << "\n";
     myLogFile << "reformat_e_bins = " << BoolToString(reformat_e_bins) << "\n";
     myLogFile << "equi_P_e_bins = " << BoolToString(equi_P_e_bins) << "\n\n";
 
+    myLogFile << "-- nRES settings ----------------------------------------------------------\n";
     myLogFile << "plot_and_fit_MomRes = " << BoolToString(plot_and_fit_MomRes) << "\n";
     myLogFile << "DeltaSlices = " << DeltaSlices << "\n";
     myLogFile << "VaryingDelta = " << BoolToString(VaryingDelta) << "\n";
     myLogFile << "SmearMode = " << SmearMode << "\n";
     myLogFile << "ShiftMode = " << ShiftMode << "\n";
-    myLogFile << "nRes_test = " << nRes_test << "\n\n";
+    myLogFile << "nRes_test = " << BoolToString(nRes_test) << "\n\n";
 
+    myLogFile << "-- Other run parameters ---------------------------------------------------\n";
     myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
     myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n\n";
 
@@ -20000,6 +20006,7 @@ void EventAnalyser() {
     myLogFile << "apply_Vz_cuts = " << BoolToString(apply_Vz_cuts) << "\n";
     myLogFile << "apply_dVz_cuts = " << BoolToString(apply_dVz_cuts) << "\n";
     myLogFile << "apply_ECAL_SF_cuts = " << BoolToString(apply_ECAL_SF_cuts) << "\n";
+    myLogFile << "apply_ECAL_P_cuts = " << BoolToString(apply_ECAL_P_cuts) << "\n";
     myLogFile << "apply_ECAL_fiducial_cuts = " << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
     myLogFile << "apply_DC_fiducial_cut = " << BoolToString(apply_DC_fiducial_cut) << "\n\n";
 
