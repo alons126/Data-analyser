@@ -159,19 +159,37 @@ void PoliFitter() {
 //    //</editor-fold>
 
     //<editor-fold desc="First good">
+
+//    /* Histogram plots output directory */
+//    std::string WorkingDirectory = "../";
+//
+///* source directory and directories */
+//    std::string SourcesDirectory = WorkingDirectory + "source" + "/";
+//    std::string DataDirectory = SourcesDirectory + "data" + "/";
+//    std::string ACorrDirectory = DataDirectory + "AcceptanceCorrections" + "/";
+//    std::string AcceptanceMapsDirectory = DataDirectory + "AcceptanceMaps" + "/";
+//    std::string AcceptanceWeightsDirectory = DataDirectory + "AcceptanceWeights" + "/";
+//    std::string NeutronResolutionDirectory = DataDirectory + "NeutronResolution" + "/";
+//    std::string NucleonCutsDirectory = DataDirectory + "NucleonCuts" + "/";
+//    std::string PIDCutsDirectory = DataDirectory + "PIDCuts" + "/";
+//
+//    string SampleName = "C12x4_simulation_G18_Q204_6GeV";
+//
+//    bool plot_and_fit_MomRes = true; // Generate nRes plots
+//    const double DeltaSlices = 0.05;
+//    const bool VaryingDelta = true;
+//    const string SmearMode = "pol1", ShiftMode = "pol1";
+//    bool nRes_test = false; // false by default
+
+//    NeutronResolution nRes;
+//    nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", /* beamE */ 5.98636, /*n_mom_th.GetLowerCut()*/ 0.4,
+//                             /* directories.Resolution_Directory_map["pRes_plots_1p_Directory"] */ "03_1n/02_Neutron_resolution_plots_1n",
+//                             DeltaSlices, VaryingDelta, SmearMode, ShiftMode, nRes_test);
+
     Double_t x[] = {1, 2, 3, 4, 5, 6, 7, 8};
     Double_t y[] = {35, 57, 25, 22, 55, 47, 89, 44};
 
     TGraph *g = new TGraph((sizeof(x) / sizeof(Double_t)), x, y);
-    g->GetXaxis()->SetTitleSize(0.06);
-    g->GetXaxis()->SetLabelSize(0.0425);
-    g->GetXaxis()->CenterTitle(true);
-    g->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
-    g->GetYaxis()->SetTitleSize(0.06);
-    g->GetYaxis()->SetLabelSize(0.0425);
-    g->GetYaxis()->CenterTitle(true);
-    g->GetYaxis()->SetTitle("R_{n} mean");
-    g->SetTitle("R_{n} mean vs. #bar{P}_{n}");
 
     TF1 *f = new TF1("f", "[0] * x * x + [1] * x + [2]"); // A*x*x + B*x + C
 
@@ -179,35 +197,23 @@ void PoliFitter() {
     g->Draw("AL");
 
     double A = f->GetParameter(0); // get [0]
-    double A_Error = f->GetParError(0); // get [0]
     double B = f->GetParameter(1); // get [1]
-    double B_Error = f->GetParError(1); // get [1]
     double C = f->GetParameter(2); // get [2]
-    double ChiSquare = f->GetChisquare(); // ChiSquare [2]
-    double NDF = f->GetNDF(); // NDF [2]
 
-    double x_1_Corr = gStyle->GetStatX() - 0.65, y_1_Corr = gStyle->GetStatY() - 0.2;
-    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.65, y_2_Corr = gStyle->GetStatY() - 0.3;
-    double x_1_Corr_legend = x_1_Corr, y_1_Corr_legend = y_1_Corr + 0.125;
-    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.125;
-    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr;
-    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr;
+    double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
+    double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
 
-    auto Corr_pol1_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
-//    auto Corr_pol1_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.15, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
-////    auto Corr_pol1_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.125, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
-    TLegendEntry *Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f, "f(#bar{P}_{n}) = A#bar{P}_{n} + B", "l");
-    Corr_pol1_legend->SetTextFont(12);
-    Corr_pol1_legend->Draw("same");
+    double x_1_FitParam = x_1_Cut_legend, y_1_FitParam = y_1_Cut_legend;
+    double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
 
     TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
     FitParam->SetBorderSize(1);
-//    FitParam->SetTextFont(0);
+    FitParam->SetTextFont(0);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A) + "#pm" + to_string(A_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B) + "#pm" + to_string(B_Error)).c_str());
-    FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare / NDF)).c_str());
+    FitParam->AddText(("Fit A = " + to_string(A)).c_str());
+    FitParam->AddText(("Fit B = " + to_string(B)).c_str());
+    FitParam->AddText(("Fit C = " + to_string(C)).c_str());
 //    FitParam->AddText(("Fit A = " + to_string_with_precision(A, 8)).c_str());
 //    FitParam->AddText(("Fit B = " + to_string_with_precision(B, 8)).c_str());
 //    FitParam->AddText(("Fit C = " + to_string_with_precision(C, 8)).c_str());
@@ -375,11 +381,11 @@ void PoliFitter() {
 //    //</editor-fold>
 //
 //    //<editor-fold desc="Drawing fit parameters and saving">
-//    double x_1_Corr_legend = gStyle->GetStatX(), y_1_Corr_legend = gStyle->GetStatY() - 0.2;
-//    double x_2_Corr_legend = gStyle->GetStatX() - 0.2, y_2_Corr_legend = gStyle->GetStatY() - 0.3;
+//    double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
+//    double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
 //
-//    double x_1_FitParam = x_1_Corr_legend, y_1_FitParam = y_1_Corr_legend;
-//    double x_2_FitParam = x_2_Corr_legend, y_2_FitParam = y_2_Corr_legend;
+//    double x_1_FitParam = x_1_Cut_legend, y_1_FitParam = y_1_Cut_legend;
+//    double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
 //
 //    TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
 //    FitParam->SetBorderSize(1);

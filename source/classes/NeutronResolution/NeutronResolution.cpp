@@ -431,14 +431,16 @@ void NeutronResolution::FitterPol1_Corr() {
     g_Corr_pol1->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol1->GetXaxis()->CenterTitle(true);
     g_Corr_pol1->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
-//    g_Corr_pol1->GetXaxis()->SetTitle("P_{n} slice mean [GeV/c]");
     g_Corr_pol1->GetYaxis()->SetTitleSize(0.06);
     g_Corr_pol1->GetYaxis()->SetLabelSize(0.0425);
     g_Corr_pol1->GetYaxis()->CenterTitle(true);
-    g_Corr_pol1->GetYaxis()->SetTitle("Fitted R_{n} mean (%)");
-//    g_Corr_pol1->GetYaxis()->SetTitle("P_{n} correction (%)");
-    g_Corr_pol1->SetTitle("Neutron currection vs. #bar{P}_{n}");
+    g_Corr_pol1->GetYaxis()->SetTitle("R_{n} mean");
+    g_Corr_pol1->SetTitle("R_{n} mean vs. #bar{P}_{n}");
 
+//    g_Corr_pol1->GetHistogram()->SetMaximum(MeanPn[NumberOfSlices] * 1.1);
+//    g_Corr_pol1->GetHistogram()->SetMinimum(MeanPn[0] * 0.9);
+//    g_Corr_pol1->GetXaxis()->SetMaximum(MeanPn[NumberOfSlices] * 1.1);
+//    g_Corr_pol1->GetXaxis()->SetMinimum(MeanPn[0] * 0.9);
 //    g_Corr_pol1->SetMaximum(MeanPn[NumberOfSlices] * 1.1);
 //    g_Corr_pol1->SetMinimum(MeanPn[0] * 0.9);
 
@@ -448,26 +450,33 @@ void NeutronResolution::FitterPol1_Corr() {
     g_Corr_pol1->Draw("AL");
 
     double A_Corr_pol1 = f_Corr_pol1->GetParameter(0); // get [0]
+    double A_Corr_pol1_Error = f_Corr_pol1->GetParError(0); // get [0]
     double B_Corr_pol1 = f_Corr_pol1->GetParameter(1); // get [1]
+    double B_Corr_pol1_Error = f_Corr_pol1->GetParError(1); // get [1]
+    double ChiSquare_Corr_pol1 = f_Corr_pol1->GetChisquare(); // ChiSquare
+    double NDF_Corr_pol1 = f_Corr_pol1->GetNDF(); // NDF
 
-    double x_1_Corr_legend = gStyle->GetStatX(), y_1_Corr_legend = gStyle->GetStatY() - 0.2;
-    double x_2_Corr_legend = gStyle->GetStatX() - 0.2, y_2_Corr_legend = gStyle->GetStatY() - 0.3;
-    double x_1_FitParam = x_1_Corr_legend, y_1_FitParam = y_1_Corr_legend;
-    double x_2_FitParam = x_2_Corr_legend, y_2_FitParam = y_2_Corr_legend;
+    double x_1_Corr = gStyle->GetStatX() - 0.55, y_1_Corr = gStyle->GetStatY() - 0.2;
+    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.55, y_2_Corr = gStyle->GetStatY() - 0.3;
+    double x_1_Corr_legend = x_1_Corr, y_1_Corr_legend = y_1_Corr + 0.125;
+    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.125;
+    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr;
+    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr;
 
-    auto Corr_pol1_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.05, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
-//    auto Corr_pol1_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.125, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
+    auto Corr_pol1_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+//    auto Corr_pol1_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.15, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
+////    auto Corr_pol1_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.125, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
     TLegendEntry *Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f_Corr_pol1, "f(#bar{P}_{n}) = A#bar{P}_{n} + B", "l");
     Corr_pol1_legend->SetTextFont(12);
     Corr_pol1_legend->Draw("same");
 
     TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
     FitParam->SetBorderSize(1);
-    FitParam->SetTextFont(0);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("Fit A = " + to_string(A_Corr_pol1)).c_str());
-    FitParam->AddText(("Fit B = " + to_string(B_Corr_pol1)).c_str());
+    FitParam->AddText(("A = " + to_string(A_Corr_pol1) + "#pm" + to_string(A_Corr_pol1_Error)).c_str());
+    FitParam->AddText(("B = " + to_string(B_Corr_pol1) + "#pm" + to_string(B_Corr_pol1_Error)).c_str());
+    FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol1 / NDF_Corr_pol1)).c_str());
     FitParam->Draw("same");
 
     Canvas_Corr_pol1->SaveAs("TEST_Corr_pol1.png");
