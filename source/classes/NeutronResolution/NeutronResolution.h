@@ -80,30 +80,35 @@ private:
     double deltaFactor = 1.;
     int NumberOfSlices = 0;
 
-    TCanvas *Canvas_Corr_pol1, *Canvas_Corr_pol2, *Canvas_Corr_pol3;
+    //<editor-fold desc="Correction and smear fit variables">
 
-    TGraph *g_Corr_pol1;
-    TGraph *g_Corr_pol2;
-    TGraph *g_Corr_pol3;
+    //TODO: add to vectors?
 
-    TF1 *f_Corr_pol1; // A*x + B
-    TF1 *f_Corr_pol2; // A*x*x + B*x + C
-    TF1 *f_Corr_pol3; // A*x*x*x + B*x*x + C*x + D
+    TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
 
-    TGraph *g_Std_pol1;
-    TGraph *g_Std_pol2;
-    TGraph *g_Std_pol3;
+    TGraph *g_Corr_pol1, g_Corr_pol1_wPC;
+    TGraph *g_Corr_pol2, g_Corr_pol2_wPC;
+    TGraph *g_Corr_pol3, g_Corr_pol3_wPC;
 
-    TF1 *f_Std_pol1; // A*x + B
-    TF1 *f_Std_pol2; // A*x*x + B*x + C
-    TF1 *f_Std_pol3; // A*x*x*x + B*x*x + C*x + D
+    TF1 *f_Corr_pol1, f_Corr_pol1_wPC; // A*x + B
+    TF1 *f_Corr_pol2, f_Corr_pol2_wPC; // A*x*x + B*x + C
+    TF1 *f_Corr_pol3, f_Corr_pol3_wPC; // A*x*x*x + B*x*x + C*x + D
 
-    double A_Corr_pol1, B_Corr_pol1;
-    double A_Corr_pol2, B_Corr_pol2, C_Corr_pol2;
-    double A_Corr_pol3, B_Corr_pol3, C_Corr_pol3, D_Corr_pol3;
-    double A_Std_pol1, B_Std_pol1;
-    double A_Std_pol2, B_Std_pol2, C_Std_pol2;
-    double A_Std_pol3, B_Std_pol3, C_Std_pol3, D_Std_pol3;
+    double A_Corr_pol1, A_Corr_pol1_Error, B_Corr_pol1, B_Corr_pol1_Error;
+    double ChiSquare_Corr_pol1, NDF_Corr_pol1;
+    double A_Corr_pol1_wPC, A_Corr_pol1_wPC_Error, B_Corr_pol1_wPC, B_Corr_pol1_wPC_Error;
+    double ChiSquare_Corr_pol1_wPC, NDF_Corr_pol1_wPC;
+
+    double A_Corr_pol2, A_Corr_pol2_Error, B_Corr_pol2, B_Corr_pol2_Error, C_Corr_pol2, C_Corr_pol2_Error;
+    double ChiSquare_Corr_pol2, NDF_Corr_pol2;
+    double A_Corr_pol2_wPC, A_Corr_pol2_wPC_Error, B_Corr_pol2_wPC, B_Corr_pol2_wPC_Error, C_Corr_pol2_wPC, C_Corr_pol2_wPC_Error;
+    double ChiSquare_Corr_pol2_wPC, NDF_Corr_pol2_wPC;
+
+    double A_Corr_pol3, A_Corr_pol3_Error, B_Corr_pol3, B_Corr_pol3_Error, C_Corr_pol3, C_Corr_pol3_Error, D_Corr_pol3, D_Corr_pol3_Error;
+    double ChiSquare_Corr_pol3, NDF_Corr_pol3;
+    double A_Corr_pol3_wPC, A_Corr_pol3_wPC_Error, B_Corr_pol3_wPC, B_Corr_pol3_wPC_Error, C_Corr_pol3_wPC, C_Corr_pol3_wPC_Error, D_Corr_pol3_wPC, D_Corr_pol3_wPC_Error;
+    double ChiSquare_Corr_pol3_wPC, NDF_Corr_pol3_wPC;
+    //</editor-fold>
 
     double Neutron_Momentum_cut = 9999.; // from clas12ana
     string SName;

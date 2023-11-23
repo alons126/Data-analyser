@@ -8,6 +8,7 @@
 #delta:		0.05
 #Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
 
+
 fit_Slice_#1_from_0.40_to_0.65			1:0.4:0.65:0.0439084:0.193694
 fit_Slice_#2_from_0.65_to_0.75			2:0.65:0.75:0.0232457:0.201852
 fit_Slice_#8_from_1.15_to_1.20			8:1.15:1.2:0.138657:0.216273
@@ -19,3 +20,57 @@ fit_Slice_#25_from_2.30_to_2.45			25:2.3:2.45:0.26219:0.19558
 fit_Slice_#28_from_2.80_to_3.00			28:2.8:3:0.47377:0.35
 fit_Slice_#29_from_3.00_to_3.30			29:3:3.3:0.261149:0.195584
 fit_Slice_#30_from_3.30_to_4.00			30:3.3:4:0.364949:0.19502
+
+
+#correction and smear fit variables:
+
+A_Corr_pol1				0.108373
+A_Corr_pol1_Error			0.024323
+B_Corr_pol1				-0.118915
+B_Corr_pol1_Error			0.0451529
+ChiSquare_Corr_pol1			0.270751
+NDF_Corr_pol1				28
+
+A_Corr_pol1_wPC				8.48798e-314
+A_Corr_pol1_wPC_Error			6.95314e-310
+B_Corr_pol1_wPC				1.45484e-314
+B_Corr_pol1_wPC_Error			6.95331e-310
+ChiSquare_Corr_pol1_wPC			6.92498e-310
+NDF_Corr_pol1_wPC				6.95331e-310
+
+A_Corr_pol2				6.95331e-310
+A_Corr_pol2_Error			6.95331e-310
+B_Corr_pol2				8.48798e-314
+B_Corr_pol2_Error			6.95331e-310
+C_Corr_pol2				0
+C_Corr_pol2_Error			6.95331e-310
+ChiSquare_Corr_pol2			6.20662e-223
+NDF_Corr_pol2				6.95331e-310
+
+A_Corr_pol2_wPC				6.95331e-310
+A_Corr_pol2_wPC_Error			6.92496e-310
+B_Corr_pol2_wPC				6.95331e-310
+B_Corr_pol2_wPC_Error			6.92496e-310
+C_Corr_pol2_wPC				6.95331e-310
+C_Corr_pol2_wPC_Error			6.95331e-310
+ChiSquare_Corr_pol2_wPC			6.92498e-310
+NDF_Corr_pol2_wPC				1.05294e-314
+
+A_Corr_pol3			6.95331e-310
+A_Corr_pol3_Error			6.95331e-310
+B_Corr_pol3			6.95331e-310
+B_Corr_pol3_Error			6.95331e-310
+C_Corr_pol3			6.92498e-310
+C_Corr_pol3_Error			6.95331e-310
+ChiSquare_Corr_pol3			6.9245e-310
+NDF_Corr_pol3			6.95331e-310
+
+A_Corr_pol3_wPC			6.95331e-310
+A_Corr_pol3_wPC_Error			7.91639e+303
+B_Corr_pol3_wPC			7.91639e+303
+B_Corr_pol3_wPC_Error			9.88131e-324
+C_Corr_pol3_wPC			6.95331e-310
+C_Corr_pol3_wPC_Error			8.48798e-314
+ChiSquare_Corr_pol3_wPC			6.92496e-310
+NDF_Corr_pol3_wPC			6.20662e-223
+

@@ -176,7 +176,9 @@ void PoliFitter() {
     TF1 *f = new TF1("f", "[0] * x * x + [1] * x + [2]"); // A*x*x + B*x + C
 
     g->Fit(f);
-    g->Draw("AL");
+    g->Draw("ap");
+    g->SetMarkerStyle(21);
+//    g->Draw("AL");
 
     double A = f->GetParameter(0); // get [0]
     double A_Error = f->GetParError(0); // get [0]
@@ -186,18 +188,19 @@ void PoliFitter() {
     double ChiSquare = f->GetChisquare(); // ChiSquare [2]
     double NDF = f->GetNDF(); // NDF [2]
 
-    double x_1_Corr = gStyle->GetStatX() - 0.65, y_1_Corr = gStyle->GetStatY() - 0.2;
-    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.65, y_2_Corr = gStyle->GetStatY() - 0.3;
+    double x_1_Corr = gStyle->GetStatX() - 0.6, y_1_Corr = gStyle->GetStatY() - 0.2;
+    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.6, y_2_Corr = gStyle->GetStatY() - 0.3;
     double x_1_Corr_legend = x_1_Corr, y_1_Corr_legend = y_1_Corr + 0.125;
-    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.125;
-    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr;
-    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr;
+    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.15;
+    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
+    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025;
 
     auto Corr_pol1_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
 //    auto Corr_pol1_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.15, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
 ////    auto Corr_pol1_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.125, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
     TLegendEntry *Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f, "f(#bar{P}_{n}) = A#bar{P}_{n} + B", "l");
     Corr_pol1_legend->SetTextFont(12);
+//    Corr_pol1_legend->SetTextSize(0.025);
     Corr_pol1_legend->Draw("same");
 
     TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");

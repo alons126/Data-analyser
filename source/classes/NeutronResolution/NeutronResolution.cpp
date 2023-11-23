@@ -282,15 +282,22 @@ Double_t CFitFunction(Double_t *v, Double_t *par) {
 
 /* SliceFitDrawAndSave function for the fit */
 void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const string &Particle, double beamE) {
-    for (int i = 0; i < NumberOfSlices; i++) {
-        cout << "\n\n";
+    TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
+    SliceFitCanvas->SetGrid();
+    SliceFitCanvas->SetBottomMargin(0.14);
+    SliceFitCanvas->SetLeftMargin(0.18);
+    SliceFitCanvas->SetRightMargin(0.12);
+    SliceFitCanvas->cd();
 
-        TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
-        SliceFitCanvas->SetGrid();
-        SliceFitCanvas->SetBottomMargin(0.14);
-        SliceFitCanvas->SetLeftMargin(0.18);
-        SliceFitCanvas->SetRightMargin(0.12);
-        SliceFitCanvas->cd();
+    for (int i = 0; i < NumberOfSlices; i++) {
+//        cout << "\n\n";
+//
+//        TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
+//        SliceFitCanvas->SetGrid();
+//        SliceFitCanvas->SetBottomMargin(0.14);
+//        SliceFitCanvas->SetLeftMargin(0.18);
+//        SliceFitCanvas->SetRightMargin(0.12);
+//        SliceFitCanvas->cd();
 
         //<editor-fold desc="Setting sNameFlag">
         string sNameFlag;
@@ -313,6 +320,8 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
         hSlice->Sumw2();
 
         if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
+            cout << "\n\n";
+
             FittedSlices.push_back(i); // Log slices that were fitted
 
             double FitUlim, FitLlim;
@@ -392,7 +401,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             FittedNeutronResSlices->Add(hSlice);
 
             SliceFitCanvas->Clear();
-            delete SliceFitCanvas;
+//            delete SliceFitCanvas;
         } else {
             continue;
         }
@@ -409,22 +418,22 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
 
 //<editor-fold desc="FitterPol1_Corr function">
 void NeutronResolution::FitterPol1_Corr() {
+    cout << "\n\nFitterPol1_Corr variables:\n";
 
     //<editor-fold desc="Setting plot x and y data">
     double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
 
     for (int i = 0; i < NumberOfSlices; i++) {
         MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean();
+        Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
 //        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut();
     }
     //</editor-fold>
 
-    Canvas_Corr_pol1 = new TCanvas("Canvas_Corr_pol1", "Canvas_Corr_pol1", 1000, 750);
-    Canvas_Corr_pol1->SetGrid();
-    Canvas_Corr_pol1->SetBottomMargin(0.14);
-    Canvas_Corr_pol1->SetLeftMargin(0.16);
-    Canvas_Corr_pol1->SetRightMargin(0.12);
+    Fit_Canvas->SetGrid();
+    Fit_Canvas->SetBottomMargin(0.14);
+    Fit_Canvas->SetLeftMargin(0.16);
+    Fit_Canvas->SetRightMargin(0.12);
 
     g_Corr_pol1 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
     g_Corr_pol1->GetXaxis()->SetTitleSize(0.06);
@@ -437,37 +446,30 @@ void NeutronResolution::FitterPol1_Corr() {
     g_Corr_pol1->GetYaxis()->SetTitle("R_{n} mean");
     g_Corr_pol1->SetTitle("R_{n} mean vs. #bar{P}_{n}");
 
-//    g_Corr_pol1->GetHistogram()->SetMaximum(MeanPn[NumberOfSlices] * 1.1);
-//    g_Corr_pol1->GetHistogram()->SetMinimum(MeanPn[0] * 0.9);
-//    g_Corr_pol1->GetXaxis()->SetMaximum(MeanPn[NumberOfSlices] * 1.1);
-//    g_Corr_pol1->GetXaxis()->SetMinimum(MeanPn[0] * 0.9);
-//    g_Corr_pol1->SetMaximum(MeanPn[NumberOfSlices] * 1.1);
-//    g_Corr_pol1->SetMinimum(MeanPn[0] * 0.9);
-
     f_Corr_pol1 = new TF1("f_Corr_pol1", "[0] * x + [1]"); // A*x + B
 
     g_Corr_pol1->Fit(f_Corr_pol1);
-    g_Corr_pol1->Draw("AL");
+    g_Corr_pol1->Draw("ap");
+    g_Corr_pol1->SetMarkerStyle(21);
 
-    double A_Corr_pol1 = f_Corr_pol1->GetParameter(0); // get [0]
-    double A_Corr_pol1_Error = f_Corr_pol1->GetParError(0); // get [0]
-    double B_Corr_pol1 = f_Corr_pol1->GetParameter(1); // get [1]
-    double B_Corr_pol1_Error = f_Corr_pol1->GetParError(1); // get [1]
-    double ChiSquare_Corr_pol1 = f_Corr_pol1->GetChisquare(); // ChiSquare
-    double NDF_Corr_pol1 = f_Corr_pol1->GetNDF(); // NDF
+    A_Corr_pol1 = f_Corr_pol1->GetParameter(0); // get [0]
+    A_Corr_pol1_Error = f_Corr_pol1->GetParError(0); // get [0]
+    B_Corr_pol1 = f_Corr_pol1->GetParameter(1); // get [1]
+    B_Corr_pol1_Error = f_Corr_pol1->GetParError(1); // get [1]
+    ChiSquare_Corr_pol1 = f_Corr_pol1->GetChisquare(); // ChiSquare
+    NDF_Corr_pol1 = f_Corr_pol1->GetNDF(); // NDF
 
-    double x_1_Corr = gStyle->GetStatX() - 0.55, y_1_Corr = gStyle->GetStatY() - 0.2;
-    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.55, y_2_Corr = gStyle->GetStatY() - 0.3;
+    double x_1_Corr = gStyle->GetStatX() - 0.6, y_1_Corr = gStyle->GetStatY() - 0.2;
+    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.6, y_2_Corr = gStyle->GetStatY() - 0.3;
     double x_1_Corr_legend = x_1_Corr, y_1_Corr_legend = y_1_Corr + 0.125;
-    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.125;
-    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr;
-    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr;
+    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.15;
+    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
+    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025;
 
     auto Corr_pol1_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
-//    auto Corr_pol1_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.15, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
-////    auto Corr_pol1_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.125, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
     TLegendEntry *Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f_Corr_pol1, "f(#bar{P}_{n}) = A#bar{P}_{n} + B", "l");
     Corr_pol1_legend->SetTextFont(12);
+    Corr_pol1_legend->SetTextSize(0.03);
     Corr_pol1_legend->Draw("same");
 
     TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
@@ -479,9 +481,11 @@ void NeutronResolution::FitterPol1_Corr() {
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol1 / NDF_Corr_pol1)).c_str());
     FitParam->Draw("same");
 
-    Canvas_Corr_pol1->SaveAs("TEST_Corr_pol1.png");
+    Fit_Canvas->SaveAs((SName + "/" + "Fit_Corr_pol1.png").c_str());
+//    Fit_Canvas->SaveAs("TEST_Corr_pol1.png");
+    Fit_Canvas->Clear();
 
-//    exit(0);
+    cout << "\n\n";
 }
 //</editor-fold>
 
@@ -554,12 +558,6 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const str
     ResSlicePlots->Write();
     PlotsFolder_fout->Write();
     PlotsFolder_fout->Close();
-
-//    TFile *CutsDirectory_fout = new TFile((CutsDirectory + "Neutron_resolution_plots_-_" + SampleName + ".root").c_str(), "recreate");
-//    CutsDirectory_fout->cd();
-//    ResSlicePlots->Write();
-//    CutsDirectory_fout->Write();
-//    CutsDirectory_fout->Close();
 }
 //</editor-fold>
 
@@ -607,15 +605,76 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
     Neutron_res_fit_param << "#sample:\t" << SampleName << "\n";
     Neutron_res_fit_param << "#run_mode:\t" << Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status << "\n";
     Neutron_res_fit_param << "#delta:\t\t" << delta << "\n";
-    Neutron_res_fit_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma\n";
-    Neutron_res_fit_param << "\n";
+
+    //<editor-fold desc="Logging slice fit results">
+    Neutron_res_fit_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma\n\n";
 
     for (int FittedSlice: FittedSlices) {
         DSCuts TempCut = ResSlicesFitVar.at(FittedSlice);
         Neutron_res_fit_param << TempCut.GetCutVariable() << "\t\t\t" << TempCut.GetSliceNumber() << ":" << TempCut.GetSliceLowerb() << ":"
-                              << TempCut.GetSliceUpperb()
-                              << ":" << TempCut.GetMean() << ":" << TempCut.GetUpperCut() << "\n";
+                              << TempCut.GetSliceUpperb() << ":" << TempCut.GetMean() << ":" << TempCut.GetUpperCut() << "\n";
     }
+    //</editor-fold>
+
+    //<editor-fold desc="Logging correction and smear fit variables">
+    if (Particle == "Neutron") {
+        Neutron_res_fit_param << "\n\n#correction and smear fit variables:\n\n";
+
+        Neutron_res_fit_param << "A_Corr_pol1" << "\t\t\t\t" << A_Corr_pol1 << "\n";
+        Neutron_res_fit_param << "A_Corr_pol1_Error" << "\t\t\t" << A_Corr_pol1_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1" << "\t\t\t\t" << B_Corr_pol1 << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1_Error" << "\t\t\t" << B_Corr_pol1_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol1" << "\t\t\t" << ChiSquare_Corr_pol1 << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol1" << "\t\t\t\t" << NDF_Corr_pol1 << "\n\n";
+
+        Neutron_res_fit_param << "A_Corr_pol1_wPC" << "\t\t\t\t" << A_Corr_pol1_wPC << "\n";
+        Neutron_res_fit_param << "A_Corr_pol1_wPC_Error" << "\t\t\t" << A_Corr_pol1_wPC_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1_wPC" << "\t\t\t\t" << B_Corr_pol1_wPC << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1_wPC_Error" << "\t\t\t" << B_Corr_pol1_wPC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol1_wPC" << "\t\t\t" << ChiSquare_Corr_pol1_wPC << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol1_wPC" << "\t\t\t\t" << NDF_Corr_pol1_wPC << "\n\n";
+
+        Neutron_res_fit_param << "A_Corr_pol2" << "\t\t\t\t" << A_Corr_pol2 << "\n";
+        Neutron_res_fit_param << "A_Corr_pol2_Error" << "\t\t\t" << A_Corr_pol2_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol2" << "\t\t\t\t" << B_Corr_pol2 << "\n";
+        Neutron_res_fit_param << "B_Corr_pol2_Error" << "\t\t\t" << B_Corr_pol2_Error << "\n";
+        Neutron_res_fit_param << "C_Corr_pol2" << "\t\t\t\t" << C_Corr_pol2 << "\n";
+        Neutron_res_fit_param << "C_Corr_pol2_Error" << "\t\t\t" << C_Corr_pol2_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol2" << "\t\t\t" << ChiSquare_Corr_pol2 << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol2" << "\t\t\t\t" << NDF_Corr_pol2 << "\n\n";
+
+        Neutron_res_fit_param << "A_Corr_pol2_wPC" << "\t\t\t\t" << A_Corr_pol2_wPC << "\n";
+        Neutron_res_fit_param << "A_Corr_pol2_wPC_Error" << "\t\t\t" << A_Corr_pol2_wPC_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol2_wPC" << "\t\t\t\t" << B_Corr_pol2_wPC << "\n";
+        Neutron_res_fit_param << "B_Corr_pol2_wPC_Error" << "\t\t\t" << B_Corr_pol2_wPC_Error << "\n";
+        Neutron_res_fit_param << "C_Corr_pol2_wPC" << "\t\t\t\t" << C_Corr_pol2_wPC << "\n";
+        Neutron_res_fit_param << "C_Corr_pol2_wPC_Error" << "\t\t\t" << C_Corr_pol2_wPC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol2_wPC" << "\t\t\t" << ChiSquare_Corr_pol2_wPC << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol2_wPC" << "\t\t\t\t" << NDF_Corr_pol2_wPC << "\n\n";
+
+        Neutron_res_fit_param << "A_Corr_pol3" << "\t\t\t" << A_Corr_pol3 << "\n";
+        Neutron_res_fit_param << "A_Corr_pol3_Error" << "\t\t\t" << A_Corr_pol3_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol3" << "\t\t\t" << B_Corr_pol3 << "\n";
+        Neutron_res_fit_param << "B_Corr_pol3_Error" << "\t\t\t" << B_Corr_pol3_Error << "\n";
+        Neutron_res_fit_param << "C_Corr_pol3" << "\t\t\t" << C_Corr_pol3 << "\n";
+        Neutron_res_fit_param << "C_Corr_pol3_Error" << "\t\t\t" << C_Corr_pol3_Error << "\n";
+        Neutron_res_fit_param << "D_Corr_pol3" << "\t\t\t" << D_Corr_pol3 << "\n";
+        Neutron_res_fit_param << "D_Corr_pol3_Error" << "\t\t\t" << D_Corr_pol3_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol3" << "\t\t\t" << ChiSquare_Corr_pol3 << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol3" << "\t\t\t" << NDF_Corr_pol3 << "\n\n";
+
+        Neutron_res_fit_param << "A_Corr_pol3_wPC" << "\t\t\t" << A_Corr_pol3_wPC << "\n";
+        Neutron_res_fit_param << "A_Corr_pol3_wPC_Error" << "\t\t\t" << A_Corr_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol3_wPC" << "\t\t\t" << B_Corr_pol3_wPC << "\n";
+        Neutron_res_fit_param << "B_Corr_pol3_wPC_Error" << "\t\t\t" << B_Corr_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "C_Corr_pol3_wPC" << "\t\t\t" << C_Corr_pol3_wPC << "\n";
+        Neutron_res_fit_param << "C_Corr_pol3_wPC_Error" << "\t\t\t" << C_Corr_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "D_Corr_pol3_wPC" << "\t\t\t" << D_Corr_pol3_wPC << "\n";
+        Neutron_res_fit_param << "D_Corr_pol3_wPC_Error" << "\t\t\t" << D_Corr_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol3_wPC" << "\t\t\t" << ChiSquare_Corr_pol3_wPC << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol3_wPC" << "\t\t\t" << NDF_Corr_pol3_wPC << "\n\n";
+    }
+    //</editor-fold>
 
     Neutron_res_fit_param.close();
 
@@ -623,33 +682,6 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
         /* Copy fitted parameters file to plots folder for easy download from the ifarm */
         system(("cp " + Neutron_res_fit_paramFilePath + " " + plots_path).c_str());
     }
-
-    /*
-    ofstream Neutron_res_fit_param;
-    std::string Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_res_fit_param_-_" + SampleName + ".par";
-
-    Neutron_res_fit_param.open(Neutron_res_fit_paramFilePath);
-    Neutron_res_fit_param << "######################################################################\n";
-    Neutron_res_fit_param << "# CLAS12 analysis cuts and parameters file (after nRes Gaussian fit) #\n";
-    Neutron_res_fit_param << "######################################################################\n";
-    Neutron_res_fit_param << "\n";
-    Neutron_res_fit_param << "# " + Particle + " resolution parameters are for:\n";
-    Neutron_res_fit_param << "#sample:\t" << SampleName << "\n";
-    Neutron_res_fit_param << "#run_mode:\t" << Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status << "\n";
-    Neutron_res_fit_param << "#delta:\t\t" << delta << "\n";
-    Neutron_res_fit_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma\n";
-    Neutron_res_fit_param << "\n";
-
-    for (int FittedSlice: FittedSlices) {
-        DSCuts TempCut = ResSlicesFitVar.at(FittedSlice);
-        Neutron_res_fit_param << TempCut.GetCutVariable() << "\t\t\t" << TempCut.GetSliceNumber() << ":" << TempCut.GetSliceLowerb() << ":" << TempCut.GetSliceUpperb()
-                              << ":" << TempCut.GetMean() << ":" << TempCut.GetUpperCut() << "\n";
-    }
-
-    Neutron_res_fit_param.close();
-
-    system(("cp " + Neutron_res_fit_paramFilePath + " " + plots_path).c_str()); // Copy fitted parameters file to plots folder for easy download from the ifarm
-*/
 }
 //</editor-fold>
 
