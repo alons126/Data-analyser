@@ -80,3 +80,57 @@ D_Corr_pol3_wPC_Error			0.0349399
 ChiSquare_Corr_pol3_wPC			0.19084
 NDF_Corr_pol3_wPC			26
 
+A_Std_pol1				-1506.93
+A_Std_pol1_Error			1200.33
+B_Std_pol1				8899.58
+B_Std_pol1_Error			2228.28
+ChiSquare_Std_pol1			6.59382e+08
+NDF_Std_pol1				28
+
+A_Std_pol1_wPC				2278.25
+A_Std_pol1_wPC_Error			1037
+B_Std_pol1_wPC				2524.32
+B_Std_pol1_wPC_Error			1671.29
+ChiSquare_Std_pol1_wPC			6.28137e+08
+NDF_Std_pol1_wPC				28
+
+A_Std_pol2				-2675.13
+A_Std_pol2_Error			1251.66
+B_Std_pol2				9099.09
+B_Std_pol2_Error			5089.57
+C_Std_pol2				52.9283
+C_Std_pol2_Error			4640.84
+ChiSquare_Std_pol2			5.63969e+08
+NDF_Std_pol2				27
+
+A_Std_pol2_wPC				-0.20895
+A_Std_pol2_wPC_Error			0.000747046
+B_Std_pol2_wPC				2089
+B_Std_pol2_wPC_Error			7.47077
+C_Std_pol2_wPC				2881.67
+C_Std_pol2_wPC_Error			889.641
+ChiSquare_Std_pol2_wPC			6.20881e+08
+NDF_Std_pol2_wPC				27
+
+A_Std_pol3			1246.22
+A_Std_pol3_Error			1402.58
+B_Std_pol3			-10299.7
+B_Std_pol3_Error			8672.65
+C_Std_pol3			22843.6
+C_Std_pol3_Error			16291
+D_Std_pol3			-7090.37
+D_Std_pol3_Error			9291.96
+ChiSquare_Std_pol3			5.47349e+08
+NDF_Std_pol3			26
+
+A_Std_pol3_wPC			0.097742
+A_Std_pol3_wPC_Error			4727.42
+B_Std_pol3_wPC			-977.649
+B_Std_pol3_wPC_Error			4701.76
+C_Std_pol3_wPC			3262.09
+C_Std_pol3_wPC_Error			4689.31
+D_Std_pol3_wPC			3825.02
+D_Std_pol3_wPC_Error			4743.36
+ChiSquare_Std_pol3_wPC			5.71729e+08
+NDF_Std_pol3_wPC			26
+
