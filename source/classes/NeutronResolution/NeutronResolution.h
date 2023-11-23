@@ -60,7 +60,9 @@ private:
     vector <DSCuts> Loaded_Res_Slices_HistVar;
     vector<int> FittedSlices;
 
-    double SliceUpperMomLim; // upper lim for momentum slices to be set after neutron upper momentum th.
+    double SliceUpperMomLim; // upper lim for momentum slices - loaded from file
+
+    double SliceUpperMomLimPC, SliceLowerMomLimPC; // lower lim for momentum slices - set by constructor
 
     double hSliceUpperLim = 1.5;
     double hSliceLowerLim = -1.5;
@@ -84,15 +86,15 @@ private:
 
     //TODO: add to vectors?
 
-    TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
+//    TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
 
-    TGraph *g_Corr_pol1, g_Corr_pol1_wPC;
-    TGraph *g_Corr_pol2, g_Corr_pol2_wPC;
-    TGraph *g_Corr_pol3, g_Corr_pol3_wPC;
+//    TGraph *g_Corr_pol1, g_Corr_pol1_wPC;
+//    TGraph *g_Corr_pol2, g_Corr_pol2_wPC;
+//    TGraph *g_Corr_pol3, g_Corr_pol3_wPC;
 
-    TF1 *f_Corr_pol1, f_Corr_pol1_wPC; // A*x + B
-    TF1 *f_Corr_pol2, f_Corr_pol2_wPC; // A*x*x + B*x + C
-    TF1 *f_Corr_pol3, f_Corr_pol3_wPC; // A*x*x*x + B*x*x + C*x + D
+//    TF1 *f_Corr_pol1, f_Corr_pol1_wPC; // A*x + B
+//    TF1 *f_Corr_pol2, f_Corr_pol2_wPC; // A*x*x + B*x + C
+//    TF1 *f_Corr_pol3, f_Corr_pol3_wPC; // A*x*x*x + B*x*x + C*x + D
 
     double A_Corr_pol1, A_Corr_pol1_Error, B_Corr_pol1, B_Corr_pol1_Error;
     double ChiSquare_Corr_pol1, NDF_Corr_pol1;
@@ -121,8 +123,9 @@ public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double nMomTh, const string &SavePath = "./",
-                      double DeltaSlices = 0.2, bool VaryingDelta = false, const string &SmearM = "pol1", const string &ShiftM = "pol1", bool nRes_test = false);
+    NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, const DSCuts &FD_nucleon_momentum_cut,
+                      double nMomTh, const string &SavePath = "./", double DeltaSlices = 0.2, bool VaryingDelta = false, const string &SmearM = "pol1",
+                      const string &ShiftM = "pol1", bool nRes_test = false);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -140,11 +143,31 @@ public:
 
     void SliceFitDrawAndSave(const string &SampleName, const string &Particle, double beamE);
 
-// FitterPol1 functions -------------------------------------------------------------------------------------------------------------------------------------------------
+// Fitter functions -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void FitterPol1_Corr();
+    void Fitter_Corr_pol1();
 
-    void FitterPol1_Std();
+    void Fitter_Corr_pol2();
+
+    void Fitter_Corr_pol3();
+
+    void Fitter_Corr_pol1_wPC();
+
+    void Fitter_Corr_pol2_wPC();
+
+    void Fitter_Corr_pol3_wPC();
+
+    void Fitter_Std_pol1();
+
+    void Fitter_Std_pol2();
+
+    void Fitter_Std_pol3();
+
+    void Fitter_Std_pol1_wPC();
+
+    void Fitter_Std_pol2_wPC();
+
+    void Fitter_Std_pol3_wPC();
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 

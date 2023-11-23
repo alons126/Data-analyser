@@ -210,12 +210,26 @@ void PoliFitter() {
     FitParam->SetTextAlign(12);
     FitParam->AddText(("A = " + to_string(A) + "#pm" + to_string(A_Error)).c_str());
     FitParam->AddText(("B = " + to_string(B) + "#pm" + to_string(B_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B) + "#pm" + to_string(B_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare / NDF)).c_str());
 //    FitParam->AddText(("Fit A = " + to_string_with_precision(A, 8)).c_str());
 //    FitParam->AddText(("Fit B = " + to_string_with_precision(B, 8)).c_str());
 //    FitParam->AddText(("Fit C = " + to_string_with_precision(C, 8)).c_str());
 //    ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
     FitParam->Draw("same");
+//    TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
+//    FitParam->SetBorderSize(1);
+////    FitParam->SetTextFont(0);
+//    FitParam->SetFillColor(0);
+//    FitParam->SetTextAlign(12);
+//    FitParam->AddText(("A = " + to_string(A) + "#pm" + to_string(A_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B) + "#pm" + to_string(B_Error)).c_str());
+//    FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare / NDF)).c_str());
+////    FitParam->AddText(("Fit A = " + to_string_with_precision(A, 8)).c_str());
+////    FitParam->AddText(("Fit B = " + to_string_with_precision(B, 8)).c_str());
+////    FitParam->AddText(("Fit C = " + to_string_with_precision(C, 8)).c_str());
+////    ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
+//    FitParam->Draw("same");
     //</editor-fold>
 
 //    //<editor-fold desc="Old stuff">

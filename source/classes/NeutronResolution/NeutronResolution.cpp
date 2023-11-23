@@ -9,12 +9,15 @@
 //TODO: add a software that creates momentum slices with at least 1000 events each automatically
 
 //<editor-fold desc="NeutronResolution constructor">
-NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double ParticleMomTh,
-                                     const string &SavePath, double DeltaSlices, bool VaryingDelta, const string &SmearM, const string &ShiftM, bool nRes_test) {
+NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE,
+                                     const DSCuts &FD_nucleon_momentum_cut, double ParticleMomTh, const string &SavePath, double DeltaSlices, bool VaryingDelta,
+                                     const string &SmearM, const string &ShiftM, bool nRes_test) {
     SlicesSavePath = SavePath;
     delta = DeltaSlices;
     nResTestMode = nRes_test;
     SmearMode = SmearM, ShiftMode = ShiftM;
+    SliceUpperMomLimPC = FD_nucleon_momentum_cut.GetUpperCutConst();
+    SliceLowerMomLimPC = FD_nucleon_momentum_cut.GetLowerCutConst();
 
     double Delta = delta, SliceLowerLim = ParticleMomTh, SliceUpperLim;
     SetUpperMomCut(SampleName, NucleonCutsDirectory);
@@ -409,16 +412,21 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
 
     if (Particle == "Neutron") {
         //TODO: figure out if this should be here
-        FitterPol1_Corr();
+        Fitter_Corr_pol1();
+        Fitter_Corr_pol2();
+        Fitter_Corr_pol3();
+        Fitter_Corr_pol1_wPC();
+        Fitter_Corr_pol2_wPC();
+        Fitter_Corr_pol3_wPC();
     }
 }
 //</editor-fold>
 
-// FitterPol1 functions -------------------------------------------------------------------------------------------------------------------------------------------------
+// Fitter functions -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="FitterPol1_Corr function">
-void NeutronResolution::FitterPol1_Corr() {
-    cout << "\n\nFitterPol1_Corr variables:\n";
+//<editor-fold desc="Fitter functions">
+void NeutronResolution::Fitter_Corr_pol1() {
+    cout << "\n\nFitter_Corr_pol1 variables:\n";
 
     //<editor-fold desc="Setting plot x and y data">
     double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
@@ -430,12 +438,14 @@ void NeutronResolution::FitterPol1_Corr() {
     }
     //</editor-fold>
 
+    TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
+    Fit_Canvas->cd();
     Fit_Canvas->SetGrid();
     Fit_Canvas->SetBottomMargin(0.14);
     Fit_Canvas->SetLeftMargin(0.16);
     Fit_Canvas->SetRightMargin(0.12);
 
-    g_Corr_pol1 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+    TGraph *g_Corr_pol1 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
     g_Corr_pol1->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol1->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol1->GetXaxis()->CenterTitle(true);
@@ -446,7 +456,7 @@ void NeutronResolution::FitterPol1_Corr() {
     g_Corr_pol1->GetYaxis()->SetTitle("R_{n} mean");
     g_Corr_pol1->SetTitle("R_{n} mean vs. #bar{P}_{n}");
 
-    f_Corr_pol1 = new TF1("f_Corr_pol1", "[0] * x + [1]"); // A*x + B
+    TF1 *f_Corr_pol1 = new TF1("f_Corr_pol1", "[0] * x + [1]"); // A*x + B
 
     g_Corr_pol1->Fit(f_Corr_pol1);
     g_Corr_pol1->Draw("ap");
@@ -476,70 +486,407 @@ void NeutronResolution::FitterPol1_Corr() {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Corr_pol1) + "#pm" + to_string(A_Corr_pol1_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Corr_pol1) + "#pm" + to_string(B_Corr_pol1_Error)).c_str());
+    FitParam->AddText(("A = " + to_string(A_Corr_pol1) + " #pm " + to_string(A_Corr_pol1_Error)).c_str());
+    FitParam->AddText(("B = " + to_string(B_Corr_pol1) + " #pm " + to_string(B_Corr_pol1_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol1 / NDF_Corr_pol1)).c_str());
     FitParam->Draw("same");
 
-    Fit_Canvas->SaveAs((SName + "/" + "Fit_Corr_pol1.png").c_str());
-//    Fit_Canvas->SaveAs("TEST_Corr_pol1.png");
+    cout << "\n\n";
+
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol1.png").c_str());
     Fit_Canvas->Clear();
+}
+
+void NeutronResolution::Fitter_Corr_pol2() {
+    cout << "\n\nFitter_Corr_pol2 variables:\n";
+
+    //<editor-fold desc="Setting plot x and y data">
+    double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+        Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
+//        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut();
+    }
+    //</editor-fold>
+
+    TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
+    Fit_Canvas->cd();
+    Fit_Canvas->SetGrid();
+    Fit_Canvas->SetBottomMargin(0.14);
+    Fit_Canvas->SetLeftMargin(0.16);
+    Fit_Canvas->SetRightMargin(0.12);
+
+    TGraph *g_Corr_pol2 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+    g_Corr_pol2->GetXaxis()->SetTitleSize(0.06);
+    g_Corr_pol2->GetXaxis()->SetLabelSize(0.0425);
+    g_Corr_pol2->GetXaxis()->CenterTitle(true);
+    g_Corr_pol2->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
+    g_Corr_pol2->GetYaxis()->SetTitleSize(0.06);
+    g_Corr_pol2->GetYaxis()->SetLabelSize(0.0425);
+    g_Corr_pol2->GetYaxis()->CenterTitle(true);
+    g_Corr_pol2->GetYaxis()->SetTitle("R_{n} mean");
+    g_Corr_pol2->SetTitle("R_{n} mean vs. #bar{P}_{n}");
+
+    TF1 *f_Corr_pol2 = new TF1("f_Corr_pol2", "[0] * x * x + [1] * x + [2]"); // A*x*x + B*x + C
+
+    g_Corr_pol2->Fit(f_Corr_pol2);
+    g_Corr_pol2->Draw("ap");
+    g_Corr_pol2->SetMarkerStyle(21);
+
+    A_Corr_pol2 = f_Corr_pol2->GetParameter(0); // get [0]
+    A_Corr_pol2_Error = f_Corr_pol2->GetParError(0); // get [0]
+    B_Corr_pol2 = f_Corr_pol2->GetParameter(1); // get [1]
+    B_Corr_pol2_Error = f_Corr_pol2->GetParError(1); // get [1]
+    C_Corr_pol2 = f_Corr_pol2->GetParameter(2); // get [2]
+    C_Corr_pol2_Error = f_Corr_pol2->GetParError(2); // get [2]
+    ChiSquare_Corr_pol2 = f_Corr_pol2->GetChisquare(); // ChiSquare
+    NDF_Corr_pol2 = f_Corr_pol2->GetNDF(); // NDF
+
+    double x_1_Corr = gStyle->GetStatX() - 0.6, y_1_Corr = gStyle->GetStatY() - 0.2;
+    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.6, y_2_Corr = gStyle->GetStatY() - 0.3;
+    double x_1_Corr_legend = x_1_Corr + 0.1, y_1_Corr_legend = y_1_Corr + 0.125;
+    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.15;
+    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
+    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05;
+
+    auto Corr_pol2_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    TLegendEntry *Corr_pol2_legend_fit = Corr_pol2_legend->AddEntry(f_Corr_pol2, "f(#bar{P}_{n}) = A#bar{P}_{n}^{2} + B#bar{P}_{n} + C", "l");
+    Corr_pol2_legend->SetTextFont(12);
+    Corr_pol2_legend->SetTextSize(0.03);
+    Corr_pol2_legend->Draw("same");
+
+    TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
+    FitParam->SetBorderSize(1);
+    FitParam->SetFillColor(0);
+    FitParam->SetTextAlign(12);
+    FitParam->AddText(("A = " + to_string(A_Corr_pol2) + " #pm " + to_string(A_Corr_pol2_Error)).c_str());
+    FitParam->AddText(("B = " + to_string(B_Corr_pol2) + " #pm " + to_string(B_Corr_pol2_Error)).c_str());
+    FitParam->AddText(("C = " + to_string(C_Corr_pol2) + " #pm " + to_string(C_Corr_pol2_Error)).c_str());
+    FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol2 / NDF_Corr_pol2)).c_str());
+    FitParam->Draw("same");
 
     cout << "\n\n";
+
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol2.png").c_str());
+    Fit_Canvas->Clear();
+}
+
+void NeutronResolution::Fitter_Corr_pol3() {
+    cout << "\n\nFitter_Corr_pol3 variables:\n";
+
+    //<editor-fold desc="Setting plot x and y data">
+    double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+        Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
+//        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut();
+    }
+    //</editor-fold>
+
+    TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
+    Fit_Canvas->cd();
+    Fit_Canvas->SetGrid();
+    Fit_Canvas->SetBottomMargin(0.14);
+    Fit_Canvas->SetLeftMargin(0.16);
+    Fit_Canvas->SetRightMargin(0.12);
+
+    TGraph *g_Corr_pol3 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+    g_Corr_pol3->GetXaxis()->SetTitleSize(0.06);
+    g_Corr_pol3->GetXaxis()->SetLabelSize(0.0425);
+    g_Corr_pol3->GetXaxis()->CenterTitle(true);
+    g_Corr_pol3->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
+    g_Corr_pol3->GetYaxis()->SetTitleSize(0.06);
+    g_Corr_pol3->GetYaxis()->SetLabelSize(0.0425);
+    g_Corr_pol3->GetYaxis()->CenterTitle(true);
+    g_Corr_pol3->GetYaxis()->SetTitle("R_{n} mean");
+    g_Corr_pol3->SetTitle("R_{n} mean vs. #bar{P}_{n}");
+
+    TF1 *f_Corr_pol3 = new TF1("f_Corr_pol3", "[0] * x * x * x + [1] * x * x + [2] * x + [3]"); // A*x*x*x + B*x*x + C*x + D
+
+    g_Corr_pol3->Fit(f_Corr_pol3);
+    g_Corr_pol3->Draw("ap");
+    g_Corr_pol3->SetMarkerStyle(21);
+
+    A_Corr_pol3 = f_Corr_pol3->GetParameter(0); // get [0]
+    A_Corr_pol3_Error = f_Corr_pol3->GetParError(0); // get [0]
+    B_Corr_pol3 = f_Corr_pol3->GetParameter(1); // get [1]
+    B_Corr_pol3_Error = f_Corr_pol3->GetParError(1); // get [1]
+    C_Corr_pol3 = f_Corr_pol3->GetParameter(2); // get [2]
+    C_Corr_pol3_Error = f_Corr_pol3->GetParError(2); // get [2]
+    D_Corr_pol3 = f_Corr_pol3->GetParameter(3); // get [3]
+    D_Corr_pol3_Error = f_Corr_pol3->GetParError(3); // get [3]
+    ChiSquare_Corr_pol3 = f_Corr_pol3->GetChisquare(); // ChiSquare
+    NDF_Corr_pol3 = f_Corr_pol3->GetNDF(); // NDF
+
+    double x_1_Corr = gStyle->GetStatX() - 0.6, y_1_Corr = gStyle->GetStatY() - 0.2;
+    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.6, y_2_Corr = gStyle->GetStatY() - 0.3;
+    double x_1_Corr_legend = x_1_Corr + 0.1 + 0.075, y_1_Corr_legend = y_1_Corr + 0.125;
+    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.15;
+    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
+    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05 - 0.05;
+
+    auto Corr_pol3_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    TLegendEntry *Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3, "f(#bar{P}_{n}) = A#bar{P}_{n}^{3} + B#bar{P}_{n}^{2} + C#bar{P}_{n} + D", "l");
+    Corr_pol3_legend->SetTextFont(12);
+    Corr_pol3_legend->SetTextSize(0.03);
+    Corr_pol3_legend->Draw("same");
+
+    TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
+    FitParam->SetBorderSize(1);
+    FitParam->SetFillColor(0);
+    FitParam->SetTextAlign(12);
+    FitParam->AddText(("A = " + to_string(A_Corr_pol3) + " #pm " + to_string(A_Corr_pol3_Error)).c_str());
+    FitParam->AddText(("B = " + to_string(B_Corr_pol3) + " #pm " + to_string(B_Corr_pol3_Error)).c_str());
+    FitParam->AddText(("C = " + to_string(C_Corr_pol3) + " #pm " + to_string(C_Corr_pol3_Error)).c_str());
+    FitParam->AddText(("D = " + to_string(D_Corr_pol3) + " #pm " + to_string(D_Corr_pol3_Error)).c_str());
+    FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol3 / NDF_Corr_pol3)).c_str());
+    FitParam->Draw("same");
+
+    cout << "\n\n";
+
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol3.png").c_str());
+    Fit_Canvas->Clear();
+}
+
+void NeutronResolution::Fitter_Corr_pol1_wPC() {
+    cout << "\n\nFitter_Corr_pol1_wPC variables:\n";
+
+    //<editor-fold desc="Setting plot x and y data">
+    double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+
+        if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
+            MeanPn[i] = Mean;
+            Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
+//        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut();
+        }
+    }
+    //</editor-fold>
+
+    TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
+    Fit_Canvas->cd();
+    Fit_Canvas->SetGrid();
+    Fit_Canvas->SetBottomMargin(0.14);
+    Fit_Canvas->SetLeftMargin(0.16);
+    Fit_Canvas->SetRightMargin(0.12);
+
+    TGraph *g_Corr_pol1_wPC = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+    g_Corr_pol1_wPC->GetXaxis()->SetTitleSize(0.06);
+    g_Corr_pol1_wPC->GetXaxis()->SetLabelSize(0.0425);
+    g_Corr_pol1_wPC->GetXaxis()->CenterTitle(true);
+    g_Corr_pol1_wPC->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
+    g_Corr_pol1_wPC->GetYaxis()->SetTitleSize(0.06);
+    g_Corr_pol1_wPC->GetYaxis()->SetLabelSize(0.0425);
+    g_Corr_pol1_wPC->GetYaxis()->CenterTitle(true);
+    g_Corr_pol1_wPC->GetYaxis()->SetTitle("R_{n} mean");
+    g_Corr_pol1_wPC->SetTitle("R_{n} mean vs. #bar{P}_{n}");
+
+    TF1 *f_Corr_pol1_wPC = new TF1("f_Corr_pol1_wPC", "[0] * x + [1]"); // A*x + B
+
+    g_Corr_pol1_wPC->Fit(f_Corr_pol1_wPC);
+    g_Corr_pol1_wPC->Draw("ap");
+    g_Corr_pol1_wPC->SetMarkerStyle(21);
+
+    A_Corr_pol1_wPC = f_Corr_pol1_wPC->GetParameter(0); // get [0]
+    A_Corr_pol1_wPC_Error = f_Corr_pol1_wPC->GetParError(0); // get [0]
+    B_Corr_pol1_wPC = f_Corr_pol1_wPC->GetParameter(1); // get [1]
+    B_Corr_pol1_wPC_Error = f_Corr_pol1_wPC->GetParError(1); // get [1]
+    ChiSquare_Corr_pol1_wPC = f_Corr_pol1_wPC->GetChisquare(); // ChiSquare
+    NDF_Corr_pol1_wPC = f_Corr_pol1_wPC->GetNDF(); // NDF
+
+    double x_1_Corr = gStyle->GetStatX() - 0.6, y_1_Corr = gStyle->GetStatY() - 0.2;
+    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.6, y_2_Corr = gStyle->GetStatY() - 0.3;
+    double x_1_Corr_legend = x_1_Corr, y_1_Corr_legend = y_1_Corr + 0.125;
+    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.15;
+    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
+    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025;
+
+    auto Corr_pol1_wPC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    TLegendEntry *Corr_pol1_wPC_legend_fit = Corr_pol1_wPC_legend->AddEntry(f_Corr_pol1_wPC, "f(#bar{P}_{n}) = A#bar{P}_{n} + B", "l");
+    Corr_pol1_wPC_legend->SetTextFont(12);
+    Corr_pol1_wPC_legend->SetTextSize(0.03);
+    Corr_pol1_wPC_legend->Draw("same");
+
+    TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
+    FitParam->SetBorderSize(1);
+    FitParam->SetFillColor(0);
+    FitParam->SetTextAlign(12);
+    FitParam->AddText(("A = " + to_string(A_Corr_pol1_wPC) + " #pm " + to_string(A_Corr_pol1_wPC_Error)).c_str());
+    FitParam->AddText(("B = " + to_string(B_Corr_pol1_wPC) + " #pm " + to_string(B_Corr_pol1_wPC_Error)).c_str());
+    FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol1_wPC / NDF_Corr_pol1_wPC)).c_str());
+    FitParam->Draw("same");
+
+    cout << "\n\n";
+
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol1_wPC.png").c_str());
+    Fit_Canvas->Clear();
+}
+
+void NeutronResolution::Fitter_Corr_pol2_wPC() {
+    cout << "\n\nFitter_Corr_pol2_wPC variables:\n";
+
+    //<editor-fold desc="Setting plot x and y data">
+    double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+
+        if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
+            MeanPn[i] = Mean;
+            Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
+//        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut();
+        }
+    }
+    //</editor-fold>
+
+    TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
+    Fit_Canvas->cd();
+    Fit_Canvas->SetGrid();
+    Fit_Canvas->SetBottomMargin(0.14);
+    Fit_Canvas->SetLeftMargin(0.16);
+    Fit_Canvas->SetRightMargin(0.12);
+
+    TGraph *g_Corr_pol2_wPC = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+    g_Corr_pol2_wPC->GetXaxis()->SetTitleSize(0.06);
+    g_Corr_pol2_wPC->GetXaxis()->SetLabelSize(0.0425);
+    g_Corr_pol2_wPC->GetXaxis()->CenterTitle(true);
+    g_Corr_pol2_wPC->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
+    g_Corr_pol2_wPC->GetYaxis()->SetTitleSize(0.06);
+    g_Corr_pol2_wPC->GetYaxis()->SetLabelSize(0.0425);
+    g_Corr_pol2_wPC->GetYaxis()->CenterTitle(true);
+    g_Corr_pol2_wPC->GetYaxis()->SetTitle("R_{n} mean");
+    g_Corr_pol2_wPC->SetTitle("R_{n} mean vs. #bar{P}_{n}");
+
+    TF1 *f_Corr_pol2_wPC = new TF1("f_Corr_pol2_wPC", "[0] * x * x + [1] * x + [2]"); // A*x*x + B*x + C
+
+    g_Corr_pol2_wPC->Fit(f_Corr_pol2_wPC);
+    g_Corr_pol2_wPC->Draw("ap");
+    g_Corr_pol2_wPC->SetMarkerStyle(21);
+
+    A_Corr_pol2_wPC = f_Corr_pol2_wPC->GetParameter(0); // get [0]
+    A_Corr_pol2_wPC_Error = f_Corr_pol2_wPC->GetParError(0); // get [0]
+    B_Corr_pol2_wPC = f_Corr_pol2_wPC->GetParameter(1); // get [1]
+    B_Corr_pol2_wPC_Error = f_Corr_pol2_wPC->GetParError(1); // get [1]
+    C_Corr_pol2_wPC = f_Corr_pol2_wPC->GetParameter(2); // get [2]
+    C_Corr_pol2_wPC_Error = f_Corr_pol2_wPC->GetParError(2); // get [2]
+    ChiSquare_Corr_pol2_wPC = f_Corr_pol2_wPC->GetChisquare(); // ChiSquare
+    NDF_Corr_pol2_wPC = f_Corr_pol2_wPC->GetNDF(); // NDF
+
+    double x_1_Corr = gStyle->GetStatX() - 0.6, y_1_Corr = gStyle->GetStatY() - 0.2;
+    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.6, y_2_Corr = gStyle->GetStatY() - 0.3;
+    double x_1_Corr_legend = x_1_Corr + 0.1, y_1_Corr_legend = y_1_Corr + 0.125;
+    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.15;
+    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
+    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05;
+
+    auto Corr_pol2_wPC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    TLegendEntry *Corr_pol2_wPC_legend_fit = Corr_pol2_wPC_legend->AddEntry(f_Corr_pol2_wPC, "f(#bar{P}_{n}) = A#bar{P}_{n}^{2} + B#bar{P}_{n} + C", "l");
+    Corr_pol2_wPC_legend->SetTextFont(12);
+    Corr_pol2_wPC_legend->SetTextSize(0.03);
+    Corr_pol2_wPC_legend->Draw("same");
+
+    TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
+    FitParam->SetBorderSize(1);
+    FitParam->SetFillColor(0);
+    FitParam->SetTextAlign(12);
+    FitParam->AddText(("A = " + to_string(A_Corr_pol2_wPC) + " #pm " + to_string(A_Corr_pol2_wPC_Error)).c_str());
+    FitParam->AddText(("B = " + to_string(B_Corr_pol2_wPC) + " #pm " + to_string(B_Corr_pol2_wPC_Error)).c_str());
+    FitParam->AddText(("C = " + to_string(C_Corr_pol2_wPC) + " #pm " + to_string(C_Corr_pol2_wPC_Error)).c_str());
+    FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol2_wPC / NDF_Corr_pol2_wPC)).c_str());
+    FitParam->Draw("same");
+
+    cout << "\n\n";
+
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol2_wPC.png").c_str());
+    Fit_Canvas->Clear();
+}
+
+void NeutronResolution::Fitter_Corr_pol3_wPC() {
+    cout << "\n\nFitter_Corr_pol3_wPC variables:\n";
+
+    //<editor-fold desc="Setting plot x and y data">
+    double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+
+        if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
+            MeanPn[i] = Mean;
+            Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
+//        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut();
+        }
+    }
+    //</editor-fold>
+
+    TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
+    Fit_Canvas->cd();
+    Fit_Canvas->SetGrid();
+    Fit_Canvas->SetBottomMargin(0.14);
+    Fit_Canvas->SetLeftMargin(0.16);
+    Fit_Canvas->SetRightMargin(0.12);
+
+    TGraph *g_Corr_pol3_wPC = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+    g_Corr_pol3_wPC->GetXaxis()->SetTitleSize(0.06);
+    g_Corr_pol3_wPC->GetXaxis()->SetLabelSize(0.0425);
+    g_Corr_pol3_wPC->GetXaxis()->CenterTitle(true);
+    g_Corr_pol3_wPC->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
+    g_Corr_pol3_wPC->GetYaxis()->SetTitleSize(0.06);
+    g_Corr_pol3_wPC->GetYaxis()->SetLabelSize(0.0425);
+    g_Corr_pol3_wPC->GetYaxis()->CenterTitle(true);
+    g_Corr_pol3_wPC->GetYaxis()->SetTitle("R_{n} mean");
+    g_Corr_pol3_wPC->SetTitle("R_{n} mean vs. #bar{P}_{n}");
+
+    TF1 *f_Corr_pol3_wPC = new TF1("f_Corr_pol3_wPC", "[0] * x * x * x + [1] * x * x + [2] * x + [3]"); // A*x*x*x + B*x*x + C*x + D
+
+    g_Corr_pol3_wPC->Fit(f_Corr_pol3_wPC);
+    g_Corr_pol3_wPC->Draw("ap");
+    g_Corr_pol3_wPC->SetMarkerStyle(21);
+
+    A_Corr_pol3_wPC = f_Corr_pol3_wPC->GetParameter(0); // get [0]
+    A_Corr_pol3_wPC_Error = f_Corr_pol3_wPC->GetParError(0); // get [0]
+    B_Corr_pol3_wPC = f_Corr_pol3_wPC->GetParameter(1); // get [1]
+    B_Corr_pol3_wPC_Error = f_Corr_pol3_wPC->GetParError(1); // get [1]
+    C_Corr_pol3_wPC = f_Corr_pol3_wPC->GetParameter(2); // get [2]
+    C_Corr_pol3_wPC_Error = f_Corr_pol3_wPC->GetParError(2); // get [2]
+    D_Corr_pol3_wPC = f_Corr_pol3_wPC->GetParameter(3); // get [3]
+    D_Corr_pol3_wPC_Error = f_Corr_pol3_wPC->GetParError(3); // get [3]
+    ChiSquare_Corr_pol3_wPC = f_Corr_pol3_wPC->GetChisquare(); // ChiSquare
+    NDF_Corr_pol3_wPC = f_Corr_pol3_wPC->GetNDF(); // NDF
+
+    double x_1_Corr = gStyle->GetStatX() - 0.6, y_1_Corr = gStyle->GetStatY() - 0.2;
+    double x_2_Corr = gStyle->GetStatX() - 0.2 - 0.6, y_2_Corr = gStyle->GetStatY() - 0.3;
+    double x_1_Corr_legend = x_1_Corr + 0.1 + 0.075, y_1_Corr_legend = y_1_Corr + 0.125;
+    double x_2_Corr_legend = x_2_Corr, y_2_Corr_legend = y_2_Corr + 0.15;
+    double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
+    double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05 - 0.05;
+
+    auto Corr_pol3_wPC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    TLegendEntry *Corr_pol3_wPC_legend_fit = Corr_pol3_wPC_legend->AddEntry(f_Corr_pol3_wPC, "f(#bar{P}_{n}) = A#bar{P}_{n}^{3} + B#bar{P}_{n}^{2} + C#bar{P}_{n} + D", "l");
+    Corr_pol3_wPC_legend->SetTextFont(12);
+    Corr_pol3_wPC_legend->SetTextSize(0.03);
+    Corr_pol3_wPC_legend->Draw("same");
+
+    TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
+    FitParam->SetBorderSize(1);
+    FitParam->SetFillColor(0);
+    FitParam->SetTextAlign(12);
+    FitParam->AddText(("A = " + to_string(A_Corr_pol3_wPC) + " #pm " + to_string(A_Corr_pol3_wPC_Error)).c_str());
+    FitParam->AddText(("B = " + to_string(B_Corr_pol3_wPC) + " #pm " + to_string(B_Corr_pol3_wPC_Error)).c_str());
+    FitParam->AddText(("C = " + to_string(C_Corr_pol3_wPC) + " #pm " + to_string(C_Corr_pol3_wPC_Error)).c_str());
+    FitParam->AddText(("D = " + to_string(D_Corr_pol3_wPC) + " #pm " + to_string(D_Corr_pol3_wPC_Error)).c_str());
+    FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol3_wPC / NDF_Corr_pol3_wPC)).c_str());
+    FitParam->Draw("same");
+
+    cout << "\n\n";
+
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol3_wPC.png").c_str());
+    Fit_Canvas->Clear();
 }
 //</editor-fold>
-
-////<editor-fold desc="FitterPol1_Corr function">
-//void NeutronResolution::FitterPol1_Std() {
-//    double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices], Pn_Std[NumberOfSlices], y[NumberOfSlices];
-//
-//    for (int i = 0; i < NumberOfSlices; i++) {
-//        MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-//        Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean();
-//        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut();
-//    }
-//
-//    TGraph *g_Corr = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
-//    TGraph *g_Std = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Std);
-//
-//    TF1 *f_Corr = new TF1("f_Corr", "[0] * x + [1]"); // A*x + B
-//    TF1 *f_Std = new TF1("f_Std", "[0] * x + [1]"); // A*x + B
-//
-//    g_Corr->Fit(f_Corr);
-//    g_Std->Fit(f_Std);
-//
-//    g_Corr->Draw("AL");
-//
-//    double A_Corr_pol1 = f_Corr->GetParameter(0); // get [0]
-//    double B_Corr_pol1 = f_Corr->GetParameter(1); // get [1]
-//    double C_Corr = f_Corr->GetParameter(2); // get [2]
-//    double A_Std = f_Std->GetParameter(0); // get [0]
-//    double B_Std = f_Std->GetParameter(1); // get [1]
-//    double C_Std = f_Std->GetParameter(2); // get [2]
-//
-//    double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
-//    double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
-//
-//    double x_1_FitParam = x_1_Cut_legend, y_1_FitParam = y_1_Cut_legend;
-//    double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
-//
-//    TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
-//    FitParam->SetBorderSize(1);
-//    FitParam->SetTextFont(0);
-//    FitParam->SetFillColor(0);
-//    FitParam->SetTextAlign(12);
-//    FitParam->AddText(("Fit A = " + to_string(A)).c_str());
-//    FitParam->AddText(("Fit B = " + to_string(B)).c_str());
-//    FitParam->AddText(("Fit C = " + to_string(C)).c_str());
-////    FitParam->AddText(("Fit A = " + to_string_with_precision(A, 8)).c_str());
-////    FitParam->AddText(("Fit B = " + to_string_with_precision(B, 8)).c_str());
-////    FitParam->AddText(("Fit C = " + to_string_with_precision(C, 8)).c_str());
-////    ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
-//    FitParam->Draw("same");
-//
-////    exit(0);
-//    }
-////</editor-fold>
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -619,6 +966,9 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
     //<editor-fold desc="Logging correction and smear fit variables">
     if (Particle == "Neutron") {
         Neutron_res_fit_param << "\n\n#correction and smear fit variables:\n\n";
+
+        Neutron_res_fit_param << "SliceUpperMomLimPC" << "\t\t\t" << SliceUpperMomLimPC << "\n";
+        Neutron_res_fit_param << "SliceLowerMomLimPC" << "\t\t\t" << SliceLowerMomLimPC << "\n\n";
 
         Neutron_res_fit_param << "A_Corr_pol1" << "\t\t\t\t" << A_Corr_pol1 << "\n";
         Neutron_res_fit_param << "A_Corr_pol1_Error" << "\t\t\t" << A_Corr_pol1_Error << "\n";

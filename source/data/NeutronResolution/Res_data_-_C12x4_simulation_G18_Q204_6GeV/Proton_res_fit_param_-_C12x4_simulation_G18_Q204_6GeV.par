@@ -8,7 +8,6 @@
 #delta:		0.05
 #Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
 
-
 fit_Slice_#1_from_0.40_to_0.65			1:0.4:0.65:0.0408823:0.19474
 fit_Slice_#3_from_0.75_to_0.85			3:0.75:0.85:0.0166333:0.19488
 fit_Slice_#4_from_0.85_to_0.95			4:0.85:0.95:0.0247969:0.192813
