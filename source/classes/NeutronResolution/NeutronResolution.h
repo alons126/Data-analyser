@@ -33,7 +33,7 @@
 
 #include "clas12reader.h"
 
-#include "../clas12ana/clas12ana.h"
+//#include "../clas12ana/clas12ana.h"
 #include "../hPlots/hPlot1D.h"
 #include "../DSCuts/DSCuts.h"
 #include "../../functions/GeneralFunctions.h"
@@ -80,6 +80,8 @@ private:
     double deltaFactor = 1.;
     int NumberOfSlices = 0;
 
+    double A,B,C;
+
     double Neutron_Momentum_cut = 9999.; // from clas12ana
     string SName;
 
@@ -109,6 +111,10 @@ public:
 // SliceFitDrawAndSave function -----------------------------------------------------------------------------------------------------------------------------------------
 
     void SliceFitDrawAndSave(const string &SampleName, const string &Particle, double beamE);
+
+// PoliFitter function --------------------------------------------------------------------------------------------------------------------------------------------------
+
+    void PoliFitter();
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
