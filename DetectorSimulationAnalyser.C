@@ -8482,15 +8482,14 @@ void EventAnalyser() {
 
         //<editor-fold desc="Neutral particles' identification (FD only)">
         /* Get FD neutrons and photons, according to the definitions: */
-        vector<int> FD_Neutrons, FD_Photons;                                                               // FD neutrons and photons to be set by definition
-        FDNeutralParticle(allParticles, FD_Neutrons,
-                          FD_Photons);     // ORIGINAL!!!!                                     // Get FD neutrons and photons, according to the definitions
+        vector<int> FD_Neutrons, FD_Photons;                                                          // FD neutrons and photons to be set by definition
+        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons);                              // Get FD neutrons and photons, according to the definitions (ORIGINAL!!!)
 //        FDNeutralParticle(allParticles, electrons, FD_Neutrons, FD_Photons, Neutron_veto_cut, beamE);      // Get FD neutrons and photons, according to the definitions
 
         /* Get FD neutrons and photons above momentum threshold: */
-        vector<int> NeutronsFD_ind, PhotonsFD_ind;                                                         // FD neutrons and photons by definition - within momentum th.
+        vector<int> NeutronsFD_ind, PhotonsFD_ind;                                                    // FD neutrons and photons by definition - within momentum th.
         FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_nucleon_cuts);
-        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts);      // FD neutron (with momentum th.) with maximal momentum
+        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts); // FD neutron (with momentum th.) with maximal momentum
         //</editor-fold>
 
         //<editor-fold desc="Setting up event selection">
