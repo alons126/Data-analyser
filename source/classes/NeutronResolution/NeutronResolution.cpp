@@ -352,8 +352,8 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             double FitMean = func->GetParameter(1); // get p1
             double FitStd = func->GetParameter(2);  // get p2
 
-            ResSlicesFitVar.at(i).SetMean(FitMean);
-            ResSlicesFitVar.at(i).SetUpperCut(FitStd);
+            ResSlicesFitVar.at(i).SetMean(FitMean); // For neutron correction
+            ResSlicesFitVar.at(i).SetUpperCut(FitStd); // For proton smearing
             ResSlicesHistVar.at(i).SetMean(SliceMean);
             ResSlicesHistVar.at(i).SetUpperCut(SliceStd);
 
@@ -413,13 +413,34 @@ void NeutronResolution::Fitter_Std_pol1() {
     bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
-    double MeanPn[NumberOfSlices], Pn_Std[NumberOfSlices];
+    bool PrintOut = false;
+
+    vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-//        Pn_Std[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
-        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut(); // upper cut is fit std!
+        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+        double Std = ResSlicesFitVar.at(i).GetUpperCut();
+
+        MeanPn.push_back(Mean);
+        Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
+
+        if (PrintOut) {
+            cout << "\nMean = " << Mean << "\n";
+            cout << "Std = " << Std << "\n";
+        }
     }
+
+    if (PrintOut) {
+        cout << "\nMeanPn.size() = " << MeanPn.size() << "\n";
+        cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
+    }
+
+    //<editor-fold desc="Safty check">
+    if (MeanPn.size() != Pn_Std.size()) {
+        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+    }
+    //</editor-fold>
+
     //</editor-fold>
 
     TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
@@ -429,10 +450,12 @@ void NeutronResolution::Fitter_Std_pol1() {
     Fit_Canvas->SetLeftMargin(0.16);
     Fit_Canvas->SetRightMargin(0.12);
 
-    TGraph *g_Std_pol1 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Std);
+    TGraph *g_Std_pol1 = new TGraph();
 
-    for (int i = 0; i < NumberOfSlices; i++) {
-        double x = MeanPn[i], y = Pn_Std[i];
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Std.at(i);
+
+        g_Std_pol1->AddPoint(x, y);
 
         if (PlotPoints) {
             TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
@@ -503,7 +526,7 @@ void NeutronResolution::Fitter_Std_pol1_wPC() {
 
     for (int i = 0; i < NumberOfSlices; i++) {
         double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Std = ResSlicesFitVar.at(i).GetMean();
+        double Std = ResSlicesFitVar.at(i).GetUpperCut();
 
         if (PrintOut) { cout << "\n"; }
 
@@ -608,13 +631,34 @@ void NeutronResolution::Fitter_Std_pol2() {
     bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
-    double MeanPn[NumberOfSlices], Pn_Std[NumberOfSlices];
+    bool PrintOut = false;
+
+    vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-//        Pn_Std[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
-        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut(); // upper cut is fit std!
+        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+        double Std = ResSlicesFitVar.at(i).GetUpperCut();
+
+        MeanPn.push_back(Mean);
+        Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
+
+        if (PrintOut) {
+            cout << "\nMean = " << Mean << "\n";
+            cout << "Std = " << Std << "\n";
+        }
     }
+
+    if (PrintOut) {
+        cout << "\nMeanPn.size() = " << MeanPn.size() << "\n";
+        cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
+    }
+
+    //<editor-fold desc="Safty check">
+    if (MeanPn.size() != Pn_Std.size()) {
+        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+    }
+    //</editor-fold>
+
     //</editor-fold>
 
     TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
@@ -624,10 +668,12 @@ void NeutronResolution::Fitter_Std_pol2() {
     Fit_Canvas->SetLeftMargin(0.16);
     Fit_Canvas->SetRightMargin(0.12);
 
-    TGraph *g_Std_pol2 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Std);
+    TGraph *g_Std_pol2 = new TGraph();
 
-    for (int i = 0; i < NumberOfSlices; i++) {
-        double x = MeanPn[i], y = Pn_Std[i];
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Std.at(i);
+
+        g_Std_pol2->AddPoint(x, y);
 
         if (PlotPoints) {
             TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
@@ -701,7 +747,7 @@ void NeutronResolution::Fitter_Std_pol2_wPC() {
 
     for (int i = 0; i < NumberOfSlices; i++) {
         double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Std = ResSlicesFitVar.at(i).GetMean();
+        double Std = ResSlicesFitVar.at(i).GetUpperCut();
 
         if (PrintOut) { cout << "\n"; }
 
@@ -809,13 +855,34 @@ void NeutronResolution::Fitter_Std_pol3() {
     bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
-    double MeanPn[NumberOfSlices], Pn_Std[NumberOfSlices];
+    bool PrintOut = false;
+
+    vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-//        Pn_Std[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
-        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut(); // upper cut is fit std!
+        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+        double Std = ResSlicesFitVar.at(i).GetUpperCut();
+
+        MeanPn.push_back(Mean);
+        Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
+
+        if (PrintOut) {
+            cout << "\nMean = " << Mean << "\n";
+            cout << "Std = " << Std << "\n";
+        }
     }
+
+    if (PrintOut) {
+        cout << "\nMeanPn.size() = " << MeanPn.size() << "\n";
+        cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
+    }
+
+    //<editor-fold desc="Safty check">
+    if (MeanPn.size() != Pn_Std.size()) {
+        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+    }
+    //</editor-fold>
+
     //</editor-fold>
 
     TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
@@ -825,10 +892,12 @@ void NeutronResolution::Fitter_Std_pol3() {
     Fit_Canvas->SetLeftMargin(0.16);
     Fit_Canvas->SetRightMargin(0.12);
 
-    TGraph *g_Std_pol3 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Std);
+    TGraph *g_Std_pol3 = new TGraph();
 
-    for (int i = 0; i < NumberOfSlices; i++) {
-        double x = MeanPn[i], y = Pn_Std[i];
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Std.at(i);
+
+        g_Std_pol3->AddPoint(x, y);
 
         if (PlotPoints) {
             TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
@@ -905,7 +974,7 @@ void NeutronResolution::Fitter_Std_pol3_wPC() {
 
     for (int i = 0; i < NumberOfSlices; i++) {
         double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Std = ResSlicesFitVar.at(i).GetMean();
+        double Std = ResSlicesFitVar.at(i).GetUpperCut();
 
         if (PrintOut) { cout << "\n"; }
 
@@ -1017,12 +1086,34 @@ void NeutronResolution::Fitter_Corr_pol1() {
     bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
-    double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
+    bool PrintOut = false;
+
+    vector<double> MeanPn, Pn_Corr;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
+        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+        double Corr = ResSlicesFitVar.at(i).GetMean();
+
+        MeanPn.push_back(Mean);
+        Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
+
+        if (PrintOut) {
+            cout << "\nMean = " << Mean << "\n";
+            cout << "Corr = " << Corr << "\n";
+        }
     }
+
+    if (PrintOut) {
+        cout << "\nMeanPn.size() = " << MeanPn.size() << "\n";
+        cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
+    }
+
+    //<editor-fold desc="Safty check">
+    if (MeanPn.size() != Pn_Corr.size()) {
+        cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+    }
+    //</editor-fold>
+
     //</editor-fold>
 
     TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
@@ -1032,10 +1123,12 @@ void NeutronResolution::Fitter_Corr_pol1() {
     Fit_Canvas->SetLeftMargin(0.16);
     Fit_Canvas->SetRightMargin(0.12);
 
-    TGraph *g_Corr_pol1 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+    TGraph *g_Corr_pol1 = new TGraph();
 
-    for (int i = 0; i < NumberOfSlices; i++) {
-        double x = MeanPn[i], y = Pn_Corr[i];
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Corr.at(i);
+
+        g_Corr_pol1->AddPoint(x, y);
 
         if (PlotPoints) {
             TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
@@ -1211,12 +1304,34 @@ void NeutronResolution::Fitter_Corr_pol2() {
     bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
-    double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
+    bool PrintOut = false;
+
+    vector<double> MeanPn, Pn_Corr;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
+        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+        double Corr = ResSlicesFitVar.at(i).GetMean();
+
+        MeanPn.push_back(Mean);
+        Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
+
+        if (PrintOut) {
+            cout << "\nMean = " << Mean << "\n";
+            cout << "Corr = " << Corr << "\n";
+        }
     }
+
+    if (PrintOut) {
+        cout << "\nMeanPn.size() = " << MeanPn.size() << "\n";
+        cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
+    }
+
+    //<editor-fold desc="Safty check">
+    if (MeanPn.size() != Pn_Corr.size()) {
+        cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+    }
+    //</editor-fold>
+
     //</editor-fold>
 
     TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
@@ -1226,10 +1341,12 @@ void NeutronResolution::Fitter_Corr_pol2() {
     Fit_Canvas->SetLeftMargin(0.16);
     Fit_Canvas->SetRightMargin(0.12);
 
-    TGraph *g_Corr_pol2 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+    TGraph *g_Corr_pol2 = new TGraph();
 
-    for (int i = 0; i < NumberOfSlices; i++) {
-        double x = MeanPn[i], y = Pn_Corr[i];
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Corr.at(i);
+
+        g_Corr_pol2->AddPoint(x, y);
 
         if (PlotPoints) {
             TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
@@ -1411,12 +1528,34 @@ void NeutronResolution::Fitter_Corr_pol3() {
     bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
-    double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
+    bool PrintOut = false;
+
+    vector<double> MeanPn, Pn_Corr;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
+        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
+        double Corr = ResSlicesFitVar.at(i).GetMean();
+
+        MeanPn.push_back(Mean);
+        Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
+
+        if (PrintOut) {
+            cout << "\nMean = " << Mean << "\n";
+            cout << "Corr = " << Corr << "\n";
+        }
     }
+
+    if (PrintOut) {
+        cout << "\nMeanPn.size() = " << MeanPn.size() << "\n";
+        cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
+    }
+
+    //<editor-fold desc="Safty check">
+    if (MeanPn.size() != Pn_Corr.size()) {
+        cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+    }
+    //</editor-fold>
+
     //</editor-fold>
 
     TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
@@ -1426,10 +1565,12 @@ void NeutronResolution::Fitter_Corr_pol3() {
     Fit_Canvas->SetLeftMargin(0.16);
     Fit_Canvas->SetRightMargin(0.12);
 
-    TGraph *g_Corr_pol3 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+    TGraph *g_Corr_pol3 = new TGraph();
 
-    for (int i = 0; i < NumberOfSlices; i++) {
-        double x = MeanPn[i], y = Pn_Corr[i];
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Corr.at(i);
+
+        g_Corr_pol3->AddPoint(x, y);
 
         if (PlotPoints) {
             TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
@@ -3582,19 +3723,32 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 
             //</editor-fold>
 
-        } else if ((SmearMode == "pol1") || (SmearMode == "pol2") || (SmearMode == "pol3")) {
+        } else if ((SmearMode == "pol1") || (SmearMode == "pol2") || (SmearMode == "pol3") ||
+                   (SmearMode == "pol1_wPC") || (SmearMode == "pol2_wPC") || (SmearMode == "pol3_wPC")) {
             /* Smear using pol fit results */
             double Smearing, Arg;
 
             if (SmearMode == "pol1") {
+                Arg = A_Std_pol1 * Momentum + B_Std_pol1;
+
+                Smearing = Rand->Gaus(1, Arg);
+            } else if (SmearMode == "pol1_wPC") {
                 Arg = A_Std_pol1_wPC * Momentum + B_Std_pol1_wPC;
 
                 Smearing = Rand->Gaus(1, Arg);
             } else if (SmearMode == "pol2") {
+                Arg = A_Std_pol2 * Momentum2 + B_Std_pol2 * Momentum + C_Std_pol2;
+
+                Smearing = Rand->Gaus(1, Arg);
+            } else if (SmearMode == "pol2_wPC") {
                 Arg = A_Std_pol2_wPC * Momentum2 + B_Std_pol2_wPC * Momentum + C_Std_pol2_wPC;
 
                 Smearing = Rand->Gaus(1, Arg);
             } else if (SmearMode == "pol3") {
+                Arg = A_Std_pol3 * Momentum3 + B_Std_pol3 * Momentum2 + C_Std_pol3 * Momentum + D_Std_pol3;
+
+                Smearing = Rand->Gaus(1, Arg);
+            } else if (SmearMode == "pol3_wPC") {
                 Arg = A_Std_pol3_wPC * Momentum3 + B_Std_pol3_wPC * Momentum2 + C_Std_pol3_wPC * Momentum + D_Std_pol3_wPC;
 
                 Smearing = Rand->Gaus(1, Arg);
@@ -3712,15 +3866,22 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
             }
             //</editor-fold>
 
-        } else if ((ShiftMode == "pol1") || (ShiftMode == "pol2") || (ShiftMode == "pol3")) {
+        } else if ((SmearMode == "pol1") || (SmearMode == "pol2") || (SmearMode == "pol3") ||
+                   (SmearMode == "pol1_wPC") || (SmearMode == "pol2_wPC") || (SmearMode == "pol3_wPC")) {
             /* Correction using pol fit results */
             double shift;
 
             if (ShiftMode == "pol1") {
+                shift = A_Corr_pol1 * Momentum + B_Corr_pol1;
+            } else if (ShiftMode == "pol1_wPC") {
                 shift = A_Corr_pol1_wPC * Momentum + B_Corr_pol1_wPC;
             } else if (ShiftMode == "pol2") {
+                shift = A_Corr_pol2 * Momentum2 + B_Corr_pol2 * Momentum + C_Corr_pol2;
+            } else if (ShiftMode == "pol2_wPC") {
                 shift = A_Corr_pol2_wPC * Momentum2 + B_Corr_pol2_wPC * Momentum + C_Corr_pol2_wPC;
             } else if (ShiftMode == "pol3") {
+                shift = A_Corr_pol3 * Momentum3 + B_Corr_pol3 * Momentum2 + C_Corr_pol3 * Momentum + D_Corr_pol3;
+            } else if (ShiftMode == "pol3_wPC") {
                 shift = A_Corr_pol3_wPC * Momentum3 + B_Corr_pol3_wPC * Momentum2 + C_Corr_pol3_wPC * Momentum + D_Corr_pol3_wPC;
             }
 
