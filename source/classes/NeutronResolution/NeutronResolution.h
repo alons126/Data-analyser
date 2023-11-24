@@ -149,29 +149,29 @@ public:
 
 // Fitter functions -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void Fitter_Corr_pol1();
-
-    void Fitter_Corr_pol2();
-
-    void Fitter_Corr_pol3();
-
-    void Fitter_Corr_pol1_wPC();
-
-    void Fitter_Corr_pol2_wPC();
-
-    void Fitter_Corr_pol3_wPC();
-
     void Fitter_Std_pol1();
-
-    void Fitter_Std_pol2();
-
-    void Fitter_Std_pol3();
 
     void Fitter_Std_pol1_wPC();
 
+    void Fitter_Std_pol2();
+
     void Fitter_Std_pol2_wPC();
 
+    void Fitter_Std_pol3();
+
     void Fitter_Std_pol3_wPC();
+
+    void Fitter_Corr_pol1();
+
+    void Fitter_Corr_pol1_wPC();
+
+    void Fitter_Corr_pol2();
+
+    void Fitter_Corr_pol2_wPC();
+
+    void Fitter_Corr_pol3();
+
+    void Fitter_Corr_pol3_wPC();
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
