@@ -9,15 +9,15 @@
 //TODO: add a software that creates momentum slices with at least 1000 events each automatically
 
 //<editor-fold desc="NeutronResolution constructor">
-NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE,
-                                     const DSCuts &FD_nucleon_momentum_cut, double ParticleMomTh, const string &SavePath, double DeltaSlices, bool VaryingDelta,
-                                     const string &SmearM, const string &ShiftM, bool nRes_test) {
+NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
+                                     const DSCuts &FD_nucleon_momentum_cut, double ParticleMomTh, bool Calculate_momResS2, const string &NeutronResolutionDirectory,
+                                     const string &SavePath, double DeltaSlices, bool VaryingDelta, const string &SmearM, const string &ShiftM, bool momRes_test) {
+    SliceUpperMomLimPC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimPC = FD_nucleon_momentum_cut.GetLowerCutConst();
+    momResS2Mode = Calculate_momResS2;
     SlicesSavePath = SavePath;
     delta = DeltaSlices;
-    nResTestMode = nRes_test;
     SmearMode = SmearM, ShiftMode = ShiftM;
-    SliceUpperMomLimPC = FD_nucleon_momentum_cut.GetUpperCutConst();
-    SliceLowerMomLimPC = FD_nucleon_momentum_cut.GetLowerCutConst();
+    momResTestMode = momRes_test;
 
     double Delta = delta, SliceLowerLim = ParticleMomTh, SliceUpperLim;
     SetUpperMomCut(SampleName, NucleonCutsDirectory);
@@ -91,7 +91,7 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
             hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
-            if (!nRes_test) {
+            if (!momRes_test) {
                 hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
                                            -0.75, 0.75, hSliceNumOfBin);
             } else {
@@ -181,6 +181,13 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
     if (LimitsPrintOut && LimitsPrintOutAndExit) { exit(0); }
 
     NumberOfSlices = SliceNumber;
+
+    if (momResS2Mode) {
+        ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
+                         Calculate_momResS2, SampleName, NucleonCutsDirectory);
+        ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_hist_param_-_" + SampleName + ".par").c_str(),
+                         Calculate_momResS2, SampleName, NucleonCutsDirectory);
+    }
 }
 //</editor-fold>
 
@@ -313,7 +320,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
 
             double FitUlim, FitLlim;
 
-            if (nResTestMode) { // In smear & shift test mode
+            if (momResTestMode) { // In smear & shift test mode
                 FitUlim = 1., FitLlim = -1.; // For both neutrons and protons
             } else {
                 if (Particle == "Neutron") {
@@ -333,7 +340,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             func->SetParameters(SliceMax, SliceMean, 0.5); // start fit with histogram's max and mean
             func->SetParNames("Constant", "Mean_value", "Sigma");
 
-            if (nResTestMode) { // In smear & shift test mode
+            if (momResTestMode) { // In smear & shift test mode
                 func->SetParLimits(1, -1.5, 1.5); // Mean limits
                 func->SetParLimits(2, 0.001, 0.35); // Sigma limits
             } else {
@@ -1783,7 +1790,7 @@ void NeutronResolution::LogResDataToFile(const string &SampleName, const string 
     //TODO: reorder file save in test mode properly
     string SaveDateDir = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/";
 
-    if (!nResTestMode) {
+    if (!momResTestMode) {
         system(("mkdir -p " + SaveDateDir).c_str());
 
         LogFitDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
@@ -1804,10 +1811,18 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
     ofstream Neutron_res_fit_param;
     std::string Neutron_res_fit_paramFilePath;
 
-    if (!nResTestMode) {
-        Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_res_fit_param_-_" + SampleName + ".par";
+    if (momResS2Mode) {
+        if (!momResTestMode) {
+            Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS2_fit_param_-_" + SampleName + ".par";
+        } else {
+            Neutron_res_fit_paramFilePath = plots_path + "/" + Particle + "_momResS2_fit_param_-_" + SampleName + ".par";
+        }
     } else {
-        Neutron_res_fit_paramFilePath = plots_path + "/" + Particle + "_res_fit_param_-_" + SampleName + ".par";
+        if (!momResTestMode) {
+            Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS1_fit_param_-_" + SampleName + ".par";
+        } else {
+            Neutron_res_fit_paramFilePath = plots_path + "/" + Particle + "_momResS1_fit_param_-_" + SampleName + ".par";
+        }
     }
 
     Neutron_res_fit_param.open(Neutron_res_fit_paramFilePath);
@@ -1949,7 +1964,7 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
 
     Neutron_res_fit_param.close();
 
-    if (!nResTestMode) {
+    if (!momResTestMode) {
         /* Copy fitted parameters file to plots folder for easy download from the ifarm */
         system(("cp " + Neutron_res_fit_paramFilePath + " " + plots_path).c_str());
     }
@@ -1964,10 +1979,18 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
     ofstream Neutron_res_Hist_param;
     std::string Neutron_res_Hist_paramFilePath;
 
-    if (!nResTestMode) {
-        Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + Particle + "_res_hist_param_-_" + SampleName + ".par";
+    if (momResS2Mode) {
+        if (!momResTestMode) {
+            Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS2_hist_param_-_" + SampleName + ".par";
+        } else {
+            Neutron_res_Hist_paramFilePath = plots_path + "/" + Particle + "_momResS2_hist_param_-_" + SampleName + ".par";
+        }
     } else {
-        Neutron_res_Hist_paramFilePath = plots_path + "/" + Particle + "_res_hist_param_-_" + SampleName + ".par";
+        if (!momResTestMode) {
+            Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS1_hist_param_-_" + SampleName + ".par";
+        } else {
+            Neutron_res_Hist_paramFilePath = plots_path + "/" + Particle + "_momResS1_hist_param_-_" + SampleName + ".par";
+        }
     }
 
     Neutron_res_Hist_param.open(Neutron_res_Hist_paramFilePath);
@@ -1990,7 +2013,7 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
 
     Neutron_res_Hist_param.close();
 
-    if (!nResTestMode) {
+    if (!momResTestMode) {
         /* Copy histogram parameters file to plots folder for easy download from the ifarm */
         system(("cp " + Neutron_res_Hist_paramFilePath + " " + plots_path).c_str());
     }
@@ -2000,11 +2023,13 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadResDataParam function">
-void NeutronResolution::ReadResDataParam(const char *filename, const string &SampleName, const string &NucleonCutsDirectory) {
-    SName = SampleName;
+void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory) {
 
     ifstream infile;
     infile.open(filename);
+
+    momResS2Mode = Calculate_momResS2;
+    SName = SampleName;
     SetUpperMomCut(SampleName, NucleonCutsDirectory);
 
     if (infile.is_open()) {
@@ -2088,11 +2113,20 @@ void NeutronResolution::ReadResDataParam(const char *filename, const string &Sam
             } else {
                 //TODO: reorganize these into vectors!
 
+
+                cout << "\n\nTEST TEST TEST!!!\n\n";
+                cout << "\n\nparameter = " << parameter << "\n\n";
+
+
+
                 if (findSubstring(parameter, "Corr")) {
                     if (findSubstring(parameter, "pol1")) {
                         if (parameter == "A_Corr_pol1") {
                             ss >> parameter2;
                             stringstream ss2(parameter2);
+
+                            cout << "\n\nparameter2 = " << parameter2 << "\n\n";
+
                             string pid_v;
                             int count = 0;
                             string pid = "";

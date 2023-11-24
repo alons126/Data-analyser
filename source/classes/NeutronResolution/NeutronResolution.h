@@ -42,7 +42,7 @@ using namespace std;
 
 class NeutronResolution {
 private:
-    bool nResTestMode;
+    bool momResTestMode, momResS2Mode;
 
 //    string SmearMode = "slices"; // Smear by resolution fit width values from slices
     string SmearMode = "pol1";     // Smear by fitted linear function to resolution Gaussian width
@@ -127,9 +127,10 @@ public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, const DSCuts &FD_nucleon_momentum_cut,
-                      double nMomTh, const string &SavePath = "./", double DeltaSlices = 0.2, bool VaryingDelta = false, const string &SmearM = "pol1",
-                      const string &ShiftM = "pol1", bool nRes_test = false);
+    NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
+                      const DSCuts &FD_nucleon_momentum_cut, double ParticleMomTh, bool Calculate_momResS2, const string &NeutronResolutionDirectory,
+                      const string &SavePath = "./", double DeltaSlices = 0.2, bool VaryingDelta = false, const string &SmearM = "pol1", const string &ShiftM = "pol1",
+                      bool nRes_test = false);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -194,7 +195,7 @@ public:
 
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadResDataParam(const char *filename, const string &SampleName, const string &NucleonCutsDirectory);
+    void ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory);
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
