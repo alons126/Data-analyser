@@ -410,6 +410,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
 //<editor-fold desc="Fitter functions">
 void NeutronResolution::Fitter_Std_pol1() {
     cout << "\n\nFitter_Std_pol1 variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     double MeanPn[NumberOfSlices], Pn_Std[NumberOfSlices];
@@ -429,6 +430,17 @@ void NeutronResolution::Fitter_Std_pol1() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Std_pol1 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Std);
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        double x = MeanPn[i], y = Pn_Std[i];
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Std_pol1->GetListOfFunctions()->Add(latex);
+        }
+    }
+
     g_Std_pol1->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol1->GetXaxis()->SetLabelSize(0.0425);
     g_Std_pol1->GetXaxis()->CenterTitle(true);
@@ -476,43 +488,44 @@ void NeutronResolution::Fitter_Std_pol1() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Std_pol1.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "01_Fit_Std_pol1.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Std_pol1_wPC() {
     cout << "\n\nFitter_Std_pol1_wPC variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     bool PrintOut = false;
 
-    vector<double> MeanPn, Pn_Corr;
+    vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
         double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Corr = ResSlicesFitVar.at(i).GetMean();
+        double Std = ResSlicesFitVar.at(i).GetMean();
 
         if (PrintOut) { cout << "\n"; }
 
         if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
             MeanPn.push_back(Mean);
-            Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
+            Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
 
             if (PrintOut) {
                 cout << "Mean = " << Mean << "\n";
-                cout << "Corr = " << Corr << "\n";
+                cout << "Std = " << Std << "\n";
             }
         }
     }
 
     if (PrintOut) {
         cout << "\nMeanPn.size() = " << MeanPn.size() << "\n";
-        cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
+        cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
     }
 
     //<editor-fold desc="Safty check">
-    if (MeanPn.size() != Pn_Corr.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+    if (MeanPn.size() != Pn_Std.size()) {
+        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -527,7 +540,17 @@ void NeutronResolution::Fitter_Std_pol1_wPC() {
 
     TGraph *g_Std_pol1_wPC = new TGraph();
 
-    for (int i = 0; i < MeanPn.size(); i++) { g_Std_pol1_wPC->AddPoint(MeanPn.at(i), Pn_Corr.at(i)); }
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Std.at(i);
+
+        g_Std_pol1_wPC->AddPoint(x, y);
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Std_pol1_wPC->GetListOfFunctions()->Add(latex);
+        }
+    }
 
     g_Std_pol1_wPC->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol1_wPC->GetXaxis()->SetLabelSize(0.0425);
@@ -576,12 +599,13 @@ void NeutronResolution::Fitter_Std_pol1_wPC() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Std_pol1_wPC.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "01_Fit_Std_pol1_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Std_pol2() {
     cout << "\n\nFitter_Std_pol2 variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     double MeanPn[NumberOfSlices], Pn_Std[NumberOfSlices];
@@ -601,6 +625,17 @@ void NeutronResolution::Fitter_Std_pol2() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Std_pol2 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Std);
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        double x = MeanPn[i], y = Pn_Std[i];
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Std_pol2->GetListOfFunctions()->Add(latex);
+        }
+    }
+
     g_Std_pol2->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol2->GetXaxis()->SetLabelSize(0.0425);
     g_Std_pol2->GetXaxis()->CenterTitle(true);
@@ -651,43 +686,44 @@ void NeutronResolution::Fitter_Std_pol2() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Std_pol2.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "02_Fit_Std_pol2.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Std_pol2_wPC() {
     cout << "\n\nFitter_Std_pol2_wPC variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     bool PrintOut = false;
 
-    vector<double> MeanPn, Pn_Corr;
+    vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
         double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Corr = ResSlicesFitVar.at(i).GetMean();
+        double Std = ResSlicesFitVar.at(i).GetMean();
 
         if (PrintOut) { cout << "\n"; }
 
         if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
             MeanPn.push_back(Mean);
-            Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
+            Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
 
             if (PrintOut) {
                 cout << "Mean = " << Mean << "\n";
-                cout << "Corr = " << Corr << "\n";
+                cout << "Std = " << Std << "\n";
             }
         }
     }
 
     if (PrintOut) {
         cout << "\nMeanPn.size() = " << MeanPn.size() << "\n";
-        cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
+        cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
     }
 
     //<editor-fold desc="Safty check">
-    if (MeanPn.size() != Pn_Corr.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+    if (MeanPn.size() != Pn_Std.size()) {
+        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -702,7 +738,17 @@ void NeutronResolution::Fitter_Std_pol2_wPC() {
 
     TGraph *g_Std_pol2_wPC = new TGraph();
 
-    for (int i = 0; i < MeanPn.size(); i++) { g_Std_pol2_wPC->AddPoint(MeanPn.at(i), Pn_Corr.at(i)); }
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Std.at(i);
+
+        g_Std_pol2_wPC->AddPoint(x, y);
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Std_pol2_wPC->GetListOfFunctions()->Add(latex);
+        }
+    }
 
     g_Std_pol2_wPC->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol2_wPC->GetXaxis()->SetLabelSize(0.0425);
@@ -754,12 +800,13 @@ void NeutronResolution::Fitter_Std_pol2_wPC() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Std_pol2_wPC.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "02_Fit_Std_pol2_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Std_pol3() {
     cout << "\n\nFitter_Std_pol3 variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     double MeanPn[NumberOfSlices], Pn_Std[NumberOfSlices];
@@ -779,6 +826,17 @@ void NeutronResolution::Fitter_Std_pol3() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Std_pol3 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Std);
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        double x = MeanPn[i], y = Pn_Std[i];
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Std_pol3->GetListOfFunctions()->Add(latex);
+        }
+    }
+
     g_Std_pol3->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol3->GetXaxis()->SetLabelSize(0.0425);
     g_Std_pol3->GetXaxis()->CenterTitle(true);
@@ -832,42 +890,44 @@ void NeutronResolution::Fitter_Std_pol3() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Std_pol3.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "03_Fit_Std_pol3.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Std_pol3_wPC() {
+    cout << "\n\nFitter_Std_pol3_wPC variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     bool PrintOut = false;
 
-    vector<double> MeanPn, Pn_Corr;
+    vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
         double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Corr = ResSlicesFitVar.at(i).GetMean();
+        double Std = ResSlicesFitVar.at(i).GetMean();
 
         if (PrintOut) { cout << "\n"; }
 
         if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
             MeanPn.push_back(Mean);
-            Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
+            Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
 
             if (PrintOut) {
                 cout << "Mean = " << Mean << "\n";
-                cout << "Corr = " << Corr << "\n";
+                cout << "Std = " << Std << "\n";
             }
         }
     }
 
     if (PrintOut) {
         cout << "\nMeanPn.size() = " << MeanPn.size() << "\n";
-        cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
+        cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
     }
 
     //<editor-fold desc="Safty check">
-    if (MeanPn.size() != Pn_Corr.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+    if (MeanPn.size() != Pn_Std.size()) {
+        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -882,7 +942,17 @@ void NeutronResolution::Fitter_Std_pol3_wPC() {
 
     TGraph *g_Std_pol3_wPC = new TGraph();
 
-    for (int i = 0; i < MeanPn.size(); i++) { g_Std_pol3_wPC->AddPoint(MeanPn.at(i), Pn_Corr.at(i)); }
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Std.at(i);
+
+        g_Std_pol3_wPC->AddPoint(x, y);
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Std_pol3_wPC->GetListOfFunctions()->Add(latex);
+        }
+    }
 
     g_Std_pol3_wPC->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol3_wPC->GetXaxis()->SetLabelSize(0.0425);
@@ -938,12 +1008,13 @@ void NeutronResolution::Fitter_Std_pol3_wPC() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Std_pol3_wPC.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "03_Fit_Std_pol3_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Corr_pol1() {
     cout << "\n\nFitter_Corr_pol1 variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
@@ -951,7 +1022,6 @@ void NeutronResolution::Fitter_Corr_pol1() {
     for (int i = 0; i < NumberOfSlices; i++) {
         MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
         Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
-//        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut();
     }
     //</editor-fold>
 
@@ -963,6 +1033,17 @@ void NeutronResolution::Fitter_Corr_pol1() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Corr_pol1 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        double x = MeanPn[i], y = Pn_Corr[i];
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Corr_pol1->GetListOfFunctions()->Add(latex);
+        }
+    }
+
     g_Corr_pol1->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol1->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol1->GetXaxis()->CenterTitle(true);
@@ -1010,12 +1091,13 @@ void NeutronResolution::Fitter_Corr_pol1() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol1.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "04_Fit_Corr_pol1.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Corr_pol1_wPC() {
     cout << "\n\nFitter_Corr_pol1_wPC variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     bool PrintOut = false;
@@ -1061,7 +1143,17 @@ void NeutronResolution::Fitter_Corr_pol1_wPC() {
 
     TGraph *g_Corr_pol1_wPC = new TGraph();
 
-    for (int i = 0; i < MeanPn.size(); i++) { g_Corr_pol1_wPC->AddPoint(MeanPn.at(i), Pn_Corr.at(i)); }
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Corr.at(i);
+
+        g_Corr_pol1_wPC->AddPoint(x, y);
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Corr_pol1_wPC->GetListOfFunctions()->Add(latex);
+        }
+    }
 
     g_Corr_pol1_wPC->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol1_wPC->GetXaxis()->SetLabelSize(0.0425);
@@ -1110,12 +1202,13 @@ void NeutronResolution::Fitter_Corr_pol1_wPC() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol1_wPC.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "04_Fit_Corr_pol1_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Corr_pol2() {
     cout << "\n\nFitter_Corr_pol2 variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
@@ -1123,7 +1216,6 @@ void NeutronResolution::Fitter_Corr_pol2() {
     for (int i = 0; i < NumberOfSlices; i++) {
         MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
         Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
-//        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut();
     }
     //</editor-fold>
 
@@ -1135,6 +1227,17 @@ void NeutronResolution::Fitter_Corr_pol2() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Corr_pol2 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        double x = MeanPn[i], y = Pn_Corr[i];
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Corr_pol2->GetListOfFunctions()->Add(latex);
+        }
+    }
+
     g_Corr_pol2->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol2->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol2->GetXaxis()->CenterTitle(true);
@@ -1185,12 +1288,13 @@ void NeutronResolution::Fitter_Corr_pol2() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol2.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "05_Fit_Corr_pol2.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Corr_pol2_wPC() {
     cout << "\n\nFitter_Corr_pol2_wPC variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     bool PrintOut = false;
@@ -1236,7 +1340,17 @@ void NeutronResolution::Fitter_Corr_pol2_wPC() {
 
     TGraph *g_Corr_pol2_wPC = new TGraph();
 
-    for (int i = 0; i < MeanPn.size(); i++) { g_Corr_pol2_wPC->AddPoint(MeanPn.at(i), Pn_Corr.at(i)); }
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Corr.at(i);
+
+        g_Corr_pol2_wPC->AddPoint(x, y);
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Corr_pol2_wPC->GetListOfFunctions()->Add(latex);
+        }
+    }
 
     g_Corr_pol2_wPC->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol2_wPC->GetXaxis()->SetLabelSize(0.0425);
@@ -1288,12 +1402,13 @@ void NeutronResolution::Fitter_Corr_pol2_wPC() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol2_wPC.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "05_Fit_Corr_pol2_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Corr_pol3() {
     cout << "\n\nFitter_Corr_pol3 variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     double MeanPn[NumberOfSlices], Pn_Corr[NumberOfSlices];
@@ -1301,7 +1416,6 @@ void NeutronResolution::Fitter_Corr_pol3() {
     for (int i = 0; i < NumberOfSlices; i++) {
         MeanPn[i] = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
         Pn_Corr[i] = ResSlicesFitVar.at(i).GetMean(); //TODO: add a mechanism to ignore failed fits
-//        Pn_Std[i] = ResSlicesFitVar.at(i).GetUpperCut();
     }
     //</editor-fold>
 
@@ -1313,6 +1427,17 @@ void NeutronResolution::Fitter_Corr_pol3() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Corr_pol3 = new TGraph((sizeof(MeanPn) / sizeof(double)), MeanPn, Pn_Corr);
+
+    for (int i = 0; i < NumberOfSlices; i++) {
+        double x = MeanPn[i], y = Pn_Corr[i];
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Corr_pol3->GetListOfFunctions()->Add(latex);
+        }
+    }
+
     g_Corr_pol3->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol3->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol3->GetXaxis()->CenterTitle(true);
@@ -1366,12 +1491,13 @@ void NeutronResolution::Fitter_Corr_pol3() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol3.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3.png").c_str());
     Fit_Canvas->Clear();
 }
 
 void NeutronResolution::Fitter_Corr_pol3_wPC() {
     cout << "\n\nFitter_Corr_pol3_wPC variables:\n";
+    bool PlotPoints = false;
 
     //<editor-fold desc="Setting plot x and y data">
     bool PrintOut = false;
@@ -1417,7 +1543,17 @@ void NeutronResolution::Fitter_Corr_pol3_wPC() {
 
     TGraph *g_Corr_pol3_wPC = new TGraph();
 
-    for (int i = 0; i < MeanPn.size(); i++) { g_Corr_pol3_wPC->AddPoint(MeanPn.at(i), Pn_Corr.at(i)); }
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_Corr.at(i);
+
+        g_Corr_pol3_wPC->AddPoint(x, y);
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            g_Corr_pol3_wPC->GetListOfFunctions()->Add(latex);
+        }
+    }
 
     g_Corr_pol3_wPC->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol3_wPC->GetXaxis()->SetLabelSize(0.0425);
@@ -1473,7 +1609,7 @@ void NeutronResolution::Fitter_Corr_pol3_wPC() {
 
     cout << "\n\n";
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "Fit_Corr_pol3_wPC.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
 //</editor-fold>
@@ -1561,18 +1697,18 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
         Neutron_res_fit_param << "SliceLowerMomLimPC" << "\t\t\t" << SliceLowerMomLimPC << "\n\n";
 
         Neutron_res_fit_param << "A_Corr_pol1" << "\t\t\t\t" << A_Corr_pol1 << "\n";
-        Neutron_res_fit_param << "A_Corr_pol1_Error" << "\t\t\t" << A_Corr_pol1_Error << "\n";
+        Neutron_res_fit_param << "A_Corr_pol1_Error" << "\t\t" << A_Corr_pol1_Error << "\n";
         Neutron_res_fit_param << "B_Corr_pol1" << "\t\t\t\t" << B_Corr_pol1 << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1_Error" << "\t\t\t" << B_Corr_pol1_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol1" << "\t\t\t" << ChiSquare_Corr_pol1 << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol1" << "\t\t\t\t" << NDF_Corr_pol1 << "\n\n";
+        Neutron_res_fit_param << "B_Corr_pol1_Error" << "\t\t" << B_Corr_pol1_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol1" << "\t\t" << ChiSquare_Corr_pol1 << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol1" << "\t\t\t" << NDF_Corr_pol1 << "\n\n";
 
-        Neutron_res_fit_param << "A_Corr_pol1_wPC" << "\t\t\t\t" << A_Corr_pol1_wPC << "\n";
-        Neutron_res_fit_param << "A_Corr_pol1_wPC_Error" << "\t\t\t" << A_Corr_pol1_wPC_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1_wPC" << "\t\t\t\t" << B_Corr_pol1_wPC << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1_wPC_Error" << "\t\t\t" << B_Corr_pol1_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol1_wPC" << "\t\t\t" << ChiSquare_Corr_pol1_wPC << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol1_wPC" << "\t\t\t\t" << NDF_Corr_pol1_wPC << "\n\n";
+        Neutron_res_fit_param << "A_Corr_pol1_wPC" << "\t\t\t" << A_Corr_pol1_wPC << "\n";
+        Neutron_res_fit_param << "A_Corr_pol1_wPC_Error" << "\t\t" << A_Corr_pol1_wPC_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1_wPC" << "\t\t\t" << B_Corr_pol1_wPC << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1_wPC_Error" << "\t\t" << B_Corr_pol1_wPC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol1_wPC" << "\t\t" << ChiSquare_Corr_pol1_wPC << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol1_wPC" << "\t\t\t" << NDF_Corr_pol1_wPC << "\n\n";
 
         Neutron_res_fit_param << "A_Corr_pol2" << "\t\t\t\t" << A_Corr_pol2 << "\n";
         Neutron_res_fit_param << "A_Corr_pol2_Error" << "\t\t\t" << A_Corr_pol2_Error << "\n";
