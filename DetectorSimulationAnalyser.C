@@ -152,7 +152,7 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = true; // Generate nRes plots
+    bool Calculate_momResS2 = false; // Generate nRes plots
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
     const string SmearMode = "pol1", ShiftMode = "pol1";

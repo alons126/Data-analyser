@@ -183,10 +183,12 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
     NumberOfSlices = SliceNumber;
 
     if (momResS2Mode) {
+        cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 mode. Loading momResS1 variables...\n";
+
         ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
                          Calculate_momResS2, SampleName, NucleonCutsDirectory);
-        ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_hist_param_-_" + SampleName + ".par").c_str(),
-                         Calculate_momResS2, SampleName, NucleonCutsDirectory);
+
+        cout << "Done.\n";
     }
 }
 //</editor-fold>
@@ -2111,1567 +2113,216 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
 
                 Loaded_Res_Slices_HistVar.push_back(TempHistCut);
             } else {
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+
                 //TODO: reorganize these into vectors!
-
-
-                cout << "\n\nTEST TEST TEST!!!\n\n";
-                cout << "\n\nparameter = " << parameter << "\n\n";
-
-
-
                 if (findSubstring(parameter, "Corr")) {
                     if (findSubstring(parameter, "pol1")) {
                         if (parameter == "A_Corr_pol1") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-
-                            cout << "\n\nparameter2 = " << parameter2 << "\n\n";
-
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol1 = par.at(1); }
+                            Loaded_A_Corr_pol1 = stod(parameter2);
                         } else if (parameter == "A_Corr_pol1_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol1_wPC = par.at(1); }
+                            Loaded_A_Corr_pol1_wPC = stod(parameter2);
                         } else if (parameter == "A_Corr_pol1_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol1_Error = par.at(1); }
+                            Loaded_A_Corr_pol1_Error = stod(parameter2);
                         } else if (parameter == "A_Corr_pol1_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol1_wPC_Error = par.at(1); }
+                            Loaded_A_Corr_pol1_wPC_Error = stod(parameter2);
                         } else if (parameter == "B_Corr_pol1") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol1 = par.at(1); }
+                            Loaded_B_Corr_pol1 = stod(parameter2);
                         } else if (parameter == "B_Corr_pol1_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol1_wPC = par.at(1); }
+                            Loaded_B_Corr_pol1_wPC = stod(parameter2);
                         } else if (parameter == "B_Corr_pol1_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol1_Error = par.at(1); }
+                            Loaded_B_Corr_pol1_Error = stod(parameter2);
                         } else if (parameter == "B_Corr_pol1_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol1_wPC_Error = par.at(1); }
+                            Loaded_B_Corr_pol1_wPC_Error = stod(parameter2);
                         } else if (parameter == "ChiSquare_Corr_pol1") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Corr_pol1 = par.at(1); }
+                            Loaded_ChiSquare_Corr_pol1 = stod(parameter2);
                         } else if (parameter == "ChiSquare_Corr_pol1_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Corr_pol1_wPC = par.at(1); }
+                            Loaded_ChiSquare_Corr_pol1_wPC = stod(parameter2);
                         } else if (parameter == "NDF_Corr_pol1") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Corr_pol1 = par.at(1); }
+                            Loaded_NDF_Corr_pol1 = stod(parameter2);
                         } else if (parameter == "NDF_Corr_pol1_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Corr_pol1_wPC = par.at(1); }
+                            Loaded_NDF_Corr_pol1_wPC = stod(parameter2);
                         }
                     } else if (findSubstring(parameter, "pol2")) {
                         if (parameter == "A_Corr_pol2") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol2 = par.at(1); }
+                            Loaded_A_Corr_pol2 = stod(parameter2);
                         } else if (parameter == "A_Corr_pol2_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol2_wPC = par.at(1); }
+                            Loaded_A_Corr_pol2_wPC = stod(parameter2);
                         } else if (parameter == "A_Corr_pol2_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol2_Error = par.at(1); }
+                            Loaded_A_Corr_pol2_Error = stod(parameter2);
                         } else if (parameter == "A_Corr_pol2_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol2_wPC_Error = par.at(1); }
+                            Loaded_A_Corr_pol2_wPC_Error = stod(parameter2);
                         } else if (parameter == "B_Corr_pol2") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol2 = par.at(1); }
+                            Loaded_B_Corr_pol2 = stod(parameter2);
                         } else if (parameter == "B_Corr_pol2_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol2_wPC = par.at(1); }
+                            Loaded_B_Corr_pol2_wPC = stod(parameter2);
                         } else if (parameter == "B_Corr_pol2_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol2_Error = par.at(1); }
+                            Loaded_B_Corr_pol2_Error = stod(parameter2);
                         } else if (parameter == "B_Corr_pol2_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol2_wPC_Error = par.at(1); }
+                            Loaded_B_Corr_pol2_wPC_Error = stod(parameter2);
                         } else if (parameter == "C_Corr_pol2") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Corr_pol2 = par.at(1); }
+                            Loaded_C_Corr_pol2 = stod(parameter2);
                         } else if (parameter == "C_Corr_pol2_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Corr_pol2_wPC = par.at(1); }
+                            Loaded_C_Corr_pol2_wPC = stod(parameter2);
                         } else if (parameter == "C_Corr_pol2_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Corr_pol2_Error = par.at(1); }
+                            Loaded_C_Corr_pol2_Error = stod(parameter2);
                         } else if (parameter == "C_Corr_pol2_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Corr_pol2_wPC_Error = par.at(1); }
+                            Loaded_C_Corr_pol2_wPC_Error = stod(parameter2);
                         } else if (parameter == "ChiSquare_Corr_pol2") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Corr_pol2 = par.at(1); }
+                            Loaded_ChiSquare_Corr_pol2 = stod(parameter2);
                         } else if (parameter == "ChiSquare_Corr_pol2_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Corr_pol2_wPC = par.at(1); }
+                            Loaded_ChiSquare_Corr_pol2_wPC = stod(parameter2);
                         } else if (parameter == "NDF_Corr_pol2") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Corr_pol2 = par.at(1); }
+                            Loaded_NDF_Corr_pol2 = stod(parameter2);
                         } else if (parameter == "NDF_Corr_pol2_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Corr_pol2_wPC = par.at(1); }
+                            Loaded_NDF_Corr_pol2_wPC = stod(parameter2);
                         }
                     } else if (findSubstring(parameter, "pol3")) {
                         if (parameter == "A_Corr_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol3 = par.at(1); }
+                            Loaded_A_Corr_pol3 = stod(parameter2);
                         } else if (parameter == "A_Corr_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol3_wPC = par.at(1); }
+                            Loaded_A_Corr_pol3_wPC = stod(parameter2);
                         } else if (parameter == "A_Corr_pol3_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol3_Error = par.at(1); }
+                            Loaded_A_Corr_pol3_Error = stod(parameter2);
                         } else if (parameter == "A_Corr_pol3_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Corr_pol3_wPC_Error = par.at(1); }
+                            Loaded_A_Corr_pol3_wPC_Error = stod(parameter2);
                         } else if (parameter == "B_Corr_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol3 = par.at(1); }
+                            Loaded_B_Corr_pol3 = stod(parameter2);
                         } else if (parameter == "B_Corr_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol3_wPC = par.at(1); }
+                            Loaded_B_Corr_pol3_wPC = stod(parameter2);
                         } else if (parameter == "B_Corr_pol3_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol3_Error = par.at(1); }
+                            Loaded_B_Corr_pol3_Error = stod(parameter2);
                         } else if (parameter == "B_Corr_pol3_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Corr_pol3_wPC_Error = par.at(1); }
+                            Loaded_B_Corr_pol3_wPC_Error = stod(parameter2);
                         } else if (parameter == "C_Corr_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Corr_pol3 = par.at(1); }
+                            Loaded_C_Corr_pol3 = stod(parameter2);
                         } else if (parameter == "C_Corr_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Corr_pol3_wPC = par.at(1); }
+                            Loaded_C_Corr_pol3_wPC = stod(parameter2);
                         } else if (parameter == "C_Corr_pol3_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Corr_pol3_Error = par.at(1); }
+                            Loaded_C_Corr_pol3_Error = stod(parameter2);
                         } else if (parameter == "C_Corr_pol3_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Corr_pol3_wPC_Error = par.at(1); }
+                            Loaded_C_Corr_pol3_wPC_Error = stod(parameter2);
                         } else if (parameter == "D_Corr_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { D_Corr_pol3 = par.at(1); }
+                            Loaded_D_Corr_pol3 = stod(parameter2);
                         } else if (parameter == "D_Corr_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { D_Corr_pol3_wPC = par.at(1); }
+                            Loaded_D_Corr_pol3_wPC = stod(parameter2);
                         } else if (parameter == "D_Corr_pol3_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { D_Corr_pol3_Error = par.at(1); }
+                            Loaded_D_Corr_pol3_Error = stod(parameter2);
                         } else if (parameter == "D_Corr_pol3_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { D_Corr_pol3_wPC_Error = par.at(1); }
+                            Loaded_D_Corr_pol3_wPC_Error = stod(parameter2);
                         } else if (parameter == "ChiSquare_Corr_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Corr_pol3 = par.at(1); }
+                            Loaded_ChiSquare_Corr_pol3 = stod(parameter2);
                         } else if (parameter == "ChiSquare_Corr_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Corr_pol3_wPC = par.at(1); }
+                            Loaded_ChiSquare_Corr_pol3_wPC = stod(parameter2);
                         } else if (parameter == "NDF_Corr_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Corr_pol3 = par.at(1); }
+                            Loaded_NDF_Corr_pol3 = stod(parameter2);
                         } else if (parameter == "NDF_Corr_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Corr_pol3_wPC = par.at(1); }
+                            Loaded_NDF_Corr_pol3_wPC = stod(parameter2);
                         }
                     }
                 } else if (findSubstring(parameter, "Std")) {
                     if (findSubstring(parameter, "pol1")) {
                         if (parameter == "A_Std_pol1") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol1 = par.at(1); }
+                            Loaded_A_Std_pol1 = stod(parameter2);
                         } else if (parameter == "A_Std_pol1_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol1_wPC = par.at(1); }
+                            Loaded_A_Std_pol1_wPC = stod(parameter2);
                         } else if (parameter == "A_Std_pol1_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol1_Error = par.at(1); }
+                            Loaded_A_Std_pol1_Error = stod(parameter2);
                         } else if (parameter == "A_Std_pol1_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol1_wPC_Error = par.at(1); }
+                            Loaded_A_Std_pol1_wPC_Error = stod(parameter2);
                         } else if (parameter == "B_Std_pol1") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol1 = par.at(1); }
+                            Loaded_B_Std_pol1 = stod(parameter2);
                         } else if (parameter == "B_Std_pol1_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol1_wPC = par.at(1); }
+                            Loaded_B_Std_pol1_wPC = stod(parameter2);
                         } else if (parameter == "B_Std_pol1_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol1_Error = par.at(1); }
+                            Loaded_B_Std_pol1_Error = stod(parameter2);
                         } else if (parameter == "B_Std_pol1_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol1_wPC_Error = par.at(1); }
+                            Loaded_B_Std_pol1_wPC_Error = stod(parameter2);
                         } else if (parameter == "ChiSquare_Std_pol1") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Std_pol1 = par.at(1); }
+                            Loaded_ChiSquare_Std_pol1 = stod(parameter2);
                         } else if (parameter == "ChiSquare_Std_pol1_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Std_pol1_wPC = par.at(1); }
+                            Loaded_ChiSquare_Std_pol1_wPC = stod(parameter2);
                         } else if (parameter == "NDF_Std_pol1") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Std_pol1 = par.at(1); }
+                            Loaded_NDF_Std_pol1 = stod(parameter2);
                         } else if (parameter == "NDF_Std_pol1_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Std_pol1_wPC = par.at(1); }
+                            Loaded_NDF_Std_pol1_wPC = stod(parameter2);
                         }
                     } else if (findSubstring(parameter, "pol2")) {
                         if (parameter == "A_Std_pol2") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol2 = par.at(1); }
+                            Loaded_A_Std_pol2 = stod(parameter2);
                         } else if (parameter == "A_Std_pol2_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol2_wPC = par.at(1); }
+                            Loaded_A_Std_pol2_wPC = stod(parameter2);
                         } else if (parameter == "A_Std_pol2_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol2_Error = par.at(1); }
+                            Loaded_A_Std_pol2_Error = stod(parameter2);
                         } else if (parameter == "A_Std_pol2_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol2_wPC_Error = par.at(1); }
+                            Loaded_A_Std_pol2_wPC_Error = stod(parameter2);
                         } else if (parameter == "B_Std_pol2") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol2 = par.at(1); }
+                            Loaded_B_Std_pol2 = stod(parameter2);
                         } else if (parameter == "B_Std_pol2_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol2_wPC = par.at(1); }
+                            Loaded_B_Std_pol2_wPC = stod(parameter2);
                         } else if (parameter == "B_Std_pol2_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol2_Error = par.at(1); }
+                            Loaded_B_Std_pol2_Error = stod(parameter2);
                         } else if (parameter == "B_Std_pol2_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol2_wPC_Error = par.at(1); }
+                            Loaded_B_Std_pol2_wPC_Error = stod(parameter2);
                         } else if (parameter == "C_Std_pol2") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Std_pol2 = par.at(1); }
+                            Loaded_C_Std_pol2 = stod(parameter2);
                         } else if (parameter == "C_Std_pol2_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Std_pol2_wPC = par.at(1); }
+                            Loaded_C_Std_pol2_wPC = stod(parameter2);
                         } else if (parameter == "C_Std_pol2_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Std_pol2_Error = par.at(1); }
+                            Loaded_C_Std_pol2_Error = stod(parameter2);
                         } else if (parameter == "C_Std_pol2_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Std_pol2_wPC_Error = par.at(1); }
+                            Loaded_C_Std_pol2_wPC_Error = stod(parameter2);
                         } else if (parameter == "ChiSquare_Std_pol2") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Std_pol2 = par.at(1); }
+                            Loaded_ChiSquare_Std_pol2 = stod(parameter2);
                         } else if (parameter == "ChiSquare_Std_pol2_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Std_pol2_wPC = par.at(1); }
+                            Loaded_ChiSquare_Std_pol2_wPC = stod(parameter2);
                         } else if (parameter == "NDF_Std_pol2") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Std_pol2 = par.at(1); }
+                            Loaded_NDF_Std_pol2 = stod(parameter2);
                         } else if (parameter == "NDF_Std_pol2_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Std_pol2_wPC = par.at(1); }
+                            Loaded_NDF_Std_pol2_wPC = stod(parameter2);
                         }
                     } else if (findSubstring(parameter, "pol3")) {
                         if (parameter == "A_Std_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol3 = par.at(1); }
+                            Loaded_A_Std_pol3 = stod(parameter2);
                         } else if (parameter == "A_Std_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol3_wPC = par.at(1); }
+                            Loaded_A_Std_pol3_wPC = stod(parameter2);
                         } else if (parameter == "A_Std_pol3_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol3_Error = par.at(1); }
+                            Loaded_A_Std_pol3_Error = stod(parameter2);
                         } else if (parameter == "A_Std_pol3_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { A_Std_pol3_wPC_Error = par.at(1); }
+                            Loaded_A_Std_pol3_wPC_Error = stod(parameter2);
                         } else if (parameter == "B_Std_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol3 = par.at(1); }
+                            Loaded_B_Std_pol3 = stod(parameter2);
                         } else if (parameter == "B_Std_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol3_wPC = par.at(1); }
+                            Loaded_B_Std_pol3_wPC = stod(parameter2);
                         } else if (parameter == "B_Std_pol3_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol3_Error = par.at(1); }
+                            Loaded_B_Std_pol3_Error = stod(parameter2);
                         } else if (parameter == "B_Std_pol3_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { B_Std_pol3_wPC_Error = par.at(1); }
+                            Loaded_B_Std_pol3_wPC_Error = stod(parameter2);
                         } else if (parameter == "C_Std_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Std_pol3 = par.at(1); }
+                            Loaded_C_Std_pol3 = stod(parameter2);
                         } else if (parameter == "C_Std_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Std_pol3_wPC = par.at(1); }
+                            Loaded_C_Std_pol3_wPC = stod(parameter2);
                         } else if (parameter == "C_Std_pol3_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Std_pol3_Error = par.at(1); }
+                            Loaded_C_Std_pol3_Error = stod(parameter2);
                         } else if (parameter == "C_Std_pol3_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { C_Std_pol3_wPC_Error = par.at(1); }
+                            Loaded_C_Std_pol3_wPC_Error = stod(parameter2);
                         } else if (parameter == "D_Std_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { D_Std_pol3 = par.at(1); }
+                            Loaded_D_Std_pol3 = stod(parameter2);
                         } else if (parameter == "D_Std_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { D_Std_pol3_wPC = par.at(1); }
+                            Loaded_D_Std_pol3_wPC = stod(parameter2);
                         } else if (parameter == "D_Std_pol3_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { D_Std_pol3_Error = par.at(1); }
+                            Loaded_D_Std_pol3_Error = stod(parameter2);
                         } else if (parameter == "D_Std_pol3_wPC_Error") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { D_Std_pol3_wPC_Error = par.at(1); }
+                            Loaded_D_Std_pol3_wPC_Error = stod(parameter2);
                         } else if (parameter == "ChiSquare_Std_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Std_pol3 = par.at(1); }
+                            Loaded_ChiSquare_Std_pol3 = stod(parameter2);
                         } else if (parameter == "ChiSquare_Std_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { ChiSquare_Std_pol3_wPC = par.at(1); }
+                            Loaded_ChiSquare_Std_pol3_wPC = stod(parameter2);
                         } else if (parameter == "NDF_Std_pol3") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Std_pol3 = par.at(1); }
+                            Loaded_NDF_Std_pol3 = stod(parameter2);
                         } else if (parameter == "NDF_Std_pol3_wPC") {
-                            ss >> parameter2;
-                            stringstream ss2(parameter2);
-                            string pid_v;
-                            int count = 0;
-                            string pid = "";
-                            vector<double> par;
-
-                            while (getline(ss2, pid_v, ':')) {
-                                if (count == 0) { pid = pid_v; }
-                                else { par.push_back(atof(pid_v.c_str())); }
-
-                                count++;
-                            }
-
-                            if (pid != "") { NDF_Std_pol3_wPC = par.at(1); }
+                            Loaded_NDF_Std_pol3_wPC = stod(parameter2);
                         }
                     }
                 }
@@ -3763,27 +2414,27 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
             double Smearing, Arg;
 
             if (SmearMode == "pol1") {
-                Arg = A_Std_pol1 * Momentum + B_Std_pol1;
+                Arg = Loaded_A_Std_pol1 * Momentum + Loaded_B_Std_pol1;
 
                 Smearing = Rand->Gaus(1, Arg);
             } else if (SmearMode == "pol1_wPC") {
-                Arg = A_Std_pol1_wPC * Momentum + B_Std_pol1_wPC;
+                Arg = Loaded_A_Std_pol1_wPC * Momentum + Loaded_B_Std_pol1_wPC;
 
                 Smearing = Rand->Gaus(1, Arg);
             } else if (SmearMode == "pol2") {
-                Arg = A_Std_pol2 * Momentum2 + B_Std_pol2 * Momentum + C_Std_pol2;
+                Arg = Loaded_A_Std_pol2 * Momentum2 + Loaded_B_Std_pol2 * Momentum + Loaded_C_Std_pol2;
 
                 Smearing = Rand->Gaus(1, Arg);
             } else if (SmearMode == "pol2_wPC") {
-                Arg = A_Std_pol2_wPC * Momentum2 + B_Std_pol2_wPC * Momentum + C_Std_pol2_wPC;
+                Arg = Loaded_A_Std_pol2_wPC * Momentum2 + Loaded_B_Std_pol2_wPC * Momentum + Loaded_C_Std_pol2_wPC;
 
                 Smearing = Rand->Gaus(1, Arg);
             } else if (SmearMode == "pol3") {
-                Arg = A_Std_pol3 * Momentum3 + B_Std_pol3 * Momentum2 + C_Std_pol3 * Momentum + D_Std_pol3;
+                Arg = Loaded_A_Std_pol3 * Momentum3 + Loaded_B_Std_pol3 * Momentum2 + Loaded_C_Std_pol3 * Momentum + Loaded_D_Std_pol3;
 
                 Smearing = Rand->Gaus(1, Arg);
             } else if (SmearMode == "pol3_wPC") {
-                Arg = A_Std_pol3_wPC * Momentum3 + B_Std_pol3_wPC * Momentum2 + C_Std_pol3_wPC * Momentum + D_Std_pol3_wPC;
+                Arg = Loaded_A_Std_pol3_wPC * Momentum3 + Loaded_B_Std_pol3_wPC * Momentum2 + Loaded_C_Std_pol3_wPC * Momentum + Loaded_D_Std_pol3_wPC;
 
                 Smearing = Rand->Gaus(1, Arg);
             }
@@ -3906,17 +2557,17 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
             double shift;
 
             if (ShiftMode == "pol1") {
-                shift = A_Corr_pol1 * Momentum + B_Corr_pol1;
+                shift = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
             } else if (ShiftMode == "pol1_wPC") {
-                shift = A_Corr_pol1_wPC * Momentum + B_Corr_pol1_wPC;
+                shift = Loaded_A_Corr_pol1_wPC * Momentum + Loaded_B_Corr_pol1_wPC;
             } else if (ShiftMode == "pol2") {
-                shift = A_Corr_pol2 * Momentum2 + B_Corr_pol2 * Momentum + C_Corr_pol2;
+                shift = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;
             } else if (ShiftMode == "pol2_wPC") {
-                shift = A_Corr_pol2_wPC * Momentum2 + B_Corr_pol2_wPC * Momentum + C_Corr_pol2_wPC;
+                shift = Loaded_A_Corr_pol2_wPC * Momentum2 + Loaded_B_Corr_pol2_wPC * Momentum + Loaded_C_Corr_pol2_wPC;
             } else if (ShiftMode == "pol3") {
-                shift = A_Corr_pol3 * Momentum3 + B_Corr_pol3 * Momentum2 + C_Corr_pol3 * Momentum + D_Corr_pol3;
+                shift = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
             } else if (ShiftMode == "pol3_wPC") {
-                shift = A_Corr_pol3_wPC * Momentum3 + B_Corr_pol3_wPC * Momentum2 + C_Corr_pol3_wPC * Momentum + D_Corr_pol3_wPC;
+                shift = Loaded_A_Corr_pol3_wPC * Momentum3 + Loaded_B_Corr_pol3_wPC * Momentum2 + Loaded_C_Corr_pol3_wPC * Momentum + Loaded_D_Corr_pol3_wPC;
             }
 
             double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
