@@ -42,7 +42,7 @@ using namespace std;
 
 class NeutronResolution {
 private:
-    bool momResTestMode, momResS2Mode;
+    bool momResTestMode, momResS2CalcMode, momResS2RunMode;
 
 //    string SmearMode = "slices"; // Smear by resolution fit width values from slices
     string SmearMode = "pol1";     // Smear by fitted linear function to resolution Gaussian width
@@ -172,9 +172,9 @@ public:
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
-                      const DSCuts &FD_nucleon_momentum_cut, double ParticleMomTh, bool Calculate_momResS2, const string &NeutronResolutionDirectory,
-                      const string &SavePath = "./", double DeltaSlices = 0.2, bool VaryingDelta = false, const string &SmearM = "pol1", const string &ShiftM = "pol1",
-                      bool nRes_test = false);
+                      const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
+                      const string &NeutronResolutionDirectory, const string &SavePath = "./", double DeltaSlices = 0.2, bool VaryingDelta = false,
+                      const string &SmearM = "pol1", const string &ShiftM = "pol1", bool nRes_test = false);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -239,7 +239,8 @@ public:
 
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory);
+    void ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory,
+                          const bool &Load_correction = true, const bool &Load_smearing = true);
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 

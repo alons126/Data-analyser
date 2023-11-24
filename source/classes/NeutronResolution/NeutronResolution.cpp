@@ -10,10 +10,11 @@
 
 //<editor-fold desc="NeutronResolution constructor">
 NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
-                                     const DSCuts &FD_nucleon_momentum_cut, double ParticleMomTh, bool Calculate_momResS2, const string &NeutronResolutionDirectory,
-                                     const string &SavePath, double DeltaSlices, bool VaryingDelta, const string &SmearM, const string &ShiftM, bool momRes_test) {
+                                     const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
+                                     const string &NeutronResolutionDirectory, const string &SavePath, double DeltaSlices, bool VaryingDelta, const string &SmearM,
+                                     const string &ShiftM, bool momRes_test) {
     SliceUpperMomLimPC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimPC = FD_nucleon_momentum_cut.GetLowerCutConst();
-    momResS2Mode = Calculate_momResS2;
+    momResS2CalcMode = Calculate_momResS2, momResS2RunMode = Run_in_momResS2;
     SlicesSavePath = SavePath;
     delta = DeltaSlices;
     SmearMode = SmearM, ShiftMode = ShiftM;
@@ -182,13 +183,26 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
 
     NumberOfSlices = SliceNumber;
 
-    if (momResS2Mode) {
-        cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 mode. Loading momResS1 variables...\n";
+    if (Particle == "Neutron") {
+        if (momResS2CalcMode && !momResS2RunMode) {
+            cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 calculation mode. Loading momResS1 variables...\n";
 
-        ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
-                         Calculate_momResS2, SampleName, NucleonCutsDirectory);
+            ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
+                             Calculate_momResS2, SampleName, NucleonCutsDirectory);
 
-        cout << "Done.\n";
+            cout << "Done.\n";
+        } else if (!momResS2CalcMode && momResS2RunMode) {
+            cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 run mode.\n";
+            cout << "Loading correction from momResS1 variables & smearing from momResS2 variables...\n";
+
+            /* Load neutron correction */
+            ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
+                             Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
+
+            /* Load proton smearing */
+            ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par").c_str(),
+                             Calculate_momResS2, SampleName, NucleonCutsDirectory, false, true);
+        }
     }
 }
 //</editor-fold>
@@ -1813,7 +1827,7 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
     ofstream Neutron_res_fit_param;
     std::string Neutron_res_fit_paramFilePath;
 
-    if (momResS2Mode) {
+    if (momResS2CalcMode) {
         if (!momResTestMode) {
             Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS2_fit_param_-_" + SampleName + ".par";
         } else {
@@ -1854,112 +1868,112 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
         Neutron_res_fit_param << "SliceUpperMomLimPC" << "\t\t\t" << SliceUpperMomLimPC << "\n";
         Neutron_res_fit_param << "SliceLowerMomLimPC" << "\t\t\t" << SliceLowerMomLimPC << "\n\n";
 
-        Neutron_res_fit_param << "A_Corr_pol1" << "\t\t\t\t" << A_Corr_pol1 << "\n";
-        Neutron_res_fit_param << "A_Corr_pol1_Error" << "\t\t" << A_Corr_pol1_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1" << "\t\t\t\t" << B_Corr_pol1 << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1_Error" << "\t\t" << B_Corr_pol1_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol1" << "\t\t" << ChiSquare_Corr_pol1 << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol1" << "\t\t\t" << NDF_Corr_pol1 << "\n\n";
+        Neutron_res_fit_param << "A_Corr_pol1" << "\t\t\t\t\t" << A_Corr_pol1 << "\n";
+        Neutron_res_fit_param << "A_Corr_pol1_Error" << "\t\t\t" << A_Corr_pol1_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1" << "\t\t\t\t\t" << B_Corr_pol1 << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1_Error" << "\t\t\t" << B_Corr_pol1_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol1" << "\t\t\t" << ChiSquare_Corr_pol1 << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol1" << "\t\t\t\t" << NDF_Corr_pol1 << "\n\n";
 
-        Neutron_res_fit_param << "A_Corr_pol1_wPC" << "\t\t\t" << A_Corr_pol1_wPC << "\n";
+        Neutron_res_fit_param << "A_Corr_pol1_wPC" << "\t\t\t\t" << A_Corr_pol1_wPC << "\n";
         Neutron_res_fit_param << "A_Corr_pol1_wPC_Error" << "\t\t" << A_Corr_pol1_wPC_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1_wPC" << "\t\t\t" << B_Corr_pol1_wPC << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1_wPC" << "\t\t\t\t" << B_Corr_pol1_wPC << "\n";
         Neutron_res_fit_param << "B_Corr_pol1_wPC_Error" << "\t\t" << B_Corr_pol1_wPC_Error << "\n";
         Neutron_res_fit_param << "ChiSquare_Corr_pol1_wPC" << "\t\t" << ChiSquare_Corr_pol1_wPC << "\n";
         Neutron_res_fit_param << "NDF_Corr_pol1_wPC" << "\t\t\t" << NDF_Corr_pol1_wPC << "\n\n";
 
-        Neutron_res_fit_param << "A_Corr_pol2" << "\t\t\t\t" << A_Corr_pol2 << "\n";
+        Neutron_res_fit_param << "A_Corr_pol2" << "\t\t\t\t\t" << A_Corr_pol2 << "\n";
         Neutron_res_fit_param << "A_Corr_pol2_Error" << "\t\t\t" << A_Corr_pol2_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol2" << "\t\t\t\t" << B_Corr_pol2 << "\n";
+        Neutron_res_fit_param << "B_Corr_pol2" << "\t\t\t\t\t" << B_Corr_pol2 << "\n";
         Neutron_res_fit_param << "B_Corr_pol2_Error" << "\t\t\t" << B_Corr_pol2_Error << "\n";
-        Neutron_res_fit_param << "C_Corr_pol2" << "\t\t\t\t" << C_Corr_pol2 << "\n";
+        Neutron_res_fit_param << "C_Corr_pol2" << "\t\t\t\t\t" << C_Corr_pol2 << "\n";
         Neutron_res_fit_param << "C_Corr_pol2_Error" << "\t\t\t" << C_Corr_pol2_Error << "\n";
         Neutron_res_fit_param << "ChiSquare_Corr_pol2" << "\t\t\t" << ChiSquare_Corr_pol2 << "\n";
         Neutron_res_fit_param << "NDF_Corr_pol2" << "\t\t\t\t" << NDF_Corr_pol2 << "\n\n";
 
         Neutron_res_fit_param << "A_Corr_pol2_wPC" << "\t\t\t\t" << A_Corr_pol2_wPC << "\n";
-        Neutron_res_fit_param << "A_Corr_pol2_wPC_Error" << "\t\t\t" << A_Corr_pol2_wPC_Error << "\n";
+        Neutron_res_fit_param << "A_Corr_pol2_wPC_Error" << "\t\t" << A_Corr_pol2_wPC_Error << "\n";
         Neutron_res_fit_param << "B_Corr_pol2_wPC" << "\t\t\t\t" << B_Corr_pol2_wPC << "\n";
-        Neutron_res_fit_param << "B_Corr_pol2_wPC_Error" << "\t\t\t" << B_Corr_pol2_wPC_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol2_wPC_Error" << "\t\t" << B_Corr_pol2_wPC_Error << "\n";
         Neutron_res_fit_param << "C_Corr_pol2_wPC" << "\t\t\t\t" << C_Corr_pol2_wPC << "\n";
-        Neutron_res_fit_param << "C_Corr_pol2_wPC_Error" << "\t\t\t" << C_Corr_pol2_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol2_wPC" << "\t\t\t" << ChiSquare_Corr_pol2_wPC << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol2_wPC" << "\t\t\t\t" << NDF_Corr_pol2_wPC << "\n\n";
+        Neutron_res_fit_param << "C_Corr_pol2_wPC_Error" << "\t\t" << C_Corr_pol2_wPC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol2_wPC" << "\t\t" << ChiSquare_Corr_pol2_wPC << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol2_wPC" << "\t\t\t" << NDF_Corr_pol2_wPC << "\n\n";
 
-        Neutron_res_fit_param << "A_Corr_pol3" << "\t\t\t" << A_Corr_pol3 << "\n";
+        Neutron_res_fit_param << "A_Corr_pol3" << "\t\t\t\t\t" << A_Corr_pol3 << "\n";
         Neutron_res_fit_param << "A_Corr_pol3_Error" << "\t\t\t" << A_Corr_pol3_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol3" << "\t\t\t" << B_Corr_pol3 << "\n";
+        Neutron_res_fit_param << "B_Corr_pol3" << "\t\t\t\t\t" << B_Corr_pol3 << "\n";
         Neutron_res_fit_param << "B_Corr_pol3_Error" << "\t\t\t" << B_Corr_pol3_Error << "\n";
-        Neutron_res_fit_param << "C_Corr_pol3" << "\t\t\t" << C_Corr_pol3 << "\n";
+        Neutron_res_fit_param << "C_Corr_pol3" << "\t\t\t\t\t" << C_Corr_pol3 << "\n";
         Neutron_res_fit_param << "C_Corr_pol3_Error" << "\t\t\t" << C_Corr_pol3_Error << "\n";
-        Neutron_res_fit_param << "D_Corr_pol3" << "\t\t\t" << D_Corr_pol3 << "\n";
+        Neutron_res_fit_param << "D_Corr_pol3" << "\t\t\t\t\t" << D_Corr_pol3 << "\n";
         Neutron_res_fit_param << "D_Corr_pol3_Error" << "\t\t\t" << D_Corr_pol3_Error << "\n";
         Neutron_res_fit_param << "ChiSquare_Corr_pol3" << "\t\t\t" << ChiSquare_Corr_pol3 << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol3" << "\t\t\t" << NDF_Corr_pol3 << "\n\n";
+        Neutron_res_fit_param << "NDF_Corr_pol3" << "\t\t\t\t" << NDF_Corr_pol3 << "\n\n";
 
-        Neutron_res_fit_param << "A_Corr_pol3_wPC" << "\t\t\t" << A_Corr_pol3_wPC << "\n";
-        Neutron_res_fit_param << "A_Corr_pol3_wPC_Error" << "\t\t\t" << A_Corr_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol3_wPC" << "\t\t\t" << B_Corr_pol3_wPC << "\n";
-        Neutron_res_fit_param << "B_Corr_pol3_wPC_Error" << "\t\t\t" << B_Corr_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "C_Corr_pol3_wPC" << "\t\t\t" << C_Corr_pol3_wPC << "\n";
-        Neutron_res_fit_param << "C_Corr_pol3_wPC_Error" << "\t\t\t" << C_Corr_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "D_Corr_pol3_wPC" << "\t\t\t" << D_Corr_pol3_wPC << "\n";
-        Neutron_res_fit_param << "D_Corr_pol3_wPC_Error" << "\t\t\t" << D_Corr_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol3_wPC" << "\t\t\t" << ChiSquare_Corr_pol3_wPC << "\n";
+        Neutron_res_fit_param << "A_Corr_pol3_wPC" << "\t\t\t\t" << A_Corr_pol3_wPC << "\n";
+        Neutron_res_fit_param << "A_Corr_pol3_wPC_Error" << "\t\t" << A_Corr_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol3_wPC" << "\t\t\t\t" << B_Corr_pol3_wPC << "\n";
+        Neutron_res_fit_param << "B_Corr_pol3_wPC_Error" << "\t\t" << B_Corr_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "C_Corr_pol3_wPC" << "\t\t\t\t" << C_Corr_pol3_wPC << "\n";
+        Neutron_res_fit_param << "C_Corr_pol3_wPC_Error" << "\t\t" << C_Corr_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "D_Corr_pol3_wPC" << "\t\t\t\t" << D_Corr_pol3_wPC << "\n";
+        Neutron_res_fit_param << "D_Corr_pol3_wPC_Error" << "\t\t" << D_Corr_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol3_wPC" << "\t\t" << ChiSquare_Corr_pol3_wPC << "\n";
         Neutron_res_fit_param << "NDF_Corr_pol3_wPC" << "\t\t\t" << NDF_Corr_pol3_wPC << "\n\n";
 
-        Neutron_res_fit_param << "A_Std_pol1" << "\t\t\t\t" << A_Std_pol1 << "\n";
+        Neutron_res_fit_param << "A_Std_pol1" << "\t\t\t\t\t" << A_Std_pol1 << "\n";
         Neutron_res_fit_param << "A_Std_pol1_Error" << "\t\t\t" << A_Std_pol1_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol1" << "\t\t\t\t" << B_Std_pol1 << "\n";
+        Neutron_res_fit_param << "B_Std_pol1" << "\t\t\t\t\t" << B_Std_pol1 << "\n";
         Neutron_res_fit_param << "B_Std_pol1_Error" << "\t\t\t" << B_Std_pol1_Error << "\n";
         Neutron_res_fit_param << "ChiSquare_Std_pol1" << "\t\t\t" << ChiSquare_Std_pol1 << "\n";
         Neutron_res_fit_param << "NDF_Std_pol1" << "\t\t\t\t" << NDF_Std_pol1 << "\n\n";
 
         Neutron_res_fit_param << "A_Std_pol1_wPC" << "\t\t\t\t" << A_Std_pol1_wPC << "\n";
-        Neutron_res_fit_param << "A_Std_pol1_wPC_Error" << "\t\t\t" << A_Std_pol1_wPC_Error << "\n";
+        Neutron_res_fit_param << "A_Std_pol1_wPC_Error" << "\t\t" << A_Std_pol1_wPC_Error << "\n";
         Neutron_res_fit_param << "B_Std_pol1_wPC" << "\t\t\t\t" << B_Std_pol1_wPC << "\n";
-        Neutron_res_fit_param << "B_Std_pol1_wPC_Error" << "\t\t\t" << B_Std_pol1_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol1_wPC" << "\t\t\t" << ChiSquare_Std_pol1_wPC << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol1_wPC" << "\t\t\t\t" << NDF_Std_pol1_wPC << "\n\n";
+        Neutron_res_fit_param << "B_Std_pol1_wPC_Error" << "\t\t" << B_Std_pol1_wPC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Std_pol1_wPC" << "\t\t" << ChiSquare_Std_pol1_wPC << "\n";
+        Neutron_res_fit_param << "NDF_Std_pol1_wPC" << "\t\t\t" << NDF_Std_pol1_wPC << "\n\n";
 
-        Neutron_res_fit_param << "A_Std_pol2" << "\t\t\t\t" << A_Std_pol2 << "\n";
+        Neutron_res_fit_param << "A_Std_pol2" << "\t\t\t\t\t" << A_Std_pol2 << "\n";
         Neutron_res_fit_param << "A_Std_pol2_Error" << "\t\t\t" << A_Std_pol2_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol2" << "\t\t\t\t" << B_Std_pol2 << "\n";
+        Neutron_res_fit_param << "B_Std_pol2" << "\t\t\t\t\t" << B_Std_pol2 << "\n";
         Neutron_res_fit_param << "B_Std_pol2_Error" << "\t\t\t" << B_Std_pol2_Error << "\n";
-        Neutron_res_fit_param << "C_Std_pol2" << "\t\t\t\t" << C_Std_pol2 << "\n";
+        Neutron_res_fit_param << "C_Std_pol2" << "\t\t\t\t\t" << C_Std_pol2 << "\n";
         Neutron_res_fit_param << "C_Std_pol2_Error" << "\t\t\t" << C_Std_pol2_Error << "\n";
         Neutron_res_fit_param << "ChiSquare_Std_pol2" << "\t\t\t" << ChiSquare_Std_pol2 << "\n";
         Neutron_res_fit_param << "NDF_Std_pol2" << "\t\t\t\t" << NDF_Std_pol2 << "\n\n";
 
         Neutron_res_fit_param << "A_Std_pol2_wPC" << "\t\t\t\t" << A_Std_pol2_wPC << "\n";
-        Neutron_res_fit_param << "A_Std_pol2_wPC_Error" << "\t\t\t" << A_Std_pol2_wPC_Error << "\n";
+        Neutron_res_fit_param << "A_Std_pol2_wPC_Error" << "\t\t" << A_Std_pol2_wPC_Error << "\n";
         Neutron_res_fit_param << "B_Std_pol2_wPC" << "\t\t\t\t" << B_Std_pol2_wPC << "\n";
-        Neutron_res_fit_param << "B_Std_pol2_wPC_Error" << "\t\t\t" << B_Std_pol2_wPC_Error << "\n";
+        Neutron_res_fit_param << "B_Std_pol2_wPC_Error" << "\t\t" << B_Std_pol2_wPC_Error << "\n";
         Neutron_res_fit_param << "C_Std_pol2_wPC" << "\t\t\t\t" << C_Std_pol2_wPC << "\n";
-        Neutron_res_fit_param << "C_Std_pol2_wPC_Error" << "\t\t\t" << C_Std_pol2_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol2_wPC" << "\t\t\t" << ChiSquare_Std_pol2_wPC << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol2_wPC" << "\t\t\t\t" << NDF_Std_pol2_wPC << "\n\n";
+        Neutron_res_fit_param << "C_Std_pol2_wPC_Error" << "\t\t" << C_Std_pol2_wPC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Std_pol2_wPC" << "\t\t" << ChiSquare_Std_pol2_wPC << "\n";
+        Neutron_res_fit_param << "NDF_Std_pol2_wPC" << "\t\t\t" << NDF_Std_pol2_wPC << "\n\n";
 
-        Neutron_res_fit_param << "A_Std_pol3" << "\t\t\t" << A_Std_pol3 << "\n";
+        Neutron_res_fit_param << "A_Std_pol3" << "\t\t\t\t\t" << A_Std_pol3 << "\n";
         Neutron_res_fit_param << "A_Std_pol3_Error" << "\t\t\t" << A_Std_pol3_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol3" << "\t\t\t" << B_Std_pol3 << "\n";
+        Neutron_res_fit_param << "B_Std_pol3" << "\t\t\t\t\t" << B_Std_pol3 << "\n";
         Neutron_res_fit_param << "B_Std_pol3_Error" << "\t\t\t" << B_Std_pol3_Error << "\n";
-        Neutron_res_fit_param << "C_Std_pol3" << "\t\t\t" << C_Std_pol3 << "\n";
+        Neutron_res_fit_param << "C_Std_pol3" << "\t\t\t\t\t" << C_Std_pol3 << "\n";
         Neutron_res_fit_param << "C_Std_pol3_Error" << "\t\t\t" << C_Std_pol3_Error << "\n";
-        Neutron_res_fit_param << "D_Std_pol3" << "\t\t\t" << D_Std_pol3 << "\n";
+        Neutron_res_fit_param << "D_Std_pol3" << "\t\t\t\t\t" << D_Std_pol3 << "\n";
         Neutron_res_fit_param << "D_Std_pol3_Error" << "\t\t\t" << D_Std_pol3_Error << "\n";
         Neutron_res_fit_param << "ChiSquare_Std_pol3" << "\t\t\t" << ChiSquare_Std_pol3 << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol3" << "\t\t\t" << NDF_Std_pol3 << "\n\n";
+        Neutron_res_fit_param << "NDF_Std_pol3" << "\t\t\t\t" << NDF_Std_pol3 << "\n\n";
 
-        Neutron_res_fit_param << "A_Std_pol3_wPC" << "\t\t\t" << A_Std_pol3_wPC << "\n";
-        Neutron_res_fit_param << "A_Std_pol3_wPC_Error" << "\t\t\t" << A_Std_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol3_wPC" << "\t\t\t" << B_Std_pol3_wPC << "\n";
-        Neutron_res_fit_param << "B_Std_pol3_wPC_Error" << "\t\t\t" << B_Std_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "C_Std_pol3_wPC" << "\t\t\t" << C_Std_pol3_wPC << "\n";
-        Neutron_res_fit_param << "C_Std_pol3_wPC_Error" << "\t\t\t" << C_Std_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "D_Std_pol3_wPC" << "\t\t\t" << D_Std_pol3_wPC << "\n";
-        Neutron_res_fit_param << "D_Std_pol3_wPC_Error" << "\t\t\t" << D_Std_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol3_wPC" << "\t\t\t" << ChiSquare_Std_pol3_wPC << "\n";
+        Neutron_res_fit_param << "A_Std_pol3_wPC" << "\t\t\t\t" << A_Std_pol3_wPC << "\n";
+        Neutron_res_fit_param << "A_Std_pol3_wPC_Error" << "\t\t" << A_Std_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "B_Std_pol3_wPC" << "\t\t\t\t" << B_Std_pol3_wPC << "\n";
+        Neutron_res_fit_param << "B_Std_pol3_wPC_Error" << "\t\t" << B_Std_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "C_Std_pol3_wPC" << "\t\t\t\t" << C_Std_pol3_wPC << "\n";
+        Neutron_res_fit_param << "C_Std_pol3_wPC_Error" << "\t\t" << C_Std_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "D_Std_pol3_wPC" << "\t\t\t\t" << D_Std_pol3_wPC << "\n";
+        Neutron_res_fit_param << "D_Std_pol3_wPC_Error" << "\t\t" << D_Std_pol3_wPC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Std_pol3_wPC" << "\t\t" << ChiSquare_Std_pol3_wPC << "\n";
         Neutron_res_fit_param << "NDF_Std_pol3_wPC" << "\t\t\t" << NDF_Std_pol3_wPC << "\n\n";
     }
     //</editor-fold>
@@ -1981,7 +1995,7 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
     ofstream Neutron_res_Hist_param;
     std::string Neutron_res_Hist_paramFilePath;
 
-    if (momResS2Mode) {
+    if (momResS2CalcMode) {
         if (!momResTestMode) {
             Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS2_hist_param_-_" + SampleName + ".par";
         } else {
@@ -2025,12 +2039,12 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadResDataParam function">
-void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory) {
-
+void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory,
+                                         const bool &Load_correction, const bool &Load_smearing) {
     ifstream infile;
     infile.open(filename);
 
-    momResS2Mode = Calculate_momResS2;
+    momResS2CalcMode = Calculate_momResS2;
     SName = SampleName;
     SetUpperMomCut(SampleName, NucleonCutsDirectory);
 
@@ -2117,10 +2131,11 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                 stringstream ss2(parameter2);
 
                 //TODO: reorganize these into vectors!
-                if (findSubstring(parameter, "Corr")) {
+                if (Load_correction && findSubstring(parameter, "Corr")) {
                     if (findSubstring(parameter, "pol1")) {
                         if (parameter == "A_Corr_pol1") {
                             Loaded_A_Corr_pol1 = stod(parameter2);
+                            cout << "\nLoaded_A_Corr_pol1 = " << Loaded_A_Corr_pol1 << "\n";
                         } else if (parameter == "A_Corr_pol1_wPC") {
                             Loaded_A_Corr_pol1_wPC = stod(parameter2);
                         } else if (parameter == "A_Corr_pol1_Error") {
@@ -2221,10 +2236,11 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             Loaded_NDF_Corr_pol3_wPC = stod(parameter2);
                         }
                     }
-                } else if (findSubstring(parameter, "Std")) {
+                } else if (Load_smearing && findSubstring(parameter, "Std")) {
                     if (findSubstring(parameter, "pol1")) {
                         if (parameter == "A_Std_pol1") {
                             Loaded_A_Std_pol1 = stod(parameter2);
+                            cout << "\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
                         } else if (parameter == "A_Std_pol1_wPC") {
                             Loaded_A_Std_pol1_wPC = stod(parameter2);
                         } else if (parameter == "A_Std_pol1_Error") {
@@ -2414,10 +2430,14 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
             double Smearing, Arg;
 
             if (SmearMode == "pol1") {
+//                cout << "\n\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
+//                cout << "\n\nLoaded_B_Std_pol1 = " << Loaded_B_Std_pol1 << "\n";
                 Arg = Loaded_A_Std_pol1 * Momentum + Loaded_B_Std_pol1;
 
                 Smearing = Rand->Gaus(1, Arg);
             } else if (SmearMode == "pol1_wPC") {
+//                cout << "\n\nLoaded_A_Std_pol1_wPC = " << Loaded_A_Std_pol1_wPC << "\n";
+//                cout << "\n\nLoaded_A_Std_pol1_wPC = " << Loaded_A_Std_pol1_wPC << "\n";
                 Arg = Loaded_A_Std_pol1_wPC * Momentum + Loaded_B_Std_pol1_wPC;
 
                 Smearing = Rand->Gaus(1, Arg);
@@ -2557,8 +2577,12 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
             double shift;
 
             if (ShiftMode == "pol1") {
+//                cout << "\n\nLoaded_A_Corr_pol1 = " << Loaded_A_Corr_pol1 << "\n";
+//                cout << "\n\nLoaded_B_Corr_pol1 = " << Loaded_B_Corr_pol1 << "\n";
                 shift = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
             } else if (ShiftMode == "pol1_wPC") {
+//                cout << "\n\nLoaded_A_Corr_pol1_wPC = " << Loaded_A_Corr_pol1_wPC << "\n";
+//                cout << "\n\nLoaded_B_Corr_pol1_wPC = " << Loaded_B_Corr_pol1_wPC << "\n";
                 shift = Loaded_A_Corr_pol1_wPC * Momentum + Loaded_B_Corr_pol1_wPC;
             } else if (ShiftMode == "pol2") {
                 shift = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;

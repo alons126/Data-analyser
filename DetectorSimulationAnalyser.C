@@ -151,11 +151,17 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
+    /* Run order:
+        1. plot_and_fit_MomRes = true , Calculate_momResS2 = false, Run_in_momResS2 = false (momResS1 calculation)
+        2. plot_and_fit_MomRes = true , Calculate_momResS2 = true , Run_in_momResS2 = false (momResS2 calculation)
+        3. plot_and_fit_MomRes = false, Calculate_momResS2 = false, Run_in_momResS2 = true  (momResS2 run) */
     bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = false; // Generate nRes plots
+    bool Calculate_momResS2 = false; // Calculate momResS2 variables
+    bool Run_in_momResS2 = false; // Smear with momResS2 and correct with momResS1
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
-    const string SmearMode = "pol1", ShiftMode = "pol1";
+    const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
+//    const string SmearMode = "pol1", ShiftMode = "pol1";
     bool nRes_test = false; // false by default
 
     //<editor-fold desc="Auto-disable variables">
@@ -174,6 +180,10 @@ void EventAnalyser() {
            Additionally, there is no need to calculate the resolution and efficiency in the same time! */
         plot_and_fit_MomRes = false;
     }
+
+    if (!plot_and_fit_MomRes) { Calculate_momResS2 = false; }
+
+    if (Calculate_momResS2 && Run_in_momResS2) { cout << "\n\nmomRes order error! Exiting...\n\n", exit(EXIT_FAILURE); }
     //</editor-fold>
 
     //</editor-fold>
@@ -344,8 +354,8 @@ void EventAnalyser() {
 //                Efficiency_Status = "Eff2_test";
                 Efficiency_Status = "Eff2";
             } else {
-                Efficiency_Status = "Eff1_test";
-//                Efficiency_Status = "Eff1";
+//                Efficiency_Status = "Eff1_test";
+                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
@@ -602,131 +612,131 @@ void EventAnalyser() {
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
 
-//    //<editor-fold desc="Plot selector - plot all">
-//    /* Master plots variable */
-//    bool Plot_selector_master = true; // Master plot selector for analysis
-//
-//    /* Cut variable plots */
-//    bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
-//
-//    /* Beta plots */
-//    bool W_plots = true;
-//
-//    /* Beta plots */
-//    bool Beta_plots = true;
-//    bool Beta_vs_P_plots = true;
-//
-//    /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-//
-//    /* Q2 plots */
-//    bool Q2_plots = true;
-//
-//    /* E_e plots */
-//    bool E_e_plots = true;
-//
-//    /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-//
-//    /* Ecal plots */
-//    bool Ecal_plots = true;
-//
-//    /* Transverse variables plots */
-//    bool TKI_plots = true;
-//
-//    /* ToF plots */
-//    bool ToF_plots = false;
-//
-//    /* Efficiency plots */
-//    bool Efficiency_plots = true;
-//    bool TL_after_Acceptance_Maps_plots = true;
-//
-//    /* Resolution plots */
-//    bool AMaps_plots = true;
-//
-//    /* Resolution plots */
-//    bool Resolution_plots = true;
-//
-//    /* Final state ratio plots */
-//    bool FSR_1D_plots = true;
-//    bool FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
-//    //</editor-fold>
-
-    //<editor-fold desc="Plot selector - selected plots">
+    //<editor-fold desc="Plot selector - plot all">
     /* Master plots variable */
     bool Plot_selector_master = true; // Master plot selector for analysis
 
     /* Cut variable plots */
     bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
-//
-//    bool Momentum_plots = true;
-    bool Momentum_plots = false;
-//
+    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta plots */
-//    bool W_plots = true;
-    bool W_plots = false;
+    bool W_plots = true;
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
+    bool Beta_plots = true;
+    bool Beta_vs_P_plots = true;
 
     /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-    bool Angle_plots_master = false; // Master angle plots selector
-    bool Theta_e_plots = false, Phi_e_plots = false;
+    bool Angle_plots_master = true; // Master angle plots selector
+    bool Theta_e_plots = true, Phi_e_plots = true;
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
+    bool Q2_plots = true;
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
+    bool E_e_plots = true;
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
+    bool ETrans_plots_master = true; // Master ET plots selector
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
+    bool Ecal_plots = true;
 
     /* Transverse variables plots */
-//    bool TKI_plots = true;
-    bool TKI_plots = false;
+    bool TKI_plots = true;
 
     /* ToF plots */
-//    bool ToF_plots = true;
     bool ToF_plots = false;
 
     /* Efficiency plots */
-//    bool Efficiency_plots = true;
-    bool Efficiency_plots = false;
-//    bool TL_after_Acceptance_Maps_plots = true;
-    bool TL_after_Acceptance_Maps_plots = false;
+    bool Efficiency_plots = true;
+    bool TL_after_Acceptance_Maps_plots = true;
 
     /* Resolution plots */
-//    bool AMaps_plots = true;
-    bool AMaps_plots = false;
+    bool AMaps_plots = true;
 
     /* Resolution plots */
     bool Resolution_plots = true;
-//    bool Resolution_plots = false;
 
     /* Final state ratio plots */
-    bool FSR_1D_plots = false;
-    bool FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
-    //</editor-fold>/
+    bool FSR_1D_plots = true;
+    bool FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
+    //</editor-fold>
+
+//    //<editor-fold desc="Plot selector - selected plots">
+//    /* Master plots variable */
+//    bool Plot_selector_master = true; // Master plot selector for analysis
+//
+//    /* Cut variable plots */
+//    bool Cut_plots_master = true; // Master cut plots selector
+////    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+////
+////    bool Momentum_plots = true;
+//    bool Momentum_plots = false;
+////
+//
+//    /* Beta plots */
+////    bool W_plots = true;
+//    bool W_plots = false;
+//
+//    /* Beta plots */
+////    bool Beta_plots = true;
+//    bool Beta_plots = false;
+////    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
+//
+//    /* Angle plots */
+////    bool Angle_plots_master = true; // Master angle plots selector
+////    bool Theta_e_plots = true, Phi_e_plots = true;
+//    bool Angle_plots_master = false; // Master angle plots selector
+//    bool Theta_e_plots = false, Phi_e_plots = false;
+//
+//    /* Q2 plots */
+////    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//
+//    /* E_e plots */
+////    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//
+//    /* ET plots */
+////    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+//
+//    /* Ecal plots */
+////    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//
+//    /* Transverse variables plots */
+////    bool TKI_plots = true;
+//    bool TKI_plots = false;
+//
+//    /* ToF plots */
+////    bool ToF_plots = true;
+//    bool ToF_plots = false;
+//
+//    /* Efficiency plots */
+////    bool Efficiency_plots = true;
+//    bool Efficiency_plots = false;
+////    bool TL_after_Acceptance_Maps_plots = true;
+//    bool TL_after_Acceptance_Maps_plots = false;
+//
+//    /* Resolution plots */
+////    bool AMaps_plots = true;
+//    bool AMaps_plots = false;
+//
+//    /* Resolution plots */
+//    bool Resolution_plots = true;
+////    bool Resolution_plots = false;
+//
+//    /* Final state ratio plots */
+//    bool FSR_1D_plots = false;
+//    bool FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
+//    //</editor-fold>/
 
     /* Other setup variables */
     bool wider_margin = true;
@@ -1032,20 +1042,31 @@ void EventAnalyser() {
     NeutronResolution nRes, pRes;
 
     if (plot_and_fit_MomRes) {
-        nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2,
+        nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
                                  NeutronResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
                                  ShiftMode, nRes_test);
-        pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2,
+        pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
                                  NeutronResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
                                  ShiftMode, nRes_test);
 
         if (nRes_test) {
-            if (Calculate_momResS2) {
+            if (Calculate_momResS2 && !Run_in_momResS2) {
                 nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par").c_str(),
                                       Calculate_momResS2, SampleName, NucleonCutsDirectory);
                 nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_hist_param_-_" + SampleName + ".par").c_str(),
                                       Calculate_momResS2, SampleName, NucleonCutsDirectory);
-            } else {
+            } else if (!Calculate_momResS2 && Run_in_momResS2) {
+                /* Load neutron correction */
+                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
+                                      Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
+
+                /* Load proton smearing */
+                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par").c_str(),
+                                      Calculate_momResS2, SampleName, NucleonCutsDirectory, false, true);
+
+                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_hist_param_-_" + SampleName + ".par").c_str(),
+                                      Calculate_momResS2, SampleName, NucleonCutsDirectory);
+            } else if (!Calculate_momResS2 && Run_in_momResS2) {
                 nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
                                       Calculate_momResS2, SampleName, NucleonCutsDirectory);
                 nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_hist_param_-_" + SampleName + ".par").c_str(),
@@ -1055,21 +1076,43 @@ void EventAnalyser() {
     } else {
         nRes.SetSmearAndShiftModes(SmearMode, ShiftMode);
 
-        if (Calculate_momResS2) {
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_hist_param_-_" + VaringSampleName + ".par").c_str(),
-                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
-        } else {
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_hist_param_-_" + VaringSampleName + ".par").c_str(),
-                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
+        if (Calculate_momResS2 && !Run_in_momResS2) {
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par").c_str(),
+                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_hist_param_-_" + SampleName + ".par").c_str(),
+                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
+        } else if (!Calculate_momResS2 && Run_in_momResS2) {
+            /* Load neutron correction */
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
+                                  Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
+
+            /* Load proton smearing */
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par").c_str(),
+                                  Calculate_momResS2, SampleName, NucleonCutsDirectory, false, true);
+
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_hist_param_-_" + SampleName + ".par").c_str(),
+                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
+        } else if (!Calculate_momResS2 && Run_in_momResS2) {
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
+                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_hist_param_-_" + SampleName + ".par").c_str(),
+                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
         }
+//        if (Calculate_momResS2) {
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
+//                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_hist_param_-_" + VaringSampleName + ".par").c_str(),
+//                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
+//        } else {
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
+//                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_hist_param_-_" + VaringSampleName + ".par").c_str(),
+//                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
+//        }
     }
     //</editor-fold>
 
-    cout << " done.\n\n";
+    cout << "\ndone.\n\n";
     //</editor-fold>
 
 // Debugging setup ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -19917,6 +19960,7 @@ void EventAnalyser() {
     myLogFile << "-- nRES settings ----------------------------------------------------------\n";
     myLogFile << "plot_and_fit_MomRes = " << BoolToString(plot_and_fit_MomRes) << "\n";
     myLogFile << "Calculate_momResS2 = " << BoolToString(Calculate_momResS2) << "\n";
+    myLogFile << "Run_in_momResS2 = " << BoolToString(Run_in_momResS2) << "\n";
     myLogFile << "DeltaSlices = " << DeltaSlices << "\n";
     myLogFile << "VaryingDelta = " << BoolToString(VaryingDelta) << "\n";
     myLogFile << "SmearMode = " << SmearMode << "\n";
