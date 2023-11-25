@@ -165,7 +165,7 @@ void EventAnalyser() {
            Calculate_momResS2 = false,
            Run_in_momResS2 = true */
     bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = false; // Calculate momResS2 variables
+    bool Calculate_momResS2 = true; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
     const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
@@ -241,7 +241,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -363,8 +363,7 @@ void EventAnalyser() {
                 Efficiency_Status = "Eff2";
             } else {
 //                Efficiency_Status = "Eff1_test";
-                Efficiency_Status = "Eff1_111";
-//                Efficiency_Status = "Eff1";
+                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
@@ -674,7 +673,7 @@ void EventAnalyser() {
     bool FSR_2D_plots; // disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-    bool TestRun = true; // set as false for a full run
+    bool TestRun = false; // set as false for a full run
 
     if (!TestRun) {
 
