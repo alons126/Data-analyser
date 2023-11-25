@@ -117,6 +117,30 @@ private:
     //</editor-fold>
 
     //<editor-fold desc="Loaded correction and smear fit variables">
+    double Loaded_A_Std_pol1, Loaded_B_Std_pol1;
+    double Loaded_A_Std_pol1_Error, Loaded_B_Std_pol1_Error;
+    double Loaded_ChiSquare_Std_pol1, Loaded_NDF_Std_pol1;
+    double Loaded_A_Std_pol1_wPC, Loaded_B_Std_pol1_wPC;
+    double Loaded_A_Std_pol1_wPC_Error, Loaded_B_Std_pol1_wPC_Error;
+    double Loaded_ChiSquare_Std_pol1_wPC, Loaded_NDF_Std_pol1_wPC;
+
+    double Loaded_A_Std_pol2, Loaded_B_Std_pol2, Loaded_C_Std_pol2;
+    double Loaded_A_Std_pol2_Error, Loaded_B_Std_pol2_Error, Loaded_C_Std_pol2_Error;
+    double Loaded_ChiSquare_Std_pol2, Loaded_NDF_Std_pol2;
+    double Loaded_A_Std_pol2_wPC, Loaded_B_Std_pol2_wPC, Loaded_C_Std_pol2_wPC;
+    double Loaded_A_Std_pol2_wPC_Error, Loaded_B_Std_pol2_wPC_Error, Loaded_C_Std_pol2_wPC_Error;
+    double Loaded_ChiSquare_Std_pol2_wPC, Loaded_NDF_Std_pol2_wPC;
+
+    double Loaded_A_Std_pol3, Loaded_B_Std_pol3, Loaded_C_Std_pol3, Loaded_D_Std_pol3;
+    double Loaded_A_Std_pol3_Error, Loaded_B_Std_pol3_Error, Loaded_C_Std_pol3_Error, Loaded_D_Std_pol3_Error;
+    double Loaded_ChiSquare_Std_pol3, Loaded_NDF_Std_pol3;
+    double Loaded_A_Std_pol3_wPC, Loaded_B_Std_pol3_wPC, Loaded_C_Std_pol3_wPC, Loaded_D_Std_pol3_wPC;
+    double Loaded_A_Std_pol3_wPC_Error, Loaded_B_Std_pol3_wPC_Error, Loaded_C_Std_pol3_wPC_Error, Loaded_D_Std_pol3_wPC_Error;
+    double Loaded_ChiSquare_Std_pol3_wPC, Loaded_NDF_Std_pol3_wPC;
+
+    vector<double> Loaded_Std_coefficients_values;
+    vector<string> Loaded_Std_coefficients_names;
+
     double Loaded_A_Corr_pol1, Loaded_B_Corr_pol1;
     double Loaded_A_Corr_pol1_Error, Loaded_B_Corr_pol1_Error;
     double Loaded_ChiSquare_Corr_pol1, Loaded_NDF_Corr_pol1;
@@ -138,26 +162,8 @@ private:
     double Loaded_A_Corr_pol3_wPC_Error, Loaded_B_Corr_pol3_wPC_Error, Loaded_C_Corr_pol3_wPC_Error, Loaded_D_Corr_pol3_wPC_Error;
     double Loaded_ChiSquare_Corr_pol3_wPC, Loaded_NDF_Corr_pol3_wPC;
 
-    double Loaded_A_Std_pol1, Loaded_B_Std_pol1;
-    double Loaded_A_Std_pol1_Error, Loaded_B_Std_pol1_Error;
-    double Loaded_ChiSquare_Std_pol1, Loaded_NDF_Std_pol1;
-    double Loaded_A_Std_pol1_wPC, Loaded_B_Std_pol1_wPC;
-    double Loaded_A_Std_pol1_wPC_Error, Loaded_B_Std_pol1_wPC_Error;
-    double Loaded_ChiSquare_Std_pol1_wPC, Loaded_NDF_Std_pol1_wPC;
-
-    double Loaded_A_Std_pol2, Loaded_B_Std_pol2, Loaded_C_Std_pol2;
-    double Loaded_A_Std_pol2_Error, Loaded_B_Std_pol2_Error, Loaded_C_Std_pol2_Error;
-    double Loaded_ChiSquare_Std_pol2, Loaded_NDF_Std_pol2;
-    double Loaded_A_Std_pol2_wPC, Loaded_B_Std_pol2_wPC, Loaded_C_Std_pol2_wPC;
-    double Loaded_A_Std_pol2_wPC_Error, Loaded_B_Std_pol2_wPC_Error, Loaded_C_Std_pol2_wPC_Error;
-    double Loaded_ChiSquare_Std_pol2_wPC, Loaded_NDF_Std_pol2_wPC;
-
-    double Loaded_A_Std_pol3, Loaded_B_Std_pol3, Loaded_C_Std_pol3, Loaded_D_Std_pol3;
-    double Loaded_A_Std_pol3_Error, Loaded_B_Std_pol3_Error, Loaded_C_Std_pol3_Error, Loaded_D_Std_pol3_Error;
-    double Loaded_ChiSquare_Std_pol3, Loaded_NDF_Std_pol3;
-    double Loaded_A_Std_pol3_wPC, Loaded_B_Std_pol3_wPC, Loaded_C_Std_pol3_wPC, Loaded_D_Std_pol3_wPC;
-    double Loaded_A_Std_pol3_wPC_Error, Loaded_B_Std_pol3_wPC_Error, Loaded_C_Std_pol3_wPC_Error, Loaded_D_Std_pol3_wPC_Error;
-    double Loaded_ChiSquare_Std_pol3_wPC, Loaded_NDF_Std_pol3_wPC;
+    vector<double> Loaded_Corr_coefficients_values;
+    vector<string> Loaded_Corr_coefficients_names;
     //</editor-fold>
 
     double Neutron_Momentum_cut = 9999.; // from clas12ana
