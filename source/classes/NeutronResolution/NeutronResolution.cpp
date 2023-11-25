@@ -2163,251 +2163,285 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                 //TODO: reorganize these into vectors!
                 if (Load_correction && findSubstring(parameter, "Corr")) {
                     if (findSubstring(parameter, "pol1")) {
-                        if (parameter == "A_Corr_pol1") {
-                            Loaded_A_Corr_pol1 = stod(parameter2);
-                            cout << "\nLoaded_A_Corr_pol1 = " << Loaded_A_Corr_pol1 << "\n";
-                            Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1");
-                        } else if (parameter == "A_Corr_pol1_wPC") {
-                            Loaded_A_Corr_pol1_wPC = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1_wPC");
-                        } else if (parameter == "A_Corr_pol1_Error") {
-                            Loaded_A_Corr_pol1_Error = stod(parameter2);
-                        } else if (parameter == "A_Corr_pol1_wPC_Error") {
-                            Loaded_A_Corr_pol1_wPC_Error = stod(parameter2);
-                        } else if (parameter == "B_Corr_pol1") {
-                            Loaded_B_Corr_pol1 = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol1");
-                        } else if (parameter == "B_Corr_pol1_wPC") {
-                            Loaded_B_Corr_pol1_wPC = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol1_wPC");
-                        } else if (parameter == "B_Corr_pol1_Error") {
-                            Loaded_B_Corr_pol1_Error = stod(parameter2);
-                        } else if (parameter == "B_Corr_pol1_wPC_Error") {
-                            Loaded_B_Corr_pol1_wPC_Error = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Corr_pol1") {
-                            Loaded_ChiSquare_Corr_pol1 = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Corr_pol1_wPC") {
-                            Loaded_ChiSquare_Corr_pol1_wPC = stod(parameter2);
-                        } else if (parameter == "NDF_Corr_pol1") {
-                            Loaded_NDF_Corr_pol1 = stod(parameter2);
-                        } else if (parameter == "NDF_Corr_pol1_wPC") {
-                            Loaded_NDF_Corr_pol1_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol1_wPC")) {
+                            if (parameter == "A_Corr_pol1_wPC") {
+                                Loaded_A_Corr_pol1_wPC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1_wPC");
+                            } else if (parameter == "A_Corr_pol1_wPC_Error") {
+                                Loaded_A_Corr_pol1_wPC_Error = stod(parameter2);
+                            } else if (parameter == "B_Corr_pol1_wPC") {
+                                Loaded_B_Corr_pol1_wPC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol1_wPC");
+                            } else if (parameter == "B_Corr_pol1_wPC_Error") {
+                                Loaded_B_Corr_pol1_wPC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Corr_pol1_wPC") {
+                                Loaded_ChiSquare_Corr_pol1_wPC = stod(parameter2);
+                            } else if (parameter == "NDF_Corr_pol1_wPC") {
+                                Loaded_NDF_Corr_pol1_wPC = stod(parameter2);
+                            }
+                        } else if (findSubstring(parameter, "pol1")) {
+                            if (parameter == "A_Corr_pol1") {
+                                Loaded_A_Corr_pol1 = stod(parameter2);
+                                cout << "\nLoaded_A_Corr_pol1 = " << Loaded_A_Corr_pol1 << "\n";
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1");
+                            } else if (parameter == "A_Corr_pol1_Error") {
+                                Loaded_A_Corr_pol1_Error = stod(parameter2);
+                            } else if (parameter == "B_Corr_pol1") {
+                                Loaded_B_Corr_pol1 = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol1");
+                            } else if (parameter == "B_Corr_pol1_Error") {
+                                Loaded_B_Corr_pol1_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Corr_pol1") {
+                                Loaded_ChiSquare_Corr_pol1 = stod(parameter2);
+                            } else if (parameter == "NDF_Corr_pol1") {
+                                Loaded_NDF_Corr_pol1 = stod(parameter2);
+                            }
                         }
                     } else if (findSubstring(parameter, "pol2")) {
-                        if (parameter == "A_Corr_pol2") {
-                            Loaded_A_Corr_pol2 = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2");
-                        } else if (parameter == "A_Corr_pol2_wPC") {
-                            Loaded_A_Corr_pol2_wPC = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2_wPC");
-                        } else if (parameter == "A_Corr_pol2_Error") {
-                            Loaded_A_Corr_pol2_Error = stod(parameter2);
-                        } else if (parameter == "A_Corr_pol2_wPC_Error") {
-                            Loaded_A_Corr_pol2_wPC_Error = stod(parameter2);
-                        } else if (parameter == "B_Corr_pol2") {
-                            Loaded_B_Corr_pol2 = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol2");
-                        } else if (parameter == "B_Corr_pol2_wPC") {
-                            Loaded_B_Corr_pol2_wPC = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol2_wPC");
-                        } else if (parameter == "B_Corr_pol2_Error") {
-                            Loaded_B_Corr_pol2_Error = stod(parameter2);
-                        } else if (parameter == "B_Corr_pol2_wPC_Error") {
-                            Loaded_B_Corr_pol2_wPC_Error = stod(parameter2);
-                        } else if (parameter == "C_Corr_pol2") {
-                            Loaded_C_Corr_pol2 = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol2");
-                        } else if (parameter == "C_Corr_pol2_wPC") {
-                            Loaded_C_Corr_pol2_wPC = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol2_wPC");
-                        } else if (parameter == "C_Corr_pol2_Error") {
-                            Loaded_C_Corr_pol2_Error = stod(parameter2);
-                        } else if (parameter == "C_Corr_pol2_wPC_Error") {
-                            Loaded_C_Corr_pol2_wPC_Error = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Corr_pol2") {
-                            Loaded_ChiSquare_Corr_pol2 = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Corr_pol2_wPC") {
-                            Loaded_ChiSquare_Corr_pol2_wPC = stod(parameter2);
-                        } else if (parameter == "NDF_Corr_pol2") {
-                            Loaded_NDF_Corr_pol2 = stod(parameter2);
-                        } else if (parameter == "NDF_Corr_pol2_wPC") {
-                            Loaded_NDF_Corr_pol2_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol2_wPC")) {
+                            if (parameter == "A_Corr_pol2_wPC") {
+                                Loaded_A_Corr_pol2_wPC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2_wPC");
+                            } else if (parameter == "A_Corr_pol2_wPC_Error") {
+                                Loaded_A_Corr_pol2_wPC_Error = stod(parameter2);
+                            } else if (parameter == "B_Corr_pol2_wPC") {
+                                Loaded_B_Corr_pol2_wPC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol2_wPC");
+                            } else if (parameter == "B_Corr_pol2_wPC_Error") {
+                                Loaded_B_Corr_pol2_wPC_Error = stod(parameter2);
+                            } else if (parameter == "C_Corr_pol2_wPC") {
+                                Loaded_C_Corr_pol2_wPC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol2_wPC");
+                            } else if (parameter == "C_Corr_pol2_wPC_Error") {
+                                Loaded_C_Corr_pol2_wPC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Corr_pol2_wPC") {
+                                Loaded_ChiSquare_Corr_pol2_wPC = stod(parameter2);
+                            } else if (parameter == "NDF_Corr_pol2_wPC") {
+                                Loaded_NDF_Corr_pol2_wPC = stod(parameter2);
+                            }
+                        } else if (findSubstring(parameter, "pol2")) {
+                            if (parameter == "A_Corr_pol2") {
+                                Loaded_A_Corr_pol2 = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2");
+                            } else if (parameter == "A_Corr_pol2_Error") {
+                                Loaded_A_Corr_pol2_Error = stod(parameter2);
+                            } else if (parameter == "B_Corr_pol2") {
+                                Loaded_B_Corr_pol2 = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol2");
+                            } else if (parameter == "B_Corr_pol2_Error") {
+                                Loaded_B_Corr_pol2_Error = stod(parameter2);
+                            } else if (parameter == "C_Corr_pol2") {
+                                Loaded_C_Corr_pol2 = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol2");
+                            } else if (parameter == "C_Corr_pol2_Error") {
+                                Loaded_C_Corr_pol2_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Corr_pol2") {
+                                Loaded_ChiSquare_Corr_pol2 = stod(parameter2);
+                            } else if (parameter == "NDF_Corr_pol2") {
+                                Loaded_NDF_Corr_pol2 = stod(parameter2);
+                            }
                         }
                     } else if (findSubstring(parameter, "pol3")) {
-                        if (parameter == "A_Corr_pol3") {
-                            Loaded_A_Corr_pol3 = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3");
-                        } else if (parameter == "A_Corr_pol3_wPC") {
-                            Loaded_A_Corr_pol3_wPC = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3_wPC");
-                        } else if (parameter == "A_Corr_pol3_Error") {
-                            Loaded_A_Corr_pol3_Error = stod(parameter2);
-                        } else if (parameter == "A_Corr_pol3_wPC_Error") {
-                            Loaded_A_Corr_pol3_wPC_Error = stod(parameter2);
-                        } else if (parameter == "B_Corr_pol3") {
-                            Loaded_B_Corr_pol3 = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol3");
-                        } else if (parameter == "B_Corr_pol3_wPC") {
-                            Loaded_B_Corr_pol3_wPC = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol3_wPC");
-                        } else if (parameter == "B_Corr_pol3_Error") {
-                            Loaded_B_Corr_pol3_Error = stod(parameter2);
-                        } else if (parameter == "B_Corr_pol3_wPC_Error") {
-                            Loaded_B_Corr_pol3_wPC_Error = stod(parameter2);
-                        } else if (parameter == "C_Corr_pol3") {
-                            Loaded_C_Corr_pol3 = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol3");
-                        } else if (parameter == "C_Corr_pol3_wPC") {
-                            Loaded_C_Corr_pol3_wPC = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol3_wPC");
-                        } else if (parameter == "C_Corr_pol3_Error") {
-                            Loaded_C_Corr_pol3_Error = stod(parameter2);
-                        } else if (parameter == "C_Corr_pol3_wPC_Error") {
-                            Loaded_C_Corr_pol3_wPC_Error = stod(parameter2);
-                        } else if (parameter == "D_Corr_pol3") {
-                            Loaded_D_Corr_pol3 = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_D_Corr_pol3");
-                        } else if (parameter == "D_Corr_pol3_wPC") {
-                            Loaded_D_Corr_pol3_wPC = stod(parameter2);
-                            Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_D_Corr_pol3_wPC");
-                        } else if (parameter == "D_Corr_pol3_Error") {
-                            Loaded_D_Corr_pol3_Error = stod(parameter2);
-                        } else if (parameter == "D_Corr_pol3_wPC_Error") {
-                            Loaded_D_Corr_pol3_wPC_Error = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Corr_pol3") {
-                            Loaded_ChiSquare_Corr_pol3 = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Corr_pol3_wPC") {
-                            Loaded_ChiSquare_Corr_pol3_wPC = stod(parameter2);
-                        } else if (parameter == "NDF_Corr_pol3") {
-                            Loaded_NDF_Corr_pol3 = stod(parameter2);
-                        } else if (parameter == "NDF_Corr_pol3_wPC") {
-                            Loaded_NDF_Corr_pol3_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol3_wPC")) {
+                            if (parameter == "A_Corr_pol3_wPC") {
+                                Loaded_A_Corr_pol3_wPC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3_wPC");
+                            } else if (parameter == "A_Corr_pol3_wPC_Error") {
+                                Loaded_A_Corr_pol3_wPC_Error = stod(parameter2);
+                            } else if (parameter == "B_Corr_pol3_wPC") {
+                                Loaded_B_Corr_pol3_wPC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol3_wPC");
+                            } else if (parameter == "B_Corr_pol3_wPC_Error") {
+                                Loaded_B_Corr_pol3_wPC_Error = stod(parameter2);
+                            } else if (parameter == "C_Corr_pol3_wPC") {
+                                Loaded_C_Corr_pol3_wPC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol3_wPC");
+                            } else if (parameter == "C_Corr_pol3_wPC_Error") {
+                                Loaded_C_Corr_pol3_wPC_Error = stod(parameter2);
+                            } else if (parameter == "D_Corr_pol3_wPC") {
+                                Loaded_D_Corr_pol3_wPC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_D_Corr_pol3_wPC");
+                            } else if (parameter == "D_Corr_pol3_wPC_Error") {
+                                Loaded_D_Corr_pol3_wPC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Corr_pol3_wPC") {
+                                Loaded_ChiSquare_Corr_pol3_wPC = stod(parameter2);
+                            } else if (parameter == "NDF_Corr_pol3_wPC") {
+                                Loaded_NDF_Corr_pol3_wPC = stod(parameter2);
+                            }
+                        } else if (findSubstring(parameter, "pol3")) {
+                            if (parameter == "A_Corr_pol3") {
+                                Loaded_A_Corr_pol3 = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3");
+                            } else if (parameter == "A_Corr_pol3_Error") {
+                                Loaded_A_Corr_pol3_Error = stod(parameter2);
+                            } else if (parameter == "B_Corr_pol3") {
+                                Loaded_B_Corr_pol3 = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol3");
+                            } else if (parameter == "B_Corr_pol3_Error") {
+                                Loaded_B_Corr_pol3_Error = stod(parameter2);
+                            } else if (parameter == "C_Corr_pol3") {
+                                Loaded_C_Corr_pol3 = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol3");
+                            } else if (parameter == "C_Corr_pol3_Error") {
+                                Loaded_C_Corr_pol3_Error = stod(parameter2);
+                            } else if (parameter == "D_Corr_pol3") {
+                                Loaded_D_Corr_pol3 = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_D_Corr_pol3");
+                            } else if (parameter == "D_Corr_pol3_Error") {
+                                Loaded_D_Corr_pol3_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Corr_pol3") {
+                                Loaded_ChiSquare_Corr_pol3 = stod(parameter2);
+                            } else if (parameter == "NDF_Corr_pol3") {
+                                Loaded_NDF_Corr_pol3 = stod(parameter2);
+                            }
                         }
                     }
                 } else if (Load_smearing && findSubstring(parameter, "Std")) {
                     if (findSubstring(parameter, "pol1")) {
-                        if (parameter == "A_Std_pol1") {
-                            Loaded_A_Std_pol1 = stod(parameter2);
-                            cout << "\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
-                            Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol1");
-                        } else if (parameter == "A_Std_pol1_wPC") {
-                            Loaded_A_Std_pol1_wPC = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol1_wPC");
-                        } else if (parameter == "A_Std_pol1_Error") {
-                            Loaded_A_Std_pol1_Error = stod(parameter2);
-                        } else if (parameter == "A_Std_pol1_wPC_Error") {
-                            Loaded_A_Std_pol1_wPC_Error = stod(parameter2);
-                        } else if (parameter == "B_Std_pol1") {
-                            Loaded_B_Std_pol1 = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol1), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol1");
-                        } else if (parameter == "B_Std_pol1_wPC") {
-                            Loaded_B_Std_pol1_wPC = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol1_wPC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol1_wPC");
-                        } else if (parameter == "B_Std_pol1_Error") {
-                            Loaded_B_Std_pol1_Error = stod(parameter2);
-                        } else if (parameter == "B_Std_pol1_wPC_Error") {
-                            Loaded_B_Std_pol1_wPC_Error = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Std_pol1") {
-                            Loaded_ChiSquare_Std_pol1 = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Std_pol1_wPC") {
-                            Loaded_ChiSquare_Std_pol1_wPC = stod(parameter2);
-                        } else if (parameter == "NDF_Std_pol1") {
-                            Loaded_NDF_Std_pol1 = stod(parameter2);
-                        } else if (parameter == "NDF_Std_pol1_wPC") {
-                            Loaded_NDF_Std_pol1_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol1_wPC")) {
+                            if (parameter == "A_Std_pol1_wPC") {
+                                Loaded_A_Std_pol1_wPC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol1_wPC");
+                            } else if (parameter == "A_Std_pol1_wPC_Error") {
+                                Loaded_A_Std_pol1_wPC_Error = stod(parameter2);
+                            } else if (parameter == "B_Std_pol1_wPC") {
+                                Loaded_B_Std_pol1_wPC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol1_wPC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol1_wPC");
+                            } else if (parameter == "B_Std_pol1_wPC_Error") {
+                                Loaded_B_Std_pol1_wPC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Std_pol1_wPC") {
+                                Loaded_ChiSquare_Std_pol1_wPC = stod(parameter2);
+                            } else if (parameter == "NDF_Std_pol1_wPC") {
+                                Loaded_NDF_Std_pol1_wPC = stod(parameter2);
+                            }
+                        } else if (findSubstring(parameter, "pol1")) {
+                            if (parameter == "A_Std_pol1") {
+                                Loaded_A_Std_pol1 = stod(parameter2);
+                                cout << "\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol1");
+                            } else if (parameter == "A_Std_pol1_Error") {
+                                Loaded_A_Std_pol1_Error = stod(parameter2);
+                            } else if (parameter == "B_Std_pol1") {
+                                Loaded_B_Std_pol1 = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol1), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol1");
+                            } else if (parameter == "B_Std_pol1_Error") {
+                                Loaded_B_Std_pol1_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Std_pol1") {
+                                Loaded_ChiSquare_Std_pol1 = stod(parameter2);
+                            } else if (parameter == "NDF_Std_pol1") {
+                                Loaded_NDF_Std_pol1 = stod(parameter2);
+                            }
                         }
                     } else if (findSubstring(parameter, "pol2")) {
-                        if (parameter == "A_Std_pol2") {
-                            Loaded_A_Std_pol2 = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2");
-                        } else if (parameter == "A_Std_pol2_wPC") {
-                            Loaded_A_Std_pol2_wPC = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2_wPC");
-                        } else if (parameter == "A_Std_pol2_Error") {
-                            Loaded_A_Std_pol2_Error = stod(parameter2);
-                        } else if (parameter == "A_Std_pol2_wPC_Error") {
-                            Loaded_A_Std_pol2_wPC_Error = stod(parameter2);
-                        } else if (parameter == "B_Std_pol2") {
-                            Loaded_B_Std_pol2 = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol2");
-                        } else if (parameter == "B_Std_pol2_wPC") {
-                            Loaded_B_Std_pol2_wPC = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol2_wPC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol2_wPC");
-                        } else if (parameter == "B_Std_pol2_Error") {
-                            Loaded_B_Std_pol2_Error = stod(parameter2);
-                        } else if (parameter == "B_Std_pol2_wPC_Error") {
-                            Loaded_B_Std_pol2_wPC_Error = stod(parameter2);
-                        } else if (parameter == "C_Std_pol2") {
-                            Loaded_C_Std_pol2 = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol2");
-                        } else if (parameter == "C_Std_pol2_wPC") {
-                            Loaded_C_Std_pol2_wPC = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol2_wPC), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol2_wPC");
-                        } else if (parameter == "C_Std_pol2_Error") {
-                            Loaded_C_Std_pol2_Error = stod(parameter2);
-                        } else if (parameter == "C_Std_pol2_wPC_Error") {
-                            Loaded_C_Std_pol2_wPC_Error = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Std_pol2") {
-                            Loaded_ChiSquare_Std_pol2 = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Std_pol2_wPC") {
-                            Loaded_ChiSquare_Std_pol2_wPC = stod(parameter2);
-                        } else if (parameter == "NDF_Std_pol2") {
-                            Loaded_NDF_Std_pol2 = stod(parameter2);
-                        } else if (parameter == "NDF_Std_pol2_wPC") {
-                            Loaded_NDF_Std_pol2_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol2_wPC")) {
+                            if (parameter == "A_Std_pol2_wPC") {
+                                Loaded_A_Std_pol2_wPC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2_wPC");
+                            } else if (parameter == "A_Std_pol2_wPC_Error") {
+                                Loaded_A_Std_pol2_wPC_Error = stod(parameter2);
+                            } else if (parameter == "B_Std_pol2_wPC") {
+                                Loaded_B_Std_pol2_wPC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol2_wPC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol2_wPC");
+                            } else if (parameter == "B_Std_pol2_wPC_Error") {
+                                Loaded_B_Std_pol2_wPC_Error = stod(parameter2);
+                            } else if (parameter == "C_Std_pol2_wPC") {
+                                Loaded_C_Std_pol2_wPC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol2_wPC), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol2_wPC");
+                            } else if (parameter == "C_Std_pol2_wPC_Error") {
+                                Loaded_C_Std_pol2_wPC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Std_pol2_wPC") {
+                                Loaded_ChiSquare_Std_pol2_wPC = stod(parameter2);
+                            } else if (parameter == "NDF_Std_pol2_wPC") {
+                                Loaded_NDF_Std_pol2_wPC = stod(parameter2);
+                            }
+                        } else if (findSubstring(parameter, "pol2")) {
+                            if (parameter == "A_Std_pol2") {
+                                Loaded_A_Std_pol2 = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2");
+                            } else if (parameter == "A_Std_pol2_Error") {
+                                Loaded_A_Std_pol2_Error = stod(parameter2);
+                            } else if (parameter == "B_Std_pol2") {
+                                Loaded_B_Std_pol2 = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol2");
+                            } else if (parameter == "B_Std_pol2_Error") {
+                                Loaded_B_Std_pol2_Error = stod(parameter2);
+                            } else if (parameter == "C_Std_pol2") {
+                                Loaded_C_Std_pol2 = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol2");
+                            } else if (parameter == "C_Std_pol2_Error") {
+                                Loaded_C_Std_pol2_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Std_pol2") {
+                                Loaded_ChiSquare_Std_pol2 = stod(parameter2);
+                            } else if (parameter == "NDF_Std_pol2") {
+                                Loaded_NDF_Std_pol2 = stod(parameter2);
+                            }
                         }
                     } else if (findSubstring(parameter, "pol3")) {
-                        if (parameter == "A_Std_pol3") {
-                            Loaded_A_Std_pol3 = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3");
-                        } else if (parameter == "A_Std_pol3_wPC") {
-                            Loaded_A_Std_pol3_wPC = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3_wPC");
-                        } else if (parameter == "A_Std_pol3_Error") {
-                            Loaded_A_Std_pol3_Error = stod(parameter2);
-                        } else if (parameter == "A_Std_pol3_wPC_Error") {
-                            Loaded_A_Std_pol3_wPC_Error = stod(parameter2);
-                        } else if (parameter == "B_Std_pol3") {
-                            Loaded_B_Std_pol3 = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol3");
-                        } else if (parameter == "B_Std_pol3_wPC") {
-                            Loaded_B_Std_pol3_wPC = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol3_wPC");
-                        } else if (parameter == "B_Std_pol3_Error") {
-                            Loaded_B_Std_pol3_Error = stod(parameter2);
-                        } else if (parameter == "B_Std_pol3_wPC_Error") {
-                            Loaded_B_Std_pol3_wPC_Error = stod(parameter2);
-                        } else if (parameter == "C_Std_pol3") {
-                            Loaded_C_Std_pol3 = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol3");
-                        } else if (parameter == "C_Std_pol3_wPC") {
-                            Loaded_C_Std_pol3_wPC = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol3_wPC");
-                        } else if (parameter == "C_Std_pol3_Error") {
-                            Loaded_C_Std_pol3_Error = stod(parameter2);
-                        } else if (parameter == "C_Std_pol3_wPC_Error") {
-                            Loaded_C_Std_pol3_wPC_Error = stod(parameter2);
-                        } else if (parameter == "D_Std_pol3") {
-                            Loaded_D_Std_pol3 = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_D_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_D_Std_pol3");
-                        } else if (parameter == "D_Std_pol3_wPC") {
-                            Loaded_D_Std_pol3_wPC = stod(parameter2);
-                            Loaded_Std_coefficients_values.push_back(Loaded_D_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_D_Std_pol3_wPC");
-                        } else if (parameter == "D_Std_pol3_Error") {
-                            Loaded_D_Std_pol3_Error = stod(parameter2);
-                        } else if (parameter == "D_Std_pol3_wPC_Error") {
-                            Loaded_D_Std_pol3_wPC_Error = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Std_pol3") {
-                            Loaded_ChiSquare_Std_pol3 = stod(parameter2);
-                        } else if (parameter == "ChiSquare_Std_pol3_wPC") {
-                            Loaded_ChiSquare_Std_pol3_wPC = stod(parameter2);
-                        } else if (parameter == "NDF_Std_pol3") {
-                            Loaded_NDF_Std_pol3 = stod(parameter2);
-                        } else if (parameter == "NDF_Std_pol3_wPC") {
-                            Loaded_NDF_Std_pol3_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol3_wPC")) {
+                            if (parameter == "A_Std_pol3_wPC") {
+                                Loaded_A_Std_pol3_wPC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3_wPC");
+                            } else if (parameter == "A_Std_pol3_wPC_Error") {
+                                Loaded_A_Std_pol3_wPC_Error = stod(parameter2);
+                            } else if (parameter == "B_Std_pol3_wPC") {
+                                Loaded_B_Std_pol3_wPC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol3_wPC");
+                            } else if (parameter == "B_Std_pol3_wPC_Error") {
+                                Loaded_B_Std_pol3_wPC_Error = stod(parameter2);
+                            } else if (parameter == "C_Std_pol3_wPC") {
+                                Loaded_C_Std_pol3_wPC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol3_wPC");
+                            } else if (parameter == "C_Std_pol3_wPC_Error") {
+                                Loaded_C_Std_pol3_wPC_Error = stod(parameter2);
+                            } else if (parameter == "D_Std_pol3_wPC") {
+                                Loaded_D_Std_pol3_wPC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_D_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_D_Std_pol3_wPC");
+                            } else if (parameter == "D_Std_pol3_wPC_Error") {
+                                Loaded_D_Std_pol3_wPC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Std_pol3_wPC") {
+                                Loaded_ChiSquare_Std_pol3_wPC = stod(parameter2);
+                            } else if (parameter == "NDF_Std_pol3_wPC") {
+                                Loaded_NDF_Std_pol3_wPC = stod(parameter2);
+                            }
+                        } else if (findSubstring(parameter, "pol3")) {
+                            if (parameter == "A_Std_pol3") {
+                                Loaded_A_Std_pol3 = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3");
+                            } else if (parameter == "A_Std_pol3_Error") {
+                                Loaded_A_Std_pol3_Error = stod(parameter2);
+                            } else if (parameter == "B_Std_pol3") {
+                                Loaded_B_Std_pol3 = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol3");
+                            } else if (parameter == "B_Std_pol3_Error") {
+                                Loaded_B_Std_pol3_Error = stod(parameter2);
+                            } else if (parameter == "C_Std_pol3") {
+                                Loaded_C_Std_pol3 = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol3");
+                            } else if (parameter == "C_Std_pol3_Error") {
+                                Loaded_C_Std_pol3_Error = stod(parameter2);
+                            } else if (parameter == "D_Std_pol3") {
+                                Loaded_D_Std_pol3 = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_D_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_D_Std_pol3");
+                            } else if (parameter == "D_Std_pol3_Error") {
+                                Loaded_D_Std_pol3_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Std_pol3") {
+                                Loaded_ChiSquare_Std_pol3 = stod(parameter2);
+                            } else if (parameter == "NDF_Std_pol3") {
+                                Loaded_NDF_Std_pol3 = stod(parameter2);
+                            }
                         }
                     }
                 }
+
+                //<editor-fold desc="Safty checks">
+                if (Loaded_Std_coefficients_values.size() != Loaded_Std_coefficients_names.size()) {
+                    cout << "\n\nNeutronResolution::ReadResDataParam: smearing coefficients load registered improperly! Exiting...\n\n", exit(0);
+                }
+                if (Loaded_Corr_coefficients_values.size() != Loaded_Corr_coefficients_names.size()) {
+                    cout << "\n\nNeutronResolution::ReadResDataParam: correction coefficients load registered improperly! Exiting...\n\n", exit(0);
+                }
+                //</editor-fold>
+
             }
         }
     } else {
@@ -2644,7 +2678,7 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
                 shift = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
             } else if (ShiftMode == "pol3_wPC") {
                 shift = Loaded_A_Corr_pol3_wPC * Momentum3 + Loaded_B_Corr_pol3_wPC * Momentum2 + Loaded_C_Corr_pol3_wPC * Momentum + Loaded_D_Corr_pol3_wPC;
-           }
+            }
 
             double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
 

@@ -139,7 +139,7 @@ private:
     double Loaded_ChiSquare_Std_pol3_wPC, Loaded_NDF_Std_pol3_wPC;
 
     vector<double> Loaded_Std_coefficients_values;
-    vector<string> Loaded_Std_coefficients_names;
+    vector <string> Loaded_Std_coefficients_names;
 
     double Loaded_A_Corr_pol1, Loaded_B_Corr_pol1;
     double Loaded_A_Corr_pol1_Error, Loaded_B_Corr_pol1_Error;
@@ -163,7 +163,7 @@ private:
     double Loaded_ChiSquare_Corr_pol3_wPC, Loaded_NDF_Corr_pol3_wPC;
 
     vector<double> Loaded_Corr_coefficients_values;
-    vector<string> Loaded_Corr_coefficients_names;
+    vector <string> Loaded_Corr_coefficients_names;
     //</editor-fold>
 
     double Neutron_Momentum_cut = 9999.; // from clas12ana
@@ -269,7 +269,17 @@ public:
 
     void SetSmearAndShiftModes(const string &SmearM, const string &ShiftM) { SmearMode = SmearM, ShiftMode = ShiftM; };
 
+    // Get functions
     double GetSliceUpperMomLim() { return SliceUpperMomLim; };
+
+    vector<double> Get_Loaded_Std_coefficients_values() { return Loaded_Std_coefficients_values; };
+
+    vector <string> Get_Loaded_Std_coefficients_names() { return Loaded_Std_coefficients_names; };
+
+    vector<double> Get_Loaded_Corr_coefficients_values() { return Loaded_Corr_coefficients_values; };
+
+    vector <string> Get_Loaded_Corr_coefficients_names() { return Loaded_Corr_coefficients_names; };
+
 
 };
 

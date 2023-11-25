@@ -20376,6 +20376,30 @@ void EventAnalyser() {
 
     //</editor-fold>
 
+    //<editor-fold desc="momRes correction and smearing">
+    if (apply_nucleon_SmearAndShift && (Calculate_momResS2 || Run_in_momResS2)) {
+        myLogFile << "\n===========================================================================\n";
+        myLogFile << "momRes correction and smearing\n";
+        myLogFile << "===========================================================================\n\n";
+
+        myLogFile << "\n-- Neutron correction -----------------------------------------------------" << "\n";
+        vector<double> Corr_coefficients_values = nRes.Get_Loaded_Corr_coefficients_values();
+        vector <string> Corr_coefficients_names = nRes.Get_Loaded_Corr_coefficients_names();
+
+        for (int i = 0; i < Corr_coefficients_values.size(); i++) {
+            myLogFile << Corr_coefficients_names.at(i) << Corr_coefficients_values.at(i) << "\n";
+        }
+
+        myLogFile << "\n\n-- Proton smearing --------------------------------------------------------" << "\n";
+        vector<double> Std_coefficients_values = nRes.Get_Loaded_Std_coefficients_values();
+        vector <string> Std_coefficients_names = nRes.Get_Loaded_Std_coefficients_names();
+
+        for (int i = 0; i < Std_coefficients_values.size(); i++) {
+            myLogFile << Std_coefficients_names.at(i) << Std_coefficients_values.at(i) << "\n";
+        }
+    }
+    //</editor-fold>
+
     //<editor-fold desc="Event counts">
     myLogFile << "===========================================================================\n";
     myLogFile << "Event counts\n";
