@@ -33,7 +33,6 @@
 
 #include "clas12reader.h"
 
-//#include "../clas12ana/clas12ana.h"
 #include "../hPlots/hPlot1D.h"
 #include "../DSCuts/DSCuts.h"
 #include "../../functions/GeneralFunctions.h"
@@ -44,12 +43,7 @@ class NeutronResolution {
 private:
     bool momResTestMode, momResS2CalcMode, momResS2RunMode;
 
-//    string SmearMode = "slices"; // Smear by resolution fit width values from slices
-    string SmearMode = "pol1_wPC";     // Smear by fitted linear function to resolution Gaussian width
-//    string SmearMode = "pol3";   // Smear by fitted 3rd degree polynomial function to resolution Gaussian width
-//    string ShiftMode = "slices"; // Shift by resolution fit width values from slices
-    string ShiftMode = "pol1_wPC";     // Shift by fitted linear function to resolution Gaussian mean
-//    string ShiftMode = "pol3";   // Shift by fitted 3rd degree polynomial function to resolution Gaussian mean
+    string SmearMode = "NONE", ShiftMode = "NONE";
 
     vector <hPlot1D> ResSlices;
     vector <vector<double>> ResSlicesLimits;

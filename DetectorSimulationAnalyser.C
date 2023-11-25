@@ -166,11 +166,11 @@ void EventAnalyser() {
            Run_in_momResS2 = true */
     bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool Calculate_momResS2 = false; // Calculate momResS2 variables
-    bool Run_in_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
     const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
     bool nRes_test = false; // false by default
+    bool Run_in_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
 
     //<editor-fold desc="Auto-disable variables">
     //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -241,7 +241,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 

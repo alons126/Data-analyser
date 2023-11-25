@@ -2184,7 +2184,6 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         } else if (findSubstring(parameter, "pol1") && !findSubstring(ShiftMode, "pol1_wPC")) {
                             if (parameter == "A_Corr_pol1") {
                                 Loaded_A_Corr_pol1 = stod(parameter2);
-                                cout << "\nLoaded_A_Corr_pol1 = " << Loaded_A_Corr_pol1 << "\n";
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1");
                             } else if (parameter == "A_Corr_pol1_Error") {
                                 Loaded_A_Corr_pol1_Error = stod(parameter2);
