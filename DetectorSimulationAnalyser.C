@@ -165,12 +165,11 @@ void EventAnalyser() {
            Calculate_momResS2 = false,
            Run_in_momResS2 = true */
     bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = true; // Calculate momResS2 variables
+    bool Calculate_momResS2 = false; // Calculate momResS2 variables
     bool Run_in_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
-    const string SmearMode = "pol3_wPC", ShiftMode = "pol2";
-//    const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
+    const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
     bool nRes_test = false; // false by default
 
     //<editor-fold desc="Auto-disable variables">

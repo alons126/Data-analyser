@@ -2477,11 +2477,8 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 
             //<editor-fold desc="Original (smearing from loaded nRes fit variables)">
             if (Momentum < SliceUpperMomLim) { // NOTE: changed according to upper neutron mom. th.
-//            if (Momentum <= SliceUpperMomLim) { // NOTE: changed according to upper neutron mom. th.
                 for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
                     if ((Loaded_res_slice.GetSliceLowerb() < Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-//                    if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-//                    if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
                         double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
 
                         if (Printout) {
@@ -2650,7 +2647,6 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
             //<editor-fold desc="Original (shift from loaded nRes fit variables)">
             for (DSCuts Loaded_res_slice: Loaded_Res_Slices_HistVar) {
                 if ((Loaded_res_slice.GetSliceLowerb() < Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-//                if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
                     double ShiftedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
 
                     if (Printout) {
