@@ -45,10 +45,10 @@ private:
     bool momResTestMode, momResS2CalcMode, momResS2RunMode;
 
 //    string SmearMode = "slices"; // Smear by resolution fit width values from slices
-    string SmearMode = "pol1";     // Smear by fitted linear function to resolution Gaussian width
+    string SmearMode = "pol1_wPC";     // Smear by fitted linear function to resolution Gaussian width
 //    string SmearMode = "pol3";   // Smear by fitted 3rd degree polynomial function to resolution Gaussian width
 //    string ShiftMode = "slices"; // Shift by resolution fit width values from slices
-    string ShiftMode = "pol1";     // Shift by fitted linear function to resolution Gaussian mean
+    string ShiftMode = "pol1_wPC";     // Shift by fitted linear function to resolution Gaussian mean
 //    string ShiftMode = "pol3";   // Shift by fitted 3rd degree polynomial function to resolution Gaussian mean
 
     vector <hPlot1D> ResSlices;
@@ -138,6 +138,7 @@ private:
     double Loaded_A_Std_pol3_wPC_Error, Loaded_B_Std_pol3_wPC_Error, Loaded_C_Std_pol3_wPC_Error, Loaded_D_Std_pol3_wPC_Error;
     double Loaded_ChiSquare_Std_pol3_wPC, Loaded_NDF_Std_pol3_wPC;
 
+    string Loaded_Std_coefficients_path;
     vector<double> Loaded_Std_coefficients_values;
     vector <string> Loaded_Std_coefficients_names;
 
@@ -162,6 +163,7 @@ private:
     double Loaded_A_Corr_pol3_wPC_Error, Loaded_B_Corr_pol3_wPC_Error, Loaded_C_Corr_pol3_wPC_Error, Loaded_D_Corr_pol3_wPC_Error;
     double Loaded_ChiSquare_Corr_pol3_wPC, Loaded_NDF_Corr_pol3_wPC;
 
+    string Loaded_Corr_coefficients_path;
     vector<double> Loaded_Corr_coefficients_values;
     vector <string> Loaded_Corr_coefficients_names;
     //</editor-fold>
@@ -272,14 +274,21 @@ public:
     // Get functions
     double GetSliceUpperMomLim() { return SliceUpperMomLim; };
 
+    string Get_SmearMode() { return SmearMode; };
+
+    string Get_Loaded_Std_coefficients_path() { return Loaded_Std_coefficients_path; };
+
     vector<double> Get_Loaded_Std_coefficients_values() { return Loaded_Std_coefficients_values; };
 
     vector <string> Get_Loaded_Std_coefficients_names() { return Loaded_Std_coefficients_names; };
 
+    string Get_ShiftMode() { return ShiftMode; };
+
+    string Get_Loaded_Corr_coefficients_path() { return Loaded_Corr_coefficients_path; };
+
     vector<double> Get_Loaded_Corr_coefficients_values() { return Loaded_Corr_coefficients_values; };
 
     vector <string> Get_Loaded_Corr_coefficients_names() { return Loaded_Corr_coefficients_names; };
-
 
 };
 

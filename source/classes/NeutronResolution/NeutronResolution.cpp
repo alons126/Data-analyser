@@ -2162,8 +2162,10 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
 
                 //TODO: reorganize these into vectors!
                 if (Load_correction && findSubstring(parameter, "Corr")) {
-                    if (findSubstring(parameter, "pol1")) {
-                        if (findSubstring(parameter, "pol1_wPC")) {
+                    Loaded_Corr_coefficients_path = filename;
+
+                    if (findSubstring(parameter, "pol1") && findSubstring(ShiftMode, "pol1")) {
+                        if (findSubstring(parameter, "pol1_wPC") && findSubstring(ShiftMode, "pol1_wPC")) {
                             if (parameter == "A_Corr_pol1_wPC") {
                                 Loaded_A_Corr_pol1_wPC = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1_wPC");
@@ -2179,7 +2181,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             } else if (parameter == "NDF_Corr_pol1_wPC") {
                                 Loaded_NDF_Corr_pol1_wPC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol1")) {
+                        } else if (findSubstring(parameter, "pol1") && !findSubstring(ShiftMode, "pol1_wPC")) {
                             if (parameter == "A_Corr_pol1") {
                                 Loaded_A_Corr_pol1 = stod(parameter2);
                                 cout << "\nLoaded_A_Corr_pol1 = " << Loaded_A_Corr_pol1 << "\n";
@@ -2197,8 +2199,8 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                                 Loaded_NDF_Corr_pol1 = stod(parameter2);
                             }
                         }
-                    } else if (findSubstring(parameter, "pol2")) {
-                        if (findSubstring(parameter, "pol2_wPC")) {
+                    } else if (findSubstring(parameter, "pol2") && findSubstring(ShiftMode, "pol2")) {
+                        if (findSubstring(parameter, "pol2_wPC") && findSubstring(ShiftMode, "pol2_wPC")) {
                             if (parameter == "A_Corr_pol2_wPC") {
                                 Loaded_A_Corr_pol2_wPC = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2_wPC");
@@ -2219,7 +2221,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             } else if (parameter == "NDF_Corr_pol2_wPC") {
                                 Loaded_NDF_Corr_pol2_wPC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol2")) {
+                        } else if (findSubstring(parameter, "pol2") && !findSubstring(ShiftMode, "pol2_wPC")) {
                             if (parameter == "A_Corr_pol2") {
                                 Loaded_A_Corr_pol2 = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2");
@@ -2241,8 +2243,8 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                                 Loaded_NDF_Corr_pol2 = stod(parameter2);
                             }
                         }
-                    } else if (findSubstring(parameter, "pol3")) {
-                        if (findSubstring(parameter, "pol3_wPC")) {
+                    } else if (findSubstring(parameter, "pol3") && findSubstring(ShiftMode, "pol3")) {
+                        if (findSubstring(parameter, "pol3_wPC") && findSubstring(ShiftMode, "pol3_wPC")) {
                             if (parameter == "A_Corr_pol3_wPC") {
                                 Loaded_A_Corr_pol3_wPC = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3_wPC");
@@ -2268,7 +2270,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             } else if (parameter == "NDF_Corr_pol3_wPC") {
                                 Loaded_NDF_Corr_pol3_wPC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol3")) {
+                        } else if (findSubstring(parameter, "pol3") && !findSubstring(ShiftMode, "pol3_wPC")) {
                             if (parameter == "A_Corr_pol3") {
                                 Loaded_A_Corr_pol3 = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3");
@@ -2297,8 +2299,10 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         }
                     }
                 } else if (Load_smearing && findSubstring(parameter, "Std")) {
-                    if (findSubstring(parameter, "pol1")) {
-                        if (findSubstring(parameter, "pol1_wPC")) {
+                    Loaded_Std_coefficients_path = filename;
+
+                    if (findSubstring(parameter, "pol1") && findSubstring(SmearMode, "pol1")) {
+                        if (findSubstring(parameter, "pol1_wPC") && findSubstring(SmearMode, "pol1_wPC")) {
                             if (parameter == "A_Std_pol1_wPC") {
                                 Loaded_A_Std_pol1_wPC = stod(parameter2);
                                 Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol1_wPC");
@@ -2314,7 +2318,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             } else if (parameter == "NDF_Std_pol1_wPC") {
                                 Loaded_NDF_Std_pol1_wPC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol1")) {
+                        } else if (findSubstring(parameter, "pol1") && !findSubstring(SmearMode, "pol1_wPC")) {
                             if (parameter == "A_Std_pol1") {
                                 Loaded_A_Std_pol1 = stod(parameter2);
                                 cout << "\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
@@ -2332,8 +2336,8 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                                 Loaded_NDF_Std_pol1 = stod(parameter2);
                             }
                         }
-                    } else if (findSubstring(parameter, "pol2")) {
-                        if (findSubstring(parameter, "pol2_wPC")) {
+                    } else if (findSubstring(parameter, "pol2") && findSubstring(SmearMode, "pol2")) {
+                        if (findSubstring(parameter, "pol2_wPC") && findSubstring(SmearMode, "pol2_wPC")) {
                             if (parameter == "A_Std_pol2_wPC") {
                                 Loaded_A_Std_pol2_wPC = stod(parameter2);
                                 Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2_wPC");
@@ -2354,7 +2358,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             } else if (parameter == "NDF_Std_pol2_wPC") {
                                 Loaded_NDF_Std_pol2_wPC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol2")) {
+                        } else if (findSubstring(parameter, "pol2") && !findSubstring(SmearMode, "pol2_wPC")) {
                             if (parameter == "A_Std_pol2") {
                                 Loaded_A_Std_pol2 = stod(parameter2);
                                 Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2");
@@ -2376,8 +2380,8 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                                 Loaded_NDF_Std_pol2 = stod(parameter2);
                             }
                         }
-                    } else if (findSubstring(parameter, "pol3")) {
-                        if (findSubstring(parameter, "pol3_wPC")) {
+                    } else if (findSubstring(parameter, "pol3") && findSubstring(SmearMode, "pol3")) {
+                        if (findSubstring(parameter, "pol3_wPC") && findSubstring(SmearMode, "pol3_wPC")) {
                             if (parameter == "A_Std_pol3_wPC") {
                                 Loaded_A_Std_pol3_wPC = stod(parameter2);
                                 Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3_wPC");
@@ -2403,7 +2407,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             } else if (parameter == "NDF_Std_pol3_wPC") {
                                 Loaded_NDF_Std_pol3_wPC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol3")) {
+                        } else if (findSubstring(parameter, "pol3") && !findSubstring(SmearMode, "pol3_wPC")) {
                             if (parameter == "A_Std_pol3") {
                                 Loaded_A_Std_pol3 = stod(parameter2);
                                 Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3");

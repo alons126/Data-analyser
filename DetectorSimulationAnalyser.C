@@ -75,7 +75,7 @@ void EventAnalyser() {
     cout << "\t\t\tDetector simulation analyser\n";
     cout << "===========================================================================\n\n";
 
-    string AnalyserVersion = "Version 1.8";
+    string AnalyserVersion = "Version 1.9";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code setup                                                                               //
@@ -152,16 +152,25 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     /* Run order:
-        1. plot_and_fit_MomRes = true , Calculate_momResS2 = false, Run_in_momResS2 = false (momResS1 calculation)
-        2. plot_and_fit_MomRes = true , Calculate_momResS2 = true , Run_in_momResS2 = false (momResS2 calculation)
-        3. plot_and_fit_MomRes = false, Calculate_momResS2 = false, Run_in_momResS2 = true  (momResS2 run) */
+        1. momResS1 calculation:
+           plot_and_fit_MomRes = true,
+           Calculate_momResS2 = false,
+           Run_in_momResS2 = false
+        2. momResS2 calculation:
+           plot_and_fit_MomRes = true,
+           Calculate_momResS2 = true,
+           Run_in_momResS2 = false
+        3. momResS2 run:
+           plot_and_fit_MomRes = false,
+           Calculate_momResS2 = false,
+           Run_in_momResS2 = true */
     bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool Calculate_momResS2 = true; // Calculate momResS2 variables
-    bool Run_in_momResS2 = false; // Smear with momResS2 and correct with momResS1
+    bool Run_in_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
-    const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
-//    const string SmearMode = "pol1", ShiftMode = "pol1";
+    const string SmearMode = "pol3_wPC", ShiftMode = "pol2";
+//    const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
     bool nRes_test = false; // false by default
 
     //<editor-fold desc="Auto-disable variables">
@@ -355,7 +364,8 @@ void EventAnalyser() {
                 Efficiency_Status = "Eff2";
             } else {
 //                Efficiency_Status = "Eff1_test";
-                Efficiency_Status = "Eff1";
+                Efficiency_Status = "Eff1_111";
+//                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
@@ -612,131 +622,192 @@ void EventAnalyser() {
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
 
-    //<editor-fold desc="Plot selector - plot all">
+    //<editor-fold desc="Plot selector variable declarations">
     /* Master plots variable */
-    bool Plot_selector_master = true; // Master plot selector for analysis
+    bool Plot_selector_master; // Master plot selector for analysis
 
     /* Cut variable plots */
-    bool Cut_plots_master = true; // Master cut plots selector
-    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
+    bool Cut_plots_master; // Master cut plots selector
+    bool Nphe_plots, Chi2_plots, Vertex_plots, SF_plots, fiducial_plots, Momentum_plots;
 
     /* Beta plots */
-    bool W_plots = true;
+    bool W_plots;
 
     /* Beta plots */
-    bool Beta_plots = true;
-    bool Beta_vs_P_plots = true;
+    bool Beta_plots;
+    bool Beta_vs_P_plots;
 
     /* Angle plots */
-    bool Angle_plots_master = true; // Master angle plots selector
-    bool Theta_e_plots = true, Phi_e_plots = true;
+    bool Angle_plots_master; // Master angle plots selector
+    bool Theta_e_plots, Phi_e_plots;
 
     /* Q2 plots */
-    bool Q2_plots = true;
+    bool Q2_plots;
 
     /* E_e plots */
-    bool E_e_plots = true;
+    bool E_e_plots;
 
     /* ET plots */
-    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+    bool ETrans_plots_master; // Master ET plots selector
+    bool ETrans_all_plots, ETrans_All_Int_plots, ETrans_QEL_plots, ETrans_MEC_plots, ETrans_RES_plots, ETrans_DIS_plots;
 
     /* Ecal plots */
-    bool Ecal_plots = true;
+    bool Ecal_plots;
 
     /* Transverse variables plots */
-    bool TKI_plots = true;
+    bool TKI_plots;
 
     /* ToF plots */
-    bool ToF_plots = false;
+    bool ToF_plots;
 
     /* Efficiency plots */
-    bool Efficiency_plots = true;
-    bool TL_after_Acceptance_Maps_plots = true;
+    bool Efficiency_plots;
+    bool TL_after_Acceptance_Maps_plots;
 
     /* Resolution plots */
-    bool AMaps_plots = true;
+    bool AMaps_plots;
 
     /* Resolution plots */
-    bool Resolution_plots = true;
+    bool Resolution_plots;
 
     /* Final state ratio plots */
-    bool FSR_1D_plots = true;
-    bool FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
+    bool FSR_1D_plots;
+    bool FSR_2D_plots; // disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-//    //<editor-fold desc="Plot selector - selected plots">
-//    /* Master plots variable */
-//    bool Plot_selector_master = true; // Master plot selector for analysis
+    bool TestRun = true; // set as false for a full run
+
+    if (!TestRun) {
+
+        //<editor-fold desc="Plot everithing (full run)">
+        /* Master plots variable */
+         Plot_selector_master = true; // Master plot selector for analysis
+
+        /* Cut variable plots */
+         Cut_plots_master = true; // Master cut plots selector
+         Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
+
+        /* Beta plots */
+         W_plots = true;
+
+        /* Beta plots */
+         Beta_plots = true;
+         Beta_vs_P_plots = true;
+
+        /* Angle plots */
+         Angle_plots_master = true; // Master angle plots selector
+         Theta_e_plots = true, Phi_e_plots = true;
+
+        /* Q2 plots */
+         Q2_plots = true;
+
+        /* E_e plots */
+         E_e_plots = true;
+
+        /* ET plots */
+         ETrans_plots_master = true; // Master ET plots selector
+         ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+
+        /* Ecal plots */
+         Ecal_plots = true;
+
+        /* Transverse variables plots */
+         TKI_plots = true;
+
+        /* ToF plots */
+         ToF_plots = false;
+
+        /* Efficiency plots */
+         Efficiency_plots = true;
+         TL_after_Acceptance_Maps_plots = true;
+
+        /* Resolution plots */
+         AMaps_plots = true;
+
+        /* Resolution plots */
+         Resolution_plots = true;
+
+        /* Final state ratio plots */
+         FSR_1D_plots = true;
+         FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
+        //</editor-fold>
+
+    } else {
+
+        //<editor-fold desc="Selected plots (test run)">
+        /* Master plots variable */
+         Plot_selector_master = true; // Master plot selector for analysis
+
+        /* Cut variable plots */
+         Cut_plots_master = true; // Master cut plots selector
+//     Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+         Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
 //
-//    /* Cut variable plots */
-//    bool Cut_plots_master = true; // Master cut plots selector
-////    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
-////
-////    bool Momentum_plots = true;
-//    bool Momentum_plots = false;
-////
+//     Momentum_plots = true;
+         Momentum_plots = false;
 //
-//    /* Beta plots */
-////    bool W_plots = true;
-//    bool W_plots = false;
-//
-//    /* Beta plots */
-////    bool Beta_plots = true;
-//    bool Beta_plots = false;
-////    bool Beta_vs_P_plots = true;
-//    bool Beta_vs_P_plots = false;
-//
-//    /* Angle plots */
-////    bool Angle_plots_master = true; // Master angle plots selector
-////    bool Theta_e_plots = true, Phi_e_plots = true;
-//    bool Angle_plots_master = false; // Master angle plots selector
-//    bool Theta_e_plots = false, Phi_e_plots = false;
-//
-//    /* Q2 plots */
-////    bool Q2_plots = true;
-//    bool Q2_plots = false;
-//
-//    /* E_e plots */
-////    bool E_e_plots = true;
-//    bool E_e_plots = false;
-//
-//    /* ET plots */
-////    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_plots_master = false; // Master ET plots selector
-//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-//
-//    /* Ecal plots */
-////    bool Ecal_plots = true;
-//    bool Ecal_plots = false;
-//
-//    /* Transverse variables plots */
-////    bool TKI_plots = true;
-//    bool TKI_plots = false;
-//
-//    /* ToF plots */
-////    bool ToF_plots = true;
-//    bool ToF_plots = false;
-//
-//    /* Efficiency plots */
-////    bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
-////    bool TL_after_Acceptance_Maps_plots = true;
-//    bool TL_after_Acceptance_Maps_plots = false;
-//
-//    /* Resolution plots */
-////    bool AMaps_plots = true;
-//    bool AMaps_plots = false;
-//
-//    /* Resolution plots */
-//    bool Resolution_plots = true;
-////    bool Resolution_plots = false;
-//
-//    /* Final state ratio plots */
-//    bool FSR_1D_plots = false;
-//    bool FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
-//    //</editor-fold>/
+
+        /* Beta plots */
+//     W_plots = true;
+         W_plots = false;
+
+        /* Beta plots */
+//     Beta_plots = true;
+         Beta_plots = false;
+//     Beta_vs_P_plots = true;
+         Beta_vs_P_plots = false;
+
+        /* Angle plots */
+//     Angle_plots_master = true; // Master angle plots selector
+//     Theta_e_plots = true, Phi_e_plots = true;
+         Angle_plots_master = false; // Master angle plots selector
+         Theta_e_plots = false, Phi_e_plots = false;
+
+        /* Q2 plots */
+//     Q2_plots = true;
+         Q2_plots = false;
+
+        /* E_e plots */
+//     E_e_plots = true;
+         E_e_plots = false;
+
+        /* ET plots */
+//     ETrans_plots_master = true; // Master ET plots selector
+         ETrans_plots_master = false; // Master ET plots selector
+         ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+
+        /* Ecal plots */
+//     Ecal_plots = true;
+         Ecal_plots = false;
+
+        /* Transverse variables plots */
+//     TKI_plots = true;
+         TKI_plots = false;
+
+        /* ToF plots */
+//     ToF_plots = true;
+         ToF_plots = false;
+
+        /* Efficiency plots */
+//     Efficiency_plots = true;
+         Efficiency_plots = false;
+//     TL_after_Acceptance_Maps_plots = true;
+         TL_after_Acceptance_Maps_plots = false;
+
+        /* Resolution plots */
+//     AMaps_plots = true;
+         AMaps_plots = false;
+
+        /* Resolution plots */
+         Resolution_plots = true;
+//     Resolution_plots = false;
+
+        /* Final state ratio plots */
+         FSR_1D_plots = false;
+         FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
+        //</editor-fold>/
+
+    }
 
     /* Other setup variables */
     bool wider_margin = true;
@@ -19993,6 +20064,8 @@ void EventAnalyser() {
     myLogFile << "Plot selector\n";
     myLogFile << "===========================================================================\n\n";
 
+    myLogFile << "TestRun = " << BoolToString(TestRun) << "\n";
+
     myLogFile << "Plot_selector_master = " << BoolToString(Plot_selector_master) << "\n";
 
     myLogFile << "\n-- Cut variable plots -----------------------------------------------------" << "\n";
@@ -20376,27 +20449,31 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-    //<editor-fold desc="momRes correction and smearing">
+    //<editor-fold desc="momRes correction and smearing coefficients">
     if (apply_nucleon_SmearAndShift && (Calculate_momResS2 || Run_in_momResS2)) {
         myLogFile << "\n===========================================================================\n";
-        myLogFile << "momRes correction and smearing\n";
-        myLogFile << "===========================================================================\n\n";
+        myLogFile << "momRes correction and smearing coefficients\n";
+        myLogFile << "===========================================================================\n";
 
         myLogFile << "\n-- Neutron correction -----------------------------------------------------" << "\n";
+        myLogFile << "ShiftMode = " << nRes.Get_ShiftMode() << "\n\n";
+        myLogFile << "Correction loading path:\n" << nRes.Get_Loaded_Corr_coefficients_path() << "\n\n";
+
         vector<double> Corr_coefficients_values = nRes.Get_Loaded_Corr_coefficients_values();
         vector <string> Corr_coefficients_names = nRes.Get_Loaded_Corr_coefficients_names();
 
-        for (int i = 0; i < Corr_coefficients_values.size(); i++) {
-            myLogFile << Corr_coefficients_names.at(i) << Corr_coefficients_values.at(i) << "\n";
-        }
+        for (int i = 0; i < Corr_coefficients_values.size(); i++) { myLogFile << Corr_coefficients_names.at(i) << " = " << Corr_coefficients_values.at(i) << "\n"; }
 
-        myLogFile << "\n\n-- Proton smearing --------------------------------------------------------" << "\n";
+        myLogFile << "\n-- Proton smearing --------------------------------------------------------" << "\n";
+        myLogFile << "SmearMode = " << nRes.Get_SmearMode() << "\n\n";
+        myLogFile << "Smearing loading path:\n" << nRes.Get_Loaded_Std_coefficients_path() << "\n\n";
+
         vector<double> Std_coefficients_values = nRes.Get_Loaded_Std_coefficients_values();
         vector <string> Std_coefficients_names = nRes.Get_Loaded_Std_coefficients_names();
 
-        for (int i = 0; i < Std_coefficients_values.size(); i++) {
-            myLogFile << Std_coefficients_names.at(i) << Std_coefficients_values.at(i) << "\n";
-        }
+        for (int i = 0; i < Std_coefficients_values.size(); i++) { myLogFile << Std_coefficients_names.at(i) << " = " << Std_coefficients_values.at(i) << "\n"; }
+
+        myLogFile << "\n\n";
     }
     //</editor-fold>
 
