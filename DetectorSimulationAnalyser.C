@@ -156,7 +156,7 @@ void EventAnalyser() {
         2. plot_and_fit_MomRes = true , Calculate_momResS2 = true , Run_in_momResS2 = false (momResS2 calculation)
         3. plot_and_fit_MomRes = false, Calculate_momResS2 = false, Run_in_momResS2 = true  (momResS2 run) */
     bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = false; // Calculate momResS2 variables
+    bool Calculate_momResS2 = true; // Calculate momResS2 variables
     bool Run_in_momResS2 = false; // Smear with momResS2 and correct with momResS1
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;
