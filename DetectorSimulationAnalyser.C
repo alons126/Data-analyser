@@ -152,22 +152,15 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     /* Run order:
-        1. momResS1 calculation:
-           plot_and_fit_MomRes = true,
-           Calculate_momResS2 = false,
-           Run_in_momResS2 = false
-        2. momResS2 calculation:
-           plot_and_fit_MomRes = true,
-           Calculate_momResS2 = true,
-           Run_in_momResS2 = false
-        3. momResS2 run:
-           plot_and_fit_MomRes = false,
-           Calculate_momResS2 = false,
-           Run_in_momResS2 = true */
+        1. momResS1 calculation 1:  VaryingDelta = true  , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_in_momResS2 = false
+        2. momResS1 calculation 2:  VaryingDelta = false , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_in_momResS2 = false
+        3. momResS2 calculation:    VaryingDelta = false , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_in_momResS2 = false
+        4. momResS2 run:            VaryingDelta = false , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_in_momResS2 = true
+    */
     bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool Calculate_momResS2 = true; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
-    const bool VaryingDelta = true;
+    const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
     bool nRes_test = false; // false by default
     bool Run_in_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
@@ -191,7 +184,9 @@ void EventAnalyser() {
 
     if (!plot_and_fit_MomRes) { Calculate_momResS2 = false; }
 
-    if (Calculate_momResS2 && Run_in_momResS2) { cout << "\n\nmomRes order error! Exiting...\n\n", exit(EXIT_FAILURE); }
+    if ((Calculate_momResS2 && Run_in_momResS2) || (Calculate_momResS2 && !VaryingDelta)) {
+        cout << "\n\nmomRes order error! Exiting...\n\n", exit(EXIT_FAILURE);
+    }
     //</editor-fold>
 
     //</editor-fold>
@@ -273,6 +268,8 @@ void EventAnalyser() {
     }
 
     if (generate_AMaps) { apply_fiducial_cuts = false; }
+
+    if (!VaryingDelta) { apply_nucleon_SmearAndShift = false; }
     //</editor-fold>
 
     //<editor-fold desc="Custom cuts naming">
@@ -338,17 +335,53 @@ void EventAnalyser() {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_";
                 } else {
-                    if (!apply_nucleon_SmearAndShift) {
-                        Additional_Status = "nResS1_";
+                    if (!Calculate_momResS2) {
+                        if (!nRes_test) {
+                            if (!Run_in_momResS2) {
+                                Additional_Status = "nResS1_";
+                            } else {
+                                Additional_Status = "nResS2R_";
+                            }
+                        } else {
+                            if (!Run_in_momResS2) {
+                                Additional_Status = "nResS1T_";
+                            } else {
+                                Additional_Status = "nResS2RT_";
+                            }
+                        }
                     } else {
-                        Additional_Status = "nResS2_";
+                        if (!nRes_test) {
+                            Additional_Status = "nResS2_";
+                        } else {
+                            Additional_Status = "nResS2T_";
+                        }
                     }
                 }
             } else if (generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_AMaps_";
                 } else {
-                    Additional_Status = "nRes_AMaps_";
+                    if (!Calculate_momResS2) {
+                        if (!nRes_test) {
+                            if (!Run_in_momResS2) {
+                                Additional_Status = "nResS1_";
+                            } else {
+                                Additional_Status = "nResS2R_";
+                            }
+                        } else {
+                            if (!Run_in_momResS2) {
+                                Additional_Status = "nResS1T_";
+                            } else {
+                                Additional_Status = "nResS2RT_";
+                            }
+                        }
+                    } else {
+                        if (!nRes_test) {
+                            Additional_Status = "nResS2_";
+                        } else {
+                            Additional_Status = "nResS2T_";
+                        }
+                    }
                 }
             }
         } else {
@@ -679,130 +712,130 @@ void EventAnalyser() {
 
         //<editor-fold desc="Plot everithing (full run)">
         /* Master plots variable */
-         Plot_selector_master = true; // Master plot selector for analysis
+        Plot_selector_master = true; // Master plot selector for analysis
 
         /* Cut variable plots */
-         Cut_plots_master = true; // Master cut plots selector
-         Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
+        Cut_plots_master = true; // Master cut plots selector
+        Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
         /* Beta plots */
-         W_plots = true;
+        W_plots = true;
 
         /* Beta plots */
-         Beta_plots = true;
-         Beta_vs_P_plots = true;
+        Beta_plots = true;
+        Beta_vs_P_plots = true;
 
         /* Angle plots */
-         Angle_plots_master = true; // Master angle plots selector
-         Theta_e_plots = true, Phi_e_plots = true;
+        Angle_plots_master = true; // Master angle plots selector
+        Theta_e_plots = true, Phi_e_plots = true;
 
         /* Q2 plots */
-         Q2_plots = true;
+        Q2_plots = true;
 
         /* E_e plots */
-         E_e_plots = true;
+        E_e_plots = true;
 
         /* ET plots */
-         ETrans_plots_master = true; // Master ET plots selector
-         ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+        ETrans_plots_master = true; // Master ET plots selector
+        ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
         /* Ecal plots */
-         Ecal_plots = true;
+        Ecal_plots = true;
 
         /* Transverse variables plots */
-         TKI_plots = true;
+        TKI_plots = true;
 
         /* ToF plots */
-         ToF_plots = false;
+        ToF_plots = false;
 
         /* Efficiency plots */
-         Efficiency_plots = true;
-         TL_after_Acceptance_Maps_plots = true;
+        Efficiency_plots = true;
+        TL_after_Acceptance_Maps_plots = true;
 
         /* Resolution plots */
-         AMaps_plots = true;
+        AMaps_plots = true;
 
         /* Resolution plots */
-         Resolution_plots = true;
+        Resolution_plots = true;
 
         /* Final state ratio plots */
-         FSR_1D_plots = true;
-         FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
+        FSR_1D_plots = true;
+        FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
         //</editor-fold>
 
     } else {
 
         //<editor-fold desc="Selected plots (test run)">
         /* Master plots variable */
-         Plot_selector_master = true; // Master plot selector for analysis
+        Plot_selector_master = true; // Master plot selector for analysis
 
         /* Cut variable plots */
-         Cut_plots_master = true; // Master cut plots selector
+        Cut_plots_master = true; // Master cut plots selector
 //     Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-         Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+        Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
 //
 //     Momentum_plots = true;
-         Momentum_plots = false;
+        Momentum_plots = false;
 //
 
         /* Beta plots */
 //     W_plots = true;
-         W_plots = false;
+        W_plots = false;
 
         /* Beta plots */
 //     Beta_plots = true;
-         Beta_plots = false;
+        Beta_plots = false;
 //     Beta_vs_P_plots = true;
-         Beta_vs_P_plots = false;
+        Beta_vs_P_plots = false;
 
         /* Angle plots */
 //     Angle_plots_master = true; // Master angle plots selector
 //     Theta_e_plots = true, Phi_e_plots = true;
-         Angle_plots_master = false; // Master angle plots selector
-         Theta_e_plots = false, Phi_e_plots = false;
+        Angle_plots_master = false; // Master angle plots selector
+        Theta_e_plots = false, Phi_e_plots = false;
 
         /* Q2 plots */
 //     Q2_plots = true;
-         Q2_plots = false;
+        Q2_plots = false;
 
         /* E_e plots */
 //     E_e_plots = true;
-         E_e_plots = false;
+        E_e_plots = false;
 
         /* ET plots */
 //     ETrans_plots_master = true; // Master ET plots selector
-         ETrans_plots_master = false; // Master ET plots selector
-         ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+        ETrans_plots_master = false; // Master ET plots selector
+        ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
         /* Ecal plots */
 //     Ecal_plots = true;
-         Ecal_plots = false;
+        Ecal_plots = false;
 
         /* Transverse variables plots */
 //     TKI_plots = true;
-         TKI_plots = false;
+        TKI_plots = false;
 
         /* ToF plots */
 //     ToF_plots = true;
-         ToF_plots = false;
+        ToF_plots = false;
 
         /* Efficiency plots */
 //     Efficiency_plots = true;
-         Efficiency_plots = false;
+        Efficiency_plots = false;
 //     TL_after_Acceptance_Maps_plots = true;
-         TL_after_Acceptance_Maps_plots = false;
+        TL_after_Acceptance_Maps_plots = false;
 
         /* Resolution plots */
 //     AMaps_plots = true;
-         AMaps_plots = false;
+        AMaps_plots = false;
 
         /* Resolution plots */
-         Resolution_plots = true;
+        Resolution_plots = true;
 //     Resolution_plots = false;
 
         /* Final state ratio plots */
-         FSR_1D_plots = false;
-         FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
+        FSR_1D_plots = false;
+        FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
         //</editor-fold>/
 
     }
