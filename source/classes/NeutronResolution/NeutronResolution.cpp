@@ -484,7 +484,7 @@ void NeutronResolution::Fitter_Std_pol1() {
 
     //<editor-fold desc="Safty check">
     if (MeanPn.size() != Pn_Std.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::Fitter_Std_pol1: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -702,7 +702,7 @@ void NeutronResolution::Fitter_Std_pol2() {
 
     //<editor-fold desc="Safty check">
     if (MeanPn.size() != Pn_Std.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::Fitter_Std_pol2: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -816,7 +816,7 @@ void NeutronResolution::Fitter_Std_pol2_wPC() {
 
     //<editor-fold desc="Safty check">
     if (MeanPn.size() != Pn_Std.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::Fitter_Std_pol2_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -926,7 +926,7 @@ void NeutronResolution::Fitter_Std_pol3() {
 
     //<editor-fold desc="Safty check">
     if (MeanPn.size() != Pn_Std.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::Fitter_Std_pol3: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -1043,7 +1043,7 @@ void NeutronResolution::Fitter_Std_pol3_wPC() {
 
     //<editor-fold desc="Safty check">
     if (MeanPn.size() != Pn_Std.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::Fitter_Std_pol3_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -1375,7 +1375,7 @@ void NeutronResolution::Fitter_Corr_pol2() {
 
     //<editor-fold desc="Safty check">
     if (MeanPn.size() != Pn_Corr.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::Fitter_Corr_pol2: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -1489,7 +1489,7 @@ void NeutronResolution::Fitter_Corr_pol2_wPC() {
 
     //<editor-fold desc="Safty check">
     if (MeanPn.size() != Pn_Corr.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::Fitter_Corr_pol2_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -1599,7 +1599,7 @@ void NeutronResolution::Fitter_Corr_pol3() {
 
     //<editor-fold desc="Safty check">
     if (MeanPn.size() != Pn_Corr.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::Fitter_Corr_pol3: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -1716,7 +1716,7 @@ void NeutronResolution::Fitter_Corr_pol3_wPC() {
 
     //<editor-fold desc="Safty check">
     if (MeanPn.size() != Pn_Corr.size()) {
-        cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::Fitter_Corr_pol3_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 

@@ -157,13 +157,13 @@ void EventAnalyser() {
         3. momResS2 calculation:    VaryingDelta = false , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_in_momResS2 = false
         4. momResS2 run:            VaryingDelta = false , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_in_momResS2 = true
     */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = true; // Calculate momResS2 variables
+    bool plot_and_fit_MomRes = true;                             // Generate nRes plots
+    bool Calculate_momResS2 = false;                             // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
-    const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
+    const bool VaryingDelta = true;                              // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
-    bool nRes_test = false; // false by default
-    bool Run_in_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
+    bool nRes_test = true;                                       // false by default
+    bool Run_in_momResS2 = true;                                 // Smear w/ momResS2 & correct w/ momResS1
 
     //<editor-fold desc="Auto-disable variables">
     //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -340,20 +340,20 @@ void EventAnalyser() {
                             if (!Run_in_momResS2) {
                                 Additional_Status = "nResS1_";
                             } else {
-                                Additional_Status = "nResS2R_";
+                                Additional_Status = "nResS2R_"; // R for Run
                             }
                         } else {
                             if (!Run_in_momResS2) {
                                 Additional_Status = "nResS1T_";
                             } else {
-                                Additional_Status = "nResS2RT_";
+                                Additional_Status = "nResS2RT_"; // R for Run; T for Test
                             }
                         }
                     } else {
                         if (!nRes_test) {
                             Additional_Status = "nResS2_";
                         } else {
-                            Additional_Status = "nResS2T_";
+                            Additional_Status = "nResS2T_"; // T for Test
                         }
                     }
                 }
