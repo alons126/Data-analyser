@@ -16,10 +16,12 @@
 
 #include "GetFDNeutronP.h"
 #include "../../classes/DSCuts/DSCuts.h"
+//#include "../../classes/NeutronResolution/NeutronResolution.cpp"
 
 using namespace std;
 
-/* The NeutralParticleID function gets neutrons or photons from the FD, according to the definition from Larry:
+//<editor-fold desc="Get neutrals by new definition">
+/* The FDNeutralParticleID function gets neutrons or photons from the FD, according to the definition from Larry:
  * Neutron = a neutral particle (i.e., neutron or photon) in the FD with no PCal hit and with an ECal hit.
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
@@ -58,7 +60,9 @@ void FDNeutralParticleID(vector <region_part_ptr> allParticles,
         if (Momentum >= Photon_momentum_th.GetLowerCut() && Momentum <= Photon_momentum_th.GetUpperCut()) { FD_Photons_within_th.push_back(i); }
     } // end of loop over ID_Photons_FD vector
 }
+//</editor-fold>
 
+//<editor-fold desc="Get leading neutron (ORIGINAL!)">
 int FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, bool apply_nucleon_cuts) {
     double P_max = -1;
     int MaxPIndex = -1;
@@ -93,5 +97,45 @@ int FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutron
 
     return MaxPIndex;
 }
+//</editor-fold>
+
+////<editor-fold desc="Get leading neutron after momentum correction">
+//int FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, bool apply_nucleon_cuts,
+//                  bool apply_nucleon_SmearAndShift, NeutronResolution &nRes) {
+//    double P_max = -1;
+//    int MaxPIndex = -1;
+//    bool PrintLog = false;
+//
+//    bool PrintOut = (PrintLog && (FD_Neutrons_within_th.size() > 0));
+//
+//    for (int &i: FD_Neutrons_within_th) { // Identified neutron above momentum threshold
+//        double P_temp = nRes.NShift(apply_nucleon_SmearAndShift, GetFDNeutronP(allParticles[i], apply_nucleon_cuts));
+////        double P_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
+//
+//        if (P_temp >= P_max) {
+//            P_max = P_temp;
+//            MaxPIndex = i;
+//        }
+//
+//        if (PrintOut) {
+//            int ParticlePDG_temp = allParticles[i]->par()->getPid();
+//
+//            bool PCAL_hit_temp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
+//            bool ECIN_hit_temp = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+//            bool ECOUT_hit_temp = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+//
+//            cout << "P_temp = " << P_temp << " (i = " << i << ", PDG = " << ParticlePDG_temp <<
+//                 ", PCAL_hit = " << PCAL_hit_temp << ", ECIN_hit = " << ECIN_hit_temp << ", ECOUT_hit = " << ECOUT_hit_temp << ")\n";
+//        }
+//    }
+//
+//    if (PrintOut) {
+//        cout << "P_max = " << P_max << " (MaxPIndex = " << MaxPIndex << ")\n\n";
+//        cout << "==========================================================\n\n\n";
+//    }
+//
+//    return MaxPIndex;
+//}
+////</editor-fold>
 
 #endif //FDNEUTRALPARTICLEID_H

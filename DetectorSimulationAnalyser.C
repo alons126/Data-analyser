@@ -131,7 +131,7 @@ void EventAnalyser() {
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -157,12 +157,12 @@ void EventAnalyser() {
         3. momResS2 calculation:    VaryingDelta = false , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_in_momResS2 = false
         4. momResS2 run:            VaryingDelta = false , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_in_momResS2 = true
     */
-    bool plot_and_fit_MomRes = true;                             // Generate nRes plots
+    bool plot_and_fit_MomRes = false;                             // Generate nRes plots
     bool Calculate_momResS2 = false;                             // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;                              // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
-    bool nRes_test = true;                                       // false by default
+    bool nRes_test = false;                                       // false by default
     bool Run_in_momResS2 = true;                                 // Smear w/ momResS2 & correct w/ momResS1
 
     //<editor-fold desc="Auto-disable variables">
@@ -232,11 +232,11 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = true;        // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
+    bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
+    bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -393,6 +393,8 @@ void EventAnalyser() {
         } else {
             if (Rec_wTL_ES) {
 //                Efficiency_Status = "Eff2_test";
+//                Efficiency_Status = "Eff2_wLeadCorr";
+//                Efficiency_Status = "Eff2_wLeadCorrwECALveto";
                 Efficiency_Status = "Eff2";
             } else {
 //                Efficiency_Status = "Eff1_test";
@@ -8656,13 +8658,14 @@ void EventAnalyser() {
         //<editor-fold desc="Neutral particles' identification (FD only)">
         /* Get FD neutrons and photons, according to the definitions: */
         vector<int> FD_Neutrons, FD_Photons;                                                          // FD neutrons and photons to be set by definition
-        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons);                              // Get FD neutrons and photons, according to the definitions (ORIGINAL!!!)
+        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons);                              // Get FD neutrons and photons, according to the definitions (ORIGINAL!)
 //        FDNeutralParticle(allParticles, electrons, FD_Neutrons, FD_Photons, Neutron_veto_cut, beamE);      // Get FD neutrons and photons, according to the definitions
 
         /* Get FD neutrons and photons above momentum threshold: */
         vector<int> NeutronsFD_ind, PhotonsFD_ind;                                                    // FD neutrons and photons by definition - within momentum th.
         FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_nucleon_cuts);
-        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts); // FD neutron (with momentum th.) with maximal momentum
+        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts); // FD neutron (with momentum th.) with maximal momentum (ORIGINAL!)
+//        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts, apply_nucleon_SmearAndShift, nRes); // FD neutron (with momentum th.) with maximal momentum after correction
         //</editor-fold>
 
         //<editor-fold desc="Setting up event selection">
