@@ -131,7 +131,7 @@ void EventAnalyser() {
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -234,8 +234,8 @@ void EventAnalyser() {
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
     bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
@@ -393,8 +393,6 @@ void EventAnalyser() {
         } else {
             if (Rec_wTL_ES) {
 //                Efficiency_Status = "Eff2_test";
-//                Efficiency_Status = "Eff2_wLeadCorr";
-//                Efficiency_Status = "Eff2_wLeadCorrwECALveto";
                 Efficiency_Status = "Eff2";
             } else {
 //                Efficiency_Status = "Eff1_test";
