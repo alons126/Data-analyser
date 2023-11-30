@@ -20491,6 +20491,7 @@ void EventAnalyser() {
         myLogFile << "ShiftMode = " << nRes.Get_ShiftMode() << "\n\n";
         myLogFile << "Correction loading path:\n" << nRes.Get_Loaded_Corr_coefficients_path() << "\n\n";
 
+        //TODO: fix the bug of logging these variables twice
         vector<double> Corr_coefficients_values = nRes.Get_Loaded_Corr_coefficients_values();
         vector <string> Corr_coefficients_names = nRes.Get_Loaded_Corr_coefficients_names();
 
