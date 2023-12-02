@@ -145,7 +145,7 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
                         } else if (SliceLowerLim >= 3.25) { // 3.00-SliceUpperMomLim
                             Delta = SliceUpperMomLim - SliceLowerLim;
                         }
-                    }else if (SampleName == "C12x4_simulation_G18_Q204_6GeV") { // Slices by option 2
+                    } else if (SampleName == "C12x4_simulation_G18_Q204_6GeV") { // Slices by option 2
                         if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.60)) { // 0.4-0.65
                             Delta = delta * 5;
                         } else if ((SliceLowerLim >= 0.60) && (SliceLowerLim < 1.10)) { // 0.65-1.15
@@ -2095,6 +2095,10 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
     momResS2CalcMode = Calculate_momResS2;
     SName = SampleName;
     SetUpperMomCut(SampleName, NucleonCutsDirectory);
+
+    if (Load_correction) { cout << "\nLoading neutron correction from:\n" << filename << "\n"; }
+
+    if (Load_smearing) { cout << "\nLoading proton smearing from:\n" << filename << "\n"; }
 
     if (infile.is_open()) {
         string tp;
