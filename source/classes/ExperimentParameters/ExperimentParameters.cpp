@@ -6,9 +6,11 @@
 std::string ExperimentParameters::ConfigureSampleName(const std::string &AnalyseFilePath, const std::string &AnalyseFileSample) {
     std::string sName = "unknown_sample_598636MeV"; // to set beamE = 5.98636 by default;
 
-    if ((AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") //Internal data drive
-        || (AnalyseFilePath == "mnt/g/e4nu/hipo_data_files")) //External drive
-    { // Local samples
+    if ((AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") // Storage (D:)
+        || (AnalyseFilePath == "mnt/g/e4nu/hipo_data_files") // Alon's Portable (G:)
+        || (AnalyseFilePath == "mnt/h/e4nu/hipo_data_files")) // Alon's Passport (F:)
+    {
+        /* Local samples */
         LocalSample = true;
 
         //<editor-fold desc="Local samples">
@@ -36,7 +38,8 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
         }
         //</editor-fold>
 
-    } else { // ifarm samples
+    } else {
+        /* ifarm samples */
 
         //<editor-fold desc="ifarm samples">
         if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/C12_G18_10a_02_11b_207052MeV") { // C12, simulation, 2GeV, ifarm
@@ -225,9 +228,9 @@ void ExperimentParameters::ConfigureVz_cuts(const string &sn) {
 
 void ExperimentParameters::ConfiguredVz_cuts(const string &sn) {
     if (sn == "C12x4_simulation_G18_Q204_6GeV") { // 4-foil
-            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
-            dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
-            dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -5, 4);
+        dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+        dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
+        dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -5, 4);
     } else if (SampleName == "C12_simulation_G18_Q204_6GeV") { // 1-foil
         dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
         dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
