@@ -100,10 +100,10 @@ void EventAnalyser() {
     ExperimentParameters Experiment(AnalyseFilePath, AnalyseFileSample);
     const string SampleName = Experiment.ConfigureSampleName(AnalyseFilePath, AnalyseFileSample); // Configure SampleName from input
     //TODO: change VaringSampleName to simulation of a 4-foil!
-    const string VaringSampleName = Experiment.GetVaringSampleName(); // Get VaringSampleName (configured from SampleName) - for data runs!
-    const double beamE = Experiment.GetBeanEnergy(); // Configure beam energy from SampleName
-    const string Target = Experiment.GetTargetElement(); // Configure target (element) from SampleName
-    const int TargetPDG = Experiment.GetTargetElementPDG(); // Configure target PDG from SampleName
+    const string VaringSampleName = Experiment.GetVaringSampleName();                             // Get VaringSampleName (configured from SampleName) - for data runs!
+    const double beamE = Experiment.GetBeanEnergy();                                              // Configure beam energy from SampleName
+    const string Target = Experiment.GetTargetElement();                                          // Configure target (element) from SampleName
+    const int TargetPDG = Experiment.GetTargetElementPDG();                                       // Configure target PDG from SampleName
     const bool isLocal = Experiment.SLocal();
     const bool isMC = Experiment.SSample();
     const bool isData = Experiment.DSample();
@@ -157,13 +157,14 @@ void EventAnalyser() {
         3. momResS2 calculation:    VaryingDelta = false , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_in_momResS2 = false
         4. momResS2 run:            VaryingDelta = false , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_in_momResS2 = true
     */
-    bool plot_and_fit_MomRes = true;                             // Generate nRes plots
-    bool Calculate_momResS2 = true;                             // Calculate momResS2 variables
+    bool plot_and_fit_MomRes = false;    // Generate nRes plots
+    bool Calculate_momResS2 = false;     // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
-    const bool VaryingDelta = true;                              // 1st momResS1 w/ VaryingDelta = false
-    const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
-    bool nRes_test = false;                                       // false by default
-    bool Run_in_momResS2 = false;                                 // Smear w/ momResS2 & correct w/ momResS1
+    const bool VaryingDelta = true;      // 1st momResS1 w/ VaryingDelta = false
+    const string SmearMode = "pol1_wPC";
+    const string ShiftMode = "pol1_wPC";
+    bool nRes_test = false;              // false by default
+    bool Run_in_momResS2 = true;         // Smear w/ momResS2 & correct w/ momResS1
 
     //<editor-fold desc="Auto-disable variables">
     //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -201,13 +202,13 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    const bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    const bool apply_cuts = false; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -227,12 +228,12 @@ void EventAnalyser() {
     bool apply_Electron_beta_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
+    bool apply_nBeta_fit_cuts = false; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -392,10 +393,8 @@ void EventAnalyser() {
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
-//                Efficiency_Status = "Eff2_test";
                 Efficiency_Status = "Eff2";
             } else {
-//                Efficiency_Status = "Eff1_test";
                 Efficiency_Status = "Eff1";
             }
         }

@@ -174,8 +174,8 @@ void ExperimentParameters::ConfigureVaringSampleName(const string &sn) {
     } else if (findSubstring(sn, "data")) { // Sample is data
         if (findSubstring(sn, "C12") && BeamAt6GeV) {
             //TODO: change VaringSampleName to simulation of a 4-foil!
-            VaringSampleName = "C12_simulation_G18_Q204_6GeV";
-//            VaringSampleName = "C12x4_simulation_G18_Q204_6GeV";
+//            VaringSampleName = "C12_simulation_G18_Q204_6GeV";
+            VaringSampleName = "C12x4_simulation_G18_Q204_6GeV";
         } else {
             cout << "\n\n\nExperimentParameters::GetVaringSampleName: no corresponding simulation sample! Exiting...", exit(0);
         }
