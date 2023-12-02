@@ -707,7 +707,7 @@ void EventAnalyser() {
     bool FSR_2D_plots; // disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-    bool TestRun = true; // set as false for a full run
+    bool TestRun = false; // set as false for a full run
 
     if (!TestRun) {
 
