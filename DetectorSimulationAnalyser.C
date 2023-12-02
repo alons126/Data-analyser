@@ -1178,38 +1178,41 @@ void EventAnalyser() {
         nRes.SetSmearAndShiftModes(SmearMode, ShiftMode);
 
         if (Calculate_momResS2 && !Run_in_momResS2) {
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par").c_str(),
-                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_hist_param_-_" + SampleName + ".par").c_str(),
-                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_hist_param_-_" + VaringSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par").c_str(),
+//                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_hist_param_-_" + SampleName + ".par").c_str(),
+//                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
         } else if (!Calculate_momResS2 && Run_in_momResS2) {
             /* Load neutron correction */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
-                                  Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
+//                                  Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par").c_str(),
-                                  Calculate_momResS2, SampleName, NucleonCutsDirectory, false, true);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par").c_str(),
+//                                  Calculate_momResS2, SampleName, NucleonCutsDirectory, false, true);
 
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_hist_param_-_" + SampleName + ".par").c_str(),
-                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_hist_param_-_" + VaringSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_hist_param_-_" + SampleName + ".par").c_str(),
+//                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
         } else if (!Calculate_momResS2 && Run_in_momResS2) {
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
-                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_hist_param_-_" + SampleName + ".par").c_str(),
-                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_hist_param_-_" + VaringSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
+//                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
+//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_hist_param_-_" + SampleName + ".par").c_str(),
+//                                  Calculate_momResS2, SampleName, NucleonCutsDirectory);
         }
-//        if (Calculate_momResS2) {
-//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
-//                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
-//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_hist_param_-_" + VaringSampleName + ".par").c_str(),
-//                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
-//        } else {
-//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-//                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
-//            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_hist_param_-_" + VaringSampleName + ".par").c_str(),
-//                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory);
-//        }
     }
     //</editor-fold>
 
