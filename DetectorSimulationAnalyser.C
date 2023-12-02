@@ -210,7 +210,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_1e_cut = true;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
