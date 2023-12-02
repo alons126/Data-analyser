@@ -113,6 +113,21 @@ Directories::Directories(std::string plots_path) {
                                                                  Find(Vertex_Daughter_Folders, "01_1e_cut/01_cParticles_Vtx_comp_plots/05_Piplus") + "/";
     Vertex_Directory_map["Vertex_piminus_1e_cut_Vtx_Directory"] = Plots_Folder + "/" + Vertex_Parent_Directory + "/" +
                                                                   Find(Vertex_Daughter_Folders, "01_1e_cut/01_cParticles_Vtx_comp_plots/06_Piminus") + "/";
+    Vertex_Directory_map["Vertex_deuteron_1e_cut_Vtx_Directory"] = Plots_Folder + "/" + Vertex_Parent_Directory + "/" +
+                                                                  Find(Vertex_Daughter_Folders, "01_1e_cut/01_cParticles_Vtx_comp_plots/07_Deuteron") + "/";
+
+    Vertex_Directory_map["Vertex_corr_Proton_1e_cut_Vtx_Directory"] = Plots_Folder + "/" + Vertex_Parent_Directory + "/" +
+                                                                 Find(Vertex_Daughter_Folders, "01_1e_cut/02_cParticles_dVtx_plots/01_Protons") + "/";
+    Vertex_Directory_map["Vertex_corr_Kplus_1e_cut_Vtx_Directory"] = Plots_Folder + "/" + Vertex_Parent_Directory + "/" +
+                                                                Find(Vertex_Daughter_Folders, "01_1e_cut/02_cParticles_dVtx_plots/02_Kplus") + "/";
+    Vertex_Directory_map["Vertex_corr_Kminus_1e_cut_Vtx_Directory"] = Plots_Folder + "/" + Vertex_Parent_Directory + "/" +
+                                                                 Find(Vertex_Daughter_Folders, "01_1e_cut/02_cParticles_dVtx_plots/03_Kminus") + "/";
+    Vertex_Directory_map["Vertex_corr_piplus_1e_cut_Vtx_Directory"] = Plots_Folder + "/" + Vertex_Parent_Directory + "/" +
+                                                                 Find(Vertex_Daughter_Folders, "01_1e_cut/02_cParticles_dVtx_plots/04_Piplus") + "/";
+    Vertex_Directory_map["Vertex_corr_piminus_1e_cut_Vtx_Directory"] = Plots_Folder + "/" + Vertex_Parent_Directory + "/" +
+                                                                  Find(Vertex_Daughter_Folders, "01_1e_cut/02_cParticles_dVtx_plots/05_Piminus") + "/";
+    Vertex_Directory_map["Vertex_corr_deuteron_1e_cut_Vtx_Directory"] = Plots_Folder + "/" + Vertex_Parent_Directory + "/" +
+                                                                  Find(Vertex_Daughter_Folders, "01_1e_cut/02_cParticles_dVtx_plots/06_Deuteron") + "/";
 
     Vertex_Directory_map["Vertex_dV_1p_Directory"] = Plots_Folder + "/" + Vertex_Parent_Directory + "/" +
                                                      Find(Vertex_Daughter_Folders, "02_1p/01_dV_plots") + "/";

@@ -6,7 +6,11 @@
 std::string ExperimentParameters::ConfigureSampleName(const std::string &AnalyseFilePath, const std::string &AnalyseFileSample) {
     std::string sName = "unknown_sample_598636MeV"; // to set beamE = 5.98636 by default;
 
-    if (AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") { // Local samples
+    if ((AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") // Storage (D:)
+        || (AnalyseFilePath == "mnt/g/e4nu/hipo_data_files") // Alon's Portable (G:)
+        || (AnalyseFilePath == "mnt/h/e4nu/hipo_data_files")) // Alon's Passport (F:)
+    {
+        /* Local samples */
         LocalSample = true;
 
         //<editor-fold desc="Local samples">
@@ -28,10 +32,14 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
         } else if (AnalyseFileSample == "C12_G18_02a_00_000_Q204_598636MeV") {
             BeamAt6GeV = SimulationSample = true;
             sName = "C12_simulation_G18_Q204_6GeV";
+        } else if (AnalyseFileSample == "C12x4_G18_02a_00_000_Q204_598636MeV") {
+            BeamAt6GeV = SimulationSample = true;
+            sName = "C12x4_simulation_G18_Q204_6GeV";
         }
         //</editor-fold>
 
-    } else { // ifarm samples
+    } else {
+        /* ifarm samples */
 
         //<editor-fold desc="ifarm samples">
         if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/C12_G18_10a_02_11b_207052MeV") { // C12, simulation, 2GeV, ifarm
@@ -179,58 +187,80 @@ void ExperimentParameters::ConfigureVaringSampleName(const string &sn) {
 // ConfigureVz_cuts function -----------------------------------------------------------------------------------------------------------------------------------------
 
 void ExperimentParameters::ConfigureVz_cuts(const string &sn) {
-
-    //TODO: recheck vertex cuts with Adi
-
-    if (sn == "C12x4_simulation_G18_Q204_6GeV") {
+    if (sn == "C12x4_simulation_G18_Q204_6GeV") { // 4-foil
         Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -7., 2.);
-    } else if (findSubstring(sn, "C12x4_data_6GeV_run_0151")) { // Sample is simulation
-        if (findSubstring(sn, "C12x4_data_6GeV_run_015186")) {
+        Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -8., 3.);
+        Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -7., 2.);
+    } else if (SampleName == "C12_simulation_G18_Q204_6GeV") { // 1-foil
+        Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -5, 5);
+        Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -5, 5);
+        Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -2, 1);
+    } else if (findSubstring(sn, "C12x4_data_6GeV_run_0151")) { // Sample is data
+        if (findSubstring(sn, "C12x4_data_6GeV_run_015186")) { // 4-foil
             Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -7., 2.);
-        } else if (findSubstring(sn, "C12x4_data_6GeV_run_015187")) {
+            Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -7., 2.);
+            Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -7., 2.);
+        } else if (findSubstring(sn, "C12x4_data_6GeV_run_015187")) { // 4-foil
             Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -7., 2.);
-        } else if (findSubstring(sn, "C12x4_data_6GeV_run_015188")) {
+            Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -7., 2.);
+            Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -7., 2.);
+        } else if (findSubstring(sn, "C12x4_data_6GeV_run_015188")) { // 4-foil
             Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -7., 2.);
+            Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -7., 2.);
+            Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -7., 2.);
         } else {
             Vz_cuts = Vz_cuts_def;
+            Vz_cuts_FD = Vz_cuts_FD_def;
+            Vz_cuts_CD = Vz_cuts_CD_def;
         }
     } else if (SampleName == "LH2_data_6GeV_run_015032") {
         Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5);
+        Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -15, 5);
+        Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -15, 5);
     } else {
-        //TODO: these are good for Ca48 simulation and data. Check cuts for other targets!
         Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -5, 5);
-        //        cout << "\n\n\nExperimentParameters::ConfigureVz_cuts: Vz can't be configured! Exiting...", exit(0);
+        Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -5, 5);
+        Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -5, 5);
     }
 }
 
 // ConfigureVz_cuts function -----------------------------------------------------------------------------------------------------------------------------------------
 
 void ExperimentParameters::ConfiguredVz_cuts(const string &sn) {
-
-    //TODO: recheck vertex corr cuts with Adi
-
-    if (sn == "C12x4_simulation_G18_Q204_6GeV") {
-//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-        dVz_cuts = dVz_cuts_def;
-    } else if (findSubstring(sn, "C12x4_data_6GeV_run_0151")) { // Sample is simulation
-        if (findSubstring(sn, "C12x4_data_6GeV_run_015186")) {
-//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-            dVz_cuts = dVz_cuts_def;
-        } else if (findSubstring(sn, "C12x4_data_6GeV_run_015187")) {
-//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-            dVz_cuts = dVz_cuts_def;
-        } else if (findSubstring(sn, "C12x4_data_6GeV_run_015188")) {
-//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-            dVz_cuts = dVz_cuts_def;
+    if (sn == "C12x4_simulation_G18_Q204_6GeV") { // 4-foil
+        dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+        dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
+        dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -5, 4);
+    } else if (SampleName == "C12_simulation_G18_Q204_6GeV") { // 1-foil
+        dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+        dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
+        dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -5, 4);
+    } else if (findSubstring(sn, "C12x4_data_6GeV_run_0151")) { // Sample is data
+        if (findSubstring(sn, "C12x4_data_6GeV_run_015186")) { // 4-foil
+            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+            dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
+            dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -5, 4);
+        } else if (findSubstring(sn, "C12x4_data_6GeV_run_015187")) { // 4-foil
+            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+            dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
+            dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -5, 4);
+        } else if (findSubstring(sn, "C12x4_data_6GeV_run_015188")) { // 4-foil
+            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+            dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
+            dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -5, 4);
         } else {
             dVz_cuts = dVz_cuts_def;
+            dVz_cuts_FD = dVz_cuts_FD_def;
+            dVz_cuts_CD = dVz_cuts_CD_def;
         }
     } else if (SampleName == "LH2_data_6GeV_run_015032") {
         dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
+        dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -8, 4);
+        dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -8, 4);
     } else {
-//        dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -2, 3);
         dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
-        //        cout << "\n\n\nExperimentParameters::ConfigureVz_cuts: Vz can't be configured! Exiting...", exit(0);
+        dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -8, 4);
+        dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -8, 4);
     }
 }
 

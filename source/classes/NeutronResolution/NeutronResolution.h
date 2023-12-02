@@ -33,7 +33,6 @@
 
 #include "clas12reader.h"
 
-#include "../clas12ana/clas12ana.h"
 #include "../hPlots/hPlot1D.h"
 #include "../DSCuts/DSCuts.h"
 #include "../../functions/GeneralFunctions.h"
@@ -42,15 +41,9 @@ using namespace std;
 
 class NeutronResolution {
 private:
-    bool nResTestMode;
+    bool momResTestMode, momResS2CalcMode, momResS2RunMode;
 
-//    string SmearMode = "slices"; // Smear by resolution fit width values from slices
-    string SmearMode = "pol1";     // Smear by fitted linear function to resolution Gaussian width
-//    string SmearMode = "pol3";   // Smear by fitted 3rd degree polynomial function to resolution Gaussian width
-//    string ShiftMode = "slices"; // Shift by resolution fit width values from slices
-    string ShiftMode = "pol1";     // Shift by fitted linear function to resolution Gaussian mean
-//    string ShiftMode = "pol3";   // Shift by fitted 3rd degree polynomial function to resolution Gaussian mean
-
+    string SmearMode = "NONE", ShiftMode = "NONE";
 
     vector <hPlot1D> ResSlices;
     vector <vector<double>> ResSlicesLimits;
@@ -60,7 +53,9 @@ private:
     vector <DSCuts> Loaded_Res_Slices_HistVar;
     vector<int> FittedSlices;
 
-    double SliceUpperMomLim; // upper lim for momentum slices to be set after neutron upper momentum th.
+    double SliceUpperMomLim; // upper lim for momentum slices - loaded from file
+
+    double SliceUpperMomLimPC, SliceLowerMomLimPC; // lower lim for momentum slices - set by constructor
 
     double hSliceUpperLim = 1.5;
     double hSliceLowerLim = -1.5;
@@ -80,6 +75,93 @@ private:
     double deltaFactor = 1.;
     int NumberOfSlices = 0;
 
+    //<editor-fold desc="Correction and smear fit variables">
+
+    //TODO: add to vectors?
+
+    double A_Corr_pol1, A_Corr_pol1_Error, B_Corr_pol1, B_Corr_pol1_Error;
+    double ChiSquare_Corr_pol1, NDF_Corr_pol1;
+    double A_Corr_pol1_wPC, A_Corr_pol1_wPC_Error, B_Corr_pol1_wPC, B_Corr_pol1_wPC_Error;
+    double ChiSquare_Corr_pol1_wPC, NDF_Corr_pol1_wPC;
+
+    double A_Corr_pol2, A_Corr_pol2_Error, B_Corr_pol2, B_Corr_pol2_Error, C_Corr_pol2, C_Corr_pol2_Error;
+    double ChiSquare_Corr_pol2, NDF_Corr_pol2;
+    double A_Corr_pol2_wPC, A_Corr_pol2_wPC_Error, B_Corr_pol2_wPC, B_Corr_pol2_wPC_Error, C_Corr_pol2_wPC, C_Corr_pol2_wPC_Error;
+    double ChiSquare_Corr_pol2_wPC, NDF_Corr_pol2_wPC;
+
+    double A_Corr_pol3, A_Corr_pol3_Error, B_Corr_pol3, B_Corr_pol3_Error, C_Corr_pol3, C_Corr_pol3_Error, D_Corr_pol3, D_Corr_pol3_Error;
+    double ChiSquare_Corr_pol3, NDF_Corr_pol3;
+    double A_Corr_pol3_wPC, A_Corr_pol3_wPC_Error, B_Corr_pol3_wPC, B_Corr_pol3_wPC_Error, C_Corr_pol3_wPC, C_Corr_pol3_wPC_Error, D_Corr_pol3_wPC, D_Corr_pol3_wPC_Error;
+    double ChiSquare_Corr_pol3_wPC, NDF_Corr_pol3_wPC;
+
+    double A_Std_pol1, A_Std_pol1_Error, B_Std_pol1, B_Std_pol1_Error;
+    double ChiSquare_Std_pol1, NDF_Std_pol1;
+    double A_Std_pol1_wPC, A_Std_pol1_wPC_Error, B_Std_pol1_wPC, B_Std_pol1_wPC_Error;
+    double ChiSquare_Std_pol1_wPC, NDF_Std_pol1_wPC;
+
+    double A_Std_pol2, A_Std_pol2_Error, B_Std_pol2, B_Std_pol2_Error, C_Std_pol2, C_Std_pol2_Error;
+    double ChiSquare_Std_pol2, NDF_Std_pol2;
+    double A_Std_pol2_wPC, A_Std_pol2_wPC_Error, B_Std_pol2_wPC, B_Std_pol2_wPC_Error, C_Std_pol2_wPC, C_Std_pol2_wPC_Error;
+    double ChiSquare_Std_pol2_wPC, NDF_Std_pol2_wPC;
+
+    double A_Std_pol3, A_Std_pol3_Error, B_Std_pol3, B_Std_pol3_Error, C_Std_pol3, C_Std_pol3_Error, D_Std_pol3, D_Std_pol3_Error;
+    double ChiSquare_Std_pol3, NDF_Std_pol3;
+    double A_Std_pol3_wPC, A_Std_pol3_wPC_Error, B_Std_pol3_wPC, B_Std_pol3_wPC_Error, C_Std_pol3_wPC, C_Std_pol3_wPC_Error, D_Std_pol3_wPC, D_Std_pol3_wPC_Error;
+    double ChiSquare_Std_pol3_wPC, NDF_Std_pol3_wPC;
+    //</editor-fold>
+
+    //<editor-fold desc="Loaded correction and smear fit variables">
+    double Loaded_A_Std_pol1, Loaded_B_Std_pol1;
+    double Loaded_A_Std_pol1_Error, Loaded_B_Std_pol1_Error;
+    double Loaded_ChiSquare_Std_pol1, Loaded_NDF_Std_pol1;
+    double Loaded_A_Std_pol1_wPC, Loaded_B_Std_pol1_wPC;
+    double Loaded_A_Std_pol1_wPC_Error, Loaded_B_Std_pol1_wPC_Error;
+    double Loaded_ChiSquare_Std_pol1_wPC, Loaded_NDF_Std_pol1_wPC;
+
+    double Loaded_A_Std_pol2, Loaded_B_Std_pol2, Loaded_C_Std_pol2;
+    double Loaded_A_Std_pol2_Error, Loaded_B_Std_pol2_Error, Loaded_C_Std_pol2_Error;
+    double Loaded_ChiSquare_Std_pol2, Loaded_NDF_Std_pol2;
+    double Loaded_A_Std_pol2_wPC, Loaded_B_Std_pol2_wPC, Loaded_C_Std_pol2_wPC;
+    double Loaded_A_Std_pol2_wPC_Error, Loaded_B_Std_pol2_wPC_Error, Loaded_C_Std_pol2_wPC_Error;
+    double Loaded_ChiSquare_Std_pol2_wPC, Loaded_NDF_Std_pol2_wPC;
+
+    double Loaded_A_Std_pol3, Loaded_B_Std_pol3, Loaded_C_Std_pol3, Loaded_D_Std_pol3;
+    double Loaded_A_Std_pol3_Error, Loaded_B_Std_pol3_Error, Loaded_C_Std_pol3_Error, Loaded_D_Std_pol3_Error;
+    double Loaded_ChiSquare_Std_pol3, Loaded_NDF_Std_pol3;
+    double Loaded_A_Std_pol3_wPC, Loaded_B_Std_pol3_wPC, Loaded_C_Std_pol3_wPC, Loaded_D_Std_pol3_wPC;
+    double Loaded_A_Std_pol3_wPC_Error, Loaded_B_Std_pol3_wPC_Error, Loaded_C_Std_pol3_wPC_Error, Loaded_D_Std_pol3_wPC_Error;
+    double Loaded_ChiSquare_Std_pol3_wPC, Loaded_NDF_Std_pol3_wPC;
+
+    string Loaded_Std_coefficients_path;
+    vector<double> Loaded_Std_coefficients_values;
+    vector <string> Loaded_Std_coefficients_names;
+
+    double Loaded_A_Corr_pol1, Loaded_B_Corr_pol1;
+    double Loaded_A_Corr_pol1_Error, Loaded_B_Corr_pol1_Error;
+    double Loaded_ChiSquare_Corr_pol1, Loaded_NDF_Corr_pol1;
+    double Loaded_A_Corr_pol1_wPC, Loaded_B_Corr_pol1_wPC;
+    double Loaded_A_Corr_pol1_wPC_Error, Loaded_B_Corr_pol1_wPC_Error;
+    double Loaded_ChiSquare_Corr_pol1_wPC, Loaded_NDF_Corr_pol1_wPC;
+
+    double Loaded_A_Corr_pol2, Loaded_B_Corr_pol2, Loaded_C_Corr_pol2;
+    double Loaded_A_Corr_pol2_Error, Loaded_B_Corr_pol2_Error, Loaded_C_Corr_pol2_Error;
+    double Loaded_ChiSquare_Corr_pol2, Loaded_NDF_Corr_pol2;
+    double Loaded_A_Corr_pol2_wPC, Loaded_B_Corr_pol2_wPC, Loaded_C_Corr_pol2_wPC;
+    double Loaded_A_Corr_pol2_wPC_Error, Loaded_B_Corr_pol2_wPC_Error, Loaded_C_Corr_pol2_wPC_Error;
+    double Loaded_ChiSquare_Corr_pol2_wPC, Loaded_NDF_Corr_pol2_wPC;
+
+    double Loaded_A_Corr_pol3, Loaded_B_Corr_pol3, Loaded_C_Corr_pol3, Loaded_D_Corr_pol3;
+    double Loaded_A_Corr_pol3_Error, Loaded_B_Corr_pol3_Error, Loaded_C_Corr_pol3_Error, Loaded_D_Corr_pol3_Error;
+    double Loaded_ChiSquare_Corr_pol3, Loaded_NDF_Corr_pol3;
+    double Loaded_A_Corr_pol3_wPC, Loaded_B_Corr_pol3_wPC, Loaded_C_Corr_pol3_wPC, Loaded_D_Corr_pol3_wPC;
+    double Loaded_A_Corr_pol3_wPC_Error, Loaded_B_Corr_pol3_wPC_Error, Loaded_C_Corr_pol3_wPC_Error, Loaded_D_Corr_pol3_wPC_Error;
+    double Loaded_ChiSquare_Corr_pol3_wPC, Loaded_NDF_Corr_pol3_wPC;
+
+    string Loaded_Corr_coefficients_path;
+    vector<double> Loaded_Corr_coefficients_values;
+    vector <string> Loaded_Corr_coefficients_names;
+    //</editor-fold>
+
     double Neutron_Momentum_cut = 9999.; // from clas12ana
     string SName;
 
@@ -91,8 +173,10 @@ public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double nMomTh, const string &SavePath = "./",
-                      double DeltaSlices = 0.2, bool VaryingDelta = false, const string &SmearM = "pol1", const string &ShiftM = "pol1", bool nRes_test = false);
+    NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
+                      const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
+                      const string &NeutronResolutionDirectory, const string &SavePath = "./", double DeltaSlices = 0.2, bool VaryingDelta = false,
+                      const string &SmearM = "pol1", const string &ShiftM = "pol1", bool nRes_test = false);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -109,6 +193,32 @@ public:
 // SliceFitDrawAndSave function -----------------------------------------------------------------------------------------------------------------------------------------
 
     void SliceFitDrawAndSave(const string &SampleName, const string &Particle, double beamE);
+
+// Fitter functions -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    void Fitter_Std_pol1();
+
+    void Fitter_Std_pol1_wPC();
+
+    void Fitter_Std_pol2();
+
+    void Fitter_Std_pol2_wPC();
+
+    void Fitter_Std_pol3();
+
+    void Fitter_Std_pol3_wPC();
+
+    void Fitter_Corr_pol1();
+
+    void Fitter_Corr_pol1_wPC();
+
+    void Fitter_Corr_pol2();
+
+    void Fitter_Corr_pol2_wPC();
+
+    void Fitter_Corr_pol3();
+
+    void Fitter_Corr_pol3_wPC();
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -131,7 +241,8 @@ public:
 
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadResDataParam(const char *filename, const string &SampleName, const string &NucleonCutsDirectory);
+    void ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory,
+                          const bool &Load_correction = true, const bool &Load_smearing = true);
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -154,7 +265,24 @@ public:
 
     void SetSmearAndShiftModes(const string &SmearM, const string &ShiftM) { SmearMode = SmearM, ShiftMode = ShiftM; };
 
+    // Get functions
     double GetSliceUpperMomLim() { return SliceUpperMomLim; };
+
+    string Get_SmearMode() { return SmearMode; };
+
+    string Get_Loaded_Std_coefficients_path() { return Loaded_Std_coefficients_path; };
+
+    vector<double> Get_Loaded_Std_coefficients_values() { return Loaded_Std_coefficients_values; };
+
+    vector <string> Get_Loaded_Std_coefficients_names() { return Loaded_Std_coefficients_names; };
+
+    string Get_ShiftMode() { return ShiftMode; };
+
+    string Get_Loaded_Corr_coefficients_path() { return Loaded_Corr_coefficients_path; };
+
+    vector<double> Get_Loaded_Corr_coefficients_values() { return Loaded_Corr_coefficients_values; };
+
+    vector <string> Get_Loaded_Corr_coefficients_names() { return Loaded_Corr_coefficients_names; };
 
 };
 

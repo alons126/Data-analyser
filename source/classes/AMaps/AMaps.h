@@ -99,14 +99,9 @@ private:
 
     bool calc_Electron_RecoToTL_Ratio = true, calc_Proton_RecoToTL_Ratio = true, calc_Neutron_RecoToTL_Ratio = true;
 
-//    double Charged_particle_min_Ratio = 0.;
-//    double Neutral_particle_min_Ratio = 0.;
+    //TODO: ask Adi for the motivation for these numbers!
     double Charged_particle_min_Ratio = 0.7;
-    double Neutral_particle_min_Ratio = 0.2;
-//    double Neutral_particle_min_Ratio = 0.05;
-//    double Neutral_particle_min_Ratio = 0.25;
-//    double Neutral_particle_min_Ratio = 0.3;
-//    double Neutral_particle_min_Ratio = Charged_particle_min_Ratio / 3.;
+    double Neutral_particle_min_Ratio = 0.2; // ORIGINAL!!!
 
     TList *AcceptanceMapsBC = new TList();
     TList *TLAMaps = new TList();
