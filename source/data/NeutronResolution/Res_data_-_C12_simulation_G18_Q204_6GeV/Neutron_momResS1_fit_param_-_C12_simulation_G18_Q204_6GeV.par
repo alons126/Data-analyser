@@ -1,0 +1,156 @@
+######################################################################
+# CLAS12 analysis cuts and parameters file (after nRes Gaussian fit) #
+######################################################################
+
+# Neutron resolution parameters are for:
+#sample:	C12_simulation_G18_Q204_6GeV
+#Analysis_run_mode:	NC_Eff1
+#momRes_calculation_mode:	Calculate momResS1
+#delta:		0.05
+#Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
+
+fit_Slice_#1_from_0.40_to_0.65			1:0.4:0.65:0.0364567:0.0389033
+fit_Slice_#2_from_0.65_to_0.75			2:0.65:0.75:0.0405324:0.0425271
+fit_Slice_#3_from_0.75_to_0.85			3:0.75:0.85:0.037276:0.0417968
+fit_Slice_#4_from_0.85_to_0.95			4:0.85:0.95:0.0396838:0.0441113
+fit_Slice_#5_from_0.95_to_1.05			5:0.95:1.05:0.0468189:0.0529449
+fit_Slice_#6_from_1.05_to_1.10			6:1.05:1.1:0.0518917:0.0540496
+fit_Slice_#7_from_1.10_to_1.15			7:1.1:1.15:0.0590674:0.0583114
+fit_Slice_#8_from_1.15_to_1.20			8:1.15:1.2:0.0549141:0.0587458
+fit_Slice_#9_from_1.20_to_1.25			9:1.2:1.25:0.0584477:0.0621049
+fit_Slice_#10_from_1.25_to_1.30			10:1.25:1.3:0.0589606:0.0629559
+fit_Slice_#11_from_1.30_to_1.35			11:1.3:1.35:0.0632118:0.0650451
+fit_Slice_#12_from_1.35_to_1.40			12:1.35:1.4:0.0673873:0.0688902
+fit_Slice_#13_from_1.40_to_1.45			13:1.4:1.45:0.068179:0.0749693
+fit_Slice_#14_from_1.45_to_1.50			14:1.45:1.5:0.0733342:0.0792505
+fit_Slice_#15_from_1.50_to_1.55			15:1.5:1.55:0.0814402:0.0849198
+fit_Slice_#16_from_1.55_to_1.60			16:1.55:1.6:0.077014:0.0790143
+fit_Slice_#17_from_1.60_to_1.65			17:1.6:1.65:0.0773803:0.0835202
+fit_Slice_#18_from_1.65_to_1.70			18:1.65:1.7:0.0851687:0.0927801
+fit_Slice_#19_from_1.70_to_1.80			19:1.7:1.8:0.0918611:0.0984255
+fit_Slice_#20_from_1.80_to_1.90			20:1.8:1.9:0.0960026:0.0961522
+fit_Slice_#21_from_1.90_to_2.00			21:1.9:2:0.104293:0.113483
+fit_Slice_#22_from_2.00_to_2.10			22:2:2.1:0.112951:0.11879
+fit_Slice_#23_from_2.10_to_2.20			23:2.1:2.2:0.124658:0.127872
+fit_Slice_#24_from_2.20_to_2.30			24:2.2:2.3:0.128768:0.132061
+fit_Slice_#25_from_2.30_to_2.45			25:2.3:2.45:0.139138:0.140929
+fit_Slice_#26_from_2.45_to_2.60			26:2.45:2.6:0.148628:0.152023
+fit_Slice_#27_from_2.60_to_2.80			27:2.6:2.8:0.163365:0.164847
+fit_Slice_#28_from_2.80_to_3.00			28:2.8:3:0.170009:0.181875
+fit_Slice_#29_from_3.00_to_3.30			29:3:3.3:0.186277:0.171138
+fit_Slice_#30_from_3.30_to_4.00			30:3.3:4:0.250305:0.171359
+
+
+#correction and smear fit variables:
+
+SliceUpperMomLimPC			3
+SliceLowerMomLimPC			1
+
+A_Corr_pol1					0.0674327
+A_Corr_pol1_Error			0.00207
+B_Corr_pol1					-0.0217463
+B_Corr_pol1_Error			0.00384272
+ChiSquare_Corr_pol1			0.00196099
+NDF_Corr_pol1				28
+
+A_Corr_pol1_wPC				0.0681009
+A_Corr_pol1_wPC_Error		0.00147593
+B_Corr_pol1_wPC				-0.025616
+B_Corr_pol1_wPC_Error		0.00265947
+ChiSquare_Corr_pol1_wPC		0.000316086
+NDF_Corr_pol1_wPC			22
+
+A_Corr_pol2					0.0102021
+A_Corr_pol2_Error			0.00126197
+B_Corr_pol2					0.0269848
+B_Corr_pol2_Error			0.00513147
+C_Corr_pol2					0.0119919
+C_Corr_pol2_Error			0.00467904
+ChiSquare_Corr_pol2			0.000573293
+NDF_Corr_pol2				27
+
+A_Corr_pol2_wPC				0.00652334
+A_Corr_pol2_wPC_Error		0.00250674
+B_Corr_pol2_wPC				0.0434239
+B_Corr_pol2_wPC_Error		0.00957323
+C_Corr_pol2_wPC				-0.00425414
+C_Corr_pol2_wPC_Error		0.00854321
+ChiSquare_Corr_pol2_wPC		0.00023901
+NDF_Corr_pol2_wPC			21
+
+A_Corr_pol3					-0.00181252
+A_Corr_pol3_Error			0.00139073
+B_Corr_pol3					0.0212913
+B_Corr_pol3_Error			0.0085994
+C_Corr_pol3					0.00699459
+C_Corr_pol3_Error			0.0161534
+D_Corr_pol3					0.0223812
+D_Corr_pol3_Error			0.00921347
+ChiSquare_Corr_pol3			0.000538137
+NDF_Corr_pol3				26
+
+A_Corr_pol3_wPC				-0.0145942
+A_Corr_pol3_wPC_Error		0.00372385
+B_Corr_pol3_wPC				0.0905669
+B_Corr_pol3_wPC_Error		0.0215313
+C_Corr_pol3_wPC				-0.109441
+C_Corr_pol3_wPC_Error		0.0396964
+D_Corr_pol3_wPC				0.0832633
+D_Corr_pol3_wPC_Error		0.0232812
+ChiSquare_Corr_pol3_wPC		0.000135189
+NDF_Corr_pol3_wPC			20
+
+A_Std_pol1					0.0565852
+A_Std_pol1_Error			0.00241514
+B_Std_pol1					-0.00259027
+B_Std_pol1_Error			0.00448343
+ChiSquare_Std_pol1			0.00266943
+NDF_Std_pol1				28
+
+A_Std_pol1_wPC				0.0694238
+A_Std_pol1_wPC_Error		0.0014045
+B_Std_pol1_wPC				-0.0236854
+B_Std_pol1_wPC_Error		0.00253076
+ChiSquare_Std_pol1_wPC		0.000286232
+NDF_Std_pol1_wPC			22
+
+A_Std_pol2					-0.00471493
+A_Std_pol2_Error			0.00256751
+B_Std_pol2					0.0752783
+B_Std_pol2_Error			0.0104401
+C_Std_pol2					-0.0181825
+C_Std_pol2_Error			0.00951966
+ChiSquare_Std_pol2			0.00237304
+NDF_Std_pol2				27
+
+A_Std_pol2_wPC				0.00712062
+A_Std_pol2_wPC_Error		0.0022607
+B_Std_pol2_wPC				0.0424873
+B_Std_pol2_wPC_Error		0.00863362
+C_Std_pol2_wPC				-0.000367652
+C_Std_pol2_wPC_Error		0.00770469
+ChiSquare_Std_pol2_wPC		0.000194395
+NDF_Std_pol2_wPC			21
+
+A_Std_pol3					-0.0137639
+A_Std_pol3_Error			0.00111476
+B_Std_pol3					0.0794941
+B_Std_pol3_Error			0.00689295
+C_Std_pol3					-0.0765229
+C_Std_pol3_Error			0.0129479
+D_Std_pol3					0.0607115
+D_Std_pol3_Error			0.00738517
+ChiSquare_Std_pol3			0.000345754
+NDF_Std_pol3				26
+
+A_Std_pol3_wPC				-0.00731676
+A_Std_pol3_wPC_Error		0.00415493
+B_Std_pol3_wPC				0.0492556
+B_Std_pol3_wPC_Error		0.0240238
+C_Std_pol3_wPC				-0.0341508
+C_Std_pol3_wPC_Error		0.0442917
+D_Std_pol3_wPC				0.043509
+D_Std_pol3_wPC_Error		0.0259763
+ChiSquare_Std_pol3_wPC		0.0001683
+NDF_Std_pol3_wPC			20
+

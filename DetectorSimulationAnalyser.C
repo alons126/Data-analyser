@@ -157,13 +157,13 @@ void EventAnalyser() {
         3. momResS2 calculation:    VaryingDelta = false , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_in_momResS2 = false
         4. momResS2 run:            VaryingDelta = false , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_in_momResS2 = true
     */
-    bool plot_and_fit_MomRes = false;                             // Generate nRes plots
-    bool Calculate_momResS2 = false;                             // Calculate momResS2 variables
+    bool plot_and_fit_MomRes = true;                             // Generate nRes plots
+    bool Calculate_momResS2 = true;                             // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;                              // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wPC", ShiftMode = "pol1_wPC";
     bool nRes_test = false;                                       // false by default
-    bool Run_in_momResS2 = true;                                 // Smear w/ momResS2 & correct w/ momResS1
+    bool Run_in_momResS2 = false;                                 // Smear w/ momResS2 & correct w/ momResS1
 
     //<editor-fold desc="Auto-disable variables">
     //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -233,10 +233,10 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_weights = false;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
