@@ -2096,7 +2096,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
     SName = SampleName;
     SetUpperMomCut(SampleName, NucleonCutsDirectory);
 
-    if (Load_correction) { cout << "\nLoading neutron correction from:\n" << filename << "\n"; }
+    if (Load_correction) { cout << "\n\nLoading neutron correction from:\n" << filename << "\n"; }
 
     if (Load_smearing) { cout << "\nLoading proton smearing from:\n" << filename << "\n"; }
 
@@ -2112,72 +2112,74 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
             string parameter, parameter2;
             ss >> parameter; // get cut identifier
 
-            if (findSubstring(parameter, "fit_Slice_#")) {
-                // get cut values
-                ss >> parameter2;
-                stringstream ss2(parameter2);
-                string SliceParam;
-                int count = 0; // parameter number
+            if (!Load_correction && !Load_smearing) {
+                if (findSubstring(parameter, "fit_Slice_#")) {
+                    // get cut values
+                    ss >> parameter2;
+                    stringstream ss2(parameter2);
+                    string SliceParam;
+                    int count = 0; // parameter number
 
-                string CutNameTemp = parameter;
-                int SliceNumberTemp;
-                double SliceLowerBoundaryTemp, SliceUpperBoundaryTemp, FitMeanTemp, FitSigmaTemp;
+                    string CutNameTemp = parameter;
+                    int SliceNumberTemp;
+                    double SliceLowerBoundaryTemp, SliceUpperBoundaryTemp, FitMeanTemp, FitSigmaTemp;
 
-                while (getline(ss2, SliceParam, ':')) {
-                    if (count == 0) {
-                        SliceNumberTemp = stoi(SliceParam);
-                    } else if (count == 1) {
-                        SliceLowerBoundaryTemp = stod(SliceParam);
-                    } else if (count == 2) {
-                        SliceUpperBoundaryTemp = stod(SliceParam);
-                    } else if (count == 3) {
-                        FitMeanTemp = stod(SliceParam);
-                    } else if (count == 4) {
-                        FitSigmaTemp = stod(SliceParam);
+                    while (getline(ss2, SliceParam, ':')) {
+                        if (count == 0) {
+                            SliceNumberTemp = stoi(SliceParam);
+                        } else if (count == 1) {
+                            SliceLowerBoundaryTemp = stod(SliceParam);
+                        } else if (count == 2) {
+                            SliceUpperBoundaryTemp = stod(SliceParam);
+                        } else if (count == 3) {
+                            FitMeanTemp = stod(SliceParam);
+                        } else if (count == 4) {
+                            FitSigmaTemp = stod(SliceParam);
+                        }
+
+                        count++;
                     }
 
-                    count++;
-                }
+                    DSCuts TempFitCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", FitMeanTemp, -9999, FitSigmaTemp);
+                    TempFitCut.SetSliceLowerb(SliceLowerBoundaryTemp);
+                    TempFitCut.SetSliceUpperb(SliceUpperBoundaryTemp);
+                    TempFitCut.SetSliceNumber(SliceNumberTemp);
 
-                DSCuts TempFitCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", FitMeanTemp, -9999, FitSigmaTemp);
-                TempFitCut.SetSliceLowerb(SliceLowerBoundaryTemp);
-                TempFitCut.SetSliceUpperb(SliceUpperBoundaryTemp);
-                TempFitCut.SetSliceNumber(SliceNumberTemp);
+                    Loaded_Res_Slices_FitVar.push_back(TempFitCut);
+                } else if (findSubstring(parameter, "hist_Slice_#")) {
+                    // get cut values
+                    ss >> parameter2;
+                    stringstream ss2(parameter2);
+                    string SliceParam;
+                    int count = 0; // parameter number
 
-                Loaded_Res_Slices_FitVar.push_back(TempFitCut);
-            } else if (findSubstring(parameter, "hist_Slice_#")) {
-                // get cut values
-                ss >> parameter2;
-                stringstream ss2(parameter2);
-                string SliceParam;
-                int count = 0; // parameter number
+                    string CutNameTemp = parameter;
+                    int SliceNumberTemp;
+                    double SliceLowerBoundaryTemp, SliceUpperBoundaryTemp, HistMeanTemp, HistSigmaTemp;
 
-                string CutNameTemp = parameter;
-                int SliceNumberTemp;
-                double SliceLowerBoundaryTemp, SliceUpperBoundaryTemp, HistMeanTemp, HistSigmaTemp;
+                    while (getline(ss2, SliceParam, ':')) {
+                        if (count == 0) {
+                            SliceNumberTemp = stoi(SliceParam);
+                        } else if (count == 1) {
+                            SliceLowerBoundaryTemp = stod(SliceParam);
+                        } else if (count == 2) {
+                            SliceUpperBoundaryTemp = stod(SliceParam);
+                        } else if (count == 3) {
+                            HistMeanTemp = stod(SliceParam);
+                        } else if (count == 4) {
+                            HistSigmaTemp = stod(SliceParam);
+                        }
 
-                while (getline(ss2, SliceParam, ':')) {
-                    if (count == 0) {
-                        SliceNumberTemp = stoi(SliceParam);
-                    } else if (count == 1) {
-                        SliceLowerBoundaryTemp = stod(SliceParam);
-                    } else if (count == 2) {
-                        SliceUpperBoundaryTemp = stod(SliceParam);
-                    } else if (count == 3) {
-                        HistMeanTemp = stod(SliceParam);
-                    } else if (count == 4) {
-                        HistSigmaTemp = stod(SliceParam);
+                        count++;
                     }
 
-                    count++;
+                    DSCuts TempHistCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", HistMeanTemp, -9999, HistSigmaTemp);
+                    TempHistCut.SetSliceLowerb(SliceLowerBoundaryTemp);
+                    TempHistCut.SetSliceUpperb(SliceUpperBoundaryTemp);
+                    TempHistCut.SetSliceNumber(SliceNumberTemp);
+
+                    Loaded_Res_Slices_HistVar.push_back(TempHistCut);
                 }
-
-                DSCuts TempHistCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", HistMeanTemp, -9999, HistSigmaTemp);
-                TempHistCut.SetSliceLowerb(SliceLowerBoundaryTemp);
-                TempHistCut.SetSliceUpperb(SliceUpperBoundaryTemp);
-                TempHistCut.SetSliceNumber(SliceNumberTemp);
-
-                Loaded_Res_Slices_HistVar.push_back(TempHistCut);
             } else {
                 ss >> parameter2;
                 stringstream ss2(parameter2);

@@ -242,7 +242,7 @@ public:
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory,
-                          const bool &Load_correction = true, const bool &Load_smearing = true);
+                          const bool &Load_correction = false, const bool &Load_smearing = false);
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
