@@ -230,10 +230,10 @@ void EventAnalyser() {
     bool apply_Electron_beta_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = false; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
@@ -397,7 +397,8 @@ void EventAnalyser() {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
             } else {
-                Efficiency_Status = "Eff1";
+//                Efficiency_Status = "Eff1";
+                Efficiency_Status = "Eff1_NOnBetaTh";
             }
         }
         //</editor-fold>
