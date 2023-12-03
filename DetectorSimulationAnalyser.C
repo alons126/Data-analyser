@@ -239,7 +239,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = true;
     bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -8558,6 +8558,15 @@ void EventAnalyser() {
     int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_with_exactly_1e_from_file = 0, num_of_events_more_then_1e = 0;
     int num_of_QEL_events_1e_cut = 0, num_of_MEC_events_1e_cut = 0, num_of_RES_events_1e_cut = 0, num_of_DIS_events_1e_cut = 0;
 
+    /* Counting FD neurton and photon hits in the ECAL */
+    //TODO: rename variable (not crucial)
+    int num_of_events_with_nFD_CLA12 = 0;
+    int num_of_events_with_nFD_CLA12_PCAL = 0, num_of_events_with_nFD_CLA12_ECIN = 0, num_of_events_with_nFD_CLA12_ECOUT = 0, num_of_events_with_nFD_CLA12_EC = 0;
+    int num_of_events_with_phFD_CLA12 = 0;
+    int num_of_events_with_phFD_CLA12_PCAL = 0, num_of_events_with_phFD_CLA12_ECIN = 0, num_of_events_with_phFD_CLA12_ECOUT = 0, num_of_events_with_phFD_CLA12_EC = 0;
+
+    int num_of_events_1n_in_FD = 0, num_of_events_2n_in_FD = 0, num_of_events_3n_in_FD = 0, num_of_events_Xn_in_FD = 0;
+
     int num_of_events_1e1p_all = 0, num_of_events_with_1e1p = 0;
 
     int num_of_events_1p_inFD = 0;
@@ -8572,13 +8581,6 @@ void EventAnalyser() {
 
     int num_of_events_nFDpCD = 0;
     int num_of_events_nFDpCD_AV = 0;
-
-    /* Counting FD neurton and photon hits in the ECAL */
-    //TODO: rename variable (not crucial)
-    int num_of_events_with_nFD_CLA12 = 0;
-    int num_of_events_with_nFD_CLA12_PCAL = 0, num_of_events_with_nFD_CLA12_ECIN = 0, num_of_events_with_nFD_CLA12_ECOUT = 0, num_of_events_with_nFD_CLA12_EC = 0;
-    int num_of_events_with_phFD_CLA12 = 0;
-    int num_of_events_with_phFD_CLA12_PCAL = 0, num_of_events_with_phFD_CLA12_ECIN = 0, num_of_events_with_phFD_CLA12_ECOUT = 0, num_of_events_with_phFD_CLA12_EC = 0;
     //</editor-fold>
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -8660,6 +8662,19 @@ void EventAnalyser() {
         FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_nucleon_cuts);
         int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts); // FD neutron (with momentum th.) with maximal momentum (ORIGINAL!)
 //        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts, apply_nucleon_SmearAndShift, nRes); // FD neutron (with momentum th.) with maximal momentum after correction
+
+        //<editor-fold desc="Counting events with good FD neutrons">
+        if (NeutronsFD_ind.size() == 1) {
+            ++num_of_events_1n_in_FD;
+        } else if (NeutronsFD_ind.size() == 2) {
+            ++num_of_events_2n_in_FD;
+        } else if (NeutronsFD_ind.size() == 3) {
+            ++num_of_events_3n_in_FD;
+        } else if (NeutronsFD_ind.size() > 3) {
+            ++num_of_events_Xn_in_FD;
+        }
+        //</editor-fold>
+
         //</editor-fold>
 
         //<editor-fold desc="Setting up event selection">
@@ -9037,7 +9052,7 @@ void EventAnalyser() {
             //<editor-fold desc="Setting up 1n TL event selection">
             // 1n = any number of id. FD neutron (we look at the leading nFD) & no id. protons:
             bool one_FDneutron_1n = ((TL_NeutronsFD_ind_mom_max != -1) &&                                     // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
-                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_max_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_ind_mom_max, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool no_protons_1n = ((TL_ProtonsCD_mom_ind.size() == 0) && (TL_ProtonsFD_mom_ind.size() == 0));
             bool FDneutron_wFC_1p = Leading_Neutron_inFD_wFC;                                                                // leading nFD is within fiducial cuts (wFC)
             TL_Event_Selection_1n = (TL_Basic_ES && one_FDneutron_1n && no_protons_1n && FDneutron_wFC_1p);
@@ -9058,7 +9073,7 @@ void EventAnalyser() {
             bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
             bool no_FDproton_nFDpCD = (TL_ProtonsFD_mom_ind.size() == 0);
             bool one_FDNeutron_nFDpCD = ((TL_NeutronsFD_ind_mom_max != -1) &&                                 // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
-                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_max_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_ind_mom_max, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool FDneutron_wFC_nFDpCD = Leading_Neutron_inFD_wFC;                                                            // leading nFD is within fiducial cuts (wFC)
             TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && no_FDproton_nFDpCD && one_FDNeutron_nFDpCD && FDneutron_wFC_nFDpCD);
             //</editor-fold>
@@ -9239,10 +9254,19 @@ void EventAnalyser() {
                                 hPhi_n_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
 
                                 if (n_inFD) {
-                                    hP_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
-                                    hTheta_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
-                                    hPhi_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
-                                    hTheta_nFD_vs_Phi_nFD_truth_nFDpCD.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+                                    if (ES_by_leading_FDneutron) {
+                                        if ((TL_NeutronsFD_ind_mom_max != -1) && (i == TL_NeutronsFD_ind_mom_max)) {
+                                            hP_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                            hTheta_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+                                            hPhi_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+                                            hTheta_nFD_vs_Phi_nFD_truth_nFDpCD.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+                                        }
+                                    } else {
+                                        hP_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+                                        hTheta_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+                                        hPhi_nFD_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+                                        hTheta_nFD_vs_Phi_nFD_truth_nFDpCD.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+                                    }
                                 }
                             }
 
@@ -20578,6 +20602,12 @@ void EventAnalyser() {
         myLogFile << "num_of_events_with_phFD_CLA12_ECOUT:\t" << num_of_events_with_phFD_CLA12_ECOUT << "\n";
         myLogFile << "num_of_events_with_phFD_CLA12_EC:\t" << num_of_events_with_phFD_CLA12_EC << "\n\n";
     }
+
+    myLogFile << "-- Counting events with FD neutrons ---------------------------------------\n";
+    myLogFile << "#(events) w/ 1 FD neutrons:\t\t" << num_of_events_1n_in_FD << "\n";
+    myLogFile << "#(events) w/ 2 FD neutrons:\t\t" << num_of_events_2n_in_FD << "\n";
+    myLogFile << "#(events) w/ 3 FD neutrons:\t\t" << num_of_events_3n_in_FD << "\n";
+    myLogFile << "#(events) w/ more than 3 FD neutrons:\t" << num_of_events_Xn_in_FD << "\n\n";
 
     myLogFile << "-- 1e1p event counts ------------------------------------------------------\n";
     myLogFile << "#(events) w/ 1e1p:\t\t\t\t" << num_of_events_with_1e1p << "\n\n";

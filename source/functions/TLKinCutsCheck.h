@@ -39,6 +39,7 @@
 
 using namespace std;
 
+/* TLKinCutsCheck for a general vector of particles */
 bool TLKinCutsCheck(const std::unique_ptr<clas12::clas12reader> &c12, bool apply_kinematical_cuts, const vector<int> &FD_nucleon,
                     const DSCuts &FD_nucleon_theta_cut, const DSCuts &FD_nucleon_momentum_cut) {
     auto mcpbank = c12->mcparts();
@@ -64,6 +65,37 @@ bool TLKinCutsCheck(const std::unique_ptr<clas12::clas12reader> &c12, bool apply
         }
 
         return true;
+    }
+}
+
+/* TLKinCutsCheck for leading FD neutrons */
+bool TLKinCutsCheck(const std::unique_ptr<clas12::clas12reader> &c12, bool apply_kinematical_cuts, const int TL_NeutronsFD_ind_mom_max,
+                    const DSCuts &FD_nucleon_theta_cut, const DSCuts &FD_nucleon_momentum_cut) {
+    auto mcpbank = c12->mcparts();
+
+    if (!apply_kinematical_cuts) {
+        return true;
+    } else {
+        if (TL_NeutronsFD_ind_mom_max == -1) {
+            return false;
+        } else {
+            mcpbank->setEntry(TL_NeutronsFD_ind_mom_max);
+
+            double Particle_TL_Momentum = rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz());
+            double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
+            double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
+
+            bool Pass_FD_nucleon_momentum_cuts = ((Particle_TL_Momentum >= FD_nucleon_momentum_cut.GetLowerCutConst()) &&
+                                                  (Particle_TL_Momentum <= FD_nucleon_momentum_cut.GetUpperCutConst()));
+            bool Pass_FD_nucleon_theta_cuts = ((Particle_TL_Theta >= FD_nucleon_theta_cut.GetLowerCutConst()) &&
+                                               (Particle_TL_Theta <= FD_nucleon_theta_cut.GetUpperCutConst()));
+
+            if (Pass_FD_nucleon_theta_cuts && Pass_FD_nucleon_momentum_cuts) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }
 
