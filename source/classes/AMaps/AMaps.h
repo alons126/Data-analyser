@@ -245,14 +245,18 @@ public:
     void ReadAMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
                         const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<int>>> &Loaded_Particle_AMap_Slices);
 
-    void ReadAMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
+// ReadAMapSlices function ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ReadWMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
                         const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<double>>> &Loaded_Particle_WMap_Slices);
 
 // ReadAMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_AMap);
 
-    void ReadAMap(const char *filename, vector<vector<double>> &Loaded_particle_WMap);
+// ReadWMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ReadWMap(const char *filename, vector<vector<double>> &Loaded_particle_WMap);
 
 // MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
 

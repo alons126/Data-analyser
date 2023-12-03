@@ -239,7 +239,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = true;
     bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -19744,14 +19744,18 @@ void EventAnalyser() {
         hProtonAMapBC.hDrawAndSave(SampleName, c1, plots, true);
         hReco_P_pFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hTL_P_pFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hReco_P_pFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hTL_P_pFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hReco_P_pFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(),
+                                       0, false);
+        hTL_P_pFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(),
+                                     0, false);
 
         hNeutronAMapBC.hDrawAndSave(SampleName, c1, plots, true);
         hReco_P_nFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
         hTL_P_nFD_AMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
-        hReco_P_nFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
-        hTL_P_nFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hReco_P_nFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(),
+                                       0, false);
+        hTL_P_nFD_WMaps.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(),
+                                     0, false);
 
         hNucleonAMapBC.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>

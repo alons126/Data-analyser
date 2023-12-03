@@ -345,11 +345,11 @@ AMaps::AMaps(const string &AcceptanceMapsDirectory, const string &SampleName) {
 
     /* Load separate maps */
     ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Electron", Loaded_ElectronMomBinsLimits, Loaded_e_AMap_Slices);
-    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Electron", Loaded_ElectronMomBinsLimits, Loaded_e_WMap_Slices);
+    ReadWMapSlices(SampleName, AcceptanceMapsDirectory, "Electron", Loaded_ElectronMomBinsLimits, Loaded_e_WMap_Slices);
     ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Proton", Loaded_PBinsLimits, Loaded_p_AMap_Slices);
-    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Proton", Loaded_PBinsLimits, Loaded_p_WMap_Slices);
+    ReadWMapSlices(SampleName, AcceptanceMapsDirectory, "Proton", Loaded_PBinsLimits, Loaded_p_WMap_Slices);
     ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Neutron", Loaded_PBinsLimits, Loaded_n_AMap_Slices);
-    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Neutron", Loaded_PBinsLimits, Loaded_n_WMap_Slices);
+    ReadWMapSlices(SampleName, AcceptanceMapsDirectory, "Neutron", Loaded_PBinsLimits, Loaded_n_WMap_Slices);
     ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Nucleon", Loaded_PBinsLimits, Loaded_nuc_AMap_Slices);
 
     /* Load combined maps */
@@ -1668,7 +1668,7 @@ void AMaps::ReadAMapLimits(const char *filename, vector<vector<double>> &Loaded_
 }
 //</editor-fold>
 
-// ReadAMapSlices function ----------------------------------------------------------------------------------------------------------------------------------------------
+// ReadAMapSlices function (AMaps) --------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadAMapSlices function (AMaps)">
 void AMaps::ReadAMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
@@ -1699,8 +1699,10 @@ void AMaps::ReadAMapSlices(const string &SampleName, const string &AcceptanceMap
 }
 //</editor-fold>
 
-//<editor-fold desc="ReadAMapSlices function (WMaps)">
-void AMaps::ReadAMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
+// ReadWMapSlices function (WMaps) --------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ReadWMapSlices function (WMaps)">
+void AMaps::ReadWMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
                            const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<double>>> &Loaded_Particle_WMaps_Slices) {
     string ParticleShort;
 
@@ -1721,14 +1723,14 @@ void AMaps::ReadAMapSlices(const string &SampleName, const string &AcceptanceMap
                               to_string_with_precision(Loaded_particle_limits.at(Slice).at(0), 2) + "_to_" +
                               to_string_with_precision(Loaded_particle_limits.at(Slice).at(1), 2) + ".par";
 
-        ReadAMap((AcceptanceMapsDirectory + SampleName + "/" + TempFileName).c_str(), Loaded_Particle_WMaps_TempSlice);
+        ReadWMap((AcceptanceMapsDirectory + SampleName + "/" + TempFileName).c_str(), Loaded_Particle_WMaps_TempSlice);
 
         Loaded_Particle_WMaps_Slices.push_back(Loaded_Particle_WMaps_TempSlice);
     }
 }
 //</editor-fold>
 
-// ReadAMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
+// ReadAMap function (AMaps) --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadAMap function (AMaps)">
 /* A function that reads AMaps */
@@ -1766,10 +1768,12 @@ void AMaps::ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_
 }
 //</editor-fold>
 
-//<editor-fold desc="ReadAMap function (WMaps)">
+// ReadWMap function (WMaps) --------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ReadWMap function (WMaps)">
 /* A function that reads WMaps */
 
-void AMaps::ReadAMap(const char *filename, vector<vector<double>> &Loaded_particle_WMaps) {
+void AMaps::ReadWMap(const char *filename, vector<vector<double>> &Loaded_particle_WMaps) {
     ifstream infile;
     infile.open(filename);
 
@@ -1796,8 +1800,7 @@ void AMaps::ReadAMap(const char *filename, vector<vector<double>> &Loaded_partic
             }
         }
     } else {
-        cout << "\n\nAMaps::ReadAMap: file:\n" << filename << "\nwas not found! Exiting...\n\n", exit(0);
-//        cout << "\n\nAMaps::ReadAMap: file not found! Exiting...\n\n", exit(0);
+        cout << "\n\nAMaps::ReadWMap: file:\n" << filename << "\nwas not found! Exiting...\n\n", exit(0);
     }
 }
 //</editor-fold>
@@ -1906,7 +1909,7 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
 }
 //</editor-fold>
 
-// GetWeight function --------------------------------------------------------------------------------------------------------------------------------------------
+// GetWeight function ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetWeight function">
 double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, double Momentum, double Theta, double Phi) {
