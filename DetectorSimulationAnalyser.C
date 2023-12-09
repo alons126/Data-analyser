@@ -145,10 +145,13 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicated histograms?)
-    bool generate_AMaps = false; // Generate acceptance maps
+    bool generate_AMaps = false;             // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
+    bool Electron_single_slice_test = false; // keep as false for normal runs!
+    bool Nucleon_single_slice_test = false;  // keep as false for normal runs!
+    vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
 
     /* Neutron resolution setup */
     /* Run order:
@@ -397,6 +400,7 @@ void EventAnalyser() {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
             } else {
+//                Efficiency_Status = "Eff1_AMaps_nucOnly_S7";
                 Efficiency_Status = "Eff1";
             }
         }
@@ -867,7 +871,7 @@ void EventAnalyser() {
 
     if (!generate_AMaps) { AMaps_plots = false; }
 
-    if (!apply_nucleon_cuts) { FSR_1D_plots = FSR_2D_plots = false; }
+    if (!apply_nucleon_cuts || (Electron_single_slice_test || Nucleon_single_slice_test)) { FSR_1D_plots = FSR_2D_plots = false; }
 
 //    if (!plot_and_fit_MomRes) { Resolution_plots = false; }
     //</editor-fold>
@@ -1101,8 +1105,8 @@ void EventAnalyser() {
         wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, directories.AMaps_Directory_map["WMaps_1e_cut_Directory"],
                       NumberNucOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
     } else {
-        aMaps = AMaps(AcceptanceMapsDirectory, VaringSampleName);
-        wMaps = AMaps(AcceptanceWeightsDirectory, VaringSampleName);
+        aMaps = AMaps(AcceptanceMapsDirectory, VaringSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
+        wMaps = AMaps(AcceptanceWeightsDirectory, VaringSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
     }
 
     cout << " done.\n\n";
@@ -20082,7 +20086,10 @@ void EventAnalyser() {
     myLogFile << "generate_AMaps = " << BoolToString(generate_AMaps) << "\n";
     myLogFile << "TL_with_one_reco_electron = " << BoolToString(TL_with_one_reco_electron) << "\n";
     myLogFile << "reformat_e_bins = " << BoolToString(reformat_e_bins) << "\n";
-    myLogFile << "equi_P_e_bins = " << BoolToString(equi_P_e_bins) << "\n\n";
+    myLogFile << "equi_P_e_bins = " << BoolToString(equi_P_e_bins) << "\n";
+    myLogFile << "Electron_single_slice_test = " << BoolToString(Electron_single_slice_test) << "\n";
+    myLogFile << "Nucleon_single_slice_test = " << BoolToString(Nucleon_single_slice_test) << "\n";
+    myLogFile << "TestSlices = {" << TestSlices.at(0) << ", " << TestSlices.at(1) << ", " << TestSlices.at(2) << "}\n\n";
 
     myLogFile << "-- nRES settings ----------------------------------------------------------\n";
     myLogFile << "plot_and_fit_MomRes = " << BoolToString(plot_and_fit_MomRes) << "\n";

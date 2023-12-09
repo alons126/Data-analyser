@@ -147,6 +147,11 @@ private:
     TH2D *LoadedNucleonAMap;
 
     string SName;
+
+//    bool e_single_slice_test, nuc_single_slice_test;
+    bool e_single_slice_test = false;   // keep as false for normal runs! (false by defult)
+    bool nuc_single_slice_test = false; // keep as false for normal runs! (false by defult)
+    vector<int> Slices2Test;
 public:
 
 // default constructor --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -160,7 +165,8 @@ public:
           int nOfMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75, int hesNumOfXBins = 100, int hesNumOfYBins = 100);
 
     // AMaps loading constructor:
-    AMaps(const string &AcceptanceMapsDirectory, const string &SampleName);
+    AMaps(const string &AcceptanceMapsDirectory, const string &SampleName,
+          const bool &Electron_single_slice_test, const bool &Nucleon_single_slice_test, const vector<int> &TestSlices);
 
 // SetBins functions ----------------------------------------------------------------------------------------------------------------------------------------------------
 

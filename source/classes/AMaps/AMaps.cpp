@@ -338,7 +338,8 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
 //</editor-fold>
 
 //<editor-fold desc="AMaps loading constructor">
-AMaps::AMaps(const string &AcceptanceMapsDirectory, const string &SampleName) {
+AMaps::AMaps(const string &AcceptanceMapsDirectory, const string &SampleName,
+             const bool &Electron_single_slice_test, const bool &Nucleon_single_slice_test, const vector<int> &TestSlices) {
     /* Load slices and their limits */
     ReadAMapLimits((AcceptanceMapsDirectory + SampleName + "/e_AMap_by_slice/e_slice_limits.par").c_str(), Loaded_ElectronMomBinsLimits);
     ReadAMapLimits((AcceptanceMapsDirectory + SampleName + "/p_AMap_by_slice/p_slice_limits.par").c_str(), Loaded_PBinsLimits);
@@ -362,6 +363,9 @@ AMaps::AMaps(const string &AcceptanceMapsDirectory, const string &SampleName) {
     HistElectronSliceNumOfYBins = 100;  // 100 by Default
     HistNucSliceNumOfXBins = 75;  // 100 by Default
     HistNucSliceNumOfYBins = 75;  // 100 by Default
+
+    e_single_slice_test = Electron_single_slice_test, nuc_single_slice_test = Nucleon_single_slice_test;
+    Slices2Test = TestSlices;
 }
 //</editor-fold>
 
@@ -1703,7 +1707,7 @@ void AMaps::ReadAMapSlices(const string &SampleName, const string &AcceptanceMap
 
 //<editor-fold desc="ReadWMapSlices function (WMaps)">
 void AMaps::ReadWMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
-                           const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<double>>> &Loaded_Particle_WMaps_Slices) {
+                           const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<double>>> &Loaded_Particle_WMap_Slices) {
     string ParticleShort;
 
     if (isElectron(Particle)) {
@@ -1717,15 +1721,15 @@ void AMaps::ReadWMapSlices(const string &SampleName, const string &AcceptanceMap
     }
 
     for (int Slice = 0; Slice < Loaded_particle_limits.size(); Slice++) {
-        vector<vector<double>> Loaded_Particle_WMaps_TempSlice;
+        vector<vector<double>> Loaded_Particle_WMap_TempSlice;
 
         string TempFileName = ParticleShort + "_WMap_by_slice/" + ParticleShort + "_WMap_file_from_" +
                               to_string_with_precision(Loaded_particle_limits.at(Slice).at(0), 2) + "_to_" +
                               to_string_with_precision(Loaded_particle_limits.at(Slice).at(1), 2) + ".par";
 
-        ReadWMap((AcceptanceMapsDirectory + SampleName + "/" + TempFileName).c_str(), Loaded_Particle_WMaps_TempSlice);
+        ReadWMap((AcceptanceMapsDirectory + SampleName + "/" + TempFileName).c_str(), Loaded_Particle_WMap_TempSlice);
 
-        Loaded_Particle_WMaps_Slices.push_back(Loaded_Particle_WMaps_TempSlice);
+        Loaded_Particle_WMap_Slices.push_back(Loaded_Particle_WMap_TempSlice);
     }
 }
 //</editor-fold>
@@ -1809,8 +1813,21 @@ void AMaps::ReadWMap(const char *filename, vector<vector<double>> &Loaded_partic
 
 //<editor-fold desc="MatchAngToHitMap function">
 bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi, bool NucleonOverlappingFC) {
+//    bool e_single_slice_test = false;   // keep as false for normal runs!
+//    bool nuc_single_slice_test = false; // keep as false for normal runs!
+
+    int e_InitialSlice = 0, e_FinalSlice = Loaded_ElectronMomBinsLimits.size();
+    int p_InitialSlice = 0, p_FinalSlice = Loaded_PBinsLimits.size(), n_InitialSlice = 0, n_FinalSlice = Loaded_PBinsLimits.size();
+
+    int e_TestSlice = Slices2Test.at(0), p_TestSlice = Slices2Test.at(1), n_TestSlice = Slices2Test.at(2);
+
+    if (e_single_slice_test) { e_InitialSlice = e_TestSlice - 1, e_FinalSlice = e_TestSlice; }
+
+    if (nuc_single_slice_test) { p_InitialSlice = p_TestSlice - 1, p_FinalSlice = p_TestSlice, n_InitialSlice = n_TestSlice - 1, n_FinalSlice = n_TestSlice; }
+
     if (isElectron(Particle)) {
-        for (int Slice = 0; Slice < Loaded_ElectronMomBinsLimits.size(); Slice++) {
+        for (int Slice = e_InitialSlice; Slice < e_FinalSlice; Slice++) {
+//        for (int Slice = 0; Slice < Loaded_ElectronMomBinsLimits.size(); Slice++) {
             if (Momentum >= Loaded_ElectronMomBinsLimits.at(Slice).at(0) && Momentum <= Loaded_ElectronMomBinsLimits.at(Slice).at(1)) {
                 for (int i = 0; i < HistElectronSliceNumOfYBins; i++) {
                     double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / HistElectronSliceNumOfYBins;
@@ -1836,7 +1853,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
             } // end of if the right momentum
         }
     } else if (isProton(Particle)) {
-        for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
+        for (int Slice = p_InitialSlice; Slice < p_FinalSlice; Slice++) {
+//        for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
             if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
                 for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
                     double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (HistNucSliceNumOfYBins);
@@ -1870,7 +1888,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
             } // end of if the right momentum
         }
     } else if (isNeutron(Particle)) {
-        for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
+        for (int Slice = n_InitialSlice; Slice < n_FinalSlice; Slice++) {
+//        for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
             if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
                 for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
                     double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (HistNucSliceNumOfYBins);
