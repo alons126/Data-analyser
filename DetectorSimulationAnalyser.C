@@ -145,7 +145,7 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicated histograms?)
-    bool generate_AMaps = true;             // Generate acceptance maps
+    bool generate_AMaps = false;             // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -239,10 +239,10 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -400,7 +400,6 @@ void EventAnalyser() {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
             } else {
-//                Efficiency_Status = "Eff1_AMaps_nucOnly_S7";
                 Efficiency_Status = "Eff1";
             }
         }
