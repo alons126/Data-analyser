@@ -145,7 +145,7 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     //TODO: fix potential memory leak (duplicated histograms?)
-    bool generate_AMaps = false;             // Generate acceptance maps
+    bool generate_AMaps = true;             // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -239,10 +239,10 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_weights = false;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -1100,9 +1100,9 @@ void EventAnalyser() {
     AMaps aMaps, wMaps;
 
     if (generate_AMaps) {
-        aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, directories.AMaps_Directory_map["AMaps_1e_cut_Directory"],
+        aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"],
                       NumberNucOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
-        wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, directories.AMaps_Directory_map["WMaps_1e_cut_Directory"],
+        wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"],
                       NumberNucOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
     } else {
         aMaps = AMaps(AcceptanceMapsDirectory, VaringSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
@@ -8724,22 +8724,23 @@ void EventAnalyser() {
         if (ES_by_leading_FDneutron) {
 
             //<editor-fold desc="Safety checks that leading nFD is neutron by definition">
-            /* Safety check that we are looking at Leading nFD */
-            bool LeadingnFDPCAL = (n_1n->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
-            bool LeadingnFDECIN = (n_1n->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
-            bool LeadingnFDECOUT = (n_1n->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+            if (NeutronsFD_ind_mom_max != -1) {
+                bool LeadingnFDPCAL = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
+                bool LeadingnFDECIN = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+                bool LeadingnFDECOUT = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
-            if (allParticles[NeutronsFD_ind_mom_max]->getRegion() != FD) {
-                cout << "\n\nLeading reco nFD check: Leading nFD is not in the FD! Exiting...\n\n", exit(0);
+                if (allParticles[NeutronsFD_ind_mom_max]->getRegion() != FD) {
+                    cout << "\n\nLeading reco nFD check: Leading nFD is not in the FD! Exiting...\n\n", exit(0);
+                }
+
+                if (!((allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 2112) || (allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 22))) {
+                    cout << "\n\nLeading reco nFD check: A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid() << ")! Exiting...\n\n", exit(0);
+                }
+
+                if (LeadingnFDPCAL) { cout << "\n\nLeading reco nFD check: neutron hit in PCAL! Exiting...\n\n", exit(0); }
+
+                if (!(LeadingnFDECIN || LeadingnFDECOUT)) { cout << "\n\nLeading reco nFD check: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
             }
-
-            if (!((allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 2112) || (allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 22))) {
-                cout << "\n\nLeading reco nFD check: A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid() << ")! Exiting...\n\n", exit(0);
-            }
-
-            if (LeadingnFDPCAL) { cout << "\n\nLeading reco nFD check: neutron hit in PCAL! Exiting...\n\n", exit(0); }
-
-            if (!(LeadingnFDECIN || LeadingnFDECOUT)) { cout << "\n\nLeading reco nFD check: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
             //</editor-fold>
 
             //<editor-fold desc="Safty check for leading nFD assignment">

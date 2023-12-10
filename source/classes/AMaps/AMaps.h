@@ -161,7 +161,7 @@ public:
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // AMaps generation constructor:
-    AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath = "./",
+    AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &AMapsMode = "", const string &SavePath = "./",
           int nOfMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75, int hesNumOfXBins = 100, int hesNumOfYBins = 100);
 
     // AMaps loading constructor:
