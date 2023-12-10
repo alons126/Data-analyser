@@ -8720,15 +8720,36 @@ void EventAnalyser() {
         /* Safety check that allParticles.size(), Nf are the same */
         if (allParticles.size() != Nf) { cout << "\n\nallParticles.size() is different than Nf! Exiting...\n\n", exit(EXIT_FAILURE); }
 
-        /* Safety check for leading FD neutron */
+        //<editor-fold desc="Safety checks for leading FD neutron">
         if (ES_by_leading_FDneutron) {
+
+            //<editor-fold desc="Safety checks that leading nFD is neutron by definition">
+            /* Safety check that we are looking at Leading nFD */
+            bool LeadingnFDPCAL = (n_1n->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
+            bool LeadingnFDECIN = (n_1n->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+            bool LeadingnFDECOUT = (n_1n->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+
+            if (allParticles[NeutronsFD_ind_mom_max]->getRegion() != FD) {
+                cout << "\n\nLeading reco nFD check: Leading nFD is not in the FD! Exiting...\n\n", exit(0);
+            }
+
+            if (!((allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 2112) || (allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 22))) {
+                cout << "\n\nLeading reco nFD check: A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid() << ")! Exiting...\n\n", exit(0);
+            }
+
+            if (LeadingnFDPCAL) { cout << "\n\nLeading reco nFD check: neutron hit in PCAL! Exiting...\n\n", exit(0); }
+
+            if (!(LeadingnFDECIN || LeadingnFDECOUT)) { cout << "\n\nLeading reco nFD check: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
+            //</editor-fold>
+
+            //<editor-fold desc="Safty check for leading nFD assignment">
             if ((NeutronsFD_ind.size() > 0) && (NeutronsFD_ind_mom_max == -1)) {
-                cout << "\n\nLeading reco nFD check: leading was not assigned! Exiting...\n\n", exit(EXIT_FAILURE);
+                cout << "\n\nLeading reco nFD check: leading was not assigned! Exiting...\n\n", exit(0);
             }
 
             if (NeutronsFD_ind.size() == 1) {
                 if (NeutronsFD_ind.at(0) != NeutronsFD_ind_mom_max) {
-                    cout << "\n\nLeading reco nFD check: leading was assigned incorrectly! Exiting...\n\n", exit(EXIT_FAILURE);
+                    cout << "\n\nLeading reco nFD check: leading was assigned incorrectly! Exiting...\n\n", exit(0);
                 }
             } else if (NeutronsFD_ind.size() > 1) {
                 for (int &i: NeutronsFD_ind) {
@@ -8737,11 +8758,15 @@ void EventAnalyser() {
                     double dMomentum = Leading_neutron_momentum - Temp_neutron_momentum;
 
                     if (dMomentum < 0) {
-                        cout << "\n\nLeading reco nFD check: assigned nFD is not the leading! Exiting...\n\n", exit(EXIT_FAILURE);
+                        cout << "\n\nLeading reco nFD check: assigned nFD is not the leading! Exiting...\n\n", exit(0);
                     }
                 }
             }
+            //</editor-fold>
+
         }
+        //</editor-fold>
+
         //</editor-fold>
 
         //<editor-fold desc="Some event counts">
@@ -10930,6 +10955,20 @@ void EventAnalyser() {
                     bool hitECOUT_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
                     auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT;                                // find first layer of hit
 
+                    //<editor-fold desc="Safety checks that leading nFD is neutron by definition (AMaps & WMaps)">
+                    if (allParticles[NeutronsFD_ind_mom_max]->getRegion() != FD) {
+                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): Leading nFD is not in the FD! Exiting...\n\n", exit(0);
+                    }
+
+                    if (!((allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 2112) || (allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 22))) {
+                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid() << ")! Exiting...\n\n", exit(0);
+                    }
+
+                    if (hitPCAL_1e_cut) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): neutron hit in PCAL! Exiting...\n\n", exit(0); }
+
+                    if (!(hitECIN_1e_cut || hitECOUT_1e_cut)) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
+                    //</editor-fold>
+
                     if (allParticles[NeutronsFD_ind_mom_max]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
                         allParticles[NeutronsFD_ind_mom_max]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
 
@@ -10965,6 +11004,20 @@ void EventAnalyser() {
                     bool hitECIN_1e_cut = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
                     bool hitECOUT_1e_cut = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
                     auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT;           // find first layer of hit
+
+                    //<editor-fold desc="Safety checks that i-th nFD is neutron by definition (AMaps & WMaps)">
+                    if (allParticles[i]->getRegion() != FD) {
+                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): Leading nFD is not in the FD! Exiting...\n\n", exit(0);
+                    }
+
+                    if (!((allParticles[i]->par()->getPid() == 2112) || (allParticles[i]->par()->getPid() == 22))) {
+                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(0);
+                    }
+
+                    if (hitPCAL_1e_cut) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): neutron hit in PCAL! Exiting...\n\n", exit(0); }
+
+                    if (!(hitECIN_1e_cut || hitECOUT_1e_cut)) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
+                    //</editor-fold>
 
                     if (allParticles[i]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
                         allParticles[i]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
