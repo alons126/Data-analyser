@@ -144,7 +144,6 @@ void EventAnalyser() {
     const bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
-    //TODO: fix potential memory leak (duplicated histograms?)
     bool generate_AMaps = false;             // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
@@ -240,9 +239,9 @@ void EventAnalyser() {
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_weights = false;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 

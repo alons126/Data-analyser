@@ -69,7 +69,8 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
     string AMapsMode_TitleAddition;
 
     if (AMapsMode != "") {
-        AMapsMode_TitleAddition = " (" + AMapsMode + ")";
+        AMapsMode_TitleAddition = AMapsMode;
+//        AMapsMode_TitleAddition = " (" + AMapsMode + ")";
     } else {
         AMapsMode_TitleAddition = "";
     }
