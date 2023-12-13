@@ -131,7 +131,8 @@ void EventAnalyser() {
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
+    bool ZoomIn_On_mom_th_plots = false; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -397,7 +398,11 @@ void EventAnalyser() {
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
-                Efficiency_Status = "Eff2";
+                if (ZoomIn_On_mom_th_plots) {
+                    Efficiency_Status = "Eff2_ZoomIn";
+                } else {
+                    Efficiency_Status = "Eff2";
+                }
             } else {
                 Efficiency_Status = "Eff1";
             }
@@ -8732,7 +8737,8 @@ void EventAnalyser() {
                 }
 
                 if (!((allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 2112) || (allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 22))) {
-                    cout << "\n\nLeading reco nFD check: A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid() << ")! Exiting...\n\n", exit(0);
+                    cout << "\n\nLeading reco nFD check: A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid() << ")! Exiting...\n\n", exit(
+                            0);
                 }
 
                 if (LeadingnFDPCAL) { cout << "\n\nLeading reco nFD check: neutron hit in PCAL! Exiting...\n\n", exit(0); }
@@ -10960,12 +10966,14 @@ void EventAnalyser() {
                     }
 
                     if (!((allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 2112) || (allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 22))) {
-                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid() << ")! Exiting...\n\n", exit(0);
+                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid() << ")! Exiting...\n\n", exit(
+                                0);
                     }
 
                     if (hitPCAL_1e_cut) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): neutron hit in PCAL! Exiting...\n\n", exit(0); }
 
-                    if (!(hitECIN_1e_cut || hitECOUT_1e_cut)) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
+                    if (!(hitECIN_1e_cut ||
+                          hitECOUT_1e_cut)) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
                     //</editor-fold>
 
                     if (allParticles[NeutronsFD_ind_mom_max]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
@@ -11010,12 +11018,14 @@ void EventAnalyser() {
                     }
 
                     if (!((allParticles[i]->par()->getPid() == 2112) || (allParticles[i]->par()->getPid() == 22))) {
-                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(0);
+                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(
+                                0);
                     }
 
                     if (hitPCAL_1e_cut) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): neutron hit in PCAL! Exiting...\n\n", exit(0); }
 
-                    if (!(hitECIN_1e_cut || hitECOUT_1e_cut)) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
+                    if (!(hitECIN_1e_cut ||
+                          hitECOUT_1e_cut)) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
                     //</editor-fold>
 
                     if (allParticles[i]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
@@ -19125,28 +19135,35 @@ void EventAnalyser() {
         hP_e_truth_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_e_truth_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 
-//        DrawAndSaveEfficiencyPlots(SampleName, hP_e_truth_1e_cut_FD, hP_e_reco_1e_cut_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_e_truth_1e_cut_FD_ZOOMIN, hP_e_reco_1e_cut_FD_ZOOMIN, plots);
+        if (ZoomIn_On_mom_th_plots) {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_e_truth_1e_cut_FD_ZOOMIN, hP_e_reco_1e_cut_FD_ZOOMIN, plots);
+        } else {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_e_truth_1e_cut_FD, hP_e_reco_1e_cut_FD, plots);
+        }
 
         hP_p_truth_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_p_truth_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_p_truth_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_p_truth_1e_cut_CD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 
-//        DrawAndSaveEfficiencyPlots(SampleName, hP_p_truth_1e_cut_FD, hP_p_reco_1e_cut_FD, plots);
-//        DrawAndSaveEfficiencyPlots(SampleName, hP_p_truth_1e_cut_CD, hP_p_reco_1e_cut_CD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_p_truth_1e_cut_FD_ZOOMIN, hP_p_reco_1e_cut_FD_ZOOMIN, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_p_truth_1e_cut_CD_ZOOMIN, hP_p_reco_1e_cut_CD_ZOOMIN, plots);
+        if (ZoomIn_On_mom_th_plots) {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_p_truth_1e_cut_FD_ZOOMIN, hP_p_reco_1e_cut_FD_ZOOMIN, plots);
+            DrawAndSaveEfficiencyPlots(SampleName, hP_p_truth_1e_cut_CD_ZOOMIN, hP_p_reco_1e_cut_CD_ZOOMIN, plots);
+        } else {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_p_truth_1e_cut_FD, hP_p_reco_1e_cut_FD, plots);
+            DrawAndSaveEfficiencyPlots(SampleName, hP_p_truth_1e_cut_CD, hP_p_reco_1e_cut_CD, plots);
+        }
 
         hP_n_truth_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 //        hP_n_truth_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_n_truth_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 //        hP_n_truth_1e_cut_CD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 
-//        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1e_cut_FD, hP_n_reco_1e_cut_FD, plots);
-////        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1e_cut_CD, hP_n_reco_1e_cut_CD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1e_cut_FD_ZOOMIN, hP_n_reco_1e_cut_FD_ZOOMIN, plots);
-//        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1e_cut_CD_ZOOMIN, hP_n_reco_1e_cut_CD_ZOOMIN, plots);
+        if (ZoomIn_On_mom_th_plots) {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1e_cut_FD_ZOOMIN, hP_n_reco_1e_cut_FD_ZOOMIN, plots);
+        } else {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1e_cut_FD, hP_n_reco_1e_cut_FD, plots);
+        }
 
         hP_piplus_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_piplus_truth_1e_cut_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
@@ -19155,7 +19172,11 @@ void EventAnalyser() {
         hP_piplus_truth_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_piplus_truth_1e_cut_CD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 
-        DrawAndSaveEfficiencyPlots(SampleName, hP_piplus_truth_1e_cut_ZOOMIN, hP_piplus_reco_1e_cut_ZOOMIN, plots);
+        if (ZoomIn_On_mom_th_plots) {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_piplus_truth_1e_cut_ZOOMIN, hP_piplus_reco_1e_cut_ZOOMIN, plots);
+        } else {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_piplus_truth_1e_cut, hP_piplus_reco_1e_cut, plots);
+        }
 
         hP_piminus_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_piminus_truth_1e_cut_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
@@ -19164,7 +19185,11 @@ void EventAnalyser() {
         hP_piminus_truth_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_piminus_truth_1e_cut_CD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 
-        DrawAndSaveEfficiencyPlots(SampleName, hP_piminus_truth_1e_cut_ZOOMIN, hP_piminus_reco_1e_cut_ZOOMIN, plots);
+        if (ZoomIn_On_mom_th_plots) {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_piminus_truth_1e_cut_ZOOMIN, hP_piminus_reco_1e_cut_ZOOMIN, plots);
+        } else {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_piminus_truth_1e_cut, hP_piminus_reco_1e_cut, plots);
+        }
 
 //        hP_Kplus_truth_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 //        hP_Kplus_truth_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
@@ -19180,10 +19205,11 @@ void EventAnalyser() {
         hP_ph_truth_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 //        hP_ph_truth_1e_cut_CD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 
-//        DrawAndSaveEfficiencyPlots(SampleName, hP_ph_truth_1e_cut_FD, hP_ph_reco_1e_cut_FD, plots);
-////        DrawAndSaveEfficiencyPlots(SampleName, hP_ph_truth_1e_cut_CD, hP_ph_reco_1e_cut_CD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_ph_truth_1e_cut_FD_ZOOMIN, hP_ph_reco_1e_cut_FD_ZOOMIN, plots);
-//        DrawAndSaveEfficiencyPlots(SampleName, hP_ph_truth_1e_cut_CD_ZOOMIN, hP_ph_reco_1e_cut_CD_ZOOMIN, plots);
+        if (ZoomIn_On_mom_th_plots) {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_ph_truth_1e_cut_FD_ZOOMIN, hP_ph_reco_1e_cut_FD_ZOOMIN, plots);
+        } else {
+            DrawAndSaveEfficiencyPlots(SampleName, hP_ph_truth_1e_cut_FD, hP_ph_reco_1e_cut_FD, plots);
+        }
         //</editor-fold>
 
         //</editor-fold>
@@ -20123,6 +20149,7 @@ void EventAnalyser() {
     myLogFile << "-- Truth level calculation setup ------------------------------------------\n";
     myLogFile << "calculate_truth_level = " << BoolToString(calculate_truth_level) << "\n";
     myLogFile << "fill_TL_plots = " << BoolToString(fill_TL_plots) << "\n";
+    myLogFile << "ZoomIn_On_mom_th_plots = " << BoolToString(ZoomIn_On_mom_th_plots) << "\n";
     myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n\n";
 
     myLogFile << "limless_mom_eff_plots = " << BoolToString(limless_mom_eff_plots) << "\n\n";
