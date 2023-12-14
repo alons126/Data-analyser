@@ -239,7 +239,7 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
+    bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
     bool apply_nucleon_SmearAndShift = false;
@@ -401,7 +401,8 @@ void EventAnalyser() {
                 if (ZoomIn_On_mom_th_plots) {
                     Efficiency_Status = "Eff2_ZoomIn";
                 } else {
-                    Efficiency_Status = "Eff2";
+//                    Efficiency_Status = "Eff2_TEST2";
+                    Efficiency_Status = "Eff2_111_START";
                 }
             } else {
                 Efficiency_Status = "Eff1";
@@ -8723,6 +8724,33 @@ void EventAnalyser() {
         /* Safety check that allParticles.size(), Nf are the same */
         if (allParticles.size() != Nf) { cout << "\n\nallParticles.size() is different than Nf! Exiting...\n\n", exit(EXIT_FAILURE); }
 
+        //<editor-fold desc="Safety checks for FD protons">
+        for (int i = 0; i < Protons_ind.size(); i++) {
+            if (protons[i]->getRegion() == FD) {
+                double Reco_Proton_Momentum = protons[i]->getP();
+
+                if (!((Reco_Proton_Momentum <= p_mom_th.GetUpperCut()) && (Reco_Proton_Momentum >= p_mom_th.GetLowerCut()))) {
+                    cout << "\n\nFD proton check: there are FD protons outside momentum th. range! Exiting...\n\n", exit(0);
+                }
+
+                for (int j = i + 1; j < Protons_ind.size(); j++) {
+                    if (Protons_ind.at(i) == Protons_ind.at(j)) { cout << "\n\nFD proton check: duplicated FD protons! Exiting...\n\n", exit(0); }
+                }
+
+//                if (Protons_ind.size() > 2) {
+//                    cout << "\n\nprotons[Protons_ind.at(i)]->par()->getPid() = " << protons[Protons_ind.at(i)]->par()->getPid() << "\n";
+//                    cout << "Protons_ind.at(" << i << ") = " << Protons_ind.at(i) <<"\n";
+//                }
+            }
+        }
+
+//        if (Protons_ind.size() != 0) {
+//            cout << "\n\n------------------------------------------------------\n\n";
+//        }
+        //</editor-fold>
+
+        //<editor-fold desc="Safety checks for FD neutrons">
+
         //<editor-fold desc="Safety checks for leading FD neutron">
         if (ES_by_leading_FDneutron) {
 
@@ -8770,6 +8798,33 @@ void EventAnalyser() {
             //</editor-fold>
 
         }
+        //</editor-fold>
+
+        //<editor-fold desc="Safety checks for FD neutrons">
+//        if (NeutronsFD_ind.size() > 0) { cout << "\n\n"; }
+
+        for (int i = 0; i < NeutronsFD_ind.size(); i++) {
+            double Reco_Neutron_Momentum = GetFDNeutronP(allParticles[NeutronsFD_ind.at(i)], apply_nucleon_cuts);
+
+            if (!((Reco_Neutron_Momentum <= n_mom_th.GetUpperCut()) && (Reco_Neutron_Momentum >= n_mom_th.GetLowerCut()))) {
+                cout << "\n\nallParticles[NeutronsFD_ind.at(i)]->par()->getPid() = " << allParticles[NeutronsFD_ind.at(i)]->par()->getPid() << "\n";
+                cout << "Reco_Neutron_Momentum = " << Reco_Neutron_Momentum << "\n";
+                cout << "n_mom_th.GetUpperCut() = " << n_mom_th.GetUpperCut() << "\n";
+                cout << "n_mom_th.GetLowerCut() = " << n_mom_th.GetLowerCut() << "\n";
+                cout << "\n\nFD neutron check: there are FD neutrons outside momentum th. range! Exiting...\n\n", exit(0);
+            }
+
+            for (int j = i + 1; j < NeutronsFD_ind.size(); j++) {
+                if (NeutronsFD_ind.at(i) == NeutronsFD_ind.at(j)) { cout << "\n\nFD neutron check: duplicated FD neutrons! Exiting...\n\n", exit(0); }
+            }
+
+//            if (NeutronsFD_ind.size() > 0) {
+//                cout << "allParticles[NeutronsFD_ind.at(i)]->par()->getPid() = " << allParticles[NeutronsFD_ind.at(i)]->par()->getPid() << "\n";
+//                cout << "NeutronsFD_ind.at(" << i << ") = " << NeutronsFD_ind.at(i) << "\n";
+//            }
+        }
+        //</editor-fold>
+
         //</editor-fold>
 
         //</editor-fold>
@@ -10293,31 +10348,46 @@ void EventAnalyser() {
         //<editor-fold desc="Fill momentum threshold plots (1e cut, CD & FD)">
         for (auto &e: electrons) {
             if (e->getRegion() == FD) {
-                hP_e_reco_1e_cut_FD.hFill(e->getP(), Weight);
-                hP_e_reco_1e_cut_FD_ZOOMIN.hFill(e->getP(), Weight);
+                bool e_Pass_FC = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", e->getP(), e->getTheta() * 180.0 / pi, e->getPhi() * 180.0 / pi);
+
+                if (!apply_fiducial_cuts || e_Pass_FC) { hP_e_reco_1e_cut_FD.hFill(e->getP(), Weight), hP_e_reco_1e_cut_FD_ZOOMIN.hFill(e->getP(), Weight); }
             }
         }
 
         //TODO: find a way to loop over good protons w/o mom. th.
         for (auto &p: protons) {
             if (p->getRegion() == FD) {
-                hP_p_reco_1e_cut_FD.hFill(p->getP(), Weight);
-                hP_p_reco_1e_cut_FD_ZOOMIN.hFill(p->getP(), Weight);
+                bool p_Pass_FC = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", p->getP(), p->getTheta() * 180.0 / pi, p->getPhi() * 180.0 / pi);
+
+                if (!apply_fiducial_cuts || p_Pass_FC) { hP_p_reco_1e_cut_FD.hFill(p->getP(), Weight), hP_p_reco_1e_cut_FD_ZOOMIN.hFill(p->getP(), Weight); }
             } else if (p->getRegion() == CD) {
-                hP_p_reco_1e_cut_CD.hFill(p->getP(), Weight);
-                hP_p_reco_1e_cut_CD_ZOOMIN.hFill(p->getP(), Weight);
+                hP_p_reco_1e_cut_CD.hFill(p->getP(), Weight), hP_p_reco_1e_cut_CD_ZOOMIN.hFill(p->getP(), Weight);
             }
         }
 
-        for (int &i: FD_Neutrons) {
-            if (allParticles[i]->getRegion() == FD) {
+        if (ES_by_leading_FDneutron && (NeutronsFD_ind_mom_max != -1)) {
+            double NeutronMomentum_1e_cut = GetFDNeutronP(allParticles[NeutronsFD_ind_mom_max], apply_nucleon_cuts);
+            double NeutronTheta_1e_cut = allParticles[NeutronsFD_ind_mom_max]->getTheta() * 180.0 / pi;
+            double NeutronPhi_1e_cut = allParticles[NeutronsFD_ind_mom_max]->getPhi() * 180.0 / pi;
+
+            bool n_Pass_FC = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut, NeutronPhi_1e_cut);
+            bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max, Neutron_veto_cut.GetLowerCut());
+
+            if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
+                hP_n_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight),hP_n_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
+            }
+        } else {
+//            for (int &i: FD_Neutrons) {
+            for (int &i: NeutronsFD_ind) {
+                double NeutronMomentum_1e_cut = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
+                double NeutronTheta_1e_cut = allParticles[i]->getTheta() * 180.0 / pi;
+                double NeutronPhi_1e_cut = allParticles[i]->getPhi() * 180.0 / pi;
+
+                bool n_Pass_FC = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut, NeutronPhi_1e_cut);
                 bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
 
-                if (NeutronPassVeto_Test) {
-                    double NeutronMomentum_1e_cut = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
-
-                    hP_n_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
-                    hP_n_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
+                if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
+                    hP_n_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight),hP_n_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
                 }
             }
         }

@@ -418,6 +418,8 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
         EfficiencyStatsType = "#phi_{" + EfficiencyParticleShort + "}";
     }
 
+//    if (findSubstring(EfficiencyRecTitle, "ZOOMIN")) { EfficiencyStatsType = EfficiencyStatsType + " - ZOOMIN"; }
+
     string EfficiencyStatsTitle = EfficiencyStatsType + " (" + EfficiencyFS + ")";
     //</editor-fold>
 
