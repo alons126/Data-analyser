@@ -145,7 +145,7 @@ void EventAnalyser() {
     const bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
-    bool generate_AMaps = true;             // Generate acceptance maps
+    bool generate_AMaps = false;             // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -406,8 +406,7 @@ void EventAnalyser() {
                     Efficiency_Status = "Eff2";
                 }
             } else {
-                Efficiency_Status = "Eff1_START";
-//                Efficiency_Status = "Eff1";
+                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
