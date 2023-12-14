@@ -132,7 +132,7 @@ void EventAnalyser() {
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
     bool ZoomIn_On_mom_th_plots = false; // Force TL event selection on reco. plots
-    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -145,7 +145,7 @@ void EventAnalyser() {
     const bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
-    bool generate_AMaps = false;             // Generate acceptance maps
+    bool generate_AMaps = true;             // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -402,10 +402,12 @@ void EventAnalyser() {
                     Efficiency_Status = "Eff2_ZoomIn";
                 } else {
 //                    Efficiency_Status = "Eff2_TEST2";
-                    Efficiency_Status = "Eff2_111_START";
+//                    Efficiency_Status = "Eff2_wTLnFC";
+                    Efficiency_Status = "Eff2";
                 }
             } else {
-                Efficiency_Status = "Eff1";
+                Efficiency_Status = "Eff1_START";
+//                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
@@ -829,18 +831,18 @@ void EventAnalyser() {
         ToF_plots = false;
 
         /* Efficiency plots */
-//     Efficiency_plots = true;
-        Efficiency_plots = false;
-//     TL_after_Acceptance_Maps_plots = true;
-        TL_after_Acceptance_Maps_plots = false;
+        Efficiency_plots = true;
+//        Efficiency_plots = false;
+        TL_after_Acceptance_Maps_plots = true;
+//        TL_after_Acceptance_Maps_plots = false;
 
         /* Resolution plots */
 //     AMaps_plots = true;
         AMaps_plots = false;
 
         /* Resolution plots */
-        Resolution_plots = true;
-//     Resolution_plots = false;
+//        Resolution_plots = true;
+        Resolution_plots = false;
 
         /* Final state ratio plots */
         FSR_1D_plots = false;
@@ -2082,13 +2084,13 @@ void EventAnalyser() {
 
     hPlot1D hP_n_reco_1e_cut_FD = hPlot1D("1e cut", "FD", "Reco FD Neutron momentum", "FD Neutron momentum P^{reco}_{n}", "P^{reco}_{n} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03a_P_n_reco_1e_cut_FD",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots); // leading nFD!
 //    hPlot1D hP_n_reco_1e_cut_CD = hPlot1D("1e cut", "CD", "Reco CD Neutron momentum", "CD Neutron momentum P^{reco}_{n}", "P^{reco}_{n} [GeV/c]",
 //                                          directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03b_P_n_reco_1e_cut_CD",
 //                                          CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_n_reco_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "Reco FD Neutron momentum - ZOOMIN", "FD Neutron momentum P^{reco}_{n} - ZOOMIN", "P^{reco}_{n} [GeV/c]",
                                                  directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03a_P_n_reco_1e_cut_FD_ZOOMIN",
-                                                 0, 1, numTH1Dbins_Mom_eff_Plots);
+                                                 0, 1, numTH1Dbins_Mom_eff_Plots); // leading nFD!
 //    hPlot1D hP_n_reco_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "Reco CD Neutron momentum - ZOOMIN", "CD Neutron momentum P^{reco}_{n} - ZOOMIN", "P^{reco}_{n} [GeV/c]",
 //                                                 directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03b_P_n_reco_1e_cut_CD_ZOOMIN",
 //                                                 0, 1, numTH1Dbins_Mom_eff_Plots);
@@ -6813,13 +6815,13 @@ void EventAnalyser() {
 
     hPlot1D hP_n_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD Neutron momentum", "FD Neutron momentum P^{truth}_{n}", "P^{truth}_{n} [GeV/c]",
                                            directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "03a_P_n_truth_1e_cut_FD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots); // leading nFD!
 //    hPlot1D hP_n_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD Neutron momentum", "CD Neutron momentum P^{truth}_{n}", "P^{truth}_{n} [GeV/c]",
 //                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "03b_P_n_truth_1e_cut_CD",
 //                                           CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_n_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD Neutron momentum - ZOOMIN", "FD Neutron momentum P^{truth}_{n} - ZOOMIN",
                                                   "P^{truth}_{n} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                                  "03a_P_n_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
+                                                  "03a_P_n_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots); // leading nFD!
 //    hPlot1D hP_n_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD Neutron momentum - ZOOMIN", "CD Neutron momentum P^{truth}_{n} - ZOOMIN",
 //                                                  "P^{truth}_{n} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
 //                                                  "03b_P_n_truth_1e_cut_CD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
@@ -9272,10 +9274,17 @@ void EventAnalyser() {
                             hTheta_n_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_n_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if (inFD) {
+                            if (n_inFD && (i == TL_NeutronsFD_ind_max)) {
                                 hP_n_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
                                 hP_n_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
                             }
+
+                            /*
+                            if (n_inFD) {
+                                hP_n_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
+                                hP_n_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
+                            }
+*/
                         }
 
                         if (TL_Event_Selection_1p) {
@@ -10374,7 +10383,7 @@ void EventAnalyser() {
             bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max, Neutron_veto_cut.GetLowerCut());
 
             if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
-                hP_n_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight),hP_n_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
+                hP_n_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight), hP_n_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
             }
         } else {
 //            for (int &i: FD_Neutrons) {
@@ -10387,7 +10396,7 @@ void EventAnalyser() {
                 bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
 
                 if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
-                    hP_n_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight),hP_n_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_n_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight), hP_n_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
                 }
             }
         }
