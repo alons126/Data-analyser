@@ -132,7 +132,7 @@ void EventAnalyser() {
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
     bool ZoomIn_On_mom_th_plots = false; // Force TL event selection on reco. plots
-    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -170,13 +170,11 @@ void EventAnalyser() {
     bool Run_in_momResS2 = true;         // Smear w/ momResS2 & correct w/ momResS1
 
     //<editor-fold desc="Auto-disable variables">
-    //    if (!calculate_2p) { calculate_pFDpCD = false; }
-
-    if (isData) {
-        calculate_truth_level = false;           // no TL calculation when running on data
-        generate_AMaps = false;                  // no AMap,WMap generation when running on data
-        plot_and_fit_MomRes = nRes_test = false; // no nRes calculation when running on data
+    if (isData) { // no TL calculation, AMap,WMap generation nor nRes calculation when running on data
+        calculate_truth_level = generate_AMaps = plot_and_fit_MomRes = nRes_test = false;
     }
+
+    if (!apply_nucleon_cuts) { calculate_truth_level = false; }
 
     if (!calculate_truth_level) { TL_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
 
@@ -8615,6 +8613,21 @@ void EventAnalyser() {
         auto deuterons = clasAna.getByPid(45);   // Deuterons
         auto neutrals = clasAna.getByPid(0);     // Unidentified
         auto otherpart = clasAna.getByPid(311);  // Other particles
+
+/*
+        // Get particle outside of clas12ana:
+        auto neutrons = c12->getByID(2112);  // Neutrons
+        auto protons = c12->getByID(2212);   // Protons
+        auto Kplus = c12->getByID(321);      // K+
+        auto Kminus = c12->getByID(-321);    // K-
+        auto piplus = c12->getByID(211);     // pi+
+        auto piminus = c12->getByID(-211);   // pi-
+        auto electrons = c12->getByID(11);   // Electrons
+
+        auto deuterons = c12->getByID(45);   // Deuterons
+        auto neutrals = c12->getByID(0);     // Unidentified
+        auto otherpart = c12->getByID(311);  // Other particles
+*/
 
         /* Number of specific particles in event */
         int Nn = neutrons.size(), Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
@@ -20233,7 +20246,7 @@ void EventAnalyser() {
     myLogFile << "calculate_1n = " << BoolToString(calculate_1n) << "\n";
     myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n\n";
     myLogFile << "calculate_pFDpCD = " << BoolToString(calculate_pFDpCD) << "\n";
-    myLogFile << "calculate_nFDpCD = " << BoolToString(calculate_nFDpCD) << "\n";
+    myLogFile << "calculate_nFDpCD = " << BoolToString(calculate_nFDpCD) << "\n\n";
 
     myLogFile << "-- Truth level calculation setup ------------------------------------------\n";
     myLogFile << "calculate_truth_level = " << BoolToString(calculate_truth_level) << "\n";
@@ -20754,7 +20767,8 @@ void EventAnalyser() {
     myLogFile << "-- Events with electrons counts -------------------------------------------\n";
     myLogFile << "#(events) w/ at least 1e:\t\t\t" << num_of_events_with_at_least_1e << "\n";
     myLogFile << "#(events) w/ more then 1e:\t\t\t" << num_of_events_more_then_1e << "\n";
-    myLogFile << "#(events) w/ exactly 1e:\t\t\t" << num_of_events_with_exactly_1e << "\n\n";
+    myLogFile << "#(events) w/ exactly 1e:\t\t\t" << num_of_events_with_exactly_1e << "\n";
+    myLogFile << "#(events) w/ exactly 1e (from file):\t" << num_of_events_with_exactly_1e_from_file << "\n\n";
 
     myLogFile << "Total #(QEL events) 1e cut:\t\t\t" << num_of_QEL_events_1e_cut << "\n";
     myLogFile << "Total #(MEC events) 1e cut:\t\t\t" << num_of_MEC_events_1e_cut << "\n";
