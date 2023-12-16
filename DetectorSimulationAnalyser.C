@@ -1273,8 +1273,6 @@ void EventAnalyser() {
 
     cout << "\nDefining histograms...";
 
-    //TODO: add weights to all histograms
-
 // ======================================================================================================================================================================
 // Cut parameters plots
 // ======================================================================================================================================================================
@@ -2885,10 +2883,10 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P (no #(e) cut)">
     hPlot2D hBeta_vs_P_CD = hPlot2D("all particles", "no #(e) cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                     directories.Beta_Directory_map["Beta_VS_P_All_e_Directory"], "01_Beta_vs_P_All_Particles_CD",
-                                    0, beamE * 1.425, 0, 3, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
+                                    0, beamE * 1.425, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
     hPlot2D hBeta_vs_P_FD = hPlot2D("all particles", "no #(e) cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                     directories.Beta_Directory_map["Beta_VS_P_All_e_Directory"], "01_Beta_vs_P_All_Particles_FD",
-                                    0, beamE * 1.425, 0, 3, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
+                                    0, beamE * 1.425, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
 
     hPlot2D hBeta_vs_P_Electrons_Only_FD = hPlot2D("electrons only", "no #(e) cut", "", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                    directories.Beta_Directory_map["Beta_VS_P_All_e_Directory"], "02_Beta_vs_P_Electrons_Only_FD",
@@ -2937,10 +2935,10 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P for all particles (1e cut)">
     hPlot2D hBeta_vs_P_1e_cut_CD = hPlot2D("all particles", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                            directories.Beta_Directory_map["Beta_VS_P_1e_cut_Directory"], "01_Beta_vs_P_1e_cut_All_Particles_CD",
-                                           0, beamE * 1.1, 0, 1.7, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
+                                           0, beamE * 1.1, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
     hPlot2D hBeta_vs_P_1e_cut_FD = hPlot2D("all particles", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                            directories.Beta_Directory_map["Beta_VS_P_1e_cut_Directory"], "01_Beta_vs_P_1e_cut_All_Particles_FD",
-                                           0, beamE * 1.1, 0, 1.7, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
+                                           0, beamE * 1.1, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
 
     hPlot2D hBeta_vs_P_1e_cut_Electrons_Only_FD = hPlot2D("electrons only", "1e cut", "", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                           directories.Beta_Directory_map["Beta_VS_P_1e_cut_Directory"], "02_Beta_vs_P_1e_cut_Electrons_Only_FD",
@@ -10303,6 +10301,10 @@ void EventAnalyser() {
         /* Applying rough 1e cut */
         if (Ne != 1) { continue; } // the rough 1e cut
 
+        //<editor-fold desc="Safety checks (1e cut)">
+        if (electrons.size() != 1) { cout << "\n\n1e cut: single electron cut is not implemented! Exiting...\n\n", exit(0); }
+        //</editor-fold>
+
         //<editor-fold desc="Applying electron beta cut">
         bool Bad_Electron_beta;
 
@@ -10323,14 +10325,14 @@ void EventAnalyser() {
         /* Safety check that we are looking at 1e cut. */
 
         // Check that we do have only one electron:
-        if (electrons.size() != 1) { cout << "\n\n1e cut: electrons.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
-        if (electrons[0]->getRegion() != FD) { cout << "\n\n1e cut: electrons is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
+        if (electrons.size() != 1) { cout << "\n\n1e cut: electrons.size() is different than 1! Exiting...\n\n", exit(0); }
+        if (electrons[0]->getRegion() != FD) { cout << "\n\n1e cut: electrons is not in the FD! Exiting...\n\n", exit(0); }
 
         // Check that our one electron is within momentum cuts:
         //TODO: might be problemetic if electron momentum cuts are changed. consider removing this if that does happen.
-        if (Electron_ind.size() != 1) { cout << "\n\n1e cut: Electron_ind.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
-        if (Electron_ind.at(0) != 0) { cout << "\n\n1e cut: Electron_ind.at(0) is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-        if (electrons[Electron_ind.at(0)]->getRegion() != FD) { cout << "\n\n1e cut: Electron_ind.at(0) is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
+        if (Electron_ind.size() != 1) { cout << "\n\n1e cut: Electron_ind.size() is different than 1! Exiting...\n\n", exit(0); }
+        if (Electron_ind.at(0) != 0) { cout << "\n\n1e cut: Electron_ind.at(0) is different than 0! Exiting...\n\n", exit(0); }
+        if (electrons[Electron_ind.at(0)]->getRegion() != FD) { cout << "\n\n1e cut: Electron_ind.at(0) is not in the FD! Exiting...\n\n", exit(0); }
         //</editor-fold>
 
         //<editor-fold desc="events counts (1e cut)">
@@ -11171,22 +11173,22 @@ void EventAnalyser() {
 
             //<editor-fold desc="Safety check (1p)">
             /* Safety check that we are looking at 1p */
-            if (e_1p->getRegion() != FD) { cout << "\n\n1p: Electron is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (p_1p->getRegion() != FD) { cout << "\n\n1p: nFD is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (e_1p->getRegion() != FD) { cout << "\n\n1p: Electron is not in the FD! Exiting...\n\n", exit(0); }
+            if (p_1p->getRegion() != FD) { cout << "\n\n1p: nFD is not in the FD! Exiting...\n\n", exit(0); }
 
-            if (Protons_ind.size() != 1) { cout << "\n\n1p: Protons_ind.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kplus.size() != 0) { cout << "\n\n1p: Kplus.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kminus.size() != 0) { cout << "\n\n1p: Kminus.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Piplus_ind.size() != 0) { cout << "\n\n1p: Piplus_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Piminus_ind.size() != 0) { cout << "\n\n1p: Piminus_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Electron_ind.size() != 1) { cout << "\n\n1p: Electron_ind.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (deuterons.size() != 0) { cout << "\n\n1p: deuterons.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (Protons_ind.size() != 1) { cout << "\n\n1p: Protons_ind.size() is different than 1! Exiting...\n\n", exit(0); }
+            if (Kplus.size() != 0) { cout << "\n\n1p: Kplus.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Kminus.size() != 0) { cout << "\n\n1p: Kminus.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Piplus_ind.size() != 0) { cout << "\n\n1p: Piplus_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Piminus_ind.size() != 0) { cout << "\n\n1p: Piminus_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Electron_ind.size() != 1) { cout << "\n\n1p: Electron_ind.size() is different than 1! Exiting...\n\n", exit(0); }
+            if (deuterons.size() != 0) { cout << "\n\n1p: deuterons.size() is different than 0! Exiting...\n\n", exit(0); }
 
-            if (e_1p->getRegion() != FD) { cout << "\n\n1p: 1p proton is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (p_1p->getRegion() != FD) { cout << "\n\n1p: 1p electron is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (e_1p->getRegion() != FD) { cout << "\n\n1p: 1p proton is not in the FD! Exiting...\n\n", exit(0); }
+            if (p_1p->getRegion() != FD) { cout << "\n\n1p: 1p electron is not in the FD! Exiting...\n\n", exit(0); }
 
             if (!(Enable_FD_photons || (PhotonsFD_ind.size() == 0))) {
-                cout << "\n\n1p: PhotonsFD_ind.size() is non-zero (" << PhotonsFD_ind.size() << ")! Exiting...\n\n", exit(EXIT_FAILURE);
+                cout << "\n\n1p: PhotonsFD_ind.size() is non-zero (" << PhotonsFD_ind.size() << ")! Exiting...\n\n", exit(0);
             }
             //</editor-fold>
 
@@ -11729,11 +11731,11 @@ void EventAnalyser() {
 
             //<editor-fold desc="Safety check (1n)">
             /* Safety check that we are looking at 1n */
-            if (e_1n->getRegion() != FD) { cout << "\n\n1n: Electron is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (n_1n->getRegion() != FD) { cout << "\n\n1n: nFD is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (e_1n->getRegion() != FD) { cout << "\n\n1n: Electron is not in the FD! Exiting...\n\n", exit(0); }
+            if (n_1n->getRegion() != FD) { cout << "\n\n1n: nFD is not in the FD! Exiting...\n\n", exit(0); }
 
             if (!(Enable_FD_photons || (PhotonsFD_ind.size() == 0))) {
-                cout << "\n\n1n: PhotonsFD_ind.size() is non-zero (" << PhotonsFD_ind.size() << ")! Exiting...\n\n", exit(EXIT_FAILURE);
+                cout << "\n\n1n: PhotonsFD_ind.size() is non-zero (" << PhotonsFD_ind.size() << ")! Exiting...\n\n", exit(0);
             }
 
             if (ES_by_leading_FDneutron) { //TODO: add this check to nFDpCD
@@ -11744,34 +11746,34 @@ void EventAnalyser() {
                         double P_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
                         if (P_max_test < P_temp) {
-                            cout << "\n\n1n: NeutronsFD_ind_mom_max is not leading FD neutron! Exiting...\n\n", exit(EXIT_FAILURE);
+                            cout << "\n\n1n: NeutronsFD_ind_mom_max is not leading FD neutron! Exiting...\n\n", exit(0);
                         }
                     }
                 }
             }
 
-//            if (NeutronsFD_ind.size() != 1) { cout << "\n\n1n: NeutronsFD_ind.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Protons_ind.size() != 0) { cout << "\n\n1n: Protons_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kplus.size() != 0) { cout << "\n\n1n: Kplus.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kminus.size() != 0) { cout << "\n\n1n: Kminus.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Piplus_ind.size() != 0) { cout << "\n\n1n: Piplus_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Piminus_ind.size() != 0) { cout << "\n\n1n: Piminus_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Electron_ind.size() != 1) { cout << "\n\n1n: Electron_ind.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (deuterons.size() != 0) { cout << "\n\n1n: deuterons.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (NeutronsFD_ind.size() != 1) { cout << "\n\n1n: NeutronsFD_ind.size() is different than 1! Exiting...\n\n", exit(0); }
+            if (Protons_ind.size() != 0) { cout << "\n\n1n: Protons_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Kplus.size() != 0) { cout << "\n\n1n: Kplus.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Kminus.size() != 0) { cout << "\n\n1n: Kminus.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Piplus_ind.size() != 0) { cout << "\n\n1n: Piplus_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Piminus_ind.size() != 0) { cout << "\n\n1n: Piminus_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Electron_ind.size() != 1) { cout << "\n\n1n: Electron_ind.size() is different than 1! Exiting...\n\n", exit(0); }
+            if (deuterons.size() != 0) { cout << "\n\n1n: deuterons.size() is different than 0! Exiting...\n\n", exit(0); }
 
             for (int &i: NeutronsFD_ind) {
                 bool NeutronInPCAL_1n = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
-                if (NeutronInPCAL_1n) { cout << "\n\n1n: a neutron have been found with a PCAL hit! Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (NeutronInPCAL_1n) { cout << "\n\n1n: a neutron have been found with a PCAL hit! Exiting...\n\n", exit(0); }
                 if (!((allParticles[i]->par()->getPid() == 2112) || (allParticles[i]->par()->getPid() == 22))) {
-                    cout << "\n\n1n: A neutron PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(EXIT_FAILURE);
+                    cout << "\n\n1n: A neutron PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(0);
                 }
             }
 
             for (int &i: PhotonsFD_ind) {
                 bool PhotonInPCAL_1n = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
-                if (!PhotonInPCAL_1n) { cout << "\n\n1n: a photon have been found without a PCAL hit! Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (!PhotonInPCAL_1n) { cout << "\n\n1n: a photon have been found without a PCAL hit! Exiting...\n\n", exit(0); }
                 if (allParticles[i]->par()->getPid() != 22) {
-                    cout << "\n\n1n: A photon PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(EXIT_FAILURE);
+                    cout << "\n\n1n: A photon PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(0);
                 }
             }
 
@@ -11783,14 +11785,14 @@ void EventAnalyser() {
             bool NeutronInECOUT_1n = (n_1n->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
             auto n_detlayer_1n = NeutronInPCAL_1n ? clas12::PCAL : NeutronInECIN_1n ? clas12::ECIN : clas12::ECOUT; // determine the earliest layer of the neutral hit
 
-            if (n_1n->getRegion() != FD) { cout << "\n\n1n: neutron is not in FD! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (n_1n->getRegion() != FD) { cout << "\n\n1n: neutron is not in FD! Exiting...\n\n", exit(0); }
             if (!((NeutronPDG == 22) || (NeutronPDG == 2112))) {
-                cout << "\n\n1n: neutral PDG is not 2112 or 22 (" << NeutronPDG << ")! Exiting...\n\n", exit(EXIT_FAILURE);
+                cout << "\n\n1n: neutral PDG is not 2112 or 22 (" << NeutronPDG << ")! Exiting...\n\n", exit(0);
             }
-            if (NeutronInPCAL_1n) { cout << "\n\n1n: neutron hit in PCAL! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (!(NeutronInECIN_1n || NeutronInECOUT_1n)) { cout << "\n\n1n: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (NeutronInPCAL_1n) { cout << "\n\n1n: neutron hit in PCAL! Exiting...\n\n", exit(0); }
+            if (!(NeutronInECIN_1n || NeutronInECOUT_1n)) { cout << "\n\n1n: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
             if (!(!NeutronInPCAL_1n && (NeutronInECIN_1n || NeutronInECOUT_1n))) {
-                cout << "\n\n1n: not neutron by definition! Exiting...\n\n", exit(EXIT_FAILURE);
+                cout << "\n\n1n: not neutron by definition! Exiting...\n\n", exit(0);
             }
             //</editor-fold>
 
@@ -12105,8 +12107,8 @@ void EventAnalyser() {
                         bool inECOUTtmp = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
                         if (PDGtmp == 22) {
-                            if (!(allParticles[i]->getRegion() == FD)) { cout << "\n\nBeta_n_1n: neutron is not in FD! Exiting...\n\n", exit(EXIT_FAILURE); }
-                            if (!(!inPCALtmp && (inECINtmp || inECOUTtmp))) { cout << "\n\nBeta_n_1n: photon is not a neutron! Exiting...\n\n", exit(EXIT_FAILURE); }
+                            if (!(allParticles[i]->getRegion() == FD)) { cout << "\n\nBeta_n_1n: neutron is not in FD! Exiting...\n\n", exit(0); }
+                            if (!(!inPCALtmp && (inECINtmp || inECOUTtmp))) { cout << "\n\nBeta_n_1n: photon is not a neutron! Exiting...\n\n", exit(0); }
 
                             //<editor-fold desc="Filling beta of neutrons from 'photons' - all sectors">
                             hBeta_n_from_ph_01_1n_FD.hFill(allParticles[i]->par()->getBeta());
@@ -12149,9 +12151,9 @@ void EventAnalyser() {
 
                     if (PDGtmp == 22) {
                         if (!(allParticles[n_ind_1n]->getRegion() == FD)) {
-                            cout << "\n\nBeta_n_1n: neutron is not in FD! Exiting...\n\n", exit(EXIT_FAILURE);
+                            cout << "\n\nBeta_n_1n: neutron is not in FD! Exiting...\n\n", exit(0);
                         }
-                        if (!(!inPCALtmp && (inECINtmp || inECOUTtmp))) { cout << "\n\nBeta_n_1n: photon is not a neutron! Exiting...\n\n", exit(EXIT_FAILURE); }
+                        if (!(!inPCALtmp && (inECINtmp || inECOUTtmp))) { cout << "\n\nBeta_n_1n: photon is not a neutron! Exiting...\n\n", exit(0); }
 
                         //<editor-fold desc="Filling beta of neutrons from 'photons' - all sectors">
                         hBeta_n_from_ph_01_1n_FD.hFill(allParticles[n_ind_1n]->par()->getBeta());
@@ -12596,13 +12598,13 @@ void EventAnalyser() {
 
             //<editor-fold desc="Safty checks (2p)">
             /* Safety check that we are looking at 2p */
-            if (Protons_ind.size() != 2) { cout << "\n\n2p: Protons_ind.size() is different than 2! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kplus.size() != 0) { cout << "\n\n2p: Kplus.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kminus.size() != 0) { cout << "\n\n2p: Kminus.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Piplus_ind.size() != 0) { cout << "\n\n2p: Piplus_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Piminus_ind.size() != 0) { cout << "\n\n2p: Piminus_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Electron_ind.size() != 1) { cout << "\n\n2p: Electron_ind.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (deuterons.size() != 0) { cout << "\n\n2p: deuterons.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (Protons_ind.size() != 2) { cout << "\n\n2p: Protons_ind.size() is different than 2! Exiting...\n\n", exit(0); }
+            if (Kplus.size() != 0) { cout << "\n\n2p: Kplus.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Kminus.size() != 0) { cout << "\n\n2p: Kminus.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Piplus_ind.size() != 0) { cout << "\n\n2p: Piplus_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Piminus_ind.size() != 0) { cout << "\n\n2p: Piminus_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Electron_ind.size() != 1) { cout << "\n\n2p: Electron_ind.size() is different than 1! Exiting...\n\n", exit(0); }
+            if (deuterons.size() != 0) { cout << "\n\n2p: deuterons.size() is different than 0! Exiting...\n\n", exit(0); }
             //</editor-fold>
 
             /* Setting particle vectors (for code organization) */
@@ -13160,25 +13162,25 @@ void EventAnalyser() {
 
             //<editor-fold desc="Safty checks (pFDpCD)">
             /* Safety check that we are looking at pFDpCD */
-            if (e_pFDpCD->getRegion() != FD) { cout << "\n\npFDpCD: Electron is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (pFD_pFDpCD->getRegion() != FD) { cout << "\n\npFDpCD: nFD is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (pCD_pFDpCD->getRegion() != CD) { cout << "\n\npFDpCD: pCD is not in the CD! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Protons_ind.size() != 2) { cout << "\n\npFDpCD: Protons_ind.size() is different than 2! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (e_pFDpCD->getRegion() != FD) { cout << "\n\npFDpCD: Electron is not in the FD! Exiting...\n\n", exit(0); }
+            if (pFD_pFDpCD->getRegion() != FD) { cout << "\n\npFDpCD: nFD is not in the FD! Exiting...\n\n", exit(0); }
+            if (pCD_pFDpCD->getRegion() != CD) { cout << "\n\npFDpCD: pCD is not in the CD! Exiting...\n\n", exit(0); }
+            if (Protons_ind.size() != 2) { cout << "\n\npFDpCD: Protons_ind.size() is different than 2! Exiting...\n\n", exit(0); }
 
             if (protons[Protons_ind.at(0)]->getRegion() == protons[Protons_ind.at(1)]->getRegion()) {
-                cout << "\n\npFDpCD: Protons are in the same region! Exiting...\n\n", exit(EXIT_FAILURE);
+                cout << "\n\npFDpCD: Protons are in the same region! Exiting...\n\n", exit(0);
             }
 
-            if (e_pFDpCD->getRegion() != FD) { cout << "\n\npFDpCD: Electron is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (pFD_pFDpCD->getRegion() != FD) { cout << "\n\npFDpCD: pFD is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (pCD_pFDpCD->getRegion() != CD) { cout << "\n\npFDpCD: pCD is not in the CD! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (e_pFDpCD->getRegion() != FD) { cout << "\n\npFDpCD: Electron is not in the FD! Exiting...\n\n", exit(0); }
+            if (pFD_pFDpCD->getRegion() != FD) { cout << "\n\npFDpCD: pFD is not in the FD! Exiting...\n\n", exit(0); }
+            if (pCD_pFDpCD->getRegion() != CD) { cout << "\n\npFDpCD: pCD is not in the CD! Exiting...\n\n", exit(0); }
 
-            if (Kplus.size() != 0) { cout << "\n\npFDpCD: Kplus.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kminus.size() != 0) { cout << "\n\npFDpCD: Kminus.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Piplus_ind.size() != 0) { cout << "\n\npFDpCD: Piplus_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Piminus_ind.size() != 0) { cout << "\n\npFDpCD: Piminus_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Electron_ind.size() != 1) { cout << "\n\npFDpCD: Electron_ind.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (deuterons.size() != 0) { cout << "\n\npFDpCD: deuterons.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (Kplus.size() != 0) { cout << "\n\npFDpCD: Kplus.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Kminus.size() != 0) { cout << "\n\npFDpCD: Kminus.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Piplus_ind.size() != 0) { cout << "\n\npFDpCD: Piplus_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Piminus_ind.size() != 0) { cout << "\n\npFDpCD: Piminus_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Electron_ind.size() != 1) { cout << "\n\npFDpCD: Electron_ind.size() is different than 1! Exiting...\n\n", exit(0); }
+            if (deuterons.size() != 0) { cout << "\n\npFDpCD: deuterons.size() is different than 0! Exiting...\n\n", exit(0); }
             //</editor-fold>
 
             //<editor-fold desc="Setting pFDpCD analysis variables">
@@ -13890,35 +13892,35 @@ void EventAnalyser() {
             //<editor-fold desc="Safty checks (nFDpCD)">
             /* Safety check that we are looking at nFDpCD */
             //TODO: reorgenize these safty checks
-            if (e_nFDpCD->getRegion() != FD) { cout << "\n\nnFDpCD: Electron is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (nFD_nFDpCD->getRegion() != FD) { cout << "\n\nnFDpCD: nFD is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (pCD_nFDpCD->getRegion() != CD) { cout << "\n\nnFDpCD: pCD is not in the CD! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (e_nFDpCD->getRegion() != FD) { cout << "\n\nnFDpCD: Electron is not in the FD! Exiting...\n\n", exit(0); }
+            if (nFD_nFDpCD->getRegion() != FD) { cout << "\n\nnFDpCD: nFD is not in the FD! Exiting...\n\n", exit(0); }
+            if (pCD_nFDpCD->getRegion() != CD) { cout << "\n\nnFDpCD: pCD is not in the CD! Exiting...\n\n", exit(0); }
 
             if (!(Enable_FD_photons || (PhotonsFD_ind.size() == 0))) {
-                cout << "\n\nnFDpCD: PhotonsFD_ind.size() is non-zero (" << PhotonsFD_ind.size() << ")! Exiting...\n\n", exit(EXIT_FAILURE);
+                cout << "\n\nnFDpCD: PhotonsFD_ind.size() is non-zero (" << PhotonsFD_ind.size() << ")! Exiting...\n\n", exit(0);
             }
 
-            if (Protons_ind.size() != 1) { cout << "\n\nnFDpCD: Protons_ind.size() is different than 2! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kplus.size() != 0) { cout << "\n\nnFDpCD: Kplus.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kminus.size() != 0) { cout << "\n\nnFDpCD: Kminus.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Piplus_ind.size() != 0) { cout << "\n\nnFDpCD: Piplus_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Piminus_ind.size() != 0) { cout << "\n\nnFDpCD: Piminus_ind.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Electron_ind.size() != 1) { cout << "\n\nnFDpCD: Electron_ind.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (deuterons.size() != 0) { cout << "\n\nnFDpCD: deuterons.size() is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (Protons_ind.size() != 1) { cout << "\n\nnFDpCD: Protons_ind.size() is different than 2! Exiting...\n\n", exit(0); }
+            if (Kplus.size() != 0) { cout << "\n\nnFDpCD: Kplus.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Kminus.size() != 0) { cout << "\n\nnFDpCD: Kminus.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Piplus_ind.size() != 0) { cout << "\n\nnFDpCD: Piplus_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Piminus_ind.size() != 0) { cout << "\n\nnFDpCD: Piminus_ind.size() is different than 0! Exiting...\n\n", exit(0); }
+            if (Electron_ind.size() != 1) { cout << "\n\nnFDpCD: Electron_ind.size() is different than 1! Exiting...\n\n", exit(0); }
+            if (deuterons.size() != 0) { cout << "\n\nnFDpCD: deuterons.size() is different than 0! Exiting...\n\n", exit(0); }
 
             for (int &i: NeutronsFD_ind) {
                 bool NeutronInPCAL_nFDpCD = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
-                if (NeutronInPCAL_nFDpCD) { cout << "\n\nnFDpCD: a neutron have been found with a PCAL hit! Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (NeutronInPCAL_nFDpCD) { cout << "\n\nnFDpCD: a neutron have been found with a PCAL hit! Exiting...\n\n", exit(0); }
                 if (!((allParticles[i]->par()->getPid() == 2112) || (allParticles[i]->par()->getPid() == 22))) {
-                    cout << "\n\nnFDpCD: A neutron PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(EXIT_FAILURE);
+                    cout << "\n\nnFDpCD: A neutron PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(0);
                 }
             }
 
             for (int &i: PhotonsFD_ind) {
                 bool PhotonInPCAL_nFDpCD = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
-                if (!PhotonInPCAL_nFDpCD) { cout << "\n\nnFDpCD: a photon have been found without a PCAL hit! Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (!PhotonInPCAL_nFDpCD) { cout << "\n\nnFDpCD: a photon have been found without a PCAL hit! Exiting...\n\n", exit(0); }
                 if (allParticles[i]->par()->getPid() != 22) {
-                    cout << "\n\nnFDpCD: A photon PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(EXIT_FAILURE);
+                    cout << "\n\nnFDpCD: A photon PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(0);
                 }
             }
             //</editor-fold>
@@ -14012,12 +14014,12 @@ void EventAnalyser() {
 
             //<editor-fold desc="Safety check (nFDpCD)">
             /* Safety check that we are looking at good neutron (BEFORE VETO!!!) */
-            if (nFD_nFDpCD->getRegion() != FD) { cout << "\n\nnFDpCD: neutron is not in FD! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (nFD_nFDpCD->getRegion() != FD) { cout << "\n\nnFDpCD: neutron is not in FD! Exiting...\n\n", exit(0); }
             if (!((NeutronPDG_nFDpCD == 22) || (NeutronPDG_nFDpCD == 2112))) {
-                cout << "\n\nnFDpCD: neutral PDG is not 2112 or 22 (" << NeutronPDG_nFDpCD << ")! Exiting...\n\n", exit(EXIT_FAILURE);
+                cout << "\n\nnFDpCD: neutral PDG is not 2112 or 22 (" << NeutronPDG_nFDpCD << ")! Exiting...\n\n", exit(0);
             }
-            if (NeutronInPCAL_nFDpCD) { cout << "\n\nnFDpCD: neutron hit in PCAL! Exiting...\n\n", exit(EXIT_FAILURE); }
-            if (!(NeutronInECIN_nFDpCD || NeutronInECOUT_nFDpCD)) { cout << "\n\nnFDpCD: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (NeutronInPCAL_nFDpCD) { cout << "\n\nnFDpCD: neutron hit in PCAL! Exiting...\n\n", exit(0); }
+            if (!(NeutronInECIN_nFDpCD || NeutronInECOUT_nFDpCD)) { cout << "\n\nnFDpCD: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
             //</editor-fold>
 
             TVector3 n_hit_nFDpCD_3v, e_hit_nFDpCD_3v;
