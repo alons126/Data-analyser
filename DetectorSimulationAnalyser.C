@@ -132,7 +132,7 @@ void EventAnalyser() {
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
     bool ZoomIn_On_mom_th_plots = false; // Force TL event selection on reco. plots
-    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -239,7 +239,7 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
+    bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
     bool apply_nucleon_SmearAndShift = false;
