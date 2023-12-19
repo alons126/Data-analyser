@@ -42,6 +42,7 @@ using namespace std;
 
 class AMaps {
 private:
+    string AMaps_Mode = "AMaps";
 
     /* Acceptance maps from class and before cuts (to be compared with one generated with the file) */
     hPlot2D ElectronAMapBC, ProtonAMapBC, NeutronAMapBC, NucleonAMapBC;
@@ -56,9 +57,12 @@ private:
     int HistElectronSliceNumOfYBins;  // 100 by Default
     int HistNucSliceNumOfXBins;       // 75 by Default
     int HistNucSliceNumOfYBins;       // 75 by Default
-    int NumberNucOfMomSlices;         // 10 by Default
+    int NumberNucOfMomSlices;
+    int NumberElecOfMomSlices;
 
-    double MomBinTh = 0.4;
+    double Nucleon_Momentum_Slice_Th = 0.4;
+    double Electron_Momentum_Slice_Th = 0.6; // Not th! but distance from beamE of last mom bin!
+//    double Electron_Momentum_Slice_Th = 0.2; // Not th! but distance from beamE of last mom bin!
 
     /* TL Acceptance maps */
     vector<hPlot2D> ElectronTLAMapsBySlice, ProtonTLAMapsBySlice, NeutronTLAMapsBySlice;
@@ -161,7 +165,7 @@ public:
 
     // AMaps generation constructor:
     AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &AMapsMode = "", const string &SavePath = "./",
-          int nOfMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75, int hesNumOfXBins = 100, int hesNumOfYBins = 100);
+          int nOfNucMomBins = 4,int nOfElecMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75, int hesNumOfXBins = 100, int hesNumOfYBins = 100);
 
     // AMaps loading constructor:
     AMaps(const string &AcceptanceMapsDirectory, const string &SampleName,
