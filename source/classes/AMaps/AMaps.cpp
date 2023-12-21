@@ -65,13 +65,17 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
 
     string AMapSavePathAMap = AMapSavePath + "04_Finalized_AMaps/";
     system(("mkdir -p " + AMapSavePathAMap).c_str());
+
+    string AMapSavePathGeneratedAMapCopy = AMapSavePath + "05_Generated_maps/";
+    system(("mkdir -p " + AMapSavePathGeneratedAMapCopy).c_str());
+    AMapCopySavePath = AMapSavePathGeneratedAMapCopy;
     //</editor-fold>
 
     //<editor-fold desc="Setting AMapsMode_TitleAddition">
     string AMapsMode_TitleAddition;
 
-    if (AMapsMode != "") {
-        AMapsMode_TitleAddition = AMapsMode;
+    if (AMaps_Mode != "") {
+        AMapsMode_TitleAddition = AMaps_Mode;
     } else {
         AMapsMode_TitleAddition = "";
     }
@@ -99,8 +103,9 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                             hSaveNameAMapBCNucleon, hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
     //</editor-fold>
 
-    for (int i = 0; i < ElectronMomBinsLimits.size(); i++) {
-        double BinLowerLim = ElectronMomBinsLimits.at(i).at(0), BinUpperLim = ElectronMomBinsLimits.at(i).at(1);
+    //<editor-fold desc="Setting electron histograms">
+    for (int i = 0; i < ElectronMomSliceLimits.size(); i++) {
+        double BinLowerLim = ElectronMomSliceLimits.at(i).at(0), BinUpperLim = ElectronMomSliceLimits.at(i).at(1);
 
         int BinUpperLimPrecision;
         if (BinUpperLim == beamE) { BinUpperLimPrecision = 3; } else { BinUpperLimPrecision = 2; }
@@ -116,10 +121,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                   to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameTLElectron = to_string(i + 1) + "_TL_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                      to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinTLElectron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleTLElectron, hTitleTLElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]",
-                                          AMapSavePathTLElectron,
-                                          hSaveNameTLElectron,
-                                          hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistElectronSliceNumOfXBins, HistElectronSliceNumOfYBins);
+        hPlot2D hPBinTLElectron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleTLElectron, hTitleTLElectron,
+                                          "#phi_{e} [Deg]", "#theta_{e} [Deg]", AMapSavePathTLElectron, hSaveNameTLElectron,
+                                          hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                          HistElectronSliceNumOfXBins, HistElectronSliceNumOfYBins);
         ElectronTLAMapsBySlice.push_back(hPBinTLElectron);
         //</editor-fold>
 
@@ -130,10 +135,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                     to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameRecoElectron = to_string(i + 1) + "_Reco_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                        to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinRecoElectron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoElectron, hTitleRecoElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]",
-                                            AMapSavePathRecoElectron,
-                                            hSaveNameRecoElectron,
-                                            hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistElectronSliceNumOfXBins, HistElectronSliceNumOfYBins);
+        hPlot2D hPBinRecoElectron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoElectron, hTitleRecoElectron,
+                                            "#phi_{e} [Deg]", "#theta_{e} [Deg]", AMapSavePathRecoElectron, hSaveNameRecoElectron,
+                                            hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                            HistElectronSliceNumOfXBins, HistElectronSliceNumOfYBins);
         ElectronRecoAMapsBySlice.push_back(hPBinRecoElectron);
         //</editor-fold>
 
@@ -144,12 +149,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                              to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameRecoToTLRatioElectron = to_string(i + 1) + "_e_Ratio_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                                 to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinRecoToTLRatioElectron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoToTLRatioElectron, hTitleRecoToTLRatioElectron, "#phi_{e} [Deg]",
-                                                     "#theta_{e} [Deg]",
-                                                     AMapSavePathRecoToTLElectron,
-                                                     hSaveNameRecoToTLRatioElectron,
-                                                     hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistElectronSliceNumOfXBins,
-                                                     HistElectronSliceNumOfYBins);
+        hPlot2D hPBinRecoToTLRatioElectron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoToTLRatioElectron, hTitleRecoToTLRatioElectron,
+                                                     "#phi_{e} [Deg]", "#theta_{e} [Deg]", AMapSavePathRecoToTLElectron, hSaveNameRecoToTLRatioElectron,
+                                                     hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                                     HistElectronSliceNumOfXBins, HistElectronSliceNumOfYBins);
         ElectronRecoToTLRatioBySlice.push_back(hPBinRecoToTLRatioElectron);
         //</editor-fold>
 
@@ -162,18 +165,21 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                         to_string_with_precision(Charged_particle_min_Ratio, 2);
         string hSaveNameSepAMapsElectron = to_string(i + 1) + "_e_SepAMap_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                            to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinSepAMapsElectron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleSepAMapsElectron, hTitleSepAMapsElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]",
-                                                AMapSavePathSepAMapsElectron,
-                                                hSaveNameSepAMapsElectron,
+        hPlot2D hPBinSepAMapsElectron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleSepAMapsElectron, hTitleSepAMapsElectron,
+                                                "#phi_{e} [Deg]", "#theta_{e} [Deg]", AMapSavePathSepAMapsElectron, hSaveNameSepAMapsElectron,
                                                 hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistElectronSliceNumOfXBins, HistElectronSliceNumOfYBins);
         ElectronAMapsBySlice.push_back(hPBinSepAMapsElectron);
         //</editor-fold>
 
         //</editor-fold>
     }
+    //</editor-fold>
 
-    for (int i = 0; i < PBinsLimits.size(); i++) {
-        double BinLowerLim = PBinsLimits.at(i).at(0), BinUpperLim = PBinsLimits.at(i).at(1);
+    //<editor-fold desc="Setting nucleon histograms">
+
+    //<editor-fold desc="Setting nucleon slice histograms">
+    for (int i = 0; i < NucleonMomSliceLimits.size(); i++) {
+        double BinLowerLim = NucleonMomSliceLimits.at(i).at(0), BinUpperLim = NucleonMomSliceLimits.at(i).at(1);
 
         int BinUpperLimPrecision;
         if (BinUpperLim == beamE) { BinUpperLimPrecision = 3; } else { BinUpperLimPrecision = 2; }
@@ -189,9 +195,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                 to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameTLProton = to_string(i + 1) + "_TL_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                    to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinTLProton = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleTLProton, hTitleTLProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]", AMapSavePathTLProton,
-                                        hSaveNameTLProton,
-                                        hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+        hPlot2D hPBinTLProton = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleTLProton, hTitleTLProton,
+                                        "#phi_{p} [Deg]", "#theta_{p} [Deg]", AMapSavePathTLProton, hSaveNameTLProton,
+                                        hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                        HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
         ProtonTLAMapsBySlice.push_back(hPBinTLProton);
         //</editor-fold>
 
@@ -202,10 +209,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                   to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameRecoProton = to_string(i + 1) + "_Reco_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                      to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinRecoProton = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoProton, hTitleRecoProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]",
-                                          AMapSavePathRecoProton,
-                                          hSaveNameRecoProton,
-                                          hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+        hPlot2D hPBinRecoProton = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoProton, hTitleRecoProton,
+                                          "#phi_{p} [Deg]", "#theta_{p} [Deg]", AMapSavePathRecoProton, hSaveNameRecoProton,
+                                          hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                          HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
         ProtonRecoAMapsBySlice.push_back(hPBinRecoProton);
         //</editor-fold>
 
@@ -216,11 +223,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                            to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameRecoToTLRatioProton = to_string(i + 1) + "_p_Ratio_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                               to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinRecoToTLRatioProton = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoToTLRatioProton, hTitleRecoToTLRatioProton, "#phi_{p} [Deg]",
-                                                   "#theta_{p} [Deg]",
-                                                   AMapSavePathRecoToTLProton,
-                                                   hSaveNameRecoToTLRatioProton,
-                                                   hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+        hPlot2D hPBinRecoToTLRatioProton = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoToTLRatioProton, hTitleRecoToTLRatioProton,
+                                                   "#phi_{p} [Deg]", "#theta_{p} [Deg]", AMapSavePathRecoToTLProton, hSaveNameRecoToTLRatioProton,
+                                                   hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                                   HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
         ProtonRecoToTLRatioBySlice.push_back(hPBinRecoToTLRatioProton);
         //</editor-fold>
 
@@ -233,10 +239,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                       to_string_with_precision(Charged_particle_min_Ratio, 2);
         string hSaveNameSepAMapsProton = to_string(i + 1) + "_p_SepAMap_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                          to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinSepAMapsProton = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleSepAMapsProton, hTitleSepAMapsProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]",
-                                              AMapSavePathSepAMapsProton,
-                                              hSaveNameSepAMapsProton,
-                                              hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+        hPlot2D hPBinSepAMapsProton = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleSepAMapsProton, hTitleSepAMapsProton,
+                                              "#phi_{p} [Deg]", "#theta_{p} [Deg]", AMapSavePathSepAMapsProton, hSaveNameSepAMapsProton,
+                                              hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                              HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
         ProtonAMapsBySlice.push_back(hPBinSepAMapsProton);
         //</editor-fold>
 
@@ -251,9 +257,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                  to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameTLNeutron = to_string(i + 1) + "_TL_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                     to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinTLNeutron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleTLNeutron, hTitleTLNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]", AMapSavePathTLNeutron,
-                                         hSaveNameTLNeutron,
-                                         hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+        hPlot2D hPBinTLNeutron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleTLNeutron, hTitleTLNeutron,
+                                         "#phi_{n} [Deg]", "#theta_{n} [Deg]", AMapSavePathTLNeutron, hSaveNameTLNeutron,
+                                         hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                         HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
         NeutronTLAMapsBySlice.push_back(hPBinTLNeutron);
         //</editor-fold>
 
@@ -264,10 +271,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                    to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameRecoNeutron = to_string(i + 1) + "_Reco_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                       to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinRecoNeutron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoNeutron, hTitleRecoNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]",
-                                           AMapSavePathRecoNeutron,
-                                           hSaveNameRecoNeutron,
-                                           hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+        hPlot2D hPBinRecoNeutron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoNeutron, hTitleRecoNeutron,
+                                           "#phi_{n} [Deg]", "#theta_{n} [Deg]", AMapSavePathRecoNeutron, hSaveNameRecoNeutron,
+                                           hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                           HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
         NeutronRecoAMapsBySlice.push_back(hPBinRecoNeutron);
         //</editor-fold>
 
@@ -278,11 +285,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                             to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameRecoToTLRatioNeutron = to_string(i + 1) + "_p_Ratio_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                                to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinRecoToTLRatioNeutron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoToTLRatioNeutron, hTitleRecoToTLRatioNeutron, "#phi_{n} [Deg]",
-                                                    "#theta_{n} [Deg]",
-                                                    AMapSavePathRecoToTLNeutron,
-                                                    hSaveNameRecoToTLRatioNeutron,
-                                                    hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+        hPlot2D hPBinRecoToTLRatioNeutron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoToTLRatioNeutron, hTitleRecoToTLRatioNeutron,
+                                                    "#phi_{n} [Deg]", "#theta_{n} [Deg]", AMapSavePathRecoToTLNeutron, hSaveNameRecoToTLRatioNeutron,
+                                                    hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                                    HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
         NeutronRecoToTLRatioBySlice.push_back(hPBinRecoToTLRatioNeutron);
         //</editor-fold>
 
@@ -295,24 +301,24 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                        to_string_with_precision(Neutral_particle_min_Ratio, 2);
         string hSaveNameSepAMapsNeutron = to_string(i + 1) + "_n_SepAMap_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                           to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinSepAMapsNeutron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleSepAMapsNeutron, hTitleSepAMapsNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]",
-                                               AMapSavePathSepAMapsNeutron,
-                                               hSaveNameSepAMapsNeutron,
-                                               hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+        hPlot2D hPBinSepAMapsNeutron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleSepAMapsNeutron, hTitleSepAMapsNeutron,
+                                               "#phi_{n} [Deg]", "#theta_{n} [Deg]", AMapSavePathSepAMapsNeutron, hSaveNameSepAMapsNeutron,
+                                               hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                               HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
         NeutronAMapsBySlice.push_back(hPBinSepAMapsNeutron);
         //</editor-fold>
 
         //</editor-fold>
 
     }
+    //</editor-fold>
 
     //<editor-fold desc="Setting neutron Acceptance maps">
 
     //<editor-fold desc="Neutron TL Acceptance maps">
     string hStatsTitleTLNeutron = "TL Neutron Hit Map", hTitleTLNeutron = "TL Neutron Hit Map", hSaveNameTLNeutron = "TL_n_AMap";
     NeutronTLAMap = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleTLNeutron, hTitleTLNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]", AMapSavePathTLNeutron,
-                            hSaveNameTLNeutron,
-                            hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+                            hSaveNameTLNeutron, hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
     //</editor-fold>
 
     //<editor-fold desc="Neutron Reco. Acceptance maps">
@@ -324,8 +330,10 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
     //<editor-fold desc="Neutron Reco./TL Ratio">
     string hStatsTitleRecoToTLNeutron = "Neutron Reco/TL ratio", hTitleRecoToTLNeutron = "Neutron Reco/TL ratio", hSaveNameRecoToTLNeutron = "Neutron_Ratio";
     NeutronRecoToTLRatio = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleRecoToTLNeutron, hTitleRecoToTLNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]",
-                                   AMapSavePathRecoToTLNeutron,
-                                   hSaveNameRecoToTLNeutron, hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+                                   AMapSavePathRecoToTLNeutron, hSaveNameRecoToTLNeutron, hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim,
+                                   HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
+    //</editor-fold>
+
     //</editor-fold>
 
     //</editor-fold>
@@ -369,17 +377,17 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
 AMaps::AMaps(const string &AcceptanceMapsDirectory, const string &SampleName,
              const bool &Electron_single_slice_test, const bool &Nucleon_single_slice_test, const vector<int> &TestSlices) {
     /* Load slices and their limits */
-    ReadAMapLimits((AcceptanceMapsDirectory + SampleName + "/e_AMap_by_slice/e_slice_limits.par").c_str(), Loaded_ElectronMomBinsLimits);
-    ReadAMapLimits((AcceptanceMapsDirectory + SampleName + "/p_AMap_by_slice/p_slice_limits.par").c_str(), Loaded_PBinsLimits);
+    ReadAMapLimits((AcceptanceMapsDirectory + SampleName + "/e_AMap_by_slice/e_slice_limits.par").c_str(), Loaded_ElectronMomSliceLimits);
+    ReadAMapLimits((AcceptanceMapsDirectory + SampleName + "/p_AMap_by_slice/p_slice_limits.par").c_str(), Loaded_NucleonMomSliceLimits);
 
     /* Load separate maps */
-    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Electron", Loaded_ElectronMomBinsLimits, Loaded_e_AMap_Slices);
-    ReadWMapSlices(SampleName, AcceptanceMapsDirectory, "Electron", Loaded_ElectronMomBinsLimits, Loaded_e_WMap_Slices);
-    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Proton", Loaded_PBinsLimits, Loaded_p_AMap_Slices);
-    ReadWMapSlices(SampleName, AcceptanceMapsDirectory, "Proton", Loaded_PBinsLimits, Loaded_p_WMap_Slices);
-    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Neutron", Loaded_PBinsLimits, Loaded_n_AMap_Slices);
-    ReadWMapSlices(SampleName, AcceptanceMapsDirectory, "Neutron", Loaded_PBinsLimits, Loaded_n_WMap_Slices);
-    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Nucleon", Loaded_PBinsLimits, Loaded_nuc_AMap_Slices);
+    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Electron", Loaded_ElectronMomSliceLimits, Loaded_e_AMap_Slices);
+    ReadWMapSlices(SampleName, AcceptanceMapsDirectory, "Electron", Loaded_ElectronMomSliceLimits, Loaded_e_WMap_Slices);
+    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Proton", Loaded_NucleonMomSliceLimits, Loaded_p_AMap_Slices);
+    ReadWMapSlices(SampleName, AcceptanceMapsDirectory, "Proton", Loaded_NucleonMomSliceLimits, Loaded_p_WMap_Slices);
+    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Neutron", Loaded_NucleonMomSliceLimits, Loaded_n_AMap_Slices);
+    ReadWMapSlices(SampleName, AcceptanceMapsDirectory, "Neutron", Loaded_NucleonMomSliceLimits, Loaded_n_WMap_Slices);
+    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Nucleon", Loaded_NucleonMomSliceLimits, Loaded_nuc_AMap_Slices);
 
     /* Load combined maps */
     ReadAMap((AcceptanceMapsDirectory + SampleName + "/e_AMap_file.par").c_str(), Loaded_e_AMap);
@@ -387,8 +395,8 @@ AMaps::AMaps(const string &AcceptanceMapsDirectory, const string &SampleName,
     ReadAMap((AcceptanceMapsDirectory + SampleName + "/n_AMap_file.par").c_str(), Loaded_n_AMap);
     ReadAMap((AcceptanceMapsDirectory + SampleName + "/nuc_AMap_file.par").c_str(), Loaded_nuc_AMap);
 
-    HistElectronSliceNumOfXBins = 200;  // 100 by Default
-    HistElectronSliceNumOfYBins = 200;  // 100 by Default
+    HistElectronSliceNumOfXBins = 150;  // 100 by Default
+    HistElectronSliceNumOfYBins = 150;  // 100 by Default
     HistNucSliceNumOfXBins = 75;  // 100 by Default
     HistNucSliceNumOfYBins = 75;  // 100 by Default
 
@@ -419,14 +427,14 @@ void AMaps::SetBins(double beamE) {
             cout << "Delta = " << Delta << "\n\n";
         }
 
-        InvertedPBinsLimits.push_back({InvertedBinLower, InvertedBinUpper});
+        InvertedNucleonMomSliceLimits.push_back({InvertedBinLower, InvertedBinUpper});
     }
 
     if (InvertedPrintOut && !RegPrintOut) { exit(0); }
 
     for (int i = (NumberNucOfMomSlices - 1); i >= 0; i--) {
-        double BinLower = 1 / InvertedPBinsLimits.at(i).at(1);
-        double BinUpper = 1 / InvertedPBinsLimits.at(i).at(0);
+        double BinLower = 1 / InvertedNucleonMomSliceLimits.at(i).at(1);
+        double BinUpper = 1 / InvertedNucleonMomSliceLimits.at(i).at(0);
 
         if (RegPrintOut) {
             cout << "\n\nBinLower = " << BinLower << "\n";
@@ -434,7 +442,7 @@ void AMaps::SetBins(double beamE) {
             cout << "i = " << i << "\n";
         }
 
-        PBinsLimits.push_back({BinLower, BinUpper});
+        NucleonMomSliceLimits.push_back({BinLower, BinUpper});
     }
 
     if (RegPrintOut) { exit(0); }
@@ -487,19 +495,19 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
                 cout << "deltaLoop = " << deltaLoop << "\n\n";
             }
 
-//            ElectronInvertedMomBinsLimits.push_back({InvBinLower, InvBinUpper});
+//            InvertedElectronMomSliceLimits.push_back({InvBinLower, InvBinUpper});
 
 //            if (InvBinUpper >= InvertedPLowerLim) {
             if (InvBinLower >= InvertedPLowerLim) {
 //            if (InvBinUpper - deltaLoop >= InvertedPLowerLim) {
-                ElectronInvertedMomBinsLimits.push_back({InvBinLower, InvBinUpper});
+                InvertedElectronMomSliceLimits.push_back({InvBinLower, InvBinUpper});
                 ++iter;
             } else {
                 SliceAndDice = false;
             }
         }
 
-        NumOfElectronMomBins = ElectronInvertedMomBinsLimits.size();
+        NumOfElectronMomBins = InvertedElectronMomSliceLimits.size();
 
         if (InvertedPrintOut && !RegPrintOut) { exit(0); }
 
@@ -509,8 +517,8 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
 //        for (int i = (NumOfElectronMomBins - 1); i >= 0; i--) {
 //        for (int i = (NumberNucOfMomSlices - 2); i >= 0; i--) {
 //        for (int i = (NumOfElectronMomBins - 1); i >= 0; i--) {
-            double BinLower = 1 / ElectronInvertedMomBinsLimits.at(i).at(1);
-            double BinUpper = 1 / ElectronInvertedMomBinsLimits.at(i).at(0);
+            double BinLower = 1 / InvertedElectronMomSliceLimits.at(i).at(1);
+            double BinUpper = 1 / InvertedElectronMomSliceLimits.at(i).at(0);
 
             if (RegPrintOut) {
                 cout << "\n\nBinLower = " << BinLower << "\n";
@@ -518,36 +526,36 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
                 cout << "i = " << i << "\n";
             }
 
-            ElectronMomBinsLimits.push_back({BinLower, BinUpper});
+            ElectronMomSliceLimits.push_back({BinLower, BinUpper});
         }
 
         if (RegPrintOut) { exit(0); }
     } else if (equi_P_e_bins) {
         if (findSubstring(SName, "C12_simulation_6GeV_T5")) { // Old sample
-            ElectronMomBinsLimits = {{0.4, 1.6},
-                                     {1.6, 2.2},
-                                     {2.2, 2.8},
-                                     {2.8, 4},
-                                     {4,   5},
-                                     {5,   6}};
+            ElectronMomSliceLimits = {{0.4, 1.6},
+                                      {1.6, 2.2},
+                                      {2.2, 2.8},
+                                      {2.8, 4},
+                                      {4,   5},
+                                      {5,   6}};
         } else { // New sample (24M)
-            ElectronMomBinsLimits = {{0.4, 0.6},
-                                     {0.6, 0.8},
-                                     {0.8, 1.2},
-                                     {1.2, 1.6},
-                                     {1.6, 2.2},
-                                     {2.2, 2.8},
-                                     {2.8, 4},
-                                     {4,   5},
-                                     {5,   6}};
+            ElectronMomSliceLimits = {{0.4, 0.6},
+                                      {0.6, 0.8},
+                                      {0.8, 1.2},
+                                      {1.2, 1.6},
+                                      {1.6, 2.2},
+                                      {2.2, 2.8},
+                                      {2.8, 4},
+                                      {4,   5},
+                                      {5,   6}};
         }
 
-        int NumOfElectronMomBins = ElectronMomBinsLimits.size();
+        int NumOfElectronMomBins = ElectronMomSliceLimits.size();
 
         if (RegPrintOut) {
             for (int i = 0; i < NumOfElectronMomBins; i++) {
-                cout << "\n\nElectronMomBinsLimits.at(" << i << ").at(" << 0 << ") = " << ElectronMomBinsLimits.at(i).at(0) << "\n";
-                cout << "ElectronMomBinsLimits.at(" << i << ").at(" << 1 << ") = " << ElectronMomBinsLimits.at(i).at(1) << "\n";
+                cout << "\n\nElectronMomSliceLimits.at(" << i << ").at(" << 0 << ") = " << ElectronMomSliceLimits.at(i).at(0) << "\n";
+                cout << "ElectronMomSliceLimits.at(" << i << ").at(" << 1 << ") = " << ElectronMomSliceLimits.at(i).at(1) << "\n";
             }
         }
 
@@ -568,7 +576,7 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
                 cout << "Delta = " << Delta << "\n\n";
             }
 
-            ElectronInvertedMomBinsLimits.push_back({InvertedBinLower, InvertedBinUpper});
+            InvertedElectronMomSliceLimits.push_back({InvertedBinLower, InvertedBinUpper});
         }
 
         if (InvertedPrintOut && !RegPrintOut) { exit(0); }
@@ -576,18 +584,18 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
         if (RegPrintOut) { cout << "\n\n---------------------------------------------\n\n"; }
 
         for (int i = 0; i < (NumberElecOfMomSlices - 1); i++) {
-            double BinLower = beamE - (1 / ElectronInvertedMomBinsLimits.at(i).at(0));
-            double BinUpper = beamE - (1 / ElectronInvertedMomBinsLimits.at(i).at(1));
+            double BinLower = beamE - (1 / InvertedElectronMomSliceLimits.at(i).at(0));
+            double BinUpper = beamE - (1 / InvertedElectronMomSliceLimits.at(i).at(1));
 
-            ElectronMomBinsLimits.push_back({BinLower, BinUpper});
+            ElectronMomSliceLimits.push_back({BinLower, BinUpper});
         }
 
-        ElectronMomBinsLimits.push_back({ElectronMomBinsLimits.at(ElectronMomBinsLimits.size() - 1).at(1), beamE});
+        ElectronMomSliceLimits.push_back({ElectronMomSliceLimits.at(ElectronMomSliceLimits.size() - 1).at(1), beamE});
 
         if (RegPrintOut) {
-            for (int i = 0; i < ElectronMomBinsLimits.size(); i++) {
-                double BinLower = ElectronMomBinsLimits.at(i).at(0);
-                double BinUpper = ElectronMomBinsLimits.at(i).at(1);
+            for (int i = 0; i < ElectronMomSliceLimits.size(); i++) {
+                double BinLower = ElectronMomSliceLimits.at(i).at(0);
+                double BinUpper = ElectronMomSliceLimits.at(i).at(1);
 
                 cout << "\nBinLower = " << BinLower << "\n";
                 cout << "BinUpper = " << BinUpper << "\n";
@@ -646,19 +654,19 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
 //                cout << "deltaLoop = " << deltaLoop << "\n\n";
 //            }
 //
-////            ElectronInvertedMomBinsLimits.push_back({InvBinLower, InvBinUpper});
+////            InvertedElectronMomSliceLimits.push_back({InvBinLower, InvBinUpper});
 //
 ////            if (InvBinUpper >= InvertedPLowerLim) {
 //            if (InvBinLower >= InvertedPLowerLim) {
 ////            if (InvBinUpper - deltaLoop >= InvertedPLowerLim) {
-//                ElectronInvertedMomBinsLimits.push_back({InvBinLower, InvBinUpper});
+//                InvertedElectronMomSliceLimits.push_back({InvBinLower, InvBinUpper});
 //                ++iter;
 //            } else {
 //                SliceAndDice = false;
 //            }
 //        }
 //
-//        NumOfElectronMomBins = ElectronInvertedMomBinsLimits.size();
+//        NumOfElectronMomBins = InvertedElectronMomSliceLimits.size();
 //
 //        if (InvertedPrintOut && !RegPrintOut) { exit(0); }
 //
@@ -668,8 +676,8 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
 ////        for (int i = (NumOfElectronMomBins - 1); i >= 0; i--) {
 ////        for (int i = (NumberNucOfMomSlices - 2); i >= 0; i--) {
 ////        for (int i = (NumOfElectronMomBins - 1); i >= 0; i--) {
-//            double BinLower = 1 / ElectronInvertedMomBinsLimits.at(i).at(1);
-//            double BinUpper = 1 / ElectronInvertedMomBinsLimits.at(i).at(0);
+//            double BinLower = 1 / InvertedElectronMomSliceLimits.at(i).at(1);
+//            double BinUpper = 1 / InvertedElectronMomSliceLimits.at(i).at(0);
 //
 //            if (RegPrintOut) {
 //                cout << "\n\nBinLower = " << BinLower << "\n";
@@ -677,20 +685,20 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
 //                cout << "i = " << i << "\n";
 //            }
 //
-//            ElectronMomBinsLimits.push_back({BinLower, BinUpper});
+//            ElectronMomSliceLimits.push_back({BinLower, BinUpper});
 //        }
 //
 //        if (RegPrintOut) { exit(0); }
 //    } else if (equi_P_e_bins) {
 //        if (findSubstring(SName, "C12_simulation_6GeV_T5")) { // Old sample
-//            ElectronMomBinsLimits = {{0.4, 1.6},
+//            ElectronMomSliceLimits = {{0.4, 1.6},
 //                                     {1.6, 2.2},
 //                                     {2.2, 2.8},
 //                                     {2.8, 4},
 //                                     {4,   5},
 //                                     {5,   6}};
 //        } else { // New sample (24M)
-//            ElectronMomBinsLimits = {{0.4, 0.6},
+//            ElectronMomSliceLimits = {{0.4, 0.6},
 //                                     {0.6, 0.8},
 //                                     {0.8, 1.2},
 //                                     {1.2, 1.6},
@@ -701,12 +709,12 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
 //                                     {5,   6}};
 //        }
 //
-//        int NumOfElectronMomBins = ElectronMomBinsLimits.size();
+//        int NumOfElectronMomBins = ElectronMomSliceLimits.size();
 //
 //        if (RegPrintOut) {
 //            for (int i = 0; i < NumOfElectronMomBins; i++) {
-//                cout << "\n\nElectronMomBinsLimits.at(" << i << ").at(" << 0 << ") = " << ElectronMomBinsLimits.at(i).at(0) << "\n";
-//                cout << "ElectronMomBinsLimits.at(" << i << ").at(" << 1 << ") = " << ElectronMomBinsLimits.at(i).at(1) << "\n";
+//                cout << "\n\nElectronMomSliceLimits.at(" << i << ").at(" << 0 << ") = " << ElectronMomSliceLimits.at(i).at(0) << "\n";
+//                cout << "ElectronMomSliceLimits.at(" << i << ").at(" << 1 << ") = " << ElectronMomSliceLimits.at(i).at(1) << "\n";
 //            }
 //        }
 //
@@ -727,14 +735,14 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
 //                cout << "Delta = " << Delta << "\n\n";
 //            }
 //
-//            ElectronInvertedMomBinsLimits.push_back({InvertedBinLower, InvertedBinUpper});
+//            InvertedElectronMomSliceLimits.push_back({InvertedBinLower, InvertedBinUpper});
 //        }
 //
 //        if (InvertedPrintOut && !RegPrintOut) { exit(0); }
 //
 //        for (int i = (NumberNucOfMomSlices - 1); i >= 0; i--) {
-//            double BinLower = 1 / ElectronInvertedMomBinsLimits.at(i).at(1);
-//            double BinUpper = 1 / ElectronInvertedMomBinsLimits.at(i).at(0);
+//            double BinLower = 1 / InvertedElectronMomSliceLimits.at(i).at(1);
+//            double BinUpper = 1 / InvertedElectronMomSliceLimits.at(i).at(0);
 //
 //            if (RegPrintOut) {
 //                cout << "\n\nBinLower = " << BinLower << "\n";
@@ -742,7 +750,7 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
 //                cout << "i = " << i << "\n";
 //            }
 //
-//            ElectronMomBinsLimits.push_back({BinLower, BinUpper});
+//            ElectronMomSliceLimits.push_back({BinLower, BinUpper});
 //        }
 //
 //        if (RegPrintOut) { exit(0); }
@@ -768,7 +776,7 @@ void AMaps::SetBins(double beamE, double nOfMomBins) {
             LowerLim = (UpperLim / nOfMomBins);
         }
 
-        PBinsLimits.push_back({LowerLim, UpperLim});
+        NucleonMomSliceLimits.push_back({LowerLim, UpperLim});
 
         if (LowerLim <= Nucleon_Momentum_Slice_Th) {
             SliceAndDice = false;
@@ -827,63 +835,171 @@ bool AMaps::isTL(const string &SampleType) {
 }
 //</editor-fold>
 
+// isReco function --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="isReco function">
+bool AMaps::isReco(const string &SampleType) {
+    if (SampleType == "Reco" || SampleType == "Reconstruction") {
+        return true;
+    } else {
+        return false;
+    }
+}
+//</editor-fold>
+
 // hFillHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="hFillHitMaps function">
 void AMaps::hFillHitMaps(const string &SampleType, const string &particle, double Momentum, double Theta, double Phi, double Weight) {
-    bool is_e = isElectron(particle), is_p = isProton(particle), is_n = isNeutron(particle), is_TL = isTL(SampleType);
+    bool is_e = isElectron(particle), is_p = isProton(particle), is_n = isNeutron(particle);
+    bool is_TL = isTL(SampleType), is_Reco = isReco(SampleType);
+
+    bool TL_e_PrintOut = false, TL_p_PrintOut = false, Reco_e_PrintOut = false, Reco_p_PrintOut = false;
+
+    //<editor-fold desc="Safty checks (AMaps::hFillHitMaps)">
+    if (is_e && is_p && is_n) { cout << "\n\nAMaps::hFillHitMaps: particle can't all particles! Exiting...\n", exit(0); }
+    if (!is_e && !is_p && !is_n) { cout << "\n\nAMaps::hFillHitMaps: particle must be an electron, proton or neutron! Exiting...\n", exit(0); }
+    if (is_e && is_p) { cout << "\n\nAMaps::hFillHitMaps: particle can't be both electrons and protons! Exiting...\n", exit(0); }
+    if (is_e && is_n) { cout << "\n\nAMaps::hFillHitMaps: particle can't be both electrons and neutrons! Exiting...\n", exit(0); }
+    if (is_p && is_n) { cout << "\n\nAMaps::hFillHitMaps: particle can't be both protons and neutrons! Exiting...\n", exit(0); }
+
+    if (is_TL && is_Reco) { cout << "\n\nAMaps::hFillHitMaps: particle can't be both TL and Reco! Exiting...\n", exit(0); }
+    if (!is_TL && !is_Reco) { cout << "\n\nAMaps::hFillHitMaps: particle must be either TL and Reco! Exiting...\n", exit(0); }
+    //</editor-fold>
 
     if (is_TL) {
-        if (is_e) {
-            for (int i = 0; i < ElectronMomBinsLimits.size(); i++) {
-                if ((Momentum >= ElectronMomBinsLimits.at(i).at(0)) && (Momentum < ElectronMomBinsLimits.at(i).at(1))) {
+        if (is_e) { // electrons are charged -> look for correct momentum slice!
+            for (int i = 0; i < ElectronMomSliceLimits.size(); i++) {
+                if ((Momentum >= ElectronMomSliceLimits.at(i).at(0)) && (Momentum < ElectronMomSliceLimits.at(i).at(1))) {
                     ElectronTLAMapsBySlice.at(i).hFill(Phi, Theta, Weight);
+
+                    if (AMaps_Mode == "AMaps" && TL_e_PrintOut) {
+                        cout << "\n";
+                        cout << "ElectronMomSliceLimits.at(" << i << ").at(0) = " << ElectronMomSliceLimits.at(i).at(0) << "\n";
+                        cout << "ElectronMomSliceLimits.at(" << i << ").at(1) = " << ElectronMomSliceLimits.at(i).at(1) << "\n";
+                        cout << "particle = " << particle << "\n";
+                        cout << "is_e = " << is_e << "\n";
+                        cout << "is_TL = " << is_TL << "\n";
+                        cout << "is_Reco = " << is_Reco << "\n";
+                        cout << "Momentum = " << Momentum << "\n";
+                        cout << "Theta = " << Theta << "\n";
+                        cout << "Phi = " << Phi << "\n";
+                    }
+
+                    //<editor-fold desc="Safty checks (AMaps::hFillHitMaps)">
+                    if (ElectronMomSliceLimits.at(i).at(0) > ElectronMomSliceLimits.at(i).at(1)) {
+                        cout << "\n\nAMaps::hFillHitMaps: electron momentum slice limits were set incorrectly! Exiting...\n", exit(0);
+                    }
+                    //</editor-fold>
+
                     break; // no need to keep the loop going after filling histogram
                 }
             }
-        } else if (is_p) {
-            for (int i = 0; i < PBinsLimits.size(); i++) {
-                if ((Momentum >= PBinsLimits.at(i).at(0)) && (Momentum < PBinsLimits.at(i).at(1))) {
+        } else if (is_p) { // protons are charged -> look for correct momentum slice!
+            for (int i = 0; i < NucleonMomSliceLimits.size(); i++) {
+                if ((Momentum >= NucleonMomSliceLimits.at(i).at(0)) && (Momentum < NucleonMomSliceLimits.at(i).at(1))) {
                     ProtonTLAMapsBySlice.at(i).hFill(Phi, Theta, Weight);
+
+                    if (AMaps_Mode == "AMaps" && TL_p_PrintOut) {
+                        cout << "\n";
+                        cout << "NucleonMomSliceLimits.at(" << i << ").at(0) = " << NucleonMomSliceLimits.at(i).at(0) << "\n";
+                        cout << "NucleonMomSliceLimits.at(" << i << ").at(1) = " << NucleonMomSliceLimits.at(i).at(1) << "\n";
+                        cout << "particle = " << particle << "\n";
+                        cout << "is_p = " << is_p << "\n";
+                        cout << "is_TL = " << is_TL << "\n";
+                        cout << "is_Reco = " << is_Reco << "\n";
+                        cout << "Momentum = " << Momentum << "\n";
+                        cout << "Theta = " << Theta << "\n";
+                        cout << "Phi = " << Phi << "\n";
+                    }
+
+                    //<editor-fold desc="Safty checks (AMaps::hFillHitMaps)">
+                    if (NucleonMomSliceLimits.at(i).at(0) > NucleonMomSliceLimits.at(i).at(1)) {
+                        cout << "\n\nAMaps::hFillHitMaps: nucleon momentum slice limits were set incorrectly! Exiting...\n", exit(0);
+                    }
+                    //</editor-fold>
+
                     break; // no need to keep the loop going after filling histogram
                 }
             }
-        } else if (is_n) {
+        } else if (is_n) { // neutrons are neutral -> same fill all slices!
             NeutronTLAMap.hFill(Phi, Theta, Weight);
 
-            for (int Bin = 0; Bin < PBinsLimits.size(); Bin++) { NeutronTLAMapsBySlice.at(Bin).hFill(Phi, Theta, Weight); }
+            for (int Bin = 0; Bin < NucleonMomSliceLimits.size(); Bin++) {
+                NeutronTLAMapsBySlice.at(Bin).hFill(Phi, Theta, Weight);
+            }
         }
-    } else {
-        if (is_e) {
+    } else if (is_Reco) {
+        if (is_e) { // electrons are charged -> look for correct momentum slice!
             ElectronAMapBC.hFill(Phi, Theta, Weight);
 
-            for (int i = 0; i < ElectronMomBinsLimits.size(); i++) {
-                if ((Momentum >= ElectronMomBinsLimits.at(i).at(0)) && (Momentum < ElectronMomBinsLimits.at(i).at(1))) {
+            for (int i = 0; i < ElectronMomSliceLimits.size(); i++) {
+                if ((Momentum >= ElectronMomSliceLimits.at(i).at(0)) && (Momentum < ElectronMomSliceLimits.at(i).at(1))) {
                     ElectronRecoAMapsBySlice.at(i).hFill(Phi, Theta, Weight);
                     ElectronRecoToTLRatioBySlice.at(i).hFill(Phi, Theta, Weight);
                     ElectronAMapsBySlice.at(i).hFill(Phi, Theta, Weight);
+
+                    if (AMaps_Mode == "AMaps" && Reco_e_PrintOut) {
+                        cout << "\n";
+                        cout << "ElectronMomSliceLimits.at(" << i << ").at(0) = " << ElectronMomSliceLimits.at(i).at(0) << "\n";
+                        cout << "ElectronMomSliceLimits.at(" << i << ").at(1) = " << ElectronMomSliceLimits.at(i).at(1) << "\n";
+                        cout << "particle = " << particle << "\n";
+                        cout << "is_p = " << is_p << "\n";
+                        cout << "is_TL = " << is_TL << "\n";
+                        cout << "is_Reco = " << is_Reco << "\n";
+                        cout << "Momentum = " << Momentum << "\n";
+                        cout << "Theta = " << Theta << "\n";
+                        cout << "Phi = " << Phi << "\n";
+                    }
+
+                    //<editor-fold desc="Safty checks (AMaps::hFillHitMaps)">
+                    if (ElectronMomSliceLimits.at(i).at(0) > ElectronMomSliceLimits.at(i).at(1)) {
+                        cout << "\n\nAMaps::hFillHitMaps: electron momentum slice limits were set incorrectly! Exiting...\n", exit(0);
+                    }
+                    //</editor-fold>
+
                     break; // no need to keep the loop going after filling histogram
                 }
             }
-        } else if (is_p) {
+        } else if (is_p) { // protons are charged -> look for correct momentum slice!
             ProtonAMapBC.hFill(Phi, Theta, Weight);
 
-            for (int i = 0; i < PBinsLimits.size(); i++) {
-                if ((Momentum >= PBinsLimits.at(i).at(0)) && (Momentum < PBinsLimits.at(i).at(1))) {
+            for (int i = 0; i < NucleonMomSliceLimits.size(); i++) {
+                if ((Momentum >= NucleonMomSliceLimits.at(i).at(0)) && (Momentum < NucleonMomSliceLimits.at(i).at(1))) {
                     ProtonRecoAMapsBySlice.at(i).hFill(Phi, Theta, Weight);
                     ProtonRecoToTLRatioBySlice.at(i).hFill(Phi, Theta, Weight);
                     ProtonAMapsBySlice.at(i).hFill(Phi, Theta, Weight);
+
+                    if (AMaps_Mode == "AMaps" && Reco_p_PrintOut) {
+                        cout << "\n";
+                        cout << "NucleonMomSliceLimits.at(" << i << ").at(0) = " << NucleonMomSliceLimits.at(i).at(0) << "\n";
+                        cout << "NucleonMomSliceLimits.at(" << i << ").at(1) = " << NucleonMomSliceLimits.at(i).at(1) << "\n";
+                        cout << "particle = " << particle << "\n";
+                        cout << "is_p = " << is_p << "\n";
+                        cout << "is_TL = " << is_TL << "\n";
+                        cout << "is_Reco = " << is_Reco << "\n";
+                        cout << "Momentum = " << Momentum << "\n";
+                        cout << "Theta = " << Theta << "\n";
+                        cout << "Phi = " << Phi << "\n";
+                    }
+
+                    //<editor-fold desc="Safty checks (AMaps::hFillHitMaps)">
+                    if (NucleonMomSliceLimits.at(i).at(0) > NucleonMomSliceLimits.at(i).at(1)) {
+                        cout << "\n\nAMaps::hFillHitMaps: nucleon momentum slice limits were set incorrectly! Exiting...\n", exit(0);
+                    }
+                    //</editor-fold>
+
                     break; // no need to keep the loop going after filling histogram
                 }
             }
-        } else if (is_n) {
+        } else if (is_n) { // neutrons are neutral -> same fill all slices!
             NeutronAMapBC.hFill(Phi, Theta, Weight);
 
             NeutronRecoAMap.hFill(Phi, Theta, Weight);
             NeutronRecoToTLRatio.hFill(Phi, Theta, Weight);
             NeutronAMap.hFill(Phi, Theta, Weight);
 
-            for (int Bin = 0; Bin < PBinsLimits.size(); Bin++) {
+            for (int Bin = 0; Bin < NucleonMomSliceLimits.size(); Bin++) {
                 NeutronRecoAMapsBySlice.at(Bin).hFill(Phi, Theta, Weight);
                 NeutronRecoToTLRatioBySlice.at(Bin).hFill(Phi, Theta, Weight);
                 NeutronAMapsBySlice.at(Bin).hFill(Phi, Theta, Weight);
@@ -898,7 +1014,7 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
 //<editor-fold desc="CalcAMapsRatio function">
 void AMaps::CalcAMapsRatio(bool ElectronRecoToTLDiv, bool ProtonRecoToTLDiv, bool NeutronRecoToTLDiv) {
     if (ElectronRecoToTLDiv) {
-        for (int i = 0; i < ElectronMomBinsLimits.size(); i++) {
+        for (int i = 0; i < ElectronMomSliceLimits.size(); i++) {
             if (ElectronRecoToTLDiv) {
                 ElectronRecoToTLRatioBySlice.at(i).hDivision(ElectronTLAMapsBySlice.at(i).GetHistogram2D());
             }
@@ -906,7 +1022,7 @@ void AMaps::CalcAMapsRatio(bool ElectronRecoToTLDiv, bool ProtonRecoToTLDiv, boo
     }
 
     if (ProtonRecoToTLDiv) {
-        for (int i = 0; i < PBinsLimits.size(); i++) {
+        for (int i = 0; i < NucleonMomSliceLimits.size(); i++) {
             if (ProtonRecoToTLDiv) { ProtonRecoToTLRatioBySlice.at(i).hDivision(ProtonTLAMapsBySlice.at(i).GetHistogram2D()); }
         }
     }
@@ -914,7 +1030,7 @@ void AMaps::CalcAMapsRatio(bool ElectronRecoToTLDiv, bool ProtonRecoToTLDiv, boo
     if (NeutronRecoToTLDiv) {
         NeutronRecoToTLRatio.hDivision(NeutronTLAMap.GetHistogram2D());
 
-        for (int i = 0; i < PBinsLimits.size(); i++) {
+        for (int i = 0; i < NucleonMomSliceLimits.size(); i++) {
             if (NeutronRecoToTLDiv) { NeutronRecoToTLRatioBySlice.at(i).hDivision(NeutronTLAMapsBySlice.at(i).GetHistogram2D()); }
         }
     }
@@ -925,7 +1041,7 @@ void AMaps::CalcAMapsRatio(bool ElectronRecoToTLDiv, bool ProtonRecoToTLDiv, boo
 
 //<editor-fold desc="GenerateSeparateCPartAMaps function">
 void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
-    for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) {
+    for (int bin = 0; bin < ElectronMomSliceLimits.size(); bin++) {
         for (int i = 0; i < (HistElectronSliceNumOfXBins + 1); i++) {
             for (int j = 0; j < (HistElectronSliceNumOfYBins + 1); j++) {
                 if (ElectronRecoToTLRatioBySlice.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ElectronAMapsBySlice.at(bin).hFillByBin(i, j, 0); }
@@ -934,7 +1050,7 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
 
         if (AMaps_Mode == "AMaps") {
             //TODO: move from here
-            ElectronRecoToTLRatioBySlice.at(bin).ApplyZMaxLim(1);
+            ElectronRecoToTLRatioBySlice.at(bin).ApplyZMaxLim(1.2);
         }
 
         //<editor-fold desc="Fill e_AMap_Slices">
@@ -965,7 +1081,7 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
 
     }
 
-    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
+    for (int bin = 0; bin < NucleonMomSliceLimits.size(); bin++) {
         for (int i = 0; i < (HistNucSliceNumOfXBins + 1); i++) {
             for (int j = 0; j < (HistNucSliceNumOfYBins + 1); j++) {
                 if (ProtonRecoToTLRatioBySlice.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ProtonAMapsBySlice.at(bin).hFillByBin(i, j, 0); }
@@ -974,7 +1090,7 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
 
         if (AMaps_Mode == "AMaps") {
             //TODO: move from here
-            ProtonRecoToTLRatioBySlice.at(bin).ApplyZMaxLim(1);
+            ProtonRecoToTLRatioBySlice.at(bin).ApplyZMaxLim(1.2);
         }
 
         //<editor-fold desc="Fill p_AMap_Slices">
@@ -1013,9 +1129,9 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
 void AMaps::GenerateCPartAMaps(double cP_minR) {
     GenerateSeparateCPartAMaps(cP_minR);
 
-    for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) { ElectronAMap.hAdd(ElectronAMapsBySlice.at(bin).GetHistogram2D()); }
+    for (int bin = 0; bin < ElectronMomSliceLimits.size(); bin++) { ElectronAMap.hAdd(ElectronAMapsBySlice.at(bin).GetHistogram2D()); }
 
-    for (int bin = 0; bin < PBinsLimits.size(); bin++) { ProtonAMap.hAdd(ProtonAMapsBySlice.at(bin).GetHistogram2D()); }
+    for (int bin = 0; bin < NucleonMomSliceLimits.size(); bin++) { ProtonAMap.hAdd(ProtonAMapsBySlice.at(bin).GetHistogram2D()); }
 
     for (int i = 0; i < HistElectronSliceNumOfYBins; i++) {
         vector<int> e_AMap_col;
@@ -1056,19 +1172,17 @@ void AMaps::GenerateNPartAMaps(double nP_minR) {
             if (NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(i, j) < nP_minR) {
                 NeutronAMap.hFillByBin(i, j, 0);
 
-                for (int bin = 0; bin < PBinsLimits.size(); bin++) { NeutronAMapsBySlice.at(bin).hFillByBin(i, j, 0); }
+                for (int bin = 0; bin < NucleonMomSliceLimits.size(); bin++) { NeutronAMapsBySlice.at(bin).hFillByBin(i, j, 0); }
             }
         }
     }
 
     if (AMaps_Mode == "AMaps") {
-        for (int bin = 0; bin < PBinsLimits.size(); bin++) {
-            //TODO: move from here
-            NeutronRecoToTLRatioBySlice.at(bin).ApplyZMaxLim(1);
+        for (int bin = 0; bin < NucleonMomSliceLimits.size(); bin++) {
+            NeutronRecoToTLRatioBySlice.at(bin).ApplyZMaxLim(1.2);
         }
 
-        //TODO: move from here
-        NeutronAMap.ApplyZMaxLim(1);
+        NeutronRecoToTLRatio.ApplyZMaxLim(1.2);
     }
 
     for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
@@ -1089,7 +1203,7 @@ void AMaps::GenerateNPartAMaps(double nP_minR) {
         n_WMap.push_back(n_WMap_col);
     }
 
-    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
+    for (int bin = 0; bin < NucleonMomSliceLimits.size(); bin++) {
         NeutronAMapsBySlice.push_back(NeutronAMap);
         n_AMap_Slices.push_back(n_AMap);
         n_WMap_Slices.push_back(n_WMap);
@@ -1125,7 +1239,7 @@ void AMaps::GenerateNucleonAMap() {
         nuc_AMap.push_back(nuc_col);
     }
 
-    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
+    for (int bin = 0; bin < NucleonMomSliceLimits.size(); bin++) {
         vector <vector<int>> nuc_slice;
 
         for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
@@ -1143,6 +1257,7 @@ void AMaps::GenerateNucleonAMap() {
         }
 
         nuc_AMap_Slices.push_back(nuc_slice);
+        nuc_WMap_Slices.push_back(nuc_slice); //TODO: fiure out if really need these!
     }
 }
 //</editor-fold>
@@ -1150,45 +1265,61 @@ void AMaps::GenerateNucleonAMap() {
 // SaveHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SaveHitMaps function">
+
+//TODO: separate into AMaps and WMaps
+
 void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDirectory) {
     string AMapSliceElectronSavePath = AcceptanceMapsDirectory + SampleName + "/e_AMap_by_slice/";
     system(("mkdir -p " + AMapSliceElectronSavePath).c_str());
     string WMapSliceElectronSavePath = AcceptanceMapsDirectory + SampleName + "/e_WMap_by_slice/";
     system(("mkdir -p " + WMapSliceElectronSavePath).c_str());
+    string AMapSliceElectronSavePathCopy = AMapCopySavePath + "/e_AMap_by_slice/";
+    system(("mkdir -p " + AMapSliceElectronSavePathCopy).c_str());
+    string WMapSliceElectronSavePathCopy = AMapCopySavePath + "/e_WMap_by_slice/";
+    system(("mkdir -p " + WMapSliceElectronSavePathCopy).c_str());
 
     string AMapSliceProtonSavePath = AcceptanceMapsDirectory + SampleName + "/p_AMap_by_slice/";
     system(("mkdir -p " + AMapSliceProtonSavePath).c_str());
     string WMapSliceProtonSavePath = AcceptanceMapsDirectory + SampleName + "/p_WMap_by_slice/";
     system(("mkdir -p " + WMapSliceProtonSavePath).c_str());
+    string AMapSliceProtonSavePathCopy = AMapCopySavePath + "/p_AMap_by_slice/";
+    system(("mkdir -p " + AMapSliceProtonSavePathCopy).c_str());
+    string WMapSliceProtonSavePathCopy = AMapCopySavePath + "/p_WMap_by_slice/";
+    system(("mkdir -p " + WMapSliceProtonSavePathCopy).c_str());
 
     string AMapSliceNeutronSavePath = AcceptanceMapsDirectory + SampleName + "/n_AMap_by_slice/";
     system(("mkdir -p " + AMapSliceNeutronSavePath).c_str());
     string WMapSliceNeutronSavePath = AcceptanceMapsDirectory + SampleName + "/n_WMap_by_slice/";
     system(("mkdir -p " + WMapSliceNeutronSavePath).c_str());
+    string AMapSliceNeutronSavePathCopy = AMapCopySavePath + "/n_AMap_by_slice/";
+    system(("mkdir -p " + AMapSliceNeutronSavePathCopy).c_str());
+    string WMapSliceNeutronSavePathCopy = AMapCopySavePath + "/n_WMap_by_slice/";
+    system(("mkdir -p " + WMapSliceNeutronSavePathCopy).c_str());
 
     string AMapSliceNucleonSavePath = AcceptanceMapsDirectory + SampleName + "/nuc_AMap_by_slice/";
     system(("mkdir -p " + AMapSliceNucleonSavePath).c_str());
     string WMapSliceNucleonSavePath = AcceptanceMapsDirectory + SampleName + "/nuc_WMap_by_slice/";
     system(("mkdir -p " + WMapSliceNucleonSavePath).c_str());
+    string AMapSliceNucleonSavePathCopy = AMapCopySavePath + "/nuc_AMap_by_slice/";
+    system(("mkdir -p " + AMapSliceNucleonSavePathCopy).c_str());
+    string WMapSliceNucleonSavePathCopy = AMapCopySavePath + "/nuc_WMap_by_slice/";
+    system(("mkdir -p " + WMapSliceNucleonSavePathCopy).c_str());
 
     //<editor-fold desc="Save electron slices">
-    for (int Slice = 0; Slice < ElectronMomBinsLimits.size(); Slice++) {
+    for (int Slice = 0; Slice < ElectronMomSliceLimits.size(); Slice++) {
         ofstream e_AMap_TempFile, e_WMap_TempFile;
 
-        string AMapTempFileName = "e_AMap_file_from_" + to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(0), 2) + "_to_" +
-                                  to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(1), 2) + ".par";
-        string WMapTempFileName = "e_WMap_file_from_" + to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(0), 2) + "_to_" +
-                                  to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(1), 2) + ".par";
+        string AMapTempFileName = "e_AMap_file_from_" + to_string_with_precision(ElectronMomSliceLimits.at(Slice).at(0), 2) + "_to_" +
+                                  to_string_with_precision(ElectronMomSliceLimits.at(Slice).at(1), 2) + ".par";
+        string WMapTempFileName = "e_WMap_file_from_" + to_string_with_precision(ElectronMomSliceLimits.at(Slice).at(0), 2) + "_to_" +
+                                  to_string_with_precision(ElectronMomSliceLimits.at(Slice).at(1), 2) + ".par";
 
         e_AMap_TempFile.open(AMapSliceElectronSavePath + AMapTempFileName);
         e_WMap_TempFile.open(WMapSliceElectronSavePath + WMapTempFileName);
 
-        e_AMap_TempFile << "Lower_P_lim:\t" << ElectronMomBinsLimits.at(Slice).at(0) << "\n";
-        e_AMap_TempFile << "Upper_P_lim:\t" << ElectronMomBinsLimits.at(Slice).at(1) << "\n";
+        e_AMap_TempFile << "Lower_P_lim:\t" << ElectronMomSliceLimits.at(Slice).at(0) << "\n";
+        e_AMap_TempFile << "Upper_P_lim:\t" << ElectronMomSliceLimits.at(Slice).at(1) << "\n";
         e_AMap_TempFile << "\n";
-//        e_WMap_TempFile << "Lower_P_lim:\t" << ElectronMomBinsLimits.at(Slice).at(0) << "\n";
-//        e_WMap_TempFile << "Upper_P_lim:\t" << ElectronMomBinsLimits.at(Slice).at(1) << "\n";
-//        e_WMap_TempFile << "\n";
 
         for (int i = 0; i < HistElectronSliceNumOfYBins; i++) {
             e_AMap_TempFile << "Line\t";
@@ -1210,44 +1341,44 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
 
         e_AMap_TempFile.close();
         e_WMap_TempFile.close();
+
+        system(("cp " + AMapSliceElectronSavePath + AMapTempFileName + " " + AMapSliceElectronSavePathCopy + AMapTempFileName).c_str());
+        system(("cp " + WMapSliceElectronSavePath + WMapTempFileName + " " + WMapSliceElectronSavePathCopy + WMapTempFileName).c_str());
     }
     //</editor-fold>
 
     //<editor-fold desc="Save proton, neutron & nucleon slices">
-    for (int Slice = 0; Slice < PBinsLimits.size(); Slice++) {
-        ofstream p_AMap_TempFile, p_WMap_TempFile, n_AMap_TempFile, n_WMap_TempFile, nuc_AMap_TempFile;
+    for (int Slice = 0; Slice < NucleonMomSliceLimits.size(); Slice++) {
+        ofstream p_AMap_TempFile, p_WMap_TempFile, n_AMap_TempFile, n_WMap_TempFile, nuc_AMap_TempFile, nuc_WMap_TempFile;
 
-        string ProtonAMapTempFileName = "p_AMap_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
-                                        to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
-        string ProtonWMapTempFileName = "p_WMap_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
-                                        to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
-        string NeutronAMapTempFileName = "n_AMap_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
-                                         to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
-        string NeutronWMapTempFileName = "n_WMap_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
-                                         to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
-        string NucleonAMapTempFileName = "nuc_AMap_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
-                                         to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
+        string ProtonAMapTempFileName = "p_AMap_file_from_" + to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(0), 2) + "_to_" +
+                                        to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(1), 2) + ".par";
+        string ProtonWMapTempFileName = "p_WMap_file_from_" + to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(0), 2) + "_to_" +
+                                        to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(1), 2) + ".par";
+        string NeutronAMapTempFileName = "n_AMap_file_from_" + to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(0), 2) + "_to_" +
+                                         to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(1), 2) + ".par";
+        string NeutronWMapTempFileName = "n_WMap_file_from_" + to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(0), 2) + "_to_" +
+                                         to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(1), 2) + ".par";
+        string NucleonAMapTempFileName = "nuc_AMap_file_from_" + to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(0), 2) + "_to_" +
+                                         to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(1), 2) + ".par";
+        string NucleonWMapTempFileName = "nuc_WMap_file_from_" + to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(0), 2) + "_to_" +
+                                         to_string_with_precision(NucleonMomSliceLimits.at(Slice).at(1), 2) + ".par";
 
         p_AMap_TempFile.open(AMapSliceProtonSavePath + ProtonAMapTempFileName);
         p_WMap_TempFile.open(WMapSliceProtonSavePath + ProtonWMapTempFileName);
         n_AMap_TempFile.open(AMapSliceNeutronSavePath + NeutronAMapTempFileName);
         n_WMap_TempFile.open(WMapSliceNeutronSavePath + NeutronWMapTempFileName);
         nuc_AMap_TempFile.open(AMapSliceNucleonSavePath + NucleonAMapTempFileName);
+        nuc_WMap_TempFile.open(WMapSliceNucleonSavePath + NucleonWMapTempFileName);
 
-        p_AMap_TempFile << "Lower_P_lim:\t" << PBinsLimits.at(Slice).at(0) << "\n";
-        p_AMap_TempFile << "Upper_P_lim:\t" << PBinsLimits.at(Slice).at(1) << "\n";
+        p_AMap_TempFile << "Lower_P_lim:\t" << NucleonMomSliceLimits.at(Slice).at(0) << "\n";
+        p_AMap_TempFile << "Upper_P_lim:\t" << NucleonMomSliceLimits.at(Slice).at(1) << "\n";
         p_AMap_TempFile << "\n";
-//        p_WMap_TempFile << "Lower_P_lim:\t" << PBinsLimits.at(Slice).at(0) << "\n";
-//        p_WMap_TempFile << "Upper_P_lim:\t" << PBinsLimits.at(Slice).at(1) << "\n";
-//        p_WMap_TempFile << "\n";
-        n_AMap_TempFile << "Lower_P_lim:\t" << PBinsLimits.at(Slice).at(0) << "\n";
-        n_AMap_TempFile << "Upper_P_lim:\t" << PBinsLimits.at(Slice).at(1) << "\n";
+        n_AMap_TempFile << "Lower_P_lim:\t" << NucleonMomSliceLimits.at(Slice).at(0) << "\n";
+        n_AMap_TempFile << "Upper_P_lim:\t" << NucleonMomSliceLimits.at(Slice).at(1) << "\n";
         n_AMap_TempFile << "\n";
-//        n_WMap_TempFile << "Lower_P_lim:\t" << PBinsLimits.at(Slice).at(0) << "\n";
-//        n_WMap_TempFile << "Upper_P_lim:\t" << PBinsLimits.at(Slice).at(1) << "\n";
-//        n_WMap_TempFile << "\n";
-        nuc_AMap_TempFile << "Lower_P_lim:\t" << PBinsLimits.at(Slice).at(0) << "\n";
-        nuc_AMap_TempFile << "Upper_P_lim:\t" << PBinsLimits.at(Slice).at(1) << "\n";
+        nuc_AMap_TempFile << "Lower_P_lim:\t" << NucleonMomSliceLimits.at(Slice).at(0) << "\n";
+        nuc_AMap_TempFile << "Upper_P_lim:\t" << NucleonMomSliceLimits.at(Slice).at(1) << "\n";
         nuc_AMap_TempFile << "\n";
 
         for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
@@ -1256,6 +1387,7 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
             n_AMap_TempFile << "Line\t";
             n_WMap_TempFile << "Weight\t";
             nuc_AMap_TempFile << "Line\t";
+            nuc_WMap_TempFile << "Weight\t";
 
             for (int j = 0; j < HistNucSliceNumOfXBins; j++) {
                 if (j != HistNucSliceNumOfXBins - 1) {
@@ -1264,12 +1396,14 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
                     n_AMap_TempFile << n_AMap_Slices.at(Slice).at(i).at(j) << ":";
                     n_WMap_TempFile << n_WMap_Slices.at(Slice).at(i).at(j) << ":";
                     nuc_AMap_TempFile << nuc_AMap_Slices.at(Slice).at(i).at(j) << ":";
+                    nuc_WMap_TempFile << nuc_WMap_Slices.at(Slice).at(i).at(j) << ":";
                 } else {
                     p_AMap_TempFile << p_AMap_Slices.at(Slice).at(i).at(j);
                     p_WMap_TempFile << p_WMap_Slices.at(Slice).at(i).at(j);
                     n_AMap_TempFile << n_AMap_Slices.at(Slice).at(i).at(j);
                     n_WMap_TempFile << n_WMap_Slices.at(Slice).at(i).at(j);
                     nuc_AMap_TempFile << nuc_AMap_Slices.at(Slice).at(i).at(j);
+                    nuc_WMap_TempFile << nuc_WMap_Slices.at(Slice).at(i).at(j);
                 }
             }
 
@@ -1278,6 +1412,7 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
             n_AMap_TempFile << "\n";
             n_WMap_TempFile << "\n";
             nuc_AMap_TempFile << "\n";
+            nuc_WMap_TempFile << "\n";
         }
 
         p_AMap_TempFile.close();
@@ -1285,25 +1420,42 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
         n_AMap_TempFile.close();
         n_WMap_TempFile.close();
         nuc_AMap_TempFile.close();
+        nuc_WMap_TempFile.close();
+
+        system(("cp " + AMapSliceProtonSavePath + ProtonAMapTempFileName + " " + AMapSliceProtonSavePathCopy + ProtonAMapTempFileName).c_str());
+        system(("cp " + WMapSliceProtonSavePath + ProtonWMapTempFileName + " " + WMapSliceProtonSavePathCopy + ProtonWMapTempFileName).c_str());
+        system(("cp " + AMapSliceNeutronSavePath + NeutronAMapTempFileName + " " + AMapSliceNeutronSavePathCopy + NeutronAMapTempFileName).c_str());
+        system(("cp " + WMapSliceNeutronSavePath + NeutronWMapTempFileName + " " + WMapSliceNeutronSavePathCopy + NeutronWMapTempFileName).c_str());
+        system(("cp " + AMapSliceNucleonSavePath + NucleonAMapTempFileName + " " + AMapSliceNucleonSavePathCopy + NucleonAMapTempFileName).c_str());
+        system(("cp " + WMapSliceNucleonSavePath + NucleonWMapTempFileName + " " + WMapSliceNucleonSavePathCopy + NucleonWMapTempFileName).c_str());
     }
     //</editor-fold>
 
     //<editor-fold desc="Save combined maps">
+    //TODO: figure out rather or not to keep these combind maps!
     ofstream e_AMap_file, p_AMap_file, n_AMap_file, nuc_AMap_file;
 
-    e_AMap_file.open(AMapSavePath + "e_AMap_file.par");
-    p_AMap_file.open(AMapSavePath + "p_AMap_file.par");
-    n_AMap_file.open(AMapSavePath + "n_AMap_file.par");
-    nuc_AMap_file.open(AMapSavePath + "nuc_AMap_file.par");
+    e_AMap_file.open(AcceptanceMapsDirectory + SampleName + "e_AMap_file.par");
+    p_AMap_file.open(AcceptanceMapsDirectory + SampleName + "p_AMap_file.par");
+    n_AMap_file.open(AcceptanceMapsDirectory + SampleName + "n_AMap_file.par");
+    nuc_AMap_file.open(AcceptanceMapsDirectory + SampleName + "nuc_AMap_file.par");
+//    e_AMap_file.open(AMapCopySavePath + "e_AMap_file.par");
+//    p_AMap_file.open(AMapCopySavePath + "p_AMap_file.par");
+//    n_AMap_file.open(AMapCopySavePath + "n_AMap_file.par");
+//    nuc_AMap_file.open(AMapCopySavePath + "nuc_AMap_file.par");
+////    e_AMap_file.open(AMapSavePath + "e_AMap_file.par");
+////    p_AMap_file.open(AMapSavePath + "p_AMap_file.par");
+////    n_AMap_file.open(AMapSavePath + "n_AMap_file.par");
+////    nuc_AMap_file.open(AMapSavePath + "nuc_AMap_file.par");
 
-    for (int Slice = 0; Slice < ElectronMomBinsLimits.size(); Slice++) {
-        e_AMap_file << "e_slice_" << (Slice + 1) << "\t" << ElectronMomBinsLimits.at(Slice).at(0) << ":" << ElectronMomBinsLimits.at(Slice).at(1) << "\n";
+    for (int Slice = 0; Slice < ElectronMomSliceLimits.size(); Slice++) {
+        e_AMap_file << "e_slice_" << (Slice + 1) << "\t" << ElectronMomSliceLimits.at(Slice).at(0) << ":" << ElectronMomSliceLimits.at(Slice).at(1) << "\n";
     }
 
-    for (int Slice = 0; Slice < PBinsLimits.size(); Slice++) {
-        p_AMap_file << "p_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
-        n_AMap_file << "n_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
-        nuc_AMap_file << "nuc_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+    for (int Slice = 0; Slice < NucleonMomSliceLimits.size(); Slice++) {
+        p_AMap_file << "p_slice_" << (Slice + 1) << "\t" << NucleonMomSliceLimits.at(Slice).at(0) << ":" << NucleonMomSliceLimits.at(Slice).at(1) << "\n";
+        n_AMap_file << "n_slice_" << (Slice + 1) << "\t" << NucleonMomSliceLimits.at(Slice).at(0) << ":" << NucleonMomSliceLimits.at(Slice).at(1) << "\n";
+        nuc_AMap_file << "nuc_slice_" << (Slice + 1) << "\t" << NucleonMomSliceLimits.at(Slice).at(0) << ":" << NucleonMomSliceLimits.at(Slice).at(1) << "\n";
     }
 
     for (int i = 0; i < HistElectronSliceNumOfYBins; i++) {
@@ -1347,10 +1499,10 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
     n_AMap_file.close();
     nuc_AMap_file.close();
 
-    system(("cp " + AMapSavePath + "e_AMap_file.par " + AcceptanceMapsDirectory + SampleName).c_str());
-    system(("cp " + AMapSavePath + "p_AMap_file.par " + AcceptanceMapsDirectory + SampleName).c_str());
-    system(("cp " + AMapSavePath + "n_AMap_file.par " + AcceptanceMapsDirectory + SampleName).c_str());
-    system(("cp " + AMapSavePath + "nuc_AMap_file.par " + AcceptanceMapsDirectory + SampleName).c_str());
+    system(("cp " + AcceptanceMapsDirectory + SampleName + "e_AMap_file.par " + AMapCopySavePath).c_str());
+    system(("cp " + AcceptanceMapsDirectory + SampleName + "p_AMap_file.par " + AMapCopySavePath).c_str());
+    system(("cp " + AcceptanceMapsDirectory + SampleName + "n_AMap_file.par " + AMapCopySavePath).c_str());
+    system(("cp " + AcceptanceMapsDirectory + SampleName + "nuc_AMap_file.par " + AMapCopySavePath).c_str());
     //</editor-fold>
 
     //<editor-fold desc="Slice limits">
@@ -1361,14 +1513,14 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
     n_slice_limits.open(AMapSliceNeutronSavePath + "n_slice_limits.par");
     nuc_slice_limits.open(AMapSliceNucleonSavePath + "nuc_slice_limits.par");
 
-    for (int Slice = 0; Slice < ElectronMomBinsLimits.size(); Slice++) {
-        e_slice_limits << "e_slice_" << (Slice + 1) << "\t" << ElectronMomBinsLimits.at(Slice).at(0) << ":" << ElectronMomBinsLimits.at(Slice).at(1) << "\n";
+    for (int Slice = 0; Slice < ElectronMomSliceLimits.size(); Slice++) {
+        e_slice_limits << "e_slice_" << (Slice + 1) << "\t" << ElectronMomSliceLimits.at(Slice).at(0) << ":" << ElectronMomSliceLimits.at(Slice).at(1) << "\n";
     }
 
-    for (int Slice = 0; Slice < PBinsLimits.size(); Slice++) {
-        p_slice_limits << "p_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
-        n_slice_limits << "n_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
-        nuc_slice_limits << "nuc_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+    for (int Slice = 0; Slice < NucleonMomSliceLimits.size(); Slice++) {
+        p_slice_limits << "p_slice_" << (Slice + 1) << "\t" << NucleonMomSliceLimits.at(Slice).at(0) << ":" << NucleonMomSliceLimits.at(Slice).at(1) << "\n";
+        n_slice_limits << "n_slice_" << (Slice + 1) << "\t" << NucleonMomSliceLimits.at(Slice).at(0) << ":" << NucleonMomSliceLimits.at(Slice).at(1) << "\n";
+        nuc_slice_limits << "nuc_slice_" << (Slice + 1) << "\t" << NucleonMomSliceLimits.at(Slice).at(0) << ":" << NucleonMomSliceLimits.at(Slice).at(1) << "\n";
     }
 
     e_slice_limits << "\n";
@@ -1381,10 +1533,10 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
     n_slice_limits.close();
     nuc_slice_limits.close();
 
-    system(("cp " + AMapSavePath + "e_slice_limits.par " + AcceptanceMapsDirectory + SampleName).c_str());
-    system(("cp " + AMapSavePath + "p_slice_limits.par " + AcceptanceMapsDirectory + SampleName).c_str());
-    system(("cp " + AMapSavePath + "n_slice_limits.par " + AcceptanceMapsDirectory + SampleName).c_str());
-    system(("cp " + AMapSavePath + "nuc_slice_limits.par " + AcceptanceMapsDirectory + SampleName).c_str());
+    system(("cp " + AMapSliceElectronSavePath + "e_slice_limits.par " + AMapSliceElectronSavePathCopy).c_str());
+    system(("cp " + AMapSliceProtonSavePath + "p_slice_limits.par " + AMapSliceProtonSavePathCopy).c_str());
+    system(("cp " + AMapSliceNeutronSavePath + "n_slice_limits.par " + AMapSliceNeutronSavePathCopy).c_str());
+    system(("cp " + AMapSliceNucleonSavePath + "nuc_slice_limits.par " + AMapSliceNucleonSavePathCopy).c_str());
     //</editor-fold>
 
 }
@@ -1413,14 +1565,14 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     NucleonAMapBC.hDrawAndSave(SampleNameTemp, h1DCanvas, AcceptanceMapsBC, true);
 
     /* Electron maps */
-    for (int i = 0; i < ElectronMomBinsLimits.size(); i++) {
+    for (int i = 0; i < ElectronMomSliceLimits.size(); i++) {
         ElectronTLAMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLAMaps, true);
         ElectronRecoAMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoAMaps, true);
         ElectronRecoToTLRatioBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, AMapsRatio, true);
         ElectronAMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, Charged_particle_Sep_AMaps, true);
     }
 
-    for (int i = 0; i < PBinsLimits.size(); i++) {
+    for (int i = 0; i < NucleonMomSliceLimits.size(); i++) {
         /* Proton maps */
         ProtonTLAMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLAMaps, true);
         ProtonRecoAMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoAMaps, true);
@@ -1496,6 +1648,7 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     AcceptanceMapsBC->Write();
     AMapsBC_ref_AMaps_fout->Write();
     AMapsBC_ref_AMaps_fout->Close();
+    system(("cp " + AMapSavePath + "/" + AMapsBC_prefix + SampleName + ".root" + " " + AMapCopySavePath).c_str());
 
     /* TL Acceptance maps */
     TFile *TLAMaps_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + AMap_TL_prefix + SampleName + ".root").c_str(), "recreate");
@@ -1503,6 +1656,7 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     TLAMaps->Write();
     TLAMaps_ref_AMaps_fout->Write();
     TLAMaps_ref_AMaps_fout->Close();
+    system(("cp " + AMapSavePath + "/" + AMap_TL_prefix + SampleName + ".root" + " " + AMapCopySavePath).c_str());
 
     /* Reco Acceptance maps */
     TFile *RecoAMaps_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + AMap_Reco_prefix + SampleName + ".root").c_str(), "recreate");
@@ -1510,6 +1664,7 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     RecoAMaps->Write();
     RecoAMaps_ref_AMaps_fout->Write();
     RecoAMaps_ref_AMaps_fout->Close();
+    system(("cp " + AMapSavePath + "/" + AMap_Reco_prefix + SampleName + ".root" + " " + AMapCopySavePath).c_str());
 
     /* Ratio Acceptance maps */
     TFile *RatioHitMaps_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + AMap_Ratio_prefix + SampleName + ".root").c_str(), "recreate");
@@ -1517,6 +1672,7 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     AMapsRatio->Write();
     RatioHitMaps_ref_AMaps_fout->Write();
     RatioHitMaps_ref_AMaps_fout->Close();
+    system(("cp " + AMapSavePath + "/" + AMap_Ratio_prefix + SampleName + ".root" + " " + AMapCopySavePath).c_str());
 
     /* Charged particle separate AMaps */
     TFile *cPartAMaps_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root").c_str(), "recreate");
@@ -1524,6 +1680,7 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     Charged_particle_Sep_AMaps->Write();
     cPartAMaps_ref_AMaps_fout->Write();
     cPartAMaps_ref_AMaps_fout->Close();
+    system(("cp " + AMapSavePath + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root" + " " + AMapCopySavePath).c_str());
 
     /* Acceptance maps */
     TFile *AMaps_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + AMaps_prefix + SampleName + ".root").c_str(), "recreate");
@@ -1531,6 +1688,7 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     AcceptanceMaps->Write();
     AMaps_ref_AMaps_fout->Write();
     AMaps_ref_AMaps_fout->Close();
+    system(("cp " + AMapSavePath + "/" + AMaps_prefix + SampleName + ".root" + " " + AMapCopySavePath).c_str());
     //</editor-fold>
 
 }
@@ -1611,9 +1769,9 @@ void AMaps::SetSlicesFromHistTitle(TH2D *Histogram2D, const string &Particle) {
     vector<double> MomBinsLimitsTemp = {SliceLowerLim, SliceUpperLim};
 
     if (isElectron(Particle)) {
-        ElectronMomBinsLimits.push_back(MomBinsLimitsTemp);
+        ElectronMomSliceLimits.push_back(MomBinsLimitsTemp);
     } else if (isProton(Particle) || isNeutron(Particle)) {
-        PBinsLimits.push_back(MomBinsLimitsTemp);
+        NucleonMomSliceLimits.push_back(MomBinsLimitsTemp);
     }
 
     if (PrintOut) {
@@ -1639,7 +1797,7 @@ void AMaps::SetSlicesFromHistTitle(TH2D *Histogram2D, vector <vector<double>> Mo
     double SliceUpperLim = stod(SliceUpperLimStr);
 
     vector<double> MomBinsLimitsTemp = {SliceLowerLim, SliceUpperLim};
-    PBinsLimits.push_back(MomBinsLimitsTemp);
+    NucleonMomSliceLimits.push_back(MomBinsLimitsTemp);
 //    MomBinsLimits.push_back(MomBinsLimitsTemp);
 
     if (PrintOut) {
@@ -1707,7 +1865,7 @@ void AMaps::ReadHitMaps(const string &AcceptanceMapsDirectory, const string &Sam
 
         if (findSubstring(TempHist->GetTitle(), "{e}")) {
             ElectronTLAMapsBySlice.push_back(Temp2DHist);
-            SetSlicesFromHistTitle(TempHist, PBinsLimits);
+            SetSlicesFromHistTitle(TempHist, NucleonMomSliceLimits);
         } else if (findSubstring(TempHist->GetTitle(), "{p}")) {
             ProtonTLAMapsBySlice.push_back(Temp2DHist);
         } else if (findSubstring(TempHist->GetTitle(), "{n}")) {
@@ -2056,8 +2214,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
 //    bool e_single_slice_test = false;   // keep as false for normal runs!
 //    bool nuc_single_slice_test = false; // keep as false for normal runs!
 
-    int e_InitialSlice = 0, e_FinalSlice = Loaded_ElectronMomBinsLimits.size();
-    int p_InitialSlice = 0, p_FinalSlice = Loaded_PBinsLimits.size(), n_InitialSlice = 0, n_FinalSlice = Loaded_PBinsLimits.size();
+    int e_InitialSlice = 0, e_FinalSlice = Loaded_ElectronMomSliceLimits.size();
+    int p_InitialSlice = 0, p_FinalSlice = Loaded_NucleonMomSliceLimits.size(), n_InitialSlice = 0, n_FinalSlice = Loaded_NucleonMomSliceLimits.size();
 
     int e_TestSlice = Slices2Test.at(0), p_TestSlice = Slices2Test.at(1), n_TestSlice = Slices2Test.at(2);
 
@@ -2067,8 +2225,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
 
     if (isElectron(Particle)) {
         for (int Slice = e_InitialSlice; Slice < e_FinalSlice; Slice++) {
-//        for (int Slice = 0; Slice < Loaded_ElectronMomBinsLimits.size(); Slice++) {
-            if (Momentum >= Loaded_ElectronMomBinsLimits.at(Slice).at(0) && Momentum <= Loaded_ElectronMomBinsLimits.at(Slice).at(1)) {
+//        for (int Slice = 0; Slice < Loaded_ElectronMomSliceLimits.size(); Slice++) {
+            if (Momentum >= Loaded_ElectronMomSliceLimits.at(Slice).at(0) && Momentum <= Loaded_ElectronMomSliceLimits.at(Slice).at(1)) {
                 for (int i = 0; i < HistElectronSliceNumOfYBins; i++) {
                     double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / HistElectronSliceNumOfYBins;
                     double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
@@ -2094,8 +2252,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
         }
     } else if (isProton(Particle)) {
         for (int Slice = p_InitialSlice; Slice < p_FinalSlice; Slice++) {
-//        for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
-            if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
+//        for (int Slice = 0; Slice < Loaded_NucleonMomSliceLimits.size(); Slice++) {
+            if (Momentum >= Loaded_NucleonMomSliceLimits.at(Slice).at(0) && Momentum <= Loaded_NucleonMomSliceLimits.at(Slice).at(1)) {
                 for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
                     double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (HistNucSliceNumOfYBins);
                     double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
@@ -2129,8 +2287,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
         }
     } else if (isNeutron(Particle)) {
         for (int Slice = n_InitialSlice; Slice < n_FinalSlice; Slice++) {
-//        for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
-            if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
+//        for (int Slice = 0; Slice < Loaded_NucleonMomSliceLimits.size(); Slice++) {
+            if (Momentum >= Loaded_NucleonMomSliceLimits.at(Slice).at(0) && Momentum <= Loaded_NucleonMomSliceLimits.at(Slice).at(1)) {
                 for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
                     double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (HistNucSliceNumOfYBins);
                     double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
@@ -2178,8 +2336,8 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
         if (isElectron(Particle)) {
             return 1;
         } else if (isProton(Particle)) {
-            for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
-                if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
+            for (int Slice = 0; Slice < Loaded_NucleonMomSliceLimits.size(); Slice++) {
+                if (Momentum >= Loaded_NucleonMomSliceLimits.at(Slice).at(0) && Momentum <= Loaded_NucleonMomSliceLimits.at(Slice).at(1)) {
                     for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
                         double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (HistNucSliceNumOfYBins);
                         double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
@@ -2198,9 +2356,9 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                                         Weight = (1 / (Loaded_p_WMap_Slices.at(Slice).at(i).at(j)));
 
                                         if (PrintOut) {
-                                            cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n";
+                                            cout << "MomentumLowerLimTemp = " << Loaded_NucleonMomSliceLimits.at(Slice).at(0) << "\n";
                                             cout << "Momentum = " << Momentum << "\n";
-                                            cout << "MomentumUpperLimTemp = " << Loaded_PBinsLimits.at(Slice).at(1) << "\n\n";
+                                            cout << "MomentumUpperLimTemp = " << Loaded_NucleonMomSliceLimits.at(Slice).at(1) << "\n\n";
 
                                             cout << "ThetaLowerLimTemp = " << ThetaLowerLimTemp << "\n";
                                             cout << "Theta = " << Theta << "\n";
@@ -2226,8 +2384,8 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                 } // end of if the right momentum
             }
         } else if (isNeutron(Particle)) {
-            for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
-                if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
+            for (int Slice = 0; Slice < Loaded_NucleonMomSliceLimits.size(); Slice++) {
+                if (Momentum >= Loaded_NucleonMomSliceLimits.at(Slice).at(0) && Momentum <= Loaded_NucleonMomSliceLimits.at(Slice).at(1)) {
                     for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
                         double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (HistNucSliceNumOfYBins);
                         double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
@@ -2246,9 +2404,9 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                                         Weight = (1 / (Loaded_n_WMap_Slices.at(Slice).at(i).at(j)));
 
                                         if (PrintOut) {
-                                            cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n";
+                                            cout << "MomentumLowerLimTemp = " << Loaded_NucleonMomSliceLimits.at(Slice).at(0) << "\n";
                                             cout << "Momentum = " << Momentum << "\n";
-                                            cout << "MomentumUpperLimTemp = " << Loaded_PBinsLimits.at(Slice).at(1) << "\n\n";
+                                            cout << "MomentumUpperLimTemp = " << Loaded_NucleonMomSliceLimits.at(Slice).at(1) << "\n\n";
 
                                             cout << "ThetaLowerLimTemp = " << ThetaLowerLimTemp << "\n";
                                             cout << "Theta = " << Theta << "\n";

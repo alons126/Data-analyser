@@ -47,8 +47,8 @@ private:
     /* Acceptance maps from class and before cuts (to be compared with one generated with the file) */
     hPlot2D ElectronAMapBC, ProtonAMapBC, NeutronAMapBC, NucleonAMapBC;
 
-    vector<vector<double>> ElectronInvertedMomBinsLimits, ElectronMomBinsLimits;
-    vector<vector<double>> InvertedPBinsLimits, PBinsLimits;
+    vector<vector<double>> InvertedElectronMomSliceLimits, ElectronMomSliceLimits;
+    vector<vector<double>> InvertedNucleonMomSliceLimits, NucleonMomSliceLimits;
 
     double hBinLowerXLim = -180, hBinUpperXLim = 180;
     double hBinLowerYLim = 0, hBinUpperYLim = 50;
@@ -94,6 +94,7 @@ private:
     vector<vector<vector<int>>> n_AMap_Slices;
     vector<vector<int>> nuc_AMap;
     vector<vector<vector<int>>> nuc_AMap_Slices;
+    vector<vector<vector<int>>> nuc_WMap_Slices; //TODO: fiure out if really need these!
 
     /* Weight maps */
     vector<vector<vector<double>>> e_WMap_Slices;
@@ -104,7 +105,7 @@ private:
     bool calc_Electron_RecoToTL_Ratio = true, calc_Proton_RecoToTL_Ratio = true, calc_Neutron_RecoToTL_Ratio = true;
 
     double Charged_particle_min_Ratio = 0.7;
-    double Neutral_particle_min_Ratio = 0.2;
+    double Neutral_particle_min_Ratio = 0.1;
 
     TList *AcceptanceMapsBC = new TList();
     TList *TLAMaps = new TList();
@@ -113,7 +114,7 @@ private:
     TList *Charged_particle_Sep_AMaps = new TList();
     TList *AcceptanceMaps = new TList();
 
-    string AMapSavePath;
+    string AMapSavePath, AMapCopySavePath;
 
     string AMapsBC_prefix = "00_AMaps_BC_-_";
     string AMap_TL_prefix = "01_AMap_TL_-_";
@@ -122,8 +123,8 @@ private:
     string cPart_Sep_AMaps_prefix = "04_cPart_Sep_AMaps_-_";
     string AMaps_prefix = "05_AMaps_-_";
 
-    vector<vector<double>> Loaded_ElectronMomBinsLimits;
-    vector<vector<double>> Loaded_PBinsLimits;
+    vector<vector<double>> Loaded_ElectronMomSliceLimits;
+    vector<vector<double>> Loaded_NucleonMomSliceLimits;
 
     /* Loaded acceptance maps */
     vector<vector<int>> Loaded_e_AMap;
@@ -194,6 +195,10 @@ public:
 // isTL function --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool isTL(const string &SampleType);
+
+// isReco function --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    bool isReco(const string &SampleType);
 
 // hFillHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -291,9 +296,9 @@ public:
 
     double GetCPartMinRatio() { return Charged_particle_min_Ratio; }
 
-    double GetPBinsLimitsSize() { return PBinsLimits.size(); }
+    double GetNucleonMomSliceLimitsSize() { return NucleonMomSliceLimits.size(); }
 
-    double GetElectronPBinsLimitsSize() { return ElectronMomBinsLimits.size(); }
+    double GetElectronNucleonMomSliceLimitsSize() { return ElectronMomSliceLimits.size(); }
 
 };
 
