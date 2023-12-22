@@ -85,7 +85,7 @@ void StackPlot4(string &SampleName, TList *Histogram_list,
     }
     //</editor-fold>
 
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram
 
     double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2 + 0.1;
     double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3 + 0.1;

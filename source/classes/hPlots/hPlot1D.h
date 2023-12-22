@@ -106,56 +106,56 @@ public:
     // histPlotter1D function (old):
     void histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
                        std::string Histogram1DTitle, std::string Histogram1DTitleReactions, double titleSize, double labelSizex, double labelSizey, TList *Histogram_list,
-                       int lineWidth, bool logScalePlot, bool linearScalePlot, THStack *Histogram1DStack, std::string Histogram1DSaveName,
-                       std::string Histogram1DSaveNamePath, std::string finalState, int kColor = 1, bool centerTitle = true, bool addToStack = false,
+                       int lineWidth, bool LogScalePlot, bool LinearScalePlot, THStack *Histogram1DStack, std::string Histogram1DSaveName,
+                       std::string Histogram1DSaveNamePath, std::string finalState, int kColor = 1, bool centerTitle = true, bool AddToStack = false,
                        bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_cuts = 0, double plot_Xmax = 0, bool plot_max = true);
 
     // histPlotter1D function (old, stackless):
     void histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
                        string Histogram1DTitle, string Histogram1DTitleReactions, double titleSize, double labelSizex, double labelSizey, TList *Histogram_list,
-                       int lineWidth, bool logScalePlot, bool linearScalePlot, string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState,
+                       int lineWidth, bool LogScalePlot, bool LinearScalePlot, string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState,
                        bool centerTitle = true, bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_cuts = 0, double plot_Xmax = 0,
                        bool plot_max = true);
 
     // histPlotter1D function (unsymmetric cuts for SF plots):
     void histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
-                       std::string Histogram1DTitle, std::string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool logScalePlot, bool linearScalePlot,
+                       std::string Histogram1DTitle, std::string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool LogScalePlot, bool LinearScalePlot,
                        THStack *Histogram1DStack, std::string Histogram1DSaveName, std::string Histogram1DSaveNamePath, std::string finalState, int kColor = 1,
-                       bool addToStack = false, bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_upper_cut = 0,
+                       bool AddToStack = false, bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_upper_cut = 0,
                        double plot_lower_cut = 0, double plot_Xmax = 0, bool plot_max = true);
 
     // histPlotter1D function (unsymmetric cuts for SF plots, stackless):
     void histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
-                       string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool logScalePlot, bool linearScalePlot,
+                       string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool LogScalePlot, bool LinearScalePlot,
                        string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState, bool showStats = true, bool title2 = false,
                        bool apply_plot_cuts = false, double plot_upper_cut = 0, double plot_lower_cut = 0, double plot_Xmax = 0, bool plot_max = true);
 
     // histPlotter1D function (one-sided cuts for Nphe plots):
     void histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
-                       std::string Histogram1DTitle, std::string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool logScalePlot, bool linearScalePlot,
+                       std::string Histogram1DTitle, std::string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool LogScalePlot, bool LinearScalePlot,
                        THStack *Histogram1DStack, std::string Histogram1DSaveName, std::string Histogram1DSaveNamePath, std::string finalState, int kColor = 1,
-                       bool addToStack = false,
+                       bool AddToStack = false,
                        bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_cut = 0, double plot_Xmax = 0,
                        bool plot_max = true);
 
     // histPlotter1D function (one-sided cuts for Nphe plots, stackless):
     void histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
-                       string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool logScalePlot, bool linearScalePlot,
+                       string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool LogScalePlot, bool LinearScalePlot,
                        string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState, bool showStats = true, bool title2 = false,
                        bool apply_plot_cuts = false, double plot_cut = 0, double plot_Xmax = 0, bool plot_max = true);
 
     // histPlotter1D function (Chi2 for separate plots):
     void histPlotter1D(TCanvas *Histogram1DCanvas1, TCanvas *Histogram1DCanvas2, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
                        double custom_normalization_factor, std::string Histogram1DTitle1, std::string Histogram1DTitle2, std::string Histogram1DTitle3,
-                       std::string Particle, double titleSize, double labelSizex, double labelSizey, TList *Histogram_list, int lineWidth, bool logScalePlot,
-                       bool linearScalePlot, THStack *Histogram1DStack, std::string Histogram1DSaveName, std::string Histogram1DSaveNamePath, int kColor = 1,
-                       bool centerTitle = true, bool addToStack = false, bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_cuts = 0,
+                       std::string Particle, double titleSize, double labelSizex, double labelSizey, TList *Histogram_list, int lineWidth, bool LogScalePlot,
+                       bool LinearScalePlot, THStack *Histogram1DStack, std::string Histogram1DSaveName, std::string Histogram1DSaveNamePath, int kColor = 1,
+                       bool centerTitle = true, bool AddToStack = false, bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_cuts = 0,
                        double plot_Xmax = 0, bool plot_max = true);
 
     // histPlotter1D function (Chi2 for separate plots, stackless):
     void histPlotter1D(TCanvas *Histogram1DCanvas1, TCanvas *Histogram1DCanvas2, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
                        double custom_normalization_factor, string Histogram1DTitle1, string Histogram1DTitle2, string Histogram1DTitle3, string Particle,
-                       double titleSize, double labelSizex, double labelSizey, TList *Histogram_list, int lineWidth, bool logScalePlot, bool linearScalePlot,
+                       double titleSize, double labelSizex, double labelSizey, TList *Histogram_list, int lineWidth, bool LogScalePlot, bool LinearScalePlot,
                        string Histogram1DSaveName, const string &Histogram1DSaveNamePath, bool centerTitle = true, bool showStats = true, bool title2 = false,
                        bool apply_plot_cuts = false, double plot_cuts = 0, double plot_Xmax = 0, bool plot_max = true);
 

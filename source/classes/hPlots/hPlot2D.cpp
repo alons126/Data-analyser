@@ -180,9 +180,9 @@ void hPlot2D::histPlotter2D(const std::string &SampleName, TCanvas *Histogram2DC
     gStyle->SetStatX(0.87);
     gStyle->SetStatY(0.875);
 
-    if (showStats == false) { Histogram2D->SetStats(0); }
+    if (!ShowStats) { Histogram2D->SetStats(0); }
 
-    if (ZLogScalePlot == true) {
+    if (ZLogScalePlot) {
         Histogram2DCanvas->SetLogz(1);
         system(("mkdir -p " + Histogram2DSaveNameDir + "/z_Log_Scale_plots").c_str());
         Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + "/z_Log_Scale_plots/" + sNameFlag + Histogram2DSaveName + "_zLogScale.png").c_str());
@@ -190,7 +190,7 @@ void hPlot2D::histPlotter2D(const std::string &SampleName, TCanvas *Histogram2DC
 //        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLogScale.png").c_str());
     }
 
-    if (ZLinearScalePlot == true) {
+    if (ZLinearScalePlot) {
         Histogram2DCanvas->SetLogz(0);
 //        system(("mkdir -p " + Histogram2DSaveNameDir + "/z_Linear_Scale_plots").c_str());
 //        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + "/z_Linear_Scale_plots/" + sNameFlag + Histogram2DSaveName + "_zLinearScale.png").c_str());
@@ -201,9 +201,9 @@ void hPlot2D::histPlotter2D(const std::string &SampleName, TCanvas *Histogram2DC
     gStyle->SetStatX(DefStatX);
     gStyle->SetStatY(DefStatY);
     Histogram2DCanvas->Clear();
-//    if (ZLogScalePlot == true) { Histogram2DCanvas->SetLogz(1); }
+//    if (ZLogScalePlot) { Histogram2DCanvas->SetLogz(1); }
 //
-//    if (showStats == false) { Histogram2D->SetStats(0); }
+//    if (!ShowStats) { Histogram2D->SetStats(0); }
 //
 //    gStyle->SetStatX(0.87);
 //    gStyle->SetStatY(0.875);
@@ -278,14 +278,14 @@ void hPlot2D::histPlotter2D(const std::string &SampleName, TCanvas *Histogram2DC
     gStyle->SetStatX(0.87);
     gStyle->SetStatY(0.4);
 
-    if (showStats == false || Histogram2D->Integral() == 0.) { Histogram2D->SetStats(0); }
+    if (!ShowStats || Histogram2D->Integral() == 0.) { Histogram2D->SetStats(0); }
 
-    if (ZLogScalePlot == true) {
+    if (ZLogScalePlot) {
         Histogram2DCanvas->SetLogz(1);
         Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLogScale.png").c_str());
     }
 
-    if (ZLinearScalePlot == true) {
+    if (ZLinearScalePlot) {
         Histogram2DCanvas->SetLogz(0);
         system(("mkdir -p " + Histogram2DSaveNameDir + "/z_Linear_Scale_plots").c_str());
         Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + "/z_Linear_Scale_plots/" + sNameFlag + Histogram2DSaveName + "_zLinearScale.png").c_str());
@@ -363,14 +363,14 @@ void hPlot2D::histPlotter2D(const std::string &SampleName, TCanvas *Histogram2DC
     gStyle->SetStatX(0.87);
     gStyle->SetStatY(0.4);
 
-    if (showStats == false || Histogram2D->Integral() == 0.) { Histogram2D->SetStats(0); }
+    if (!ShowStats || Histogram2D->Integral() == 0.) { Histogram2D->SetStats(0); }
 
-    if (ZLogScalePlot == true) {
+    if (ZLogScalePlot) {
         Histogram2DCanvas->SetLogz(1);
         Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLogScale.png").c_str());
     }
 
-    if (ZLinearScalePlot == true) {
+    if (ZLinearScalePlot) {
         Histogram2DCanvas->SetLogz(0);
         system(("mkdir -p " + Histogram2DSaveNameDir + "/z_Linear_Scale_plots").c_str());
         Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + "/z_Linear_Scale_plots/" + sNameFlag + Histogram2DSaveName + "_zLinearScale.png").c_str());
@@ -452,14 +452,14 @@ void hPlot2D::histPlotter2D(const std::string &SampleName, TCanvas *Histogram2DC
     gStyle->SetStatX(0.87);
     gStyle->SetStatY(0.4);
 
-    if (showStats == false || Histogram2D->Integral() == 0.) { Histogram2D->SetStats(0); }
+    if (!ShowStats || Histogram2D->Integral() == 0.) { Histogram2D->SetStats(0); }
 
-    if (ZLogScalePlot == true) {
+    if (ZLogScalePlot) {
         Histogram2DCanvas->SetLogz(1);
         Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLogScale.png").c_str());
     }
 
-    if (ZLinearScalePlot == true) {
+    if (ZLinearScalePlot) {
         Histogram2DCanvas->SetLogz(0);
         system(("mkdir -p " + Histogram2DSaveNameDir + "/z_Linear_Scale_plots").c_str());
         Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + "/z_Linear_Scale_plots/" + sNameFlag + Histogram2DSaveName + "_zLinearScale.png").c_str());

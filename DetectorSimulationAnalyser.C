@@ -146,6 +146,7 @@ void EventAnalyser() {
 
     /* Acceptance maps setup */
     bool generate_AMaps = true;             // Generate acceptance maps
+    //TODO: UPDATE AMaps loading constructor electron histogram's number of bins
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = false;
@@ -391,7 +392,8 @@ void EventAnalyser() {
                     Efficiency_Status = "Eff2";
                 }
             } else {
-                Efficiency_Status = "Eff1_full_nFDt_noLnFDmech";
+//                Efficiency_Status = "Eff1_full_nFDt_noLnFDmech";
+                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
@@ -836,7 +838,7 @@ void EventAnalyser() {
 
     /* Other setup variables */
     bool wider_margin = true;
-    bool debug_plots = false; // Print out clas12ana debugging plots
+    bool debug_plots = true; // Print out clas12ana debugging plots
 
     bool Log_scale_Vx_plots = false, Log_scale_Vy_plots = false;
     bool Log_scale_Vz_plots = true;
@@ -1076,8 +1078,8 @@ void EventAnalyser() {
     if (reformat_e_bins) { equi_P_e_bins = false; }
 
     /* Set Bins by case */
-    int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = 150, HistNucSliceNumOfXBins = 75;
-//    int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = numTH2Dbins_Electron_Ang_Plots, HistNucSliceNumOfXBins = numTH2Dbins_Nucleon_Ang_Plots;
+//    int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = 150, HistNucSliceNumOfXBins = 75;
+    int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = numTH2Dbins_Electron_Ang_Plots, HistNucSliceNumOfXBins = numTH2Dbins_Nucleon_Ang_Plots;
 
     //<editor-fold desc="Determine NumberNucOfMomSlices by sample">
     if (VaringSampleName == "C12_simulation_G18_Q204_6GeV" || VaringSampleName == "C12x4_simulation_G18_Q204_6GeV") {
@@ -1088,6 +1090,7 @@ void EventAnalyser() {
     //</editor-fold>
 
     AMaps aMaps, wMaps;
+    //TODO: UPDATE AMaps loading constructor electron histogram's number of bins
 
     if (generate_AMaps) {
         aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], NumberNucOfMomSlices,
@@ -3717,13 +3720,13 @@ void EventAnalyser() {
     //<editor-fold desc="Neutron veto plots (1e cut)">
 
     //<editor-fold desc="CLAS12 neutrons and protons">
-    hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e}",
+    hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e} BV",
                                                                   "'Neutron Hits' vs. Electron Hits - Before Veto",
                                                                   "#Delta#phi_{n,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                                   "#Delta#theta_{n,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
                                                                   directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
                                                                   "01_Neutron_hits_vs_electron_hits_BV_1e_cut", -180, 180, -50, 50, 100, 100);
-    hPlot2D hdTheta_n_p_VS_dPhi_n_p_Protons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{n,p} vs. #Delta#phi_{n,p}",
+    hPlot2D hdTheta_n_p_VS_dPhi_n_p_Protons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{n,p} vs. #Delta#phi_{n,p} BV",
                                                                 "'Neutron Hits' vs. Proton Hits - Before Veto",
                                                                 "#Delta#phi_{n,p} = #phi_{n}^{ECIN/ECOUT} - #phi_{p}^{PCAL} [Deg]",
                                                                 "#Delta#theta_{n,p} = #theta_{n}^{ECIN/ECOUT} - #theta_{p}^{PCAL} [Deg]",
@@ -3734,19 +3737,19 @@ void EventAnalyser() {
     //<editor-fold desc="Electrons and redefined neutrons">
 
     //<editor-fold desc="Electrons and leading FD neutron">
-    hPlot2D hdTheta_LnFD_e_VS_dPhi_LnFD_e_Electrons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e}",
+    hPlot2D hdTheta_LnFD_e_VS_dPhi_LnFD_e_Electrons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e} BV",
                                                                         "'Leading Neutron Hits' vs. Electron Hits - Before Veto",
                                                                         "#Delta#phi_{LnFD,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                                         "#Delta#theta_{LnFD,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
                                                                         directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
                                                                         "03_LnFD_Neutron_hits_vs_electron_hits_BV_1e_cut", -180, 180, -50, 50, 100, 100);
-    hPlot2D hdTheta_LnFD_e_VS_dPhi_LnFD_e_Electrons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e}",
+    hPlot2D hdTheta_LnFD_e_VS_dPhi_LnFD_e_Electrons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e} AV",
                                                                         "'Leading Neutron Hits' vs. Electron Hits - After Veto",
                                                                         "#Delta#phi_{LnFD,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                                         "#Delta#theta_{LnFD,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
                                                                         directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
                                                                         "04_LnFD_Neutron_hits_vs_electron_hits_AV_1e_cut", -180, 180, -50, 50, 100, 100);
-    hPlot2D hdTheta_LnFD_e_VS_dPhi_LnFD_e_Electrons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e}",
+    hPlot2D hdTheta_LnFD_e_VS_dPhi_LnFD_e_Electrons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e} Vetoed",
                                                                             "'Leading Neutron Hits' vs. Electron Hits - Vetoed Neutrons",
                                                                             "#Delta#phi_{LnFD,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                                             "#Delta#theta_{LnFD,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
@@ -3755,19 +3758,19 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Electrons and all FD neutrons">
-    hPlot2D hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e}",
+    hPlot2D hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e} BV",
                                                                       "'Neutron Hits' vs. Electron Hits - Before Veto",
                                                                       "#Delta#phi_{nFD,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                                       "#Delta#theta_{nFD,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
                                                                       directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
                                                                       "06_nFD_Neutron_hits_vs_electron_hits_BV_1e_cut", -180, 180, -50, 50, 100, 100);
-    hPlot2D hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e}",
+    hPlot2D hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e} AV",
                                                                       "'Neutron Hits' vs. Electron Hits - After Veto",
                                                                       "#Delta#phi_{nFD,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                                       "#Delta#theta_{nFD,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
                                                                       directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
                                                                       "07_nFD_Neutron_hits_vs_electron_hits_AV_1e_cut", -180, 180, -50, 50, 100, 100);
-    hPlot2D hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e}",
+    hPlot2D hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e} Vetoed",
                                                                           "'Neutron Hits' vs. Electron Hits - Vetoed Neutrons",
                                                                           "#Delta#phi_{nFD,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                                           "#Delta#theta_{nFD,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
@@ -3780,19 +3783,19 @@ void EventAnalyser() {
     //<editor-fold desc="Identified protons and redefined neutrons">
 
     //<editor-fold desc="Identified protons and leading FD neutron">
-    hPlot2D hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD}",
+    hPlot2D hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} BV",
                                                                       "'Leading Neutron Hits' vs. Proton Hits - Before Veto",
                                                                       "#Delta#phi_{LnFD,pFD} = #phi_{n}^{ECIN/ECOUT} - #phi_{pFD}^{PCAL} [Deg]",
                                                                       "#Delta#theta_{LnFD,pFD} = #theta_{n}^{ECIN/ECOUT} - #theta_{pFD}^{PCAL} [Deg]",
                                                                       directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
                                                                       "09_LnFD_Neutron_hits_vs_proton_hits_BV_1e_cut", -180, 180, -50, 50, 100, 100);
-    hPlot2D hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD}",
+    hPlot2D hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} AV",
                                                                       "'Leading Neutron Hits' vs. Proton Hits - After Veto",
                                                                       "#Delta#phi_{LnFD,pFD} = #phi_{n}^{ECIN/ECOUT} - #phi_{pFD}^{PCAL} [Deg]",
                                                                       "#Delta#theta_{LnFD,pFD} = #theta_{n}^{ECIN/ECOUT} - #theta_{pFD}^{PCAL} [Deg]",
                                                                       directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
                                                                       "10_LnFD_Neutron_hits_vs_proton_hits_AV_1e_cut", -180, 180, -50, 50, 100, 100);
-    hPlot2D hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD}",
+    hPlot2D hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} Vetoed",
                                                                           "'Leading Neutron Hits' vs. Proton Hits - Vetoed Neutrons",
                                                                           "#Delta#phi_{LnFD,pFD} = #phi_{n}^{ECIN/ECOUT} - #phi_{pFD}^{PCAL} [Deg]",
                                                                           "#Delta#theta_{LnFD,pFD} = #theta_{n}^{ECIN/ECOUT} - #theta_{pFD}^{PCAL} [Deg]",
@@ -3801,19 +3804,19 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Identified protons and all FD neutrons">
-    hPlot2D hdTheta_nFD_p_VS_dPhi_nFD_p_Protons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD}",
+    hPlot2D hdTheta_nFD_p_VS_dPhi_nFD_p_Protons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD} BV",
                                                                     "'Neutron Hits' vs. Proton Hits - Before Veto",
                                                                     "#Delta#phi_{nFD,pFD} = #phi_{n}^{ECIN/ECOUT} - #phi_{pFD}^{PCAL} [Deg]",
                                                                     "#Delta#theta_{nFD,pFD} = #theta_{n}^{ECIN/ECOUT} - #theta_{pFD}^{PCAL} [Deg]",
                                                                     directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
                                                                     "12_nFD_Neutron_hits_vs_proton_hits_BV_1e_cut", -180, 180, -50, 50, 100, 100);
-    hPlot2D hdTheta_nFD_p_VS_dPhi_nFD_p_Protons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD}",
+    hPlot2D hdTheta_nFD_p_VS_dPhi_nFD_p_Protons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD} AV",
                                                                     "'Neutron Hits' vs. Proton Hits - After Veto",
                                                                     "#Delta#phi_{nFD,pFD} = #phi_{n}^{ECIN/ECOUT} - #phi_{pFD}^{PCAL} [Deg]",
                                                                     "#Delta#theta_{nFD,pFD} = #theta_{n}^{ECIN/ECOUT} - #theta_{pFD}^{PCAL} [Deg]",
                                                                     directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
                                                                     "13_nFD_Neutron_hits_vs_proton_hits_AV_1e_cut", -180, 180, -50, 50, 100, 100);
-    hPlot2D hdTheta_nFD_p_VS_dPhi_nFD_p_Protons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD}",
+    hPlot2D hdTheta_nFD_p_VS_dPhi_nFD_p_Protons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD} Vetoed",
                                                                         "'Neutron Hits' vs. Proton Hits - Vetoed Neutrons",
                                                                         "#Delta#phi_{nFD,pFD} = #phi_{n}^{ECIN/ECOUT} - #phi_{pFD}^{PCAL} [Deg]",
                                                                         "#Delta#theta_{nFD,pFD} = #theta_{n}^{ECIN/ECOUT} - #theta_{pFD}^{PCAL} [Deg]",
@@ -4081,7 +4084,7 @@ void EventAnalyser() {
 // Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p1_p2 (CD & FD)">
-    THStack *sTheta_p1_p2_2p = new THStack("#theta_{p_{1},p_{2}} (All Int., 2p)",
+    THStack *sTheta_p1_p2_2p = new THStack("#theta_{p_{1},p_{2}} (All Int., stack, 2p)",
                                            "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (2p);#theta_{p_{1},p_{2}} [Deg];");
     TH1D *hTheta_p1_p2_All_Int_2p = new TH1D("#theta_{p_{1},p_{2}} (All Int., 2p)",
                                              "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (All Int., 2p);#theta_{p_{1},p_{2}} [Deg];",
@@ -8623,8 +8626,7 @@ void EventAnalyser() {
         auto neutrals = clasAna.getByPid(0);     // Unidentified
         auto otherpart = clasAna.getByPid(311);  // Other particles
 
-/*
-        // Get particle outside of clas12ana:
+/*        // Get particle outside of clas12ana:
         auto neutrons = c12->getByID(2112);  // Neutrons
         auto protons = c12->getByID(2212);   // Protons
         auto Kplus = c12->getByID(321);      // K+
@@ -8635,8 +8637,7 @@ void EventAnalyser() {
 
         auto deuterons = c12->getByID(45);   // Deuterons
         auto neutrals = c12->getByID(0);     // Unidentified
-        auto otherpart = c12->getByID(311);  // Other particles
-*/
+        auto otherpart = c12->getByID(311);  // Other particles*/
 
         /* Number of specific particles in event */
         int Nn = neutrons.size(), Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
@@ -11385,121 +11386,6 @@ void EventAnalyser() {
                 } // end of if neutron is within fiducial cuts
             }
             //</editor-fold>
-
-//            //<editor-fold desc="Filling neurton reco. Acceptance maps (old with leading nFD mech.)">
-//            if (ES_by_leading_FDneutron && (NeutronsFD_ind.size() == 1)) {
-//                if (NeutronsFD_ind_mom_max != -1) { // if NeutronsFD_ind_mom_max == -1, there are no neutrons above momentum th. in the event
-//                    bool hitPCAL_1e_cut = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
-//                    bool hitECIN_1e_cut = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
-//                    bool hitECOUT_1e_cut = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
-//                    auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT;                                // find first layer of hit
-//
-//                    //<editor-fold desc="Safety checks that leading nFD is neutron by definition (AMaps & WMaps)">
-//                    if (allParticles[NeutronsFD_ind.at(0)]->getRegion() != FD) {
-//                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): Leading nFD is not in the FD! Exiting...\n\n", exit(0);
-//                    }
-//
-//                    if (!((allParticles[NeutronsFD_ind.at(0)]->par()->getPid() == 2112) || (allParticles[NeutronsFD_ind.at(0)]->par()->getPid() == 22))) {
-//                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind.at(0)]->par()->getPid()
-//                             << ")! Exiting...\n\n", exit(
-//                                0);
-//                    }
-//
-//                    if (hitPCAL_1e_cut) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): neutron hit in PCAL! Exiting...\n\n", exit(0); }
-//
-//                    if (!(hitECIN_1e_cut ||
-//                          hitECOUT_1e_cut)) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
-//                    //</editor-fold>
-//
-//                    if (allParticles[NeutronsFD_ind.at(0)]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
-//                        allParticles[NeutronsFD_ind.at(0)]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
-//                        bool NeutronPassVeto_1e_cut = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind.at(0), Neutron_veto_cut.GetLowerCut());
-//
-//                        if (NeutronPassVeto_1e_cut) { // if neutron passes ECAL veto:
-//                            double Reco_P_nFD_amaps = GetFDNeutronP(allParticles[NeutronsFD_ind.at(0)], apply_nucleon_cuts);
-//                            double Reco_theta_nFD_amaps = allParticles[NeutronsFD_ind.at(0)]->getTheta() * 180.0 / pi;
-//                            double Reco_phi_nFD_amaps = allParticles[NeutronsFD_ind.at(0)]->getPhi() * 180.0 / pi;
-//
-//                            double dTheta = TL_theta_nFD_amaps - Reco_theta_nFD_amaps, dPhi = CalcdPhi(TL_phi_nFD_amaps - Reco_phi_nFD_amaps);
-//
-//                            double dPhiCut = 1., dThetaCut = 1.; //TODO: add to a DSCuts variable
-////                            double dPhiCut = 5., dThetaCut = 2.; //TODO: add to a DSCuts variable
-//                            bool Pass_dThetaCut = (fabs(dTheta) < dThetaCut), Pass_dPhiCut = (fabs(dPhi) < dPhiCut);
-//
-//                            if (Filled_nFD_TL_amaps && Pass_dThetaCut && Pass_dPhiCut) {
-//                                bool FD_Theta_Cut_Reco_neutrons = (Reco_theta_nFD_amaps <= FD_nucleon_theta_cut.GetUpperCut());
-//                                bool FD_Momentum_Cut_Reco_neutrons = ((Reco_P_nFD_amaps <= FD_nucleon_momentum_cut.GetUpperCut()) &&
-//                                                                      (Reco_P_nFD_amaps >= FD_nucleon_momentum_cut.GetLowerCut()));
-//
-//                                hReco_P_nFD_AMaps.hFill(Reco_P_nFD_amaps, Weight);
-//                                hNeutronAMapBC.hFill(Reco_phi_nFD_amaps, Reco_theta_nFD_amaps, Weight);
-//                                aMaps.hFillHitMaps("Reco", "Neutron", Reco_P_nFD_amaps, Reco_theta_nFD_amaps, Reco_phi_nFD_amaps, Weight);
-//
-//                                if (FD_Theta_Cut_Reco_neutrons && FD_Momentum_Cut_Reco_neutrons) {
-//                                    hReco_P_nFD_WMaps.hFill(Reco_P_nFD_amaps, Weight);
-//                                    hNeutronAMapBCwKC.hFill(Reco_phi_nFD_amaps, Reco_theta_nFD_amaps, Weight);
-//                                    wMaps.hFillHitMaps("Reco", "Neutron", Reco_P_nFD_amaps, Reco_theta_nFD_amaps, Reco_phi_nFD_amaps, Weight);
-//                                }
-//                            } // end of if pass neutron ECAL veto
-//                        }
-//                    } // end of if neutron is within fiducial cuts
-//                }
-//            }
-//            else {
-//                for (int &i: NeutronsFD_ind) {
-//                    bool hitPCAL_1e_cut = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
-//                    bool hitECIN_1e_cut = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
-//                    bool hitECOUT_1e_cut = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
-//                    auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT;           // find first layer of hit
-//
-//                    //<editor-fold desc="Safety checks that i-th nFD is neutron by definition (AMaps & WMaps)">
-//                    if (allParticles[i]->getRegion() != FD) {
-//                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): Leading nFD is not in the FD! Exiting...\n\n", exit(0);
-//                    }
-//
-//                    if (!((allParticles[i]->par()->getPid() == 2112) || (allParticles[i]->par()->getPid() == 22))) {
-//                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid()
-//                             << ")! Exiting...\n\n", exit(
-//                                0);
-//                    }
-//
-//                    if (hitPCAL_1e_cut) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): neutron hit in PCAL! Exiting...\n\n", exit(0); }
-//
-//                    if (!(hitECIN_1e_cut ||
-//                          hitECOUT_1e_cut)) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
-//                    //</editor-fold>
-//
-//                    if (allParticles[i]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
-//                        allParticles[i]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
-//
-//                        bool NeutronPassVeto_1e_cut = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
-//
-//                        double Mom_neut_1e_cut = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
-//                        double Theta_neut_1e_cut = allParticles[i]->getTheta() * 180.0 / pi;
-//                        double Phi_neut_1e_cut = allParticles[i]->getPhi() * 180.0 / pi;
-//
-//                        if ((Mom_neut_1e_cut <= n_mom_th.GetUpperCut()) && (Mom_neut_1e_cut >= n_mom_th.GetLowerCut())) { // if id. reco neutron
-//                            bool FD_Theta_Cut_Reco_neutrons = (Theta_neut_1e_cut <= FD_nucleon_theta_cut.GetUpperCut());
-//                            bool FD_Momentum_Cut_Reco_neutrons = ((Mom_neut_1e_cut <= FD_nucleon_momentum_cut.GetUpperCut()) &&
-//                                                                  (Mom_neut_1e_cut >= FD_nucleon_momentum_cut.GetLowerCut()));
-//
-//                            // if neutron passes ECAL veto:
-//                            if (NeutronPassVeto_1e_cut) {
-//                                hReco_P_nFD_AMaps.hFill(Mom_neut_1e_cut, Weight);
-//                                hNeutronAMapBC.hFill(Phi_neut_1e_cut, Theta_neut_1e_cut, Weight);
-//                                aMaps.hFillHitMaps("Reco", "Neutron", Mom_neut_1e_cut, Theta_neut_1e_cut, Phi_neut_1e_cut, Weight);
-//
-//                                if (FD_Theta_Cut_Reco_neutrons && FD_Momentum_Cut_Reco_neutrons) {
-//                                    hReco_P_nFD_WMaps.hFill(Mom_neut_1e_cut, Weight);
-//                                    hNeutronAMapBCwKC.hFill(Phi_neut_1e_cut, Theta_neut_1e_cut, Weight);
-//                                    wMaps.hFillHitMaps("Reco", "Neutron", Mom_neut_1e_cut, Theta_neut_1e_cut, Phi_neut_1e_cut, Weight);
-//                                }
-//                            } // end of if pass neutron ECAL veto
-//                        } // end of if id. reco neutron
-//                    } // end of if pass reco ECAL fiducial
-//                }
-//            }
-//            //</editor-fold>
 
         } // end of fill Acceptance maps if
         //</editor-fold>

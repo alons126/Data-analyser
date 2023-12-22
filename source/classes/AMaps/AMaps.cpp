@@ -167,7 +167,8 @@ AMaps::AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins,
                                            to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
         hPlot2D hPBinSepAMapsElectron = hPlot2D(AMapsMode_TitleAddition, "", hStatsTitleSepAMapsElectron, hTitleSepAMapsElectron,
                                                 "#phi_{e} [Deg]", "#theta_{e} [Deg]", AMapSavePathSepAMapsElectron, hSaveNameSepAMapsElectron,
-                                                hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistElectronSliceNumOfXBins, HistElectronSliceNumOfYBins);
+                                                hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistElectronSliceNumOfXBins,
+                                                HistElectronSliceNumOfYBins);
         ElectronAMapsBySlice.push_back(hPBinSepAMapsElectron);
         //</editor-fold>
 
@@ -395,8 +396,8 @@ AMaps::AMaps(const string &AcceptanceMapsDirectory, const string &SampleName,
     ReadAMap((AcceptanceMapsDirectory + SampleName + "/n_AMap_file.par").c_str(), Loaded_n_AMap);
     ReadAMap((AcceptanceMapsDirectory + SampleName + "/nuc_AMap_file.par").c_str(), Loaded_nuc_AMap);
 
-    HistElectronSliceNumOfXBins = 150;  // 100 by Default
-    HistElectronSliceNumOfYBins = 150;  // 100 by Default
+    HistElectronSliceNumOfXBins = 100;  // 100 by Default
+    HistElectronSliceNumOfYBins = 100;  // 100 by Default
     HistNucSliceNumOfXBins = 75;  // 100 by Default
     HistNucSliceNumOfYBins = 75;  // 100 by Default
 
