@@ -323,6 +323,7 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="Electron ID">
+    /* Before cuts */
     HistPlotter2D(c, MScThesisPlots, NO_CUTS_beta_VS_P_no_clas12ana,
                   "#beta vs. P (all particles, no #(e) cut, CD)", SampleName,
                   ElectronIDFolderSimBC, "01_Beta_vs_P_CD_all_par_no_cuts");
@@ -355,12 +356,13 @@ void MScThesisPlotter() {
                   "#beta vs. P (electrons only, 1e cut)", SampleName,
                   ElectronIDFolderSimBC, "05_Beta_e_vs_P_FD_electrons_only_1e_cut");
 
+    /* After cuts */
     HistPlotter2D(c, MScThesisPlots, plots_no_chi2,
                   "#beta vs. P (all particles, 1e cut, CD)", SampleName,
-                  ElectronIDFolderSimBC, "06_Beta_vs_P_CD_all_par_1e_cut");
+                  ElectronIDFolderSimAC, "02_Beta_vs_P_CD_all_par_1e_cut");
     HistPlotter2D(c, MScThesisPlots, plots_no_chi2,
                   "#beta vs. P (all particles, 1e cut, FD)", SampleName,
-                  ElectronIDFolderSimBC, "06_Beta_vs_P_FD_all_par_1e_cut");
+                  ElectronIDFolderSimAC, "02_Beta_vs_P_FD_all_par_1e_cut");
     //</editor-fold>
 
     //<editor-fold desc="Proton ID">
@@ -392,16 +394,9 @@ void MScThesisPlotter() {
                   "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName,
                   ProtonIDFolderSimBC, "04_theta_pFD_vs_pCD_for_small_theta_pFD_pCD_2p");
 
-    HistPlotter2D(c, MScThesisPlots, plots_no_NC,
-                  "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName,
-                  ProtonIDFolderSimBC, "05_theta_pFD_vs_pCD_for_all_theta_pFD_pCD");
-    HistPlotter2D(c, MScThesisPlots, plots_no_NC,
-                  "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName,
-                  ProtonIDFolderSimBC, "05_theta_pFD_vs_pCD_for_small_theta_pFD_pCD_2p");
-
     HistPlotter1D(c, MScThesisPlots, plots_no_NC,
                   "#delta#phi for small #Delta#theta_{pFD/pCD} - ZOOMIN", SampleName,
-                  ProtonIDFolderSimBC, "06_dPhi_pFD_pCD_for_small_dTheta_pFD_pCD_2p");
+                  ProtonIDFolderSimBC, "05_dPhi_pFD_pCD_for_small_dTheta_pFD_pCD_2p");
 
     /* After cuts */
     //TODO: fix duplicated histogram names!
@@ -422,13 +417,6 @@ void MScThesisPlotter() {
     HistPlotter2D(c, MScThesisPlots, plots_wNC_AMaps02,
                   "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName,
                   ProtonIDFolderSimAC, "04_theta_pFD_vs_pCD_for_small_theta_pFD_pCD_2p");
-
-    HistPlotter2D(c, MScThesisPlots, plots_wNC_AMaps02,
-                  "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName,
-                  ProtonIDFolderSimAC, "05_theta_pFD_vs_pCD_for_all_theta_pFD_pCD");
-    HistPlotter2D(c, MScThesisPlots, plots_wNC_AMaps02,
-                  "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName,
-                  ProtonIDFolderSimAC, "05_theta_pFD_vs_pCD_for_small_theta_pFD_pCD_2p");
     //</editor-fold>
 
     //<editor-fold desc="Neutrals ID">

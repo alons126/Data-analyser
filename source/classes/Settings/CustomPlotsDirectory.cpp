@@ -146,7 +146,7 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
                     Efficiency_Status = "Eff2";
                 }
             } else {
-//                Efficiency_Status = "Eff1_full_nFDt_noLnFDmech";
+//                Efficiency_Status = "Eff1_NoBetaNeutTh";
                 Efficiency_Status = "Eff1";
             }
         }
@@ -169,19 +169,19 @@ void CustomPlotsDirectory::SetPaths(const string &WorkingDirectory, const string
     string run;
 
     if (!apply_cuts) { // Stage 0 - no cuts
-        run = SampleName + Stage0_prefix + Added_PreStatuses;
+        run = SampleName + Stage0_prefix + Added_PreStatuses + "";
         Plots_path = WorkingDirectory + run;
         Plots_log_save_Directory = Plots_path + "/" + "Run_log_" + run + ".txt";
     } else {
         if (!apply_chi2_cuts_1e_cut) { // Stage 1 - with cuts except PID (chi2) cuts
-            run = SampleName + Stage1_prefix + Added_PreStatuses;
+            run = SampleName + Stage1_prefix + Added_PreStatuses + "";
             Plots_path = WorkingDirectory + run, Plots_log_save_Directory = Plots_path + "/" + "Run_log_" + run + ".txt";
         } else if (apply_chi2_cuts_1e_cut) {
             if (!apply_nucleon_cuts) { // Stage 2 - set nucleon cuts (neutron beta fit & proton double detection cuts)
-                run = SampleName + Stage2_prefix + Added_Statuses;
+                run = SampleName + Stage2_prefix + Added_Statuses + "";
                 Plots_path = WorkingDirectory + run, Plots_log_save_Directory = Plots_path + "/" + "Run_log_" + run + ".txt";
             } else {                   // Stage 3 - other runs
-                run = SampleName + Stage3_prefix + Added_Statuses;
+                run = SampleName + Stage3_prefix + Added_Statuses + "";
                 Plots_path = WorkingDirectory + run, Plots_log_save_Directory = Plots_path + "/" + "Run_log_" + run + ".txt";
             }
         }

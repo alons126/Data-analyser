@@ -179,14 +179,21 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                    Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)") {
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
+            TGraph *ClusterCenter = new TGraph();
+            ClusterCenter->AddPoint(40., 40.);
+            ClusterCenter->Draw("p");
+            ClusterCenter->SetMarkerStyle(22);
+            ClusterCenter->SetMarkerColor(kMagenta);
+            ClusterCenter->SetMarkerSize(3);
+
             TLine *UpperThetapFDcut = new TLine(gPad->GetUxmin(), 45., gPad->GetUxmax(), 45.);
             UpperThetapFDcut->SetLineWidth(2);
-            UpperThetapFDcut->SetLineColor(kRed);
+            UpperThetapFDcut->SetLineColor(kBlue);
             UpperThetapFDcut->Draw("same");
 
             TLine *LowerThetapFDcut = new TLine(gPad->GetUxmin(), 35., gPad->GetUxmax(), 35.);
             LowerThetapFDcut->SetLineWidth(2);
-            LowerThetapFDcut->SetLineColor(kRed);
+            LowerThetapFDcut->SetLineColor(kBlue);
             LowerThetapFDcut->Draw("same");
 
             TLine *UpperThetapCDcut = new TLine(45., gPad->GetUymin(), 45., gPad->GetUymax());

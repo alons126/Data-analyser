@@ -148,7 +148,7 @@ void EventAnalyser() {
     const bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
-    bool generate_AMaps = true;             // Generate acceptance maps
+    bool generate_AMaps = false;             // Generate acceptance maps
     //TODO: UPDATE AMaps loading constructor electron histogram's number of bins
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
@@ -211,7 +211,7 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
+    bool apply_nBeta_fit_cuts = false; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -322,10 +322,10 @@ void EventAnalyser() {
     cout << "apply_Nphe_cut:\t\t\t" << BoolToString(apply_Nphe_cut) << "\n";
     cout << "apply_ECAL_SF_cuts:\t\t" << BoolToString(apply_ECAL_SF_cuts) << "\n";
     cout << "apply_ECAL_P_cuts:\t\t" << BoolToString(apply_ECAL_P_cuts) << "\n";
+    cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n\n";
     cout << "apply_Electron_beta_cut:\t" << BoolToString(apply_Electron_beta_cut) << "\n\n";
 
     cout << "apply_chi2_cuts_1e_cut:\t\t" << BoolToString(apply_chi2_cuts_1e_cut) << "\n";
-    cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n\n";
 
     cout << "apply_nucleon_cuts:\t\t" << BoolToString(apply_nucleon_cuts) << "\n\n";
 
@@ -8713,8 +8713,11 @@ void EventAnalyser() {
         //<editor-fold desc="Debugging & monitoring">
 
         //<editor-fold desc="Safety checks">
+
+        //<editor-fold desc="Safety check for clas12ana particles">
         /* Safety check that allParticles.size(), Nf are the same */
         if (allParticles.size() != Nf) { cout << "\n\nallParticles.size() is different than Nf! Exiting...\n\n", exit(EXIT_FAILURE); }
+        //</editor-fold>
 
         //<editor-fold desc="Safety checks for FD protons">
         for (int i = 0; i < Protons_ind.size(); i++) {
@@ -11257,7 +11260,6 @@ void EventAnalyser() {
 
                 double dTheta = TL_theta_e_amaps - Reco_theta_e_amaps, dPhi = CalcdPhi(TL_phi_e_amaps - Reco_phi_e_amaps);
 
-//                double dPhiCut = 2.5, dThetaCut = 1.; //TODO: add to a DSCuts variable
                 double dPhiCut = 5., dThetaCut = 2.; //TODO: add to a DSCuts variable
                 bool Pass_dThetaCut = (fabs(dTheta) < dThetaCut), Pass_dPhiCut = (fabs(dPhi) < dPhiCut);
 
@@ -11285,7 +11287,6 @@ void EventAnalyser() {
 
                 double dTheta = TL_theta_pFD_amaps - Reco_theta_pFD_amaps, dPhi = CalcdPhi(TL_phi_pFD_amaps - Reco_phi_pFD_amaps);
 
-//                double dPhiCut = 2.5, dThetaCut = 1.; //TODO: add to a DSCuts variable
                 double dPhiCut = 5., dThetaCut = 2.; //TODO: add to a DSCuts variable
                 bool Pass_dThetaCut = (fabs(dTheta) < dThetaCut), Pass_dPhiCut = (fabs(dPhi) < dPhiCut);
 
@@ -20932,10 +20933,10 @@ void EventAnalyser() {
     myLogFile << "apply_Nphe_cut = " << BoolToString(apply_Nphe_cut) << "\n";
     myLogFile << "apply_ECAL_SF_cuts = " << BoolToString(apply_ECAL_SF_cuts) << "\n";
     myLogFile << "apply_ECAL_P_cuts = " << BoolToString(apply_ECAL_P_cuts) << "\n";
+    myLogFile << "apply_ECAL_fiducial_cuts = " << BoolToString(apply_ECAL_fiducial_cuts) << "\n\n";
     myLogFile << "apply_Electron_beta_cut = " << BoolToString(apply_Electron_beta_cut) << "\n\n";
 
     myLogFile << "apply_chi2_cuts_1e_cut = " << BoolToString(apply_chi2_cuts_1e_cut) << "\n";
-    myLogFile << "apply_ECAL_fiducial_cuts = " << BoolToString(apply_ECAL_fiducial_cuts) << "\n\n";
 
     myLogFile << "-- My analysis cuts -------------------------------------------------------\n";
     myLogFile << "apply_nucleon_cuts = " << BoolToString(apply_nucleon_cuts) << "\n\n";
