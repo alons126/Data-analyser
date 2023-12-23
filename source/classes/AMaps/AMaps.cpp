@@ -1436,10 +1436,10 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
     //TODO: figure out rather or not to keep these combind maps!
     ofstream e_AMap_file, p_AMap_file, n_AMap_file, nuc_AMap_file;
 
-    e_AMap_file.open(AcceptanceMapsDirectory + SampleName + "e_AMap_file.par");
-    p_AMap_file.open(AcceptanceMapsDirectory + SampleName + "p_AMap_file.par");
-    n_AMap_file.open(AcceptanceMapsDirectory + SampleName + "n_AMap_file.par");
-    nuc_AMap_file.open(AcceptanceMapsDirectory + SampleName + "nuc_AMap_file.par");
+    e_AMap_file.open(AcceptanceMapsDirectory + SampleName + "/e_AMap_file.par");
+    p_AMap_file.open(AcceptanceMapsDirectory + SampleName + "/p_AMap_file.par");
+    n_AMap_file.open(AcceptanceMapsDirectory + SampleName + "/n_AMap_file.par");
+    nuc_AMap_file.open(AcceptanceMapsDirectory + SampleName + "/nuc_AMap_file.par");
 //    e_AMap_file.open(AMapCopySavePath + "e_AMap_file.par");
 //    p_AMap_file.open(AMapCopySavePath + "p_AMap_file.par");
 //    n_AMap_file.open(AMapCopySavePath + "n_AMap_file.par");
@@ -1500,10 +1500,10 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
     n_AMap_file.close();
     nuc_AMap_file.close();
 
-    system(("cp " + AcceptanceMapsDirectory + SampleName + "e_AMap_file.par " + AMapCopySavePath).c_str());
-    system(("cp " + AcceptanceMapsDirectory + SampleName + "p_AMap_file.par " + AMapCopySavePath).c_str());
-    system(("cp " + AcceptanceMapsDirectory + SampleName + "n_AMap_file.par " + AMapCopySavePath).c_str());
-    system(("cp " + AcceptanceMapsDirectory + SampleName + "nuc_AMap_file.par " + AMapCopySavePath).c_str());
+    system(("cp " + AcceptanceMapsDirectory + SampleName + "/e_AMap_file.par " + AMapCopySavePath).c_str());
+    system(("cp " + AcceptanceMapsDirectory + SampleName + "/p_AMap_file.par " + AMapCopySavePath).c_str());
+    system(("cp " + AcceptanceMapsDirectory + SampleName + "/n_AMap_file.par " + AMapCopySavePath).c_str());
+    system(("cp " + AcceptanceMapsDirectory + SampleName + "/nuc_AMap_file.par " + AMapCopySavePath).c_str());
     //</editor-fold>
 
     //<editor-fold desc="Slice limits">
