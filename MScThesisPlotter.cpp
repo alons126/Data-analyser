@@ -289,6 +289,7 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="DC fiducial cuts">
+    /* Before cuts */
     HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
                   "dc_hitmap_before_1", SampleName,
                   DCFiducialCutsFolderSimBC, "01_dc_hitmap_e_R1");
@@ -318,6 +319,37 @@ void MScThesisPlotter() {
     HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
                   "dc_hitmap_before_pion_3", SampleName,
                   DCFiducialCutsFolderSimBC, "03_dc_hitmap_pi_R3");
+
+    /* After cuts */
+    HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
+                  "dc_hitmap_before_1", SampleName,
+                  DCFiducialCutsFolderSimAC, "01_dc_hitmap_e_R1");
+    HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
+                  "dc_hitmap_before_2", SampleName,
+                  DCFiducialCutsFolderSimAC, "01_dc_hitmap_e_R2");
+    HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
+                  "dc_hitmap_before_3", SampleName,
+                  DCFiducialCutsFolderSimAC, "01_dc_hitmap_e_R3");
+
+    HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
+                  "dc_hitmap_before_proton_1", SampleName,
+                  DCFiducialCutsFolderSimAC, "02_dc_hitmap_p_R1");
+    HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
+                  "dc_hitmap_before_proton_2", SampleName,
+                  DCFiducialCutsFolderSimAC, "02_dc_hitmap_p_R2");
+    HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
+                  "dc_hitmap_before_proton_3", SampleName,
+                  DCFiducialCutsFolderSimAC, "02_dc_hitmap_p_R3");
+
+    HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
+                  "dc_hitmap_before_pion_1", SampleName,
+                  DCFiducialCutsFolderSimAC, "03_dc_hitmap_pi_R1");
+    HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
+                  "dc_hitmap_before_pion_2", SampleName,
+                  DCFiducialCutsFolderSimAC, "03_dc_hitmap_pi_R2");
+    HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts,
+                  "dc_hitmap_before_pion_3", SampleName,
+                  DCFiducialCutsFolderSimAC, "03_dc_hitmap_pi_R3");
     //</editor-fold>
 
     //</editor-fold>

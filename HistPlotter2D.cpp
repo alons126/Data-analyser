@@ -93,6 +93,9 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
         if (findSubstring(Histogram2DNameCopy,"dc_hitmap")) {
             ShowStats = false;
+
+            Histogram2D->GetXaxis()->SetTitle("x [cm]");
+            Histogram2D->GetYaxis()->SetTitle("y [cm]");
         }
 
         if (findSubstring(Histogram2DNameCopy,"#beta vs. P")) {

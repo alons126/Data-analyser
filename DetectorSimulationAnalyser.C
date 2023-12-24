@@ -148,7 +148,7 @@ void EventAnalyser() {
     const bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
-    bool generate_AMaps = false;             // Generate acceptance maps
+    bool generate_AMaps = true;             // Generate acceptance maps
     //TODO: UPDATE AMaps loading constructor electron histogram's number of bins
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
@@ -211,7 +211,7 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = false; // apply neutron upper mom. th.
+    bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -814,7 +814,7 @@ void EventAnalyser() {
     /* Angle plots */
     int numTH1Dbins_Ang_Plots = 50;
     int numTH2Dbins_Ang_Plots = 65;
-    int numTH2Dbins_Electron_Ang_Plots = 100;
+    int numTH2Dbins_Electron_Ang_Plots = 150;
     int numTH2Dbins_Nucleon_Ang_Plots = 75;
 
     /* Q2 plots */

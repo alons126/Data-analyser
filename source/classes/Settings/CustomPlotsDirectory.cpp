@@ -146,7 +146,6 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
                     Efficiency_Status = "Eff2";
                 }
             } else {
-//                Efficiency_Status = "Eff1_NoBetaNeutTh";
                 Efficiency_Status = "Eff1";
             }
         }
@@ -156,8 +155,10 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
 
     Added_PreStatuses = Preselection_Cuts_Status + Electron_Quality_Cuts_Status;
 
-    Added_Statuses = Preselection_Cuts_Status + Electron_Quality_Cuts_Status + Nucleon_Cuts_Status + FD_photons_Status + PSmearing_Status + FiducialCuts_Status +
-                     KinCuts_Status + KinWei_Status + Additional_Status + Efficiency_Status;
+    Added_Statuses = Preselection_Cuts_Status + Electron_Quality_Cuts_Status +
+                     Nucleon_Cuts_Status + FD_photons_Status + PSmearing_Status +
+                     FiducialCuts_Status + KinCuts_Status + KinWei_Status +
+                     Additional_Status + Efficiency_Status;
 }
 //</editor-fold>
 

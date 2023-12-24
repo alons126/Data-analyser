@@ -396,8 +396,10 @@ AMaps::AMaps(const string &AcceptanceMapsDirectory, const string &SampleName,
     ReadAMap((AcceptanceMapsDirectory + SampleName + "/n_AMap_file.par").c_str(), Loaded_n_AMap);
     ReadAMap((AcceptanceMapsDirectory + SampleName + "/nuc_AMap_file.par").c_str(), Loaded_nuc_AMap);
 
-    HistElectronSliceNumOfXBins = 100;  // 100 by Default
-    HistElectronSliceNumOfYBins = 100;  // 100 by Default
+    HistElectronSliceNumOfXBins = 150;  // 100 by Default
+    HistElectronSliceNumOfYBins = 150;  // 100 by Default
+//    HistElectronSliceNumOfXBins = 100;  // 100 by Default
+//    HistElectronSliceNumOfYBins = 100;  // 100 by Default
     HistNucSliceNumOfXBins = 75;  // 100 by Default
     HistNucSliceNumOfYBins = 75;  // 100 by Default
 
