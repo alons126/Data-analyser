@@ -398,10 +398,12 @@ AMaps::AMaps(const string &AcceptanceMapsDirectory, const string &SampleName,
 
     HistElectronSliceNumOfXBins = 150;  // 100 by Default
     HistElectronSliceNumOfYBins = 150;  // 100 by Default
-//    HistElectronSliceNumOfXBins = 100;  // 100 by Default
-//    HistElectronSliceNumOfYBins = 100;  // 100 by Default
-    HistNucSliceNumOfXBins = 75;  // 100 by Default
-    HistNucSliceNumOfYBins = 75;  // 100 by Default
+//    HistElectronSliceNumOfXBins = 100;
+//    HistElectronSliceNumOfYBins = 100;
+    HistNucSliceNumOfXBins = 80;
+    HistNucSliceNumOfYBins = 80;
+//    HistNucSliceNumOfXBins = 75;  // 100 by Default
+//    HistNucSliceNumOfYBins = 75;  // 100 by Default
 
     e_single_slice_test = Electron_single_slice_test, nuc_single_slice_test = Nucleon_single_slice_test;
     Slices2Test = TestSlices;

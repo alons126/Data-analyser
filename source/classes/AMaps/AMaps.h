@@ -61,7 +61,9 @@ private:
     int NumberElecOfMomSlices;
 
     double Nucleon_Momentum_Slice_Th = 0.4;
-    double Electron_Momentum_Slice_Th = 0.6; // Not th! but distance from beamE of last mom bin!
+//    double Electron_Momentum_Slice_Th = 1.0; // Not th! but distance from beamE of last mom bin!
+    double Electron_Momentum_Slice_Th = 0.8; // Not th! but distance from beamE of last mom bin!
+//    double Electron_Momentum_Slice_Th = 0.6; // Not th! but distance from beamE of last mom bin!
 //    double Electron_Momentum_Slice_Th = 0.2; // Not th! but distance from beamE of last mom bin!
 
     /* TL Acceptance maps */

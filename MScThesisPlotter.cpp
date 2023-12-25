@@ -26,12 +26,16 @@ void MScThesisPlotter() {
     const string SampleName = "C12x4_simulation_G18_Q204_6GeV";
 
     //<editor-fold desc="Runs">
-    const char *NO_CUTS_beta_VS_P_no_clas12ana = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_no_clas12ana/C12x4_simulation_G18_Q204_6GeV_plots.root";
+    const char *NO_CUTS_beta_VS_P_no_clas12ana = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_no_clas12ana_v2/C12x4_simulation_G18_Q204_6GeV_plots.root";
+//    const char *NO_CUTS_beta_VS_P_no_clas12ana = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_no_clas12ana/C12x4_simulation_G18_Q204_6GeV_plots.root";
 
-    const char *plots_NO_CUTS_with_clas12ana = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS/C12x4_simulation_G18_Q204_6GeV_plots.root";
+    const char *plots_NO_CUTS_with_clas12ana = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_v2/C12x4_simulation_G18_Q204_6GeV_plots.root";
+//    const char *plots_NO_CUTS_with_clas12ana = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS/C12x4_simulation_G18_Q204_6GeV_plots.root";
 
     const char *plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts =
-            "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_DC_fiducial_cuts/DebugOutputFile.root";
+            "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_DC_fiducial_cuts_v2/DebugOutputFile.root";
+//    const char *plots_NO_CUTS_with_clas12ana_DC_fiducial_cuts =
+//            "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_DC_fiducial_cuts/DebugOutputFile.root";
 
     const char *plots_no_chi2 = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/C12x4_simulation_G18_Q204_6GeV_S01ACwoChi2/C12x4_simulation_G18_Q204_6GeV_plots.root";
 
@@ -407,6 +411,13 @@ void MScThesisPlotter() {
                   "#chi^{2}_{p} (1e cut, CD)", SampleName,
                   ProtonIDFolderSimBC, "01_chi2_p_CD_1e_cut");
 
+    HistPlotter1D(c, MScThesisPlots, plots_no_chi2,
+                  "FD Proton momentum #epsilon_{eff} (1e_cut)", SampleName,
+                  ProtonIDFolderSimBC, "02_P_pFD_eff_1e_cut_FD");
+    HistPlotter1D(c, MScThesisPlots, plots_no_chi2,
+                  "CD Proton momentum #epsilon_{eff} (1e_cut)", SampleName,
+                  ProtonIDFolderSimBC, "02_P_pCD_eff_1e_cut_CD");
+
 //    //TODO: fix duplicated histogram names!
 //    HistPlotter1D(c, MScThesisPlots, plots_no_NC,
 //                  "#theta_{p_{1},p_{2}} (All Int., 2p)", SampleName,
@@ -468,11 +479,19 @@ void MScThesisPlotter() {
 //                  NeutralsFDIDFolderSimBC, "02_ECAL_veto_nFD_p_1e_cut");
 
     HistPlotter1D(c, MScThesisPlots, plots_no_chi2,
+                  "Leading FD neutron momentum #epsilon_{eff} (1e_cut)", SampleName,
+                  ProtonIDFolderSimBC, "03_P_LnFD_eff_1e_cut_FD");
+    HistPlotter1D(c, MScThesisPlots, plots_no_chi2,
+                  "FD neutrons momentum #epsilon_{eff} (1e_cut)", SampleName,
+                  ProtonIDFolderSimBC, "03_P_nFD_eff_1e_cut_FD");
+/*
+    HistPlotter1D(c, MScThesisPlots, plots_no_chi2,
                   "Leading FD neutron momentum APID (1n, FD)", SampleName,
                   NeutralsFDIDFolderSimBC, "03_P_LnFD_1n");
     HistPlotter1D(c, MScThesisPlots, plots_no_chi2,
                   "Leading FD neutron momentum APID - ZOOMOUT (1n, FD)", SampleName,
                   NeutralsFDIDFolderSimBC, "03_P_LnFD_ZOOMOUT_1n");
+*/
 
     /* After cuts */
 //    //TODO: regenerate cut!
@@ -512,6 +531,13 @@ void MScThesisPlotter() {
     HistPlotter1D(c, MScThesisPlots, plots_no_chi2,
                   "#chi^{2}_{#pi^{-}} (1e cut, CD)", SampleName,
                   PionsIDFolderSimBC, "02_chi2_pim_CD_1e_cut");
+
+    HistPlotter1D(c, MScThesisPlots, plots_no_chi2,
+                  "Piplus momentum #epsilon_{eff} (1e_cut)", SampleName,
+                  ProtonIDFolderSimBC, "03_P_pip_eff_1e_cut");
+    HistPlotter1D(c, MScThesisPlots, plots_no_chi2,
+                  "Piminus momentum #epsilon_{eff} (1e_cut)", SampleName,
+                  ProtonIDFolderSimBC, "04_P_pim_eff_1e_cut");
     //</editor-fold>
 
     //<editor-fold desc="Other particles ID">
