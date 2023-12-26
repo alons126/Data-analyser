@@ -37,7 +37,7 @@ public:
     void ConfigureStatuses(const bool &apply_cuts, const bool &only_preselection_cuts, const bool &apply_chi2_cuts_1e_cut, const bool &only_electron_quality_cuts,
                            const bool &apply_nucleon_cuts, const bool &Enable_FD_photons, const bool &apply_nucleon_SmearAndShift,
                            const bool &apply_kinematical_cuts,
-                           const bool &apply_kinematical_weights, const bool &apply_fiducial_cuts, const bool &generate_AMaps, const bool &plot_and_fit_MomRes,
+                           const bool &apply_kinematical_weights, const bool &apply_fiducial_cuts, const bool &Generate_AMaps, const bool &plot_and_fit_MomRes,
                            const bool &VaryingDelta, const bool &Calculate_momResS2, const bool &Run_in_momResS2, const bool &nRes_test, const bool &Rec_wTL_ES,
                            const bool &ZoomIn_On_mom_th_plots);
 

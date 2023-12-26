@@ -23,7 +23,7 @@
 using namespace std;
 
 TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring) {
-    bool PrintOut = true;
+    bool PrintOut = false;
 
     TFile *file = new TFile(filename);
     if (!file) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }

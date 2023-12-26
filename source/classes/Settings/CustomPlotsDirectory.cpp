@@ -10,7 +10,7 @@
 void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool &only_preselection_cuts, const bool &apply_chi2_cuts_1e_cut,
                                              const bool &only_electron_quality_cuts, const bool &apply_nucleon_cuts, const bool &Enable_FD_photons,
                                              const bool &apply_nucleon_SmearAndShift, const bool &apply_kinematical_cuts, const bool &apply_kinematical_weights,
-                                             const bool &apply_fiducial_cuts, const bool &generate_AMaps, const bool &plot_and_fit_MomRes, const bool &VaryingDelta,
+                                             const bool &apply_fiducial_cuts, const bool &Generate_AMaps, const bool &plot_and_fit_MomRes, const bool &VaryingDelta,
                                              const bool &Calculate_momResS2, const bool &Run_in_momResS2, const bool &nRes_test, const bool &Rec_wTL_ES,
                                              const bool &ZoomIn_On_mom_th_plots) {
     if (Custom_cuts_naming) {
@@ -75,11 +75,11 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
         }
 
         if (apply_chi2_cuts_1e_cut) {
-            if (!generate_AMaps && !plot_and_fit_MomRes) {
+            if (!Generate_AMaps && !plot_and_fit_MomRes) {
                 Additional_Status = "";
-            } else if (generate_AMaps && !plot_and_fit_MomRes) {
+            } else if (Generate_AMaps && !plot_and_fit_MomRes) {
                 Additional_Status = "AMaps_";
-            } else if (!generate_AMaps && plot_and_fit_MomRes) {
+            } else if (!Generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_";
                 } else {
@@ -105,7 +105,7 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
                         }
                     }
                 }
-            } else if (generate_AMaps && plot_and_fit_MomRes) {
+            } else if (Generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_AMaps_";
                 } else {
@@ -143,7 +143,6 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
                 if (ZoomIn_On_mom_th_plots) {
                     Efficiency_Status = "Eff2_ZoomIn";
                 } else {
-//                    Efficiency_Status = "Eff2_eTh10";
                     Efficiency_Status = "Eff2";
                 }
             } else {

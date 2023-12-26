@@ -284,7 +284,7 @@ public:
 
 // IsInFDQuery function -------------------------------------------------------------------------------------------------------------------------------------------------
 
-    bool IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi, bool NucleonOverlappingFC = true);
+    bool IsInFDQuery(bool Generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi, bool NucleonOverlappingFC = true);
 
 // Other methods --------------------------------------------------------------------------------------------------------------------------------------------------------
 

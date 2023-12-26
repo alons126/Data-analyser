@@ -73,7 +73,7 @@ private:
     const bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
-    bool generate_AMaps = true;             // Generate acceptance maps
+    bool Generate_AMaps = true;             // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = false;
@@ -127,7 +127,7 @@ private:
     bool apply_ECAL_fiducial_cuts = true;
 
     /* DC fiducial (edge) cuts */
-    bool apply_DC_fiducial_cut = true;
+    bool apply_DC_fiducial_cuts = true;
 
     // My analysis cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
     /* Electron beta cut */
@@ -147,7 +147,7 @@ private:
 
     //<editor-fold desc="Auto-disable variables">
     if (isData) { // no TL calculation, AMap,WMap generation nor nRes calculation when running on data
-        calculate_truth_level = generate_AMaps = plot_and_fit_MomRes = nRes_test = false;
+        calculate_truth_level = Generate_AMaps = plot_and_fit_MomRes = nRes_test = false;
     }
 
     if (!apply_nucleon_cuts) { calculate_truth_level = false; }
@@ -174,7 +174,7 @@ private:
     //<editor-fold desc="Auto-disable variables">
     if (!apply_cuts) {
         apply_Nphe_cut = apply_chi2_cuts_1e_cut = apply_Vz_cuts = apply_dVz_cuts = false;
-        apply_ECAL_SF_cuts = apply_ECAL_P_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
+        apply_ECAL_SF_cuts = apply_ECAL_P_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cuts = false;
         apply_Electron_beta_cut = apply_nucleon_cuts = false;
     }
 
@@ -188,7 +188,7 @@ private:
         if (Calculate_momResS2) { apply_nucleon_SmearAndShift = true; }
     }
 
-    if (generate_AMaps) { apply_fiducial_cuts = false; }
+    if (Generate_AMaps) { apply_fiducial_cuts = false; }
 
     if (!VaryingDelta) { apply_nucleon_SmearAndShift = false; }
     //</editor-fold>
@@ -248,11 +248,11 @@ private:
         }
 
         if (apply_chi2_cuts_1e_cut) {
-            if (!generate_AMaps && !plot_and_fit_MomRes) {
+            if (!Generate_AMaps && !plot_and_fit_MomRes) {
                 Additional_Status = "";
-            } else if (generate_AMaps && !plot_and_fit_MomRes) {
+            } else if (Generate_AMaps && !plot_and_fit_MomRes) {
                 Additional_Status = "AMaps_";
-            } else if (!generate_AMaps && plot_and_fit_MomRes) {
+            } else if (!Generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_";
                 } else {
@@ -278,7 +278,7 @@ private:
                         }
                     }
                 }
-            } else if (generate_AMaps && plot_and_fit_MomRes) {
+            } else if (Generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_AMaps_";
                 } else {
@@ -381,7 +381,7 @@ private:
     cout << "apply_ECAL_SF_cuts:\t\t" << BoolToString(apply_ECAL_SF_cuts) << "\n";
     cout << "apply_ECAL_P_cuts:\t\t" << BoolToString(apply_ECAL_P_cuts) << "\n";
     cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
-    cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n\n";
+    cout << "apply_DC_fiducial_cuts:\t\t" << BoolToString(apply_DC_fiducial_cuts) << "\n\n";
 
     cout << "apply_Electron_beta_cut:\t" << BoolToString(apply_Electron_beta_cut) << "\n\n";
 
@@ -786,7 +786,7 @@ private:
 
     if (!fill_TL_plots) { Efficiency_plots = TL_after_Acceptance_Maps_plots = false; }
 
-    if (!generate_AMaps) { AMaps_plots = false; }
+    if (!Generate_AMaps) { AMaps_plots = false; }
 
     if (!apply_nucleon_cuts || (Electron_single_slice_test || Nucleon_single_slice_test)) { FSR_1D_plots = FSR_2D_plots = false; }
 
@@ -999,8 +999,8 @@ private:
     /* Acceptance maps are handled completely by the AMaps class */
     cout << "\nSetting Acceptance maps...";
 
-    if (!calculate_truth_level) { generate_AMaps = false; }
-    if (!generate_AMaps) { AMaps_plots = false; }
+    if (!calculate_truth_level) { Generate_AMaps = false; }
+    if (!Generate_AMaps) { AMaps_plots = false; }
     if (reformat_e_bins) { equi_P_e_bins = false; }
 
     /* Set Bins by case */
@@ -1017,7 +1017,7 @@ private:
 
     AMaps aMaps, wMaps;
 
-    if (generate_AMaps) {
+    if (Generate_AMaps) {
         aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                       NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
         wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,
@@ -1249,7 +1249,7 @@ public:
         const bool ES_by_leading_FDneutron = true;
 
         /* Acceptance maps setup */
-        bool generate_AMaps = true;             // Generate acceptance maps
+        bool Generate_AMaps = true;             // Generate acceptance maps
         bool TL_with_one_reco_electron = true;
         bool reformat_e_bins = false;
         bool equi_P_e_bins = false;
@@ -1303,7 +1303,7 @@ public:
         bool apply_ECAL_fiducial_cuts = true;
 
         /* DC fiducial (edge) cuts */
-        bool apply_DC_fiducial_cut = true;
+        bool apply_DC_fiducial_cuts = true;
 
         // My analysis cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
         /* Electron beta cut */
@@ -1323,7 +1323,7 @@ public:
 
         //<editor-fold desc="Auto-disable variables">
         if (isData) { // no TL calculation, AMap,WMap generation nor nRes calculation when running on data
-            calculate_truth_level = generate_AMaps = plot_and_fit_MomRes = nRes_test = false;
+            calculate_truth_level = Generate_AMaps = plot_and_fit_MomRes = nRes_test = false;
         }
 
         if (!apply_nucleon_cuts) { calculate_truth_level = false; }
@@ -1350,7 +1350,7 @@ public:
         //<editor-fold desc="Auto-disable variables">
         if (!apply_cuts) {
             apply_Nphe_cut = apply_chi2_cuts_1e_cut = apply_Vz_cuts = apply_dVz_cuts = false;
-            apply_ECAL_SF_cuts = apply_ECAL_P_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
+            apply_ECAL_SF_cuts = apply_ECAL_P_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cuts = false;
             apply_Electron_beta_cut = apply_nucleon_cuts = false;
         }
 
@@ -1364,7 +1364,7 @@ public:
             if (Calculate_momResS2) { apply_nucleon_SmearAndShift = true; }
         }
 
-        if (generate_AMaps) { apply_fiducial_cuts = false; }
+        if (Generate_AMaps) { apply_fiducial_cuts = false; }
 
         if (!VaryingDelta) { apply_nucleon_SmearAndShift = false; }
         //</editor-fold>
@@ -1424,11 +1424,11 @@ public:
             }
 
             if (apply_chi2_cuts_1e_cut) {
-                if (!generate_AMaps && !plot_and_fit_MomRes) {
+                if (!Generate_AMaps && !plot_and_fit_MomRes) {
                     Additional_Status = "";
-                } else if (generate_AMaps && !plot_and_fit_MomRes) {
+                } else if (Generate_AMaps && !plot_and_fit_MomRes) {
                     Additional_Status = "AMaps_";
-                } else if (!generate_AMaps && plot_and_fit_MomRes) {
+                } else if (!Generate_AMaps && plot_and_fit_MomRes) {
                     if (!VaryingDelta) {
                         Additional_Status = "nResSS_";
                     } else {
@@ -1454,7 +1454,7 @@ public:
                             }
                         }
                     }
-                } else if (generate_AMaps && plot_and_fit_MomRes) {
+                } else if (Generate_AMaps && plot_and_fit_MomRes) {
                     if (!VaryingDelta) {
                         Additional_Status = "nResSS_AMaps_";
                     } else {
@@ -1557,7 +1557,7 @@ public:
         cout << "apply_ECAL_SF_cuts:\t\t" << BoolToString(apply_ECAL_SF_cuts) << "\n";
         cout << "apply_ECAL_P_cuts:\t\t" << BoolToString(apply_ECAL_P_cuts) << "\n";
         cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
-        cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n\n";
+        cout << "apply_DC_fiducial_cuts:\t\t" << BoolToString(apply_DC_fiducial_cuts) << "\n\n";
 
         cout << "apply_Electron_beta_cut:\t" << BoolToString(apply_Electron_beta_cut) << "\n\n";
 
@@ -1962,7 +1962,7 @@ public:
 
         if (!fill_TL_plots) { Efficiency_plots = TL_after_Acceptance_Maps_plots = false; }
 
-        if (!generate_AMaps) { AMaps_plots = false; }
+        if (!Generate_AMaps) { AMaps_plots = false; }
 
         if (!apply_nucleon_cuts || (Electron_single_slice_test || Nucleon_single_slice_test)) { FSR_1D_plots = FSR_2D_plots = false; }
 
@@ -2175,8 +2175,8 @@ public:
         /* Acceptance maps are handled completely by the AMaps class */
         cout << "\nSetting Acceptance maps...";
 
-        if (!calculate_truth_level) { generate_AMaps = false; }
-        if (!generate_AMaps) { AMaps_plots = false; }
+        if (!calculate_truth_level) { Generate_AMaps = false; }
+        if (!Generate_AMaps) { AMaps_plots = false; }
         if (reformat_e_bins) { equi_P_e_bins = false; }
 
         /* Set Bins by case */
@@ -2193,7 +2193,7 @@ public:
 
         AMaps aMaps, wMaps;
 
-        if (generate_AMaps) {
+        if (Generate_AMaps) {
             aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                           NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
             wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,

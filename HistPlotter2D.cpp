@@ -38,6 +38,30 @@ const string ConfigSName2D(const string &SampleName) {
     }
 }
 
+double SetxOffset2D(const bool &ShowStats) {
+    double xOffset;
+
+    if (!ShowStats) {
+        xOffset = -0.11;
+    } else {
+        xOffset = 0;
+    }
+
+    return xOffset;
+}
+
+double SetyOffset2D(const bool &ShowStats) {
+    double yOffset;
+
+    if (!ShowStats) {
+        yOffset = 0.15;
+    } else {
+        yOffset = 0;
+    }
+
+    return yOffset;
+}
+
 void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *filename, const char *Histogram2DName,
                    const string &SampleName, const string &SavePath, const string &SaveName) {
     cout << "\n\n";
@@ -48,6 +72,18 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
     TFile *file = new TFile(filename);
     TH2D *Histogram2D = (TH2D *) file->Get(Histogram2DName);
+
+    double Legend_x1_BaseLine = gStyle->GetStatX(), Legend_y1_BaseLine = gStyle->GetStatY(); // Top right
+    double Legend_x2_BaseLine = gStyle->GetStatX(), Legend_y2_BaseLine = gStyle->GetStatY(); // Bottom left
+
+    double Legend_x1_OneLine = Legend_x1_BaseLine, Legend_y1_OneLine = Legend_y1_BaseLine - 0.2; // Top right
+    double Legend_x2_OneLine = Legend_x2_BaseLine - 0.2, Legend_y2_OneLine = Legend_y2_BaseLine - 0.25; // Bottom left
+
+    double Legend_x1_TwoLines = Legend_x1_BaseLine, Legend_y1_TwoLines = Legend_y1_BaseLine - 0.2; // Top right
+    double Legend_x2_TwoLines = Legend_x2_BaseLine - 0.2, Legend_y2_TwoLines = Legend_y2_BaseLine - 0.3; // Bottom left
+
+    double Legend_x1_ThreeLines = Legend_x1_BaseLine, Legend_y1_ThreeLines = Legend_y1_BaseLine - 0.2; // Top right
+    double Legend_x2_ThreeLines = Legend_x2_BaseLine - 0.2, Legend_y2_ThreeLines = Legend_y2_BaseLine - 0.35; // Bottom left
 
     const string Histogram2DNameCopy = Histogram2DName;
     int LineColor = 1;
@@ -91,14 +127,14 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
         gPad->Update();
 
-        if (findSubstring(Histogram2DNameCopy,"dc_hitmap")) {
+        if (findSubstring(Histogram2DNameCopy, "dc_hitmap")) {
             ShowStats = false;
 
             Histogram2D->GetXaxis()->SetTitle("x [cm]");
             Histogram2D->GetYaxis()->SetTitle("y [cm]");
         }
 
-        if (findSubstring(Histogram2DNameCopy,"#beta vs. P")) {
+        if (findSubstring(Histogram2DNameCopy, "#beta vs. P")) {
             if ((Histogram2DNameCopy == "#beta vs. P (all particles, no #(e) cut, CD)") ||
                 (Histogram2DNameCopy == "#beta vs. P (all particles, no #(e) cut, FD)") ||
                 (Histogram2DNameCopy == "#beta vs. P (all particles, 1e cut, CD)") ||
@@ -141,7 +177,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             }
         }
 
-        if (Histogram2DNameCopy == "SF vs. P_{e} BC (1e cut, FD)") {
+        if ((Histogram2DNameCopy == "SF vs. P_{e} BC (1e cut, FD)") || (Histogram2DNameCopy == "SF vs. P_{e} (1e cut, FD)")) {
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
             TLine *UpperFScut = new TLine(gPad->GetUxmin(), 0.28, gPad->GetUxmax(), 0.28);
@@ -155,7 +191,8 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerFScut->Draw("same");
         }
 
-        if (Histogram2DNameCopy == "Vcal vs. SF BC (1e cut, PCAL)" || Histogram2DNameCopy == "Wcal vs. SF BC (1e cut, PCAL)") {
+        if ((Histogram2DNameCopy == "Vcal vs. SF BC (1e cut, PCAL)" || Histogram2DNameCopy == "Wcal vs. SF BC (1e cut, PCAL)") ||
+            (Histogram2DNameCopy == "Vcal vs. SF (1e cut, PCAL)" || Histogram2DNameCopy == "Wcal vs. SF (1e cut, PCAL)")) {
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
             TLine *LowerECALcoorCut = new TLine(14., gPad->GetUymin(), 14., gPad->GetUymax());
@@ -179,15 +216,15 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         }
 
         if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD}<20#circ (All Int., 2p)" ||
-                   Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)") {
+            Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)") {
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
-            TGraph *ClusterCenter = new TGraph();
-            ClusterCenter->AddPoint(40., 40.);
-            ClusterCenter->Draw("p");
-            ClusterCenter->SetMarkerStyle(22);
-            ClusterCenter->SetMarkerColor(kMagenta);
-            ClusterCenter->SetMarkerSize(3);
+//            TGraph *ClusterCenter = new TGraph();
+//            ClusterCenter->AddPoint(40., 40.);
+//            ClusterCenter->Draw("p");
+//            ClusterCenter->SetMarkerStyle(22);
+//            ClusterCenter->SetMarkerColor(kMagenta);
+//            ClusterCenter->SetMarkerSize(3);
 
             TLine *UpperThetapFDcut = new TLine(gPad->GetUxmin(), 45., gPad->GetUxmax(), 45.);
             UpperThetapFDcut->SetLineWidth(2);
