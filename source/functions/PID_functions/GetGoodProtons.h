@@ -29,10 +29,10 @@ using namespace std;
 //<editor-fold desc="GetGoodProtons function">
 vector<int> GetGoodProtons(bool apply_nucleon_cuts, vector<region_part_ptr> &protons, const vector<int> &IDProtons_ind,
                            DSCuts &Theta_p1_cuts_2p, DSCuts &Theta_p2_cuts_2p, DSCuts &dphi_p1_p2_2p) {
-    vector<int> GoodProtons; // good protons vector fater the cuts
+    vector<int> GoodProtons; // good protons vector after the cuts
 
     /* Monitoring variables */
-    bool TwoCutsPrintout = false;                                                                            // set as true to print a massege when both cuts are applied
+    bool TwoCutsPrintout = false;                                                                            // set as true to print a massage when both cuts are applied
     bool Cut_sCTOFhp = false, Cut_dCDaFDd = false;                                                                          // variables to indicate which cut is applied
 
     for (int i = 0; i < IDProtons_ind.size(); i++) {

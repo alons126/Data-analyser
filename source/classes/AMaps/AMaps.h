@@ -42,12 +42,13 @@ using namespace std;
 
 class AMaps {
 private:
+    string AMaps_Mode = "AMaps";
 
     /* Acceptance maps from class and before cuts (to be compared with one generated with the file) */
     hPlot2D ElectronAMapBC, ProtonAMapBC, NeutronAMapBC, NucleonAMapBC;
 
-    vector<vector<double>> ElectronInvertedMomBinsLimits, ElectronMomBinsLimits;
-    vector<vector<double>> InvertedPBinsLimits, PBinsLimits;
+    vector<vector<double>> InvertedElectronMomSliceLimits, ElectronMomSliceLimits;
+    vector<vector<double>> InvertedNucleonMomSliceLimits, NucleonMomSliceLimits;
 
     double hBinLowerXLim = -180, hBinUpperXLim = 180;
     double hBinLowerYLim = 0, hBinUpperYLim = 50;
@@ -56,9 +57,11 @@ private:
     int HistElectronSliceNumOfYBins;  // 100 by Default
     int HistNucSliceNumOfXBins;       // 75 by Default
     int HistNucSliceNumOfYBins;       // 75 by Default
-    int NumberNucOfMomSlices;         // 10 by Default
+    int NumberNucOfMomSlices;
+    int NumberElecOfMomSlices;
 
-    double MomBinTh = 0.4;
+    double Nucleon_Momentum_Slice_Th = 0.4;
+    double Electron_Momentum_Slice_Th = 0.8; // Not th! but distance from beamE of last mom bin!
 
     /* TL Acceptance maps */
     vector<hPlot2D> ElectronTLAMapsBySlice, ProtonTLAMapsBySlice, NeutronTLAMapsBySlice;
@@ -90,6 +93,7 @@ private:
     vector<vector<vector<int>>> n_AMap_Slices;
     vector<vector<int>> nuc_AMap;
     vector<vector<vector<int>>> nuc_AMap_Slices;
+    vector<vector<vector<int>>> nuc_WMap_Slices; //TODO: fiure out if really need these!
 
     /* Weight maps */
     vector<vector<vector<double>>> e_WMap_Slices;
@@ -109,7 +113,7 @@ private:
     TList *Charged_particle_Sep_AMaps = new TList();
     TList *AcceptanceMaps = new TList();
 
-    string AMapSavePath;
+    string AMapSavePath, AMapCopySavePath;
 
     string AMapsBC_prefix = "00_AMaps_BC_-_";
     string AMap_TL_prefix = "01_AMap_TL_-_";
@@ -118,8 +122,8 @@ private:
     string cPart_Sep_AMaps_prefix = "04_cPart_Sep_AMaps_-_";
     string AMaps_prefix = "05_AMaps_-_";
 
-    vector<vector<double>> Loaded_ElectronMomBinsLimits;
-    vector<vector<double>> Loaded_PBinsLimits;
+    vector<vector<double>> Loaded_ElectronMomSliceLimits;
+    vector<vector<double>> Loaded_NucleonMomSliceLimits;
 
     /* Loaded acceptance maps */
     vector<vector<int>> Loaded_e_AMap;
@@ -161,7 +165,7 @@ public:
 
     // AMaps generation constructor:
     AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &AMapsMode = "", const string &SavePath = "./",
-          int nOfMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75, int hesNumOfXBins = 100, int hesNumOfYBins = 100);
+          int nOfNucMomBins = 4,int nOfElecMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75, int hesNumOfXBins = 100, int hesNumOfYBins = 100);
 
     // AMaps loading constructor:
     AMaps(const string &AcceptanceMapsDirectory, const string &SampleName,
@@ -190,6 +194,10 @@ public:
 // isTL function --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool isTL(const string &SampleType);
+
+// isReco function --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    bool isReco(const string &SampleType);
 
 // hFillHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -273,7 +281,7 @@ public:
 
 // IsInFDQuery function -------------------------------------------------------------------------------------------------------------------------------------------------
 
-    bool IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi, bool NucleonOverlappingFC = true);
+    bool IsInFDQuery(bool Generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi, bool NucleonOverlappingFC = true);
 
 // Other methods --------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -287,9 +295,9 @@ public:
 
     double GetCPartMinRatio() { return Charged_particle_min_Ratio; }
 
-    double GetPBinsLimitsSize() { return PBinsLimits.size(); }
+    double GetNucleonMomSliceLimitsSize() { return NucleonMomSliceLimits.size(); }
 
-    double GetElectronPBinsLimitsSize() { return ElectronMomBinsLimits.size(); }
+    double GetElectronNucleonMomSliceLimitsSize() { return ElectronMomSliceLimits.size(); }
 
 };
 

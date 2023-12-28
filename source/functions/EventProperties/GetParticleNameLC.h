@@ -16,7 +16,7 @@
 
 using namespace std;
 
-string GetParticleNameLC(string Source) {
+string GetParticleNameLC(string Source, bool ForDir = false) {
     string ParticleName;
 
     if (findSubstring(Source, "neutrals") || findSubstring(Source, "Neutrals")
@@ -27,7 +27,15 @@ string GetParticleNameLC(string Source) {
     } else if (findSubstring(Source, "Proton") || findSubstring(Source, "proton")) {
         ParticleName = "proton";
     } else if (findSubstring(Source, "Neutron") || findSubstring(Source, "neutron")) {
-        ParticleName = "neutron";
+        if (!(findSubstring(Source,"Leading") || findSubstring(Source,"leading"))) {
+            ParticleName = "neutron";
+        } else {
+            if (ForDir) {
+                ParticleName = "leading_neutron";
+            } else {
+                ParticleName = "leading neutron";
+            }
+        }
     } else if (findSubstring(Source, "#pi^{+}")) {
         ParticleName = "piplus";
     } else if (findSubstring(Source, "#pi^{-}")) {

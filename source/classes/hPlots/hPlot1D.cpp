@@ -105,22 +105,22 @@ hPlot1D::hPlot1D(std::string hst, std::string ht, std::string xat, double LowerX
 //<editor-fold desc="histPlotter1D function (old)">
 void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
                             std::string Histogram1DTitle, std::string Histogram1DTitleReactions, double titleSize, double labelSizex, double labelSizey,
-                            TList *Histogram_list, int lineWidth, bool logScalePlot, bool linearScalePlot, THStack *Histogram1DStack, std::string Histogram1DSaveName,
-                            std::string Histogram1DSaveNamePath, std::string finalState, int kColor = 1, bool centerTitle = true, bool addToStack = false,
+                            TList *Histogram_list, int lineWidth, bool LogScalePlot, bool LinearScalePlot, THStack *Histogram1DStack, std::string Histogram1DSaveName,
+                            std::string Histogram1DSaveNamePath, std::string finalState, int kColor = 1, bool centerTitle = true, bool AddToStack = false,
                             bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_cuts = 0, double plot_Xmax = 0, bool plot_max = true) {
 
 //  Normalization factor:
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
-    if (normalize_Histogram == true && custom_normalization == false) {
+    if (normalize_Histogram && !custom_normalization) {
         Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram == true && custom_normalization == true) {
+    } else if (normalize_Histogram && custom_normalization) {
         Histogram1D_integral = custom_normalization_factor;
     }
 
-    if (normalize_Histogram == true) {
+    if (normalize_Histogram) {
         string title;
 
         if (finalState == "") {
@@ -146,7 +146,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
-    } else if (normalize_Histogram == false) {
+    } else if (!normalize_Histogram) {
         std::string title;
 
         if (title2 == false) {
@@ -190,11 +190,11 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
     Histogram1D->SetLineWidth(lineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (showStats == false) {
+    if (!ShowStats) {
         Histogram1D->SetStats(0);
     }
 
-    if (apply_plot_cuts == true) {
+    if (apply_plot_cuts) {
         gPad->Update();
         double Upper_cut = plot_cuts + plot_Xmax;
         double Lower_cut = -plot_cuts + plot_Xmax;
@@ -228,7 +228,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
     }
 
-    if (logScalePlot == true) {
+    if (LogScalePlot) {
         Histogram1DCanvas->SetLogy(1);
         string Histogram1DSaveNameDir;
 
@@ -242,7 +242,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (linearScalePlot == true) {
+    if (LinearScalePlot) {
         Histogram1DCanvas->SetLogy(0);
         string Histogram1DSaveNameDir;
 
@@ -256,7 +256,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (addToStack == true) {
+    if (AddToStack) {
         Histogram1D->SetLineColor(LineColor);
         Histogram1D->SetStats(0);
         Histogram1DStack->Add(Histogram1D);
@@ -269,21 +269,21 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 //<editor-fold desc="histPlotter1D function (old, stackless)">
 void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
                             string Histogram1DTitle, string Histogram1DTitleReactions, double titleSize, double labelSizex, double labelSizey, TList *Histogram_list,
-                            int lineWidth, bool logScalePlot, bool linearScalePlot, string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState,
+                            int lineWidth, bool LogScalePlot, bool LinearScalePlot, string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState,
                             bool centerTitle = true, bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_cuts = 0, double plot_Xmax = 0,
                             bool plot_max = true) {
 
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
-    if (normalize_Histogram == true && custom_normalization == false) {
+    if (normalize_Histogram && !custom_normalization) {
         Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram == true && custom_normalization == true) {
+    } else if (normalize_Histogram && custom_normalization) {
         Histogram1D_integral = custom_normalization_factor;
     }
 
-    if (normalize_Histogram == true) {
+    if (normalize_Histogram) {
         string title;
 
         if (finalState == "") {
@@ -310,7 +310,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
-    } else if (normalize_Histogram == false) {
+    } else if (!normalize_Histogram) {
         string title;
 
         if (title2 == false) {
@@ -353,9 +353,9 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
     Histogram1D->SetLineWidth(lineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (showStats == false) { Histogram1D->SetStats(0); }
+    if (!ShowStats) { Histogram1D->SetStats(0); }
 
-    if (apply_plot_cuts == true) {
+    if (apply_plot_cuts) {
         gPad->Update();
         double Upper_cut = plot_cuts + plot_Xmax;
         double Lower_cut = -plot_cuts + plot_Xmax;
@@ -389,7 +389,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
     }
 
-    if (logScalePlot == true) {
+    if (LogScalePlot) {
         Histogram1DCanvas->SetLogy(1);
         string Histogram1DSaveNameDir;
 
@@ -403,7 +403,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (linearScalePlot == true) {
+    if (LinearScalePlot) {
         Histogram1DCanvas->SetLogy(0);
         string Histogram1DSaveNameDir;
 
@@ -426,23 +426,23 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 
 //<editor-fold desc="histPlotter1D function (unsymmetric cuts for SF plots)">
 void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
-                            std::string Histogram1DTitle, std::string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool logScalePlot,
-                            bool linearScalePlot, THStack *Histogram1DStack, std::string Histogram1DSaveName, std::string Histogram1DSaveNamePath, std::string finalState,
-                            int kColor = 1, bool addToStack = false, bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_upper_cut = 0,
+                            std::string Histogram1DTitle, std::string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool LogScalePlot,
+                            bool LinearScalePlot, THStack *Histogram1DStack, std::string Histogram1DSaveName, std::string Histogram1DSaveNamePath, std::string finalState,
+                            int kColor = 1, bool AddToStack = false, bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_upper_cut = 0,
                             double plot_lower_cut = 0, double plot_Xmax = 0, bool plot_max = true) {
 
 //  Normalization factor:
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
-    if (normalize_Histogram == true && custom_normalization == false) {
+    if (normalize_Histogram && !custom_normalization) {
         Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram == true && custom_normalization == true) {
+    } else if (normalize_Histogram && custom_normalization) {
         Histogram1D_integral = custom_normalization_factor;
     }
 
-    if (normalize_Histogram == true) {
+    if (normalize_Histogram) {
         std::string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
         const char *HistogramTitle0 = title.c_str();
         Histogram1D->SetTitle(HistogramTitle0);
@@ -461,7 +461,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
-    } else if (normalize_Histogram == false) {
+    } else if (!normalize_Histogram) {
         std::string title;
 
         if (title2 == false) {
@@ -502,11 +502,11 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
     Histogram1D->SetLineWidth(lineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (showStats == false) {
+    if (!ShowStats) {
         Histogram1D->SetStats(0);
     }
 
-    if (apply_plot_cuts == true) {
+    if (apply_plot_cuts) {
         gPad->Update();
         double Upper_cut = plot_upper_cut;
         double Lower_cut = plot_lower_cut;
@@ -546,7 +546,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
     }
 
-//    if (showStats == false) {
+//    if (!ShowStats) {
 //        Histogram1D->SetStats(0);
 //        gStyle->SetOptStat(000001111);
 //        gROOT->ForceStyle();
@@ -558,21 +558,21 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 //        gROOT->ForceStyle();
 //    }
 
-    if (logScalePlot == true) {
+    if (LogScalePlot) {
         Histogram1DCanvas->SetLogy(1);
         std::string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (linearScalePlot == true) {
+    if (LinearScalePlot) {
         Histogram1DCanvas->SetLogy(0);
         std::string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (addToStack == true) {
+    if (AddToStack) {
         Histogram1D->SetLineColor(LineColor);
         Histogram1D->SetStats(0);
         Histogram1DStack->Add(Histogram1D);
@@ -584,21 +584,21 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 
 //<editor-fold desc="histPlotter1D function (unsymmetric cuts for SF plots, stackless)">
 void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
-                            string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool logScalePlot, bool linearScalePlot,
+                            string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool LogScalePlot, bool LinearScalePlot,
                             string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState, bool showStats = true, bool title2 = false,
                             bool apply_plot_cuts = false, double plot_upper_cut = 0, double plot_lower_cut = 0, double plot_Xmax = 0, bool plot_max = true) {
 
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
-    if (normalize_Histogram == true && custom_normalization == false) {
+    if (normalize_Histogram && !custom_normalization) {
         Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram == true && custom_normalization == true) {
+    } else if (normalize_Histogram && custom_normalization) {
         Histogram1D_integral = custom_normalization_factor;
     }
 
-    if (normalize_Histogram == true) {
+    if (normalize_Histogram) {
         string title;
 
         if (finalState == "") {
@@ -624,7 +624,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
-    } else if (normalize_Histogram == false) {
+    } else if (!normalize_Histogram) {
         string title;
 
         if (title2 == false) {
@@ -667,9 +667,9 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
     Histogram1D->SetLineWidth(lineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (showStats == false) { Histogram1D->SetStats(0); }
+    if (!ShowStats) { Histogram1D->SetStats(0); }
 
-    if (apply_plot_cuts == true) {
+    if (apply_plot_cuts) {
         gPad->Update();
         double Upper_cut = plot_upper_cut;
         double Lower_cut = plot_lower_cut;
@@ -705,7 +705,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
     }
 
-    if (logScalePlot == true) {
+    if (LogScalePlot) {
         Histogram1DCanvas->SetLogy(1);
         string Histogram1DSaveNameDir;
 
@@ -719,7 +719,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (linearScalePlot == true) {
+    if (LinearScalePlot) {
         Histogram1DCanvas->SetLogy(0);
         string Histogram1DSaveNameDir;
 
@@ -741,23 +741,23 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 
 //<editor-fold desc="histPlotter1D function (one-sided cuts for Nphe plots)">
 void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
-                            std::string Histogram1DTitle, std::string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool logScalePlot,
-                            bool linearScalePlot, THStack *Histogram1DStack, std::string Histogram1DSaveName, std::string Histogram1DSaveNamePath, std::string finalState,
-                            int kColor = 1, bool addToStack = false, bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_cut = 0,
+                            std::string Histogram1DTitle, std::string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool LogScalePlot,
+                            bool LinearScalePlot, THStack *Histogram1DStack, std::string Histogram1DSaveName, std::string Histogram1DSaveNamePath, std::string finalState,
+                            int kColor = 1, bool AddToStack = false, bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_cut = 0,
                             double plot_Xmax = 0, bool plot_max = true) {
 
 //  Normalization factor:
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
-    if (normalize_Histogram == true && custom_normalization == false) {
+    if (normalize_Histogram && !custom_normalization) {
         Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram == true && custom_normalization == true) {
+    } else if (normalize_Histogram && custom_normalization) {
         Histogram1D_integral = custom_normalization_factor;
     }
 
-    if (normalize_Histogram == true) {
+    if (normalize_Histogram) {
         std::string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
         const char *HistogramTitle0 = title.c_str();
         Histogram1D->SetTitle(HistogramTitle0);
@@ -776,7 +776,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
-    } else if (normalize_Histogram == false) {
+    } else if (!normalize_Histogram) {
         std::string title;
 
         if (title2 == false) {
@@ -817,11 +817,11 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
     Histogram1D->SetLineWidth(lineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (showStats == false) {
+    if (!ShowStats) {
         Histogram1D->SetStats(0);
     }
 
-    if (apply_plot_cuts == true) {
+    if (apply_plot_cuts) {
         gPad->Update();
         double Cut = plot_cut;
         double plot_xmax = plot_Xmax;
@@ -852,7 +852,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
     }
 
-//    if (showStats == false) {
+//    if (!ShowStats) {
 //        Histogram1D->SetStats(0);
 //        gStyle->SetOptStat(000001111);
 //        gROOT->ForceStyle();
@@ -864,21 +864,21 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 //        gROOT->ForceStyle();
 //    }
 
-    if (logScalePlot == true) {
+    if (LogScalePlot) {
         Histogram1DCanvas->SetLogy(1);
         std::string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (linearScalePlot == true) {
+    if (LinearScalePlot) {
         Histogram1DCanvas->SetLogy(0);
         std::string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (addToStack == true) {
+    if (AddToStack) {
         Histogram1D->SetLineColor(LineColor);
         Histogram1D->SetStats(0);
         Histogram1DStack->Add(Histogram1D);
@@ -890,21 +890,21 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 
 //<editor-fold desc="histPlotter1D function (one-sided cuts for Nphe plots, stackless)">
 void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
-                            string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool logScalePlot, bool linearScalePlot,
+                            string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool LogScalePlot, bool LinearScalePlot,
                             string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState, bool showStats = true, bool title2 = false,
                             bool apply_plot_cuts = false, double plot_cut = 0, double plot_Xmax = 0, bool plot_max = true) {
 
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
-    if (normalize_Histogram == true && custom_normalization == false) {
+    if (normalize_Histogram && !custom_normalization) {
         Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram == true && custom_normalization == true) {
+    } else if (normalize_Histogram && custom_normalization) {
         Histogram1D_integral = custom_normalization_factor;
     }
 
-    if (normalize_Histogram == true) {
+    if (normalize_Histogram) {
         string title;
 
         if (finalState == "") {
@@ -931,7 +931,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
-    } else if (normalize_Histogram == false) {
+    } else if (!normalize_Histogram) {
         string title;
 
         if (title2 == false) {
@@ -974,9 +974,9 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
     Histogram1D->SetLineWidth(lineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (showStats == false) { Histogram1D->SetStats(0); }
+    if (!ShowStats) { Histogram1D->SetStats(0); }
 
-    if (apply_plot_cuts == true) {
+    if (apply_plot_cuts) {
         gPad->Update();
         double Cut = plot_cut;
         double plot_xmax = plot_Xmax;
@@ -1004,7 +1004,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
     }
 
-    if (logScalePlot == true) {
+    if (LogScalePlot) {
         Histogram1DCanvas->SetLogy(1);
         if (finalState == "") {
             string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale.png";
@@ -1017,7 +1017,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
     }
 
-    if (linearScalePlot == true) {
+    if (LinearScalePlot) {
         Histogram1DCanvas->SetLogy(0);
         if (finalState == "") {
             string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale.png";
@@ -1051,18 +1051,18 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
     }
 
 //  Normalization factor:
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
 //    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
-    if (normalize_Histogram == true && custom_normalization == false) {
+    if (normalize_Histogram && !custom_normalization) {
         Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram == true && custom_normalization == true) {
+    } else if (normalize_Histogram && custom_normalization) {
         Histogram1D_integral = custom_normalization_factor;
     }
 
-    if (normalize_Histogram == true) {
+    if (normalize_Histogram) {
         std::string title;
 
         if (Histogram1DTitles["Histogram1DTitleReactions"] == "" && Histogram1DTitles["DetectorRegion"] == "") {
@@ -1096,7 +1096,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
             Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
-    } else if (normalize_Histogram == false) {
+    } else if (!normalize_Histogram) {
         std::string title;
 
         if (Histogram1DTitles["Histogram1DTitleReactions"] == "" && Histogram1DTitles["DetectorRegion"] == "") {
@@ -1137,7 +1137,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
     Histogram1D->SetLineWidth(LineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (ShowStats == false) { Histogram1D->SetStats(0); }
+    if (!ShowStats) { Histogram1D->SetStats(0); }
 
     if (ApplyPlotCuts == true) {
         gPad->Update();
@@ -1179,7 +1179,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
         }
     }
 
-    if (LogScalePlot == true) {
+    if (LogScalePlot) {
         Histogram1DCanvas->SetLogy(1);
         std::string Histogram1DSaveNameDir;
 
@@ -1193,7 +1193,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (LinearScalePlot == true) {
+    if (LinearScalePlot) {
         Histogram1DCanvas->SetLogy(0);
         std::string Histogram1DSaveNameDir;
 
@@ -1207,7 +1207,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (AddToStack == true) {
+    if (AddToStack) {
         Histogram1D->SetLineColor(LineColor);
         Histogram1D->SetStats(0);
         Histogram1DStack->Add(Histogram1D);
@@ -1231,18 +1231,18 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
     }
 
 //  Normalization factor:
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
 //    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
-    if (normalize_Histogram == true && custom_normalization == false) {
+    if (normalize_Histogram && !custom_normalization) {
         Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram == true && custom_normalization == true) {
+    } else if (normalize_Histogram && custom_normalization) {
         Histogram1D_integral = custom_normalization_factor;
     }
 
-    if (normalize_Histogram == true) {
+    if (normalize_Histogram) {
         std::string title;
 
         if (Histogram1DTitles["Histogram1DTitleReactions"] == "" && Histogram1DTitles["DetectorRegion"] == "") {
@@ -1276,7 +1276,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
             Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
-    } else if (normalize_Histogram == false) {
+    } else if (!normalize_Histogram) {
         std::string title;
 
         if (Histogram1DTitles["Histogram1DTitleReactions"] == "" && Histogram1DTitles["DetectorRegion"] == "") {
@@ -1317,7 +1317,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
     Histogram1D->SetLineWidth(LineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (ShowStats == false) { Histogram1D->SetStats(0); }
+    if (!ShowStats) { Histogram1D->SetStats(0); }
 
     if (ApplyPlotCuts == true) {
         gPad->Update();
@@ -1359,7 +1359,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
         }
     }
 
-    if (LogScalePlot == true) {
+    if (LogScalePlot) {
         Histogram1DCanvas->SetLogy(1);
         std::string Histogram1DSaveNameDir;
 
@@ -1373,7 +1373,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (LinearScalePlot == true) {
+    if (LinearScalePlot) {
         Histogram1DCanvas->SetLogy(0);
         std::string Histogram1DSaveNameDir;
 
@@ -1407,18 +1407,18 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
         sNameFlag = "d";
     }
 
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
 //    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
-    if (normalize_Histogram == true && custom_normalization == false) {
+    if (normalize_Histogram && !custom_normalization) {
         Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram == true && custom_normalization == true) {
+    } else if (normalize_Histogram && custom_normalization) {
         Histogram1D_integral = custom_normalization_factor;
     }
 
-    if (normalize_Histogram == true) {
+    if (normalize_Histogram) {
         std::string title;
 
         if (Histogram1DTitles["Histogram1DTitleReactions"] == "" && Histogram1DTitles["DetectorRegion"] == "") {
@@ -1452,7 +1452,7 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
             Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
-    } else if (normalize_Histogram == false) {
+    } else if (!normalize_Histogram) {
         std::string title;
 
         if (Histogram1DTitles["Histogram1DTitleReactions"] == "" && Histogram1DTitles["DetectorRegion"] == "") {
@@ -1494,7 +1494,7 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
     Histogram1D->SetLineWidth(LineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (ShowStats == false) { Histogram1D->SetStats(0); }
+    if (!ShowStats) { Histogram1D->SetStats(0); }
 
     if (particle != "") { cout << "\n\nFit results for " << particle << " in " << finalState << " are (" << Histogram1DTitleReactions << "):\n\n"; }
 
@@ -1587,7 +1587,7 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
 
     if (particle != "") { cout << "\n"; }
 
-    if (LogScalePlot == true) {
+    if (LogScalePlot) {
         Histogram1DCanvas->SetLogy(1);
         std::string Histogram1DSaveNameDir;
 
@@ -1601,7 +1601,7 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (LinearScalePlot == true) {
+    if (LinearScalePlot) {
         Histogram1DCanvas->SetLogy(0);
         std::string Histogram1DSaveNameDir;
 
