@@ -184,9 +184,10 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    bool apply_cuts = true; // master ON/OFF switch for applying cuts
-    bool only_preselection_cuts = true; // keep as false for regular runs!
-    bool only_electron_quality_cuts = true; // keep as false for regular runs!
+    bool apply_cuts = false; // master ON/OFF switch for applying cuts
+    bool clas12ana_particles = false;  //TODO: move form here!
+    bool only_preselection_cuts = false; // keep as false for regular runs!
+    bool only_electron_quality_cuts = false; // keep as false for regular runs!
 
     /* Preselection cuts (event cuts) */
     bool apply_preselection_cuts = true; // master ON/OFF switch for preselection cuts
@@ -273,7 +274,7 @@ void EventAnalyser() {
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
     const bool custom_cuts_naming = true;
     settings.SetCustomCutsNaming(custom_cuts_naming);
-    settings.ConfigureStatuses(apply_cuts, only_preselection_cuts, apply_chi2_cuts_1e_cut, only_electron_quality_cuts, apply_nucleon_cuts, Enable_FD_photons,
+    settings.ConfigureStatuses(apply_cuts, clas12ana_particles, only_preselection_cuts, apply_chi2_cuts_1e_cut, only_electron_quality_cuts, apply_nucleon_cuts, Enable_FD_photons,
                                apply_nucleon_SmearAndShift, apply_kinematical_cuts, apply_kinematical_weights, apply_fiducial_cuts, Generate_AMaps,
                                plot_and_fit_MomRes, VaryingDelta, Calculate_momResS2, Run_in_momResS2, nRes_test, Rec_wTL_ES, ZoomIn_On_mom_th_plots);
     settings.SetPaths(WorkingDirectory, SampleName, plots_path, apply_cuts, apply_chi2_cuts_1e_cut, apply_nucleon_cuts);
@@ -307,6 +308,7 @@ void EventAnalyser() {
     }
 
     cout << "apply_cuts:\t\t\t" << BoolToString(apply_cuts) << "\n";
+    cout << "clas12ana_particles:\t\t" << BoolToString(clas12ana_particles) << "\n"; //TODO: move form here!
     cout << "only_preselection_cuts:\t\t" << BoolToString(only_preselection_cuts) << "\n";
     cout << "only_electron_quality_cuts:\t" << BoolToString(only_electron_quality_cuts) << "\n\n";
 
@@ -1926,19 +1928,22 @@ void EventAnalyser() {
     hPlot1D hP_LnFD_APID_1e_cut_FD = hPlot1D("1e_cut", "FD", "Leading FD neutron momentum APID", "Leading FD neutron momentum P_{n} APID", "P_{n} [GeV/c]",
                                              directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "08a_P_LnFD_APID_1e_cut_FD",
                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins); // Leading nFD
-    hPlot1D hP_LnFD_APID_1e_cut_ZOOMOUT_FD = hPlot1D("1e_cut", "FD", "Leading FD neutron momentum APID - ZOOMOUT", "Leading FD neutron momentum P_{n} APID - ZOOMOUT", "P_{n} [GeV/c]",
+    hPlot1D hP_LnFD_APID_1e_cut_ZOOMOUT_FD = hPlot1D("1e_cut", "FD", "Leading FD neutron momentum APID - ZOOMOUT", "Leading FD neutron momentum P_{n} APID - ZOOMOUT",
+                                                     "P_{n} [GeV/c]",
                                                      directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "08b_P_LnFD_APID_1e_cut_ZOOMOUT_FD",
                                                      Momentum_lboundary, 15., numTH1Dbins); // Leading nFD
     hPlot1D hP_LnFD_BPID_1e_cut_FD = hPlot1D("1e_cut", "FD", "Leading FD neutron momentum BPID", "Leading FD neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
                                              directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "08c_P_LnFD_BPID_1e_cut_FD",
                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins); // Leading nFD
-    hPlot1D hP_LnFD_BPID_1e_cut_ZOOMOUT_FD = hPlot1D("1e_cut", "FD", "Leading FD neutron momentum BPID - ZOOMOUT", "Leading FD neutron momentum P_{n} BPID - ZOOMOUT", "P_{n} [GeV/c]",
+    hPlot1D hP_LnFD_BPID_1e_cut_ZOOMOUT_FD = hPlot1D("1e_cut", "FD", "Leading FD neutron momentum BPID - ZOOMOUT", "Leading FD neutron momentum P_{n} BPID - ZOOMOUT",
+                                                     "P_{n} [GeV/c]",
                                                      directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "08d_P_LnFD_BPID_1e_cut_ZOOMOUT_FD",
                                                      Momentum_lboundary, 15., numTH1Dbins); // Leading nFD
     hPlot1D hP_LnFD_APIDandNS_1e_cut_FD = hPlot1D("1e_cut", "FD", "Leading FD neutron momentum APID&NC", "Leading FD neutron momentum P_{n} APID&NC", "P_{n} [GeV/c]",
                                                   directories.Momentum_Directory_map["Momentum_1e_cut_Directory"], "08e_P_LnFD_APIDandNS_1e_cut_FD",
                                                   Momentum_lboundary, Momentum_uboundary, numTH1Dbins); // Leading nFD
-    hPlot1D hP_LnFD_APIDandNS_1e_cut_ZOOMOUT_FD = hPlot1D("1e_cut", "FD", "Leading FD neutron momentum APID&NC - ZOOMOUT", "Leading FD neutron momentum P_{n} APID&NC - ZOOMOUT",
+    hPlot1D hP_LnFD_APIDandNS_1e_cut_ZOOMOUT_FD = hPlot1D("1e_cut", "FD", "Leading FD neutron momentum APID&NC - ZOOMOUT",
+                                                          "Leading FD neutron momentum P_{n} APID&NC - ZOOMOUT",
                                                           "P_{n} [GeV/c]", directories.Momentum_Directory_map["Momentum_1e_cut_Directory"],
                                                           "08f_P_LnFD_APIDandNS_1e_cut_ZOOMOUT_FD", Momentum_lboundary, 15., numTH1Dbins); // Leading nFD
 
@@ -2876,14 +2881,14 @@ void EventAnalyser() {
                                                         0, P_boundary, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
 
     hPlot2D hBeta_vs_P_1e_cut_Neutrons_Only_CD_CLAS12 = hPlot2D("neutrons only clas12", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
-                                                         directories.Beta_Directory_map["Beta_VS_P_1e_cut_Directory"], "04a_Beta_vs_P_1e_cut_Neutrons_Only_CD",
-                                                         0, P_boundary, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
+                                                                directories.Beta_Directory_map["Beta_VS_P_1e_cut_Directory"], "04a_Beta_vs_P_1e_cut_Neutrons_Only_CD",
+                                                                0, P_boundary, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
     hPlot2D hBeta_vs_P_1e_cut_Neutrons_Only_FD_CLAS12 = hPlot2D("neutrons only clas12", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
-                                                         directories.Beta_Directory_map["Beta_VS_P_1e_cut_Directory"], "04a_Beta_vs_P_1e_cut_Neutrons_Only_FD",
-                                                         0, P_boundary, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
+                                                                directories.Beta_Directory_map["Beta_VS_P_1e_cut_Directory"], "04a_Beta_vs_P_1e_cut_Neutrons_Only_FD",
+                                                                0, P_boundary, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
     hPlot2D hBeta_vs_P_1e_cut_Neutrons_Only_FD_ByDef = hPlot2D("neutrons only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
-                                                         directories.Beta_Directory_map["Beta_VS_P_1e_cut_Directory"], "04b_Beta_vs_P_1e_cut_Neutrons_Only_FD",
-                                                         0, P_boundary, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
+                                                               directories.Beta_Directory_map["Beta_VS_P_1e_cut_Directory"], "04b_Beta_vs_P_1e_cut_Neutrons_Only_FD",
+                                                               0, P_boundary, 0, Beta_boundary, numTH2Dbins_Beta_Plots, numTH2Dbins_Beta_Plots);
 
     hPlot2D hBeta_vs_P_1e_cut_Kplus_Only_CD = hPlot2D("K^{+} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                       directories.Beta_Directory_map["Beta_VS_P_1e_cut_Directory"], "05_Beta_vs_P_1e_cut_Kplus_Only_CD",
@@ -8683,34 +8688,70 @@ void EventAnalyser() {
         auto allParticles = clasAna.getParticles();
 
         /* All of these particles are with clas12ana cuts. Only cuts missing are momentum and beta(?) cuts - to be applied later */
-        auto neutrons = clasAna.getByPid(2112);  // Neutrons
-        auto protons = clasAna.getByPid(2212);   // Protons
-        auto Kplus = clasAna.getByPid(321);      // K+
-        auto Kminus = clasAna.getByPid(-321);    // K-
-        auto piplus = clasAna.getByPid(211);     // pi+
-        auto piminus = clasAna.getByPid(-211);   // pi-
-        auto electrons = clasAna.getByPid(11);   // Electrons
+        vector <region_part_ptr> neutrons, protons, Kplus, Kminus, piplus, piminus, electrons, deuterons, neutrals, otherpart;
 
-        auto deuterons = clasAna.getByPid(45);   // Deuterons
-        auto neutrals = clasAna.getByPid(0);     // Unidentified
-        auto otherpart = clasAna.getByPid(311);  // Other particles
+        if (clas12ana_particles) {
+            // Get particle outside from clas12ana:
+            neutrons = clasAna.getByPid(2112);  // Neutrons
+            protons = clasAna.getByPid(2212);   // Protons
+            Kplus = clasAna.getByPid(321);      // K+
+            Kminus = clasAna.getByPid(-321);    // K-
+            piplus = clasAna.getByPid(211);     // pi+
+            piminus = clasAna.getByPid(-211);   // pi-
+            electrons = clasAna.getByPid(11);   // Electrons
 
-/*
-        // Get particle outside of clas12ana:
-        auto neutrons = c12->getByID(2112);  // Neutrons
-        auto protons = c12->getByID(2212);   // Protons
-        auto Kplus = c12->getByID(321);      // K+
-        auto Kminus = c12->getByID(-321);    // K-
-        auto piplus = c12->getByID(211);     // pi+
-        auto piminus = c12->getByID(-211);   // pi-
-        auto electrons = c12->getByID(11);   // Electrons
+            deuterons = clasAna.getByPid(45);   // Deuterons
+            neutrals = clasAna.getByPid(0);     // Unidentified
+            otherpart = clasAna.getByPid(311);  // Other particles
+        } else {
+            // Get particle outside of clas12ana:
+            neutrons = c12->getByID(2112);      // Neutrons
+            protons = c12->getByID(2212);       // Protons
+            Kplus = c12->getByID(321);          // K+
+            Kminus = c12->getByID(-321);        // K-
+            piplus = c12->getByID(211);         // pi+
+            piminus = c12->getByID(-211);       // pi-
+            electrons = c12->getByID(11);       // Electrons
 
-        auto deuterons = c12->getByID(45);   // Deuterons
-        auto neutrals = c12->getByID(0);     // Unidentified
-        auto otherpart = c12->getByID(311);  // Other particles
-*/
+            deuterons = c12->getByID(45);       // Deuterons
+            neutrals = c12->getByID(0);         // Unidentified
+            otherpart = c12->getByID(311);      // Other particles
+        }
 
-        /* Number of specific particles in event */
+//        //<editor-fold desc="Old">
+//        /* All of these particles are with clas12ana cuts. Only cuts missing are momentum and beta(?) cuts - to be applied later *//*
+//
+//        auto neutrons = clasAna.getByPid(2112);  // Neutrons
+//        auto protons = clasAna.getByPid(2212);   // Protons
+//        auto Kplus = clasAna.getByPid(321);      // K+
+//        auto Kminus = clasAna.getByPid(-321);    // K-
+//        auto piplus = clasAna.getByPid(211);     // pi+
+//        auto piminus = clasAna.getByPid(-211);   // pi-
+//        auto electrons = clasAna.getByPid(11);   // Electrons
+//
+//        auto deuterons = clasAna.getByPid(45);   // Deuterons
+//        auto neutrals = clasAna.getByPid(0);     // Unidentified
+//        auto otherpart = clasAna.getByPid(311);  // Other particles
+//
+//*/
+///*
+//        // Get particle outside of clas12ana:
+//        auto neutrons = c12->getByID(2112);  // Neutrons
+//        auto protons = c12->getByID(2212);   // Protons
+//        auto Kplus = c12->getByID(321);      // K+
+//        auto Kminus = c12->getByID(-321);    // K-
+//        auto piplus = c12->getByID(211);     // pi+
+//        auto piminus = c12->getByID(-211);   // pi-
+//        auto electrons = c12->getByID(11);   // Electrons
+//
+//        auto deuterons = c12->getByID(45);   // Deuterons
+//        auto neutrals = c12->getByID(0);     // Unidentified
+//        auto otherpart = c12->getByID(311);  // Other particles
+//*//*
+//
+//        /* Number of specific particles in event */
+//        //</editor-fold>
+
         int Nn = neutrons.size(), Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
         int Nd = deuterons.size(), Nneut = neutrals.size(), No = otherpart.size();
 
@@ -8818,7 +8859,7 @@ void EventAnalyser() {
 
         //<editor-fold desc="Safety check for clas12ana particles">
         /* Safety check that allParticles.size(), Nf are the same */
-        if (allParticles.size() != Nf) { cout << "\n\nallParticles.size() is different than Nf! Exiting...\n\n", exit(EXIT_FAILURE); }
+        if ((clas12ana_particles) && (allParticles.size() != Nf)) { cout << "\n\nallParticles.size() is different than Nf! Exiting...\n\n", exit(EXIT_FAILURE); }
         //</editor-fold>
 
         //<editor-fold desc="Safety checks for FD protons">
@@ -21002,6 +21043,9 @@ void EventAnalyser() {
 
     myLogFile << "-- clas12ana cuts ---------------------------------------------------------\n";
     myLogFile << "apply_cuts = " << BoolToString(apply_cuts) << "\n\n";
+
+    myLogFile << "clas12ana_particles = " << BoolToString(clas12ana_particles) << "\n\n"; //TODO: move form here!
+
     myLogFile << "only_preselection_cuts = " << BoolToString(only_preselection_cuts) << "\n";
     myLogFile << "only_electron_quality_cuts = " << BoolToString(only_electron_quality_cuts) << "\n";
 

@@ -7,26 +7,20 @@
 // ConfigureStatuses function ------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ConfigureStatuses">
-void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool &only_preselection_cuts, const bool &apply_chi2_cuts_1e_cut,
-                                             const bool &only_electron_quality_cuts, const bool &apply_nucleon_cuts, const bool &Enable_FD_photons,
-                                             const bool &apply_nucleon_SmearAndShift, const bool &apply_kinematical_cuts, const bool &apply_kinematical_weights,
-                                             const bool &apply_fiducial_cuts, const bool &Generate_AMaps, const bool &plot_and_fit_MomRes, const bool &VaryingDelta,
-                                             const bool &Calculate_momResS2, const bool &Run_in_momResS2, const bool &nRes_test, const bool &Rec_wTL_ES,
-                                             const bool &ZoomIn_On_mom_th_plots) {
+void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool &clas12ana_particles, const bool &only_preselection_cuts,
+                                             const bool &apply_chi2_cuts_1e_cut, const bool &only_electron_quality_cuts, const bool &apply_nucleon_cuts,
+                                             const bool &Enable_FD_photons, const bool &apply_nucleon_SmearAndShift, const bool &apply_kinematical_cuts,
+                                             const bool &apply_kinematical_weights, const bool &apply_fiducial_cuts, const bool &Generate_AMaps,
+                                             const bool &plot_and_fit_MomRes, const bool &VaryingDelta, const bool &Calculate_momResS2, const bool &Run_in_momResS2,
+                                             const bool &nRes_test, const bool &Rec_wTL_ES, const bool &ZoomIn_On_mom_th_plots) {
     if (Custom_cuts_naming) {
 
         //<editor-fold desc="Status additions">
-        if (only_preselection_cuts) {
-            Preselection_Cuts_Status = "_Preselection_Cuts";
-        } else if (apply_cuts) {
-            Preselection_Cuts_Status = "";
-        }
+        if (!clas12ana_particles) { Clas12ana_particles_status = "_no_clas12ana"; }
 
-        if (only_electron_quality_cuts) {
-            Electron_Quality_Cuts_Status = "_eQC";
-        } else if (apply_cuts) {
-            Electron_Quality_Cuts_Status = "";
-        }
+        if (only_preselection_cuts) { Preselection_Cuts_Status = "_Preselection_Cuts"; }
+
+        if (only_electron_quality_cuts) { Electron_Quality_Cuts_Status = "_eQC"; }
 
         if (apply_nucleon_cuts) {
             Nucleon_Cuts_Status = "NC_";
@@ -153,7 +147,7 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
 
     }
 
-    Added_PreStatuses = Preselection_Cuts_Status + Electron_Quality_Cuts_Status;
+    Added_PreStatuses = Clas12ana_particles_status + Preselection_Cuts_Status + Electron_Quality_Cuts_Status;
 
     Added_Statuses = Preselection_Cuts_Status + Electron_Quality_Cuts_Status +
                      Nucleon_Cuts_Status + FD_photons_Status + PSmearing_Status +
