@@ -153,7 +153,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
 //            lower_cut->SetLineColor(kMagenta);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
 //            lower_cut->SetLineColor(kMagenta);
@@ -162,7 +162,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut, 3)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut, 3)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
 //            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(lower_cut, ("Peak location = " + to_string_with_precision(max_location)).c_str(), "l");
             }
@@ -343,7 +343,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             upper_cut->SetLineColor(kBlue);
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -351,7 +351,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut, 3)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut, 3)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
             }
 
@@ -524,7 +524,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             lower_cut->SetLineColor(kRed);
 //            lower_cut->SetLineColor(kMagenta);
 
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
 //            lower_cut->SetLineColor(kMagenta);
@@ -533,7 +533,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
 //            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(lower_cut, ("Peak location = " + to_string_with_precision(max_location)).c_str(), "l");
             }
@@ -713,7 +713,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             if (plot_lower_cut != -1) { lower_cut->Draw("same"); }
             lower_cut->SetLineColor(kRed);
 
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -721,7 +721,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
             }
 
@@ -879,7 +879,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             plot_cut->Draw("same");
             plot_cut->SetLineColor(kRed);
 //            plot_cut->SetLineColor(kMagenta);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
 //            plot_cut->SetLineColor(kMagenta);
@@ -887,7 +887,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(plot_cut, ("Lower cut = " + to_string_with_precision(Cut, 0)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
 //            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(plot_cut, ("Peak location = " + to_string_with_precision(max_location)).c_str(), "l");
             }
@@ -1052,14 +1052,14 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
         if (Histogram1D->Integral() != 0.) {
             plot_cut->Draw("same");
             plot_cut->SetLineColor(kRed);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
 
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(plot_cut, ("Lower cut = " + to_string_with_precision(Cut, 0)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
             }
 
@@ -1229,7 +1229,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
 //            lower_cut->SetLineColor(kMagenta);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
 //            lower_cut->SetLineColor(kMagenta);
@@ -1238,7 +1238,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
 //            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(lower_cut, ("Peak location = " + to_string_with_precision(max_location)).c_str(), "l");
             }
@@ -1399,7 +1399,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
             upper_cut->SetLineColor(kBlue);
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -1407,7 +1407,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
             }
 
@@ -1589,7 +1589,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
             upper_cut->SetLineColor(kBlue);
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -1597,7 +1597,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax1)).c_str(), "l");
             }
 
@@ -1761,7 +1761,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
             upper_cut->SetLineColor(kBlue);
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -1769,7 +1769,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax1)).c_str(), "l");
             }
 
@@ -1965,7 +1965,7 @@ void histPlotter1DwFit(TCanvas *Histogram1DCanvas,
             upper_cut->SetLineColor(kBlue);
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -1973,7 +1973,7 @@ void histPlotter1DwFit(TCanvas *Histogram1DCanvas,
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("UC = " + to_string_with_precision(Upper_cut, 3)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("LC = " + to_string_with_precision(Lower_cut, 3)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Mean = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
             }
 

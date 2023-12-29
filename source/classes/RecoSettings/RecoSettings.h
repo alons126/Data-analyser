@@ -27,8 +27,8 @@ private:
     /* Configure and get run parameters */
     ExperimentParameters Experiment(AnalyseFilePath, AnalyseFileSample);
     const string SampleName = Experiment.ConfigureSampleName(AnalyseFilePath, AnalyseFileSample); // Configure SampleName from input
-    //TODO: change VaringSampleName to simulation of a 4-foil!
-    const string VaringSampleName = Experiment.GetVaringSampleName();                             // Get VaringSampleName (configured from SampleName) - for data runs!
+    //TODO: change VaryingSampleName to simulation of a 4-foil!
+    const string VaryingSampleName = Experiment.GetVaryingSampleName();                             // Get VaryingSampleName (configured from SampleName) - for data runs!
     const double beamE = Experiment.GetBeanEnergy();                                              // Configure beam energy from SampleName
     const string Target = Experiment.GetTargetElement();                                          // Configure target (element) from SampleName
     const int TargetPDG = Experiment.GetTargetElementPDG();                                       // Configure target PDG from SampleName
@@ -361,7 +361,7 @@ private:
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";
 
     cout << "SampleName:\t\t" << SampleName << "\n";
-    cout << "VaringSampleName:\t" << VaringSampleName << "\n";
+    cout << "VaryingSampleName:\t" << VaryingSampleName << "\n";
     cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
     cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
     //</editor-fold>
@@ -632,7 +632,7 @@ private:
 
     if (!TestRun) {
 
-        //<editor-fold desc="Plot everithing (full run)">
+        //<editor-fold desc="Plot everything (full run)">
         /* Master plots variable */
         Plot_selector_master = true; // Master plot selector for analysis
 
@@ -1008,7 +1008,7 @@ private:
 //    int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = numTH2Dbins_Electron_Ang_Plots, HistNucSliceNumOfXBins = numTH2Dbins_Nucleon_Ang_Plots;
 
     //<editor-fold desc="Determine NumberNucOfMomSlices by sample">
-    if (VaringSampleName == "C12_simulation_G18_Q204_6GeV" || VaringSampleName == "C12x4_simulation_G18_Q204_6GeV") {
+    if (VaryingSampleName == "C12_simulation_G18_Q204_6GeV" || VaryingSampleName == "C12x4_simulation_G18_Q204_6GeV") {
         NumberNucOfMomSlices = 9, NumberElecOfMomSlices = 40;
     } else {
         NumberNucOfMomSlices = 4, NumberElecOfMomSlices = 4;
@@ -1023,8 +1023,8 @@ private:
         wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                       NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
     } else {
-        aMaps = AMaps(AcceptanceMapsDirectory, VaringSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
-        wMaps = AMaps(AcceptanceWeightsDirectory, VaringSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
+        aMaps = AMaps(AcceptanceMapsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
+        wMaps = AMaps(AcceptanceWeightsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
     }
 
     cout << " done.\n\n";
@@ -1078,34 +1078,34 @@ private:
             if (Calculate_momResS2) { // if Calculate_momResS2 = true => load everything from momResS1 files
                 /* Load neutron correction fit parameters */
                 nRes.ReadResDataParam(
-                        (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                        Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                        (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                        Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                 /* Load proton smearing fit parameters */
                 nRes.ReadResDataParam(
-                        (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                        Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                        (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                        Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
             } else { // if Calculate_momResS2 = false => load everything from either momResS1 or momResS2
                 if (Run_in_momResS2) { // if Calculate_momResS2 = false and Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                            Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                     /* Load proton smearing fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                            Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                 } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                            Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                     /* Load proton smearing fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                            Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                 }
             }
         }
@@ -1114,20 +1114,20 @@ private:
 
         if (Run_in_momResS2) { // if Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
             /* Load neutron correction fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
         } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
             /* Load neutron correction fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                  Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                  Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
         }
     }
     //</editor-fold>
@@ -1203,8 +1203,8 @@ public:
         /* Configure and get run parameters */
         ExperimentParameters Experiment(AnalyseFilePath, AnalyseFileSample);
         const string SampleName = Experiment.ConfigureSampleName(AnalyseFilePath, AnalyseFileSample); // Configure SampleName from input
-        //TODO: change VaringSampleName to simulation of a 4-foil!
-        const string VaringSampleName = Experiment.GetVaringSampleName();                             // Get VaringSampleName (configured from SampleName) - for data runs!
+        //TODO: change VaryingSampleName to simulation of a 4-foil!
+        const string VaryingSampleName = Experiment.GetVaryingSampleName();                             // Get VaryingSampleName (configured from SampleName) - for data runs!
         const double beamE = Experiment.GetBeanEnergy();                                              // Configure beam energy from SampleName
         const string Target = Experiment.GetTargetElement();                                          // Configure target (element) from SampleName
         const int TargetPDG = Experiment.GetTargetElementPDG();                                       // Configure target PDG from SampleName
@@ -1537,7 +1537,7 @@ public:
         cout << "Settings mode:\t\t'" << file_name << "'\n\n";
 
         cout << "SampleName:\t\t" << SampleName << "\n";
-        cout << "VaringSampleName:\t" << VaringSampleName << "\n";
+        cout << "VaryingSampleName:\t" << VaryingSampleName << "\n";
         cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
         cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
         //</editor-fold>
@@ -1808,7 +1808,7 @@ public:
 
         if (!TestRun) {
 
-            //<editor-fold desc="Plot everithing (full run)">
+            //<editor-fold desc="Plot everything (full run)">
             /* Master plots variable */
             Plot_selector_master = true; // Master plot selector for analysis
 
@@ -2184,7 +2184,7 @@ public:
 //    int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = numTH2Dbins_Electron_Ang_Plots, HistNucSliceNumOfXBins = numTH2Dbins_Nucleon_Ang_Plots;
 
         //<editor-fold desc="Determine NumberNucOfMomSlices by sample">
-        if (VaringSampleName == "C12_simulation_G18_Q204_6GeV" || VaringSampleName == "C12x4_simulation_G18_Q204_6GeV") {
+        if (VaryingSampleName == "C12_simulation_G18_Q204_6GeV" || VaryingSampleName == "C12x4_simulation_G18_Q204_6GeV") {
             NumberNucOfMomSlices = 9, NumberElecOfMomSlices = 40;
         } else {
             NumberNucOfMomSlices = 4, NumberElecOfMomSlices = 4;
@@ -2199,8 +2199,8 @@ public:
             wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                           NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
         } else {
-            aMaps = AMaps(AcceptanceMapsDirectory, VaringSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
-            wMaps = AMaps(AcceptanceWeightsDirectory, VaringSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
+            aMaps = AMaps(AcceptanceMapsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
+            wMaps = AMaps(AcceptanceWeightsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
         }
 
         cout << " done.\n\n";
@@ -2254,34 +2254,34 @@ public:
                 if (Calculate_momResS2) { // if Calculate_momResS2 = true => load everything from momResS1 files
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                            Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                     /* Load proton smearing fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                            Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                 } else { // if Calculate_momResS2 = false => load everything from either momResS1 or momResS2
                     if (Run_in_momResS2) { // if Calculate_momResS2 = false and Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
                         /* Load neutron correction fit parameters */
                         nRes.ReadResDataParam(
-                                (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                                (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                         /* Load proton smearing fit parameters */
                         nRes.ReadResDataParam(
-                                (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                                (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                     } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
                         /* Load neutron correction fit parameters */
                         nRes.ReadResDataParam(
-                                (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                                (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                         /* Load proton smearing fit parameters */
                         nRes.ReadResDataParam(
-                                (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                                (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                     }
                 }
             }
@@ -2290,20 +2290,20 @@ public:
 
             if (Run_in_momResS2) { // if Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
                 /* Load neutron correction fit parameters */
-                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                      Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                      Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                 /* Load proton smearing fit parameters */
-                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                      Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                      Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
             } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
                 /* Load neutron correction fit parameters */
-                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                      Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                      Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                 /* Load proton smearing fit parameters */
-                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                                      Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                      Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
             }
         }
         //</editor-fold>

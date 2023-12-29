@@ -102,8 +102,8 @@ void EventAnalyser() {
     /* Configure and get run parameters */
     ExperimentParameters Experiment(AnalyseFilePath, AnalyseFileSample);
     const string SampleName = Experiment.ConfigureSampleName(AnalyseFilePath, AnalyseFileSample); // Configure SampleName from input
-    //TODO: change VaringSampleName to simulation of a 4-foil!
-    const string VaringSampleName = Experiment.GetVaringSampleName();                             // Get VaringSampleName (configured from SampleName) - for data runs!
+    //TODO: change VaryingSampleName to simulation of a 4-foil!
+    const string VaryingSampleName = Experiment.GetVaryingSampleName();                             // Get VaryingSampleName (configured from SampleName) - for data runs!
     const double beamE = Experiment.GetBeanEnergy();                                              // Configure beam energy from SampleName
     const string Target = Experiment.GetTargetElement();                                          // Configure target (element) from SampleName
     const int TargetPDG = Experiment.GetTargetElementPDG();                                       // Configure target PDG from SampleName
@@ -154,8 +154,8 @@ void EventAnalyser() {
     vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = true; // Calculate momResS2 variables
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wPC";
@@ -252,7 +252,7 @@ void EventAnalyser() {
     if (!calculate_truth_level) { TL_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
 
     if (Rec_wTL_ES) {
-        /* if Rec_wTL_ES = true, there are no momentum thresholds, and we get an infinite loop in the nRes slice calaculations!
+        /* if Rec_wTL_ES = true, there are no momentum thresholds, and we get an infinite loop in the nRes slice calculations!
            Additionally, there is no need to calculate the resolution and efficiency in the same time! */
         plot_and_fit_MomRes = false;
     }
@@ -292,7 +292,7 @@ void EventAnalyser() {
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";
 
     cout << "SampleName:\t\t" << SampleName << "\n";
-    cout << "VaringSampleName:\t" << VaringSampleName << "\n";
+    cout << "VaryingSampleName:\t" << VaryingSampleName << "\n";
     cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
     cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
     //</editor-fold>
@@ -319,7 +319,7 @@ void EventAnalyser() {
     cout << "apply_Nphe_cut:\t\t\t" << BoolToString(apply_Nphe_cut) << "\n";
     cout << "apply_ECAL_SF_cuts:\t\t" << BoolToString(apply_ECAL_SF_cuts) << "\n";
     cout << "apply_ECAL_P_cuts:\t\t" << BoolToString(apply_ECAL_P_cuts) << "\n";
-    cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n\n";
+    cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
     cout << "apply_Electron_beta_cut:\t" << BoolToString(apply_Electron_beta_cut) << "\n\n";
 
     cout << "apply_chi2_cuts_1e_cut:\t\t" << BoolToString(apply_chi2_cuts_1e_cut) << "\n";
@@ -425,7 +425,7 @@ void EventAnalyser() {
 
     /* Neutron momentum cuts (1n & nFDpCD, FD only) */
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
-    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta.
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_apprax; // Approximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta.
 
     /* Truth-level momentum cuts */
     //TODO: remove pion mom. th. separation by CD and FD. It's useless (according to Adi)
@@ -571,7 +571,7 @@ void EventAnalyser() {
 
     if (!TestRun) {
 
-        //<editor-fold desc="Plot everithing (full run)">
+        //<editor-fold desc="Plot everything (full run)">
         /* Master plots variable */
         Plot_selector_master = true; // Master plot selector for analysis
 
@@ -681,18 +681,18 @@ void EventAnalyser() {
         ToF_plots = false;
 
         /* Efficiency plots */
-        Efficiency_plots = true;
-//        Efficiency_plots = false;
-        TL_after_Acceptance_Maps_plots = true;
-//        TL_after_Acceptance_Maps_plots = false;
+//        Efficiency_plots = true;
+        Efficiency_plots = false;
+//        TL_after_Acceptance_Maps_plots = true;
+        TL_after_Acceptance_Maps_plots = false;
 
         /* Resolution plots */
-//        AMaps_plots = true;
-        AMaps_plots = false;
+        AMaps_plots = true;
+//        AMaps_plots = false;
 
         /* Resolution plots */
-//        Resolution_plots = true;
-        Resolution_plots = false;
+        Resolution_plots = true;
+//        Resolution_plots = false;
 
         /* Final state ratio plots */
         FSR_1D_plots = false;
@@ -950,7 +950,7 @@ void EventAnalyser() {
     int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = numTH2Dbins_Electron_Ang_Plots, HistNucSliceNumOfXBins = numTH2Dbins_Nucleon_Ang_Plots;
 
     //<editor-fold desc="Determine NumberNucOfMomSlices by sample">
-    if (VaringSampleName == "C12_simulation_G18_Q204_6GeV" || VaringSampleName == "C12x4_simulation_G18_Q204_6GeV") {
+    if (VaryingSampleName == "C12_simulation_G18_Q204_6GeV" || VaryingSampleName == "C12x4_simulation_G18_Q204_6GeV") {
         NumberNucOfMomSlices = 9, NumberElecOfMomSlices = 9;
 //        NumberNucOfMomSlices = 9, NumberElecOfMomSlices = 35;
     } else {
@@ -967,8 +967,8 @@ void EventAnalyser() {
         wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                       NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
     } else {
-        aMaps = AMaps(AcceptanceMapsDirectory, VaringSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
-        wMaps = AMaps(AcceptanceWeightsDirectory, VaringSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
+        aMaps = AMaps(AcceptanceMapsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
+        wMaps = AMaps(AcceptanceWeightsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
     }
 
     cout << " done.\n\n";
@@ -1000,12 +1000,14 @@ void EventAnalyser() {
     /* Neutron resolution fits is handled completely by the NeutronResolution class */
     cout << "\nSetting neutron resolution data...";
 
-    if (!calculate_truth_level) { plot_and_fit_MomRes = false; } // Disable resolution-realted operations if not calculating TL plots
+    if (!calculate_truth_level) { plot_and_fit_MomRes = false; } // Disable resolution-related operations if not calculating TL plots
+
+    if (!apply_nucleon_cuts) { plot_and_fit_MomRes = false; } // Disable resolution-related operations in initial runs
 
     if (!plot_and_fit_MomRes) { Calculate_momResS2 = false; }
 
     /* Comment to test smearing and shift */
-//    if (apply_nucleon_SmearAndShift) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
+//    if (apply_nucleon_SmearAndShift) { plot_and_fit_MomRes = false; }  // Disable resolution-related operations when applying proton smearing
 
     //<editor-fold desc="Neutron resolution class declaration & definition">
     NeutronResolution nRes, pRes;
@@ -1024,34 +1026,34 @@ void EventAnalyser() {
             if (Calculate_momResS2) { // if Calculate_momResS2 = true => load everything from momResS1 files
                 /* Load neutron correction fit parameters */
                 nRes.ReadResDataParam(
-                        (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                        Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                        (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                        Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                 /* Load proton smearing fit parameters */
                 nRes.ReadResDataParam(
-                        (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                        Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                        (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                        Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
             } else { // if Calculate_momResS2 = false => load everything from either momResS1 or momResS2
                 if (Run_in_momResS2) { // if Calculate_momResS2 = false and Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                            Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                     /* Load proton smearing fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                            Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                 } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                            Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                     /* Load proton smearing fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                            Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                 }
             }
         }
@@ -1061,23 +1063,23 @@ void EventAnalyser() {
         if (Run_in_momResS2) { // if Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
             /* Load neutron correction fit parameters */
             nRes.ReadResDataParam(
-                    (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                    Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                    (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                    Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing fit parameters */
             nRes.ReadResDataParam(
-                    (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS2_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                    Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                    (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                    Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
         } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
             /* Load neutron correction fit parameters */
             nRes.ReadResDataParam(
-                    (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                    Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, true, false);
+                    (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                    Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing fit parameters */
             nRes.ReadResDataParam(
-                    (NeutronResolutionDirectory + "Res_data_-_" + VaringSampleName + "/Neutron_momResS1_fit_param_-_" + VaringSampleName + ".par").c_str(),
-                    Calculate_momResS2, VaringSampleName, NucleonCutsDirectory, false, true);
+                    (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                    Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
         }
     }
     //</editor-fold>
@@ -2055,7 +2057,6 @@ void EventAnalyser() {
 
     hPlot1D hP_ph_reco_1e_cut_FD = hPlot1D("1e cut", "FD", "Reco FD #gamma momentum", "FD #gamma momentum P^{reco}_{#gamma}", "P^{reco}_{#gamma} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "09a_P_ph_reco_1e_cut_FD",
-//                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
                                            CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_ph_reco_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "Reco FD #gamma momentum - ZOOMIN", "FD #gamma momentum P^{reco}_{#gamma} - ZOOMIN",
                                                   "P^{reco}_{#gamma} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
@@ -6905,7 +6906,6 @@ void EventAnalyser() {
 
     hPlot1D hP_ph_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #gamma momentum", "FD #gamma momentum P^{truth}_{#gamma}", "P^{truth}_{#gamma} [GeV/c]",
                                             directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "09a_P_ph_truth_1e_cut_FD",
-//                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
                                             CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_ph_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #gamma momentum - ZOOMIN", "FD #gamma momentum P^{truth}_{#gamma} - ZOOMIN",
                                                    "P^{truth}_{#gamma} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
@@ -7690,11 +7690,9 @@ void EventAnalyser() {
     hPlot1D hP_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pCD_AC_truth_pFDpCD",
                                              CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-//                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pCD_BC_truth_pFDpCD",
                                              CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-//                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_pip_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "04_P_piplus_AC_truth_pFDpCD",
@@ -7945,11 +7943,9 @@ void EventAnalyser() {
     hPlot1D hP_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pCD_AC_truth_nFDpCD",
                                              CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-//                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pCD_BC_truth_nFDpCD",
                                              CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-//                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
                                              directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "04_P_piplus_AC_truth_nFDpCD",
@@ -8449,8 +8445,8 @@ void EventAnalyser() {
     if (apply_cuts) {
         // Cuts on electrons only:
         if (apply_ECAL_SF_cuts) { // making f_ecalSFCuts = ture
-            //todo: ask justin what are these cuts:
-            //todo: ask justin for these cuts for LH2 and C12 (and other elements)
+            //TODO: ask justin what are these cuts:
+            //TODO: ask justin for these cuts for LH2 and C12 (and other elements)
             clasAna.readEcalSFPar((PIDCutsDirectory + "paramsSF_40Ca_x2.dat").c_str());
             //TODO: RECHECK WHAT ARE THE CUTS HERE:
             SF_cuts = DSCuts("SF", "FD", "Electron", "1e cut", 0.24865, clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut());
@@ -8459,8 +8455,8 @@ void EventAnalyser() {
         }
 
         if (apply_ECAL_P_cuts) { // making f_ecalSFCuts = ture
-            //todo: ask justin what are these cuts:
-            //todo: ask justin for these cuts for LH2 and C12 (and other elements)
+            //TODO: ask justin what are these cuts:
+            //TODO: ask justin for these cuts for LH2 and C12 (and other elements)
             clasAna.readEcalPPar((PIDCutsDirectory + "paramsPI_40Ca_x2.dat").c_str());
 
             clasAna.setEcalPCuts();
@@ -8573,8 +8569,8 @@ void EventAnalyser() {
         // Cuts on electrons only:
         if (only_electron_quality_cuts) {
             if (apply_ECAL_SF_cuts) { // making f_ecalSFCuts = ture
-                //todo: ask justin what are these cuts:
-                //todo: ask justin for these cuts for LH2 and C12 (and other elements)
+                //TODO: ask justin what are these cuts:
+                //TODO: ask justin for these cuts for LH2 and C12 (and other elements)
                 clasAna.readEcalSFPar((PIDCutsDirectory + "paramsSF_40Ca_x2.dat").c_str());
                 //TODO: RECHECK WHAT ARE THE CUTS HERE:
                 SF_cuts = DSCuts("SF", "FD", "Electron", "1e cut", 0.24865, clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut());
@@ -8583,8 +8579,8 @@ void EventAnalyser() {
             }
 
             if (apply_ECAL_P_cuts) { // making f_ecalSFCuts = ture
-                //todo: ask justin what are these cuts:
-                //todo: ask justin for these cuts for LH2 and C12 (and other elements)
+                //TODO: ask justin what are these cuts:
+                //TODO: ask justin for these cuts for LH2 and C12 (and other elements)
                 clasAna.readEcalPPar((PIDCutsDirectory + "paramsPI_40Ca_x2.dat").c_str());
 
                 clasAna.setEcalPCuts();
@@ -8962,7 +8958,7 @@ void EventAnalyser() {
         if (Ne >= 1) { // At least 1e cut (log only)
             ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
 
-            if (Ne > 1) { ++num_of_events_more_then_1e; /* logging #(events) w/ more then 1e */ }
+            if (Ne > 1) { ++num_of_events_more_then_1e; /* logging #(events) w/ more than 1e */ }
         }
         //</editor-fold>
 
@@ -10085,7 +10081,7 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="Fill electron and proton acceptance maps">
-                if (Generate_AMaps && TL_Event_Selection_1e_cut_AMaps && inFD) { // NOTE: here we fill Acceptance maps before they're generation - no fiducial cuts yet!
+                if (Generate_AMaps && TL_Event_Selection_1e_cut_AMaps && inFD) { // NOTE: here we fill Acceptance maps before their generation - no fiducial cuts yet!
                     if (particlePDGtmp == 11) {
                         /* Fill TL electron acceptance maps */
 
@@ -12253,7 +12249,7 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
-                //<editor-fold desc="Neutron momentum - from 'photons (1n)">
+                //<editor-fold desc="Neutron momentum - from 'photons' (1n)">
                 /* Neutron mom before cuts (from 'photons') */
                 for (int i = 0; i < allParticles.size(); i++) {
                     int ParticlePDGtmp = allParticles[i]->par()->getPid();
@@ -13259,7 +13255,7 @@ void EventAnalyser() {
                     Theta_pFD = p_second_2p->getTheta() * 180.0 / pi, Theta_pCD = p_first_2p->getTheta() * 180.0 / pi;
                 }
 
-                if (Theta_p1_p2_2p < 20.) { // Theta_p1_p2_2p does no change for pFDpCD, so no new calaculation is needed
+                if (Theta_p1_p2_2p < 20.) { // Theta_p1_p2_2p does not change for pFDpCD, so no new calculation is needed
                     hTheta_pFD_vs_Theta_pCD_for_Theta_pFD_pCD_20_2p->Fill(Theta_pCD, Theta_pFD, Weight);
                     hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p->Fill(dPhi_hit_pFDpCD_2p, Weight);
                     hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_2p->Fill(dPhi_hit_pFDpCD_2p, Weight);
@@ -13558,7 +13554,7 @@ void EventAnalyser() {
                 } // end of loop over protons vector
                 //</editor-fold>
 
-                //<editor-fold desc="Id. pFD and pCD protons (pFDpCD)">
+                //<editor-fold desc="ID. pFD and pCD protons (pFDpCD)">
                 double Vx_pFD_pFDpCD = pFD_pFDpCD->par()->getVx(), Vy_pFD_pFDpCD = pFD_pFDpCD->par()->getVy(), Vz_pFD_pFDpCD = pFD_pFDpCD->par()->getVz();
                 double dVx_pFD_pFDpCD = Vx_pFD_pFDpCD - Vx_e_pFDpCD, dVy_pFD_pFDpCD = Vy_pFD_pFDpCD - Vy_e_pFDpCD, dVz_pFD_pFDpCD = Vz_pFD_pFDpCD - Vz_e_pFDpCD;
                 double Vx_pCD_pFDpCD = pCD_pFDpCD->par()->getVx(), Vy_pCD_pFDpCD = pCD_pFDpCD->par()->getVy(), Vz_pCD_pFDpCD = pCD_pFDpCD->par()->getVz();
@@ -16085,8 +16081,6 @@ void EventAnalyser() {
         cout << "\n\nBeta plots are disabled by user.\n\n";
     } // end of Beta plot if
 
-//    if (!apply_nucleon_cuts) {
-//        /* If sample is with 2GeV beam energy, no fit is needed. */
     if (!apply_nucleon_cuts && !is2GeVSample) {
         /* If sample is with 2GeV beam energy, no fit is needed. */
         BetaFit(SampleName, Beta_max_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_01_1n_FD, plots, beamE);
@@ -20739,9 +20733,9 @@ void EventAnalyser() {
 // Saving proton pid cuts to .par file ----------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Saving pid cuts to .par file">
-    if (apply_cuts &&
-        (!only_preselection_cuts && only_electron_quality_cuts) &&
-        !apply_chi2_cuts_1e_cut) { // log pid cuts only if all other cuts are enabled //todo: review this. make code preform cuts only in this case
+    if (apply_cuts && // log pid cuts only if all other cuts are enabled //TODO: review this. make code preform cuts only in this case
+        (!only_preselection_cuts && !only_electron_quality_cuts) && // Do not log PID cuts if running in only preselection or only electron qulity cuts mode
+        !apply_chi2_cuts_1e_cut) {
         DSCuts chi2cuts[] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD, Chi2_piplus_cuts_CD, Chi2_piplus_cuts_FD, Chi2_piminus_cuts_CD, Chi2_piminus_cuts_FD};
         int chi2cuts_length = 6;
 
@@ -20873,7 +20867,7 @@ void EventAnalyser() {
     myLogFile << "WorkingDirectory: " << WorkingDirectory << "\n";
     myLogFile << "plots_path: " << plots_path << "\n";
     myLogFile << "SampleName: " << SampleName << "\n";
-    myLogFile << "VaringSampleName: " << VaringSampleName << "\n\n";
+    myLogFile << "VaryingSampleName: " << VaryingSampleName << "\n\n";
 
     myLogFile << "isLocal:\t\t\t" << BoolToString(isLocal) << "\n";
     myLogFile << "isMC:\t\t" << BoolToString(isMC) << "\n";
@@ -21694,7 +21688,7 @@ void EventAnalyser() {
     cout << "AnalyseFile:\t\t" << AnalyseFile << "\n\n";
 
     cout << "SampleName:\t\t" << SampleName << "\n";
-    cout << "VaringSampleName:\t" << VaringSampleName << "\n\n";
+    cout << "VaryingSampleName:\t" << VaryingSampleName << "\n\n";
 
     cout << "apply_cuts:\t\t'" << BoolToString(apply_cuts) << "'\n";
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";

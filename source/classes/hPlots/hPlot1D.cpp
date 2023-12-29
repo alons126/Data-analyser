@@ -212,7 +212,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             upper_cut->SetLineColor(kBlue);
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -220,7 +220,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
             }
 
@@ -373,7 +373,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             upper_cut->SetLineColor(kBlue);
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -381,7 +381,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut, 3)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut, 3)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
             }
 
@@ -528,7 +528,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             lower_cut->SetLineColor(kRed);
 //            lower_cut->SetLineColor(kMagenta);
 
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
 //            lower_cut->SetLineColor(kMagenta);
@@ -537,7 +537,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
 //            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(lower_cut, ("Peak location = " + to_string_with_precision(max_location)).c_str(), "l");
             }
@@ -689,7 +689,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             if (plot_lower_cut != -1) { lower_cut->Draw("same"); }
             lower_cut->SetLineColor(kRed);
 
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -697,7 +697,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
             }
 
@@ -835,7 +835,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             plot_cut->Draw("same");
             plot_cut->SetLineColor(kRed);
 //            plot_cut->SetLineColor(kMagenta);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
 //            plot_cut->SetLineColor(kMagenta);
@@ -843,7 +843,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(plot_cut, ("Lower cut = " + to_string_with_precision(Cut, 0)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
 //            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(plot_cut, ("Peak location = " + to_string_with_precision(max_location)).c_str(), "l");
             }
@@ -989,14 +989,14 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         if (Histogram1D->Integral() != 0.) {
             plot_cut->Draw("same");
             plot_cut->SetLineColor(kRed);
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
 
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(plot_cut, ("Lower cut = " + to_string_with_precision(Cut, 0)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
             }
 
@@ -1033,7 +1033,6 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
     Histogram1DCanvas->Clear();
 }
 //</editor-fold>
-
 
 // histPlotter1D function (unified) -------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1161,7 +1160,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
             if (fabs(plot_lower_cut) != 9999) { lower_cut->Draw("same"); }
             lower_cut->SetLineColor(kRed);
 
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -1171,7 +1170,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut + plot_xmax, 3)).c_str(), "l");
 //            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
             }
 
@@ -1341,7 +1340,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
             if (fabs(plot_lower_cut) != 9999) { lower_cut->Draw("same"); }
             lower_cut->SetLineColor(kRed);
 
-            if (plot_max == true) {
+            if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
             }
@@ -1351,7 +1350,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut + plot_xmax, 3)).c_str(), "l");
 //            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
             }
 
@@ -1492,11 +1491,32 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
     Histogram1D->GetYaxis()->SetLabelSize(Histogram1DTitleSizes.at(2));
     Histogram1D->GetYaxis()->CenterTitle(CenterTitle);
     Histogram1D->SetLineWidth(LineWidth);
-    Histogram_list->Add(Histogram1D);
+//    Histogram_list->Add(Histogram1D);
+    auto ListOfFunctions = Histogram1D->GetListOfFunctions();
 
     if (!ShowStats) { Histogram1D->SetStats(0); }
 
     if (particle != "") { cout << "\n\nFit results for " << particle << " in " << finalState << " are (" << Histogram1DTitleReactions << "):\n\n"; }
+
+    gPad->Update();
+
+    TF1 *fit;
+
+    double Upper_cut = plot_ucut + plot_Xmax, Lower_cut = plot_lcut + plot_Xmax, plot_xmax = plot_Xmax;
+    TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
+    upper_cut->SetLineWidth(LineWidth);
+    TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
+    lower_cut->SetLineWidth(LineWidth);
+    TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
+    max_location->SetLineWidth(LineWidth + 1);
+
+    double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
+    double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
+    auto Cut_legend = new TLegend(x_1_Cut_legend, y_1_Cut_legend, x_2_Cut_legend, y_2_Cut_legend);
+
+    double x_1_FitParam = gStyle->GetStatX(), y_1_FitParam = y_1_Cut_legend - 0.14;
+    double x_2_FitParam = gStyle->GetStatX() - 0.2, y_2_FitParam = y_1_Cut_legend - 0.245;
+    TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
 
     if (ApplyPlotCuts == true) {
         double Amp, Mean, Std;
@@ -1508,7 +1528,8 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
             cout << "\n\n";
 
             /* Get fitted function to TF1 plot */
-            TF1 *fit = Histogram1D->GetFunction("gaus");
+            fit = Histogram1D->GetFunction("gaus");
+//            TF1 *fit = Histogram1D->GetFunction("gaus");
             fit->SetLineColor(kMagenta);
 
             /* Set fitted plot parameters from TF1 plot */
@@ -1517,10 +1538,10 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
             Std = fit->GetParameter(2); // get p2
 
             /* Set cut parameters from TF1 plot */
-            //todo: set these as 9999 if histogram is empty?
+            //TODO: set these as 9999 if histogram is empty?
             plot_Xmax = Mean;
-            plot_ucut = Std * factor; // Cut up to 2 Std from mean
-            plot_lcut = -(Std * factor); // Cut up to 2 Std from mean
+            plot_ucut = Std * factor; // Cut up to Std*factor from mean
+            plot_lcut = -(Std * factor); // Cut up to Std*factor from mean
 
             /* Remove TF1 plot from histogram */
             Histogram1D->GetListOfFunctions()->Remove(Histogram1D->GetFunction("gaus"));
@@ -1528,60 +1549,71 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
             /* Draw TF1 plot as curved function */
             fit->SetLineColor(kMagenta);
             fit->Draw("same && C");
+            ListOfFunctions->Add(fit);
         }
 
         gPad->Update();
 
-        double Upper_cut = plot_ucut + plot_Xmax, Lower_cut = plot_lcut + plot_Xmax, plot_xmax = plot_Xmax;
-        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
-        upper_cut->SetLineWidth(LineWidth);
-        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
-        lower_cut->SetLineWidth(LineWidth);
-        TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
-        max_location->SetLineWidth(LineWidth + 1);
+        Upper_cut = plot_ucut + plot_Xmax, Lower_cut = plot_lcut + plot_Xmax, plot_xmax = plot_Xmax;
+        upper_cut->SetX1(Upper_cut), upper_cut->SetY1(0.), upper_cut->SetX2(Upper_cut), upper_cut->SetY2(gPad->GetFrame()->GetY2());
+        lower_cut->SetX1(Lower_cut), lower_cut->SetY1(0.), lower_cut->SetX2(Lower_cut), lower_cut->SetY2(gPad->GetFrame()->GetY2());
+        max_location->SetX1(plot_Xmax), max_location->SetY1(0.), max_location->SetX2(plot_Xmax), max_location->SetY2(gPad->GetFrame()->GetY2());
 
-        double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
-        double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
-        auto Cut_legend = new TLegend(x_1_Cut_legend, y_1_Cut_legend, x_2_Cut_legend, y_2_Cut_legend);
+//        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
+//        upper_cut->SetLineWidth(LineWidth);
+//        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
+//        lower_cut->SetLineWidth(LineWidth);
+//        TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
+//        max_location->SetLineWidth(LineWidth + 1);
+
+//        double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
+//        double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
+//        auto Cut_legend = new TLegend(x_1_Cut_legend, y_1_Cut_legend, x_2_Cut_legend, y_2_Cut_legend);
+
+/*
+//        gPad->Update();
+
+//        double Upper_cut = plot_ucut + plot_Xmax, Lower_cut = plot_lcut + plot_Xmax, plot_xmax = plot_Xmax;
+//        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
+//        upper_cut->SetLineWidth(LineWidth);
+//        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
+//        lower_cut->SetLineWidth(LineWidth);
+//        TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
+//        max_location->SetLineWidth(LineWidth + 1);
+
+//        double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
+//        double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
+//        auto Cut_legend = new TLegend(x_1_Cut_legend, y_1_Cut_legend, x_2_Cut_legend, y_2_Cut_legend);
+*/
 
         if (Histogram1D->Integral() != 0.) {
-            if (fabs(plot_ucut) != 9999) { upper_cut->Draw("same"); }
-            upper_cut->SetLineColor(kBlue);
+            if (fabs(plot_ucut) != 9999) { upper_cut->Draw("same"), upper_cut->SetLineColor(kBlue), ListOfFunctions->Add(upper_cut); }
 
-            if (fabs(plot_lcut) != 9999) { lower_cut->Draw("same"); }
-            lower_cut->SetLineColor(kRed);
+            if (fabs(plot_lcut) != 9999) { lower_cut->Draw("same"), lower_cut->SetLineColor(kRed), ListOfFunctions->Add(lower_cut); }
 
-            if (plot_max == true) {
-                max_location->Draw("same");
-                max_location->SetLineColor(kGreen);
-            }
+            if (plot_max) { max_location->Draw("same"), max_location->SetLineColor(kGreen), ListOfFunctions->Add(max_location); }
 
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("UC = " + to_string_with_precision(Upper_cut, 3)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("LC = " + to_string_with_precision(Lower_cut, 3)).c_str(), "l");
 
-            if (plot_max == true) {
+            if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Mean = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
             }
 
-            Cut_legend->Draw("same");
+            Cut_legend->Draw("same"), ListOfFunctions->Add(Cut_legend);
 
-            double x_1_FitParam = gStyle->GetStatX(), y_1_FitParam = y_1_Cut_legend - 0.14;
-            double x_2_FitParam = gStyle->GetStatX() - 0.2, y_2_FitParam = y_1_Cut_legend - 0.245;
+//            double x_1_FitParam = gStyle->GetStatX(), y_1_FitParam = y_1_Cut_legend - 0.14;
+//            double x_2_FitParam = gStyle->GetStatX() - 0.2, y_2_FitParam = y_1_Cut_legend - 0.245;
+//            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
 
-            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
-            FitParam->SetBorderSize(1);
-            FitParam->SetTextFont(0);
-            FitParam->SetFillColor(0);
-//            FitParam->SetTextAlign(11);
-//            FitParam->SetTextAlign(22);
-            FitParam->SetTextAlign(12);
+            FitParam->SetBorderSize(1), FitParam->SetTextFont(0), FitParam->SetFillColor(0), FitParam->SetTextAlign(12);
             FitParam->AddText(("Fit amp = " + to_string_with_precision(Amp, 8)).c_str());
             FitParam->AddText(("Fit std = " + to_string_with_precision(Std, 8)).c_str());
             FitParam->AddText(("Fit mean = " + to_string_with_precision(Mean, 8)).c_str());
             ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
             FitParam->AddText(("Cuts = std * " + to_string_with_precision(factor, 2) + " = " + to_string_with_precision(plot_ucut, 3)).c_str());
             ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
-            FitParam->Draw("same");
+            FitParam->Draw("same"), ListOfFunctions->Add(FitParam);
         }
     }
 
@@ -1596,7 +1628,7 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
         } else {
             Histogram1DSaveNameDir = Histogram1DSaveNamePath + sNameFlag + Histogram1DSaveName + "_log_scale_" + Histogram1DTitles["DetectorRegion"] + ".png";
         }
-//        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + FinalState + ".png";
+
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
@@ -1610,10 +1642,23 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
         } else {
             Histogram1DSaveNameDir = Histogram1DSaveNamePath + sNameFlag + Histogram1DSaveName + "_linear_scale_" + Histogram1DTitles["DetectorRegion"] + ".png";
         }
-//        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + FinalState + ".png";
+
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
+
+//    auto ListOfFunctions = Histogram1D->GetListOfFunctions();
+//    ListOfFunctions->Add(fit);
+//    ListOfFunctions->Add(upper_cut);
+//    ListOfFunctions->Add(lower_cut);
+//    ListOfFunctions->Add(max_location);
+//    ListOfFunctions->Add(Cut_legend);
+////    ListOfFunctions->Add((TObject *) fit);
+////    ListOfFunctions->Add((TObject *) upper_cut);
+////    ListOfFunctions->Add((TObject *) lower_cut);
+////    ListOfFunctions->Add((TObject *) max_location);
+//    ListOfFunctions->Add((TObject *) FitParam);
+    Histogram_list->Add(Histogram1D);
 
     Histogram1DCanvas->Clear();
 }

@@ -498,6 +498,7 @@ void NeutronResolution::Fitter_Std_pol1() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Std_pol1 = new TGraph();
+    g_Std_pol1->SetName("g_Std_pol1");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Std.at(i);
@@ -558,6 +559,12 @@ void NeutronResolution::Fitter_Std_pol1() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Std_pol1->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Std_pol1_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesWidth->Add(g_Std_pol1);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "01_Fit_Std_pol1.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -609,6 +616,7 @@ void NeutronResolution::Fitter_Std_pol1_wPC() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Std_pol1_wPC = new TGraph();
+    g_Std_pol1_wPC->SetName("g_Std_pol1_wPC");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Std.at(i);
@@ -669,6 +677,12 @@ void NeutronResolution::Fitter_Std_pol1_wPC() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Std_pol1_wPC->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Std_pol1_wPC_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesWidth->Add(g_Std_pol1_wPC);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "01_Fit_Std_pol1_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -716,6 +730,7 @@ void NeutronResolution::Fitter_Std_pol2() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Std_pol2 = new TGraph();
+    g_Std_pol2->SetName("g_Std_pol2");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Std.at(i);
@@ -779,6 +794,12 @@ void NeutronResolution::Fitter_Std_pol2() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Std_pol2->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Std_pol2_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesWidth->Add(g_Std_pol2);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "02_Fit_Std_pol2.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -830,6 +851,7 @@ void NeutronResolution::Fitter_Std_pol2_wPC() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Std_pol2_wPC = new TGraph();
+    g_Std_pol2_wPC->SetName("g_Std_pol2_wPC");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Std.at(i);
@@ -893,6 +915,12 @@ void NeutronResolution::Fitter_Std_pol2_wPC() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Std_pol2_wPC->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Std_pol2_wPC_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesWidth->Add(g_Std_pol2_wPC);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "02_Fit_Std_pol2_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -940,6 +968,7 @@ void NeutronResolution::Fitter_Std_pol3() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Std_pol3 = new TGraph();
+    g_Std_pol3->SetName("g_Std_pol3");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Std.at(i);
@@ -1006,6 +1035,12 @@ void NeutronResolution::Fitter_Std_pol3() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Std_pol3->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Std_pol3_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesWidth->Add(g_Std_pol3);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "03_Fit_Std_pol3.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -1057,6 +1092,7 @@ void NeutronResolution::Fitter_Std_pol3_wPC() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Std_pol3_wPC = new TGraph();
+    g_Std_pol3_wPC->SetName("g_Std_pol3_wPC");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Std.at(i);
@@ -1124,6 +1160,12 @@ void NeutronResolution::Fitter_Std_pol3_wPC() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Std_pol3_wPC->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Std_pol3_wPC_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesWidth->Add(g_Std_pol3_wPC);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "03_Fit_Std_pol3_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -1171,6 +1213,7 @@ void NeutronResolution::Fitter_Corr_pol1() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Corr_pol1 = new TGraph();
+    g_Corr_pol1->SetName("g_Corr_pol1");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Corr.at(i);
@@ -1231,6 +1274,12 @@ void NeutronResolution::Fitter_Corr_pol1() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Corr_pol1->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Corr_pol1_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesMean->Add(g_Corr_pol1);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "04_Fit_Corr_pol1.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -1282,6 +1331,7 @@ void NeutronResolution::Fitter_Corr_pol1_wPC() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Corr_pol1_wPC = new TGraph();
+    g_Corr_pol1_wPC->SetName("g_Corr_pol1_wPC");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Corr.at(i);
@@ -1342,6 +1392,12 @@ void NeutronResolution::Fitter_Corr_pol1_wPC() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Corr_pol1_wPC->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Corr_pol1_wPC_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesMean->Add(g_Corr_pol1_wPC);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "04_Fit_Corr_pol1_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -1389,6 +1445,7 @@ void NeutronResolution::Fitter_Corr_pol2() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Corr_pol2 = new TGraph();
+    g_Corr_pol2->SetName("g_Corr_pol2");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Corr.at(i);
@@ -1452,6 +1509,12 @@ void NeutronResolution::Fitter_Corr_pol2() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Corr_pol2->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Corr_pol2_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesMean->Add(g_Corr_pol2);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "05_Fit_Corr_pol2.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -1503,6 +1566,7 @@ void NeutronResolution::Fitter_Corr_pol2_wPC() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Corr_pol2_wPC = new TGraph();
+    g_Corr_pol2_wPC->SetName("g_Corr_pol2_wPC");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Corr.at(i);
@@ -1566,6 +1630,12 @@ void NeutronResolution::Fitter_Corr_pol2_wPC() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Corr_pol2_wPC->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Corr_pol2_wPC_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesMean->Add(g_Corr_pol2_wPC);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "05_Fit_Corr_pol2_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -1613,6 +1683,7 @@ void NeutronResolution::Fitter_Corr_pol3() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Corr_pol3 = new TGraph();
+    g_Corr_pol3->SetName("g_Corr_pol3");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Corr.at(i);
@@ -1679,6 +1750,12 @@ void NeutronResolution::Fitter_Corr_pol3() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Corr_pol3->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Corr_pol3_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesMean->Add(g_Corr_pol3);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -1730,6 +1807,7 @@ void NeutronResolution::Fitter_Corr_pol3_wPC() {
     Fit_Canvas->SetRightMargin(0.12);
 
     TGraph *g_Corr_pol3_wPC = new TGraph();
+    g_Corr_pol3_wPC->SetName("g_Corr_pol3_wPC");
 
     for (int i = 0; i < MeanPn.size(); i++) {
         double x = MeanPn.at(i), y = Pn_Corr.at(i);
@@ -1797,6 +1875,12 @@ void NeutronResolution::Fitter_Corr_pol3_wPC() {
 
     cout << "\n\n";
 
+    auto ListOfFunctions = g_Corr_pol3_wPC->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Corr_pol3_wPC_legend);
+    ListOfFunctions->Add((TObject *) FitParam);
+
+    FittedNeutronResSlicesMean->Add(g_Corr_pol3_wPC);
+
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3_wPC.png").c_str());
     Fit_Canvas->Clear();
 }
@@ -1810,6 +1894,8 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const str
     string SampleNameTemp = SampleName;
 
     ResSlicePlots->Add(FittedNeutronResSlices);
+    ResSlicePlots->Add(FittedNeutronResSlicesWidth);
+    ResSlicePlots->Add(FittedNeutronResSlicesMean);
 
     for (int i = 0; i < NumberOfSlices; i++) { ResSlices.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, ResSlicePlots, false, true, 1., 9999, 9999, 0, false); }
 

@@ -159,28 +159,28 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
     if (!SimulationSample && !DataSample) { cout << "\n\nConfigureSampleName: sample type configuration error! Exiting...\n", exit(0); }
     //</editor-fold>
 
-    ConfigureVaringSampleName(sName);
+    ConfigureVaryingSampleName(sName);
     ConfigureVz_cuts(sName);
     ConfiguredVz_cuts(sName);
 
     return sName;
 }
 
-// ConfigureVaringSampleName function -----------------------------------------------------------------------------------------------------------------------------------------
+// ConfigureVaryingSampleName function -----------------------------------------------------------------------------------------------------------------------------------------
 
-void ExperimentParameters::ConfigureVaringSampleName(const string &sn) {
+void ExperimentParameters::ConfigureVaryingSampleName(const string &sn) {
     if (findSubstring(sn, "sim")) { // Sample is simulation
-        VaringSampleName = SampleName;
+        VaryingSampleName = SampleName;
     } else if (findSubstring(sn, "data")) { // Sample is data
         if (findSubstring(sn, "C12") && BeamAt6GeV) {
-            //TODO: change VaringSampleName to simulation of a 4-foil!
-//            VaringSampleName = "C12_simulation_G18_Q204_6GeV";
-            VaringSampleName = "C12x4_simulation_G18_Q204_6GeV";
+            //TODO: change VaryingSampleName to simulation of a 4-foil!
+//            VaryingSampleName = "C12_simulation_G18_Q204_6GeV";
+            VaryingSampleName = "C12x4_simulation_G18_Q204_6GeV";
         } else {
-            cout << "\n\n\nExperimentParameters::GetVaringSampleName: no corresponding simulation sample! Exiting...", exit(0);
+            cout << "\n\n\nExperimentParameters::GetVaryingSampleName: no corresponding simulation sample! Exiting...", exit(0);
         }
     } else {
-        cout << "\n\n\nExperimentParameters::ConfigureVaringSampleName: sample can't be configured! Exiting...", exit(0);
+        cout << "\n\n\nExperimentParameters::ConfigureVaryingSampleName: sample can't be configured! Exiting...", exit(0);
     }
 }
 

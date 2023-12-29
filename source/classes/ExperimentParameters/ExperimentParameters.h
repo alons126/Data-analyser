@@ -11,7 +11,7 @@
 class ExperimentParameters : public TargetParameters {
 protected:
     std::string SampleName;
-    std::string VaringSampleName; // for AMaps, WMaps and nRes
+    std::string VaryingSampleName; // for AMaps, WMaps and nRes
     double BeanEnergy;
 
     bool LocalSample = false;
@@ -33,9 +33,9 @@ public:
 
     string ConfigureSampleName(const string &AnalyseFilePath, const string &AnalyseFileSample);
 
-// ConfigureVaringSampleName function -----------------------------------------------------------------------------------------------------------------------------------
+// ConfigureVaryingSampleName function -----------------------------------------------------------------------------------------------------------------------------------
 
-    void ConfigureVaringSampleName(const string &sn);
+    void ConfigureVaryingSampleName(const string &sn);
 
 // ConfigureVz_cuts function --------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -95,7 +95,7 @@ public:
 
     bool IsBeamAt6GeV() const { return BeamAt6GeV; };
 
-    string GetVaringSampleName() { return VaringSampleName; };
+    string GetVaryingSampleName() { return VaryingSampleName; };
 };
 
 

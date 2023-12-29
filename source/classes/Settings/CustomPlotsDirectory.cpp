@@ -140,7 +140,6 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
                     Efficiency_Status = "Eff2";
                 }
             } else {
-//                Efficiency_Status = "Eff1_NoBetaNeutTh";
                 Efficiency_Status = "Eff1";
             }
         }

@@ -475,7 +475,7 @@ void gst::Loop() {
 // TList setup ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="TList name setup">
-    string listName = plots_path + plotsInput + plots_file_type; //todo: add if-else to choose plotsInput or file_name
+    string listName = plots_path + plotsInput + plots_file_type; //TODO: add if-else to choose plotsInput or file_name
     const char *TListName = listName.c_str();
     //</editor-fold>
 
@@ -5538,7 +5538,7 @@ void gst::Loop() {
 
 // Old plots:
 
-    //todo: remove title and fix xlabel according to BEnergy for QEL case (confirm w/ Adi)
+    //TODO: remove title and fix xlabel according to BEnergy for QEL case (confirm w/ Adi)
     //<editor-fold desc="E_cal restoration histograms - old plots">
     TH1D *E_cal_MEC_2n;
     TH1D *E_cal_QEL_2p, *E_cal_MEC_2p, *E_cal_RES_2p, *E_cal_DIS_2p, *E_cal_QEL_1n1p, *E_cal_MEC_1n1p, *E_cal_RES_1n1p, *E_cal_DIS_1n1p;
@@ -5789,7 +5789,7 @@ void gst::Loop() {
 
 // MicroBooNE histogram reconstruction -------------------------------------------------------------
 
-//todo: get rid of the stack in histPlotter1D() (make a default without it)
+//TODO: get rid of the stack in histPlotter1D() (make a default without it)
     THStack *gamma_Lab_Stack, *gamma_mu_p_tot_Stack, dP_T_Stack;
     THStack *gamma_Lab_weighted_Stack, *gamma_mu_p_tot_weighted_Stack, dP_T_Stack_weighted;
 
@@ -10376,7 +10376,7 @@ void gst::Loop() {
     TFile(TListName, "recreate");
     fout->cd();
     plots->Write();
-    fout->Write(); //todo: figure out if fout is needed.
+    fout->Write(); //TODO: figure out if fout is needed.
     fout->Close();
 
 //    cout << "\n";

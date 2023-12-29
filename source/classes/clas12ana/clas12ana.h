@@ -244,7 +244,7 @@ public:
 
             return itter_FD->second.at(1);
         } else {
-            //todo: figure out what to do in this case
+            //TODO: figure out what to do in this case
             return -9999;
         }
     }
@@ -259,7 +259,7 @@ public:
 
             return itter_FD->second.at(0);
         } else {
-            //todo: figure out what to do in this case
+            //TODO: figure out what to do in this case
             return -9999;
         }
     }
@@ -428,7 +428,7 @@ private:
     double dPhi_p1_p2_Mean = 9999.; // My addition
 
     // ME: in the old version, SF cuts where:
-    //todo: CHECK WITH JUSTIN WHAT TO DO WITH THEM!
+    //TODO: CHECK WITH JUSTIN WHAT TO DO WITH THEM!
     double SF_max_cut = .28;
     double SF_min_cut = .2;
 

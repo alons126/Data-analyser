@@ -65,6 +65,8 @@ private:
 
     TList *ResSlicePlots = new TList();
     TFolder *FittedNeutronResSlices = new TFolder("Fitted neutron resolution slices", "Fitted neutron resolution slices");
+    TFolder *FittedNeutronResSlicesMean = new TFolder("Fitted neutron resolution slice mean", "Fitted neutron resolution slice mean");
+    TFolder *FittedNeutronResSlicesWidth = new TFolder("Fitted neutron resolution slice width", "Fitted neutron resolution slice width");
 
     TRandom3 *Rand = new TRandom3();
 
