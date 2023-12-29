@@ -72,6 +72,12 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     TFile *file = new TFile(filename);
     TH1D *Histogram1D;
 
+//    TDirectoryFile *mydir1 = (TDirectoryFile *) fxsec1->Get("e-_C12");
+//    TDirectoryFile *mydir2 = (TDirectoryFile *) fxsec2->Get("e-_C12");
+//
+//    TGraph *graph1 = (TGraph *) mydir1->Get("tot_em");
+//    TGraph *graph2 = (TGraph *) mydir2->Get("tot_em");
+
     if (file->Get(Histogram1DName) == nullptr) {
         Histogram1D = Histofinder1D(filename, Histogram1DName);
     } else {

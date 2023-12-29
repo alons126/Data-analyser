@@ -131,6 +131,7 @@ void EventAnalyser() {
     bool TL_plots_only_for_NC = false; // TL plots only AFTER beta fit
     bool fill_TL_plots = true;
     bool ZoomIn_On_mom_th_plots = false; // momentum th. efficiencies with zoomin
+    bool Eff_calc_with_one_reco_electron = false;
     bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
@@ -146,7 +147,7 @@ void EventAnalyser() {
     /* Acceptance maps setup */
     bool Generate_AMaps = false;             // Generate acceptance maps
     //TODO: UPDATE AMaps loading constructor electron histogram's number of bins
-    bool TL_with_one_reco_electron = true;
+    bool AMaps_calc_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
     bool Electron_single_slice_test = false; // keep as false for normal runs!
@@ -169,6 +170,11 @@ void EventAnalyser() {
     3. momResS2 calculation:    VaryingDelta = true , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_with_momResS2 = false
     4. momResS2 run:            VaryingDelta = true , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_with_momResS2 = true
 */
+
+    //<editor-fold desc="Auto-disable variables">
+    if (!Rec_wTL_ES) { Eff_calc_with_one_reco_electron = false; }
+    //</editor-fold>
+
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -249,7 +255,7 @@ void EventAnalyser() {
         calculate_truth_level = Generate_AMaps = plot_and_fit_MomRes = nRes_test = false;
     }
 
-    if (!calculate_truth_level) { TL_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
+    if (!calculate_truth_level) { AMaps_calc_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
 
     if (Rec_wTL_ES) {
         /* if Rec_wTL_ES = true, there are no momentum thresholds, and we get an infinite loop in the nRes slice calculations!
@@ -9250,8 +9256,10 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Setting up basic TL event selection">
-            bool TL_Event_Selection_1e_cut = (TL_Event_Selection_1e_cut_AMaps &&
+            bool TL_Event_Selection_1e_cut = (TL_Event_Selection_1e_cut_AMaps && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1)) &&
                                               TL_ElectronFD_mom_ind.size() == TL_ElectronFD_wFC_mom_ind.size());     // One id. FD electron above momentum threshold
+//            bool TL_Event_Selection_1e_cut = (TL_Event_Selection_1e_cut_AMaps &&
+//                                              TL_ElectronFD_mom_ind.size() == TL_ElectronFD_wFC_mom_ind.size());     // One id. FD electron above momentum threshold
             bool no_TL_pip = (TL_piplusFD_mom_ind.size() == 0 && TL_piplusCD_mom_ind.size() == 0);                   // No pi+ above momentum threshold (CD & FD)
             bool no_TL_pim = (TL_piminusFD_mom_ind.size() == 0 && TL_piminusCD_mom_ind.size() == 0);                 // No pi- above momentum threshold (CD & FD)
             bool no_TL_cPions = (no_TL_pip && no_TL_pim);                                                            // No id. cPions above momentum threshold
@@ -9264,13 +9272,11 @@ void EventAnalyser() {
 
             //<editor-fold desc="Setting up 1p TL event selection">
             // 1p = one id. FD proton (any or no FD neutrons, according to the value of Enable_FD_neutrons):
-            bool TL_FDneutrons_1p = (Enable_FD_neutrons ||
-                                     (TL_NeutronsFD_mom_ind.size() == 0));                    // no id. FD neutrons for Enable_FD_neutrons = false
+            bool TL_FDneutrons_1p = (Enable_FD_neutrons || (TL_NeutronsFD_mom_ind.size() == 0)); // no id. FD neutrons for Enable_FD_neutrons = false
             bool no_CDproton_1p = (TL_ProtonsCD_mom_ind.size() == 0);
             bool one_FDproton_1p = ((TL_ProtonsFD_mom_ind.size() == 1) &&
                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-            bool FDproton_wFC_1p = (TL_ProtonsFD_mom_ind.size() ==
-                                    TL_ProtonsFD_wFC_mom_ind.size());                      // id. FD proton is within fiducial cuts (wFC)
+            bool FDproton_wFC_1p = (TL_ProtonsFD_mom_ind.size() == TL_ProtonsFD_wFC_mom_ind.size()); // id. FD proton is within fiducial cuts (wFC)
             TL_Event_Selection_1p = (TL_Basic_ES && TL_FDneutrons_1p && no_CDproton_1p && one_FDproton_1p && FDproton_wFC_1p);
             //</editor-fold>
 
@@ -9693,7 +9699,7 @@ void EventAnalyser() {
                             hTheta_pip_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_pip_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if (inCD || inFD) {
+                            if ((inCD || inFD)) {
                                 hP_piplus_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                                 hP_piplus_truth_1e_cut_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
 
@@ -9804,7 +9810,7 @@ void EventAnalyser() {
                             hTheta_pim_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_pim_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if (inCD || inFD) {
+                            if ((inCD || inFD)) {
                                 hP_piminus_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                                 hP_piminus_truth_1e_cut_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
 
@@ -10098,7 +10104,7 @@ void EventAnalyser() {
 
                         hTL_P_e_WMaps.hFill(Particle_TL_Momentum, Weight);
                         wMaps.hFillHitMaps("TL", "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
-//                    } else if (!ES_by_leading_FDneutron && ((particlePDGtmp == 2112) && (!TL_with_one_reco_electron || (electrons.size() == 1)))) {
+//                    } else if (!ES_by_leading_FDneutron && ((particlePDGtmp == 2112) && (!AMaps_calc_with_one_reco_electron || (electrons.size() == 1)))) {
 //                        /* Fill all TL FD neutrons acceptance maps */
 //
 //                        if ((Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut()) && (Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut())) { // if id. TL neutron
@@ -10123,7 +10129,7 @@ void EventAnalyser() {
 //                                wMaps.hFillHitMaps("TL", "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
 //                            }
 //                        } // end of if id. TL neutron
-                    } else if ((particlePDGtmp == 2212) && (!TL_with_one_reco_electron || (electrons.size() == 1))) {
+                    } else if ((particlePDGtmp == 2212) && (!AMaps_calc_with_one_reco_electron || (electrons.size() == 1))) {
                         /* Fill all TL FD proton acceptance maps */
 
                         if ((Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut()) && (Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut())) { // if id. TL proton
@@ -10155,7 +10161,7 @@ void EventAnalyser() {
             } // end of for loop over TL particles
 
             //<editor-fold desc="Fill leading FD neutron acceptance maps">
-            if (Generate_AMaps && TL_Event_Selection_1e_cut_AMaps && (!TL_with_one_reco_electron || (electrons.size() == 1)) &&
+            if (Generate_AMaps && TL_Event_Selection_1e_cut_AMaps && (!AMaps_calc_with_one_reco_electron || (electrons.size() == 1)) &&
                 ES_by_leading_FDneutron && ((TL_IDed_Leading_nFD_ind != -1) && (TL_IDed_Leading_nFD_momentum > 0))) {
                 /* Fill leading TL FD neutron acceptance maps */
 
@@ -19921,10 +19927,8 @@ void EventAnalyser() {
         hP_p_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
 
         if (!apply_kinematical_cuts) {
-            hP_pFD_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0,
-                                            false);
-            hP_pFD_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0,
-                                            false);
+            hP_pFD_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
+            hP_pFD_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_p_mom_cuts.GetLowerCut(), TL_p_mom_cuts.GetUpperCut(), 0, false);
         } else {
             hP_pFD_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
                                             FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
@@ -20913,6 +20917,7 @@ void EventAnalyser() {
     myLogFile << "TL_plots_only_for_NC = " << BoolToString(TL_plots_only_for_NC) << "\n";
     myLogFile << "fill_TL_plots = " << BoolToString(fill_TL_plots) << "\n";
     myLogFile << "ZoomIn_On_mom_th_plots = " << BoolToString(ZoomIn_On_mom_th_plots) << "\n";
+    myLogFile << "Eff_calc_with_one_reco_electron = " << BoolToString(Eff_calc_with_one_reco_electron) << "\n";
     myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n\n";
 
     myLogFile << "limless_mom_eff_plots = " << BoolToString(limless_mom_eff_plots) << "\n\n";
@@ -20926,7 +20931,7 @@ void EventAnalyser() {
 
     myLogFile << "-- AMaps settings ---------------------------------------------------------\n";
     myLogFile << "Generate_AMaps = " << BoolToString(Generate_AMaps) << "\n";
-    myLogFile << "TL_with_one_reco_electron = " << BoolToString(TL_with_one_reco_electron) << "\n";
+    myLogFile << "AMaps_calc_with_one_reco_electron = " << BoolToString(AMaps_calc_with_one_reco_electron) << "\n";
     myLogFile << "reformat_e_bins = " << BoolToString(reformat_e_bins) << "\n";
     myLogFile << "equi_P_e_bins = " << BoolToString(equi_P_e_bins) << "\n";
     myLogFile << "Electron_single_slice_test = " << BoolToString(Electron_single_slice_test) << "\n";

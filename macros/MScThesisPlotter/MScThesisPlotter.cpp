@@ -20,6 +20,7 @@
 #include "HistPlotter1D.cpp"
 #include "HistPlotter2D.cpp"
 #include "AMapsPlotter.cpp"
+#include "GraphPlotter1D.cpp"
 
 using namespace std;
 
@@ -69,6 +70,21 @@ void MScThesisPlotter() {
                                        "/C12x4_simulation_G18_Q204_6GeV_plots.root";
     const char *plots_Efficiency_wFC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wFC_Eff2_v2"
                                        "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+    //</editor-fold>
+
+    //<editor-fold desc="momRes runs">
+    const char *plots_momResS1_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_nResS1_Eff1_v2"
+                                     "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+    const char *plots_nResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_nResS1_Eff1_v2"
+                                           "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+    const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_nResS1_Eff1_v2"
+                                           "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+    const char *plots_momResS2_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaS_nResS2_Eff1_v2"
+                                     "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+    const char *plots_nResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaS_nResS2_Eff1_v2"
+                                           "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+    const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaS_nResS2_Eff1_v2"
+                                           "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     //</editor-fold>
 
     //</editor-fold>
@@ -185,6 +201,12 @@ void MScThesisPlotter() {
 
     const string MomResFolderSim = "Event_Selection_Sim/08_MomRes";
     system(("mkdir -p " + MomResFolderSim).c_str());
+
+    const string MomResS1FolderSim = "Event_Selection_Sim/08_MomRes/01_momResS1_Calc";
+    system(("mkdir -p " + MomResS1FolderSim).c_str());
+
+    const string MomResS2FolderSim = "Event_Selection_Sim/08_MomRes/02_momResS2_Calc";
+    system(("mkdir -p " + MomResS2FolderSim).c_str());
     //</editor-fold>
 
     //<editor-fold desc="Results">
@@ -741,65 +763,85 @@ void MScThesisPlotter() {
 //                  "TL P_{nFD} used in AMaps (1e cut, FD)", SampleName,
 //                  AMapsFolderMomentumPlotsSim, "03_TL_P_nFD");
 //    //</editor-fold>
+//
+//    //<editor-fold desc="Efficiency">
+//    /* No fiducial cuts */
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
+//                  "Electron momentum #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyRegFolderSim, "01_electron_mom_eff_1p");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
+//                  "Electron theta #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyRegFolderSim, "01_electron_theta_eff_1p");
+//
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
+//                  "FD Proton momentum #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyRegFolderSim, "02_proton_mom_eff_1p");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
+//                  "Proton theta #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyRegFolderSim, "02_proton_theta_eff_1p");
+//
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
+//                  "Electron momentum #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyRegFolderSim, "03_electron_mom_eff_1n");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
+//                  "Electron theta #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyRegFolderSim, "03_electron_theta_eff_1n");
+//
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
+//                  "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyRegFolderSim, "04_neutron_mom_eff_1n");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
+//                  "Neutron theta #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyRegFolderSim, "04_neutron_theta_eff_1n");
+//
+//    /* With fiducial cuts */
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Electron momentum #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyWithFCFolderSim, "01_electron_mom_eff_1p");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Electron theta #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyWithFCFolderSim, "01_electron_theta_eff_1p");
+//
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "FD Proton momentum #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyWithFCFolderSim, "02_proton_mom_eff_1p");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Proton theta #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyWithFCFolderSim, "02_proton_theta_eff_1p");
+//
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Electron momentum #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyWithFCFolderSim, "03_electron_mom_eff_1n");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Electron theta #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyWithFCFolderSim, "03_electron_theta_eff_1n");
+//
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyWithFCFolderSim, "04_neutron_mom_eff_1n");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Neutron theta #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyWithFCFolderSim, "04_neutron_theta_eff_1n");
+//    //</editor-fold>
 
-    //<editor-fold desc="Efficiency">
-    /* No fiducial cuts */
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
-                  "Electron momentum #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyRegFolderSim, "01_electron_mom_eff_1p");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
-                  "Electron theta #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyRegFolderSim, "01_electron_theta_eff_1p");
+    //<editor-fold desc="momRes">
+    /* Mean fit before correction */
+    GraphPlotter1D(MScThesisPlots, plots_nResS1_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wPC",
+                   SampleName, MomResS1FolderSim, "01_g_Std_pol1_wPC");
+    GraphPlotter1D(MScThesisPlots, plots_nResS1_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wPC",
+                   SampleName, MomResS1FolderSim, "02_g_Corr_pol1_wPC_Important"); // Important! (correction!)
 
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
-                  "FD Proton momentum #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyRegFolderSim, "02_proton_mom_eff_1p");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
-                  "Proton theta #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyRegFolderSim, "02_proton_theta_eff_1p");
+    /* Width fit after correction */
+    GraphPlotter1D(MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wPC",
+                   SampleName, MomResS2FolderSim, "01_g_Std_pol1_wPC_Important"); // Important! (smearing!)
+    GraphPlotter1D(MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wPC",
+                   SampleName, MomResS2FolderSim, "02_g_Corr_pol1_wPC");
 
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
-                  "Electron momentum #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyRegFolderSim, "03_electron_mom_eff_1n");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
-                  "Electron theta #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyRegFolderSim, "03_electron_theta_eff_1n");
-
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
-                  "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyRegFolderSim, "04_neutron_mom_eff_1n");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
-                  "Neutron theta #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyRegFolderSim, "04_neutron_theta_eff_1n");
-
-    /* With fiducial cuts */
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Electron momentum #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyWithFCFolderSim, "01_electron_mom_eff_1p");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Electron theta #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyWithFCFolderSim, "01_electron_theta_eff_1p");
-
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "FD Proton momentum #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyWithFCFolderSim, "02_proton_mom_eff_1p");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Proton theta #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyWithFCFolderSim, "02_proton_theta_eff_1p");
-
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Electron momentum #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyWithFCFolderSim, "03_electron_mom_eff_1n");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Electron theta #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyWithFCFolderSim, "03_electron_theta_eff_1n");
-
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyWithFCFolderSim, "04_neutron_mom_eff_1n");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Neutron theta #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyWithFCFolderSim, "04_neutron_theta_eff_1n");
+//    /* momRes test */
+//    GraphPlotter1D(c, MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wPC",
+//                   SampleName, MomResS2FolderSim, "01_g_Std_pol1_wPC"); // Important!
+//    GraphPlotter1D(c, MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wPC",
+//                   SampleName, MomResS2FolderSim, "02_g_Corr_pol1_wPC");
     //</editor-fold>
 
 //    //TODO: figure out where to save these!
