@@ -122,19 +122,15 @@ void EventAnalyser() {
     //<editor-fold desc="Event selection setup">
     /* Settings to enable/disable specific FS plot calculations (Rec only): */
 
-    /* Final states to analyse (1N) */
-    const bool calculate_1p = true;
-    const bool calculate_1n = true;
-
-    /* Final states to analyse (2N) */
-    const bool calculate_2p = true;
-    const bool calculate_pFDpCD = true;
-    const bool calculate_nFDpCD = true;
+    /* Final states to analyse (1N & 2N) */
+    const bool calculate_1p = true, calculate_1n = true;
+    const bool calculate_2p = true, calculate_pFDpCD = true, calculate_nFDpCD = true;
 
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
+    bool TL_plots_only_for_NC = false; // TL plots only AFTER beta fit
     bool fill_TL_plots = true;
-    bool ZoomIn_On_mom_th_plots = false; // Force TL event selection on reco. plots
+    bool ZoomIn_On_mom_th_plots = false; // momentum th. efficiencies with zoomin
     bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
@@ -158,19 +154,20 @@ void EventAnalyser() {
     vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
-    bool Calculate_momResS2 = false; // Calculate momResS2 variables
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool Calculate_momResS2 = true; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wPC";
     const string ShiftMode = "pol1_wPC";
-    bool Run_in_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
-    bool nRes_test = true; // false by default
-    /* Run order:
-    1. momResS1 calculation 1:  VaryingDelta = true  , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_in_momResS2 = false
-    2. momResS1 calculation 2:  VaryingDelta = false , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_in_momResS2 = false
-    3. momResS2 calculation:    VaryingDelta = false , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_in_momResS2 = false
-    4. momResS2 run:            VaryingDelta = false , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_in_momResS2 = true
+    bool Run_in_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
+    bool nRes_test = false; // false by default
+    /* momRes run order guide:
+    1. momResS1 calculation 1:
+                           1a:  VaryingDelta = false  , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_in_momResS2 = false
+                           1b:  VaryingDelta = true , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_in_momResS2 = false
+    3. momResS2 calculation:    VaryingDelta = true , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_in_momResS2 = false
+    4. momResS2 run:            VaryingDelta = true , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_in_momResS2 = true
 */
     //</editor-fold>
 
@@ -184,8 +181,8 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    bool apply_cuts = false; // master ON/OFF switch for applying cuts
-    bool clas12ana_particles = false;  //TODO: move form here!
+    bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    bool clas12ana_particles = true; //TODO: move form here!
     bool only_preselection_cuts = false; // keep as false for regular runs!
     bool only_electron_quality_cuts = false; // keep as false for regular runs!
 
@@ -195,11 +192,11 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cuts = true; // DC fiducial (edge) cuts
 
     /* Electron quality cuts */
-    bool apply_electron_quality_cuts = true; // master ON/OFF switch for electron quality cuts
+    bool apply_electron_quality_cuts = true; // master ON/OFF switch for eQC
     bool apply_Nphe_cut = true; // Number of photo-electrons in HTCC cut
-    bool apply_ECAL_SF_cuts = true; // Sampling fraction cut on both E_deb AND P_e
-    bool apply_ECAL_P_cuts = false; // Sampling fraction cut on P_e (keep as false for now!)
-    bool apply_ECAL_fiducial_cuts = true; // ECAL fiducial (edge) cuts for other charged particles
+    bool apply_ECAL_SF_cuts = true; // SF cut on both E_deb AND P_e
+    bool apply_ECAL_P_cuts = false; // SF cut on P_e (keep as false for now!)
+    bool apply_ECAL_fiducial_cuts = true; // ECAL edge cuts for other charged particles
     bool apply_Electron_beta_cut = true; // Electron beta cut
 
     /* Chi2 cuts (= PID cuts) */
@@ -211,7 +208,7 @@ void EventAnalyser() {
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    //TODO: automate adding upper mom. th. to nuclon cuts (for nRes calc)
+    //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
@@ -274,7 +271,8 @@ void EventAnalyser() {
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
     const bool custom_cuts_naming = true;
     settings.SetCustomCutsNaming(custom_cuts_naming);
-    settings.ConfigureStatuses(apply_cuts, clas12ana_particles, only_preselection_cuts, apply_chi2_cuts_1e_cut, only_electron_quality_cuts, apply_nucleon_cuts, Enable_FD_photons,
+    settings.ConfigureStatuses(apply_cuts, clas12ana_particles, only_preselection_cuts, apply_chi2_cuts_1e_cut, only_electron_quality_cuts, apply_nucleon_cuts,
+                               Enable_FD_photons,
                                apply_nucleon_SmearAndShift, apply_kinematical_cuts, apply_kinematical_weights, apply_fiducial_cuts, Generate_AMaps,
                                plot_and_fit_MomRes, VaryingDelta, Calculate_momResS2, Run_in_momResS2, nRes_test, Rec_wTL_ES, ZoomIn_On_mom_th_plots);
     settings.SetPaths(WorkingDirectory, SampleName, plots_path, apply_cuts, apply_chi2_cuts_1e_cut, apply_nucleon_cuts);
@@ -943,7 +941,9 @@ void EventAnalyser() {
     cout << "\nSetting Acceptance maps...";
 
     if (!calculate_truth_level) { Generate_AMaps = false; }
+
     if (!Generate_AMaps) { AMaps_plots = false; }
+
     if (reformat_e_bins) { equi_P_e_bins = false; }
 
     /* Set Bins by case */
@@ -9007,12 +9007,7 @@ void EventAnalyser() {
         bool TL_Event_Selection_inclusive = true;
         bool TL_Event_Selection_1p = true, TL_Event_Selection_1n = true, TL_Event_Selection_pFDpCD = true, TL_Event_Selection_nFDpCD = true;
 
-        bool Filled_e_TL_amaps = false, Filled_pFD_TL_amaps = false, Filled_nFD_TL_amaps = false;
-        double TL_P_e_amaps, TL_theta_e_amaps, TL_phi_e_amaps;
-        double TL_P_pFD_amaps, TL_theta_pFD_amaps, TL_phi_pFD_amaps;
-        double TL_P_nFD_amaps, TL_theta_nFD_amaps, TL_phi_nFD_amaps;
-
-        if (calculate_truth_level && apply_nucleon_cuts && isMC) { // run only for CLAS12 simulation & AFTER beta fit
+        if (calculate_truth_level && (!TL_plots_only_for_NC || apply_nucleon_cuts) && isMC) { // run only for CLAS12 simulation & AFTER beta fit
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
 
@@ -11384,7 +11379,8 @@ void EventAnalyser() {
                     }
 
                     if (!((allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 2112) || (allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 22))) {
-                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid() << ")! Exiting...\n\n", exit(
+                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid()
+                             << ")! Exiting...\n\n", exit(
                                 0);
                     }
 
@@ -20920,6 +20916,7 @@ void EventAnalyser() {
 
     myLogFile << "-- Truth level calculation setup ------------------------------------------\n";
     myLogFile << "calculate_truth_level = " << BoolToString(calculate_truth_level) << "\n";
+    myLogFile << "TL_plots_only_for_NC = " << BoolToString(TL_plots_only_for_NC) << "\n";
     myLogFile << "fill_TL_plots = " << BoolToString(fill_TL_plots) << "\n";
     myLogFile << "ZoomIn_On_mom_th_plots = " << BoolToString(ZoomIn_On_mom_th_plots) << "\n";
     myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n\n";
