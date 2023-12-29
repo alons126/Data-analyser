@@ -17,8 +17,8 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
-#include "source/functions/GeneralFunctions.h"
-#include "source/constants.h"
+#include "../../source/functions/GeneralFunctions.h"
+#include "../../source/constants.h"
 
 using namespace std;
 
@@ -215,7 +215,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             UpperBetaElectronCut->Draw("same");
         }
 
-        if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD}<20#circ (All Int., 2p)" ||
+        if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)" ||
             Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)") {
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
@@ -246,6 +246,10 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerThetapCDcut->SetLineColor(kRed);
             LowerThetapCDcut->Draw("same");
         }
+
+//        if (findSubstring(Histogram2DNameCopy, "AMaps") || findSubstring(Histogram2DNameCopy, "WMaps")) {
+//
+//        }
     }
 
     gStyle->SetStatX(0.87);

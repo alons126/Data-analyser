@@ -784,13 +784,12 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         } else {
             title = Histogram1DTitle + " (" + finalState + ")";
         }
-//        std::string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+
         const char *HistogramTitle0 = title.c_str();
         Histogram1D->SetTitle(HistogramTitle0);
         Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
-//            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
@@ -805,14 +804,10 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
     }
 
     Histogram1D->GetXaxis()->SetTitleSize(Histogram1DTitleSizes.at(0));
-//    Histogram1D->GetXaxis()->SetTitleSize(0.06);
     Histogram1D->GetXaxis()->SetLabelSize(Histogram1DTitleSizes.at(1));
-//    Histogram1D->GetXaxis()->SetLabelSize(0.0425);
     Histogram1D->GetXaxis()->CenterTitle(CenterTitle);
     Histogram1D->GetYaxis()->SetTitleSize(Histogram1DTitleSizes.at(0));
-//    Histogram1D->GetYaxis()->SetTitleSize(0.06);
     Histogram1D->GetYaxis()->SetLabelSize(Histogram1DTitleSizes.at(2));
-//    Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Histogram1D->GetYaxis()->CenterTitle(CenterTitle);
     Histogram1D->SetLineWidth(lineWidth);
     Histogram_list->Add(Histogram1D);
@@ -834,35 +829,21 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         if (Histogram1D->Integral() != 0.) {
             plot_cut->Draw("same");
             plot_cut->SetLineColor(kRed);
-//            plot_cut->SetLineColor(kMagenta);
+
             if (plot_max) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
-//            plot_cut->SetLineColor(kMagenta);
             }
 
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(plot_cut, ("Lower cut = " + to_string_with_precision(Cut, 0)).c_str(), "l");
 
             if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
-//            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(plot_cut, ("Peak location = " + to_string_with_precision(max_location)).c_str(), "l");
             }
 
             Cut_legend->Draw("same");
         }
     }
-
-//    if (!ShowStats) {
-//        Histogram1D->SetStats(0);
-//        gStyle->SetOptStat(000001111);
-//        gROOT->ForceStyle();
-////        gStyle->SetOptStat(111110);
-////        Histogram1D->SetOptStat(111110);
-//    } else if (showStats == true) {
-////        gStyle->SetOptStat(000001111);
-//        gStyle->SetOptStat(111110);
-//        gROOT->ForceStyle();
-//    }
 
     if (LogScalePlot) {
         Histogram1DCanvas->SetLogy(1);
@@ -1052,7 +1033,6 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-//    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
     if (normalize_Histogram && !custom_normalization) {
@@ -1076,8 +1056,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
                     " (" + Histogram1DTitles["Histogram1DTitleReactions"] + ", " + Histogram1DTitles["FinalState"] + ", " + Histogram1DTitles["DetectorRegion"] + ")" +
                     " - Normalized";
         }
-//        std::string title = Histogram1DTitles["HistogramTitle"] + " (" + Histogram1DTitles["Histogram1DTitleReactions"] + ", " + Histogram1DTitles["FinalState"] + ")" +
-//                            " - Normalized";
+
         const char *HistogramTitle0 = title.c_str();
         Histogram1D->SetTitle(HistogramTitle0);
         Histogram1D->GetYaxis()->SetTitle("Probability (%)");
@@ -1140,14 +1119,11 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
 
     if (ApplyPlotCuts == true) {
         gPad->Update();
-        double Upper_cut = plot_upper_cut;
-        double Lower_cut = plot_lower_cut;
-        double plot_xmax = plot_Xmax;
+
+        double Upper_cut = plot_upper_cut, Lower_cut = plot_lower_cut, plot_xmax = plot_Xmax;
         TLine *upper_cut = new TLine((Upper_cut + plot_xmax), 0., (Upper_cut + plot_xmax), gPad->GetFrame()->GetY2());
-//        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
         upper_cut->SetLineWidth(LineWidth);
         TLine *lower_cut = new TLine((Lower_cut + plot_xmax), 0., (Lower_cut + plot_xmax), gPad->GetFrame()->GetY2());
-//        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
         lower_cut->SetLineWidth(LineWidth);
         TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
         max_location->SetLineWidth(LineWidth + 1);
@@ -1166,9 +1142,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
             }
 
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut + plot_xmax, 3)).c_str(), "l");
-//            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut + plot_xmax, 3)).c_str(), "l");
-//            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
             if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
@@ -1187,7 +1161,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
         } else {
             Histogram1DSaveNameDir = Histogram1DSaveNamePath + sNameFlag + Histogram1DSaveName + "_log_scale_" + Histogram1DTitles["DetectorRegion"] + ".png";
         }
-//        std::string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
+
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
@@ -1201,7 +1175,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
         } else {
             Histogram1DSaveNameDir = Histogram1DSaveNamePath + sNameFlag + Histogram1DSaveName + "_linear_scale_" + Histogram1DTitles["DetectorRegion"] + ".png";
         }
-//        std::string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
+
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
@@ -1232,7 +1206,6 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-//    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
     if (normalize_Histogram && !custom_normalization) {
@@ -1256,8 +1229,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
                     " (" + Histogram1DTitles["Histogram1DTitleReactions"] + ", " + Histogram1DTitles["FinalState"] + ", " + Histogram1DTitles["DetectorRegion"] + ")" +
                     " - Normalized";
         }
-//        std::string title = Histogram1DTitles["HistogramTitle"] + " (" + Histogram1DTitles["Histogram1DTitleReactions"] + ", " + Histogram1DTitles["FinalState"] + ")" +
-//                            " - Normalized";
+
         const char *HistogramTitle0 = title.c_str();
         Histogram1D->SetTitle(HistogramTitle0);
         Histogram1D->GetYaxis()->SetTitle("Probability (%)");
@@ -1324,10 +1296,8 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
         double Lower_cut = plot_lower_cut;
         double plot_xmax = plot_Xmax;
         TLine *upper_cut = new TLine((Upper_cut + plot_xmax), 0., (Upper_cut + plot_xmax), gPad->GetFrame()->GetY2());
-//        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
         upper_cut->SetLineWidth(LineWidth);
         TLine *lower_cut = new TLine((Lower_cut + plot_xmax), 0., (Lower_cut + plot_xmax), gPad->GetFrame()->GetY2());
-//        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
         lower_cut->SetLineWidth(LineWidth);
         TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
         max_location->SetLineWidth(LineWidth + 1);
@@ -1346,9 +1316,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
             }
 
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut + plot_xmax, 3)).c_str(), "l");
-//            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut + plot_xmax, 3)).c_str(), "l");
-//            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
             if (plot_max) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
@@ -1367,7 +1335,6 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
         } else {
             Histogram1DSaveNameDir = Histogram1DSaveNamePath + sNameFlag + Histogram1DSaveName + "_log_scale_" + Histogram1DTitles["DetectorRegion"] + ".png";
         }
-//        std::string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
@@ -1381,7 +1348,6 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
         } else {
             Histogram1DSaveNameDir = Histogram1DSaveNamePath + sNameFlag + Histogram1DSaveName + "_linear_scale_" + Histogram1DTitles["DetectorRegion"] + ".png";
         }
-//        std::string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
@@ -1408,7 +1374,6 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
 
     double Histogram1D_integral; // To be calculated only if normalize_Histogram
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-//    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
     if (normalize_Histogram && !custom_normalization) {
@@ -1433,7 +1398,6 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
                     " - Normalized";
         }
 
-//        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
         Histogram1D->GetYaxis()->SetTitle("Probability (%)");
@@ -1491,7 +1455,6 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
     Histogram1D->GetYaxis()->SetLabelSize(Histogram1DTitleSizes.at(2));
     Histogram1D->GetYaxis()->CenterTitle(CenterTitle);
     Histogram1D->SetLineWidth(LineWidth);
-//    Histogram_list->Add(Histogram1D);
     auto ListOfFunctions = Histogram1D->GetListOfFunctions();
 
     if (!ShowStats) { Histogram1D->SetStats(0); }
@@ -1529,7 +1492,6 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
 
             /* Get fitted function to TF1 plot */
             fit = Histogram1D->GetFunction("gaus");
-//            TF1 *fit = Histogram1D->GetFunction("gaus");
             fit->SetLineColor(kMagenta);
 
             /* Set fitted plot parameters from TF1 plot */
@@ -1559,33 +1521,6 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
         lower_cut->SetX1(Lower_cut), lower_cut->SetY1(0.), lower_cut->SetX2(Lower_cut), lower_cut->SetY2(gPad->GetFrame()->GetY2());
         max_location->SetX1(plot_Xmax), max_location->SetY1(0.), max_location->SetX2(plot_Xmax), max_location->SetY2(gPad->GetFrame()->GetY2());
 
-//        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
-//        upper_cut->SetLineWidth(LineWidth);
-//        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
-//        lower_cut->SetLineWidth(LineWidth);
-//        TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
-//        max_location->SetLineWidth(LineWidth + 1);
-
-//        double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
-//        double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
-//        auto Cut_legend = new TLegend(x_1_Cut_legend, y_1_Cut_legend, x_2_Cut_legend, y_2_Cut_legend);
-
-/*
-//        gPad->Update();
-
-//        double Upper_cut = plot_ucut + plot_Xmax, Lower_cut = plot_lcut + plot_Xmax, plot_xmax = plot_Xmax;
-//        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
-//        upper_cut->SetLineWidth(LineWidth);
-//        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
-//        lower_cut->SetLineWidth(LineWidth);
-//        TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
-//        max_location->SetLineWidth(LineWidth + 1);
-
-//        double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
-//        double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
-//        auto Cut_legend = new TLegend(x_1_Cut_legend, y_1_Cut_legend, x_2_Cut_legend, y_2_Cut_legend);
-*/
-
         if (Histogram1D->Integral() != 0.) {
             if (fabs(plot_ucut) != 9999) { upper_cut->Draw("same"), upper_cut->SetLineColor(kBlue), ListOfFunctions->Add(upper_cut); }
 
@@ -1601,10 +1536,6 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
             }
 
             Cut_legend->Draw("same"), ListOfFunctions->Add(Cut_legend);
-
-//            double x_1_FitParam = gStyle->GetStatX(), y_1_FitParam = y_1_Cut_legend - 0.14;
-//            double x_2_FitParam = gStyle->GetStatX() - 0.2, y_2_FitParam = y_1_Cut_legend - 0.245;
-//            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
 
             FitParam->SetBorderSize(1), FitParam->SetTextFont(0), FitParam->SetFillColor(0), FitParam->SetTextAlign(12);
             FitParam->AddText(("Fit amp = " + to_string_with_precision(Amp, 8)).c_str());
@@ -1647,17 +1578,6 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-//    auto ListOfFunctions = Histogram1D->GetListOfFunctions();
-//    ListOfFunctions->Add(fit);
-//    ListOfFunctions->Add(upper_cut);
-//    ListOfFunctions->Add(lower_cut);
-//    ListOfFunctions->Add(max_location);
-//    ListOfFunctions->Add(Cut_legend);
-////    ListOfFunctions->Add((TObject *) fit);
-////    ListOfFunctions->Add((TObject *) upper_cut);
-////    ListOfFunctions->Add((TObject *) lower_cut);
-////    ListOfFunctions->Add((TObject *) max_location);
-//    ListOfFunctions->Add((TObject *) FitParam);
     Histogram_list->Add(Histogram1D);
 
     Histogram1DCanvas->Clear();

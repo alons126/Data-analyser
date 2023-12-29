@@ -154,20 +154,20 @@ void EventAnalyser() {
     vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wPC";
     const string ShiftMode = "pol1_wPC";
-    bool Run_in_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
-    bool nRes_test = false; // false by default
+    bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
+    bool nRes_test = true; // false by default
     /* momRes run order guide:
     1. momResS1 calculation 1:
-                           1a:  VaryingDelta = false  , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_in_momResS2 = false
-                           1b:  VaryingDelta = true , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_in_momResS2 = false
-    3. momResS2 calculation:    VaryingDelta = true , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_in_momResS2 = false
-    4. momResS2 run:            VaryingDelta = true , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_in_momResS2 = true
+                           1a:  VaryingDelta = false  , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_with_momResS2 = false
+                           1b:  VaryingDelta = true , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_with_momResS2 = false
+    3. momResS2 calculation:    VaryingDelta = true , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_with_momResS2 = false
+    4. momResS2 run:            VaryingDelta = true , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_with_momResS2 = true
 */
     //</editor-fold>
 
@@ -213,7 +213,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -259,7 +259,7 @@ void EventAnalyser() {
 
     if (!plot_and_fit_MomRes) { Calculate_momResS2 = false; }
 
-    if ((Calculate_momResS2 && Run_in_momResS2) // Don't run calculate momResS2 and run on it at the same time
+    if ((Calculate_momResS2 && Run_with_momResS2) // Don't run calculate momResS2 and run on it at the same time
         || (Calculate_momResS2 && !VaryingDelta) // Don't run calculate momResS2 and small momentum slices at the same time
             ) {
         cout << "\n\nmomRes order error! Exiting...\n\n", exit(EXIT_FAILURE);
@@ -274,7 +274,7 @@ void EventAnalyser() {
     settings.ConfigureStatuses(apply_cuts, clas12ana_particles, only_preselection_cuts, apply_chi2_cuts_1e_cut, only_electron_quality_cuts, apply_nucleon_cuts,
                                Enable_FD_photons,
                                apply_nucleon_SmearAndShift, apply_kinematical_cuts, apply_kinematical_weights, apply_fiducial_cuts, Generate_AMaps,
-                               plot_and_fit_MomRes, VaryingDelta, Calculate_momResS2, Run_in_momResS2, nRes_test, Rec_wTL_ES, ZoomIn_On_mom_th_plots);
+                               plot_and_fit_MomRes, VaryingDelta, Calculate_momResS2, Run_with_momResS2, nRes_test, Rec_wTL_ES, ZoomIn_On_mom_th_plots);
     settings.SetPaths(WorkingDirectory, SampleName, plots_path, apply_cuts, apply_chi2_cuts_1e_cut, apply_nucleon_cuts);
     settings.GetPlotsPath(plots_path);
     settings.GetPlotsLogSaveDirectory(plots_log_save_Directory);
@@ -1014,11 +1014,11 @@ void EventAnalyser() {
 
     if (plot_and_fit_MomRes) {
         nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2,
-                                 Run_in_momResS2,
+                                 Run_with_momResS2,
                                  NeutronResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
                                  ShiftMode, nRes_test);
         pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2,
-                                 Run_in_momResS2,
+                                 Run_with_momResS2,
                                  NeutronResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
                                  ShiftMode, nRes_test);
 
@@ -1034,7 +1034,7 @@ void EventAnalyser() {
                         (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                         Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
             } else { // if Calculate_momResS2 = false => load everything from either momResS1 or momResS2
-                if (Run_in_momResS2) { // if Calculate_momResS2 = false and Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
+                if (Run_with_momResS2) { // if Calculate_momResS2 = false and Run_with_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
                             (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
@@ -1044,7 +1044,7 @@ void EventAnalyser() {
                     nRes.ReadResDataParam(
                             (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
-                } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
+                } else { // if Calculate_momResS2 = false and Run_with_momResS2 = false => load both correction and smearing from momResS1
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
                             (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
@@ -1060,7 +1060,7 @@ void EventAnalyser() {
     } else { // if plot_and_fit_MomRes = false => Calculate_momResS2 = false !!!
         nRes.SetSmearAndShiftModes(SmearMode, ShiftMode);
 
-        if (Run_in_momResS2) { // if Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
+        if (Run_with_momResS2) { // if Run_with_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
             /* Load neutron correction fit parameters */
             nRes.ReadResDataParam(
                     (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
@@ -1070,7 +1070,7 @@ void EventAnalyser() {
             nRes.ReadResDataParam(
                     (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                     Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
-        } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
+        } else { // if Calculate_momResS2 = false and Run_with_momResS2 = false => load both correction and smearing from momResS1
             /* Load neutron correction fit parameters */
             nRes.ReadResDataParam(
                     (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
@@ -20936,7 +20936,7 @@ void EventAnalyser() {
     myLogFile << "-- nRES settings ----------------------------------------------------------\n";
     myLogFile << "plot_and_fit_MomRes = " << BoolToString(plot_and_fit_MomRes) << "\n";
     myLogFile << "Calculate_momResS2 = " << BoolToString(Calculate_momResS2) << "\n";
-    myLogFile << "Run_in_momResS2 = " << BoolToString(Run_in_momResS2) << "\n";
+    myLogFile << "Run_with_momResS2 = " << BoolToString(Run_with_momResS2) << "\n";
     myLogFile << "DeltaSlices = " << DeltaSlices << "\n";
     myLogFile << "VaryingDelta = " << BoolToString(VaryingDelta) << "\n";
     myLogFile << "SmearMode = " << SmearMode << "\n";
@@ -21389,7 +21389,7 @@ void EventAnalyser() {
 
     myLogFile << "\n\n";
     /*
-    if (apply_nucleon_SmearAndShift && (Calculate_momResS2 || Run_in_momResS2)) {
+    if (apply_nucleon_SmearAndShift && (Calculate_momResS2 || Run_with_momResS2)) {
         myLogFile << "\n===========================================================================\n";
         myLogFile << "momRes correction and smearing coefficients\n";
         myLogFile << "===========================================================================\n";
