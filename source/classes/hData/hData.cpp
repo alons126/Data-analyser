@@ -7,31 +7,126 @@
 // GetParticleName function ---------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetParticleName function">
-string hData::GetParticleName(const string &Source) {
+string hData::GetParticleName(const string &Source, const bool &PluralParticles) {
     string ParticleName, FS = GetFS(Source);
 
     if (findSubstring(Source, "neutrals") || findSubstring(Source, "Neutrals")
         || findSubstring(Source, "neut.") || findSubstring(Source, "Neut.")) {
-        ParticleName = "neut";
+        if (PluralParticles) {
+            ParticleName = "Neut";
+        } else {
+            ParticleName = "Neut";
+        }
     } else if (findSubstring(Source, "Electron") || findSubstring(Source, "electron")) {
-        ParticleName = "Electron";
+        if (PluralParticles) {
+            ParticleName = "Electrons";
+        } else {
+            ParticleName = "Electron";
+        }
     } else if (findSubstring(Source, "Proton") || findSubstring(Source, "proton")) {
-        ParticleName = "Proton";
+        if (PluralParticles) {
+            ParticleName = "Protons";
+        } else {
+            ParticleName = "Proton";
+        }
     } else if (findSubstring(Source, "Neutron") || findSubstring(Source, "neutron")) {
-        ParticleName = "Neutron";
+        if (PluralParticles) {
+            ParticleName = "Neutrons";
+        } else {
+            ParticleName = "Neutron";
+        }
     } else if (findSubstring(Source, "#pi^{+}")) {
         ParticleName = "Piplus";
     } else if (findSubstring(Source, "#pi^{-}")) {
         ParticleName = "Piminus";
-    } else if (findSubstring(Source, "#K^{+}")) {
+    } else if (findSubstring(Source, "K^{+}")) {
         ParticleName = "Kplus";
-    } else if (findSubstring(Source, "#K^{-}")) {
+    } else if (findSubstring(Source, "K^{-}")) {
         ParticleName = "Kminus";
+    } else if (findSubstring(Source, "D")) {
+        if (PluralParticles) {
+            ParticleName = "Deuterons";
+        } else {
+            ParticleName = "Deuteron";
+        }
     } else if (findSubstring(Source, "#gamma") || findSubstring(Source, "photon")
                || findSubstring(Source, "Photon")) {
-        ParticleName = "Photon";
+        if (PluralParticles) {
+            ParticleName = "Photons";
+        } else {
+            ParticleName = "Photon";
+        }
     } else if ((FS == "nFDpCD") || (FS == "pFDpCD")) {
         ParticleName = "Nucleon";
+    } else {
+        ParticleName = "Unknown";
+    }
+
+    return ParticleName;
+}
+//</editor-fold>
+
+// GetParticleNameFromSubscript function --------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetParticleNameFromSubscript function">
+string hData::GetParticleNameFromSubscript(const string &Source, const bool &PluralParticles) {
+    string ParticleName;
+
+    if (findSubstring(Source, "{e}")) {
+        if (PluralParticles) {
+            ParticleName = "Electrons";
+        } else {
+            ParticleName = "Electron";
+        }
+    } else if (findSubstring(Source, "{p}") ||
+               findSubstring(Source, "{pFD}") || findSubstring(Source, "{pCD}")) {
+        if (PluralParticles) {
+            ParticleName = "Protons";
+        } else {
+            ParticleName = "Proton";
+        }
+    } else if (findSubstring(Source, "{n}") || findSubstring(Source, "{nFD}")) {
+        if (PluralParticles) {
+            ParticleName = "Neutrons";
+        } else {
+            ParticleName = "Neutron";
+        }
+    } else if (findSubstring(Source, "{#pi^{+}}")) {
+        if (PluralParticles) {
+            ParticleName = "Positive pions";
+        } else {
+            ParticleName = "#pi^{+}";
+        }
+    } else if (findSubstring(Source, "{#pi^{-}}")) {
+        if (PluralParticles) {
+            ParticleName = "Negative pions";
+        } else {
+            ParticleName = "#pi^{-}";
+        }
+    } else if (findSubstring(Source, "{K^{+}}")) {
+        if (PluralParticles) {
+            ParticleName = "Positive kaons";
+        } else {
+            ParticleName = "K^{+}";
+        }
+    } else if (findSubstring(Source, "{K^{-}}")) {
+        if (PluralParticles) {
+            ParticleName = "Negative kaons";
+        } else {
+            ParticleName = "K^{-}";
+        }
+    } else if (findSubstring(Source, "{D}")) {
+        if (PluralParticles) {
+            ParticleName = "Deuterons";
+        } else {
+            ParticleName = "Deuteron";
+        }
+    } else if (findSubstring(Source, "{#gamma}")) {
+        if (PluralParticles) {
+            ParticleName = "Photons";
+        } else {
+            ParticleName = "Photon";
+        }
     } else {
         ParticleName = "Unknown";
     }
@@ -43,31 +138,126 @@ string hData::GetParticleName(const string &Source) {
 // GetParticleNameLC function -------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetParticleNameLC function">
-string hData::GetParticleNameLC(const string &Source) {
+string hData::GetParticleNameLC(const string &Source, const bool &PluralParticles) {
     string ParticleName;
 
     if (findSubstring(Source, "neutrals") || findSubstring(Source, "Neutrals")
         || findSubstring(Source, "neut.") || findSubstring(Source, "Neut.")) {
-        ParticleName = "neut";
+        if (PluralParticles) {
+            ParticleName = "neut";
+        } else {
+            ParticleName = "neut";
+        }
     } else if (findSubstring(Source, "Electron") || findSubstring(Source, "electron")) {
-        ParticleName = "electron";
+        if (PluralParticles) {
+            ParticleName = "electrons";
+        } else {
+            ParticleName = "electron";
+        }
     } else if (findSubstring(Source, "Proton") || findSubstring(Source, "proton")) {
-        ParticleName = "proton";
+        if (PluralParticles) {
+            ParticleName = "protons";
+        } else {
+            ParticleName = "proton";
+        }
     } else if (findSubstring(Source, "Neutron") || findSubstring(Source, "neutron")) {
-        ParticleName = "neutron";
+        if (PluralParticles) {
+            ParticleName = "neutrons";
+        } else {
+            ParticleName = "neutron";
+        }
     } else if (findSubstring(Source, "#pi^{+}")) {
         ParticleName = "piplus";
     } else if (findSubstring(Source, "#pi^{-}")) {
         ParticleName = "piminus";
-    } else if (findSubstring(Source, "#K^{+}")) {
-        ParticleName = "kplus";
-    } else if (findSubstring(Source, "#K^{-}")) {
-        ParticleName = "kminus";
+    } else if (findSubstring(Source, "K^{+}")) {
+        ParticleName = "Kplus";
+    } else if (findSubstring(Source, "K^{-}")) {
+        ParticleName = "Kminus";
+    } else if (findSubstring(Source, "deuteron")) {
+        if (PluralParticles) {
+            ParticleName = "deuterons";
+        } else {
+            ParticleName = "deuteron";
+        }
     } else if (findSubstring(Source, "#gamma") || findSubstring(Source, "photon")
                || findSubstring(Source, "Photon")) {
-        ParticleName = "photon";
+        if (PluralParticles) {
+            ParticleName = "photons";
+        } else {
+            ParticleName = "photon";
+        }
     } else {
         ParticleName = "unknown";
+    }
+
+    return ParticleName;
+}
+//</editor-fold>
+
+// GetParticleNameLCFromSubscript function --------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetParticleNameLCFromSubscript function">
+string hData::GetParticleNameLCFromSubscript(const string &Source, const bool &PluralParticles) {
+    string ParticleName;
+
+    if (findSubstring(Source, "{e}")) {
+        if (PluralParticles) {
+            ParticleName = "electrons";
+        } else {
+            ParticleName = "electron";
+        }
+    } else if (findSubstring(Source, "{p}") ||
+               findSubstring(Source, "{pFD}") || findSubstring(Source, "{pCD}")) {
+        if (PluralParticles) {
+            ParticleName = "protons";
+        } else {
+            ParticleName = "proton";
+        }
+    } else if (findSubstring(Source, "{n}") || findSubstring(Source, "{nFD}")) {
+        if (PluralParticles) {
+            ParticleName = "neutrons";
+        } else {
+            ParticleName = "neutron";
+        }
+    } else if (findSubstring(Source, "{#pi^{+}}")) {
+        if (PluralParticles) {
+            ParticleName = "positive pions";
+        } else {
+            ParticleName = "#pi^{+}";
+        }
+    } else if (findSubstring(Source, "{#pi^{-}}")) {
+        if (PluralParticles) {
+            ParticleName = "negative pions";
+        } else {
+            ParticleName = "#pi^{-}";
+        }
+    } else if (findSubstring(Source, "{K^{+}}")) {
+        if (PluralParticles) {
+            ParticleName = "positive kaons";
+        } else {
+            ParticleName = "K^{+}";
+        }
+    } else if (findSubstring(Source, "{K^{-}}")) {
+        if (PluralParticles) {
+            ParticleName = "negative kaons";
+        } else {
+            ParticleName = "K^{-}";
+        }
+    } else if (findSubstring(Source, "{D}")) {
+        if (PluralParticles) {
+            ParticleName = "deuterons";
+        } else {
+            ParticleName = "deuteron";
+        }
+    } else if (findSubstring(Source, "{#gamma}")) {
+        if (PluralParticles) {
+            ParticleName = "Photons";
+        } else {
+            ParticleName = "Photon";
+        }
+    } else {
+        ParticleName = "Unknown";
     }
 
     return ParticleName;
@@ -93,16 +283,49 @@ string hData::GetParticleNameShort(const string &Source) {
         ParticleNameShort = "#pi^{+}";
     } else if (findSubstring(Source, "#pi^{-}")) {
         ParticleNameShort = "#pi^{-}";
-    } else if (findSubstring(Source, "#K^{+}")) {
+    } else if (findSubstring(Source, "K^{+}")) {
         ParticleNameShort = "K^{+}";
-    } else if (findSubstring(Source, "#K^{-}")) {
+    } else if (findSubstring(Source, "K^{-}")) {
         ParticleNameShort = "K^{-}";
+    } else if (findSubstring(Source, "D")) {
+        ParticleNameShort = "D";
     } else if (findSubstring(Source, "#gamma") || findSubstring(Source, "photon")
                || findSubstring(Source, "Photon")) {
         ParticleNameShort = "Photon";
     } else {
         ParticleNameShort = "";
-//        ParticleNameShort = "Unknown";
+    }
+
+    return ParticleNameShort;
+}
+//</editor-fold>
+
+// GetParticleNameShortFromSubscript function ---------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetParticleNameShortFromSubscript function">
+string hData::GetParticleNameShortFromSubscript(const string &Source) {
+    string ParticleNameShort;
+
+    if (findSubstring(Source, "{e}")) {
+        ParticleNameShort = "e";
+    } else if (findSubstring(Source, "{p}")) {
+        ParticleNameShort = "p";
+    } else if (findSubstring(Source, "{n}")) {
+        ParticleNameShort = "n";
+    } else if (findSubstring(Source, "{#pi^{+}}")) {
+        ParticleNameShort = "#pi^{+}";
+    } else if (findSubstring(Source, "{#pi^{-}}")) {
+        ParticleNameShort = "#pi^{-}";
+    } else if (findSubstring(Source, "{K^{+}}")) {
+        ParticleNameShort = "K^{+}";
+    } else if (findSubstring(Source, "{K^{-}}")) {
+        ParticleNameShort = "K^{-}";
+    } else if (findSubstring(Source, "{D}")) {
+        ParticleNameShort = "D";
+    } else if (findSubstring(Source, "{#gamma}")) {
+        ParticleNameShort = "#gamma";
+    } else {
+        ParticleNameShort = "";
     }
 
     return ParticleNameShort;
@@ -339,15 +562,47 @@ string hData::GetType(const string &Source) {
 // GetDRegion function --------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetDRegion function">
-string hData::GetDRegion(const string &Source) {
+string hData::GetDRegion(const string &Source, const bool &ReturnGoingRegion) {
     string DRegion, Type = GetType(Source), Particle = GetParticleName(Source), ParticleLC = GetParticleNameLC(Source);
 
     if (findSubstring(Source, ", FD)") || findSubstring(Type, "FD " + Particle) ||
         findSubstring(Source, "FD " + ParticleLC)) {
-        DRegion = "FD";
+        if (ReturnGoingRegion) {
+            DRegion = "forward-going";
+        } else {
+            DRegion = "FD";
+        }
     } else if (findSubstring(Source, ", CD)") || findSubstring(Type, "CD " + Particle) ||
                findSubstring(Source, "CD " + ParticleLC)) {
-        DRegion = "CD";
+        if (ReturnGoingRegion) {
+            DRegion = "central-going";
+        } else {
+            DRegion = "CD";
+        }
+    }
+
+    return DRegion;
+}
+//</editor-fold>
+
+// GetDRegionExplicit function ------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetDRegionExplicit function">
+string hData::GetDRegionExplicit(const string &Source, const bool &ReturnGoingRegion) {
+    string DRegion, Type = GetType(Source), Particle = GetParticleName(Source), ParticleLC = GetParticleNameLC(Source);
+
+    if (findSubstring(Source, "FD")) {
+        if (ReturnGoingRegion) {
+            DRegion = "forward-going";
+        } else {
+            DRegion = "FD";
+        }
+    } else if (findSubstring(Source, "CD")) {
+        if (ReturnGoingRegion) {
+            DRegion = "central-going";
+        } else {
+            DRegion = "CD";
+        }
     }
 
     return DRegion;

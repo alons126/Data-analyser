@@ -17,6 +17,7 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
+#include "../../source/classes/hData/hData.cpp"
 #include "../../source/functions/GeneralFunctions.h"
 #include "../../source/constants.h"
 #include "Histofinder1D.cpp"
@@ -43,10 +44,15 @@ double SetxOffset1D(const bool &ShowStats) {
     double xOffset;
 
     if (!ShowStats) {
-        xOffset = -0.11;
+        xOffset = -0.15;
     } else {
         xOffset = 0;
     }
+//    if (!ShowStats) {
+//        xOffset = -0.11;
+//    } else {
+//        xOffset = 0;
+//    }
 
     return xOffset;
 }
@@ -55,10 +61,15 @@ double SetyOffset1D(const bool &ShowStats) {
     double yOffset;
 
     if (!ShowStats) {
-        yOffset = 0.15;
+        yOffset = 0.125;
     } else {
         yOffset = 0;
     }
+//    if (!ShowStats) {
+//        yOffset = 0.15;
+//    } else {
+//        yOffset = 0;
+//    }
 
     return yOffset;
 }
@@ -67,16 +78,12 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                    const string &SampleName, const string &SavePath, const string &SaveName) {
     cout << "\n\n";
 
+    hData particles;
+
     HistogramCanvas->Clear();
 
     TFile *file = new TFile(filename);
     TH1D *Histogram1D;
-
-//    TDirectoryFile *mydir1 = (TDirectoryFile *) fxsec1->Get("e-_C12");
-//    TDirectoryFile *mydir2 = (TDirectoryFile *) fxsec2->Get("e-_C12");
-//
-//    TGraph *graph1 = (TGraph *) mydir1->Get("tot_em");
-//    TGraph *graph2 = (TGraph *) mydir2->Get("tot_em");
 
     if (file->Get(Histogram1DName) == nullptr) {
         Histogram1D = Histofinder1D(filename, Histogram1DName);
@@ -155,58 +162,84 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     } else if (Histogram1D->Integral() != 0.) {
 
         if (findSubstring(Histogram1DNameCopy, "V_{z}^{")) {
-            LogScalePlot = true;
+            LogScalePlot = true, ShowStats = false;
 
-            double UpperCut = 3., LowerCut = -8.;
+            string HistTitle = Histogram1D->GetTitle();
+            string ParticleShort = particles.GetParticleNameShortFromSubscript(HistTitle);
+            string ParticlesLC;
+            string Region = particles.GetDRegionExplicit(HistTitle, true);
+
+            if (ParticleShort == "#pi^{+}" || ParticleShort == "#pi^{-}" || ParticleShort == "K^{+}" || ParticleShort == "K^{-}") {
+                ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, false);
+            } else {
+                ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, true);
+            }
+
+            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats), UpperCut = 3., LowerCut = -8.;
+
+            if (ParticleShort == "e") {
+                Histogram1D->SetTitle(("V_{z}^{" + ParticleShort + "} of " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+            } else {
+                Histogram1D->SetTitle(("V_{z}^{" + ParticleShort + "} of " + Region + " " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+            }
 
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperVzCut = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
-            UpperVzCut->SetLineWidth(2);
-            UpperVzCut->SetLineColor(kBlue);
-            UpperVzCut->Draw("same");
+            UpperVzCut->SetLineWidth(2), UpperVzCut->SetLineColor(kBlue), UpperVzCut->Draw("same");
 
             TLine *LowerVzCut = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
-            LowerVzCut->SetLineWidth(2);
-            LowerVzCut->SetLineColor(kRed);
-            LowerVzCut->Draw("same");
+            LowerVzCut->SetLineWidth(2), LowerVzCut->SetLineColor(kRed), LowerVzCut->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_TwoLines, Legend_y1_TwoLines, Legend_x2_TwoLines, Legend_y2_TwoLines);
+            auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.05 + xOffset, Legend_y2_TwoLines + yOffset);
             TLegendEntry *UpperVzCutEntry = Legend->AddEntry(UpperVzCut, ("Upper cut = " + to_string_with_precision(UpperCut, 0) + " [cm]").c_str(), "l");
             TLegendEntry *LowerVzCutEntry = Legend->AddEntry(LowerVzCut, ("Lower cut = " + to_string_with_precision(LowerCut, 0) + " [cm]").c_str(), "l");
-            Legend->SetTextSize(0.03);
-            Legend->SetTextAlign(12);
-            Legend->Draw("same");
+            Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         }
 
         if (findSubstring(Histogram1DNameCopy, "Vertex corr. dV^{")) {
-            LogScalePlot = true;
+            LogScalePlot = true, ShowStats = false;
 
-            double UpperCut = 4., LowerCut = -5.;
+            string HistTitle = Histogram1D->GetTitle();
+            string ParticleShort = particles.GetParticleNameShortFromSubscript(HistTitle.substr(0, HistTitle.find_last_of('=') + 1));
+            string ParticlesLC;
+            string Region = particles.GetDRegionExplicit(HistTitle, true);
+
+            if (ParticleShort == "#pi^{+}" || ParticleShort == "#pi^{-}" || ParticleShort == "K^{+}" || ParticleShort == "K^{-}") {
+                ParticlesLC = particles.GetParticleNameLCFromSubscript("{" + ParticleShort + "}", false);
+            } else {
+                ParticlesLC = particles.GetParticleNameLCFromSubscript("{" + ParticleShort + "}", true);
+            }
+
+            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats), UpperCut = 4., LowerCut = -5.;
+
+            if (ParticleShort == "e") {
+                Histogram1D->SetTitle(("dV_{z}^{" + ParticleShort + "} of " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+            } else {
+                Histogram1D->SetTitle(("dV_{z}^{" + ParticleShort + "} of " + Region + " " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+            }
 
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperVzCut = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
-            UpperVzCut->SetLineWidth(2);
-            UpperVzCut->SetLineColor(kBlue);
-            UpperVzCut->Draw("same");
+            UpperVzCut->SetLineWidth(2), UpperVzCut->SetLineColor(kBlue), UpperVzCut->Draw("same");
 
             TLine *LowerVzCut = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
-            LowerVzCut->SetLineWidth(2);
-            LowerVzCut->SetLineColor(kRed);
-            LowerVzCut->Draw("same");
+            LowerVzCut->SetLineWidth(2), LowerVzCut->SetLineColor(kRed), LowerVzCut->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_TwoLines, Legend_y1_TwoLines, Legend_x2_TwoLines, Legend_y2_TwoLines);
+            auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.05 + xOffset, Legend_y2_TwoLines + yOffset);
             TLegendEntry *UpperVzCutEntry = Legend->AddEntry(UpperVzCut, ("Upper cut = " + to_string_with_precision(UpperCut, 0) + " [cm]").c_str(), "l");
             TLegendEntry *LowerVzCutEntry = Legend->AddEntry(LowerVzCut, ("Lower cut = " + to_string_with_precision(LowerCut, 0) + " [cm]").c_str(), "l");
-            Legend->SetTextSize(0.03);
-            Legend->SetTextAlign(12);
-            Legend->Draw("same");
+            Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         }
 
         if (Histogram1DNameCopy == "N_{phe} in HTCC BC (1e cut)" || Histogram1DNameCopy == "N_{phe} in HTCC (1e cut)") {
+            ShowStats = false;
+
+            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
             double LowerCut = 2.;
 
+            Histogram1D->SetTitle("N_{phe} in the HTCC for ^{12}C(e,e')");
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *LowerNpheCut = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
@@ -214,21 +247,55 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerNpheCut->SetLineColor(kRed);
             LowerNpheCut->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_OneLine, Legend_y1_OneLine, Legend_x2_OneLine, Legend_y2_OneLine);
+            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine + xOffset, Legend_y2_OneLine + yOffset);
             TLegendEntry *LowerNpheCutEntry = Legend->AddEntry(LowerNpheCut, ("Lower cut = " + to_string_with_precision(LowerCut, 0)).c_str(), "l");
             Legend->SetTextSize(0.03);
             Legend->SetTextAlign(12);
             Legend->Draw("same");
         }
 
+        if (findSubstring(Histogram1DNameCopy, "#chi^{2}")) {
+            string HistTitle = Histogram1D->GetTitle();
+            string ParticleShort = particles.GetParticleNameShortFromSubscript(HistTitle);
+            string ParticlesLC;
+            string Region = particles.GetDRegionExplicit(HistTitle, true);
+
+            if (ParticleShort == "e") {
+                string ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, true);
+                Histogram1D->SetTitle(("#chi^{2}_{" + ParticleShort + "} of " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+            } else {
+                if ((ParticleShort != "p") || (ParticleShort != "D")) {
+                    ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, false);
+                } else {
+                    ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, true);
+                }
+
+                Histogram1D->SetTitle(("#chi^{2}_{" + ParticleShort + "} of " + Region + " " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+
+                if (findSubstring(Histogram1DNameCopy, "{D}") ||
+                    findSubstring(Histogram1DNameCopy, "{K^{+}}") || findSubstring(Histogram1DNameCopy, "{K^{-}}")) {
+                    auto FuncList = Histogram1D->GetListOfFunctions();
+                    FuncList->Clear();
+                }
+            }
+
+            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
+        }
+
         if ((Histogram1DNameCopy == "FD Proton momentum #epsilon_{eff} (1e cut)") ||
             (Histogram1DNameCopy == "CD Proton momentum #epsilon_{eff} (1e cut)")) {
             ShowStats = false;
-            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
 
+            string HistTitle = Histogram1D->GetTitle();
+//            string ParticleShort = particles.GetParticleNameShortFromSubscript(HistTitle);
+            string ParticlesLC = particles.GetParticleNameLC(HistTitle, true);
+            string Region = particles.GetDRegionExplicit(HistTitle, true);
+
+            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
             double LowerMomentumTh = 0.4;
 
             Histogram1D->GetYaxis()->SetRangeUser(0., 0.2);
+            Histogram1D->SetTitle(("Momentum efficiency of " + Region + " " + ParticlesLC + " in ^{12}C(e,e')").c_str());
             Histogram1D->GetYaxis()->SetTitle("#epsilon_{eff}");
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
@@ -237,34 +304,28 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.2 + xOffset, Legend_y2_OneLine + yOffset);
+            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset, Legend_y2_OneLine + yOffset);
 
             TLegendEntry *LowerMomThEntry;
 
-            if (Histogram1DNameCopy == "FD Proton momentum #epsilon_{eff} (1e cut)") {
-                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{pFD} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
-                Histogram1D->GetXaxis()->SetTitle("P_{pFD} [GeV/c]");
-            } else {
-                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{pCD} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
-                Histogram1D->GetXaxis()->SetTitle("P_{pCD} [GeV/c]");
-            }
+            LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+            Histogram1D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
+
+//            if (Histogram1DNameCopy == "FD Proton momentum #epsilon_{eff} (1e cut)") {
+//                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+//                Histogram1D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
+//            } else {
+//                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+//                Histogram1D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
+//            }
 
             Legend->SetTextSize(0.03);
             Legend->SetTextAlign(12);
             Legend->Draw("same");
         }
 
-        if (findSubstring(Histogram1DNameCopy, "#chi^{2}")) {
-            if (findSubstring(Histogram1DNameCopy, "{D}") ||
-                findSubstring(Histogram1DNameCopy, "{K^{+}}") || findSubstring(Histogram1DNameCopy, "{K^{-}}")) {
-                auto FuncList = Histogram1D->GetListOfFunctions();
-                FuncList->Clear();
-            }
-
-            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
-        }
-
         if (Histogram1DNameCopy == "#theta_{p_{1},p_{2}} (All Int., 2p)") {
+            Histogram1D->SetTitle("Opening angle between the #font[12]{2p} protons");
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
             Histogram1D->SetLineWidth(LineWidth);
             Histogram1D->SetLineColor(kBlue);
@@ -332,6 +393,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Legend->Draw("same");
         }
 
+/*
         if (Histogram1DNameCopy == "Reco FD neutrons momentum (1e cut, FD)") {
             double UpperCut = beamE, LowerCut = 0.4;
 
@@ -354,9 +416,10 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Legend->SetTextAlign(12);
             Legend->Draw("same");
         }
+*/
 
-        if ((findSubstring(Histogram1DNameCopy, "Leading FD neutron momentum APID")) ||
-            (Histogram1DNameCopy == "Reco FD neutrons momentum (1e cut, FD)")) {
+        if ((Histogram1DNameCopy == "Reco FD neutrons momentum (1e cut, FD)") ||
+            (Histogram1DNameCopy == "Reco FD neutron momentum - ZOOMOUT (1e cut, FD)")) {
             double UpperCut = beamE, LowerCut = 0.4;
 
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
@@ -371,9 +434,9 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_TwoLines, Legend_y1_TwoLines, Legend_x2_TwoLines, Legend_y2_TwoLines);
-            TLegendEntry *UpperMomThEntry = Legend->AddEntry(UpperMomTh, "Upper P_{nFD} th. = E_{beam}/c", "l");
-            TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{nFD} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
+            auto Legend = new TLegend(Legend_x1_TwoLines, Legend_y1_TwoLines, Legend_x2_TwoLines - 0.15, Legend_y2_TwoLines);
+            TLegendEntry *UpperMomThEntry = Legend->AddEntry(UpperMomTh, "Upper P_{n} th. = E_{beam}/c", "l");
+            TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
             Legend->SetTextSize(0.03);
             Legend->SetTextAlign(12);
             Legend->Draw("same");
@@ -395,7 +458,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.1 + xOffset, Legend_y2_OneLine + yOffset);
+            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset, Legend_y2_OneLine + yOffset);
 
             if (Histogram1DNameCopy == "CD & FD Piplus momentum #epsilon_{eff} (1e cut)") {
                 TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = "
@@ -414,7 +477,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             if (findSubstring(Histogram1DNameCopy, " P_{e} ")) {
                 Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
             } else if (findSubstring(Histogram1DNameCopy, " P_{pFD} ")) {
-                ShowStats = true;
+                ShowStats = false;
 
                 double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
                 double LowerCut = 0.4;
@@ -426,13 +489,13 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 LowerMomTh->SetLineColor(kRed);
                 LowerMomTh->Draw("same");
 
-                auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine + xOffset, Legend_y2_OneLine + yOffset);
-                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 0) + " [GeV/c]").c_str(), "l");
+                auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine + xOffset - 0.15, Legend_y2_OneLine + yOffset);
+                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
                 Legend->SetTextSize(0.03);
                 Legend->SetTextAlign(12);
                 Legend->Draw("same");
             } else if (findSubstring(Histogram1DNameCopy, " P_{nFD} ")) {
-                ShowStats = true;
+                ShowStats = false;
 
                 double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
                 double UpperCut = beamE, LowerCut = 0.4;
@@ -449,9 +512,9 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 LowerMomTh->SetLineColor(kRed);
                 LowerMomTh->Draw("same");
 
-                auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines + xOffset, Legend_y2_TwoLines + yOffset);
-                TLegendEntry *UpperMomThEntry = Legend->AddEntry(UpperMomTh, ("Upper cut = " + to_string_with_precision(UpperCut, 0) + " [GeV/c]").c_str(), "l");
-                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 0) + " [GeV/c]").c_str(), "l");
+                auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines + xOffset - 0.15, Legend_y2_TwoLines + yOffset);
+                TLegendEntry *UpperMomThEntry = Legend->AddEntry(UpperMomTh, ("Upper cut = " + to_string_with_precision(UpperCut, 1) + " [GeV/c]").c_str(), "l");
+                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
                 Legend->SetTextSize(0.03);
                 Legend->SetTextAlign(12);
                 Legend->Draw("same");

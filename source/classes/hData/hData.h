@@ -35,6 +35,10 @@
 using namespace std;
 
 class hData {
+private:
+    int StandardCanvasWidth = 1000, StandardCanvasHeight = 750;
+    double BottomMargin = 0.14, LeftMargin = 0.16, RightMargin = 0.16, TopMargin = 0.12;
+
 public:
 
 // constructors ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -44,15 +48,27 @@ public:
 
 // GetParticleName function ---------------------------------------------------------------------------------------------------------------------------------------------
 
-    string GetParticleName(const string &Source);
+    string GetParticleName(const string &Source, const bool &PluralParticles = false);
+
+// GetParticleNameFromSubscript function --------------------------------------------------------------------------------------------------------------------------------
+
+    string GetParticleNameFromSubscript(const string &Source, const bool &PluralParticles = false);
 
 // GetParticleNameLC function -------------------------------------------------------------------------------------------------------------------------------------------
 
-    string GetParticleNameLC(const string &Source);
+    string GetParticleNameLC(const string &Source, const bool &PluralParticles = false);
 
-// GetParticleNameLC function -------------------------------------------------------------------------------------------------------------------------------------------
+// GetParticleNameLCFromSubscript function ------------------------------------------------------------------------------------------------------------------------------
+
+    string GetParticleNameLCFromSubscript(const string &Source, const bool &PluralParticles = false);
+
+// GetParticleNameShort function ----------------------------------------------------------------------------------------------------------------------------------------
 
     string GetParticleNameShort(const string &Source);
+
+// GetParticleNameShortFromSubscript function ---------------------------------------------------------------------------------------------------------------------------
+
+    string GetParticleNameShortFromSubscript(const string &Source);
 
 // GetType function -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -60,7 +76,11 @@ public:
 
 // GetDRegion function --------------------------------------------------------------------------------------------------------------------------------------------------
 
-    string GetDRegion(const string &Source);
+    string GetDRegionExplicit(const string &Source, const bool &ReturnGoingRegion = false);
+
+// GetDRegion function --------------------------------------------------------------------------------------------------------------------------------------------------
+
+    string GetDRegion(const string &Source, const bool &ReturnGoingRegion = false);
 
 // GetFSRTitle function -------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -77,6 +97,20 @@ public:
 // GetFS function -------------------------------------------------------------------------------------------------------------------------------------------------------
 
     string GetFS(const string &Source);
+
+// Other get function ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+    int GetStandardCanvasWidth() { return StandardCanvasWidth; }
+
+    int GetStandardCanvasHeight() { return StandardCanvasHeight; }
+
+    int GetBottomMargin() { return BottomMargin; }
+
+    int GetLeftMargin() { return LeftMargin; }
+
+    int GetRightMargin() { return RightMargin; }
+
+    int GetTopMargin() { return TopMargin; }
 
 // SetXLabel function ---------------------------------------------------------------------------------------------------------------------------------------------------
 

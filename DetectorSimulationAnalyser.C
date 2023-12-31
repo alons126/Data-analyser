@@ -131,8 +131,8 @@ void EventAnalyser() {
     bool TL_plots_only_for_NC = false; // TL plots only AFTER beta fit
     bool fill_TL_plots = true;
     bool ZoomIn_On_mom_th_plots = false; // momentum th. efficiencies with zoomin
-    bool Eff_calc_with_one_reco_electron = false;
-    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
+    bool Eff_calc_with_one_reco_electron = true;
+    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -155,14 +155,14 @@ void EventAnalyser() {
     vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wPC";
     const string ShiftMode = "pol1_wPC";
     bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
-    bool nRes_test = true; // false by default
+    bool nRes_test = false; // false by default
     /* momRes run order guide:
     1. momResS1 calculation 1:
                            1a:  VaryingDelta = false  , plot_and_fit_MomRes = true  , Calculate_momResS2 = false , Run_with_momResS2 = false
@@ -219,7 +219,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -1998,30 +1998,27 @@ void EventAnalyser() {
                                                  directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "02b_P_p_reco_1e_cut_CD_ZOOMIN",
                                                  0, 1, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_LnFD_reco_1e_cut_FD = hPlot1D("1e cut", "FD", "Reco leading FD neutron momentum", "Leading FD neutron momentum P^{reco}_{n}", "P^{reco}_{n} [GeV/c]",
-                                             directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03a_P_LnFD_reco_1e_cut_FD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots); // leading nFD!
-    hPlot1D hP_LnFD_reco_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "Reco leading FD neutron momentum - ZOOMIN", "Leading FD neutron momentum P^{reco}_{n} - ZOOMIN",
-                                                    "P^{reco}_{n} [GeV/c]",
-                                                    directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03a_P_LnFD_reco_1e_cut_FD_ZOOMIN",
-                                                    0, 1, numTH1Dbins_Mom_eff_Plots); // leading nFD!
-    hPlot1D hP_LnFD_reco_1e_cut_FD_ZOOMOUT = hPlot1D("1e cut", "FD", "Reco leading FD neutron momentum - ZOOMOUT", "Leading FD neutron momentum P^{reco}_{n} - "
-                                                                                                                   "ZOOMOUT",
-                                                     "P^{reco}_{n} [GeV/c]",
-                                                     directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03a_P_LnFD_reco_1e_cut_FD_ZOOMOUT",
-                                                     0, 15., numTH1Dbins_Mom_eff_Plots); // leading nFD!
-    hPlot1D hP_nFD_reco_1e_cut_FD = hPlot1D("1e cut", "FD", "Reco FD neutrons momentum", "FD neutrons momentum P^{reco}_{n}", "P^{reco}_{n} [GeV/c]",
-                                            directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03b_P_nFD_reco_1e_cut_FD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots); // all nFD!
-    hPlot1D hP_nFD_reco_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "Reco FD neutrons momentum - ZOOMIN", "FD neutrons momentum P^{reco}_{n} - ZOOMIN",
-                                                   "P^{reco}_{n} [GeV/c]",
-                                                   directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03b_P_nFD_reco_1e_cut_FD_ZOOMIN",
-                                                   0, 1, numTH1Dbins_Mom_eff_Plots); // all nFD!
-    hPlot1D hP_nFD_reco_1e_cut_FD_ZOOMOUT = hPlot1D("1e cut", "FD", "Reco FD neutron momentum - ZOOMOUT", "FD neutrons momentum P^{reco}_{n} - "
-                                                                                                          "ZOOMOUT",
-                                                    "P^{reco}_{n} [GeV/c]",
-                                                    directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03b_P_nFD_reco_1e_cut_FD_ZOOMOUT",
-                                                    0, 15., numTH1Dbins_Mom_eff_Plots); // all nFD!
+    // leading nFD:
+    hPlot1D hP_LnFD_reco_APID_1e_cut_FD = hPlot1D("1e cut", "FD", "Reco leading FD neutron momentum APID", "Leading FD neutron momentum P^{reco}_{n} APID",
+                                                  "P^{reco}_{n} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                  "03a_P_LnFD_reco_APID_1e_cut_FD", Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_LnFD_reco_APID_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "Reco leading FD neutron momentum APID - ZOOMIN", "Leading FD neutron momentum P^{reco}_{n} APID - ZOOMIN",
+                                                         "P^{reco}_{n} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                         "03a_P_LnFD_reco_APID_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_LnFD_reco_APID_1e_cut_FD_ZOOMOUT = hPlot1D("1e cut", "FD", "Reco leading FD neutron momentum APID - ZOOMOUT",
+                                                          "Leading FD neutron momentum P^{reco}_{n} APID - ZOOMOUT", "P^{reco}_{n} [GeV/c]",
+                                                          directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03a_P_LnFD_reco_APID_1e_cut_FD_ZOOMOUT", 0,
+                                                          15., numTH1Dbins_Mom_eff_Plots);
+    // all nFD:
+    hPlot1D hP_nFD_reco_APID_1e_cut_FD = hPlot1D("1e cut", "FD", "Reco FD neutrons momentum APID", "FD neutrons momentum P^{reco}_{n} APID", "P^{reco}_{n} [GeV/c]",
+                                                 directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "03b_P_nFD_reco_APID_1e_cut_FD",
+                                                 Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_nFD_reco_APID_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "Reco FD neutrons momentum APID - ZOOMIN", "FD neutrons momentum P^{reco}_{n} APID - ZOOMIN",
+                                                        "P^{reco}_{n} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                        "03b_P_nFD_reco_APID_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_nFD_reco_APID_1e_cut_FD_ZOOMOUT = hPlot1D("1e cut", "FD", "Reco FD neutron momentum APID - ZOOMOUT", "FD neutrons momentum P^{reco}_{n} APID - ZOOMOUT",
+                                                         "P^{reco}_{n} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                         "03b_P_nFD_reco_APID_1e_cut_FD_ZOOMOUT", 0, 15., numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_piplus_reco_1e_cut = hPlot1D("1e cut", "CD & FD", "Reco #pi^{+} momentum", "#pi^{+} momentum P^{reco}_{#pi^{+}}", "P^{reco}_{#pi^{+}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "04_P_piplus_reco_1e_cut",
@@ -8793,17 +8790,15 @@ void EventAnalyser() {
 
         //<editor-fold desc="Neutral particles' identification (FD only)">
         /* Get FD neutrons and photons, according to the definitions: */
-        vector<int> FD_Neutrons, FD_Photons;                                                          // FD neutrons and photons to be set by definition
-        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons);                              // Get FD neutrons and photons, according to the definitions
-        // (ORIGINAL!)
+        vector<int> FD_Neutrons, FD_Photons; // FD neutrons and photons to be set by definition
+        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons); // Get FD neutrons and photons, according to the definitions (ORIGINAL!)
 //        FDNeutralParticle(allParticles, electrons, FD_Neutrons, FD_Photons, Neutron_veto_cut, beamE);      // Get FD neutrons and photons, according to the definitions
         int NeutronsFD_ind_max = FDNeutralMaxP(allParticles, FD_Neutrons, apply_nucleon_cuts); // FD neutron with maximal momentum
 
         /* Get FD neutrons and photons above momentum threshold: */
-        vector<int> NeutronsFD_ind, PhotonsFD_ind;                                                    // FD neutrons and photons by definition - within momentum th.
+        vector<int> NeutronsFD_ind, PhotonsFD_ind; // FD neutrons and photons by definition - within momentum th.
         FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_nucleon_cuts);
-        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts); // FD neutron (with momentum th.) with maximal momentum
-        // (ORIGINAL!)
+        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts); // FD neutron (with momentum th.) with maximal momentum (ORIGINAL!)
 //        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts, apply_nucleon_SmearAndShift, nRes); // FD neutron (with momentum th.) with maximal momentum after correction
 
         //<editor-fold desc="Counting events with good FD neutrons">
@@ -10465,9 +10460,9 @@ void EventAnalyser() {
                 bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max, Neutron_veto_cut.GetLowerCut());
 
                 if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
-                    hP_LnFD_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
-                    hP_LnFD_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
-                    hP_LnFD_reco_1e_cut_FD_ZOOMOUT.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_LnFD_reco_APID_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_LnFD_reco_APID_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_LnFD_reco_APID_1e_cut_FD_ZOOMOUT.hFill(NeutronMomentum_1e_cut, Weight);
                 }
             }
 
@@ -10480,9 +10475,9 @@ void EventAnalyser() {
                 bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
 
                 if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
-                    hP_nFD_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
-                    hP_nFD_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
-                    hP_nFD_reco_1e_cut_FD_ZOOMOUT.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_nFD_reco_APID_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_nFD_reco_APID_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_nFD_reco_APID_1e_cut_FD_ZOOMOUT.hFill(NeutronMomentum_1e_cut, Weight);
                 }
             }
 
@@ -10496,9 +10491,9 @@ void EventAnalyser() {
                 bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max, Neutron_veto_cut.GetLowerCut());
 
                 if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
-                    hP_LnFD_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
-                    hP_LnFD_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
-                    hP_LnFD_reco_1e_cut_FD_ZOOMOUT.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_LnFD_reco_APID_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_LnFD_reco_APID_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
+                    hP_LnFD_reco_APID_1e_cut_FD_ZOOMOUT.hFill(NeutronMomentum_1e_cut, Weight);
                 }
             } else {
                 for (int &i: NeutronsFD_ind) {
@@ -10510,9 +10505,9 @@ void EventAnalyser() {
                     bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
 
                     if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
-                        hP_nFD_reco_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
-                        hP_nFD_reco_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
-                        hP_nFD_reco_1e_cut_FD_ZOOMOUT.hFill(NeutronMomentum_1e_cut, Weight);
+                        hP_nFD_reco_APID_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
+                        hP_nFD_reco_APID_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
+                        hP_nFD_reco_APID_1e_cut_FD_ZOOMOUT.hFill(NeutronMomentum_1e_cut, Weight);
                     }
                 }
             }
@@ -15598,12 +15593,12 @@ void EventAnalyser() {
         hP_p_reco_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_p_reco_1e_cut_CD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 
-        hP_LnFD_reco_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
-        hP_LnFD_reco_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
-        hP_LnFD_reco_1e_cut_FD_ZOOMOUT.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
-        hP_nFD_reco_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
-        hP_nFD_reco_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
-        hP_nFD_reco_1e_cut_FD_ZOOMOUT.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hP_LnFD_reco_APID_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hP_LnFD_reco_APID_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hP_LnFD_reco_APID_1e_cut_FD_ZOOMOUT.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hP_nFD_reco_APID_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hP_nFD_reco_APID_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hP_nFD_reco_APID_1e_cut_FD_ZOOMOUT.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 
         hP_piplus_reco_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_piplus_reco_1e_cut_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
@@ -19858,11 +19853,11 @@ void EventAnalyser() {
         hP_nFD_truth_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
 
         if (ZoomIn_On_mom_th_plots) {
-            DrawAndSaveEfficiencyPlots(SampleName, hP_LnFD_truth_1e_cut_FD_ZOOMIN, hP_LnFD_reco_1e_cut_FD_ZOOMIN, plots);
-            DrawAndSaveEfficiencyPlots(SampleName, hP_nFD_truth_1e_cut_FD_ZOOMIN, hP_nFD_reco_1e_cut_FD_ZOOMIN, plots);
+            DrawAndSaveEfficiencyPlots(SampleName, hP_LnFD_truth_1e_cut_FD_ZOOMIN, hP_LnFD_reco_APID_1e_cut_FD_ZOOMIN, plots);
+            DrawAndSaveEfficiencyPlots(SampleName, hP_nFD_truth_1e_cut_FD_ZOOMIN, hP_nFD_reco_APID_1e_cut_FD_ZOOMIN, plots);
         } else {
-            DrawAndSaveEfficiencyPlots(SampleName, hP_LnFD_truth_1e_cut_FD, hP_LnFD_reco_1e_cut_FD, plots);
-            DrawAndSaveEfficiencyPlots(SampleName, hP_nFD_truth_1e_cut_FD, hP_nFD_reco_1e_cut_FD, plots);
+            DrawAndSaveEfficiencyPlots(SampleName, hP_LnFD_truth_1e_cut_FD, hP_LnFD_reco_APID_1e_cut_FD, plots);
+            DrawAndSaveEfficiencyPlots(SampleName, hP_nFD_truth_1e_cut_FD, hP_nFD_reco_APID_1e_cut_FD, plots);
         }
 
         hP_piplus_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);

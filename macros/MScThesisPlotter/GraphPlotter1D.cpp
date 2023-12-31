@@ -17,6 +17,7 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
+//#include "../../source/classes/hData/hData.cpp"
 #include "../../source/functions/GeneralFunctions.h"
 #include "../../source/constants.h"
 
@@ -65,11 +66,13 @@ double SetyOffset1D_(const bool &ShowStats) {
 void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char *filenameDir, const char *Graph1DName,
                     const string &SampleName, const string &SavePath, const string &SaveName) {
     cout << "\n\n";
+    hData utilities;
+
     const string Graph1DNameCopy = Graph1DName;
 
 //    HistogramCanvas->Clear();
-    TCanvas *c1 = new TCanvas("can1", "can2", 1000, 750); // normal res
-    c1->cd()->SetGrid(), c1->cd()->SetBottomMargin(0.14), c1->cd()->SetLeftMargin(0.18), c1->cd()->SetRightMargin(0.12), c1->cd();
+    TCanvas *c1 = new TCanvas("can1", "can2", utilities.GetStandardCanvasWidth(), utilities.GetStandardCanvasHeight()); // normal res
+    c1->cd()->SetGrid(), c1->cd()->SetBottomMargin(0.14), c1->cd()->SetLeftMargin(0.18), c1->cd()->SetRightMargin(0.12), c1->cd()->SetTopMargin(0.12), c1->cd();
 
     TFile *file = new TFile(filename);
     if (!file) { cout << "\nInvalid file! Exiting...\n", exit(0); }
