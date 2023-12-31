@@ -69,43 +69,43 @@ void process_events() {
                                                                    " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV; #omega = Ev - El [GeV]",
                                                                    100, 0, beamE * 1.1); // (e,eFD'pFD)X
 
-    TH1D *_1e1p0pizeroFD0phFD0cPiX_wPpth_wPphth_wPpi0th_wPcpith = new TH1D("#omega for 1e1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
+    TH1D *_1e1p0pizeroFD0phFD0cPiX_wPpth_wPphth_wPpi0th_wKCpith = new TH1D("#omega for 1e1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
                                                                            " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV",
                                                                            "#omega for 1e1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
                                                                            " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV;"
                                                                            " #omega = Ev - El [GeV]", 100, 0, beamE * 1.1); // (e,e'p)
-    TH1D *_1eFD1p0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith = new TH1D("#omega for 1e{FD}1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
+    TH1D *_1eFD1p0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith = new TH1D("#omega for 1e{FD}1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
                                                                             " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV",
                                                                             "#omega for 1e{FD}1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
                                                                             " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV;"
                                                                             " #omega = Ev - El [GeV]", 100, 0, beamE * 1.1); // (e,e'FDp)X
-    TH1D *_1e1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith = new TH1D("#omega for 1e1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
+    TH1D *_1e1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith = new TH1D("#omega for 1e1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
                                                                             " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV",
                                                                             "#omega for 1e1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
                                                                             " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV;"
                                                                             " #omega = Ev - El [GeV]", 100, 0, beamE * 1.1); // (e,e'pFD)X
-    TH1D *_1eFD1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith = new TH1D("#omega for 1e{FD}1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
+    TH1D *_1eFD1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith = new TH1D("#omega for 1e{FD}1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
                                                                               " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV",
                                                                               "#omega for 1e{FD}1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}X"
                                                                               " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV;"
                                                                               " #omega = Ev - El [GeV]", 100, 0, beamE * 1.1); // (e,eFD'pFD)X
 
-    TH1D *f_1e1p0pizeroFD0phFD0cPiXn_wPpth_wPphth_wPpi0th_wPcpith = new TH1D("#omega for 1e1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
+    TH1D *f_1e1p0pizeroFD0phFD0cPiXn_wPpth_wPphth_wPpi0th_wKCpith = new TH1D("#omega for 1e1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
                                                                              " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV",
                                                                              "#omega for 1e1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
                                                                              " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV;"
                                                                              " #omega = Ev - El [GeV]", 100, 0, beamE * 1.1); // (e,e'p)
-    TH1D *f_1eFD1p0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith = new TH1D("#omega for 1e{FD}1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
+    TH1D *f_1eFD1p0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith = new TH1D("#omega for 1e{FD}1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
                                                                               " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV",
                                                                               "#omega for 1e{FD}1p0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
                                                                               " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV;"
                                                                               " #omega = Ev - El [GeV]", 100, 0, beamE * 1.1); // (e,e'FDp)X
-    TH1D *f_1e1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith = new TH1D("#omega for 1e1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
+    TH1D *f_1e1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith = new TH1D("#omega for 1e1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
                                                                               " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV",
                                                                               "#omega for 1e1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
                                                                               " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV;"
                                                                               " #omega = Ev - El [GeV]", 100, 0, beamE * 1.1); // (e,e'pFD)X
-    TH1D *f_1eFD1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith = new TH1D("#omega for 1e{FD}1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
+    TH1D *f_1eFD1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith = new TH1D("#omega for 1e{FD}1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
                                                                                 " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV",
                                                                                 "#omega for 1e{FD}1p{FD}0#pi^{0}{FD}0#gamma{FD}0#pi^{#pm}Xn"
                                                                                 " w/P_{p}#geq0.3, P_{#pi^{0}}#geq0.58, P_{#gamma}#geq0.3 GeV, P_{#pi^{#pm}}#geq0.2 GeV;"
@@ -529,18 +529,18 @@ void process_events() {
 
             //<editor-fold desc="1e1p w/ P_p, P_ph, P_pi0 and P_cPi th. plots">
             if (numOfPi0_mom_FD == 0 && numOfPh_mom_FD == 0 && numOfPim_mom == 0 && numOfPip_mom == 0) {
-                _1e1p0pizeroFD0phFD0cPiX_wPpth_wPphth_wPpi0th_wPcpith->Fill(omega); // omega for (e,e'p)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
+                _1e1p0pizeroFD0phFD0cPiX_wPpth_wPphth_wPpi0th_wKCpith->Fill(omega); // omega for (e,e'p)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
 
                 if (lp_in_FD) {
-                    _1eFD1p0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith->Fill(omega); // omega for (e,e'FDp)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
+                    _1eFD1p0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith->Fill(omega); // omega for (e,e'FDp)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
                 }
 
                 if (p_mom_in_FD) {
-                    _1e1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith->Fill(omega); // omega for (e,e'pFD)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
+                    _1e1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith->Fill(omega); // omega for (e,e'pFD)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
                 }
 
                 if (lp_in_FD && p_mom_in_FD) {
-                    _1eFD1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith->Fill(omega); // omega for (e,eFD'pFD)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
+                    _1eFD1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith->Fill(omega); // omega for (e,eFD'pFD)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
                 }
             }
             //</editor-fold>
@@ -548,18 +548,18 @@ void process_events() {
             //<editor-fold desc="1e1p w/ P_p, P_ph, P_pi0 and P_cPi th. plots">
             if ((numOfPi0_mom_FD == 0 && numOfPh_mom_FD == 0 && numOfPim_mom == 0 && numOfPip_mom == 0) &&
                 nf == nfp + nfpi0 + nfpip + nfpim + nfn + numOfPh) {
-                f_1e1p0pizeroFD0phFD0cPiXn_wPpth_wPphth_wPpi0th_wPcpith->Fill(omega); // omega for (e,e'p)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
+                f_1e1p0pizeroFD0phFD0cPiXn_wPpth_wPphth_wPpi0th_wKCpith->Fill(omega); // omega for (e,e'p)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
 
                 if (lp_in_FD) {
-                    f_1eFD1p0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith->Fill(omega); // omega for (e,e'FDp)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
+                    f_1eFD1p0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith->Fill(omega); // omega for (e,e'FDp)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
                 }
 
                 if (p_mom_in_FD) {
-                    f_1e1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith->Fill(omega); // omega for (e,e'pFD)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
+                    f_1e1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith->Fill(omega); // omega for (e,e'pFD)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
                 }
 
                 if (lp_in_FD && p_mom_in_FD) {
-                    f_1eFD1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith->Fill(omega); // omega for (e,eFD'pFD)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
+                    f_1eFD1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith->Fill(omega); // omega for (e,eFD'pFD)X w/P_{p}#geq0.3 GeV & no FD #pi^{0},#gamma
                 }
             }
             //</editor-fold>
@@ -640,36 +640,36 @@ void process_events() {
     c1->SaveAs("TL_plots/14_1eFD1pFD0pizeroFD0phFDX_wPpth_wPphth_wPpi0th.png");
     c1->Clear();
 
-    _1e1p0pizeroFD0phFD0cPiX_wPpth_wPphth_wPpi0th_wPcpith->Draw();
-    c1->SaveAs("TL_plots/15_1e1p0pizeroFD0phFD0cPiX_wPpth_wPphth_wPpi0th_wPcpith.png");
+    _1e1p0pizeroFD0phFD0cPiX_wPpth_wPphth_wPpi0th_wKCpith->Draw();
+    c1->SaveAs("TL_plots/15_1e1p0pizeroFD0phFD0cPiX_wPpth_wPphth_wPpi0th_wKCpith.png");
     c1->Clear();
 
-    _1eFD1p0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith->Draw();
-    c1->SaveAs("TL_plots/16_1eFD1p0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith.png");
+    _1eFD1p0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith->Draw();
+    c1->SaveAs("TL_plots/16_1eFD1p0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith.png");
     c1->Clear();
 
-    _1e1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith->Draw();
-    c1->SaveAs("TL_plots/17_1e1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith.png");
+    _1e1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith->Draw();
+    c1->SaveAs("TL_plots/17_1e1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith.png");
     c1->Clear();
 
-    _1eFD1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith->Draw();
-    c1->SaveAs("TL_plots/18_1eFD1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wPcpith.png");
+    _1eFD1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith->Draw();
+    c1->SaveAs("TL_plots/18_1eFD1pFD0pizeroFD0phFDcPiX_wPpth_wPphth_wPpi0th_wKCpith.png");
     c1->Clear();
 
-    f_1e1p0pizeroFD0phFD0cPiXn_wPpth_wPphth_wPpi0th_wPcpith->Draw();
-    c1->SaveAs("TL_plots/19_1e1p0pizeroFD0phFD0cPiXn_wPpth_wPphth_wPpi0th_wPcpith.png");
+    f_1e1p0pizeroFD0phFD0cPiXn_wPpth_wPphth_wPpi0th_wKCpith->Draw();
+    c1->SaveAs("TL_plots/19_1e1p0pizeroFD0phFD0cPiXn_wPpth_wPphth_wPpi0th_wKCpith.png");
     c1->Clear();
 
-    f_1eFD1p0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith->Draw();
-    c1->SaveAs("TL_plots/20_1eFD1p0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith.png");
+    f_1eFD1p0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith->Draw();
+    c1->SaveAs("TL_plots/20_1eFD1p0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith.png");
     c1->Clear();
 
-    f_1e1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith->Draw();
-    c1->SaveAs("TL_plots/21_1e1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith.png");
+    f_1e1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith->Draw();
+    c1->SaveAs("TL_plots/21_1e1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith.png");
     c1->Clear();
 
-    f_1eFD1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith->Draw();
-    c1->SaveAs("TL_plots/22_1eFD1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wPcpith.png");
+    f_1eFD1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith->Draw();
+    c1->SaveAs("TL_plots/22_1eFD1pFD0pizeroFD0phFDcPiXn_wPpth_wPphth_wPpi0th_wKCpith.png");
     c1->Clear();
 
     cout << "\n\nFinished!\n\n";

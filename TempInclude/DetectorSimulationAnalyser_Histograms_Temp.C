@@ -165,8 +165,8 @@ void EventAnalyser() {
     bool Calculate_momResS2 = false;     // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;      // 1st momResS1 w/ VaryingDelta = false
-    const string SmearMode = "pol1_wPC";
-    const string CorrMode = "pol1_wPC";
+    const string SmearMode = "pol1_wKC";
+    const string CorrMode = "pol1_wKC";
     bool nRes_test = false;              // false by default
     bool Run_in_momResS2 = true;         // Smear w/ momResS2 & correct w/ momResS1
     //</editor-fold>

@@ -836,22 +836,22 @@ void MScThesisPlotter() {
 
     //<editor-fold desc="momRes">
     /* Mean fit before correction */
-    GraphPlotter1D(MScThesisPlots, plots_nResS1_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wPC",
-                   SampleName, MomResS1FolderSim, "01_g_Std_pol1_wPC");
-    GraphPlotter1D(MScThesisPlots, plots_nResS1_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wPC",
-                   SampleName, MomResS1FolderSim, "02_g_Corr_pol1_wPC_Important"); // Important! (correction!)
+    GraphPlotter1D(MScThesisPlots, plots_nResS1_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wKC",
+                   SampleName, MomResS1FolderSim, "01_g_Std_pol1_wKC");
+    GraphPlotter1D(MScThesisPlots, plots_nResS1_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wKC",
+                   SampleName, MomResS1FolderSim, "02_g_Corr_pol1_wKC_Important"); // Important! (correction!)
 
     /* Width fit after correction */
-    GraphPlotter1D(MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wPC",
-                   SampleName, MomResS2FolderSim, "01_g_Std_pol1_wPC_Important"); // Important! (smearing!)
-    GraphPlotter1D(MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wPC",
-                   SampleName, MomResS2FolderSim, "02_g_Corr_pol1_wPC");
+    GraphPlotter1D(MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wKC",
+                   SampleName, MomResS2FolderSim, "01_g_Std_pol1_wKC_Important"); // Important! (smearing!)
+    GraphPlotter1D(MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wKC",
+                   SampleName, MomResS2FolderSim, "02_g_Corr_pol1_wKC");
 
 //    /* momRes test */
-//    GraphPlotter1D(c, MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wPC",
-//                   SampleName, MomResS2FolderSim, "01_g_Std_pol1_wPC"); // Important!
-//    GraphPlotter1D(c, MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wPC",
-//                   SampleName, MomResS2FolderSim, "02_g_Corr_pol1_wPC");
+//    GraphPlotter1D(c, MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wKC",
+//                   SampleName, MomResS2FolderSim, "01_g_Std_pol1_wKC"); // Important!
+//    GraphPlotter1D(c, MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wKC",
+//                   SampleName, MomResS2FolderSim, "02_g_Corr_pol1_wKC");
     //</editor-fold>
 
 //    //TODO: figure out where to save these!

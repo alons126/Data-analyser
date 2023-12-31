@@ -83,56 +83,56 @@ private:
 
     double A_Corr_pol1, A_Corr_pol1_Error, B_Corr_pol1, B_Corr_pol1_Error;
     double ChiSquare_Corr_pol1, NDF_Corr_pol1;
-    double A_Corr_pol1_wPC, A_Corr_pol1_wPC_Error, B_Corr_pol1_wPC, B_Corr_pol1_wPC_Error;
-    double ChiSquare_Corr_pol1_wPC, NDF_Corr_pol1_wPC;
+    double A_Corr_pol1_wKC, A_Corr_pol1_wKC_Error, B_Corr_pol1_wKC, B_Corr_pol1_wKC_Error;
+    double ChiSquare_Corr_pol1_wKC, NDF_Corr_pol1_wKC;
 
     double A_Corr_pol2, A_Corr_pol2_Error, B_Corr_pol2, B_Corr_pol2_Error, C_Corr_pol2, C_Corr_pol2_Error;
     double ChiSquare_Corr_pol2, NDF_Corr_pol2;
-    double A_Corr_pol2_wPC, A_Corr_pol2_wPC_Error, B_Corr_pol2_wPC, B_Corr_pol2_wPC_Error, C_Corr_pol2_wPC, C_Corr_pol2_wPC_Error;
-    double ChiSquare_Corr_pol2_wPC, NDF_Corr_pol2_wPC;
+    double A_Corr_pol2_wKC, A_Corr_pol2_wKC_Error, B_Corr_pol2_wKC, B_Corr_pol2_wKC_Error, C_Corr_pol2_wKC, C_Corr_pol2_wKC_Error;
+    double ChiSquare_Corr_pol2_wKC, NDF_Corr_pol2_wKC;
 
     double A_Corr_pol3, A_Corr_pol3_Error, B_Corr_pol3, B_Corr_pol3_Error, C_Corr_pol3, C_Corr_pol3_Error, D_Corr_pol3, D_Corr_pol3_Error;
     double ChiSquare_Corr_pol3, NDF_Corr_pol3;
-    double A_Corr_pol3_wPC, A_Corr_pol3_wPC_Error, B_Corr_pol3_wPC, B_Corr_pol3_wPC_Error, C_Corr_pol3_wPC, C_Corr_pol3_wPC_Error, D_Corr_pol3_wPC, D_Corr_pol3_wPC_Error;
-    double ChiSquare_Corr_pol3_wPC, NDF_Corr_pol3_wPC;
+    double A_Corr_pol3_wKC, A_Corr_pol3_wKC_Error, B_Corr_pol3_wKC, B_Corr_pol3_wKC_Error, C_Corr_pol3_wKC, C_Corr_pol3_wKC_Error, D_Corr_pol3_wKC, D_Corr_pol3_wKC_Error;
+    double ChiSquare_Corr_pol3_wKC, NDF_Corr_pol3_wKC;
 
     double A_Std_pol1, A_Std_pol1_Error, B_Std_pol1, B_Std_pol1_Error;
     double ChiSquare_Std_pol1, NDF_Std_pol1;
-    double A_Std_pol1_wPC, A_Std_pol1_wPC_Error, B_Std_pol1_wPC, B_Std_pol1_wPC_Error;
-    double ChiSquare_Std_pol1_wPC, NDF_Std_pol1_wPC;
+    double A_Std_pol1_wKC, A_Std_pol1_wKC_Error, B_Std_pol1_wKC, B_Std_pol1_wKC_Error;
+    double ChiSquare_Std_pol1_wKC, NDF_Std_pol1_wKC;
 
     double A_Std_pol2, A_Std_pol2_Error, B_Std_pol2, B_Std_pol2_Error, C_Std_pol2, C_Std_pol2_Error;
     double ChiSquare_Std_pol2, NDF_Std_pol2;
-    double A_Std_pol2_wPC, A_Std_pol2_wPC_Error, B_Std_pol2_wPC, B_Std_pol2_wPC_Error, C_Std_pol2_wPC, C_Std_pol2_wPC_Error;
-    double ChiSquare_Std_pol2_wPC, NDF_Std_pol2_wPC;
+    double A_Std_pol2_wKC, A_Std_pol2_wKC_Error, B_Std_pol2_wKC, B_Std_pol2_wKC_Error, C_Std_pol2_wKC, C_Std_pol2_wKC_Error;
+    double ChiSquare_Std_pol2_wKC, NDF_Std_pol2_wKC;
 
     double A_Std_pol3, A_Std_pol3_Error, B_Std_pol3, B_Std_pol3_Error, C_Std_pol3, C_Std_pol3_Error, D_Std_pol3, D_Std_pol3_Error;
     double ChiSquare_Std_pol3, NDF_Std_pol3;
-    double A_Std_pol3_wPC, A_Std_pol3_wPC_Error, B_Std_pol3_wPC, B_Std_pol3_wPC_Error, C_Std_pol3_wPC, C_Std_pol3_wPC_Error, D_Std_pol3_wPC, D_Std_pol3_wPC_Error;
-    double ChiSquare_Std_pol3_wPC, NDF_Std_pol3_wPC;
+    double A_Std_pol3_wKC, A_Std_pol3_wKC_Error, B_Std_pol3_wKC, B_Std_pol3_wKC_Error, C_Std_pol3_wKC, C_Std_pol3_wKC_Error, D_Std_pol3_wKC, D_Std_pol3_wKC_Error;
+    double ChiSquare_Std_pol3_wKC, NDF_Std_pol3_wKC;
     //</editor-fold>
 
     //<editor-fold desc="Loaded correction and smear fit variables">
     double Loaded_A_Std_pol1, Loaded_B_Std_pol1;
     double Loaded_A_Std_pol1_Error, Loaded_B_Std_pol1_Error;
     double Loaded_ChiSquare_Std_pol1, Loaded_NDF_Std_pol1;
-    double Loaded_A_Std_pol1_wPC, Loaded_B_Std_pol1_wPC;
-    double Loaded_A_Std_pol1_wPC_Error, Loaded_B_Std_pol1_wPC_Error;
-    double Loaded_ChiSquare_Std_pol1_wPC, Loaded_NDF_Std_pol1_wPC;
+    double Loaded_A_Std_pol1_wKC, Loaded_B_Std_pol1_wKC;
+    double Loaded_A_Std_pol1_wKC_Error, Loaded_B_Std_pol1_wKC_Error;
+    double Loaded_ChiSquare_Std_pol1_wKC, Loaded_NDF_Std_pol1_wKC;
 
     double Loaded_A_Std_pol2, Loaded_B_Std_pol2, Loaded_C_Std_pol2;
     double Loaded_A_Std_pol2_Error, Loaded_B_Std_pol2_Error, Loaded_C_Std_pol2_Error;
     double Loaded_ChiSquare_Std_pol2, Loaded_NDF_Std_pol2;
-    double Loaded_A_Std_pol2_wPC, Loaded_B_Std_pol2_wPC, Loaded_C_Std_pol2_wPC;
-    double Loaded_A_Std_pol2_wPC_Error, Loaded_B_Std_pol2_wPC_Error, Loaded_C_Std_pol2_wPC_Error;
-    double Loaded_ChiSquare_Std_pol2_wPC, Loaded_NDF_Std_pol2_wPC;
+    double Loaded_A_Std_pol2_wKC, Loaded_B_Std_pol2_wKC, Loaded_C_Std_pol2_wKC;
+    double Loaded_A_Std_pol2_wKC_Error, Loaded_B_Std_pol2_wKC_Error, Loaded_C_Std_pol2_wKC_Error;
+    double Loaded_ChiSquare_Std_pol2_wKC, Loaded_NDF_Std_pol2_wKC;
 
     double Loaded_A_Std_pol3, Loaded_B_Std_pol3, Loaded_C_Std_pol3, Loaded_D_Std_pol3;
     double Loaded_A_Std_pol3_Error, Loaded_B_Std_pol3_Error, Loaded_C_Std_pol3_Error, Loaded_D_Std_pol3_Error;
     double Loaded_ChiSquare_Std_pol3, Loaded_NDF_Std_pol3;
-    double Loaded_A_Std_pol3_wPC, Loaded_B_Std_pol3_wPC, Loaded_C_Std_pol3_wPC, Loaded_D_Std_pol3_wPC;
-    double Loaded_A_Std_pol3_wPC_Error, Loaded_B_Std_pol3_wPC_Error, Loaded_C_Std_pol3_wPC_Error, Loaded_D_Std_pol3_wPC_Error;
-    double Loaded_ChiSquare_Std_pol3_wPC, Loaded_NDF_Std_pol3_wPC;
+    double Loaded_A_Std_pol3_wKC, Loaded_B_Std_pol3_wKC, Loaded_C_Std_pol3_wKC, Loaded_D_Std_pol3_wKC;
+    double Loaded_A_Std_pol3_wKC_Error, Loaded_B_Std_pol3_wKC_Error, Loaded_C_Std_pol3_wKC_Error, Loaded_D_Std_pol3_wKC_Error;
+    double Loaded_ChiSquare_Std_pol3_wKC, Loaded_NDF_Std_pol3_wKC;
 
     string Loaded_Std_coefficients_path;
     vector<double> Loaded_Std_coefficients_values;
@@ -141,23 +141,23 @@ private:
     double Loaded_A_Corr_pol1, Loaded_B_Corr_pol1;
     double Loaded_A_Corr_pol1_Error, Loaded_B_Corr_pol1_Error;
     double Loaded_ChiSquare_Corr_pol1, Loaded_NDF_Corr_pol1;
-    double Loaded_A_Corr_pol1_wPC, Loaded_B_Corr_pol1_wPC;
-    double Loaded_A_Corr_pol1_wPC_Error, Loaded_B_Corr_pol1_wPC_Error;
-    double Loaded_ChiSquare_Corr_pol1_wPC, Loaded_NDF_Corr_pol1_wPC;
+    double Loaded_A_Corr_pol1_wKC, Loaded_B_Corr_pol1_wKC;
+    double Loaded_A_Corr_pol1_wKC_Error, Loaded_B_Corr_pol1_wKC_Error;
+    double Loaded_ChiSquare_Corr_pol1_wKC, Loaded_NDF_Corr_pol1_wKC;
 
     double Loaded_A_Corr_pol2, Loaded_B_Corr_pol2, Loaded_C_Corr_pol2;
     double Loaded_A_Corr_pol2_Error, Loaded_B_Corr_pol2_Error, Loaded_C_Corr_pol2_Error;
     double Loaded_ChiSquare_Corr_pol2, Loaded_NDF_Corr_pol2;
-    double Loaded_A_Corr_pol2_wPC, Loaded_B_Corr_pol2_wPC, Loaded_C_Corr_pol2_wPC;
-    double Loaded_A_Corr_pol2_wPC_Error, Loaded_B_Corr_pol2_wPC_Error, Loaded_C_Corr_pol2_wPC_Error;
-    double Loaded_ChiSquare_Corr_pol2_wPC, Loaded_NDF_Corr_pol2_wPC;
+    double Loaded_A_Corr_pol2_wKC, Loaded_B_Corr_pol2_wKC, Loaded_C_Corr_pol2_wKC;
+    double Loaded_A_Corr_pol2_wKC_Error, Loaded_B_Corr_pol2_wKC_Error, Loaded_C_Corr_pol2_wKC_Error;
+    double Loaded_ChiSquare_Corr_pol2_wKC, Loaded_NDF_Corr_pol2_wKC;
 
     double Loaded_A_Corr_pol3, Loaded_B_Corr_pol3, Loaded_C_Corr_pol3, Loaded_D_Corr_pol3;
     double Loaded_A_Corr_pol3_Error, Loaded_B_Corr_pol3_Error, Loaded_C_Corr_pol3_Error, Loaded_D_Corr_pol3_Error;
     double Loaded_ChiSquare_Corr_pol3, Loaded_NDF_Corr_pol3;
-    double Loaded_A_Corr_pol3_wPC, Loaded_B_Corr_pol3_wPC, Loaded_C_Corr_pol3_wPC, Loaded_D_Corr_pol3_wPC;
-    double Loaded_A_Corr_pol3_wPC_Error, Loaded_B_Corr_pol3_wPC_Error, Loaded_C_Corr_pol3_wPC_Error, Loaded_D_Corr_pol3_wPC_Error;
-    double Loaded_ChiSquare_Corr_pol3_wPC, Loaded_NDF_Corr_pol3_wPC;
+    double Loaded_A_Corr_pol3_wKC, Loaded_B_Corr_pol3_wKC, Loaded_C_Corr_pol3_wKC, Loaded_D_Corr_pol3_wKC;
+    double Loaded_A_Corr_pol3_wKC_Error, Loaded_B_Corr_pol3_wKC_Error, Loaded_C_Corr_pol3_wKC_Error, Loaded_D_Corr_pol3_wKC_Error;
+    double Loaded_ChiSquare_Corr_pol3_wKC, Loaded_NDF_Corr_pol3_wKC;
 
     string Loaded_Corr_coefficients_path;
     vector<double> Loaded_Corr_coefficients_values;
@@ -200,27 +200,27 @@ public:
 
     void Fitter_Std_pol1();
 
-    void Fitter_Std_pol1_wPC();
+    void Fitter_Std_pol1_wKC();
 
     void Fitter_Std_pol2();
 
-    void Fitter_Std_pol2_wPC();
+    void Fitter_Std_pol2_wKC();
 
     void Fitter_Std_pol3();
 
-    void Fitter_Std_pol3_wPC();
+    void Fitter_Std_pol3_wKC();
 
     void Fitter_Corr_pol1();
 
-    void Fitter_Corr_pol1_wPC();
+    void Fitter_Corr_pol1_wKC();
 
     void Fitter_Corr_pol2();
 
-    void Fitter_Corr_pol2_wPC();
+    void Fitter_Corr_pol2_wKC();
 
     void Fitter_Corr_pol3();
 
-    void Fitter_Corr_pol3_wPC();
+    void Fitter_Corr_pol3_wKC();
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 

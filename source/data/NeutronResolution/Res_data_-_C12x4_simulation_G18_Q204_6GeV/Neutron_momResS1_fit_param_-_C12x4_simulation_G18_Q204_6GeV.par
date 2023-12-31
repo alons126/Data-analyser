@@ -49,12 +49,12 @@ B_Corr_pol1_Error			0.122823
 ChiSquare_Corr_pol1			1.43678
 NDF_Corr_pol1				24
 
-A_Corr_pol1_wPC				0.140893
-A_Corr_pol1_wPC_Error		0.103186
-B_Corr_pol1_wPC				-0.229027
-B_Corr_pol1_wPC_Error		0.187398
-ChiSquare_Corr_pol1_wPC		1.16058
-NDF_Corr_pol1_wPC			19
+A_Corr_pol1_wKC				0.140893
+A_Corr_pol1_wKC_Error		0.103186
+B_Corr_pol1_wKC				-0.229027
+B_Corr_pol1_wKC_Error		0.187398
+ChiSquare_Corr_pol1_wKC		1.16058
+NDF_Corr_pol1_wKC			19
 
 A_Corr_pol2					-0.00874208
 A_Corr_pol2_Error			0.0786875
@@ -65,14 +65,14 @@ C_Corr_pol2_Error			0.270155
 ChiSquare_Corr_pol2			1.43601
 NDF_Corr_pol2				23
 
-A_Corr_pol2_wPC				-0.134519
-A_Corr_pol2_wPC_Error		0.205435
-B_Corr_pol2_wPC				0.649241
-B_Corr_pol2_wPC_Error		0.783376
-C_Corr_pol2_wPC				-0.669506
-C_Corr_pol2_wPC_Error		0.699082
-ChiSquare_Corr_pol2_wPC		1.13357
-NDF_Corr_pol2_wPC			18
+A_Corr_pol2_wKC				-0.134519
+A_Corr_pol2_wKC_Error		0.205435
+B_Corr_pol2_wKC				0.649241
+B_Corr_pol2_wKC_Error		0.783376
+C_Corr_pol2_wKC				-0.669506
+C_Corr_pol2_wKC_Error		0.699082
+ChiSquare_Corr_pol2_wKC		1.13357
+NDF_Corr_pol2_wKC			18
 
 A_Corr_pol3					0.0231439
 A_Corr_pol3_Error			0.0930336
@@ -85,16 +85,16 @@ D_Corr_pol3_Error			0.55849
 ChiSquare_Corr_pol3			1.43199
 NDF_Corr_pol3				22
 
-A_Corr_pol3_wPC				0.795146
-A_Corr_pol3_wPC_Error		0.354693
-B_Corr_pol3_wPC				-4.71893
-B_Corr_pol3_wPC_Error		2.0534
-C_Corr_pol3_wPC				9.01522
-C_Corr_pol3_wPC_Error		3.79844
-D_Corr_pol3_wPC				-5.48196
-D_Corr_pol3_wPC_Error		2.2378
-ChiSquare_Corr_pol3_wPC		0.874961
-NDF_Corr_pol3_wPC			17
+A_Corr_pol3_wKC				0.795146
+A_Corr_pol3_wKC_Error		0.354693
+B_Corr_pol3_wKC				-4.71893
+B_Corr_pol3_wKC_Error		2.0534
+C_Corr_pol3_wKC				9.01522
+C_Corr_pol3_wKC_Error		3.79844
+D_Corr_pol3_wKC				-5.48196
+D_Corr_pol3_wKC_Error		2.2378
+ChiSquare_Corr_pol3_wKC		0.874961
+NDF_Corr_pol3_wKC			17
 
 A_Std_pol1					0.0445148
 A_Std_pol1_Error			0.0318887
@@ -103,12 +103,12 @@ B_Std_pol1_Error			0.0572256
 ChiSquare_Std_pol1			0.311897
 NDF_Std_pol1				24
 
-A_Std_pol1_wPC				0.0372362
-A_Std_pol1_wPC_Error		0.0473031
-B_Std_pol1_wPC				0.176715
-B_Std_pol1_wPC_Error		0.0859083
-ChiSquare_Std_pol1_wPC		0.243902
-NDF_Std_pol1_wPC			19
+A_Std_pol1_wKC				0.0372362
+A_Std_pol1_wKC_Error		0.0473031
+B_Std_pol1_wKC				0.176715
+B_Std_pol1_wKC_Error		0.0859083
+ChiSquare_Std_pol1_wKC		0.243902
+NDF_Std_pol1_wKC			19
 
 A_Std_pol2					-0.0261463
 A_Std_pol2_Error			0.0362643
@@ -119,14 +119,14 @@ C_Std_pol2_Error			0.124505
 ChiSquare_Std_pol2			0.305004
 NDF_Std_pol2				23
 
-A_Std_pol2_wPC				-0.167933
-A_Std_pol2_wPC_Error		0.0866822
-B_Std_pol2_wPC				0.671856
-B_Std_pol2_wPC_Error		0.330542
-C_Std_pol2_wPC				-0.373176
-C_Std_pol2_wPC_Error		0.294974
-ChiSquare_Std_pol2_wPC		0.201819
-NDF_Std_pol2_wPC			18
+A_Std_pol2_wKC				-0.167933
+A_Std_pol2_wKC_Error		0.0866822
+B_Std_pol2_wKC				0.671856
+B_Std_pol2_wKC_Error		0.330542
+C_Std_pol2_wKC				-0.373176
+C_Std_pol2_wKC_Error		0.294974
+ChiSquare_Std_pol2_wKC		0.201819
+NDF_Std_pol2_wKC			18
 
 A_Std_pol3					0.0268621
 A_Std_pol3_Error			0.0425525
@@ -139,14 +139,14 @@ D_Std_pol3_Error			0.255447
 ChiSquare_Std_pol3			0.299577
 NDF_Std_pol3				22
 
-A_Std_pol3_wPC				-0.189176
-A_Std_pol3_wPC_Error		0.16407
-B_Std_pol3_wPC				0.922759
-B_Std_pol3_wPC_Error		0.949835
-C_Std_pol3_wPC				-1.31852
-C_Std_pol3_wPC_Error		1.75703
-D_Std_pol3_wPC				0.771772
-D_Std_pol3_wPC_Error		1.03513
-ChiSquare_Std_pol3_wPC		0.187181
-NDF_Std_pol3_wPC			17
+A_Std_pol3_wKC				-0.189176
+A_Std_pol3_wKC_Error		0.16407
+B_Std_pol3_wKC				0.922759
+B_Std_pol3_wKC_Error		0.949835
+C_Std_pol3_wKC				-1.31852
+C_Std_pol3_wKC_Error		1.75703
+D_Std_pol3_wKC				0.771772
+D_Std_pol3_wKC_Error		1.03513
+ChiSquare_Std_pol3_wKC		0.187181
+NDF_Std_pol3_wKC			17
 
