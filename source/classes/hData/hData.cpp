@@ -360,6 +360,22 @@ string hData::GetFS(const string &Source) {
 }
 //</editor-fold>
 
+// GetTopology function -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetTopology function">
+string hData::GetTopology(const string &Source) {
+    string Topology;
+
+    if ((Source == "1p") || (Source == "1n")) {
+        Topology = "1N";
+    } else if ((Source == "pFDpCD") || (Source == "nFDpCD")) {
+        Topology = "2N";
+    }
+
+    return Topology;
+}
+//</editor-fold>
+
 // GetType function -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetType function">

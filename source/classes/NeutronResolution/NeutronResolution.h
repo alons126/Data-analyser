@@ -180,7 +180,7 @@ public:
 
     NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
                       const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
-                      const string &NeutronResolutionDirectory, const string &SavePath = "./", double DeltaSlices = 0.2, bool VaryingDelta = false,
+                      const string &NeutronResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2, const bool &VaryingDelta = false,
                       const string &SmearM = "pol1", const string &ShiftM = "pol1", bool nRes_test = false);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -193,11 +193,11 @@ public:
 
 // hFillResPlots function -----------------------------------------------------------------------------------------------------------------------------------------------
 
-    void hFillResPlots(double Momentum, double Resolution, double Weight);
+    void hFillResPlots(const double &Momentum, const double &Resolution, const double &Weight);
 
 // SliceFitDrawAndSave function -----------------------------------------------------------------------------------------------------------------------------------------
 
-    void SliceFitDrawAndSave(const string &SampleName, const string &Particle, double beamE);
+    void SliceFitDrawAndSave(const string &SampleName, const string &Particle, const double &beamE);
 
 // Fitter functions -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -251,11 +251,11 @@ public:
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    double PSmear(bool apply_nucleon_SmearAndCorr, double Momentum);
+    double PSmear(const bool &apply_nucleon_SmearAndCorr, const double &Momentum);
 
 // NCorr function -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    double NCorr(bool apply_nucleon_SmearAndCorr, double Momentum);
+    double NCorr(const bool &apply_nucleon_SmearAndCorr, const double &Momentum);
 
 // Other functions ------------------------------------------------------------------------------------------------------------------------------------------------------
 

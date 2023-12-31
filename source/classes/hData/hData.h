@@ -98,6 +98,10 @@ public:
 
     string GetFS(const string &Source);
 
+// GetTopology function -------------------------------------------------------------------------------------------------------------------------------------------------
+
+    string GetTopology(const string &Source);
+
 // Other get function ---------------------------------------------------------------------------------------------------------------------------------------------------
 
     int GetStandardCanvasWidth() { return StandardCanvasWidth; }

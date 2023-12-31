@@ -1,3 +1,4 @@
+
 ######################################################################
 # CLAS12 analysis cuts and parameters file (after nRes Gaussian fit) #
 ######################################################################
@@ -5,7 +6,7 @@
 # Proton resolution parameters are for:
 #sample:	C12x4_simulation_G18_Q204_6GeV
 #Analysis_run_mode:	NC_Eff1
-#momRes_calculation_mode:	Calculate momResS2
+#momRes_calculation_mode:	Calculate momResS1
 #delta:		0.05
 #Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
 

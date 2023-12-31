@@ -130,6 +130,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
     string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
     string FSRatioFS = Propeties.GetFS(FSRatioRecTitle);
+    string FSRatioFSTopology = Propeties.GetTopology(FSRatioRecTitle);
 
     string FSRatioXLabel = SetXAxisTitle(FSRatioRecTitle);
     string FSRatioYLabel = SetYAxisTitle("FSRatio", FSRatioFS, nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
@@ -148,7 +149,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
                      sNameFlag, FSRatio_plot_1D_SaveName, FSRatioDRegion, FSRatioFS);
     //</editor-fold>
 
-    TH1D *FSRatio_plot_1D = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());
+    TH1D *FSRatio_plot_1D = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio (" + FSRatioFSTopology + ")").c_str());
 
     string FSRatio_plot_1D_Name = FSRatio_plot_1D->GetName();
     string TFolder_Name = FSRatio_plot_1D_Name + " folder";

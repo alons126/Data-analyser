@@ -161,8 +161,8 @@ void EventAnalyser() {
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
-    bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
-    bool nRes_test = false; // false by default
+    bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
+    bool nRes_test = true; // false by default
     /*
     MomRes run order guide:
     1. momResS1 calculation 1:
@@ -859,7 +859,7 @@ void EventAnalyser() {
 
     /* Neutron resolution plots */
     int numTH1Dbins_nRes_Plots = numTH1Dbins_Ang_Plots;
-    int numTH2Dbins_nRes_Plots = numTH2Dbins_Nucleon_Ang_Plots;
+    int numTH2Dbins_nRes_Plots = numTH2Dbins_Nucleon_Ang_Plots * 4 / 3;
     //</editor-fold>
 
     //<editor-fold desc="Histogram limits">
@@ -9276,7 +9276,7 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Setting up basic TL event selection">
-            bool TL_Event_Selection_1e_cut = (TL_Event_Selection_1e_cut_AMaps && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1)) &&
+            bool TL_Event_Selection_1e_cut = (TL_Event_Selection_1e_cut_AMaps &&
                                               TL_ElectronFD_mom_ind.size() == TL_ElectronFD_wFC_mom_ind.size());     // One id. FD electron above momentum threshold
 //            bool TL_Event_Selection_1e_cut = (TL_Event_Selection_1e_cut_AMaps &&
 //                                              TL_ElectronFD_mom_ind.size() == TL_ElectronFD_wFC_mom_ind.size());     // One id. FD electron above momentum threshold
@@ -9433,7 +9433,7 @@ void EventAnalyser() {
                             hTheta_n_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_n_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if (n_inFD) {
+                            if (n_inFD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) {
                                 hP_nFD_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
                                 hP_nFD_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
 
@@ -9551,12 +9551,12 @@ void EventAnalyser() {
                             hTheta_p_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_p_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if (inFD) {
+                            if (inFD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) {
                                 hP_p_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
                                 hP_p_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
                             }
 
-                            if (inCD) {
+                            if (inCD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) {
                                 hP_p_truth_1e_cut_CD.hFill(Particle_TL_Momentum, Weight);
                                 hP_p_truth_1e_cut_CD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
                             }
@@ -9719,7 +9719,7 @@ void EventAnalyser() {
                             hTheta_pip_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_pip_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if ((inCD || inFD)) {
+                            if ((inCD || inFD) && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) {
                                 hP_piplus_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                                 hP_piplus_truth_1e_cut_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
 
@@ -9830,7 +9830,7 @@ void EventAnalyser() {
                             hTheta_pim_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_pim_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if ((inCD || inFD)) {
+                            if ((inCD || inFD) && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) {
                                 hP_piminus_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                                 hP_piminus_truth_1e_cut_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
 
@@ -10001,7 +10001,7 @@ void EventAnalyser() {
                             hTheta_ph_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_ph_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if (inFD) {
+                            if (inFD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) {
                                 hP_ph_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
                                 hP_ph_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
                             }

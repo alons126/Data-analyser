@@ -11,8 +11,8 @@
 //<editor-fold desc="NeutronResolution constructor">
 NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
                                      const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
-                                     const string &NeutronResolutionDirectory, const string &SavePath, double DeltaSlices, bool VaryingDelta, const string &SmearM,
-                                     const string &CorrM, bool momRes_test) {
+                                     const string &NeutronResolutionDirectory, const string &SavePath, const double &DeltaSlices, const bool &VaryingDelta,
+                                     const string &SmearM, const string &CorrM, bool momRes_test) {
     SliceUpperMomLimPC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimPC = FD_nucleon_momentum_cut.GetLowerCutConst();
     momResS2CalcMode = Calculate_momResS2, momResS2RunMode = Run_in_momResS2;
     SlicesSavePath = SavePath;
@@ -314,7 +314,7 @@ void NeutronResolution::SetUpperMomCut(const string &SampleName, const string &N
 // hFillResPlots function -----------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="hFillResPlots function">
-void NeutronResolution::hFillResPlots(double Momentum, double Resolution, double Weight) {
+void NeutronResolution::hFillResPlots(const double &Momentum, const double &Resolution, const double &Weight) {
     bool Printout = false;
 
     for (int i = 0; i < NumberOfSlices; i++) {
@@ -346,7 +346,7 @@ Double_t CFitFunction(Double_t *v, Double_t *par) {
 }
 
 /* SliceFitDrawAndSave function for the fit */
-void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const string &Particle, double beamE) {
+void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const string &Particle, const double &beamE) {
     TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
     SliceFitCanvas->SetGrid();
     SliceFitCanvas->SetBottomMargin(0.14);
@@ -2774,7 +2774,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
 //<editor-fold desc="PSmear function">
 /* A function to smear protons by fitted neutron resolution */
 
-double NeutronResolution::PSmear(bool apply_nucleon_SmearAndCorr, double Momentum) {
+double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
     bool Printout = false;
 
     if (!apply_nucleon_SmearAndCorr) {
@@ -2864,7 +2864,7 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndCorr, double Momentu
 //<editor-fold desc="NCorr function">
 /* A function to correction (calibrate) neutron momentum by fitted neutron correction */
 
-double NeutronResolution::NCorr(bool apply_nucleon_SmearAndCorr, double Momentum) {
+double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
     bool Printout = false;
 
     if (!apply_nucleon_SmearAndCorr) {
