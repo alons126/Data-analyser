@@ -93,7 +93,7 @@ private:
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true;      // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wPC";
-    const string ShiftMode = "pol1_wPC";
+    const string CorrMode = "pol1_wPC";
     bool nRes_test = false;              // false by default
     bool Run_in_momResS2 = true;         // Smear w/ momResS2 & correct w/ momResS1
     //</editor-fold>
@@ -143,7 +143,7 @@ private:
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_nucleon_SmearAndCorr = false;
 
     //<editor-fold desc="Auto-disable variables">
     if (isData) { // no TL calculation, AMap,WMap generation nor nRes calculation when running on data
@@ -183,14 +183,14 @@ private:
     if (!apply_nucleon_cuts) { apply_nucleon_physical_cuts = false; }
 
     if (!apply_nucleon_physical_cuts) {
-        apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndShift = false;
+        apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndCorr = false;
     } else {
-        if (Calculate_momResS2) { apply_nucleon_SmearAndShift = true; }
+        if (Calculate_momResS2) { apply_nucleon_SmearAndCorr = true; }
     }
 
     if (Generate_AMaps) { apply_fiducial_cuts = false; }
 
-    if (!VaryingDelta) { apply_nucleon_SmearAndShift = false; }
+    if (!VaryingDelta) { apply_nucleon_SmearAndCorr = false; }
     //</editor-fold>
 
     //<editor-fold desc="Custom cuts naming">
@@ -221,7 +221,7 @@ private:
             }
         }
 
-        if (!apply_nucleon_SmearAndShift) {
+        if (!apply_nucleon_SmearAndCorr) {
             PSmearing_Status = "";
         } else {
             PSmearing_Status = "wNSaS_";
@@ -392,7 +392,7 @@ private:
     cout << "apply_fiducial_cuts:\t\t" << BoolToString(apply_fiducial_cuts) << "\n";
     cout << "apply_kinematical_cuts:\t\t" << BoolToString(apply_kinematical_cuts) << "\n";
     cout << "apply_kinematical_weights:\t" << BoolToString(apply_kinematical_weights) << "\n";
-    cout << "apply_nucleon_SmearAndShift:\t" << BoolToString(apply_nucleon_SmearAndShift) << "\n\n";
+    cout << "apply_nucleon_SmearAndCorr:\t" << BoolToString(apply_nucleon_SmearAndCorr) << "\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -1061,7 +1061,7 @@ private:
     if (!plot_and_fit_MomRes) { Calculate_momResS2 = false; }
 
     /* Comment to test smearing and shift */
-//    if (apply_nucleon_SmearAndShift) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
+//    if (apply_nucleon_SmearAndCorr) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
 
     //<editor-fold desc="Neutron resolution class declaration & definition">
     NeutronResolution nRes, pRes;
@@ -1069,10 +1069,10 @@ private:
     if (plot_and_fit_MomRes) {
         nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
                                  NeutronResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
-                                 ShiftMode, nRes_test);
+                                 CorrMode, nRes_test);
         pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
                                  NeutronResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
-                                 ShiftMode, nRes_test);
+                                 CorrMode, nRes_test);
 
         if (nRes_test) {
             if (Calculate_momResS2) { // if Calculate_momResS2 = true => load everything from momResS1 files
@@ -1110,7 +1110,7 @@ private:
             }
         }
     } else { // if plot_and_fit_MomRes = false => Calculate_momResS2 = false !!!
-        nRes.SetSmearAndShiftModes(SmearMode, ShiftMode);
+        nRes.SetSmearAndCorrModes(SmearMode, CorrMode);
 
         if (Run_in_momResS2) { // if Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
             /* Load neutron correction fit parameters */
@@ -1269,7 +1269,7 @@ public:
         const double DeltaSlices = 0.05;
         const bool VaryingDelta = true;      // 1st momResS1 w/ VaryingDelta = false
         const string SmearMode = "pol1_wPC";
-        const string ShiftMode = "pol1_wPC";
+        const string CorrMode = "pol1_wPC";
         bool nRes_test = false;              // false by default
         bool Run_in_momResS2 = true;         // Smear w/ momResS2 & correct w/ momResS1
         //</editor-fold>
@@ -1319,7 +1319,7 @@ public:
         bool apply_fiducial_cuts = false;
         bool apply_kinematical_cuts = false;
         bool apply_kinematical_weights = false;
-        bool apply_nucleon_SmearAndShift = false;
+        bool apply_nucleon_SmearAndCorr = false;
 
         //<editor-fold desc="Auto-disable variables">
         if (isData) { // no TL calculation, AMap,WMap generation nor nRes calculation when running on data
@@ -1359,14 +1359,14 @@ public:
         if (!apply_nucleon_cuts) { apply_nucleon_physical_cuts = false; }
 
         if (!apply_nucleon_physical_cuts) {
-            apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndShift = false;
+            apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndCorr = false;
         } else {
-            if (Calculate_momResS2) { apply_nucleon_SmearAndShift = true; }
+            if (Calculate_momResS2) { apply_nucleon_SmearAndCorr = true; }
         }
 
         if (Generate_AMaps) { apply_fiducial_cuts = false; }
 
-        if (!VaryingDelta) { apply_nucleon_SmearAndShift = false; }
+        if (!VaryingDelta) { apply_nucleon_SmearAndCorr = false; }
         //</editor-fold>
 
         //<editor-fold desc="Custom cuts naming">
@@ -1397,7 +1397,7 @@ public:
                 }
             }
 
-            if (!apply_nucleon_SmearAndShift) {
+            if (!apply_nucleon_SmearAndCorr) {
                 PSmearing_Status = "";
             } else {
                 PSmearing_Status = "wNSaS_";
@@ -1568,7 +1568,7 @@ public:
         cout << "apply_fiducial_cuts:\t\t" << BoolToString(apply_fiducial_cuts) << "\n";
         cout << "apply_kinematical_cuts:\t\t" << BoolToString(apply_kinematical_cuts) << "\n";
         cout << "apply_kinematical_weights:\t" << BoolToString(apply_kinematical_weights) << "\n";
-        cout << "apply_nucleon_SmearAndShift:\t" << BoolToString(apply_nucleon_SmearAndShift) << "\n\n";
+        cout << "apply_nucleon_SmearAndCorr:\t" << BoolToString(apply_nucleon_SmearAndCorr) << "\n\n";
         //</editor-fold>
 
         //</editor-fold>
@@ -2237,7 +2237,7 @@ public:
         if (!plot_and_fit_MomRes) { Calculate_momResS2 = false; }
 
         /* Comment to test smearing and shift */
-//    if (apply_nucleon_SmearAndShift) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
+//    if (apply_nucleon_SmearAndCorr) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
 
         //<editor-fold desc="Neutron resolution class declaration & definition">
         NeutronResolution nRes, pRes;
@@ -2245,10 +2245,10 @@ public:
         if (plot_and_fit_MomRes) {
             nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
                                      NeutronResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
-                                     ShiftMode, nRes_test);
+                                     CorrMode, nRes_test);
             pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
                                      NeutronResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
-                                     ShiftMode, nRes_test);
+                                     CorrMode, nRes_test);
 
             if (nRes_test) {
                 if (Calculate_momResS2) { // if Calculate_momResS2 = true => load everything from momResS1 files
@@ -2286,7 +2286,7 @@ public:
                 }
             }
         } else { // if plot_and_fit_MomRes = false => Calculate_momResS2 = false !!!
-            nRes.SetSmearAndShiftModes(SmearMode, ShiftMode);
+            nRes.SetSmearAndCorrModes(SmearMode, CorrMode);
 
             if (Run_in_momResS2) { // if Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
                 /* Load neutron correction fit parameters */

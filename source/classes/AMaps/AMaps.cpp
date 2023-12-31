@@ -857,7 +857,7 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
 
     bool TL_e_PrintOut = false, TL_p_PrintOut = false, Reco_e_PrintOut = false, Reco_p_PrintOut = false;
 
-    //<editor-fold desc="Safty checks (AMaps::hFillHitMaps)">
+    //<editor-fold desc="Safety checks (AMaps::hFillHitMaps)">
     if (is_e && is_p && is_n) { cout << "\n\nAMaps::hFillHitMaps: particle can't all particles! Exiting...\n", exit(0); }
     if (!is_e && !is_p && !is_n) { cout << "\n\nAMaps::hFillHitMaps: particle must be an electron, proton or neutron! Exiting...\n", exit(0); }
     if (is_e && is_p) { cout << "\n\nAMaps::hFillHitMaps: particle can't be both electrons and protons! Exiting...\n", exit(0); }
@@ -887,7 +887,7 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
                         cout << "Phi = " << Phi << "\n";
                     }
 
-                    //<editor-fold desc="Safty checks (AMaps::hFillHitMaps)">
+                    //<editor-fold desc="Safety checks (AMaps::hFillHitMaps)">
                     if (ElectronMomSliceLimits.at(i).at(0) > ElectronMomSliceLimits.at(i).at(1)) {
                         cout << "\n\nAMaps::hFillHitMaps: electron momentum slice limits were set incorrectly! Exiting...\n", exit(0);
                     }
@@ -914,7 +914,7 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
                         cout << "Phi = " << Phi << "\n";
                     }
 
-                    //<editor-fold desc="Safty checks (AMaps::hFillHitMaps)">
+                    //<editor-fold desc="Safety checks (AMaps::hFillHitMaps)">
                     if (NucleonMomSliceLimits.at(i).at(0) > NucleonMomSliceLimits.at(i).at(1)) {
                         cout << "\n\nAMaps::hFillHitMaps: nucleon momentum slice limits were set incorrectly! Exiting...\n", exit(0);
                     }
@@ -953,7 +953,7 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
                         cout << "Phi = " << Phi << "\n";
                     }
 
-                    //<editor-fold desc="Safty checks (AMaps::hFillHitMaps)">
+                    //<editor-fold desc="Safety checks (AMaps::hFillHitMaps)">
                     if (ElectronMomSliceLimits.at(i).at(0) > ElectronMomSliceLimits.at(i).at(1)) {
                         cout << "\n\nAMaps::hFillHitMaps: electron momentum slice limits were set incorrectly! Exiting...\n", exit(0);
                     }
@@ -984,7 +984,7 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
                         cout << "Phi = " << Phi << "\n";
                     }
 
-                    //<editor-fold desc="Safty checks (AMaps::hFillHitMaps)">
+                    //<editor-fold desc="Safety checks (AMaps::hFillHitMaps)">
                     if (NucleonMomSliceLimits.at(i).at(0) > NucleonMomSliceLimits.at(i).at(1)) {
                         cout << "\n\nAMaps::hFillHitMaps: nucleon momentum slice limits were set incorrectly! Exiting...\n", exit(0);
                     }

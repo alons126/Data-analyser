@@ -178,13 +178,13 @@ void PoliFitter() {
 //    bool plot_and_fit_MomRes = true; // Generate nRes plots
 //    const double DeltaSlices = 0.05;
 //    const bool VaryingDelta = true;
-//    const string SmearMode = "pol1", ShiftMode = "pol1";
+//    const string SmearMode = "pol1", CorrMode = "pol1";
 //    bool nRes_test = false; // false by default
 
 //    NeutronResolution nRes;
 //    nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", /* beamE */ 5.98636, /*n_mom_th.GetLowerCut()*/ 0.4,
 //                             /* directories.Resolution_Directory_map["pRes_plots_1p_Directory"] */ "03_1n/02_Neutron_resolution_plots_1n",
-//                             DeltaSlices, VaryingDelta, SmearMode, ShiftMode, nRes_test);
+//                             DeltaSlices, VaryingDelta, SmearMode, CorrMode, nRes_test);
 
     Double_t x[] = {1, 2, 3, 4, 5, 6, 7, 8};
     Double_t y[] = {35, 57, 25, 22, 55, 47, 89, 44};

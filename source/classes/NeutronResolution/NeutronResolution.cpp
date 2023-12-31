@@ -12,15 +12,15 @@
 NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
                                      const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
                                      const string &NeutronResolutionDirectory, const string &SavePath, double DeltaSlices, bool VaryingDelta, const string &SmearM,
-                                     const string &ShiftM, bool momRes_test) {
+                                     const string &CorrM, bool momRes_test) {
     SliceUpperMomLimPC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimPC = FD_nucleon_momentum_cut.GetLowerCutConst();
     momResS2CalcMode = Calculate_momResS2, momResS2RunMode = Run_in_momResS2;
     SlicesSavePath = SavePath;
     delta = DeltaSlices;
-    SmearMode = SmearM, ShiftMode = ShiftM;
+    SmearMode = SmearM, CorrMode = CorrM;
     momResTestMode = momRes_test;
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (momResS2CalcMode && momResS2RunMode) {
         cout << "NeutronResolution::NeutronResolution: calculating and running on momResS2 is illegal! Exiting...\n\n", exit(0);
     }
@@ -60,7 +60,7 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
 //            cout << "Delta = " << Delta << "\n";
         }
 
-        //<editor-fold desc="Safty check">
+        //<editor-fold desc="Safety check">
         if ((abs(SliceUpperLim) > beamE * 1.5) || (abs(SliceLowerLim) > beamE * 1.5)) {
             cout << "NeutronResolution::NeutronResolution: slice limits are not defined properly! Exiting...\n\n", exit(0);
         }
@@ -482,7 +482,7 @@ void NeutronResolution::Fitter_Std_pol1() {
         cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Std.size()) {
         cout << "\n\nNeutronResolution::Fitter_Std_pol1: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -600,7 +600,7 @@ void NeutronResolution::Fitter_Std_pol1_wPC() {
         cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Std.size()) {
         cout << "\n\nNeutronResolution::Fitter_Std_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -714,7 +714,7 @@ void NeutronResolution::Fitter_Std_pol2() {
         cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Std.size()) {
         cout << "\n\nNeutronResolution::Fitter_Std_pol2: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -835,7 +835,7 @@ void NeutronResolution::Fitter_Std_pol2_wPC() {
         cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Std.size()) {
         cout << "\n\nNeutronResolution::Fitter_Std_pol2_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -952,7 +952,7 @@ void NeutronResolution::Fitter_Std_pol3() {
         cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Std.size()) {
         cout << "\n\nNeutronResolution::Fitter_Std_pol3: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -1076,7 +1076,7 @@ void NeutronResolution::Fitter_Std_pol3_wPC() {
         cout << "Pn_Std.size() = " << Pn_Std.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Std.size()) {
         cout << "\n\nNeutronResolution::Fitter_Std_pol3_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -1197,7 +1197,7 @@ void NeutronResolution::Fitter_Corr_pol1() {
         cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Corr.size()) {
         cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -1315,7 +1315,7 @@ void NeutronResolution::Fitter_Corr_pol1_wPC() {
         cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Corr.size()) {
         cout << "\n\nNeutronResolution::Fitter_Corr_pol1_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -1429,7 +1429,7 @@ void NeutronResolution::Fitter_Corr_pol2() {
         cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Corr.size()) {
         cout << "\n\nNeutronResolution::Fitter_Corr_pol2: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -1550,7 +1550,7 @@ void NeutronResolution::Fitter_Corr_pol2_wPC() {
         cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Corr.size()) {
         cout << "\n\nNeutronResolution::Fitter_Corr_pol2_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -1667,7 +1667,7 @@ void NeutronResolution::Fitter_Corr_pol3() {
         cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Corr.size()) {
         cout << "\n\nNeutronResolution::Fitter_Corr_pol3: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -1791,7 +1791,7 @@ void NeutronResolution::Fitter_Corr_pol3_wPC() {
         cout << "Pn_Corr.size() = " << Pn_Corr.size() << "\n\n";
     }
 
-    //<editor-fold desc="Safty check">
+    //<editor-fold desc="Safety check">
     if (MeanPn.size() != Pn_Corr.size()) {
         cout << "\n\nNeutronResolution::Fitter_Corr_pol3_wPC: x and y data are of different lengths! Exiting...\n\n", exit(0);
     }
@@ -2274,8 +2274,16 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                 if (Load_correction && findSubstring(parameter, "Corr")) {
                     Loaded_Corr_coefficients_path = filename;
 
-                    if (findSubstring(parameter, "pol1") && findSubstring(ShiftMode, "pol1")) {
-                        if (findSubstring(parameter, "pol1_wPC") && findSubstring(ShiftMode, "pol1_wPC")) {
+                    //<editor-fold desc="Safety checks for loading correction variables">
+                    if (Loaded_Corr_coefficients_path == "") {
+                        cout << "\n\nNeutronResolution::ReadResDataParam: Loaded_Corr_coefficients_path is empty!\n";
+                        cout << "The file:\n" << filename << "\n";
+                        cout << "is not found! Exiting...\n\n", exit(0);
+                    }
+                    //</editor-fold>
+
+                    if (findSubstring(parameter, "pol1") && findSubstring(CorrMode, "pol1")) {
+                        if (findSubstring(parameter, "pol1_wPC") && findSubstring(CorrMode, "pol1_wPC")) {
                             if (parameter == "A_Corr_pol1_wPC") {
                                 Loaded_A_Corr_pol1_wPC = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1_wPC");
@@ -2291,7 +2299,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             } else if (parameter == "NDF_Corr_pol1_wPC") {
                                 Loaded_NDF_Corr_pol1_wPC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol1") && !findSubstring(ShiftMode, "pol1_wPC")) {
+                        } else if (findSubstring(parameter, "pol1") && !findSubstring(CorrMode, "pol1_wPC")) {
                             if (parameter == "A_Corr_pol1") {
                                 Loaded_A_Corr_pol1 = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1");
@@ -2308,8 +2316,8 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                                 Loaded_NDF_Corr_pol1 = stod(parameter2);
                             }
                         }
-                    } else if (findSubstring(parameter, "pol2") && findSubstring(ShiftMode, "pol2")) {
-                        if (findSubstring(parameter, "pol2_wPC") && findSubstring(ShiftMode, "pol2_wPC")) {
+                    } else if (findSubstring(parameter, "pol2") && findSubstring(CorrMode, "pol2")) {
+                        if (findSubstring(parameter, "pol2_wPC") && findSubstring(CorrMode, "pol2_wPC")) {
                             if (parameter == "A_Corr_pol2_wPC") {
                                 Loaded_A_Corr_pol2_wPC = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2_wPC");
@@ -2330,7 +2338,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             } else if (parameter == "NDF_Corr_pol2_wPC") {
                                 Loaded_NDF_Corr_pol2_wPC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol2") && !findSubstring(ShiftMode, "pol2_wPC")) {
+                        } else if (findSubstring(parameter, "pol2") && !findSubstring(CorrMode, "pol2_wPC")) {
                             if (parameter == "A_Corr_pol2") {
                                 Loaded_A_Corr_pol2 = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2");
@@ -2352,8 +2360,8 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                                 Loaded_NDF_Corr_pol2 = stod(parameter2);
                             }
                         }
-                    } else if (findSubstring(parameter, "pol3") && findSubstring(ShiftMode, "pol3")) {
-                        if (findSubstring(parameter, "pol3_wPC") && findSubstring(ShiftMode, "pol3_wPC")) {
+                    } else if (findSubstring(parameter, "pol3") && findSubstring(CorrMode, "pol3")) {
+                        if (findSubstring(parameter, "pol3_wPC") && findSubstring(CorrMode, "pol3_wPC")) {
                             if (parameter == "A_Corr_pol3_wPC") {
                                 Loaded_A_Corr_pol3_wPC = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3_wPC");
@@ -2379,7 +2387,7 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             } else if (parameter == "NDF_Corr_pol3_wPC") {
                                 Loaded_NDF_Corr_pol3_wPC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol3") && !findSubstring(ShiftMode, "pol3_wPC")) {
+                        } else if (findSubstring(parameter, "pol3") && !findSubstring(CorrMode, "pol3_wPC")) {
                             if (parameter == "A_Corr_pol3") {
                                 Loaded_A_Corr_pol3 = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3");
@@ -2409,6 +2417,14 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                     }
                 } else if (Load_smearing && findSubstring(parameter, "Std")) {
                     Loaded_Std_coefficients_path = filename;
+
+                    //<editor-fold desc="Safety checks for loading smearing variables">
+                    if (Load_smearing && Loaded_Std_coefficients_path == "") {
+                        cout << "\n\nNeutronResolution::ReadResDataParam: Loaded_Std_coefficients_path is empty!\n";
+                        cout << "The file:\n" << filename << "\n";
+                        cout << "is not found! Exiting...\n\n", exit(0);
+                    }
+                    //</editor-fold>
 
                     if (findSubstring(parameter, "pol1") && findSubstring(SmearMode, "pol1")) {
                         if (findSubstring(parameter, "pol1_wPC") && findSubstring(SmearMode, "pol1_wPC")) {
@@ -2546,10 +2562,11 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                     }
                 }
 
-                //<editor-fold desc="Safty checks">
+                //<editor-fold desc="Safety checks">
                 if (Loaded_Std_coefficients_values.size() != Loaded_Std_coefficients_names.size()) {
                     cout << "\n\nNeutronResolution::ReadResDataParam: smearing coefficients load registered improperly! Exiting...\n\n", exit(0);
                 }
+
                 if (Loaded_Corr_coefficients_values.size() != Loaded_Corr_coefficients_names.size()) {
                     cout << "\n\nNeutronResolution::ReadResDataParam: correction coefficients load registered improperly! Exiting...\n\n", exit(0);
                 }
@@ -2568,10 +2585,10 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
 //<editor-fold desc="PSmear function">
 /* A function to smear protons by fitted neutron resolution */
 
-double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Momentum) {
+double NeutronResolution::PSmear(bool apply_nucleon_SmearAndCorr, double Momentum) {
     bool Printout = false;
 
-    if (!apply_nucleon_SmearAndShift) {
+    if (!apply_nucleon_SmearAndCorr) {
         /* Smearing and correction are disabled */
         return Momentum;
     } else {
@@ -2730,124 +2747,76 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 }
 //</editor-fold>
 
-// NShift function ------------------------------------------------------------------------------------------------------------------------------------------------------
+// NCorr function -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="NShift function">
+//<editor-fold desc="NCorr function">
 /* A function to shift (calibrate) neutron momentum by fitted neutron shift */
 
-double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Momentum) {
+double NeutronResolution::NCorr(bool apply_nucleon_SmearAndCorr, double Momentum) {
     bool Printout = false;
 
-    //TODO: rename as correction, not shift
-
-    if (!apply_nucleon_SmearAndShift) {
+    if (!apply_nucleon_SmearAndCorr) {
         /* Smearing and correction are disabled */
         return Momentum;
     } else {
         /* Smearing and correction are enabled */
 
-        /* Setting momentum powers */
-        double Momentum2 = Momentum * Momentum;
-        double Momentum3 = Momentum2 * Momentum;
+        /* Setting corrected momentum & momentum powers */
+        double CorrectedMomentum, Momentum2 = Momentum * Momentum, Momentum3 = Momentum2 * Momentum;
 
-        if (ShiftMode == "slices") {
+//        cout << "\n\nMomentum = " << Momentum << "\n";
+//        cout << "\n\nCorrectedMomentum = " << CorrectedMomentum << "\n";
+
+        if (CorrMode == "slices") {
             /* Correction using slice fit results */
 
             //<editor-fold desc="Original (shift from loaded nRes fit variables)">
             for (DSCuts Loaded_res_slice: Loaded_Res_Slices_HistVar) {
                 if ((Loaded_res_slice.GetSliceLowerb() < Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-                    double ShiftedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
+                    CorrectedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
 
                     if (Printout) {
                         cout << "\n\nLoaded_res_slice.GetMean() = " << Loaded_res_slice.GetMean() << "\n";
                         cout << "Momentum = " << Momentum << "\n";
                         cout << "shift = " << Loaded_res_slice.GetMean() << "\n";
-                        cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
+                        cout << "CorrectedMomentum = " << CorrectedMomentum << "\n\n";
                     }
-
-                    return ShiftedMomentum;
                 }
             }
             //</editor-fold>
 
-        } else if ((SmearMode == "pol1") || (SmearMode == "pol2") || (SmearMode == "pol3") ||
-                   (SmearMode == "pol1_wPC") || (SmearMode == "pol2_wPC") || (SmearMode == "pol3_wPC")) {
+        } else if ((CorrMode == "pol1") || (CorrMode == "pol2") || (CorrMode == "pol3") ||
+                   (CorrMode == "pol1_wPC") || (CorrMode == "pol2_wPC") || (CorrMode == "pol3_wPC")) {
             /* Correction using pol fit results */
-            double shift;
+            double Correction;
 
-            if (ShiftMode == "pol1") {
-                shift = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
-            } else if (ShiftMode == "pol1_wPC") {
-                shift = Loaded_A_Corr_pol1_wPC * Momentum + Loaded_B_Corr_pol1_wPC;
-            } else if (ShiftMode == "pol2") {
-                shift = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;
-            } else if (ShiftMode == "pol2_wPC") {
-                shift = Loaded_A_Corr_pol2_wPC * Momentum2 + Loaded_B_Corr_pol2_wPC * Momentum + Loaded_C_Corr_pol2_wPC;
-            } else if (ShiftMode == "pol3") {
-                shift = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
-            } else if (ShiftMode == "pol3_wPC") {
-                shift = Loaded_A_Corr_pol3_wPC * Momentum3 + Loaded_B_Corr_pol3_wPC * Momentum2 + Loaded_C_Corr_pol3_wPC * Momentum + Loaded_D_Corr_pol3_wPC;
+            if (CorrMode == "pol1") {
+                Correction = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
+            } else if (CorrMode == "pol1_wPC") {
+                Correction = Loaded_A_Corr_pol1_wPC * Momentum + Loaded_B_Corr_pol1_wPC;
+            } else if (CorrMode == "pol2") {
+                Correction = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;
+            } else if (CorrMode == "pol2_wPC") {
+                Correction = Loaded_A_Corr_pol2_wPC * Momentum2 + Loaded_B_Corr_pol2_wPC * Momentum + Loaded_C_Corr_pol2_wPC;
+            } else if (CorrMode == "pol3") {
+                Correction = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
+            } else if (CorrMode == "pol3_wPC") {
+                Correction = Loaded_A_Corr_pol3_wPC * Momentum3 + Loaded_B_Corr_pol3_wPC * Momentum2 + Loaded_C_Corr_pol3_wPC * Momentum + Loaded_D_Corr_pol3_wPC;
             }
 
-            double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
+            CorrectedMomentum = Momentum * (1 + Correction); // minus for protons and plus for neutrons
 
             if (Printout) {
-                cout << "\n\nShiftMode = " << ShiftMode << "\n";
-                cout << "Shift = " << shift << "\n";
+                cout << "\n\nCorrMode = " << CorrMode << "\n";
+                cout << "Correction = " << Correction << "\n";
                 cout << "Momentum = " << Momentum << "\n";
-                cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
+                cout << "CorrectedMomentum = " << CorrectedMomentum << "\n\n";
             }
-
-            return ShiftedMomentum;
         } else {
-            cout << "\n\nNeutronResolution::NShift: ShiftMode illegal! Exiting...", exit(0);
+            cout << "\n\nNeutronResolution::NCorr: CorrMode illegal! Exiting...", exit(0);
         }
 
-        //<editor-fold desc="Original code">
-        //        } else if ((ShiftMode == "pol1") || (ShiftMode == "pol3")) {
-//            /* Neutron shift from *excel* linear fit */
-//            //TODO: automate the neutron mom shift into this class for future uses
-//            //TODO: rename as correction, not shift
-//            double shift;
-//
-//            if (findSubstring(SName, "C12_simulation_6GeV_T5")) { // Old sample
-//                if (ShiftMode == "pol1") {
-////                    shift = 0.0579 * Momentum - 0.0146; // new shift between 1 and 3 GeV/c
-//                    shift = 0.0583 * Momentum - 0.0127; // old shift between 0.4 to 4.09 GeV/c
-//                } else {
-//                    cout << "\n\nNeutronResolution::NShift: ShiftMode illegal (no pol3 for C12_simulation_6GeV_T5)! Exiting...", exit(0);
-//                }
-//            } else { // New sample (24M, 1-foil)
-//                if (ShiftMode == "pol1") {
-////                    shift = 0.068 * Momentum - 0.0256; // new shift between 1 and 3 GeV/c
-//                    shift = 0.0674 * Momentum - 0.0218; // old shift between 0.4 to 4.09 GeV/c
-//                } else if (ShiftMode == "pol3") {
-//                    double Momentum2 = Momentum * Momentum;
-//                    double Momentum3 = Momentum * Momentum * Momentum;
-//
-//                    shift = -0.0017 * Momentum3 + 0.0205 * Momentum2 + 0.0081 * Momentum + 0.0219; // old shift between 0.4 to 4.09 GeV/c
-//                } else {
-//                    cout << "\n\nNeutronResolution::NShift: ShiftMode illegal! Exiting...", exit(0);
-//                }
-//            }
-//
-//            double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
-//
-//            if (Printout) {
-//                cout << "\n\nShiftMode = " << ShiftMode << "\n";
-//                cout << "Shift = " << shift << "\n";
-//                cout << "Momentum = " << Momentum << "\n";
-//                cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
-//            }
-//
-//            return ShiftedMomentum;
-//        } else {
-//            cout << "\n\nNeutronResolution::NShift: ShiftMode illegal! Exiting...", exit(0);
-//        }
-        //</editor-fold>
-
+        return CorrectedMomentum;
     }
-
-    return Momentum;
 }
 //</editor-fold>

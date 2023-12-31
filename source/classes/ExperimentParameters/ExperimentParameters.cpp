@@ -149,7 +149,7 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
 
     }
 
-    //<editor-fold desc="Safty checks">
+    //<editor-fold desc="Safety checks">
     if (!BeamAt2GeV && !BeamAt4GeV && !BeamAt6GeV) { cout << "\n\nConfigureSampleName: beam energy unknown! Exiting...\n", exit(0); }
 
     if (BeamAt2GeV && BeamAt4GeV && BeamAt6GeV) { cout << "\n\nConfigureSampleName: beam energy configuration error! Exiting...\n", exit(0); }

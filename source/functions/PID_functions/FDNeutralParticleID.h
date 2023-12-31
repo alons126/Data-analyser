@@ -101,7 +101,7 @@ int FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutron
 
 ////<editor-fold desc="Get leading neutron after momentum correction">
 //int FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, bool apply_nucleon_cuts,
-//                  bool apply_nucleon_SmearAndShift, NeutronResolution &nRes) {
+//                  bool apply_nucleon_SmearAndCorr, NeutronResolution &nRes) {
 //    double P_max = -1;
 //    int MaxPIndex = -1;
 //    bool PrintLog = false;
@@ -109,7 +109,7 @@ int FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutron
 //    bool PrintOut = (PrintLog && (FD_Neutrons_within_th.size() > 0));
 //
 //    for (int &i: FD_Neutrons_within_th) { // Identified neutron above momentum threshold
-//        double P_temp = nRes.NShift(apply_nucleon_SmearAndShift, GetFDNeutronP(allParticles[i], apply_nucleon_cuts));
+//        double P_temp = nRes.NCorr(apply_nucleon_SmearAndCorr, GetFDNeutronP(allParticles[i], apply_nucleon_cuts));
 ////        double P_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 //
 //        if (P_temp >= P_max) {

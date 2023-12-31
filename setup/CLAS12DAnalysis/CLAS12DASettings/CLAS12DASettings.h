@@ -164,7 +164,7 @@ private:
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = true;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_nucleon_SmearAndCorr = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -205,7 +205,7 @@ private:
             }
         }
 
-        if (!apply_nucleon_SmearAndShift) {
+        if (!apply_nucleon_SmearAndCorr) {
             PSmearing_Status = "";
         } else {
             PSmearing_Status = "wNSaS_";
@@ -311,7 +311,7 @@ private:
 
     if (!apply_nucleon_cuts) { apply_nucleon_physical_cuts = false; }
 
-    if (!apply_nucleon_physical_cuts) { apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndShift = false; }
+    if (!apply_nucleon_physical_cuts) { apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndCorr = false; }
 
     if (Generate_AMaps) { apply_fiducial_cuts = false; }
 
@@ -366,8 +366,8 @@ private:
     cout << "apply_kinematical_weights:\t" <<
     BoolToString(apply_kinematical_weights)
     << "\n";
-    cout << "apply_nucleon_SmearAndShift:\t" <<
-    BoolToString(apply_nucleon_SmearAndShift)
+    cout << "apply_nucleon_SmearAndCorr:\t" <<
+    BoolToString(apply_nucleon_SmearAndCorr)
     << "\n\n";
     //</editor-fold>
 
@@ -902,7 +902,7 @@ private:
     cout << "\nSetting neutron resolution data...";
 
     if (!calculate_truth_level) { plot_and_fit_MomRes = false; } // Disable resolution-realted operations if not calculating TL plots
-    if (apply_nucleon_SmearAndShift) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
+    if (apply_nucleon_SmearAndCorr) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
 
     //<editor-fold desc="Neutron resolution class declaration & definition">
     NeutronResolution nRes, pRes;

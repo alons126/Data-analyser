@@ -43,7 +43,7 @@ class NeutronResolution {
 private:
     bool momResTestMode, momResS2CalcMode, momResS2RunMode;
 
-    string SmearMode = "NONE", ShiftMode = "NONE";
+    string SmearMode = "NONE", CorrMode = "NONE";
 
     vector <hPlot1D> ResSlices;
     vector <vector<double>> ResSlicesLimits;
@@ -248,11 +248,11 @@ public:
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    double PSmear(bool apply_nucleon_SmearAndShift, double Momentum);
+    double PSmear(bool apply_nucleon_SmearAndCorr, double Momentum);
 
-// NShift function ------------------------------------------------------------------------------------------------------------------------------------------------------
+// NCorr function -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    double NShift(bool apply_nucleon_SmearAndShift, double Momentum);
+    double NCorr(bool apply_nucleon_SmearAndCorr, double Momentum);
 
 // Other functions ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -263,9 +263,9 @@ public:
 
     void SetSmearMode(const string &SmearM) { SmearMode = SmearM; };
 
-    void SetShiftMode(const string &ShiftM) { ShiftMode = ShiftM; };
+    void SetCorrMode(const string &ShiftM) { CorrMode = ShiftM; };
 
-    void SetSmearAndShiftModes(const string &SmearM, const string &ShiftM) { SmearMode = SmearM, ShiftMode = ShiftM; };
+    void SetSmearAndCorrModes(const string &SmearM, const string &ShiftM) { SmearMode = SmearM, CorrMode = ShiftM; };
 
     // Get functions
     double GetSliceUpperMomLim() { return SliceUpperMomLim; };
@@ -278,7 +278,7 @@ public:
 
     vector <string> Get_Loaded_Std_coefficients_names() { return Loaded_Std_coefficients_names; };
 
-    string Get_ShiftMode() { return ShiftMode; };
+    string Get_CorrMode() { return CorrMode; };
 
     string Get_Loaded_Corr_coefficients_path() { return Loaded_Corr_coefficients_path; };
 
