@@ -223,6 +223,10 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     Efficiency_plot->GetYaxis()->SetTitle((EfficiencyYLabel).c_str());
     Efficiency_plot->GetXaxis()->SetTitle((EfficiencyXLabel).c_str());
 
+    string Efficiency_plot_Name = Efficiency_plot->GetName();
+    string TFolder_Name = Efficiency_plot_Name + " folder";
+    TFolder *EfficiencyComponentPlots = new TFolder(TFolder_Name.c_str(), TFolder_Name.c_str());
+
     //<editor-fold desc="Plotting and saving RPlot_Clone_test">
     RPlot_Clone_test->SetLineStyle(1);
     RPlot_Clone_test->SetLineColor(kBlue);
@@ -234,10 +238,10 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     RPlot_Clone_test->GetYaxis()->SetLabelSize(0.0425);
     RPlot_Clone_test->GetYaxis()->CenterTitle(true);
     RPlot_Clone_test->SetLineWidth(2);
-
     RPlot_Clone_test->Draw();
     RPlot_Clone_test->SetStats(1);
-    Histogram_list->Add(RPlot_Clone_test);
+    EfficiencyComponentPlots->Add(RPlot_Clone_test);
+//    Histogram_list->Add(RPlot_Clone_test);
 
     Canvas->SaveAs((RPlot_Clone_test_SaveName).c_str());
     Canvas->Clear();
@@ -254,11 +258,10 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     TLPlot_Clone_test->GetYaxis()->SetLabelSize(0.0425);
     TLPlot_Clone_test->GetYaxis()->CenterTitle(true);
     TLPlot_Clone_test->SetLineWidth(2);
-
-
     TLPlot_Clone_test->Draw();
     TLPlot_Clone_test->SetStats(1);
-    Histogram_list->Add(TLPlot_Clone_test);
+    EfficiencyComponentPlots->Add(TLPlot_Clone_test);
+//    Histogram_list->Add(TLPlot_Clone_test);
 
     Canvas->SaveAs((TLPlot_Clone_test_SaveName).c_str());
     Canvas->Clear();
@@ -275,10 +278,10 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     RPlot_Clone_test_rebined->GetYaxis()->SetLabelSize(0.0425);
     RPlot_Clone_test_rebined->GetYaxis()->CenterTitle(true);
     RPlot_Clone_test_rebined->SetLineWidth(2);
-
     RPlot_Clone_test_rebined->Draw();
     RPlot_Clone_test_rebined->SetStats(1);
-    Histogram_list->Add(RPlot_Clone_test_rebined);
+    EfficiencyComponentPlots->Add(RPlot_Clone_test_rebined);
+//    Histogram_list->Add(RPlot_Clone_test_rebined);
 
     Canvas->SaveAs((RPlot_Clone_test_rebined_SaveName).c_str());
     Canvas->Clear();
@@ -295,10 +298,10 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     TLPlot_Clone_test_rebined->GetYaxis()->SetLabelSize(0.0425);
     TLPlot_Clone_test_rebined->GetYaxis()->CenterTitle(true);
     TLPlot_Clone_test_rebined->SetLineWidth(2);
-
     TLPlot_Clone_test_rebined->Draw();
     TLPlot_Clone_test_rebined->SetStats(1);
-    Histogram_list->Add(TLPlot_Clone_test_rebined);
+    EfficiencyComponentPlots->Add(TLPlot_Clone_test_rebined);
+//    Histogram_list->Add(TLPlot_Clone_test_rebined);
 
     Canvas->SaveAs((TLPlot_Clone_test_rebined_SaveName).c_str());
     Canvas->Clear();
@@ -319,9 +322,11 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     if (plot_errorbars) { RPlot_Clone->Sumw2(); }
 
     if (rebin_plots) { RPlot_Clone->Rebin(2); }
+
     RPlot_Clone->Draw();
     RPlot_Clone->SetStats(1);
-    Histogram_list->Add(RPlot_Clone);
+    EfficiencyComponentPlots->Add(RPlot_Clone);
+//    Histogram_list->Add(RPlot_Clone);
 
     Canvas->SaveAs((RPlot_Clone_SaveName).c_str());
     Canvas->Clear();
@@ -342,9 +347,11 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     if (plot_errorbars) { TLPlot_Clone->Sumw2(); }
 
     if (rebin_plots) { TLPlot_Clone->Rebin(2); }
+
     TLPlot_Clone->Draw();
     TLPlot_Clone->SetStats(1);
-    Histogram_list->Add(TLPlot_Clone);
+    EfficiencyComponentPlots->Add(TLPlot_Clone);
+//    Histogram_list->Add(TLPlot_Clone);
 
     Canvas->SaveAs((TLPlot_Clone_SaveName).c_str());
     Canvas->Clear();
@@ -366,10 +373,14 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     if (plot_errorbars) { Efficiency_plot->Sumw2(); }
 
     if (rebin_plots) { Efficiency_plot->Rebin(2); }
+
     Efficiency_plot->Divide(TLPlot_Clone);
     Efficiency_plot->Draw();
     Efficiency_plot->SetStats(0);
+
+    Histogram_list->Add(EfficiencyComponentPlots);
     Histogram_list->Add(Efficiency_plot);
+
     Canvas->SaveAs((Efficiency_plot_SaveName).c_str());
 
     Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.6);
@@ -579,6 +590,10 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     Efficiency_plot->GetYaxis()->SetTitle((EfficiencyYLabel).c_str());
     Efficiency_plot->GetXaxis()->SetTitle((EfficiencyXLabel).c_str());
 
+    string Efficiency_plot_Name = Efficiency_plot->GetName();
+    string TFolder_Name = Efficiency_plot_Name + " folder";
+    TFolder *EfficiencyComponentPlots = new TFolder(TFolder_Name.c_str(), TFolder_Name.c_str());
+
     //<editor-fold desc="Plotting and saving RPlot_Clone_test">
     RPlot_Clone_test->SetLineStyle(1);
     RPlot_Clone_test->SetLineColor(kBlue);
@@ -593,7 +608,8 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     RPlot_Clone_test->SetLineWidth(2);
     RPlot_Clone_test->Draw();
     RPlot_Clone_test->SetStats(1);
-    Histogram_list->Add(RPlot_Clone_test);
+    EfficiencyComponentPlots->Add(RPlot_Clone_test);
+//    Histogram_list->Add(RPlot_Clone_test);
 
     Canvas->SaveAs((RPlot_Clone_test_SaveName).c_str());
     Canvas->Clear();
@@ -604,7 +620,8 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     TLPlot_Clone_test->SetLineColor(kBlue);
     TLPlot_Clone_test->Draw();
     TLPlot_Clone_test->SetStats(1);
-    Histogram_list->Add(TLPlot_Clone_test);
+    EfficiencyComponentPlots->Add(TLPlot_Clone_test);
+//    Histogram_list->Add(TLPlot_Clone_test);
 
     Canvas->SaveAs((TLPlot_Clone_test_SaveName).c_str());
     Canvas->Clear();
@@ -624,7 +641,8 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     RPlot_Clone_test_rebined->SetLineWidth(2);
     RPlot_Clone_test_rebined->Draw();
     RPlot_Clone_test_rebined->SetStats(1);
-    Histogram_list->Add(RPlot_Clone_test_rebined);
+    EfficiencyComponentPlots->Add(RPlot_Clone_test_rebined);
+//    Histogram_list->Add(RPlot_Clone_test_rebined);
 
     Canvas->SaveAs((RPlot_Clone_test_rebined_SaveName).c_str());
     Canvas->Clear();
@@ -635,7 +653,8 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     TLPlot_Clone_test_rebined->SetLineColor(kBlue);
     TLPlot_Clone_test_rebined->Draw();
     TLPlot_Clone_test_rebined->SetStats(1);
-    Histogram_list->Add(TLPlot_Clone_test_rebined);
+    EfficiencyComponentPlots->Add(TLPlot_Clone_test_rebined);
+//    Histogram_list->Add(TLPlot_Clone_test_rebined);
 
     Canvas->SaveAs((TLPlot_Clone_test_rebined_SaveName).c_str());
     Canvas->Clear();
@@ -660,7 +679,8 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     if (rebin_plots) { RPlot_Clone->Rebin(2); }
     RPlot_Clone->Draw();
     RPlot_Clone->SetStats(1);
-    Histogram_list->Add(RPlot_Clone);
+    EfficiencyComponentPlots->Add(RPlot_Clone);
+//    Histogram_list->Add(RPlot_Clone);
 
     Canvas->SaveAs((RPlot_Clone_SaveName).c_str());
     Canvas->Clear();
@@ -675,7 +695,8 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     if (rebin_plots) { TLPlot_Clone->Rebin(2); }
     TLPlot_Clone->Draw();
     TLPlot_Clone->SetStats(1);
-    Histogram_list->Add(TLPlot_Clone);
+    EfficiencyComponentPlots->Add(TLPlot_Clone);
+//    Histogram_list->Add(TLPlot_Clone);
 
     Canvas->SaveAs((TLPlot_Clone_SaveName).c_str());
     Canvas->Clear();
@@ -701,6 +722,7 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     Efficiency_plot->SetStats(0);
     Efficiency_plot->Draw();
 
+    Histogram_list->Add(EfficiencyComponentPlots);
     Histogram_list->Add(Efficiency_plot);
     Canvas->SaveAs((Efficiency_plot_SaveName).c_str());
 

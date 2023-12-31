@@ -156,7 +156,7 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = true; // Calculate momResS2 variables
+    bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
@@ -586,7 +586,7 @@ void EventAnalyser() {
         Cut_plots_master = true; // Master cut plots selector
         Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
-        /* Beta plots */
+        /* W plots */
         W_plots = true;
 
         /* Beta plots */
@@ -645,8 +645,7 @@ void EventAnalyser() {
         Momentum_plots = true;
 //        Momentum_plots = false;
 
-
-        /* Beta plots */
+        /* W plots */
 //     W_plots = true;
         W_plots = false;
 
@@ -688,10 +687,10 @@ void EventAnalyser() {
         ToF_plots = false;
 
         /* Efficiency plots */
-//        Efficiency_plots = true;
-        Efficiency_plots = false;
-//        TL_after_Acceptance_Maps_plots = true;
-        TL_after_Acceptance_Maps_plots = false;
+        Efficiency_plots = true;
+//        Efficiency_plots = false;
+        TL_after_Acceptance_Maps_plots = true;
+//        TL_after_Acceptance_Maps_plots = false;
 
         /* Resolution plots */
 //        AMaps_plots = true;
@@ -702,8 +701,10 @@ void EventAnalyser() {
 //        Resolution_plots = false;
 
         /* Final state ratio plots */
-        FSR_1D_plots = false;
-        FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
+        FSR_1D_plots = true;
+        FSR_2D_plots = true; // disabled below if HipoChainLength is 2 or lower
+//        FSR_1D_plots = false;
+//        FSR_2D_plots = false; // disabled below if HipoChainLength is 2 or lower
         //</editor-fold>/
 
     }
@@ -1068,25 +1069,47 @@ void EventAnalyser() {
         nRes.SetSmearAndCorrModes(SmearMode, CorrMode);
 
         if (Run_with_momResS2) { // if Run_with_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
+
+            string NeutronCorrectionDataFile = NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par";
+            string ProtonSmearingDataFile = NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par";
+
             /* Load neutron correction fit parameters */
-            nRes.ReadResDataParam(
-                    (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
-                    Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
+            nRes.ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing fit parameters */
-            nRes.ReadResDataParam(
-                    (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
-                    Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
+            nRes.ReadResDataParam(ProtonSmearingDataFile.c_str(), Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
+
+            //<editor-fold desc="Safety checks for data files">
+            if (!findSubstring(NeutronCorrectionDataFile, "Neutron") || findSubstring(NeutronCorrectionDataFile, "Proton")) {
+                cout << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+            }
+
+            if (!findSubstring(ProtonSmearingDataFile, "Neutron") || findSubstring(ProtonSmearingDataFile, "Proton")) {
+                cout << "\n\nNeutronResolution::NeutronResolution: proton smearing variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+            }
+            //</editor-fold>
+
         } else { // if Calculate_momResS2 = false and Run_with_momResS2 = false => load both correction and smearing from momResS1
+
+            string NeutronCorrectionDataFile = NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par";
+            string ProtonSmearingDataFile = NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par";
+
             /* Load neutron correction fit parameters */
-            nRes.ReadResDataParam(
-                    (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
-                    Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
+            nRes.ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing fit parameters */
-            nRes.ReadResDataParam(
-                    (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
-                    Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
+            nRes.ReadResDataParam(ProtonSmearingDataFile.c_str(), Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
+
+            //<editor-fold desc="Safety checks for data files">
+            if (!findSubstring(NeutronCorrectionDataFile, "Neutron") || findSubstring(NeutronCorrectionDataFile, "Proton")) {
+                cout << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+            }
+
+            if (!findSubstring(ProtonSmearingDataFile, "Neutron") || findSubstring(ProtonSmearingDataFile, "Proton")) {
+                cout << "\n\nNeutronResolution::NeutronResolution: proton smearing variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+            }
+            //</editor-fold>
+
         }
     }
     //</editor-fold>

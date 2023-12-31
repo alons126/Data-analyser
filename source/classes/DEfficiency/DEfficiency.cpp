@@ -147,12 +147,22 @@ void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, const string &Sample
     ACorrection_plot->GetYaxis()->SetTitle((ACorrectionYLabel).c_str());
     ACorrection_plot->GetXaxis()->SetTitle((ACorrectionXLabel).c_str());
 
-    DrawAndSaveHistogram1D(Canvas, Histogram_list, RPlot_Clone_test, 1, kBlue, true, false, false, RPlot_Clone_test_SaveName);
-    DrawAndSaveHistogram1D(Canvas, Histogram_list, TLPlot_Clone_test, 1, kBlue, true, false, false, TLPlot_Clone_test_SaveName);
-    DrawAndSaveHistogram1D(Canvas, Histogram_list, RPlot_Clone_test_rebined, 1, kBlue, true, false, false, RPlot_Clone_test_rebined_SaveName);
-    DrawAndSaveHistogram1D(Canvas, Histogram_list, TLPlot_Clone_test_rebined, 1, kBlue, true, false, false, TLPlot_Clone_test_rebined_SaveName);
-    DrawAndSaveHistogram1D(Canvas, Histogram_list, RPlot_Clone, 1, kBlue, true, true, true, RPlot_Clone_SaveName);
-    DrawAndSaveHistogram1D(Canvas, Histogram_list, TLPlot_Clone, 1, kBlue, true, true, true, TLPlot_Clone_SaveName);
+    string ACorrection_plot_Name = ACorrection_plot->GetName();
+    string TFolder_Name = ACorrection_plot_Name + " folder";
+    TFolder *ACorrectionComponentPlots = new TFolder(TFolder_Name.c_str(), TFolder_Name.c_str());
+
+    DrawAndSaveHistogram1D(Canvas, Histogram_list, ACorrectionComponentPlots, RPlot_Clone_test, 1, kBlue, true, false, false, RPlot_Clone_test_SaveName);
+    DrawAndSaveHistogram1D(Canvas, Histogram_list, ACorrectionComponentPlots, TLPlot_Clone_test, 1, kBlue, true, false, false, TLPlot_Clone_test_SaveName);
+    DrawAndSaveHistogram1D(Canvas, Histogram_list, ACorrectionComponentPlots, RPlot_Clone_test_rebined, 1, kBlue, true, false, false, RPlot_Clone_test_rebined_SaveName);
+    DrawAndSaveHistogram1D(Canvas, Histogram_list, ACorrectionComponentPlots, TLPlot_Clone_test_rebined, 1, kBlue, true, false, false, TLPlot_Clone_test_rebined_SaveName);
+    DrawAndSaveHistogram1D(Canvas, Histogram_list, ACorrectionComponentPlots, RPlot_Clone, 1, kBlue, true, true, true, RPlot_Clone_SaveName);
+    DrawAndSaveHistogram1D(Canvas, Histogram_list, ACorrectionComponentPlots, TLPlot_Clone, 1, kBlue, true, true, true, TLPlot_Clone_SaveName);
+//    DrawAndSaveHistogram1D(Canvas, Histogram_list, RPlot_Clone_test, 1, kBlue, true, false, false, RPlot_Clone_test_SaveName);
+//    DrawAndSaveHistogram1D(Canvas, Histogram_list, TLPlot_Clone_test, 1, kBlue, true, false, false, TLPlot_Clone_test_SaveName);
+//    DrawAndSaveHistogram1D(Canvas, Histogram_list, RPlot_Clone_test_rebined, 1, kBlue, true, false, false, RPlot_Clone_test_rebined_SaveName);
+//    DrawAndSaveHistogram1D(Canvas, Histogram_list, TLPlot_Clone_test_rebined, 1, kBlue, true, false, false, TLPlot_Clone_test_rebined_SaveName);
+//    DrawAndSaveHistogram1D(Canvas, Histogram_list, RPlot_Clone, 1, kBlue, true, true, true, RPlot_Clone_SaveName);
+//    DrawAndSaveHistogram1D(Canvas, Histogram_list, TLPlot_Clone, 1, kBlue, true, true, true, TLPlot_Clone_SaveName);
 
     //<editor-fold desc="Plotting and saving ACorrection_plot">
     ACorrection_plot->SetLineStyle(1);
@@ -170,9 +180,11 @@ void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, const string &Sample
     if (plot_errorbars) { ACorrection_plot->Sumw2(); }
 
     if (rebin_plots) { ACorrection_plot->Rebin(2); }
+
     ACorrection_plot->Divide(RPlot_Clone);
     ACorrection_plot->Draw();
     ACorrection_plot->SetStats(0);
+    Histogram_list->Add(ACorrectionComponentPlots);
     Histogram_list->Add(ACorrection_plot);
     Canvas->SaveAs((ACorrection_plot_SaveName).c_str());
     Canvas->Clear();
@@ -242,8 +254,9 @@ void DEfficiency::DrawAndSaveACorrPlots(bool save_ACorr_data, const string &Samp
 // DrawAndSaveHistogram1D function --------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="DrawAndSaveHistogram1D function">
-void DEfficiency::DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_list, TH1D *Histogram1D, int LineStyle, int kColor, bool ShowStats, bool PlotErrorbars,
-                                         bool RebinPlots, const string &HistSaveDir) {
+void DEfficiency::DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_list, TFolder *Histogram_folder, TH1D *Histogram1D, int LineStyle, int kColor, bool ShowStats,
+                                         bool PlotErrorbars, bool RebinPlots, const string &HistSaveDir) {
+    //TODO: remove TList *Histogram_list from arguments if not needed
     Histogram1D->SetLineStyle(LineStyle);
     Histogram1D->SetLineColor(kColor);
     Histogram1D->SetStats(ShowStats);
@@ -261,7 +274,8 @@ void DEfficiency::DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_l
     if (RebinPlots) { Histogram1D->Rebin(2); }
 
     Histogram1D->Draw();
-    Histogram_list->Add(Histogram1D);
+    Histogram_folder->Add(Histogram1D);
+//    Histogram_list->Add(Histogram1D);
 
     HistCanvas->SaveAs(HistSaveDir.c_str());
     HistCanvas->Clear();

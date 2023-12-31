@@ -76,22 +76,22 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
         DSCuts ResSliceFitCuts;
 
         if (Particle == "Neutron") {
-            hStatsTitle = "n res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+            hStatsTitle = "n res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{nFD}#leq" +
                           to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
-            hTitle = "Neutron resolution for " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+            hTitle = "Neutron resolution for " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{nFD}#leq" +
                      to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
             hSaveName = to_string(SliceNumber) + "_res_plot_for_TL_P_n_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                         to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
             hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
-            hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "R_{n} = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
+            hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "R_{nFD} = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
                                        hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
             ResSliceFitCuts = DSCuts(("fit_" + hCutName), "FD", "Neutron", "1n", 0, -9999, 9999);
         } else if (Particle == "Proton") {
-            hStatsTitle = "p res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
+            hStatsTitle = "p res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{pFD}#leq" +
                           to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
-            hTitle = "Proton resolution for " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
+            hTitle = "Proton resolution for " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{pFD}#leq" +
                      to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
             hSaveName = to_string(SliceNumber) + "_res_plot_for_TL_P_p_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                         to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
@@ -211,25 +211,42 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
         if (momResS2CalcMode && !momResS2RunMode) {
             cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 calculation mode. Loading momResS1 variables...\n";
 
+            string NeutronCorrectionDataFile = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
+
             /* Load neutron correction variables (from momResS1), but not smearing variables */
-            ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
-                             Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
+            ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
 
-//            ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
-//                             Calculate_momResS2, SampleName, NucleonCutsDirectory);
+            //<editor-fold desc="Safety checks for data files">
+            if (!findSubstring(NeutronCorrectionDataFile, "Neutron") || findSubstring(NeutronCorrectionDataFile, "Proton")) {
+                cout << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+            }
+            //</editor-fold>
 
-            cout << "Done.\n";
+            cout << "\nDone.\n";
         } else if (!momResS2CalcMode && momResS2RunMode) {
             cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 run mode.\n";
             cout << "Loading correction from momResS1 variables & smearing from momResS2 variables...\n";
 
-            /* Load neutron correction variables (from momResS1) */
-            ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par").c_str(),
-                             Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
+            string NeutronCorrectionDataFile = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
+            string ProtonSmearingDataFile = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par";
 
-            /* Load neutron correction variables (from momResS2) */
-            ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par").c_str(),
-                             Calculate_momResS2, SampleName, NucleonCutsDirectory, false, true);
+            /* Load neutron correction variables (from momResS1) */
+            ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
+
+            /* Load proton smearing variables (from momResS2) */
+            ReadResDataParam(ProtonSmearingDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, false, true);
+
+            //<editor-fold desc="Safety checks for data files">
+            if (!findSubstring(NeutronCorrectionDataFile, "Neutron") || findSubstring(NeutronCorrectionDataFile, "Proton")) {
+                cout << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+            }
+
+            if (!findSubstring(ProtonSmearingDataFile, "Neutron") || findSubstring(ProtonSmearingDataFile, "Proton")) {
+                cout << "\n\nNeutronResolution::NeutronResolution: proton smearing variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+            }
+            //</editor-fold>
+
+            cout << "\nDone.\n";
         }
     }
 }
@@ -421,9 +438,6 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             FitParam->AddText(("Fit amp = " + to_string(FitAmp)).c_str());
             FitParam->AddText(("Fit mean = " + to_string(FitMean)).c_str());
             FitParam->AddText(("Fit std = " + to_string(FitStd)).c_str());
-//            FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 8)).c_str());
-//            FitParam->AddText(("Fit mean = " + to_string_with_precision(FitMean, 8)).c_str());
-//            FitParam->AddText(("Fit std = " + to_string_with_precision(FitStd, 8)).c_str());
             ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
             FitParam->Draw("same");
 
@@ -434,9 +448,16 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             string hSlice_CloneSaveName = hSlice_CloneSaveDir + sNameFlag + ResSlices.at(i).GetHistogram1DSaveName() + "_fitted.png";
             system(("mkdir -p " + hSlice_CloneSaveDir).c_str());
 
+            auto ListOfFunctions = hSlice->GetListOfFunctions();
+            ListOfFunctions->Add((TObject *) FitParam);
+
             SliceFitCanvas->SaveAs(hSlice_CloneSaveName.c_str());
 
-            FittedNeutronResSlices->Add(hSlice);
+            if (Particle == "Neutron") {
+                FittedNeutronResSlices->Add(hSlice);
+            } else if (Particle == "Proton") {
+                FittedProtonResSlices->Add(hSlice);
+            }
 
             SliceFitCanvas->Clear();
 
@@ -446,20 +467,17 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
         }
     }
 
-    if (Particle == "Neutron") {
-        //TODO: figure out if this should be here
-        Fitter_Std_pol1(), Fitter_Std_pol2(), Fitter_Std_pol3();
-        Fitter_Std_pol1_wKC(), Fitter_Std_pol2_wKC(), Fitter_Std_pol3_wKC();
-        Fitter_Corr_pol1(), Fitter_Corr_pol2(), Fitter_Corr_pol3();
-        Fitter_Corr_pol1_wKC(), Fitter_Corr_pol2_wKC(), Fitter_Corr_pol3_wKC();
-    }
+    Fitter_Std_pol1(Particle), Fitter_Std_pol2(Particle), Fitter_Std_pol3(Particle);
+    Fitter_Std_pol1_wKC(Particle), Fitter_Std_pol2_wKC(Particle), Fitter_Std_pol3_wKC(Particle);
+    Fitter_Corr_pol1(Particle), Fitter_Corr_pol2(Particle), Fitter_Corr_pol3(Particle);
+    Fitter_Corr_pol1_wKC(Particle), Fitter_Corr_pol2_wKC(Particle), Fitter_Corr_pol3_wKC(Particle);
 }
 //</editor-fold>
 
 // Fitter functions -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Fitter functions">
-void NeutronResolution::Fitter_Std_pol1() {
+void NeutronResolution::Fitter_Std_pol1(const string &Particle) {
     cout << "\n\nFitter_Std_pol1 variables:\n";
     bool PlotPoints = false;
 
@@ -516,15 +534,21 @@ void NeutronResolution::Fitter_Std_pol1() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Std_pol1->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Std_pol1->GetYaxis()->SetTitle("R_{nFD} fit width");
+    } else if (Particle == "Proton") {
+        g_Std_pol1->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Std_pol1->GetYaxis()->SetTitle("R_{pFD} fit width");
+    }
+
     g_Std_pol1->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol1->GetXaxis()->SetLabelSize(0.0425);
     g_Std_pol1->GetXaxis()->CenterTitle(true);
-    g_Std_pol1->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Std_pol1->GetYaxis()->SetTitleSize(0.06);
     g_Std_pol1->GetYaxis()->SetLabelSize(0.0425);
     g_Std_pol1->GetYaxis()->CenterTitle(true);
-    g_Std_pol1->GetYaxis()->SetTitle("R_{n} fit width");
-    g_Std_pol1->SetTitle("Proton smear fit (noPC, linear fit)");
+    g_Std_pol1->SetTitle("Proton smear fit (no KC, linear fit)");
 
     TF1 *f_Std_pol1 = new TF1("f_Std_pol1", "[0] * x + [1]"); // A*x + B
 
@@ -547,7 +571,14 @@ void NeutronResolution::Fitter_Std_pol1() {
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025;
 
     auto Std_pol1_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
-    TLegendEntry *Std_pol1_legend_fit = Std_pol1_legend->AddEntry(f_Std_pol1, "f(#bar{P}_{n}) = A#bar{P}_{n} + B", "l");
+    TLegendEntry *Std_pol1_legend_fit;
+
+    if (Particle == "Neutron") {
+        Std_pol1_legend_fit = Std_pol1_legend->AddEntry(f_Std_pol1, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
+    } else if (Particle == "Proton") {
+        Std_pol1_legend_fit = Std_pol1_legend->AddEntry(f_Std_pol1, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
+    }
+
     Std_pol1_legend->SetTextFont(12);
     Std_pol1_legend->SetTextSize(0.03);
     Std_pol1_legend->Draw("same");
@@ -567,13 +598,13 @@ void NeutronResolution::Fitter_Std_pol1() {
     ListOfFunctions->Add((TObject *) Std_pol1_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesWidth->Add(g_Std_pol1);
+    if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol1); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol1); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "01_Fit_Std_pol1.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Std_pol1_wKC() {
+void NeutronResolution::Fitter_Std_pol1_wKC(const string &Particle) {
     cout << "\n\nFitter_Std_pol1_wKC variables:\n";
     bool PlotPoints = false;
 
@@ -634,14 +665,20 @@ void NeutronResolution::Fitter_Std_pol1_wKC() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Std_pol1_wKC->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Std_pol1_wKC->GetYaxis()->SetTitle("R_{nFD} fit width");
+    } else if (Particle == "Proton") {
+        g_Std_pol1_wKC->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Std_pol1_wKC->GetYaxis()->SetTitle("R_{pFD} fit width");
+    }
+
     g_Std_pol1_wKC->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol1_wKC->GetXaxis()->SetLabelSize(0.0425);
     g_Std_pol1_wKC->GetXaxis()->CenterTitle(true);
-    g_Std_pol1_wKC->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Std_pol1_wKC->GetYaxis()->SetTitleSize(0.06);
     g_Std_pol1_wKC->GetYaxis()->SetLabelSize(0.0425);
     g_Std_pol1_wKC->GetYaxis()->CenterTitle(true);
-    g_Std_pol1_wKC->GetYaxis()->SetTitle("R_{n} fit width");
     g_Std_pol1_wKC->SetTitle("Proton smear fit (wKC, linear fit)");
 
     TF1 *f_Std_pol1_wKC = new TF1("f_Std_pol1_wKC", "[0] * x + [1]"); // A*x + B
@@ -665,7 +702,14 @@ void NeutronResolution::Fitter_Std_pol1_wKC() {
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025;
 
     auto Std_pol1_wKC_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
-    TLegendEntry *Std_pol1_wKC_legend_fit = Std_pol1_wKC_legend->AddEntry(f_Std_pol1_wKC, "f(#bar{P}_{n}) = A#bar{P}_{n} + B", "l");
+    TLegendEntry *Std_pol1_wKC_legend_fit;
+
+    if (Particle == "Neutron") {
+        Std_pol1_wKC_legend_fit = Std_pol1_wKC_legend->AddEntry(f_Std_pol1_wKC, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
+    } else if (Particle == "Proton") {
+        Std_pol1_wKC_legend_fit = Std_pol1_wKC_legend->AddEntry(f_Std_pol1_wKC, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
+    }
+
     Std_pol1_wKC_legend->SetTextFont(12);
     Std_pol1_wKC_legend->SetTextSize(0.03);
     Std_pol1_wKC_legend->Draw("same");
@@ -685,13 +729,13 @@ void NeutronResolution::Fitter_Std_pol1_wKC() {
     ListOfFunctions->Add((TObject *) Std_pol1_wKC_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesWidth->Add(g_Std_pol1_wKC);
+    if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol1_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol1_wKC); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "01_Fit_Std_pol1_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Std_pol2() {
+void NeutronResolution::Fitter_Std_pol2(const string &Particle) {
     cout << "\n\nFitter_Std_pol2 variables:\n";
     bool PlotPoints = false;
 
@@ -748,15 +792,21 @@ void NeutronResolution::Fitter_Std_pol2() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Std_pol2->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Std_pol2->GetYaxis()->SetTitle("R_{nFD} fit width");
+    } else if (Particle == "Proton") {
+        g_Std_pol2->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Std_pol2->GetYaxis()->SetTitle("R_{pFD} fit width");
+    }
+
     g_Std_pol2->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol2->GetXaxis()->SetLabelSize(0.0425);
     g_Std_pol2->GetXaxis()->CenterTitle(true);
-    g_Std_pol2->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Std_pol2->GetYaxis()->SetTitleSize(0.06);
     g_Std_pol2->GetYaxis()->SetLabelSize(0.0425);
     g_Std_pol2->GetYaxis()->CenterTitle(true);
-    g_Std_pol2->GetYaxis()->SetTitle("R_{n} fit width");
-    g_Std_pol2->SetTitle("Proton smear fit (noPC, quadratic fit)");
+    g_Std_pol2->SetTitle("Proton smear fit (no KC, quadratic fit)");
 
     TF1 *f_Std_pol2 = new TF1("f_Std_pol2", "[0] * x * x + [1] * x + [2]"); // A*x*x + B*x + C
 
@@ -781,7 +831,14 @@ void NeutronResolution::Fitter_Std_pol2() {
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025 - 0.05;
 
     auto Std_pol2_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
-    TLegendEntry *Std_pol2_legend_fit = Std_pol2_legend->AddEntry(f_Std_pol2, "f(#bar{P}_{n}) = A#bar{P}_{n}^{2} + B#bar{P}_{n} + C", "l");
+    TLegendEntry *Std_pol2_legend_fit;
+
+    if (Particle == "Neutron") {
+        Std_pol2_legend_fit = Std_pol2_legend->AddEntry(f_Std_pol2, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
+    } else if (Particle == "Proton") {
+        Std_pol2_legend_fit = Std_pol2_legend->AddEntry(f_Std_pol2, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
+    }
+
     Std_pol2_legend->SetTextFont(12);
     Std_pol2_legend->SetTextSize(0.03);
     Std_pol2_legend->Draw("same");
@@ -802,13 +859,13 @@ void NeutronResolution::Fitter_Std_pol2() {
     ListOfFunctions->Add((TObject *) Std_pol2_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesWidth->Add(g_Std_pol2);
+    if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol2); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol2); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "02_Fit_Std_pol2.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Std_pol2_wKC() {
+void NeutronResolution::Fitter_Std_pol2_wKC(const string &Particle) {
     cout << "\n\nFitter_Std_pol2_wKC variables:\n";
     bool PlotPoints = false;
 
@@ -869,14 +926,20 @@ void NeutronResolution::Fitter_Std_pol2_wKC() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Std_pol2_wKC->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Std_pol2_wKC->GetYaxis()->SetTitle("R_{nFD} fit width");
+    } else if (Particle == "Proton") {
+        g_Std_pol2_wKC->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Std_pol2_wKC->GetYaxis()->SetTitle("R_{pFD} fit width");
+    }
+
     g_Std_pol2_wKC->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol2_wKC->GetXaxis()->SetLabelSize(0.0425);
     g_Std_pol2_wKC->GetXaxis()->CenterTitle(true);
-    g_Std_pol2_wKC->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Std_pol2_wKC->GetYaxis()->SetTitleSize(0.06);
     g_Std_pol2_wKC->GetYaxis()->SetLabelSize(0.0425);
     g_Std_pol2_wKC->GetYaxis()->CenterTitle(true);
-    g_Std_pol2_wKC->GetYaxis()->SetTitle("R_{n} fit width");
     g_Std_pol2_wKC->SetTitle("Proton smear fit (wKC, quadratic fit)");
 
     TF1 *f_Std_pol2_wKC = new TF1("f_Std_pol2_wKC", "[0] * x * x + [1] * x + [2]"); // A*x*x + B*x + C
@@ -902,7 +965,14 @@ void NeutronResolution::Fitter_Std_pol2_wKC() {
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025 - 0.05;
 
     auto Std_pol2_wKC_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
-    TLegendEntry *Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "f(#bar{P}_{n}) = A#bar{P}_{n}^{2} + B#bar{P}_{n} + C", "l");
+    TLegendEntry *Std_pol2_wKC_legend_fit;
+
+    if (Particle == "Neutron") {
+        Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
+    } else if (Particle == "Proton") {
+        Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
+    }
+
     Std_pol2_wKC_legend->SetTextFont(12);
     Std_pol2_wKC_legend->SetTextSize(0.03);
     Std_pol2_wKC_legend->Draw("same");
@@ -923,13 +993,13 @@ void NeutronResolution::Fitter_Std_pol2_wKC() {
     ListOfFunctions->Add((TObject *) Std_pol2_wKC_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesWidth->Add(g_Std_pol2_wKC);
+    if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol2_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol2_wKC); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "02_Fit_Std_pol2_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Std_pol3() {
+void NeutronResolution::Fitter_Std_pol3(const string &Particle) {
     cout << "\n\nFitter_Std_pol3 variables:\n";
     bool PlotPoints = false;
 
@@ -986,15 +1056,21 @@ void NeutronResolution::Fitter_Std_pol3() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Std_pol3->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Std_pol3->GetYaxis()->SetTitle("R_{nFD} fit width");
+    } else if (Particle == "Proton") {
+        g_Std_pol3->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Std_pol3->GetYaxis()->SetTitle("R_{pFD} fit width");
+    }
+
     g_Std_pol3->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol3->GetXaxis()->SetLabelSize(0.0425);
     g_Std_pol3->GetXaxis()->CenterTitle(true);
-    g_Std_pol3->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Std_pol3->GetYaxis()->SetTitleSize(0.06);
     g_Std_pol3->GetYaxis()->SetLabelSize(0.0425);
     g_Std_pol3->GetYaxis()->CenterTitle(true);
-    g_Std_pol3->GetYaxis()->SetTitle("R_{n} fit width");
-    g_Std_pol3->SetTitle("Proton smear fit (noPC, cubic fit)");
+    g_Std_pol3->SetTitle("Proton smear fit (no KC, cubic fit)");
 
     TF1 *f_Std_pol3 = new TF1("f_Std_pol3", "[0] * x * x * x + [1] * x * x + [2] * x + [3]"); // A*x*x*x + B*x*x + C*x + D
 
@@ -1021,7 +1097,14 @@ void NeutronResolution::Fitter_Std_pol3() {
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025 - 0.05 - 0.05;
 
     auto Std_pol3_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
-    TLegendEntry *Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3, "f(#bar{P}_{n}) = A#bar{P}_{n}^{3} + B#bar{P}_{n}^{2} + C#bar{P}_{n} + D", "l");
+    TLegendEntry *Std_pol3_legend_fit;
+
+    if (Particle == "Neutron") {
+        Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+    } else if (Particle == "Proton") {
+        Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+    }
+
     Std_pol3_legend->SetTextFont(12);
     Std_pol3_legend->SetTextSize(0.03);
     Std_pol3_legend->Draw("same");
@@ -1043,13 +1126,13 @@ void NeutronResolution::Fitter_Std_pol3() {
     ListOfFunctions->Add((TObject *) Std_pol3_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesWidth->Add(g_Std_pol3);
+    if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol3); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol3); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "03_Fit_Std_pol3.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Std_pol3_wKC() {
+void NeutronResolution::Fitter_Std_pol3_wKC(const string &Particle) {
     cout << "\n\nFitter_Std_pol3_wKC variables:\n";
     bool PlotPoints = false;
 
@@ -1110,14 +1193,20 @@ void NeutronResolution::Fitter_Std_pol3_wKC() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Std_pol3_wKC->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Std_pol3_wKC->GetYaxis()->SetTitle("R_{nFD} fit width");
+    } else if (Particle == "Proton") {
+        g_Std_pol3_wKC->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Std_pol3_wKC->GetYaxis()->SetTitle("R_{pFD} fit width");
+    }
+
     g_Std_pol3_wKC->GetXaxis()->SetTitleSize(0.06);
     g_Std_pol3_wKC->GetXaxis()->SetLabelSize(0.0425);
     g_Std_pol3_wKC->GetXaxis()->CenterTitle(true);
-    g_Std_pol3_wKC->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Std_pol3_wKC->GetYaxis()->SetTitleSize(0.06);
     g_Std_pol3_wKC->GetYaxis()->SetLabelSize(0.0425);
     g_Std_pol3_wKC->GetYaxis()->CenterTitle(true);
-    g_Std_pol3_wKC->GetYaxis()->SetTitle("R_{n} fit width");
     g_Std_pol3_wKC->SetTitle("Proton smear fit (wKC, cubic fit)");
 
     TF1 *f_Std_pol3_wKC = new TF1("f_Std_pol3_wKC", "[0] * x * x * x + [1] * x * x + [2] * x + [3]"); // A*x*x*x + B*x*x + C*x + D
@@ -1145,8 +1234,14 @@ void NeutronResolution::Fitter_Std_pol3_wKC() {
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025 - 0.05 - 0.05;
 
     auto Std_pol3_wKC_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
-    TLegendEntry *Std_pol3_wKC_legend_fit = Std_pol3_wKC_legend->AddEntry(f_Std_pol3_wKC, "f(#bar{P}_{n}) = A#bar{P}_{n}^{3} + B#bar{P}_{n}^{2} + C#bar{P}_{n} + D",
-                                                                          "l");
+    TLegendEntry *Std_pol3_wKC_legend_fit;
+
+    if (Particle == "Neutron") {
+        Std_pol3_wKC_legend_fit = Std_pol3_wKC_legend->AddEntry(f_Std_pol3_wKC, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+    } else if (Particle == "Proton") {
+        Std_pol3_wKC_legend_fit = Std_pol3_wKC_legend->AddEntry(f_Std_pol3_wKC, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+    }
+
     Std_pol3_wKC_legend->SetTextFont(12);
     Std_pol3_wKC_legend->SetTextSize(0.03);
     Std_pol3_wKC_legend->Draw("same");
@@ -1168,13 +1263,13 @@ void NeutronResolution::Fitter_Std_pol3_wKC() {
     ListOfFunctions->Add((TObject *) Std_pol3_wKC_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesWidth->Add(g_Std_pol3_wKC);
+    if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol3_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol3_wKC); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "03_Fit_Std_pol3_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Corr_pol1() {
+void NeutronResolution::Fitter_Corr_pol1(const string &Particle) {
     cout << "\n\nFitter_Corr_pol1 variables:\n";
     bool PlotPoints = false;
 
@@ -1231,15 +1326,22 @@ void NeutronResolution::Fitter_Corr_pol1() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Corr_pol1->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Corr_pol1->GetYaxis()->SetTitle("R_{nFD} fit mean");
+        g_Corr_pol1->SetTitle("Neutron correction fit (no KC, linear fit)");
+    } else if (Particle == "Proton") {
+        g_Corr_pol1->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Corr_pol1->GetYaxis()->SetTitle("R_{pFD} fit mean");
+        g_Corr_pol1->SetTitle("Proton correction fit (no KC, linear fit)");
+    }
+
     g_Corr_pol1->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol1->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol1->GetXaxis()->CenterTitle(true);
-    g_Corr_pol1->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Corr_pol1->GetYaxis()->SetTitleSize(0.06);
     g_Corr_pol1->GetYaxis()->SetLabelSize(0.0425);
     g_Corr_pol1->GetYaxis()->CenterTitle(true);
-    g_Corr_pol1->GetYaxis()->SetTitle("R_{n} fit mean");
-    g_Corr_pol1->SetTitle("Neutron correction fit (noPC, linear fit)");
 
     TF1 *f_Corr_pol1 = new TF1("f_Corr_pol1", "[0] * x + [1]"); // A*x + B
 
@@ -1262,7 +1364,14 @@ void NeutronResolution::Fitter_Corr_pol1() {
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025;
 
     auto Corr_pol1_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
-    TLegendEntry *Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f_Corr_pol1, "f(#bar{P}_{n}) = A#bar{P}_{n} + B", "l");
+    TLegendEntry *Corr_pol1_legend_fit;
+
+    if (Particle == "Neutron") {
+        Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f_Corr_pol1, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
+    } else if (Particle == "Proton") {
+        Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f_Corr_pol1, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
+    }
+
     Corr_pol1_legend->SetTextFont(12);
     Corr_pol1_legend->SetTextSize(0.03);
     Corr_pol1_legend->Draw("same");
@@ -1282,13 +1391,13 @@ void NeutronResolution::Fitter_Corr_pol1() {
     ListOfFunctions->Add((TObject *) Corr_pol1_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesMean->Add(g_Corr_pol1);
+    if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol1); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol1); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "04_Fit_Corr_pol1.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Corr_pol1_wKC() {
+void NeutronResolution::Fitter_Corr_pol1_wKC(const string &Particle) {
     cout << "\n\nFitter_Corr_pol1_wKC variables:\n";
     bool PlotPoints = false;
 
@@ -1349,15 +1458,22 @@ void NeutronResolution::Fitter_Corr_pol1_wKC() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Corr_pol1_wKC->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Corr_pol1_wKC->GetYaxis()->SetTitle("R_{nFD} fit mean");
+        g_Corr_pol1_wKC->SetTitle("Neutron correction fit (wKC, linear fit)");
+    } else if (Particle == "Proton") {
+        g_Corr_pol1_wKC->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Corr_pol1_wKC->GetYaxis()->SetTitle("R_{pFD} fit mean");
+        g_Corr_pol1_wKC->SetTitle("Proton correction fit (wKC, linear fit)");
+    }
+
     g_Corr_pol1_wKC->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol1_wKC->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol1_wKC->GetXaxis()->CenterTitle(true);
-    g_Corr_pol1_wKC->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Corr_pol1_wKC->GetYaxis()->SetTitleSize(0.06);
     g_Corr_pol1_wKC->GetYaxis()->SetLabelSize(0.0425);
     g_Corr_pol1_wKC->GetYaxis()->CenterTitle(true);
-    g_Corr_pol1_wKC->GetYaxis()->SetTitle("R_{n} fit mean");
-    g_Corr_pol1_wKC->SetTitle("Neutron correction fit (wKC, linear fit)");
 
     TF1 *f_Corr_pol1_wKC = new TF1("f_Corr_pol1_wKC", "[0] * x + [1]"); // A*x + B
 
@@ -1380,7 +1496,14 @@ void NeutronResolution::Fitter_Corr_pol1_wKC() {
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025;
 
     auto Corr_pol1_wKC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
-    TLegendEntry *Corr_pol1_wKC_legend_fit = Corr_pol1_wKC_legend->AddEntry(f_Corr_pol1_wKC, "f(#bar{P}_{n}) = A#bar{P}_{n} + B", "l");
+    TLegendEntry *Corr_pol1_wKC_legend_fit;
+
+    if (Particle == "Neutron") {
+        Corr_pol1_wKC_legend_fit = Corr_pol1_wKC_legend->AddEntry(f_Corr_pol1_wKC, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
+    } else if (Particle == "Proton") {
+        Corr_pol1_wKC_legend_fit = Corr_pol1_wKC_legend->AddEntry(f_Corr_pol1_wKC, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
+    }
+
     Corr_pol1_wKC_legend->SetTextFont(12);
     Corr_pol1_wKC_legend->SetTextSize(0.03);
     Corr_pol1_wKC_legend->Draw("same");
@@ -1400,13 +1523,13 @@ void NeutronResolution::Fitter_Corr_pol1_wKC() {
     ListOfFunctions->Add((TObject *) Corr_pol1_wKC_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesMean->Add(g_Corr_pol1_wKC);
+    if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol1_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol1_wKC); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "04_Fit_Corr_pol1_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Corr_pol2() {
+void NeutronResolution::Fitter_Corr_pol2(const string &Particle) {
     cout << "\n\nFitter_Corr_pol2 variables:\n";
     bool PlotPoints = false;
 
@@ -1463,15 +1586,22 @@ void NeutronResolution::Fitter_Corr_pol2() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Corr_pol2->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Corr_pol2->GetYaxis()->SetTitle("R_{nFD} fit mean");
+        g_Corr_pol2->SetTitle("Neutron correction fit (no KC, quadratic fit)");
+    } else if (Particle == "Proton") {
+        g_Corr_pol2->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Corr_pol2->GetYaxis()->SetTitle("R_{pFD} fit mean");
+        g_Corr_pol2->SetTitle("Proton correction fit (no KC, quadratic fit)");
+    }
+
     g_Corr_pol2->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol2->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol2->GetXaxis()->CenterTitle(true);
-    g_Corr_pol2->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Corr_pol2->GetYaxis()->SetTitleSize(0.06);
     g_Corr_pol2->GetYaxis()->SetLabelSize(0.0425);
     g_Corr_pol2->GetYaxis()->CenterTitle(true);
-    g_Corr_pol2->GetYaxis()->SetTitle("R_{n} fit mean");
-    g_Corr_pol2->SetTitle("Neutron correction fit (noPC, quadratic fit)");
 
     TF1 *f_Corr_pol2 = new TF1("f_Corr_pol2", "[0] * x * x + [1] * x + [2]"); // A*x*x + B*x + C
 
@@ -1496,7 +1626,14 @@ void NeutronResolution::Fitter_Corr_pol2() {
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05;
 
     auto Corr_pol2_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
-    TLegendEntry *Corr_pol2_legend_fit = Corr_pol2_legend->AddEntry(f_Corr_pol2, "f(#bar{P}_{n}) = A#bar{P}_{n}^{2} + B#bar{P}_{n} + C", "l");
+    TLegendEntry *Corr_pol2_legend_fit;
+
+    if (Particle == "Neutron") {
+        Corr_pol2_legend_fit = Corr_pol2_legend->AddEntry(f_Corr_pol2, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
+    } else if (Particle == "Proton") {
+        Corr_pol2_legend_fit = Corr_pol2_legend->AddEntry(f_Corr_pol2, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
+    }
+
     Corr_pol2_legend->SetTextFont(12);
     Corr_pol2_legend->SetTextSize(0.03);
     Corr_pol2_legend->Draw("same");
@@ -1517,13 +1654,13 @@ void NeutronResolution::Fitter_Corr_pol2() {
     ListOfFunctions->Add((TObject *) Corr_pol2_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesMean->Add(g_Corr_pol2);
+    if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol2); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol2); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "05_Fit_Corr_pol2.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Corr_pol2_wKC() {
+void NeutronResolution::Fitter_Corr_pol2_wKC(const string &Particle) {
     cout << "\n\nFitter_Corr_pol2_wKC variables:\n";
     bool PlotPoints = false;
 
@@ -1584,15 +1721,22 @@ void NeutronResolution::Fitter_Corr_pol2_wKC() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Corr_pol2_wKC->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Corr_pol2_wKC->GetYaxis()->SetTitle("R_{nFD} fit mean");
+        g_Corr_pol2_wKC->SetTitle("Neutron correction fit (wKC, quadratic fit)");
+    } else if (Particle == "Proton") {
+        g_Corr_pol2_wKC->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Corr_pol2_wKC->GetYaxis()->SetTitle("R_{pFD} fit mean");
+        g_Corr_pol2_wKC->SetTitle("Proton correction fit (wKC, quadratic fit)");
+    }
+
     g_Corr_pol2_wKC->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol2_wKC->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol2_wKC->GetXaxis()->CenterTitle(true);
-    g_Corr_pol2_wKC->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Corr_pol2_wKC->GetYaxis()->SetTitleSize(0.06);
     g_Corr_pol2_wKC->GetYaxis()->SetLabelSize(0.0425);
     g_Corr_pol2_wKC->GetYaxis()->CenterTitle(true);
-    g_Corr_pol2_wKC->GetYaxis()->SetTitle("R_{n} fit mean");
-    g_Corr_pol2_wKC->SetTitle("Neutron correction fit (wKC, quadratic fit)");
 
     TF1 *f_Corr_pol2_wKC = new TF1("f_Corr_pol2_wKC", "[0] * x * x + [1] * x + [2]"); // A*x*x + B*x + C
 
@@ -1617,7 +1761,14 @@ void NeutronResolution::Fitter_Corr_pol2_wKC() {
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05;
 
     auto Corr_pol2_wKC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
-    TLegendEntry *Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "f(#bar{P}_{n}) = A#bar{P}_{n}^{2} + B#bar{P}_{n} + C", "l");
+    TLegendEntry *Corr_pol2_wKC_legend_fit;
+
+    if (Particle == "Neutron") {
+        Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
+    } else if (Particle == "Proton") {
+        Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
+    }
+
     Corr_pol2_wKC_legend->SetTextFont(12);
     Corr_pol2_wKC_legend->SetTextSize(0.03);
     Corr_pol2_wKC_legend->Draw("same");
@@ -1638,13 +1789,13 @@ void NeutronResolution::Fitter_Corr_pol2_wKC() {
     ListOfFunctions->Add((TObject *) Corr_pol2_wKC_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesMean->Add(g_Corr_pol2_wKC);
+    if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol2_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol2_wKC); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "05_Fit_Corr_pol2_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Corr_pol3() {
+void NeutronResolution::Fitter_Corr_pol3(const string &Particle) {
     cout << "\n\nFitter_Corr_pol3 variables:\n";
     bool PlotPoints = false;
 
@@ -1701,15 +1852,22 @@ void NeutronResolution::Fitter_Corr_pol3() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Corr_pol3->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Corr_pol3->GetYaxis()->SetTitle("R_{nFD} fit mean");
+        g_Corr_pol3->SetTitle("Neutron correction fit (no KC, cubic fit)");
+    } else if (Particle == "Proton") {
+        g_Corr_pol3->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Corr_pol3->GetYaxis()->SetTitle("R_{pFD} fit mean");
+        g_Corr_pol3->SetTitle("Proton correction fit (no KC, cubic fit)");
+    }
+
     g_Corr_pol3->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol3->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol3->GetXaxis()->CenterTitle(true);
-    g_Corr_pol3->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Corr_pol3->GetYaxis()->SetTitleSize(0.06);
     g_Corr_pol3->GetYaxis()->SetLabelSize(0.0425);
     g_Corr_pol3->GetYaxis()->CenterTitle(true);
-    g_Corr_pol3->GetYaxis()->SetTitle("R_{n} fit mean");
-    g_Corr_pol3->SetTitle("Neutron correction fit (noPC, cubic fit)");
 
     TF1 *f_Corr_pol3 = new TF1("f_Corr_pol3", "[0] * x * x * x + [1] * x * x + [2] * x + [3]"); // A*x*x*x + B*x*x + C*x + D
 
@@ -1736,7 +1894,14 @@ void NeutronResolution::Fitter_Corr_pol3() {
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05 - 0.05;
 
     auto Corr_pol3_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
-    TLegendEntry *Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3, "f(#bar{P}_{n}) = A#bar{P}_{n}^{3} + B#bar{P}_{n}^{2} + C#bar{P}_{n} + D", "l");
+    TLegendEntry *Corr_pol3_legend_fit;
+
+    if (Particle == "Neutron") {
+        Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+    } else if (Particle == "Proton") {
+        Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+    }
+
     Corr_pol3_legend->SetTextFont(12);
     Corr_pol3_legend->SetTextSize(0.03);
     Corr_pol3_legend->Draw("same");
@@ -1758,13 +1923,13 @@ void NeutronResolution::Fitter_Corr_pol3() {
     ListOfFunctions->Add((TObject *) Corr_pol3_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesMean->Add(g_Corr_pol3);
+    if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol3); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol3); }
 
     Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3.png").c_str());
     Fit_Canvas->Clear();
 }
 
-void NeutronResolution::Fitter_Corr_pol3_wKC() {
+void NeutronResolution::Fitter_Corr_pol3_wKC(const string &Particle) {
     cout << "\n\nFitter_Corr_pol3_wKC variables:\n";
     bool PlotPoints = false;
 
@@ -1825,15 +1990,22 @@ void NeutronResolution::Fitter_Corr_pol3_wKC() {
         }
     }
 
+    if (Particle == "Neutron") {
+        g_Corr_pol3_wKC->GetXaxis()->SetTitle("#bar{P}_{nFD} [GeV/c]");
+        g_Corr_pol3_wKC->GetYaxis()->SetTitle("R_{nFD} fit mean");
+        g_Corr_pol3_wKC->SetTitle("Neutron correction fit (wKC, cubic fit)");
+    } else if (Particle == "Proton") {
+        g_Corr_pol3_wKC->GetXaxis()->SetTitle("#bar{P}_{pFD} [GeV/c]");
+        g_Corr_pol3_wKC->GetYaxis()->SetTitle("R_{pFD} fit mean");
+        g_Corr_pol3_wKC->SetTitle("Proton correction fit (wKC, cubic fit)");
+    }
+
     g_Corr_pol3_wKC->GetXaxis()->SetTitleSize(0.06);
     g_Corr_pol3_wKC->GetXaxis()->SetLabelSize(0.0425);
     g_Corr_pol3_wKC->GetXaxis()->CenterTitle(true);
-    g_Corr_pol3_wKC->GetXaxis()->SetTitle("#bar{P}_{n} [GeV/c]");
     g_Corr_pol3_wKC->GetYaxis()->SetTitleSize(0.06);
     g_Corr_pol3_wKC->GetYaxis()->SetLabelSize(0.0425);
     g_Corr_pol3_wKC->GetYaxis()->CenterTitle(true);
-    g_Corr_pol3_wKC->GetYaxis()->SetTitle("R_{n} fit mean");
-    g_Corr_pol3_wKC->SetTitle("Neutron correction fit (wKC, cubic fit)");
 
     TF1 *f_Corr_pol3_wKC = new TF1("f_Corr_pol3_wKC", "[0] * x * x * x + [1] * x * x + [2] * x + [3]"); // A*x*x*x + B*x*x + C*x + D
 
@@ -1860,8 +2032,13 @@ void NeutronResolution::Fitter_Corr_pol3_wKC() {
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05 - 0.05;
 
     auto Corr_pol3_wKC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
-    TLegendEntry *Corr_pol3_wKC_legend_fit = Corr_pol3_wKC_legend->AddEntry(f_Corr_pol3_wKC, "f(#bar{P}_{n}) = A#bar{P}_{n}^{3} + B#bar{P}_{n}^{2} + C#bar{P}_{n} + D",
-                                                                            "l");
+    TLegendEntry *Corr_pol3_wKC_legend_fit;
+    if (Particle == "Neutron") {
+        Corr_pol3_wKC_legend_fit = Corr_pol3_wKC_legend->AddEntry(f_Corr_pol3_wKC, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+    } else if (Particle == "Proton") {
+        Corr_pol3_wKC_legend_fit = Corr_pol3_wKC_legend->AddEntry(f_Corr_pol3_wKC, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+    }
+
     Corr_pol3_wKC_legend->SetTextFont(12);
     Corr_pol3_wKC_legend->SetTextSize(0.03);
     Corr_pol3_wKC_legend->Draw("same");
@@ -1873,19 +2050,19 @@ void NeutronResolution::Fitter_Corr_pol3_wKC() {
     FitParam->AddText(("A = " + to_string(A_Corr_pol3_wKC) + " #pm " + to_string(A_Corr_pol3_wKC_Error)).c_str());
     FitParam->AddText(("B = " + to_string(B_Corr_pol3_wKC) + " #pm " + to_string(B_Corr_pol3_wKC_Error)).c_str());
     FitParam->AddText(("C = " + to_string(C_Corr_pol3_wKC) + " #pm " + to_string(C_Corr_pol3_wKC_Error)).c_str());
-    FitParam->AddText(("D = " + to_string(D_Corr_pol3_wPC) + " #pm " + to_string(D_Corr_pol3_wPC_Error)).c_str());
-    FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol3_wPC / NDF_Corr_pol3_wPC)).c_str());
+    FitParam->AddText(("D = " + to_string(D_Corr_pol3_wKC) + " #pm " + to_string(D_Corr_pol3_wKC_Error)).c_str());
+    FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol3_wKC / NDF_Corr_pol3_wKC)).c_str());
     FitParam->Draw("same");
 
     cout << "\n\n";
 
-    auto ListOfFunctions = g_Corr_pol3_wPC->GetListOfFunctions();
-    ListOfFunctions->Add((TObject *) Corr_pol3_wPC_legend);
+    auto ListOfFunctions = g_Corr_pol3_wKC->GetListOfFunctions();
+    ListOfFunctions->Add((TObject *) Corr_pol3_wKC_legend);
     ListOfFunctions->Add((TObject *) FitParam);
 
-    FittedNeutronResSlicesMean->Add(g_Corr_pol3_wPC);
+    if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol3_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol3_wKC); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3_wPC.png").c_str());
+    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 //</editor-fold>
@@ -1897,9 +2074,15 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const str
                                              const string &NeutronResolutionDirectory) {
     string SampleNameTemp = SampleName;
 
-    ResSlicePlots->Add(FittedNeutronResSlices);
-    ResSlicePlots->Add(FittedNeutronResSlicesWidth);
-    ResSlicePlots->Add(FittedNeutronResSlicesMean);
+    if (Particle == "Neutron") {
+        ResSlicePlots->Add(FittedNeutronResSlices);
+        ResSlicePlots->Add(FittedNeutronResSlicesWidth);
+        ResSlicePlots->Add(FittedNeutronResSlicesMean);
+    } else if (Particle == "Proton") {
+        ResSlicePlots->Add(FittedProtonResSlices);
+        ResSlicePlots->Add(FittedProtonResSlicesWidth);
+        ResSlicePlots->Add(FittedProtonResSlicesMean);
+    }
 
     for (int i = 0; i < NumberOfSlices; i++) { ResSlices.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, ResSlicePlots, false, true, 1., 9999, 9999, 0, false); }
 
@@ -2002,12 +2185,12 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
         Neutron_res_fit_param << "ChiSquare_Corr_pol1" << "\t\t\t" << ChiSquare_Corr_pol1 << "\n";
         Neutron_res_fit_param << "NDF_Corr_pol1" << "\t\t\t\t" << NDF_Corr_pol1 << "\n\n";
 
-        Neutron_res_fit_param << "A_Corr_pol1_wPC" << "\t\t\t\t" << A_Corr_pol1_wPC << "\n";
-        Neutron_res_fit_param << "A_Corr_pol1_wPC_Error" << "\t\t" << A_Corr_pol1_wPC_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1_wPC" << "\t\t\t\t" << B_Corr_pol1_wPC << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1_wPC_Error" << "\t\t" << B_Corr_pol1_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol1_wPC" << "\t\t" << ChiSquare_Corr_pol1_wPC << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol1_wPC" << "\t\t\t" << NDF_Corr_pol1_wPC << "\n\n";
+        Neutron_res_fit_param << "A_Corr_pol1_wKC" << "\t\t\t\t" << A_Corr_pol1_wKC << "\n";
+        Neutron_res_fit_param << "A_Corr_pol1_wKC_Error" << "\t\t" << A_Corr_pol1_wKC_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1_wKC" << "\t\t\t\t" << B_Corr_pol1_wKC << "\n";
+        Neutron_res_fit_param << "B_Corr_pol1_wKC_Error" << "\t\t" << B_Corr_pol1_wKC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol1_wKC" << "\t\t" << ChiSquare_Corr_pol1_wKC << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol1_wKC" << "\t\t\t" << NDF_Corr_pol1_wKC << "\n\n";
 
         Neutron_res_fit_param << "A_Corr_pol2" << "\t\t\t\t\t" << A_Corr_pol2 << "\n";
         Neutron_res_fit_param << "A_Corr_pol2_Error" << "\t\t\t" << A_Corr_pol2_Error << "\n";
@@ -2018,14 +2201,14 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
         Neutron_res_fit_param << "ChiSquare_Corr_pol2" << "\t\t\t" << ChiSquare_Corr_pol2 << "\n";
         Neutron_res_fit_param << "NDF_Corr_pol2" << "\t\t\t\t" << NDF_Corr_pol2 << "\n\n";
 
-        Neutron_res_fit_param << "A_Corr_pol2_wPC" << "\t\t\t\t" << A_Corr_pol2_wPC << "\n";
-        Neutron_res_fit_param << "A_Corr_pol2_wPC_Error" << "\t\t" << A_Corr_pol2_wPC_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol2_wPC" << "\t\t\t\t" << B_Corr_pol2_wPC << "\n";
-        Neutron_res_fit_param << "B_Corr_pol2_wPC_Error" << "\t\t" << B_Corr_pol2_wPC_Error << "\n";
-        Neutron_res_fit_param << "C_Corr_pol2_wPC" << "\t\t\t\t" << C_Corr_pol2_wPC << "\n";
-        Neutron_res_fit_param << "C_Corr_pol2_wPC_Error" << "\t\t" << C_Corr_pol2_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol2_wPC" << "\t\t" << ChiSquare_Corr_pol2_wPC << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol2_wPC" << "\t\t\t" << NDF_Corr_pol2_wPC << "\n\n";
+        Neutron_res_fit_param << "A_Corr_pol2_wKC" << "\t\t\t\t" << A_Corr_pol2_wKC << "\n";
+        Neutron_res_fit_param << "A_Corr_pol2_wKC_Error" << "\t\t" << A_Corr_pol2_wKC_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol2_wKC" << "\t\t\t\t" << B_Corr_pol2_wKC << "\n";
+        Neutron_res_fit_param << "B_Corr_pol2_wKC_Error" << "\t\t" << B_Corr_pol2_wKC_Error << "\n";
+        Neutron_res_fit_param << "C_Corr_pol2_wKC" << "\t\t\t\t" << C_Corr_pol2_wKC << "\n";
+        Neutron_res_fit_param << "C_Corr_pol2_wKC_Error" << "\t\t" << C_Corr_pol2_wKC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol2_wKC" << "\t\t" << ChiSquare_Corr_pol2_wKC << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol2_wKC" << "\t\t\t" << NDF_Corr_pol2_wKC << "\n\n";
 
         Neutron_res_fit_param << "A_Corr_pol3" << "\t\t\t\t\t" << A_Corr_pol3 << "\n";
         Neutron_res_fit_param << "A_Corr_pol3_Error" << "\t\t\t" << A_Corr_pol3_Error << "\n";
@@ -2038,16 +2221,16 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
         Neutron_res_fit_param << "ChiSquare_Corr_pol3" << "\t\t\t" << ChiSquare_Corr_pol3 << "\n";
         Neutron_res_fit_param << "NDF_Corr_pol3" << "\t\t\t\t" << NDF_Corr_pol3 << "\n\n";
 
-        Neutron_res_fit_param << "A_Corr_pol3_wPC" << "\t\t\t\t" << A_Corr_pol3_wPC << "\n";
-        Neutron_res_fit_param << "A_Corr_pol3_wPC_Error" << "\t\t" << A_Corr_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol3_wPC" << "\t\t\t\t" << B_Corr_pol3_wPC << "\n";
-        Neutron_res_fit_param << "B_Corr_pol3_wPC_Error" << "\t\t" << B_Corr_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "C_Corr_pol3_wPC" << "\t\t\t\t" << C_Corr_pol3_wPC << "\n";
-        Neutron_res_fit_param << "C_Corr_pol3_wPC_Error" << "\t\t" << C_Corr_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "D_Corr_pol3_wPC" << "\t\t\t\t" << D_Corr_pol3_wPC << "\n";
-        Neutron_res_fit_param << "D_Corr_pol3_wPC_Error" << "\t\t" << D_Corr_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol3_wPC" << "\t\t" << ChiSquare_Corr_pol3_wPC << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol3_wPC" << "\t\t\t" << NDF_Corr_pol3_wPC << "\n\n";
+        Neutron_res_fit_param << "A_Corr_pol3_wKC" << "\t\t\t\t" << A_Corr_pol3_wKC << "\n";
+        Neutron_res_fit_param << "A_Corr_pol3_wKC_Error" << "\t\t" << A_Corr_pol3_wKC_Error << "\n";
+        Neutron_res_fit_param << "B_Corr_pol3_wKC" << "\t\t\t\t" << B_Corr_pol3_wKC << "\n";
+        Neutron_res_fit_param << "B_Corr_pol3_wKC_Error" << "\t\t" << B_Corr_pol3_wKC_Error << "\n";
+        Neutron_res_fit_param << "C_Corr_pol3_wKC" << "\t\t\t\t" << C_Corr_pol3_wKC << "\n";
+        Neutron_res_fit_param << "C_Corr_pol3_wKC_Error" << "\t\t" << C_Corr_pol3_wKC_Error << "\n";
+        Neutron_res_fit_param << "D_Corr_pol3_wKC" << "\t\t\t\t" << D_Corr_pol3_wKC << "\n";
+        Neutron_res_fit_param << "D_Corr_pol3_wKC_Error" << "\t\t" << D_Corr_pol3_wKC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Corr_pol3_wKC" << "\t\t" << ChiSquare_Corr_pol3_wKC << "\n";
+        Neutron_res_fit_param << "NDF_Corr_pol3_wKC" << "\t\t\t" << NDF_Corr_pol3_wKC << "\n\n";
 
         Neutron_res_fit_param << "A_Std_pol1" << "\t\t\t\t\t" << A_Std_pol1 << "\n";
         Neutron_res_fit_param << "A_Std_pol1_Error" << "\t\t\t" << A_Std_pol1_Error << "\n";
@@ -2056,12 +2239,12 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
         Neutron_res_fit_param << "ChiSquare_Std_pol1" << "\t\t\t" << ChiSquare_Std_pol1 << "\n";
         Neutron_res_fit_param << "NDF_Std_pol1" << "\t\t\t\t" << NDF_Std_pol1 << "\n\n";
 
-        Neutron_res_fit_param << "A_Std_pol1_wPC" << "\t\t\t\t" << A_Std_pol1_wPC << "\n";
-        Neutron_res_fit_param << "A_Std_pol1_wPC_Error" << "\t\t" << A_Std_pol1_wPC_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol1_wPC" << "\t\t\t\t" << B_Std_pol1_wPC << "\n";
-        Neutron_res_fit_param << "B_Std_pol1_wPC_Error" << "\t\t" << B_Std_pol1_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol1_wPC" << "\t\t" << ChiSquare_Std_pol1_wPC << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol1_wPC" << "\t\t\t" << NDF_Std_pol1_wPC << "\n\n";
+        Neutron_res_fit_param << "A_Std_pol1_wKC" << "\t\t\t\t" << A_Std_pol1_wKC << "\n";
+        Neutron_res_fit_param << "A_Std_pol1_wKC_Error" << "\t\t" << A_Std_pol1_wKC_Error << "\n";
+        Neutron_res_fit_param << "B_Std_pol1_wKC" << "\t\t\t\t" << B_Std_pol1_wKC << "\n";
+        Neutron_res_fit_param << "B_Std_pol1_wKC_Error" << "\t\t" << B_Std_pol1_wKC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Std_pol1_wKC" << "\t\t" << ChiSquare_Std_pol1_wKC << "\n";
+        Neutron_res_fit_param << "NDF_Std_pol1_wKC" << "\t\t\t" << NDF_Std_pol1_wKC << "\n\n";
 
         Neutron_res_fit_param << "A_Std_pol2" << "\t\t\t\t\t" << A_Std_pol2 << "\n";
         Neutron_res_fit_param << "A_Std_pol2_Error" << "\t\t\t" << A_Std_pol2_Error << "\n";
@@ -2072,14 +2255,14 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
         Neutron_res_fit_param << "ChiSquare_Std_pol2" << "\t\t\t" << ChiSquare_Std_pol2 << "\n";
         Neutron_res_fit_param << "NDF_Std_pol2" << "\t\t\t\t" << NDF_Std_pol2 << "\n\n";
 
-        Neutron_res_fit_param << "A_Std_pol2_wPC" << "\t\t\t\t" << A_Std_pol2_wPC << "\n";
-        Neutron_res_fit_param << "A_Std_pol2_wPC_Error" << "\t\t" << A_Std_pol2_wPC_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol2_wPC" << "\t\t\t\t" << B_Std_pol2_wPC << "\n";
-        Neutron_res_fit_param << "B_Std_pol2_wPC_Error" << "\t\t" << B_Std_pol2_wPC_Error << "\n";
-        Neutron_res_fit_param << "C_Std_pol2_wPC" << "\t\t\t\t" << C_Std_pol2_wPC << "\n";
-        Neutron_res_fit_param << "C_Std_pol2_wPC_Error" << "\t\t" << C_Std_pol2_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol2_wPC" << "\t\t" << ChiSquare_Std_pol2_wPC << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol2_wPC" << "\t\t\t" << NDF_Std_pol2_wPC << "\n\n";
+        Neutron_res_fit_param << "A_Std_pol2_wKC" << "\t\t\t\t" << A_Std_pol2_wKC << "\n";
+        Neutron_res_fit_param << "A_Std_pol2_wKC_Error" << "\t\t" << A_Std_pol2_wKC_Error << "\n";
+        Neutron_res_fit_param << "B_Std_pol2_wKC" << "\t\t\t\t" << B_Std_pol2_wKC << "\n";
+        Neutron_res_fit_param << "B_Std_pol2_wKC_Error" << "\t\t" << B_Std_pol2_wKC_Error << "\n";
+        Neutron_res_fit_param << "C_Std_pol2_wKC" << "\t\t\t\t" << C_Std_pol2_wKC << "\n";
+        Neutron_res_fit_param << "C_Std_pol2_wKC_Error" << "\t\t" << C_Std_pol2_wKC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Std_pol2_wKC" << "\t\t" << ChiSquare_Std_pol2_wKC << "\n";
+        Neutron_res_fit_param << "NDF_Std_pol2_wKC" << "\t\t\t" << NDF_Std_pol2_wKC << "\n\n";
 
         Neutron_res_fit_param << "A_Std_pol3" << "\t\t\t\t\t" << A_Std_pol3 << "\n";
         Neutron_res_fit_param << "A_Std_pol3_Error" << "\t\t\t" << A_Std_pol3_Error << "\n";
@@ -2092,16 +2275,16 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
         Neutron_res_fit_param << "ChiSquare_Std_pol3" << "\t\t\t" << ChiSquare_Std_pol3 << "\n";
         Neutron_res_fit_param << "NDF_Std_pol3" << "\t\t\t\t" << NDF_Std_pol3 << "\n\n";
 
-        Neutron_res_fit_param << "A_Std_pol3_wPC" << "\t\t\t\t" << A_Std_pol3_wPC << "\n";
-        Neutron_res_fit_param << "A_Std_pol3_wPC_Error" << "\t\t" << A_Std_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol3_wPC" << "\t\t\t\t" << B_Std_pol3_wPC << "\n";
-        Neutron_res_fit_param << "B_Std_pol3_wPC_Error" << "\t\t" << B_Std_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "C_Std_pol3_wPC" << "\t\t\t\t" << C_Std_pol3_wPC << "\n";
-        Neutron_res_fit_param << "C_Std_pol3_wPC_Error" << "\t\t" << C_Std_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "D_Std_pol3_wPC" << "\t\t\t\t" << D_Std_pol3_wPC << "\n";
-        Neutron_res_fit_param << "D_Std_pol3_wPC_Error" << "\t\t" << D_Std_pol3_wPC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol3_wPC" << "\t\t" << ChiSquare_Std_pol3_wPC << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol3_wPC" << "\t\t\t" << NDF_Std_pol3_wPC << "\n\n";
+        Neutron_res_fit_param << "A_Std_pol3_wKC" << "\t\t\t\t" << A_Std_pol3_wKC << "\n";
+        Neutron_res_fit_param << "A_Std_pol3_wKC_Error" << "\t\t" << A_Std_pol3_wKC_Error << "\n";
+        Neutron_res_fit_param << "B_Std_pol3_wKC" << "\t\t\t\t" << B_Std_pol3_wKC << "\n";
+        Neutron_res_fit_param << "B_Std_pol3_wKC_Error" << "\t\t" << B_Std_pol3_wKC_Error << "\n";
+        Neutron_res_fit_param << "C_Std_pol3_wKC" << "\t\t\t\t" << C_Std_pol3_wKC << "\n";
+        Neutron_res_fit_param << "C_Std_pol3_wKC_Error" << "\t\t" << C_Std_pol3_wKC_Error << "\n";
+        Neutron_res_fit_param << "D_Std_pol3_wKC" << "\t\t\t\t" << D_Std_pol3_wKC << "\n";
+        Neutron_res_fit_param << "D_Std_pol3_wKC_Error" << "\t\t" << D_Std_pol3_wKC_Error << "\n";
+        Neutron_res_fit_param << "ChiSquare_Std_pol3_wKC" << "\t\t" << ChiSquare_Std_pol3_wKC << "\n";
+        Neutron_res_fit_param << "NDF_Std_pol3_wKC" << "\t\t\t" << NDF_Std_pol3_wKC << "\n\n";
     }
     //</editor-fold>
 
@@ -2158,6 +2341,8 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
     Neutron_res_Hist_param << "#momRes_calculation_mode:\t" << momRes_calculation_mode << "\n";
     Neutron_res_Hist_param << "#delta:\t\t" << delta << "\n";
     //</editor-fold>
+
+    Neutron_res_Hist_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma\n\n"; //TODO: confirm order!
 
     for (DSCuts ResSlice: ResSlicesHistVar) {
         Neutron_res_Hist_param << ResSlice.GetCutVariable() << "\t\t\t" << ResSlice.GetSliceNumber() << ":" << ResSlice.GetSliceLowerb() << ":"
@@ -2287,23 +2472,23 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                     //</editor-fold>
 
                     if (findSubstring(parameter, "pol1") && findSubstring(CorrMode, "pol1")) {
-                        if (findSubstring(parameter, "pol1_wPC") && findSubstring(CorrMode, "pol1_wPC")) {
-                            if (parameter == "A_Corr_pol1_wPC") {
-                                Loaded_A_Corr_pol1_wPC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1_wPC");
-                            } else if (parameter == "A_Corr_pol1_wPC_Error") {
-                                Loaded_A_Corr_pol1_wPC_Error = stod(parameter2);
-                            } else if (parameter == "B_Corr_pol1_wPC") {
-                                Loaded_B_Corr_pol1_wPC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol1_wPC");
-                            } else if (parameter == "B_Corr_pol1_wPC_Error") {
-                                Loaded_B_Corr_pol1_wPC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Corr_pol1_wPC") {
-                                Loaded_ChiSquare_Corr_pol1_wPC = stod(parameter2);
-                            } else if (parameter == "NDF_Corr_pol1_wPC") {
-                                Loaded_NDF_Corr_pol1_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol1_wKC") && findSubstring(CorrMode, "pol1_wKC")) {
+                            if (parameter == "A_Corr_pol1_wKC") {
+                                Loaded_A_Corr_pol1_wKC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1_wKC");
+                            } else if (parameter == "A_Corr_pol1_wKC_Error") {
+                                Loaded_A_Corr_pol1_wKC_Error = stod(parameter2);
+                            } else if (parameter == "B_Corr_pol1_wKC") {
+                                Loaded_B_Corr_pol1_wKC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol1_wKC");
+                            } else if (parameter == "B_Corr_pol1_wKC_Error") {
+                                Loaded_B_Corr_pol1_wKC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Corr_pol1_wKC") {
+                                Loaded_ChiSquare_Corr_pol1_wKC = stod(parameter2);
+                            } else if (parameter == "NDF_Corr_pol1_wKC") {
+                                Loaded_NDF_Corr_pol1_wKC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol1") && !findSubstring(CorrMode, "pol1_wPC")) {
+                        } else if (findSubstring(parameter, "pol1") && !findSubstring(CorrMode, "pol1_wKC")) {
                             if (parameter == "A_Corr_pol1") {
                                 Loaded_A_Corr_pol1 = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1");
@@ -2321,28 +2506,28 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             }
                         }
                     } else if (findSubstring(parameter, "pol2") && findSubstring(CorrMode, "pol2")) {
-                        if (findSubstring(parameter, "pol2_wPC") && findSubstring(CorrMode, "pol2_wPC")) {
-                            if (parameter == "A_Corr_pol2_wPC") {
-                                Loaded_A_Corr_pol2_wPC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2_wPC");
-                            } else if (parameter == "A_Corr_pol2_wPC_Error") {
-                                Loaded_A_Corr_pol2_wPC_Error = stod(parameter2);
-                            } else if (parameter == "B_Corr_pol2_wPC") {
-                                Loaded_B_Corr_pol2_wPC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol2_wPC");
-                            } else if (parameter == "B_Corr_pol2_wPC_Error") {
-                                Loaded_B_Corr_pol2_wPC_Error = stod(parameter2);
-                            } else if (parameter == "C_Corr_pol2_wPC") {
-                                Loaded_C_Corr_pol2_wPC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol2_wPC");
-                            } else if (parameter == "C_Corr_pol2_wPC_Error") {
-                                Loaded_C_Corr_pol2_wPC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Corr_pol2_wPC") {
-                                Loaded_ChiSquare_Corr_pol2_wPC = stod(parameter2);
-                            } else if (parameter == "NDF_Corr_pol2_wPC") {
-                                Loaded_NDF_Corr_pol2_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol2_wKC") && findSubstring(CorrMode, "pol2_wKC")) {
+                            if (parameter == "A_Corr_pol2_wKC") {
+                                Loaded_A_Corr_pol2_wKC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2_wKC");
+                            } else if (parameter == "A_Corr_pol2_wKC_Error") {
+                                Loaded_A_Corr_pol2_wKC_Error = stod(parameter2);
+                            } else if (parameter == "B_Corr_pol2_wKC") {
+                                Loaded_B_Corr_pol2_wKC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol2_wKC");
+                            } else if (parameter == "B_Corr_pol2_wKC_Error") {
+                                Loaded_B_Corr_pol2_wKC_Error = stod(parameter2);
+                            } else if (parameter == "C_Corr_pol2_wKC") {
+                                Loaded_C_Corr_pol2_wKC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol2_wKC");
+                            } else if (parameter == "C_Corr_pol2_wKC_Error") {
+                                Loaded_C_Corr_pol2_wKC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Corr_pol2_wKC") {
+                                Loaded_ChiSquare_Corr_pol2_wKC = stod(parameter2);
+                            } else if (parameter == "NDF_Corr_pol2_wKC") {
+                                Loaded_NDF_Corr_pol2_wKC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol2") && !findSubstring(CorrMode, "pol2_wPC")) {
+                        } else if (findSubstring(parameter, "pol2") && !findSubstring(CorrMode, "pol2_wKC")) {
                             if (parameter == "A_Corr_pol2") {
                                 Loaded_A_Corr_pol2 = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2");
@@ -2365,33 +2550,33 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             }
                         }
                     } else if (findSubstring(parameter, "pol3") && findSubstring(CorrMode, "pol3")) {
-                        if (findSubstring(parameter, "pol3_wPC") && findSubstring(CorrMode, "pol3_wPC")) {
-                            if (parameter == "A_Corr_pol3_wPC") {
-                                Loaded_A_Corr_pol3_wPC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3_wPC");
-                            } else if (parameter == "A_Corr_pol3_wPC_Error") {
-                                Loaded_A_Corr_pol3_wPC_Error = stod(parameter2);
-                            } else if (parameter == "B_Corr_pol3_wPC") {
-                                Loaded_B_Corr_pol3_wPC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol3_wPC");
-                            } else if (parameter == "B_Corr_pol3_wPC_Error") {
-                                Loaded_B_Corr_pol3_wPC_Error = stod(parameter2);
-                            } else if (parameter == "C_Corr_pol3_wPC") {
-                                Loaded_C_Corr_pol3_wPC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol3_wPC");
-                            } else if (parameter == "C_Corr_pol3_wPC_Error") {
-                                Loaded_C_Corr_pol3_wPC_Error = stod(parameter2);
-                            } else if (parameter == "D_Corr_pol3_wPC") {
-                                Loaded_D_Corr_pol3_wPC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3_wPC), Loaded_Corr_coefficients_names.push_back("Loaded_D_Corr_pol3_wPC");
-                            } else if (parameter == "D_Corr_pol3_wPC_Error") {
-                                Loaded_D_Corr_pol3_wPC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Corr_pol3_wPC") {
-                                Loaded_ChiSquare_Corr_pol3_wPC = stod(parameter2);
-                            } else if (parameter == "NDF_Corr_pol3_wPC") {
-                                Loaded_NDF_Corr_pol3_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol3_wKC") && findSubstring(CorrMode, "pol3_wKC")) {
+                            if (parameter == "A_Corr_pol3_wKC") {
+                                Loaded_A_Corr_pol3_wKC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3_wKC");
+                            } else if (parameter == "A_Corr_pol3_wKC_Error") {
+                                Loaded_A_Corr_pol3_wKC_Error = stod(parameter2);
+                            } else if (parameter == "B_Corr_pol3_wKC") {
+                                Loaded_B_Corr_pol3_wKC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol3_wKC");
+                            } else if (parameter == "B_Corr_pol3_wKC_Error") {
+                                Loaded_B_Corr_pol3_wKC_Error = stod(parameter2);
+                            } else if (parameter == "C_Corr_pol3_wKC") {
+                                Loaded_C_Corr_pol3_wKC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol3_wKC");
+                            } else if (parameter == "C_Corr_pol3_wKC_Error") {
+                                Loaded_C_Corr_pol3_wKC_Error = stod(parameter2);
+                            } else if (parameter == "D_Corr_pol3_wKC") {
+                                Loaded_D_Corr_pol3_wKC = stod(parameter2);
+                                Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_D_Corr_pol3_wKC");
+                            } else if (parameter == "D_Corr_pol3_wKC_Error") {
+                                Loaded_D_Corr_pol3_wKC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Corr_pol3_wKC") {
+                                Loaded_ChiSquare_Corr_pol3_wKC = stod(parameter2);
+                            } else if (parameter == "NDF_Corr_pol3_wKC") {
+                                Loaded_NDF_Corr_pol3_wKC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol3") && !findSubstring(CorrMode, "pol3_wPC")) {
+                        } else if (findSubstring(parameter, "pol3") && !findSubstring(CorrMode, "pol3_wKC")) {
                             if (parameter == "A_Corr_pol3") {
                                 Loaded_A_Corr_pol3 = stod(parameter2);
                                 Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3");
@@ -2431,23 +2616,23 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                     //</editor-fold>
 
                     if (findSubstring(parameter, "pol1") && findSubstring(SmearMode, "pol1")) {
-                        if (findSubstring(parameter, "pol1_wPC") && findSubstring(SmearMode, "pol1_wPC")) {
-                            if (parameter == "A_Std_pol1_wPC") {
-                                Loaded_A_Std_pol1_wPC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol1_wPC");
-                            } else if (parameter == "A_Std_pol1_wPC_Error") {
-                                Loaded_A_Std_pol1_wPC_Error = stod(parameter2);
-                            } else if (parameter == "B_Std_pol1_wPC") {
-                                Loaded_B_Std_pol1_wPC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol1_wPC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol1_wPC");
-                            } else if (parameter == "B_Std_pol1_wPC_Error") {
-                                Loaded_B_Std_pol1_wPC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Std_pol1_wPC") {
-                                Loaded_ChiSquare_Std_pol1_wPC = stod(parameter2);
-                            } else if (parameter == "NDF_Std_pol1_wPC") {
-                                Loaded_NDF_Std_pol1_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol1_wKC") && findSubstring(SmearMode, "pol1_wKC")) {
+                            if (parameter == "A_Std_pol1_wKC") {
+                                Loaded_A_Std_pol1_wKC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1_wKC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol1_wKC");
+                            } else if (parameter == "A_Std_pol1_wKC_Error") {
+                                Loaded_A_Std_pol1_wKC_Error = stod(parameter2);
+                            } else if (parameter == "B_Std_pol1_wKC") {
+                                Loaded_B_Std_pol1_wKC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol1_wKC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol1_wKC");
+                            } else if (parameter == "B_Std_pol1_wKC_Error") {
+                                Loaded_B_Std_pol1_wKC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Std_pol1_wKC") {
+                                Loaded_ChiSquare_Std_pol1_wKC = stod(parameter2);
+                            } else if (parameter == "NDF_Std_pol1_wKC") {
+                                Loaded_NDF_Std_pol1_wKC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol1") && !findSubstring(SmearMode, "pol1_wPC")) {
+                        } else if (findSubstring(parameter, "pol1") && !findSubstring(SmearMode, "pol1_wKC")) {
                             if (parameter == "A_Std_pol1") {
                                 Loaded_A_Std_pol1 = stod(parameter2);
                                 cout << "\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
@@ -2466,28 +2651,28 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             }
                         }
                     } else if (findSubstring(parameter, "pol2") && findSubstring(SmearMode, "pol2")) {
-                        if (findSubstring(parameter, "pol2_wPC") && findSubstring(SmearMode, "pol2_wPC")) {
-                            if (parameter == "A_Std_pol2_wPC") {
-                                Loaded_A_Std_pol2_wPC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2_wPC");
-                            } else if (parameter == "A_Std_pol2_wPC_Error") {
-                                Loaded_A_Std_pol2_wPC_Error = stod(parameter2);
-                            } else if (parameter == "B_Std_pol2_wPC") {
-                                Loaded_B_Std_pol2_wPC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol2_wPC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol2_wPC");
-                            } else if (parameter == "B_Std_pol2_wPC_Error") {
-                                Loaded_B_Std_pol2_wPC_Error = stod(parameter2);
-                            } else if (parameter == "C_Std_pol2_wPC") {
-                                Loaded_C_Std_pol2_wPC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol2_wPC), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol2_wPC");
-                            } else if (parameter == "C_Std_pol2_wPC_Error") {
-                                Loaded_C_Std_pol2_wPC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Std_pol2_wPC") {
-                                Loaded_ChiSquare_Std_pol2_wPC = stod(parameter2);
-                            } else if (parameter == "NDF_Std_pol2_wPC") {
-                                Loaded_NDF_Std_pol2_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol2_wKC") && findSubstring(SmearMode, "pol2_wKC")) {
+                            if (parameter == "A_Std_pol2_wKC") {
+                                Loaded_A_Std_pol2_wKC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2_wKC");
+                            } else if (parameter == "A_Std_pol2_wKC_Error") {
+                                Loaded_A_Std_pol2_wKC_Error = stod(parameter2);
+                            } else if (parameter == "B_Std_pol2_wKC") {
+                                Loaded_B_Std_pol2_wKC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol2_wKC");
+                            } else if (parameter == "B_Std_pol2_wKC_Error") {
+                                Loaded_B_Std_pol2_wKC_Error = stod(parameter2);
+                            } else if (parameter == "C_Std_pol2_wKC") {
+                                Loaded_C_Std_pol2_wKC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol2_wKC");
+                            } else if (parameter == "C_Std_pol2_wKC_Error") {
+                                Loaded_C_Std_pol2_wKC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Std_pol2_wKC") {
+                                Loaded_ChiSquare_Std_pol2_wKC = stod(parameter2);
+                            } else if (parameter == "NDF_Std_pol2_wKC") {
+                                Loaded_NDF_Std_pol2_wKC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol2") && !findSubstring(SmearMode, "pol2_wPC")) {
+                        } else if (findSubstring(parameter, "pol2") && !findSubstring(SmearMode, "pol2_wKC")) {
                             if (parameter == "A_Std_pol2") {
                                 Loaded_A_Std_pol2 = stod(parameter2);
                                 Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2");
@@ -2510,33 +2695,33 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             }
                         }
                     } else if (findSubstring(parameter, "pol3") && findSubstring(SmearMode, "pol3")) {
-                        if (findSubstring(parameter, "pol3_wPC") && findSubstring(SmearMode, "pol3_wPC")) {
-                            if (parameter == "A_Std_pol3_wPC") {
-                                Loaded_A_Std_pol3_wPC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3_wPC");
-                            } else if (parameter == "A_Std_pol3_wPC_Error") {
-                                Loaded_A_Std_pol3_wPC_Error = stod(parameter2);
-                            } else if (parameter == "B_Std_pol3_wPC") {
-                                Loaded_B_Std_pol3_wPC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol3_wPC");
-                            } else if (parameter == "B_Std_pol3_wPC_Error") {
-                                Loaded_B_Std_pol3_wPC_Error = stod(parameter2);
-                            } else if (parameter == "C_Std_pol3_wPC") {
-                                Loaded_C_Std_pol3_wPC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol3_wPC");
-                            } else if (parameter == "C_Std_pol3_wPC_Error") {
-                                Loaded_C_Std_pol3_wPC_Error = stod(parameter2);
-                            } else if (parameter == "D_Std_pol3_wPC") {
-                                Loaded_D_Std_pol3_wPC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_D_Std_pol3_wPC), Loaded_Std_coefficients_names.push_back("Loaded_D_Std_pol3_wPC");
-                            } else if (parameter == "D_Std_pol3_wPC_Error") {
-                                Loaded_D_Std_pol3_wPC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Std_pol3_wPC") {
-                                Loaded_ChiSquare_Std_pol3_wPC = stod(parameter2);
-                            } else if (parameter == "NDF_Std_pol3_wPC") {
-                                Loaded_NDF_Std_pol3_wPC = stod(parameter2);
+                        if (findSubstring(parameter, "pol3_wKC") && findSubstring(SmearMode, "pol3_wKC")) {
+                            if (parameter == "A_Std_pol3_wKC") {
+                                Loaded_A_Std_pol3_wKC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3_wKC");
+                            } else if (parameter == "A_Std_pol3_wKC_Error") {
+                                Loaded_A_Std_pol3_wKC_Error = stod(parameter2);
+                            } else if (parameter == "B_Std_pol3_wKC") {
+                                Loaded_B_Std_pol3_wKC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol3_wKC");
+                            } else if (parameter == "B_Std_pol3_wKC_Error") {
+                                Loaded_B_Std_pol3_wKC_Error = stod(parameter2);
+                            } else if (parameter == "C_Std_pol3_wKC") {
+                                Loaded_C_Std_pol3_wKC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol3_wKC");
+                            } else if (parameter == "C_Std_pol3_wKC_Error") {
+                                Loaded_C_Std_pol3_wKC_Error = stod(parameter2);
+                            } else if (parameter == "D_Std_pol3_wKC") {
+                                Loaded_D_Std_pol3_wKC = stod(parameter2);
+                                Loaded_Std_coefficients_values.push_back(Loaded_D_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back("Loaded_D_Std_pol3_wKC");
+                            } else if (parameter == "D_Std_pol3_wKC_Error") {
+                                Loaded_D_Std_pol3_wKC_Error = stod(parameter2);
+                            } else if (parameter == "ChiSquare_Std_pol3_wKC") {
+                                Loaded_ChiSquare_Std_pol3_wKC = stod(parameter2);
+                            } else if (parameter == "NDF_Std_pol3_wKC") {
+                                Loaded_NDF_Std_pol3_wKC = stod(parameter2);
                             }
-                        } else if (findSubstring(parameter, "pol3") && !findSubstring(SmearMode, "pol3_wPC")) {
+                        } else if (findSubstring(parameter, "pol3") && !findSubstring(SmearMode, "pol3_wKC")) {
                             if (parameter == "A_Std_pol3") {
                                 Loaded_A_Std_pol3 = stod(parameter2);
                                 Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3");
@@ -2637,22 +2822,22 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndCorr, double Momentu
             //</editor-fold>
 
         } else if ((SmearMode == "pol1") || (SmearMode == "pol2") || (SmearMode == "pol3") ||
-                   (SmearMode == "pol1_wPC") || (SmearMode == "pol2_wPC") || (SmearMode == "pol3_wPC")) {
+                   (SmearMode == "pol1_wKC") || (SmearMode == "pol2_wKC") || (SmearMode == "pol3_wKC")) {
             /* Smear using pol fit results */
             double Smearing, Arg;
 
             if (SmearMode == "pol1") {
                 Arg = Loaded_A_Std_pol1 * Momentum + Loaded_B_Std_pol1;
-            } else if (SmearMode == "pol1_wPC") {
-                Arg = Loaded_A_Std_pol1_wPC * Momentum + Loaded_B_Std_pol1_wPC;
+            } else if (SmearMode == "pol1_wKC") {
+                Arg = Loaded_A_Std_pol1_wKC * Momentum + Loaded_B_Std_pol1_wKC;
             } else if (SmearMode == "pol2") {
                 Arg = Loaded_A_Std_pol2 * Momentum2 + Loaded_B_Std_pol2 * Momentum + Loaded_C_Std_pol2;
-            } else if (SmearMode == "pol2_wPC") {
-                Arg = Loaded_A_Std_pol2_wPC * Momentum2 + Loaded_B_Std_pol2_wPC * Momentum + Loaded_C_Std_pol2_wPC;
+            } else if (SmearMode == "pol2_wKC") {
+                Arg = Loaded_A_Std_pol2_wKC * Momentum2 + Loaded_B_Std_pol2_wKC * Momentum + Loaded_C_Std_pol2_wKC;
             } else if (SmearMode == "pol3") {
                 Arg = Loaded_A_Std_pol3 * Momentum3 + Loaded_B_Std_pol3 * Momentum2 + Loaded_C_Std_pol3 * Momentum + Loaded_D_Std_pol3;
-            } else if (SmearMode == "pol3_wPC") {
-                Arg = Loaded_A_Std_pol3_wPC * Momentum3 + Loaded_B_Std_pol3_wPC * Momentum2 + Loaded_C_Std_pol3_wPC * Momentum + Loaded_D_Std_pol3_wPC;
+            } else if (SmearMode == "pol3_wKC") {
+                Arg = Loaded_A_Std_pol3_wKC * Momentum3 + Loaded_B_Std_pol3_wKC * Momentum2 + Loaded_C_Std_pol3_wKC * Momentum + Loaded_D_Std_pol3_wKC;
             }
 
             Smearing = Rand->Gaus(1, Arg);
@@ -2710,22 +2895,22 @@ double NeutronResolution::NCorr(bool apply_nucleon_SmearAndCorr, double Momentum
             //</editor-fold>
 
         } else if ((CorrMode == "pol1") || (CorrMode == "pol2") || (CorrMode == "pol3") ||
-                   (CorrMode == "pol1_wPC") || (CorrMode == "pol2_wPC") || (CorrMode == "pol3_wPC")) {
+                   (CorrMode == "pol1_wKC") || (CorrMode == "pol2_wKC") || (CorrMode == "pol3_wKC")) {
             /* Correction using pol fit results */
             double Correction;
 
             if (CorrMode == "pol1") {
                 Correction = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
-            } else if (CorrMode == "pol1_wPC") {
-                Correction = Loaded_A_Corr_pol1_wPC * Momentum + Loaded_B_Corr_pol1_wPC;
+            } else if (CorrMode == "pol1_wKC") {
+                Correction = Loaded_A_Corr_pol1_wKC * Momentum + Loaded_B_Corr_pol1_wKC;
             } else if (CorrMode == "pol2") {
                 Correction = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;
-            } else if (CorrMode == "pol2_wPC") {
-                Correction = Loaded_A_Corr_pol2_wPC * Momentum2 + Loaded_B_Corr_pol2_wPC * Momentum + Loaded_C_Corr_pol2_wPC;
+            } else if (CorrMode == "pol2_wKC") {
+                Correction = Loaded_A_Corr_pol2_wKC * Momentum2 + Loaded_B_Corr_pol2_wKC * Momentum + Loaded_C_Corr_pol2_wKC;
             } else if (CorrMode == "pol3") {
                 Correction = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
-            } else if (CorrMode == "pol3_wPC") {
-                Correction = Loaded_A_Corr_pol3_wPC * Momentum3 + Loaded_B_Corr_pol3_wPC * Momentum2 + Loaded_C_Corr_pol3_wPC * Momentum + Loaded_D_Corr_pol3_wPC;
+            } else if (CorrMode == "pol3_wKC") {
+                Correction = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum + Loaded_D_Corr_pol3_wKC;
             }
 
             CorrectedMomentum = Momentum * (1 + Correction); // minus for protons and plus for neutrons

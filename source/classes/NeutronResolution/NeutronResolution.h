@@ -67,6 +67,9 @@ private:
     TFolder *FittedNeutronResSlices = new TFolder("Fitted neutron resolution slices", "Fitted neutron resolution slices");
     TFolder *FittedNeutronResSlicesMean = new TFolder("Fitted neutron resolution slice mean", "Fitted neutron resolution slice mean");
     TFolder *FittedNeutronResSlicesWidth = new TFolder("Fitted neutron resolution slice width", "Fitted neutron resolution slice width");
+    TFolder *FittedProtonResSlices = new TFolder("Fitted proton resolution slices", "Fitted proton resolution slices");
+    TFolder *FittedProtonResSlicesMean = new TFolder("Fitted proton resolution slice mean", "Fitted proton resolution slice mean");
+    TFolder *FittedProtonResSlicesWidth = new TFolder("Fitted proton resolution slice width", "Fitted proton resolution slice width");
 
     TRandom3 *Rand = new TRandom3();
 
@@ -198,29 +201,29 @@ public:
 
 // Fitter functions -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void Fitter_Std_pol1();
+    void Fitter_Std_pol1(const string &Particle);
 
-    void Fitter_Std_pol1_wKC();
+    void Fitter_Std_pol1_wKC(const string &Particle);
 
-    void Fitter_Std_pol2();
+    void Fitter_Std_pol2(const string &Particle);
 
-    void Fitter_Std_pol2_wKC();
+    void Fitter_Std_pol2_wKC(const string &Particle);
 
-    void Fitter_Std_pol3();
+    void Fitter_Std_pol3(const string &Particle);
 
-    void Fitter_Std_pol3_wKC();
+    void Fitter_Std_pol3_wKC(const string &Particle);
 
-    void Fitter_Corr_pol1();
+    void Fitter_Corr_pol1(const string &Particle);
 
-    void Fitter_Corr_pol1_wKC();
+    void Fitter_Corr_pol1_wKC(const string &Particle);
 
-    void Fitter_Corr_pol2();
+    void Fitter_Corr_pol2(const string &Particle);
 
-    void Fitter_Corr_pol2_wKC();
+    void Fitter_Corr_pol2_wKC(const string &Particle);
 
-    void Fitter_Corr_pol3();
+    void Fitter_Corr_pol3(const string &Particle);
 
-    void Fitter_Corr_pol3_wKC();
+    void Fitter_Corr_pol3_wKC(const string &Particle);
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 

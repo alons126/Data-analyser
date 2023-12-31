@@ -75,53 +75,53 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
                 Additional_Status = "AMaps_";
             } else if (!Generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
-                    Additional_Status = "nResSS_";
+                    Additional_Status = "momResSS_";
                 } else {
                     if (!Calculate_momResS2) {
                         if (!nRes_test) {
                             if (!Run_in_momResS2) {
-                                Additional_Status = "nResS1_";
+                                Additional_Status = "momResS1_";
                             } else {
-                                Additional_Status = "nResS2R_"; // R for Run
+                                Additional_Status = "momResS2R_"; // R for Run
                             }
                         } else {
                             if (!Run_in_momResS2) {
-                                Additional_Status = "nResS1T_";
+                                Additional_Status = "momResS1T_";
                             } else {
-                                Additional_Status = "nResS2RT_"; // R for Run; T for Test
+                                Additional_Status = "momResS2RT_"; // R for Run; T for Test
                             }
                         }
                     } else {
                         if (!nRes_test) {
-                            Additional_Status = "nResS2_";
+                            Additional_Status = "momResS2_";
                         } else {
-                            Additional_Status = "nResS2T_"; // T for Test
+                            Additional_Status = "momResS2T_"; // T for Test
                         }
                     }
                 }
             } else if (Generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
-                    Additional_Status = "nResSS_AMaps_";
+                    Additional_Status = "momResSS_AMaps_";
                 } else {
                     if (!Calculate_momResS2) {
                         if (!nRes_test) {
                             if (!Run_in_momResS2) {
-                                Additional_Status = "nResS1_";
+                                Additional_Status = "momResS1_";
                             } else {
-                                Additional_Status = "nResS2R_";
+                                Additional_Status = "momResS2R_";
                             }
                         } else {
                             if (!Run_in_momResS2) {
-                                Additional_Status = "nResS1T_";
+                                Additional_Status = "momResS1T_";
                             } else {
-                                Additional_Status = "nResS2RT_";
+                                Additional_Status = "momResS2RT_";
                             }
                         }
                     } else {
                         if (!nRes_test) {
-                            Additional_Status = "nResS2_";
+                            Additional_Status = "momResS2_";
                         } else {
-                            Additional_Status = "nResS2T_";
+                            Additional_Status = "momResS2T_";
                         }
                     }
                 }
