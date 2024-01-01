@@ -57,10 +57,8 @@ private:
 
     double SliceUpperMomLimPC, SliceLowerMomLimPC; // lower lim for momentum slices - set by constructor
 
-    double hSliceUpperLim = 1.5;
-    double hSliceLowerLim = -1.5;
-//    double hSliceUpperLim = 3.;
-//    double hSliceLowerLim = -3.;
+    double hSliceUpperLim = 1.1;
+    double hSliceLowerLim = -1.1;
     int hSliceNumOfBin = 65;
 
     TList *ResSlicePlots = new TList();

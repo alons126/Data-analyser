@@ -338,10 +338,17 @@ string hData::GetParticleNameShortFromSubscript(const string &Source) {
 string hData::GetFS(const string &Source) {
     string FinalState;
 
-    if (findSubstring(Source, "1e_cut") || findSubstring(Source, "1e cut") || findSubstring(Source, "1e Cut")) {
+    if (findSubstring(Source, "1e_cut") || findSubstring(Source, "1e cut") || findSubstring(Source, "1e Cut") ||
+        findSubstring(Source, "(e,e')")) {
         FinalState = "1e cut";
+    } else if (findSubstring(Source, "1pFD")) {
+        FinalState = "1pFD";
     } else if (findSubstring(Source, "1p")) {
         FinalState = "1p";
+    } else if (findSubstring(Source, "1nFD")) {
+        FinalState = "1n";
+    } else if (findSubstring(Source, "1LnFD")) {
+        FinalState = "1LnFD";
     } else if (findSubstring(Source, "1n")) {
         FinalState = "1n";
     } else if (findSubstring(Source, "1n1p")) {
@@ -356,6 +363,10 @@ string hData::GetFS(const string &Source) {
         FinalState = "nFDpCD";
     }
 
+    //<editor-fold desc="Safety check">
+    if (FinalState == "") { cout << "hData::GetFS: finale state is not found (Source = " << Source << ")! Exiting...\n\n", exit(0); }
+    //</editor-fold>
+
     return FinalState;
 }
 //</editor-fold>
@@ -366,11 +377,17 @@ string hData::GetFS(const string &Source) {
 string hData::GetTopology(const string &Source) {
     string Topology;
 
-    if ((Source == "1p") || (Source == "1n")) {
+    if (findSubstring(Source, "1n") || findSubstring(Source, "1p") ||
+        findSubstring(Source, "1nFD") || findSubstring(Source, "1pFD")) {
         Topology = "1N";
-    } else if ((Source == "pFDpCD") || (Source == "nFDpCD")) {
+    } else if (findSubstring(Source, "1n1p") || findSubstring(Source, "2p") ||
+               findSubstring(Source, "nFDpCD") || findSubstring(Source, "pFDpCD")) {
         Topology = "2N";
     }
+
+    //<editor-fold desc="Safety check">
+    if (Topology == "") { cout << "hData::GetTopology: topology is not found (Source = " << Source << ")! Exiting...\n\n", exit(0); }
+    //</editor-fold>
 
     return Topology;
 }
