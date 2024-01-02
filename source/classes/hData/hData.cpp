@@ -363,9 +363,9 @@ string hData::GetFS(const string &Source) {
         FinalState = "nFDpCD";
     }
 
-    //<editor-fold desc="Safety check">
-    if (FinalState == "") { cout << "hData::GetFS: finale state is not found (Source = " << Source << ")! Exiting...\n\n", exit(0); }
-    //</editor-fold>
+//    //<editor-fold desc="Safety check">
+//    if (FinalState == "") { cout << "hData::GetFS: finale state is not found (Source = " << Source << ")! Exiting...\n\n", exit(0); }
+//    //</editor-fold>
 
     return FinalState;
 }
@@ -385,9 +385,9 @@ string hData::GetTopology(const string &Source) {
         Topology = "2N";
     }
 
-    //<editor-fold desc="Safety check">
-    if (Topology == "") { cout << "hData::GetTopology: topology is not found (Source = " << Source << ")! Exiting...\n\n", exit(0); }
-    //</editor-fold>
+//    //<editor-fold desc="Safety check">
+//    if (Topology == "") { cout << "hData::GetTopology: topology is not found (Source = " << Source << ")! Exiting...\n\n", exit(0); }
+//    //</editor-fold>
 
     return Topology;
 }

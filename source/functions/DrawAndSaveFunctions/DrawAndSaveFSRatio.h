@@ -770,14 +770,14 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     if (FSTopology == "2N") { TFolder_Name = TFolder_Name + " (" + FSRatioDRegion + ")"; }
     TFolder *FSRatio_plot_1D_TFolder = new TFolder(TFolder_Name.c_str(), TFolder_Name.c_str());
 
-    if (Histogram_list->FindObject(TFolder_Name.c_str())) {
-        cout << "\n\nTFolder_Name is in TList!\n\n";
-        cout << "\n\nFSRatioFSNumerator = " << FSRatioFSNumerator << "\n\n";
-        cout << "\n\nFSRatioFSDenominator = " << FSRatioFSDenominator << "\n\n";
-        cout << "\n\nFSRatioDRegion = " << FSRatioDRegion << "\n\n";
-        cout << "\n\nFSTopology = " << FSTopology << "\n\n";
-        cout << "\n\nExiting...\n\n", exit(0);
-    }
+//    if (Histogram_list->FindObject(TFolder_Name.c_str())) {
+//        cout << "\n\nTFolder_Name is in TList!\n\n";
+//        cout << "\n\nFSRatioFSNumerator = " << FSRatioFSNumerator << "\n\n";
+//        cout << "\n\nFSRatioFSDenominator = " << FSRatioFSDenominator << "\n\n";
+//        cout << "\n\nFSRatioDRegion = " << FSRatioDRegion << "\n\n";
+//        cout << "\n\nFSTopology = " << FSTopology << "\n\n";
+//        cout << "\n\nExiting...\n\n", exit(0);
+//    }
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone_test">
     nFDpCD_Plot_Clone_test->SetLineStyle(1);

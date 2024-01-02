@@ -16,6 +16,10 @@ public:
 
     Settings() = default;
 
+// AutoDisableVariables constructor --------------------------------------------------------------------------------------------------------------------------------
+
+    void AutoDisableVariables();
+
 };
 
 

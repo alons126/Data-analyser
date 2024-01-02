@@ -137,7 +137,6 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
                 if (ZoomIn_On_mom_th_plots) {
                     Efficiency_Status = "Eff2_ZoomIn";
                 } else {
-//                    Efficiency_Status = "Eff2_1_reco_e";
                     Efficiency_Status = "Eff2";
                 }
             } else {
