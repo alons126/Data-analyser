@@ -2775,7 +2775,8 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
 /* A function to smear protons by fitted neutron resolution */
 
 double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
-    bool Printout = false;
+    bool Printout = true;
+    bool Printout_Std_Variables = true;
 
     if (!apply_nucleon_SmearAndCorr) {
         /* Smearing and correction are disabled */
@@ -2828,16 +2829,58 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
 
             if (SmearMode == "pol1") {
                 Arg = Loaded_A_Std_pol1 * Momentum + Loaded_B_Std_pol1;
+
+                if (Printout_Std_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
+                    cout << "Loaded_B_Std_pol1 = " << Loaded_B_Std_pol1 << "\n\n";
+                }
             } else if (SmearMode == "pol1_wKC") {
                 Arg = Loaded_A_Std_pol1_wKC * Momentum + Loaded_B_Std_pol1_wKC;
+
+                if (Printout_Std_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Std_pol1_wKC = " << Loaded_A_Std_pol1_wKC << "\n";
+                    cout << "Loaded_B_Std_pol1_wKC = " << Loaded_B_Std_pol1_wKC << "\n\n";
+                }
             } else if (SmearMode == "pol2") {
                 Arg = Loaded_A_Std_pol2 * Momentum2 + Loaded_B_Std_pol2 * Momentum + Loaded_C_Std_pol2;
+
+                if (Printout_Std_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Std_pol2 = " << Loaded_A_Std_pol2 << "\n";
+                    cout << "Loaded_B_Std_pol2 = " << Loaded_B_Std_pol2 << "\n";
+                    cout << "Loaded_C_Std_pol2 = " << Loaded_C_Std_pol2 << "\n\n";
+                }
             } else if (SmearMode == "pol2_wKC") {
                 Arg = Loaded_A_Std_pol2_wKC * Momentum2 + Loaded_B_Std_pol2_wKC * Momentum + Loaded_C_Std_pol2_wKC;
+
+                if (Printout_Std_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Std_pol2_wKC = " << Loaded_A_Std_pol2_wKC << "\n";
+                    cout << "Loaded_B_Std_pol2_wKC = " << Loaded_B_Std_pol2_wKC << "\n";
+                    cout << "Loaded_C_Std_pol2_wKC = " << Loaded_C_Std_pol2_wKC << "\n\n";
+                }
             } else if (SmearMode == "pol3") {
                 Arg = Loaded_A_Std_pol3 * Momentum3 + Loaded_B_Std_pol3 * Momentum2 + Loaded_C_Std_pol3 * Momentum + Loaded_D_Std_pol3;
+
+                if (Printout_Std_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Std_pol3 = " << Loaded_A_Std_pol3 << "\n";
+                    cout << "Loaded_B_Std_pol3 = " << Loaded_B_Std_pol3 << "\n";
+                    cout << "Loaded_C_Std_pol3 = " << Loaded_C_Std_pol3 << "\n";
+                    cout << "Loaded_D_Std_pol3 = " << Loaded_D_Std_pol3 << "\n\n";
+                }
             } else if (SmearMode == "pol3_wKC") {
                 Arg = Loaded_A_Std_pol3_wKC * Momentum3 + Loaded_B_Std_pol3_wKC * Momentum2 + Loaded_C_Std_pol3_wKC * Momentum + Loaded_D_Std_pol3_wKC;
+
+                if (Printout_Std_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Std_pol3_wKC = " << Loaded_A_Std_pol3_wKC << "\n";
+                    cout << "Loaded_B_Std_pol3_wKC = " << Loaded_B_Std_pol3_wKC << "\n";
+                    cout << "Loaded_C_Std_pol3_wKC = " << Loaded_C_Std_pol3_wKC << "\n";
+                    cout << "Loaded_D_Std_pol3_wKC = " << Loaded_D_Std_pol3_wKC << "\n\n";
+                }
             }
 
             Smearing = Rand->Gaus(1, Arg);
@@ -2845,6 +2888,7 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
 
             if (Printout) {
                 cout << "\n\nSmearMode = " << SmearMode << "\n";
+                cout << "Arg = " << Arg << "\n";
                 cout << "Smearing = " << Smearing << "\n";
                 cout << "Momentum = " << Momentum << "\n";
                 cout << "SmearedMomentum = " << SmearedMomentum << "\n\n";
@@ -2866,6 +2910,7 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
 
 double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
     bool Printout = false;
+    bool Printout_Corr_Variables = false;
 
     if (!apply_nucleon_SmearAndCorr) {
         /* Smearing and correction are disabled */
@@ -2901,16 +2946,58 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
 
             if (CorrMode == "pol1") {
                 Correction = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol1 = " << Loaded_A_Corr_pol1 << "\n";
+                    cout << "Loaded_B_Corr_pol1 = " << Loaded_B_Corr_pol1 << "\n\n";
+                }
             } else if (CorrMode == "pol1_wKC") {
                 Correction = Loaded_A_Corr_pol1_wKC * Momentum + Loaded_B_Corr_pol1_wKC;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol1_wKC = " << Loaded_A_Corr_pol1_wKC << "\n";
+                    cout << "Loaded_B_Corr_pol1_wKC = " << Loaded_B_Corr_pol1_wKC << "\n\n";
+                }
             } else if (CorrMode == "pol2") {
                 Correction = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol2 = " << Loaded_A_Corr_pol2 << "\n";
+                    cout << "Loaded_B_Corr_pol2 = " << Loaded_B_Corr_pol2 << "\n";
+                    cout << "Loaded_C_Corr_pol2 = " << Loaded_C_Corr_pol2 << "\n\n";
+                }
             } else if (CorrMode == "pol2_wKC") {
                 Correction = Loaded_A_Corr_pol2_wKC * Momentum2 + Loaded_B_Corr_pol2_wKC * Momentum + Loaded_C_Corr_pol2_wKC;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol2_wKC = " << Loaded_A_Corr_pol2_wKC << "\n";
+                    cout << "Loaded_B_Corr_pol2_wKC = " << Loaded_B_Corr_pol2_wKC << "\n";
+                    cout << "Loaded_C_Corr_pol2_wKC = " << Loaded_C_Corr_pol2_wKC << "\n\n";
+                }
             } else if (CorrMode == "pol3") {
                 Correction = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol3 = " << Loaded_A_Corr_pol3 << "\n";
+                    cout << "Loaded_B_Corr_pol3 = " << Loaded_B_Corr_pol3 << "\n";
+                    cout << "Loaded_C_Corr_pol3 = " << Loaded_C_Corr_pol3 << "\n";
+                    cout << "Loaded_D_Corr_pol3 = " << Loaded_D_Corr_pol3 << "\n\n";
+                }
             } else if (CorrMode == "pol3_wKC") {
                 Correction = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum + Loaded_D_Corr_pol3_wKC;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol3_wKC = " << Loaded_A_Corr_pol3_wKC << "\n";
+                    cout << "Loaded_B_Corr_pol3_wKC = " << Loaded_B_Corr_pol3_wKC << "\n";
+                    cout << "Loaded_C_Corr_pol3_wKC = " << Loaded_C_Corr_pol3_wKC << "\n";
+                    cout << "Loaded_D_Corr_pol3_wKC = " << Loaded_D_Corr_pol3_wKC << "\n\n";
+                }
             }
 
             CorrectedMomentum = Momentum * (1 + Correction); // minus for protons and plus for neutrons
