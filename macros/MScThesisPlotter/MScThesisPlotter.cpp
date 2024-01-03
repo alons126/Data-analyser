@@ -693,10 +693,10 @@ void MScThesisPlotter() {
 
     /* After nFD momentum threshold */
     HistPlotter1D(c, MScThesisPlots, plots_NC,
-                  "Reco FD neutrons momentum (1e cut, FD)", SampleName,
+                  "Reco FD neutrons momentum APID (1e cut, FD)", SampleName,
                   NeutralsFDIDFolderSimAC, "03a_P_nFD_1e_cut_FD");
     HistPlotter1D(c, MScThesisPlots, plots_NC,
-                  "Reco FD neutron momentum - ZOOMOUT (1e cut, FD)", SampleName,
+                  "Reco FD neutron momentum APID - ZOOMOUT (1e cut, FD)", SampleName,
                   NeutralsFDIDFolderSimAC, "03b_P_nFD_ZOOMOUT_1e_cut_FD");
     //</editor-fold>
 

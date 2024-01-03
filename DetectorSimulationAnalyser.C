@@ -8826,9 +8826,8 @@ void EventAnalyser() {
                                                  Theta_p1_cuts_2p, Theta_p2_cuts_2p, dphi_pFD_pCD_2p); // good identified protons (no sCTOFhp and no dCDaFDd)
 
         // Proton vectors for (e,e'Xp)Y efficiency
-        // TODO: ask Adi if I need these vectors!
         vector<int> All_Protons_ind = ChargedParticleID(protons, no_p_mom_th); // indices of all protons (i.e., without P_p th.)
-        vector<int> All_good_Protons_ind = GetGoodProtons(apply_nucleon_cuts, protons, All_Protons_ind,
+        vector<int> All_gProtons_ind = GetGoodProtons(apply_nucleon_cuts, protons, All_Protons_ind,
                                                           Theta_p1_cuts_2p, Theta_p2_cuts_2p, dphi_pFD_pCD_2p); // good protons (no sCTOFhp and no dCDaFDd) - WITHOUT mom. th.
 
         vector<int> Piplus_ind = ChargedParticleID(piplus, pip_mom_th);
@@ -10490,7 +10489,7 @@ void EventAnalyser() {
                 }
             }
 
-            for (auto &i: All_good_Protons_ind) {
+            for (auto &i: All_gProtons_ind) {
                 if (protons[i]->getRegion() == FD) {
                     bool p_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi);
 
