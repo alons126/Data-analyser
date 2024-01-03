@@ -138,8 +138,8 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
                     Efficiency_Status = "Eff2_ZoomIn";
                 } else {
 //                    Efficiency_Status = "Eff2_111";
-//                    Efficiency_Status = "Eff2_512_reg";
-                    Efficiency_Status = "Eff2";
+                    Efficiency_Status = "Eff2_512_newIncProtonEff";
+//                    Efficiency_Status = "Eff2";
                 }
             } else {
                 Efficiency_Status = "Eff1";

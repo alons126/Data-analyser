@@ -132,7 +132,7 @@ void EventAnalyser() {
     bool fill_TL_plots = true;
     bool ZoomIn_On_mom_th_plots = false; // momentum th. efficiencies with zoomin
     bool Eff_calc_with_one_reco_electron = true;
-    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -220,7 +220,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndCorr = true;
+    bool apply_nucleon_SmearAndCorr = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -8827,7 +8827,7 @@ void EventAnalyser() {
 
         // Proton vectors for (e,e'Xp)Y efficiency
         // TODO: ask Adi if I need these vectors!
-        vector<int> All_Protons_ind = ChargedParticleID(protons, no_p_mom_th); // indices of all protons
+        vector<int> All_Protons_ind = ChargedParticleID(protons, no_p_mom_th); // indices of all protons (i.e., without P_p th.)
         vector<int> All_good_Protons_ind = GetGoodProtons(apply_nucleon_cuts, protons, All_Protons_ind,
                                                           Theta_p1_cuts_2p, Theta_p2_cuts_2p, dphi_pFD_pCD_2p); // good protons (no sCTOFhp and no dCDaFDd) - WITHOUT mom. th.
 
@@ -10490,18 +10490,17 @@ void EventAnalyser() {
                 }
             }
 
-            //TODO: find a way to loop over good protons w/o mom. th.
-            for (auto &p: protons) {
-                if (p->getRegion() == FD) {
-                    bool p_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Proton", p->getP(), p->getTheta() * 180.0 / pi, p->getPhi() * 180.0 / pi);
+            for (auto &i: All_good_Protons_ind) {
+                if (protons[i]->getRegion() == FD) {
+                    bool p_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi);
 
                     if (!apply_fiducial_cuts || p_Pass_FC) {
-                        hP_p_reco_1e_cut_FD.hFill(p->getP(), Weight), hP_p_reco_1e_cut_FD_ZOOMIN.hFill(p->getP(), Weight);
-                        hP_p_vs_Theta_p_reco_1e_cut_FD.hFill(p->getP(), p->getTheta() * 180.0 / pi, Weight);
+                        hP_p_reco_1e_cut_FD.hFill(protons[i]->getP(), Weight), hP_p_reco_1e_cut_FD_ZOOMIN.hFill(protons[i]->getP(), Weight);
+                        hP_p_vs_Theta_p_reco_1e_cut_FD.hFill(protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, Weight);
                     }
-                } else if (p->getRegion() == CD) {
-                    hP_p_reco_1e_cut_CD.hFill(p->getP(), Weight), hP_p_reco_1e_cut_CD_ZOOMIN.hFill(p->getP(), Weight);
-                    hP_p_vs_Theta_p_reco_1e_cut_CD.hFill(p->getP(), p->getTheta() * 180.0 / pi, Weight);
+                } else if (protons[i]->getRegion() == CD) {
+                    hP_p_reco_1e_cut_CD.hFill(protons[i]->getP(), Weight), hP_p_reco_1e_cut_CD_ZOOMIN.hFill(protons[i]->getP(), Weight);
+                    hP_p_vs_Theta_p_reco_1e_cut_CD.hFill(protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, Weight);
                 }
             }
 
