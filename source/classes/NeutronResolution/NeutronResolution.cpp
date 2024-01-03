@@ -2775,8 +2775,8 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
 /* A function to smear protons by fitted neutron resolution */
 
 double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
-    bool Printout = true;
-    bool Printout_Std_Variables = true;
+    bool Printout = false;
+    bool Printout_Std_Variables = false;
 
     if (!apply_nucleon_SmearAndCorr) {
         /* Smearing and correction are disabled */

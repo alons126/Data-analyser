@@ -294,12 +294,12 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
             double LowerMomentumTh = 0.4;
 
-            Histogram1D->GetYaxis()->SetRangeUser(0., 0.2);
+            Histogram1D->GetYaxis()->SetRangeUser(0., 1.);
             Histogram1D->SetTitle(("Momentum efficiency of " + Region + " " + ParticlesLC + " in ^{12}C(e,e')").c_str());
             Histogram1D->GetYaxis()->SetTitle("#epsilon_{eff}");
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
-            TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, 0.2);
+            TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, 1.);
             LowerMomTh->SetLineWidth(2);
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
@@ -449,11 +449,11 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             double LowerMomentumTh = 0.2;
 
-            Histogram1D->GetYaxis()->SetRangeUser(0., 0.1);
+            Histogram1D->GetYaxis()->SetRangeUser(0., 1.);
             Histogram1D->GetYaxis()->SetTitle("#epsilon_{eff}");
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
-            TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, 0.1);
+            TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, 1.);
             LowerMomTh->SetLineWidth(2);
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
@@ -522,13 +522,13 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         }
 
         if (findSubstring(Histogram1DNameCopy, "#epsilon_{eff} (1p)") || findSubstring(Histogram1DNameCopy, "#epsilon_{eff} (1n)")) {
-            double LowerMomentumKCut = 1.0, UpperMomentumKCut = 3.0, UpperThetaKCut = 32., upperLim;
+            double LowerMomentumKCut = 1.0, UpperMomentumKCut = 3.0, UpperThetaKCut = 32., upperLim = 1.;
 
-            if (!findSubstring(SavePath, "wFC")) {
-                upperLim = 0.2;
-            } else {
-                upperLim = 1.0;
-            }
+//            if (!findSubstring(SavePath, "wFC")) {
+//                upperLim = 0.2;
+//            } else {
+//                upperLim = 1.0;
+//            }
 
             if (findSubstring(Histogram1DNameCopy, "momentum") &&
                 !(findSubstring(Histogram1DNameCopy, "Electron") || findSubstring(Histogram1DNameCopy, "{e}}"))) {

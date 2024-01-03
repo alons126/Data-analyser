@@ -75,17 +75,17 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="momRes runs">
-    const char *plots_momResS1_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_nResS1_Eff1_v2"
+    const char *plots_momResS1_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
                                      "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_nResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_nResS1_Eff1_v2"
+    const char *plots_momResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
                                            "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-    const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_nResS1_Eff1_v2"
+    const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
                                            "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-    const char *plots_momResS2_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaS_nResS2_Eff1_v2"
+    const char *plots_momResS2_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
                                      "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_nResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaS_nResS2_Eff1_v2"
+    const char *plots_momResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
                                            "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-    const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaS_nResS2_Eff1_v2"
+    const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
                                            "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     //</editor-fold>
 
@@ -209,6 +209,9 @@ void MScThesisPlotter() {
 
     const string MomResS2FolderSim = "MScThesisPlotter/Event_Selection_Sim/08_MomRes/02_momResS2_Calc";
     system(("mkdir -p " + MomResS2FolderSim).c_str());
+
+    const string MomResS2RTFolderSim = "MScThesisPlotter/Event_Selection_Sim/08_MomRes/03_momResS2RT_Calc";
+    system(("mkdir -p " + MomResS2RTFolderSim).c_str());
     //</editor-fold>
 
     //<editor-fold desc="Results">
@@ -836,21 +839,21 @@ void MScThesisPlotter() {
 
     //<editor-fold desc="momRes">
     /* Mean fit before correction */
-    GraphPlotter1D(MScThesisPlots, plots_nResS1_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wKC",
+    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wKC",
                    SampleName, MomResS1FolderSim, "01_g_Std_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_nResS1_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wKC",
+    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wKC",
                    SampleName, MomResS1FolderSim, "02_g_Corr_pol1_wKC_Important"); // Important! (correction!)
 
     /* Width fit after correction */
-    GraphPlotter1D(MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wKC",
+    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wKC",
                    SampleName, MomResS2FolderSim, "01_g_Std_pol1_wKC_Important"); // Important! (smearing!)
-    GraphPlotter1D(MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wKC",
+    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wKC",
                    SampleName, MomResS2FolderSim, "02_g_Corr_pol1_wKC");
 
 //    /* momRes test */
-//    GraphPlotter1D(c, MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wKC",
+//    GraphPlotter1D(c, MScThesisPlots, plots_momResS2_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wKC",
 //                   SampleName, MomResS2FolderSim, "01_g_Std_pol1_wKC"); // Important!
-//    GraphPlotter1D(c, MScThesisPlots, plots_nResS2_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wKC",
+//    GraphPlotter1D(c, MScThesisPlots, plots_momResS2_FittedPlots, "Fitted neutron resolution slice mean", "g_Corr_pol1_wKC",
 //                   SampleName, MomResS2FolderSim, "02_g_Corr_pol1_wKC");
     //</editor-fold>
 

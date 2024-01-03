@@ -132,7 +132,7 @@ void EventAnalyser() {
     bool fill_TL_plots = true;
     bool ZoomIn_On_mom_th_plots = false; // momentum th. efficiencies with zoomin
     bool Eff_calc_with_one_reco_electron = true;
-    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -155,14 +155,14 @@ void EventAnalyser() {
     vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
-    bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
-    bool nRes_test = false; // false by default
+    bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
+    bool nRes_test = true; // false by default
     /*
     MomRes run order guide:
     1. momResS1 calculation 1:
@@ -220,7 +220,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndCorr = false;
+    bool apply_nucleon_SmearAndCorr = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
