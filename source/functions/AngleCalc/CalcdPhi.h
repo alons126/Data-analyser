@@ -24,7 +24,7 @@ double CalcdPhi(region_part_ptr proton1, region_part_ptr proton2) {
     if (proton1->getRegion() == proton2->getRegion()) {
 //        cout << "\n\nCalcdPhi: protons are in the same region! Exiting...\n\n";
         cout << "\n\nCalcdPhi: protons are in the same region (" << proton1->getRegion() << " & " << proton2->getRegion() << ")! Exiting...\n\n";
-        exit(EXIT_FAILURE);
+        exit(0);
     } else if (proton1->getRegion() == FD && proton2->getRegion() == CD) {
         PhiFD = proton1->getPhi() * 180.0 / pi, PhiCD = proton2->getPhi() * 180.0 / pi;
     } else if (proton1->getRegion() == CD && proton2->getRegion() == FD) {

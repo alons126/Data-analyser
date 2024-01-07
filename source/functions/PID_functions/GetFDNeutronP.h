@@ -70,7 +70,7 @@ double GetFDNeutronP(region_part_ptr &Neutron, bool apply_nucleon_cuts) {
         }
         //</editor-fold>
 
-    } else if (!apply_nucleon_cuts) {
+    } else {
 
         //<editor-fold desc="Get momentum for both neutrons and photons from file">
         Momentum = Neutron->par()->getP();

@@ -53,7 +53,7 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
     Canvas->cd();
 
 //    cout << "\n\n\n\n" << BetaPlot.GetHistogram1DSaveNamePath() << "Approximatied_beta/" << "\n\n\n\n";
-//    exit(EXIT_FAILURE);
+//    exit(0);
     //</editor-fold>
 
     //<editor-fold desc="Setting sNameFlag">
@@ -252,7 +252,7 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
         cout << "P(Beta_Min_Apprax) = " << P_Beta_Min_Apprax << "\n\n";
 
 ////        cout << "\n\n\n\n" << BetaPlot.GetHistogram1DSaveNamePath() << "Approximatied_beta/" << "\n\n\n\n";
-//        exit(EXIT_FAILURE);
+//        exit(0);
 
         Momentum_cuts.SetUpperCut(P_Beta_Max_Apprax);
         //</editor-fold>

@@ -42,6 +42,7 @@ using namespace std;
 class NeutronResolution {
 private:
     bool momResTestMode, momResS2CalcMode, momResS2RunMode;
+    bool ForceSmallProtonResLimits = false;
 
     string SmearMode = "NONE", CorrMode = "NONE";
 
@@ -179,7 +180,7 @@ public:
     NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
                       const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
                       const string &NeutronResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2, const bool &VaryingDelta = false,
-                      const string &SmearM = "pol1", const string &ShiftM = "pol1", bool nRes_test = false);
+                      const string &SmearM = "pol1", const string &ShiftM = "pol1", bool nRes_test = false, bool ForceSmallpResLimits = false);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -267,6 +268,8 @@ public:
     void SetCorrMode(const string &ShiftM) { CorrMode = ShiftM; };
 
     void SetSmearAndCorrModes(const string &SmearM, const string &ShiftM) { SmearMode = SmearM, CorrMode = ShiftM; };
+
+    void SetForceSmallpResLimits(const bool &fsprl) { ForceSmallProtonResLimits = fsprl; };
 
     // Get functions
     double GetSliceUpperMomLim() { return SliceUpperMomLim; };

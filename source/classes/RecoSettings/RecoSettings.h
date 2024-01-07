@@ -165,7 +165,7 @@ private:
     if ((Calculate_momResS2 && Run_in_momResS2) // Don't run calculate momResS2 and run on it at the same time
     || (Calculate_momResS2 && !VaryingDelta) // Don't run calculate momResS2 and small momentum slices at the same time
     ) {
-        cout << "\n\nmomRes order error! Exiting...\n\n", exit(EXIT_FAILURE);
+        cout << "\n\nmomRes order error! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -1341,7 +1341,7 @@ public:
         if ((Calculate_momResS2 && Run_in_momResS2) // Don't run calculate momResS2 and run on it at the same time
             || (Calculate_momResS2 && !VaryingDelta) // Don't run calculate momResS2 and small momentum slices at the same time
                 ) {
-            cout << "\n\nmomRes order error! Exiting...\n\n", exit(EXIT_FAILURE);
+            cout << "\n\nmomRes order error! Exiting...\n\n", exit(0);
         }
         //</editor-fold>
 

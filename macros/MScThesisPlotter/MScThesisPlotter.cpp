@@ -807,34 +807,34 @@ void MScThesisPlotter() {
                   "Neutron theta #epsilon_{eff} (1n)", SampleName,
                   EfficiencyRegFolderSim, "04_neutron_theta_eff_1n");
 
-    /* With fiducial cuts */
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Electron momentum #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyWithFCFolderSim, "01_electron_mom_eff_1p");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Electron theta #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyWithFCFolderSim, "01_electron_theta_eff_1p");
-
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "FD Proton momentum #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyWithFCFolderSim, "02_proton_mom_eff_1p");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Proton theta #epsilon_{eff} (1p)", SampleName,
-                  EfficiencyWithFCFolderSim, "02_proton_theta_eff_1p");
-
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Electron momentum #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyWithFCFolderSim, "03_electron_mom_eff_1n");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Electron theta #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyWithFCFolderSim, "03_electron_theta_eff_1n");
-
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyWithFCFolderSim, "04_neutron_mom_eff_1n");
-    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-                  "Neutron theta #epsilon_{eff} (1n)", SampleName,
-                  EfficiencyWithFCFolderSim, "04_neutron_theta_eff_1n");
+//    /* With fiducial cuts */
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Electron momentum #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyWithFCFolderSim, "01_electron_mom_eff_1p");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Electron theta #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyWithFCFolderSim, "01_electron_theta_eff_1p");
+//
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "FD Proton momentum #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyWithFCFolderSim, "02_proton_mom_eff_1p");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Proton theta #epsilon_{eff} (1p)", SampleName,
+//                  EfficiencyWithFCFolderSim, "02_proton_theta_eff_1p");
+//
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Electron momentum #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyWithFCFolderSim, "03_electron_mom_eff_1n");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Electron theta #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyWithFCFolderSim, "03_electron_theta_eff_1n");
+//
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyWithFCFolderSim, "04_neutron_mom_eff_1n");
+//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+//                  "Neutron theta #epsilon_{eff} (1n)", SampleName,
+//                  EfficiencyWithFCFolderSim, "04_neutron_theta_eff_1n");
     //</editor-fold>
 
     //<editor-fold desc="momRes">

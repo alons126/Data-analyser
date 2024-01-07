@@ -77,11 +77,11 @@ vector<int> GetGoodProtons(bool apply_nucleon_cuts, vector<region_part_ptr> &pro
 
     //<editor-fold desc="Safety checks">
     if (!apply_nucleon_cuts && (GoodProtons.size() != IDProtons_ind.size())) {
-        cout << "\n\nGetGoodProtons(): GoodProtons and IDProtons_ind are not the same withot neucleon cut! exiting...\n\n", exit(EXIT_FAILURE);
+        cout << "\n\nGetGoodProtons(): GoodProtons and IDProtons_ind are not the same withot neucleon cut! exiting...\n\n", exit(0);
     }
 
     if (GoodProtons.size() > IDProtons_ind.size()) {
-        cout << "\n\nGetGoodProtons(): GoodProtons.size() can't be greater than IDProtons_ind.size()! exiting...\n\n", exit(EXIT_FAILURE);
+        cout << "\n\nGetGoodProtons(): GoodProtons.size() can't be greater than IDProtons_ind.size()! exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -91,7 +91,7 @@ vector<int> GetGoodProtons(bool apply_nucleon_cuts, vector<region_part_ptr> &pro
         cout << "IDProtons_ind.size() = " << IDProtons_ind.size() << "\n";
         cout << "GoodProtons.size() = " << GoodProtons.size() << "\n\n\n";
     }
-//    if (Cut_sCTOFhp && Cut_dCDaFDd) { cout << "\n\nGetGoodProtons(): We have a duble cut! exiting...\n\n", exit(EXIT_FAILURE); }
+//    if (Cut_sCTOFhp && Cut_dCDaFDd) { cout << "\n\nGetGoodProtons(): We have a duble cut! exiting...\n\n", exit(0); }
     //</editor-fold>
 
     return GoodProtons;

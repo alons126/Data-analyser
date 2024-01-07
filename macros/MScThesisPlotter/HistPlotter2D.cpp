@@ -142,7 +142,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
                 TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
-                EquiLine->SetLineWidth(2);
+                EquiLine->SetLineWidth(3);
                 EquiLine->SetLineColor(kBlack);
                 EquiLine->Draw("same");
 
@@ -181,12 +181,12 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
             TLine *UpperFScut = new TLine(gPad->GetUxmin(), 0.28, gPad->GetUxmax(), 0.28);
-            UpperFScut->SetLineWidth(2);
+            UpperFScut->SetLineWidth(3);
             UpperFScut->SetLineColor(kRed);
             UpperFScut->Draw("same");
 
             TLine *LowerFScut = new TLine(gPad->GetUxmin(), 0.2, gPad->GetUxmax(), 0.2);
-            LowerFScut->SetLineWidth(2);
+            LowerFScut->SetLineWidth(3);
             LowerFScut->SetLineColor(kRed);
             LowerFScut->Draw("same");
         }
@@ -196,7 +196,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
             TLine *LowerECALcoorCut = new TLine(14., gPad->GetUymin(), 14., gPad->GetUymax());
-            LowerECALcoorCut->SetLineWidth(2);
+            LowerECALcoorCut->SetLineWidth(3);
             LowerECALcoorCut->SetLineColor(kRed);
             LowerECALcoorCut->Draw("same");
         }
@@ -205,12 +205,12 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
             TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
-            EquiLine->SetLineWidth(2);
+            EquiLine->SetLineWidth(3);
             EquiLine->SetLineColor(kBlack);
             EquiLine->Draw("same");
 
             TLine *UpperBetaElectronCut = new TLine(gPad->GetUxmin(), 1.2, gPad->GetUxmax(), 1.2);
-            UpperBetaElectronCut->SetLineWidth(2);
+            UpperBetaElectronCut->SetLineWidth(3);
             UpperBetaElectronCut->SetLineColor(kRed);
             UpperBetaElectronCut->Draw("same");
         }
@@ -227,22 +227,22 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 //            ClusterCenter->SetMarkerSize(3);
 
             TLine *UpperThetapFDcut = new TLine(gPad->GetUxmin(), 45., gPad->GetUxmax(), 45.);
-            UpperThetapFDcut->SetLineWidth(2);
+            UpperThetapFDcut->SetLineWidth(3);
             UpperThetapFDcut->SetLineColor(kBlue);
             UpperThetapFDcut->Draw("same");
 
             TLine *LowerThetapFDcut = new TLine(gPad->GetUxmin(), 35., gPad->GetUxmax(), 35.);
-            LowerThetapFDcut->SetLineWidth(2);
+            LowerThetapFDcut->SetLineWidth(3);
             LowerThetapFDcut->SetLineColor(kBlue);
             LowerThetapFDcut->Draw("same");
 
             TLine *UpperThetapCDcut = new TLine(45., gPad->GetUymin(), 45., gPad->GetUymax());
-            UpperThetapCDcut->SetLineWidth(2);
+            UpperThetapCDcut->SetLineWidth(3);
             UpperThetapCDcut->SetLineColor(kRed);
             UpperThetapCDcut->Draw("same");
 
             TLine *LowerThetapCDcut = new TLine(35., gPad->GetUymin(), 35., gPad->GetUymax());
-            LowerThetapCDcut->SetLineWidth(2);
+            LowerThetapCDcut->SetLineWidth(3);
             LowerThetapCDcut->SetLineColor(kRed);
             LowerThetapCDcut->Draw("same");
         }

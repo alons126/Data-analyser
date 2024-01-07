@@ -9,6 +9,6 @@
 
 using namespace std;
 
-void quit() { exit(EXIT_FAILURE); }
+void quit() { exit(0); }
 
 #endif //QUIT_H

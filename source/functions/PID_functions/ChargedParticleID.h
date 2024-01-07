@@ -23,7 +23,7 @@ vector<int> ChargedParticleID(vector<region_part_ptr> &Particle, DSCuts &Momentu
 
     for (int i = 0; i < Particle.size(); i++) {
         if (Particle[i]->par()->getCharge() == 0) { // Check that the particle's charge is zero
-            cout << "\n\nChargedParticleID: Particle is neutral! Exiting...\n\n", exit(EXIT_FAILURE);
+            cout << "\n\nChargedParticleID: Particle is neutral! Exiting...\n\n", exit(0);
         }
 
         double Momentum = Particle[i]->getP();

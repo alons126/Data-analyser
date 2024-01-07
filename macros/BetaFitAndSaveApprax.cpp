@@ -296,7 +296,7 @@ void BetaFitAndSaveApprax() {
     cout << "P(Beta_Min_Apprax) = " << P_Beta_Min_Apprax << "\n\n";
 
 ////        cout << "\n\n\n\n" << BetaPlot.GetHistogram1DSaveNamePath() << "Approximatied_beta/" << "\n\n\n\n";
-//        exit(EXIT_FAILURE);
+//        exit(0);
 
     n_momentum_cuts.SetUpperCut(P_Beta_Max_Apprax);
     //</editor-fold>

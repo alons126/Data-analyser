@@ -238,7 +238,7 @@ void EventAnalyser() {
     if ((Calculate_momResS2 && Run_in_momResS2) // Don't run calculate momResS2 and run on it at the same time
         || (Calculate_momResS2 && !VaryingDelta) // Don't run calculate momResS2 and small momentum slices at the same time
             ) {
-        cout << "\n\nmomRes order error! Exiting...\n\n", exit(EXIT_FAILURE);
+        cout << "\n\nmomRes order error! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -8746,7 +8746,7 @@ void EventAnalyser() {
 
         //<editor-fold desc="Safety checks">
         /* Safety check that allParticles.size(), Nf are the same */
-        if (allParticles.size() != Nf) { cout << "\n\nallParticles.size() is different than Nf! Exiting...\n\n", exit(EXIT_FAILURE); }
+        if (allParticles.size() != Nf) { cout << "\n\nallParticles.size() is different than Nf! Exiting...\n\n", exit(0); }
 
         //<editor-fold desc="Safety checks for FD protons">
         for (int i = 0; i < Protons_ind.size(); i++) {
@@ -9120,16 +9120,16 @@ void EventAnalyser() {
                 if ((TL_IDed_Leading_nFD_ind != -1) && (TL_IDed_Leading_nFD_momentum != Leading_TL_FDNeutron_Momentum)) {
                     cout << "\nTL_IDed_Leading_nFD_momentum = " << TL_IDed_Leading_nFD_momentum << "\n";
                     cout << "Leading_TL_FDNeutron_Momentum = " << Leading_TL_FDNeutron_Momentum << "\n";
-                    cout << "\n\nLeading TL nFD check: momentum magnitude inconsistent! Exiting...\n\n", exit(EXIT_FAILURE);
+                    cout << "\n\nLeading TL nFD check: momentum magnitude inconsistent! Exiting...\n\n", exit(0);
                 }
 
                 if ((TL_NeutronsFD_mom_ind.size() > 0) && (TL_IDed_Leading_nFD_ind == -1)) {
-                    cout << "\n\nLeading TL nFD check: leading was not assigned! Exiting...\n\n", exit(EXIT_FAILURE);
+                    cout << "\n\nLeading TL nFD check: leading was not assigned! Exiting...\n\n", exit(0);
                 }
 
                 if (TL_NeutronsFD_mom_ind.size() == 1) {
                     if (TL_NeutronsFD_mom_ind.at(0) != TL_IDed_Leading_nFD_ind) {
-                        cout << "\n\nLeading TL nFD check: leading was assigned incorrectly! Exiting...\n\n", exit(EXIT_FAILURE);
+                        cout << "\n\nLeading TL nFD check: leading was assigned incorrectly! Exiting...\n\n", exit(0);
                     }
                 } else if (TL_NeutronsFD_mom_ind.size() > 1) {
                     for (int &i: TL_NeutronsFD_mom_ind) {
@@ -9140,7 +9140,7 @@ void EventAnalyser() {
                         double dMomentum = Leading_neutron_momentum - Temp_neutron_momentum;
 
                         if (dMomentum < 0) {
-                            cout << "\n\nLeading TL nFD check: assigned nFD is not the leading! Exiting...\n\n", exit(EXIT_FAILURE);
+                            cout << "\n\nLeading TL nFD check: assigned nFD is not the leading! Exiting...\n\n", exit(0);
                         }
                     }
                 }

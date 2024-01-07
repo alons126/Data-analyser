@@ -12,13 +12,14 @@
 NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
                                      const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
                                      const string &NeutronResolutionDirectory, const string &SavePath, const double &DeltaSlices, const bool &VaryingDelta,
-                                     const string &SmearM, const string &CorrM, bool momRes_test) {
+                                     const string &SmearM, const string &CorrM, bool momRes_test, bool ForceSmallpResLimits) {
     SliceUpperMomLimPC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimPC = FD_nucleon_momentum_cut.GetLowerCutConst();
     momResS2CalcMode = Calculate_momResS2, momResS2RunMode = Run_in_momResS2;
     SlicesSavePath = SavePath;
     delta = DeltaSlices;
     SmearMode = SmearM, CorrMode = CorrM;
     momResTestMode = momRes_test;
+    ForceSmallpResLimits = ForceSmallpResLimits;
 
     //<editor-fold desc="Safety check">
     if (momResS2CalcMode && momResS2RunMode) {
@@ -98,9 +99,11 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
             hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
-            if (!momRes_test) {
+            if (!momRes_test || ForceSmallpResLimits) {
                 hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
-                                           -0.75, 0.75, hSliceNumOfBin);
+                                           -0.2, 0.2, hSliceNumOfBin);
+//                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
+//                                           -0.75, 0.75, hSliceNumOfBin);
             } else {
                 hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
                                            hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);

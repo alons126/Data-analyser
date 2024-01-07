@@ -186,10 +186,10 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperVzCut = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
-            UpperVzCut->SetLineWidth(2), UpperVzCut->SetLineColor(kBlue), UpperVzCut->Draw("same");
+            UpperVzCut->SetLineWidth(3), UpperVzCut->SetLineColor(kBlue), UpperVzCut->Draw("same");
 
             TLine *LowerVzCut = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
-            LowerVzCut->SetLineWidth(2), LowerVzCut->SetLineColor(kRed), LowerVzCut->Draw("same");
+            LowerVzCut->SetLineWidth(3), LowerVzCut->SetLineColor(kRed), LowerVzCut->Draw("same");
 
             auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.05 + xOffset, Legend_y2_TwoLines + yOffset);
             TLegendEntry *UpperVzCutEntry = Legend->AddEntry(UpperVzCut, ("Upper cut = " + to_string_with_precision(UpperCut, 0) + " [cm]").c_str(), "l");
@@ -222,10 +222,10 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperVzCut = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
-            UpperVzCut->SetLineWidth(2), UpperVzCut->SetLineColor(kBlue), UpperVzCut->Draw("same");
+            UpperVzCut->SetLineWidth(3), UpperVzCut->SetLineColor(kBlue), UpperVzCut->Draw("same");
 
             TLine *LowerVzCut = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
-            LowerVzCut->SetLineWidth(2), LowerVzCut->SetLineColor(kRed), LowerVzCut->Draw("same");
+            LowerVzCut->SetLineWidth(3), LowerVzCut->SetLineColor(kRed), LowerVzCut->Draw("same");
 
             auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.05 + xOffset, Legend_y2_TwoLines + yOffset);
             TLegendEntry *UpperVzCutEntry = Legend->AddEntry(UpperVzCut, ("Upper cut = " + to_string_with_precision(UpperCut, 0) + " [cm]").c_str(), "l");
@@ -243,7 +243,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *LowerNpheCut = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
-            LowerNpheCut->SetLineWidth(2);
+            LowerNpheCut->SetLineWidth(3);
             LowerNpheCut->SetLineColor(kRed);
             LowerNpheCut->Draw("same");
 
@@ -300,7 +300,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, 1.);
-            LowerMomTh->SetLineWidth(2);
+            LowerMomTh->SetLineWidth(3);
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
@@ -344,17 +344,17 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *PeakLoc = new TLine(PeakLocation, gPad->GetUymin(), PeakLocation, gPad->GetUymax());
-            PeakLoc->SetLineWidth(2);
+            PeakLoc->SetLineWidth(3);
             PeakLoc->SetLineColor(kGreen);
             PeakLoc->Draw("same");
 
             TLine *UpperdPhiCut = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
-            UpperdPhiCut->SetLineWidth(2);
+            UpperdPhiCut->SetLineWidth(3);
             UpperdPhiCut->SetLineColor(kBlue);
             UpperdPhiCut->Draw("same");
 
             TLine *LowerdPhiCut = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
-            LowerdPhiCut->SetLineWidth(2);
+            LowerdPhiCut->SetLineWidth(3);
             LowerdPhiCut->SetLineColor(kRed);
             LowerdPhiCut->Draw("same");
 
@@ -376,12 +376,12 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperMomTh = new TLine(UpperCut, gPad->GetUymin(), UpperCut, 1.);
-            UpperMomTh->SetLineWidth(2);
+            UpperMomTh->SetLineWidth(3);
             UpperMomTh->SetLineColor(kBlue);
             UpperMomTh->Draw("same");
 
             TLine *LowerMomTh = new TLine(LowerCut, gPad->GetUymin(), LowerCut, 1.);
-            LowerMomTh->SetLineWidth(2);
+            LowerMomTh->SetLineWidth(3);
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
@@ -400,12 +400,12 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperMomTh = new TLine(UpperCut, gPad->GetUymin(), UpperCut, 1.);
-            UpperMomTh->SetLineWidth(2);
+            UpperMomTh->SetLineWidth(3);
             UpperMomTh->SetLineColor(kBlue);
             UpperMomTh->Draw("same");
 
             TLine *LowerMomTh = new TLine(LowerCut, gPad->GetUymin(), LowerCut, 1.);
-            LowerMomTh->SetLineWidth(2);
+            LowerMomTh->SetLineWidth(3);
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
@@ -425,12 +425,12 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperMomTh = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
-            UpperMomTh->SetLineWidth(2);
+            UpperMomTh->SetLineWidth(3);
             UpperMomTh->SetLineColor(kBlue);
             UpperMomTh->Draw("same");
 
             TLine *LowerMomTh = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
-            LowerMomTh->SetLineWidth(2);
+            LowerMomTh->SetLineWidth(3);
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
@@ -454,7 +454,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, 1.);
-            LowerMomTh->SetLineWidth(2);
+            LowerMomTh->SetLineWidth(3);
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
@@ -485,7 +485,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
                 TLine *LowerMomTh = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
-                LowerMomTh->SetLineWidth(2);
+                LowerMomTh->SetLineWidth(3);
                 LowerMomTh->SetLineColor(kRed);
                 LowerMomTh->Draw("same");
 
@@ -503,12 +503,12 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
                 TLine *UpperMomTh = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
-                UpperMomTh->SetLineWidth(2);
+                UpperMomTh->SetLineWidth(3);
                 UpperMomTh->SetLineColor(kBlue);
                 UpperMomTh->Draw("same");
 
                 TLine *LowerMomTh = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
-                LowerMomTh->SetLineWidth(2);
+                LowerMomTh->SetLineWidth(3);
                 LowerMomTh->SetLineColor(kRed);
                 LowerMomTh->Draw("same");
 
@@ -541,12 +541,12 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
                 TLine *LowerMomKCut = new TLine(LowerMomentumKCut, gPad->GetUymin(), LowerMomentumKCut, upperLim);
-                LowerMomKCut->SetLineWidth(2);
+                LowerMomKCut->SetLineWidth(3);
                 LowerMomKCut->SetLineColor(kRed);
                 LowerMomKCut->Draw("same");
 
                 TLine *UpperMomKCut = new TLine(UpperMomentumKCut, gPad->GetUymin(), UpperMomentumKCut, upperLim);
-                UpperMomKCut->SetLineWidth(2);
+                UpperMomKCut->SetLineWidth(3);
                 UpperMomKCut->SetLineColor(kBlue);
                 UpperMomKCut->Draw("same");
 
@@ -567,7 +567,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
                 TLine *upperThetaKCut = new TLine(UpperThetaKCut, gPad->GetUymin(), UpperThetaKCut, upperLim);
-                upperThetaKCut->SetLineWidth(2);
+                upperThetaKCut->SetLineWidth(3);
                 upperThetaKCut->SetLineColor(kRed);
                 upperThetaKCut->Draw("same");
 

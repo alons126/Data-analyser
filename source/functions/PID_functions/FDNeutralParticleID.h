@@ -35,9 +35,11 @@ void FDNeutralParticleID(vector <region_part_ptr> allParticles,
 
         int NeutralPDG = allParticles[i]->par()->getPid();
 
+        //<editor-fold desc="Safety check">
         if (!((NeutralPDG == 22) || (NeutralPDG == 2112))) {
-            cout << "\n\nFDNeutralParticleID (Neutrons): Neutron PDG is not 2112 or 22 (" << NeutralPDG << "). Exiting...\n\n", exit(EXIT_FAILURE);
+            cout << "\n\nFDNeutralParticleID (Neutrons): neutron PDG is not 2112 or 22 (" << NeutralPDG << "). Exiting...\n\n", exit(0);
         }
+        //</editor-fold>
 
         double Momentum = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
@@ -50,9 +52,11 @@ void FDNeutralParticleID(vector <region_part_ptr> allParticles,
 
         int NeutralPDG = allParticles[i]->par()->getPid();
 
+        //<editor-fold desc="Safety check">
         if (NeutralPDG != 22) {
-            cout << "\n\nFDNeutralParticleID (Photons): Photon PDG is not 22 (" << NeutralPDG << "). Exiting...\n\n", exit(EXIT_FAILURE);
+            cout << "\n\nFDNeutralParticleID (Photons): photon PDG is not 22 (" << NeutralPDG << "). Exiting...\n\n", exit(0);
         }
+        //</editor-fold>
 
         double Momentum = allParticles[i]->getP();
 
