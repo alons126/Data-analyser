@@ -299,10 +299,9 @@ void NeutronResolution::ReadInputParam(const char *filename) {
                 if (pid != "") { Neutron_Momentum_cut = par.at(1); }
             }
         }
-    } else
+    } else {
         cout << "Parameter file didn't read in " << endl;
-
-//    return;
+    }
 }
 //</editor-fold>
 
@@ -319,17 +318,17 @@ void NeutronResolution::SetUpperMomCut(const string &SampleName, const string &N
 // hFillResPlots function -----------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="hFillResPlots function">
-void NeutronResolution::hFillResPlots(const double &Momentum, const double &Resolution, const double &Weight) {
+void NeutronResolution::hFillResPlots(const double &TL_momentum, const double &Resolution, const double &Weight) {
     bool Printout = false;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        if ((Momentum >= ResSlicesLimits.at(i).at(0)) && (Momentum < ResSlicesLimits.at(i).at(1))) {
+        if ((TL_momentum >= ResSlicesLimits.at(i).at(0)) && (TL_momentum < ResSlicesLimits.at(i).at(1))) {
             ResSlices.at(i).hFill(Resolution, Weight);
 
             if (Printout) {
-                cout << "\n\nResSlicesLimits.at(i).at(0) = " << ResSlicesLimits.at(i).at(0) << "\n";
-                cout << "Momentum = " << Momentum << "\n";
-                cout << "ResSlicesLimits.at(i).at(1) = " << ResSlicesLimits.at(i).at(1) << "\n";
+                cout << "\n\nResSlicesLimits.at(" << i << ").at(0) = " << ResSlicesLimits.at(i).at(0) << "\n";
+                cout << "TL_momentum = " << TL_momentum << "\n";
+                cout << "ResSlicesLimits.at(" << i << ").at(1) = " << ResSlicesLimits.at(i).at(1) << "\n";
             }
 
             break; // no need to keep the loop going after filling histogram
@@ -595,6 +594,8 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             }
 
             hSlice->Fit("fit");
+            hSlice->SetLineColor(kBlue);
+            hSlice->SetLineWidth(2);
 
             double FitAmp = func->GetParameter(0);  // get p0
             double FitMean = func->GetParameter(1); // get p1
@@ -611,7 +612,6 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
 
             TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam - 0.025, "NDC");
-//            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
             FitParam->SetBorderSize(1);
             FitParam->SetFillColor(0);
             FitParam->SetTextAlign(12);
@@ -620,10 +620,6 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 4)).c_str());
             FitParam->AddText(("Fit #mu = " + to_string_with_precision(FitMean, 4)).c_str());
             FitParam->AddText(("Fit #sigma = " + to_string_with_precision(FitStd, 4)).c_str());
-////            FitParam->AddText(("Fit amp = " + to_string(FitAmp)).c_str());
-////            FitParam->AddText(("Fit mean = " + to_string(FitMean)).c_str());
-////            FitParam->AddText(("Fit std = " + to_string(FitStd)).c_str());
-//            ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
             FitParam->Draw("same");
 
             int SliceUpperLimPrecision;
@@ -777,8 +773,6 @@ void NeutronResolution::Fitter_Std_pol1(const string &Particle) {
     FitParam->SetTextSize(0.03);
     FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol1, 4) + " #pm " + to_string_with_precision(A_Std_pol1_Error, 4)).c_str());
     FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol1, 4) + " #pm " + to_string_with_precision(B_Std_pol1_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Std_pol1) + " #pm " + to_string(A_Std_pol1_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Std_pol1) + " #pm " + to_string(B_Std_pol1_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol1 / NDF_Std_pol1)).c_str());
     FitParam->Draw("same");
 
@@ -913,8 +907,6 @@ void NeutronResolution::Fitter_Std_pol1_wKC(const string &Particle) {
     FitParam->SetTextSize(0.03);
     FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol1_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol1_wKC_Error, 4)).c_str());
     FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol1_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol1_wKC_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Std_pol1_wKC) + " #pm " + to_string(A_Std_pol1_wKC_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Std_pol1_wKC) + " #pm " + to_string(B_Std_pol1_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol1_wKC / NDF_Std_pol1_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -1048,9 +1040,6 @@ void NeutronResolution::Fitter_Std_pol2(const string &Particle) {
     FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol2, 4) + " #pm " + to_string_with_precision(A_Std_pol2_Error, 4)).c_str());
     FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol2, 4) + " #pm " + to_string_with_precision(B_Std_pol2_Error, 4)).c_str());
     FitParam->AddText(("C = " + to_string_with_precision(C_Std_pol2, 4) + " #pm " + to_string_with_precision(C_Std_pol2_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Std_pol2) + " #pm " + to_string(A_Std_pol2_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Std_pol2) + " #pm " + to_string(B_Std_pol2_Error)).c_str());
-//    FitParam->AddText(("C = " + to_string(C_Std_pol2) + " #pm " + to_string(C_Std_pol2_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol2 / NDF_Std_pol2)).c_str());
     FitParam->Draw("same");
 
@@ -1188,9 +1177,6 @@ void NeutronResolution::Fitter_Std_pol2_wKC(const string &Particle) {
     FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol2_wKC_Error, 4)).c_str());
     FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol2_wKC_Error, 4)).c_str());
     FitParam->AddText(("C = " + to_string_with_precision(C_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(C_Std_pol2_wKC_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Std_pol2_wKC) + " #pm " + to_string(A_Std_pol2_wKC_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Std_pol2_wKC) + " #pm " + to_string(B_Std_pol2_wKC_Error)).c_str());
-//    FitParam->AddText(("C = " + to_string(C_Std_pol2_wKC) + " #pm " + to_string(C_Std_pol2_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol2_wKC / NDF_Std_pol2_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -1327,10 +1313,6 @@ void NeutronResolution::Fitter_Std_pol3(const string &Particle) {
     FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol3, 4) + " #pm " + to_string_with_precision(B_Std_pol3_Error, 4)).c_str());
     FitParam->AddText(("C = " + to_string_with_precision(C_Std_pol3, 4) + " #pm " + to_string_with_precision(C_Std_pol3_Error, 4)).c_str());
     FitParam->AddText(("D = " + to_string_with_precision(D_Std_pol3, 4) + " #pm " + to_string_with_precision(D_Std_pol3_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Std_pol3) + " #pm " + to_string(A_Std_pol3_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Std_pol3) + " #pm " + to_string(B_Std_pol3_Error)).c_str());
-//    FitParam->AddText(("C = " + to_string(C_Std_pol3) + " #pm " + to_string(C_Std_pol3_Error)).c_str());
-//    FitParam->AddText(("D = " + to_string(D_Std_pol3) + " #pm " + to_string(D_Std_pol3_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol3 / NDF_Std_pol3)).c_str());
     FitParam->Draw("same");
 
@@ -1473,10 +1455,6 @@ void NeutronResolution::Fitter_Std_pol3_wKC(const string &Particle) {
     FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol3_wKC_Error, 4)).c_str());
     FitParam->AddText(("C = " + to_string_with_precision(C_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(C_Std_pol3_wKC_Error, 4)).c_str());
     FitParam->AddText(("D = " + to_string_with_precision(D_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(D_Std_pol3_wKC_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Std_pol3_wKC) + " #pm " + to_string(A_Std_pol3_wKC_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Std_pol3_wKC) + " #pm " + to_string(B_Std_pol3_wKC_Error)).c_str());
-//    FitParam->AddText(("C = " + to_string(C_Std_pol3_wKC) + " #pm " + to_string(C_Std_pol3_wKC_Error)).c_str());
-//    FitParam->AddText(("D = " + to_string(D_Std_pol3_wKC) + " #pm " + to_string(D_Std_pol3_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol3_wKC / NDF_Std_pol3_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -1608,8 +1586,6 @@ void NeutronResolution::Fitter_Corr_pol1(const string &Particle) {
     FitParam->SetTextSize(0.03);
     FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol1, 4) + " #pm " + to_string_with_precision(A_Corr_pol1_Error, 4)).c_str());
     FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol1, 4) + " #pm " + to_string_with_precision(B_Corr_pol1_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Corr_pol1) + " #pm " + to_string(A_Corr_pol1_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Corr_pol1) + " #pm " + to_string(B_Corr_pol1_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol1 / NDF_Corr_pol1)).c_str());
     FitParam->Draw("same");
 
@@ -1745,8 +1721,6 @@ void NeutronResolution::Fitter_Corr_pol1_wKC(const string &Particle) {
     FitParam->SetTextSize(0.03);
     FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol1_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol1_wKC_Error, 4)).c_str());
     FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol1_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol1_wKC_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Corr_pol1_wKC) + " #pm " + to_string(A_Corr_pol1_wKC_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Corr_pol1_wKC) + " #pm " + to_string(B_Corr_pol1_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol1_wKC / NDF_Corr_pol1_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -1881,9 +1855,6 @@ void NeutronResolution::Fitter_Corr_pol2(const string &Particle) {
     FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol2, 4) + " #pm " + to_string_with_precision(A_Corr_pol2_Error, 4)).c_str());
     FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol2, 4) + " #pm " + to_string_with_precision(B_Corr_pol2_Error, 4)).c_str());
     FitParam->AddText(("C = " + to_string_with_precision(C_Corr_pol2, 4) + " #pm " + to_string_with_precision(C_Corr_pol2_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Corr_pol2) + " #pm " + to_string(A_Corr_pol2_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Corr_pol2) + " #pm " + to_string(B_Corr_pol2_Error)).c_str());
-//    FitParam->AddText(("C = " + to_string(C_Corr_pol2) + " #pm " + to_string(C_Corr_pol2_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol2 / NDF_Corr_pol2)).c_str());
     FitParam->Draw("same");
 
@@ -2022,9 +1993,6 @@ void NeutronResolution::Fitter_Corr_pol2_wKC(const string &Particle) {
     FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol2_wKC_Error, 4)).c_str());
     FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol2_wKC_Error, 4)).c_str());
     FitParam->AddText(("C = " + to_string_with_precision(C_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(C_Corr_pol2_wKC_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Corr_pol2_wKC) + " #pm " + to_string(A_Corr_pol2_wKC_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Corr_pol2_wKC) + " #pm " + to_string(B_Corr_pol2_wKC_Error)).c_str());
-//    FitParam->AddText(("C = " + to_string(C_Corr_pol2_wKC) + " #pm " + to_string(C_Corr_pol2_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol2_wKC / NDF_Corr_pol2_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -2162,10 +2130,6 @@ void NeutronResolution::Fitter_Corr_pol3(const string &Particle) {
     FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol3, 4) + " #pm " + to_string_with_precision(B_Corr_pol3_Error, 4)).c_str());
     FitParam->AddText(("C = " + to_string_with_precision(C_Corr_pol3, 4) + " #pm " + to_string_with_precision(C_Corr_pol3_Error, 4)).c_str());
     FitParam->AddText(("D = " + to_string_with_precision(D_Corr_pol3, 4) + " #pm " + to_string_with_precision(D_Corr_pol3_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Corr_pol3) + " #pm " + to_string(A_Corr_pol3_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Corr_pol3) + " #pm " + to_string(B_Corr_pol3_Error)).c_str());
-//    FitParam->AddText(("C = " + to_string(C_Corr_pol3) + " #pm " + to_string(C_Corr_pol3_Error)).c_str());
-//    FitParam->AddText(("D = " + to_string(D_Corr_pol3) + " #pm " + to_string(D_Corr_pol3_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol3 / NDF_Corr_pol3)).c_str());
     FitParam->Draw("same");
 
@@ -2308,10 +2272,6 @@ void NeutronResolution::Fitter_Corr_pol3_wKC(const string &Particle) {
     FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol3_wKC_Error, 4)).c_str());
     FitParam->AddText(("C = " + to_string_with_precision(C_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(C_Corr_pol3_wKC_Error, 4)).c_str());
     FitParam->AddText(("D = " + to_string_with_precision(D_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(D_Corr_pol3_wKC_Error, 4)).c_str());
-//    FitParam->AddText(("A = " + to_string(A_Corr_pol3_wKC) + " #pm " + to_string(A_Corr_pol3_wKC_Error)).c_str());
-//    FitParam->AddText(("B = " + to_string(B_Corr_pol3_wKC) + " #pm " + to_string(B_Corr_pol3_wKC_Error)).c_str());
-//    FitParam->AddText(("C = " + to_string(C_Corr_pol3_wKC) + " #pm " + to_string(C_Corr_pol3_wKC_Error)).c_str());
-//    FitParam->AddText(("D = " + to_string(D_Corr_pol3_wKC) + " #pm " + to_string(D_Corr_pol3_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol3_wKC / NDF_Corr_pol3_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -2384,7 +2344,6 @@ void NeutronResolution::LogResDataToFile(const string &SampleName, const string 
 //<editor-fold desc="LogFitDataToFile function">
 void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
                                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
-
     ofstream Neutron_res_fit_param;
     std::string Neutron_res_fit_paramFilePath;
 
