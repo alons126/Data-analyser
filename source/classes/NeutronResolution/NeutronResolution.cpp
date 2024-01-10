@@ -433,15 +433,20 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             double x_1_FitParam = x_1_Cut_legend, y_1_FitParam = y_1_Cut_legend;
             double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
 
-            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
+            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam - 0.025, "NDC");
+//            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
             FitParam->SetBorderSize(1);
-            FitParam->SetTextFont(0);
             FitParam->SetFillColor(0);
             FitParam->SetTextAlign(12);
-            FitParam->AddText(("Fit amp = " + to_string(FitAmp)).c_str());
-            FitParam->AddText(("Fit mean = " + to_string(FitMean)).c_str());
-            FitParam->AddText(("Fit std = " + to_string(FitStd)).c_str());
-            ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
+            FitParam->SetTextFont(42);
+            FitParam->SetTextSize(0.03);
+            FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 4)).c_str());
+            FitParam->AddText(("Fit #mu = " + to_string_with_precision(FitMean, 4)).c_str());
+            FitParam->AddText(("Fit #sigma = " + to_string_with_precision(FitStd, 4)).c_str());
+////            FitParam->AddText(("Fit amp = " + to_string(FitAmp)).c_str());
+////            FitParam->AddText(("Fit mean = " + to_string(FitMean)).c_str());
+////            FitParam->AddText(("Fit std = " + to_string(FitStd)).c_str());
+//            ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
             FitParam->Draw("same");
 
             int SliceUpperLimPrecision;
@@ -454,7 +459,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             auto ListOfFunctions = hSlice->GetListOfFunctions();
             ListOfFunctions->Add((TObject *) FitParam);
 
-            SliceFitCanvas->SaveAs(hSlice_CloneSaveName.c_str());
+            cout << "\n", SliceFitCanvas->SaveAs(hSlice_CloneSaveName.c_str());
 
             if (Particle == "Neutron") {
                 FittedNeutronResSlices->Add(hSlice);
@@ -573,16 +578,17 @@ void NeutronResolution::Fitter_Std_pol1(const string &Particle) {
     double x_1_FitParam = x_1_Std, y_1_FitParam = y_1_Std + 0.025;
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025;
 
-    auto Std_pol1_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+    auto Std_pol1_legend = new TLegend(x_1_Std_legend + 0.075, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+//    auto Std_pol1_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
     TLegendEntry *Std_pol1_legend_fit;
 
     if (Particle == "Neutron") {
-        Std_pol1_legend_fit = Std_pol1_legend->AddEntry(f_Std_pol1, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
+        Std_pol1_legend_fit = Std_pol1_legend->AddEntry(f_Std_pol1, "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
     } else if (Particle == "Proton") {
-        Std_pol1_legend_fit = Std_pol1_legend->AddEntry(f_Std_pol1, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
+        Std_pol1_legend_fit = Std_pol1_legend->AddEntry(f_Std_pol1, "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
     }
 
-    Std_pol1_legend->SetTextFont(12);
+    Std_pol1_legend->SetTextFont(42);
     Std_pol1_legend->SetTextSize(0.03);
     Std_pol1_legend->Draw("same");
 
@@ -590,8 +596,12 @@ void NeutronResolution::Fitter_Std_pol1(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Std_pol1) + " #pm " + to_string(A_Std_pol1_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Std_pol1) + " #pm " + to_string(B_Std_pol1_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol1, 4) + " #pm " + to_string_with_precision(A_Std_pol1_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol1, 4) + " #pm " + to_string_with_precision(B_Std_pol1_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Std_pol1) + " #pm " + to_string(A_Std_pol1_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Std_pol1) + " #pm " + to_string(B_Std_pol1_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol1 / NDF_Std_pol1)).c_str());
     FitParam->Draw("same");
 
@@ -603,7 +613,7 @@ void NeutronResolution::Fitter_Std_pol1(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol1); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol1); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "01_Fit_Std_pol1.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "01_Fit_Std_pol1.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -704,16 +714,17 @@ void NeutronResolution::Fitter_Std_pol1_wKC(const string &Particle) {
     double x_1_FitParam = x_1_Std, y_1_FitParam = y_1_Std + 0.025;
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025;
 
-    auto Std_pol1_wKC_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+    auto Std_pol1_wKC_legend = new TLegend(x_1_Std_legend + 0.075, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+//    auto Std_pol1_wKC_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
     TLegendEntry *Std_pol1_wKC_legend_fit;
 
     if (Particle == "Neutron") {
-        Std_pol1_wKC_legend_fit = Std_pol1_wKC_legend->AddEntry(f_Std_pol1_wKC, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
+        Std_pol1_wKC_legend_fit = Std_pol1_wKC_legend->AddEntry(f_Std_pol1_wKC, "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
     } else if (Particle == "Proton") {
-        Std_pol1_wKC_legend_fit = Std_pol1_wKC_legend->AddEntry(f_Std_pol1_wKC, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
+        Std_pol1_wKC_legend_fit = Std_pol1_wKC_legend->AddEntry(f_Std_pol1_wKC, "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
     }
 
-    Std_pol1_wKC_legend->SetTextFont(12);
+    Std_pol1_wKC_legend->SetTextFont(42);
     Std_pol1_wKC_legend->SetTextSize(0.03);
     Std_pol1_wKC_legend->Draw("same");
 
@@ -721,8 +732,12 @@ void NeutronResolution::Fitter_Std_pol1_wKC(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Std_pol1_wKC) + " #pm " + to_string(A_Std_pol1_wKC_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Std_pol1_wKC) + " #pm " + to_string(B_Std_pol1_wKC_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol1_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol1_wKC_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol1_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol1_wKC_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Std_pol1_wKC) + " #pm " + to_string(A_Std_pol1_wKC_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Std_pol1_wKC) + " #pm " + to_string(B_Std_pol1_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol1_wKC / NDF_Std_pol1_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -734,7 +749,7 @@ void NeutronResolution::Fitter_Std_pol1_wKC(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol1_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol1_wKC); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "01_Fit_Std_pol1_wKC.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "01_Fit_Std_pol1_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -833,16 +848,17 @@ void NeutronResolution::Fitter_Std_pol2(const string &Particle) {
     double x_1_FitParam = x_1_Std, y_1_FitParam = y_1_Std + 0.025;
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025 - 0.05;
 
-    auto Std_pol2_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+    auto Std_pol2_legend = new TLegend(x_1_Std_legend + 0.075, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+//    auto Std_pol2_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
     TLegendEntry *Std_pol2_legend_fit;
 
     if (Particle == "Neutron") {
-        Std_pol2_legend_fit = Std_pol2_legend->AddEntry(f_Std_pol2, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
+        Std_pol2_legend_fit = Std_pol2_legend->AddEntry(f_Std_pol2, "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
     } else if (Particle == "Proton") {
-        Std_pol2_legend_fit = Std_pol2_legend->AddEntry(f_Std_pol2, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
+        Std_pol2_legend_fit = Std_pol2_legend->AddEntry(f_Std_pol2, "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
     }
 
-    Std_pol2_legend->SetTextFont(12);
+    Std_pol2_legend->SetTextFont(42);
     Std_pol2_legend->SetTextSize(0.03);
     Std_pol2_legend->Draw("same");
 
@@ -850,9 +866,14 @@ void NeutronResolution::Fitter_Std_pol2(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Std_pol2) + " #pm " + to_string(A_Std_pol2_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Std_pol2) + " #pm " + to_string(B_Std_pol2_Error)).c_str());
-    FitParam->AddText(("C = " + to_string(C_Std_pol2) + " #pm " + to_string(C_Std_pol2_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol2, 4) + " #pm " + to_string_with_precision(A_Std_pol2_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol2, 4) + " #pm " + to_string_with_precision(B_Std_pol2_Error, 4)).c_str());
+    FitParam->AddText(("C = " + to_string_with_precision(C_Std_pol2, 4) + " #pm " + to_string_with_precision(C_Std_pol2_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Std_pol2) + " #pm " + to_string(A_Std_pol2_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Std_pol2) + " #pm " + to_string(B_Std_pol2_Error)).c_str());
+//    FitParam->AddText(("C = " + to_string(C_Std_pol2) + " #pm " + to_string(C_Std_pol2_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol2 / NDF_Std_pol2)).c_str());
     FitParam->Draw("same");
 
@@ -864,7 +885,7 @@ void NeutronResolution::Fitter_Std_pol2(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol2); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol2); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "02_Fit_Std_pol2.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "02_Fit_Std_pol2.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -967,16 +988,17 @@ void NeutronResolution::Fitter_Std_pol2_wKC(const string &Particle) {
     double x_1_FitParam = x_1_Std, y_1_FitParam = y_1_Std + 0.025;
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025 - 0.05;
 
-    auto Std_pol2_wKC_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+    auto Std_pol2_wKC_legend = new TLegend(x_1_Std_legend + 0.075, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+//    auto Std_pol2_wKC_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
     TLegendEntry *Std_pol2_wKC_legend_fit;
 
     if (Particle == "Neutron") {
-        Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
+        Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
     } else if (Particle == "Proton") {
-        Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
+        Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
     }
 
-    Std_pol2_wKC_legend->SetTextFont(12);
+    Std_pol2_wKC_legend->SetTextFont(42);
     Std_pol2_wKC_legend->SetTextSize(0.03);
     Std_pol2_wKC_legend->Draw("same");
 
@@ -984,9 +1006,14 @@ void NeutronResolution::Fitter_Std_pol2_wKC(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Std_pol2_wKC) + " #pm " + to_string(A_Std_pol2_wKC_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Std_pol2_wKC) + " #pm " + to_string(B_Std_pol2_wKC_Error)).c_str());
-    FitParam->AddText(("C = " + to_string(C_Std_pol2_wKC) + " #pm " + to_string(C_Std_pol2_wKC_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol2_wKC_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol2_wKC_Error, 4)).c_str());
+    FitParam->AddText(("C = " + to_string_with_precision(C_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(C_Std_pol2_wKC_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Std_pol2_wKC) + " #pm " + to_string(A_Std_pol2_wKC_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Std_pol2_wKC) + " #pm " + to_string(B_Std_pol2_wKC_Error)).c_str());
+//    FitParam->AddText(("C = " + to_string(C_Std_pol2_wKC) + " #pm " + to_string(C_Std_pol2_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol2_wKC / NDF_Std_pol2_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -998,7 +1025,7 @@ void NeutronResolution::Fitter_Std_pol2_wKC(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol2_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol2_wKC); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "02_Fit_Std_pol2_wKC.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "02_Fit_Std_pol2_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -1099,16 +1126,17 @@ void NeutronResolution::Fitter_Std_pol3(const string &Particle) {
     double x_1_FitParam = x_1_Std, y_1_FitParam = y_1_Std + 0.025;
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025 - 0.05 - 0.05;
 
-    auto Std_pol3_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+    auto Std_pol3_legend = new TLegend(x_1_Std_legend + 0.075, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+//    auto Std_pol3_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
     TLegendEntry *Std_pol3_legend_fit;
 
     if (Particle == "Neutron") {
-        Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+        Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3, "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
     } else if (Particle == "Proton") {
-        Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+        Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3, "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
     }
 
-    Std_pol3_legend->SetTextFont(12);
+    Std_pol3_legend->SetTextFont(42);
     Std_pol3_legend->SetTextSize(0.03);
     Std_pol3_legend->Draw("same");
 
@@ -1116,10 +1144,16 @@ void NeutronResolution::Fitter_Std_pol3(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Std_pol3) + " #pm " + to_string(A_Std_pol3_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Std_pol3) + " #pm " + to_string(B_Std_pol3_Error)).c_str());
-    FitParam->AddText(("C = " + to_string(C_Std_pol3) + " #pm " + to_string(C_Std_pol3_Error)).c_str());
-    FitParam->AddText(("D = " + to_string(D_Std_pol3) + " #pm " + to_string(D_Std_pol3_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol3, 4) + " #pm " + to_string_with_precision(A_Std_pol3_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol3, 4) + " #pm " + to_string_with_precision(B_Std_pol3_Error, 4)).c_str());
+    FitParam->AddText(("C = " + to_string_with_precision(C_Std_pol3, 4) + " #pm " + to_string_with_precision(C_Std_pol3_Error, 4)).c_str());
+    FitParam->AddText(("D = " + to_string_with_precision(D_Std_pol3, 4) + " #pm " + to_string_with_precision(D_Std_pol3_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Std_pol3) + " #pm " + to_string(A_Std_pol3_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Std_pol3) + " #pm " + to_string(B_Std_pol3_Error)).c_str());
+//    FitParam->AddText(("C = " + to_string(C_Std_pol3) + " #pm " + to_string(C_Std_pol3_Error)).c_str());
+//    FitParam->AddText(("D = " + to_string(D_Std_pol3) + " #pm " + to_string(D_Std_pol3_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol3 / NDF_Std_pol3)).c_str());
     FitParam->Draw("same");
 
@@ -1131,7 +1165,7 @@ void NeutronResolution::Fitter_Std_pol3(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol3); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol3); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "03_Fit_Std_pol3.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "03_Fit_Std_pol3.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -1236,16 +1270,19 @@ void NeutronResolution::Fitter_Std_pol3_wKC(const string &Particle) {
     double x_1_FitParam = x_1_Std, y_1_FitParam = y_1_Std + 0.025;
     double x_2_FitParam = x_2_Std, y_2_FitParam = y_2_Std + 0.025 - 0.05 - 0.05;
 
-    auto Std_pol3_wKC_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+    auto Std_pol3_wKC_legend = new TLegend(x_1_Std_legend + 0.075, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
+//    auto Std_pol3_wKC_legend = new TLegend(x_1_Std_legend, y_1_Std_legend, x_2_Std_legend, y_2_Std_legend);
     TLegendEntry *Std_pol3_wKC_legend_fit;
 
     if (Particle == "Neutron") {
-        Std_pol3_wKC_legend_fit = Std_pol3_wKC_legend->AddEntry(f_Std_pol3_wKC, "g(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+        Std_pol3_wKC_legend_fit = Std_pol3_wKC_legend->AddEntry(f_Std_pol3_wKC,
+                                                                "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
     } else if (Particle == "Proton") {
-        Std_pol3_wKC_legend_fit = Std_pol3_wKC_legend->AddEntry(f_Std_pol3_wKC, "g(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+        Std_pol3_wKC_legend_fit = Std_pol3_wKC_legend->AddEntry(f_Std_pol3_wKC,
+                                                                "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
     }
 
-    Std_pol3_wKC_legend->SetTextFont(12);
+    Std_pol3_wKC_legend->SetTextFont(42);
     Std_pol3_wKC_legend->SetTextSize(0.03);
     Std_pol3_wKC_legend->Draw("same");
 
@@ -1253,10 +1290,16 @@ void NeutronResolution::Fitter_Std_pol3_wKC(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Std_pol3_wKC) + " #pm " + to_string(A_Std_pol3_wKC_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Std_pol3_wKC) + " #pm " + to_string(B_Std_pol3_wKC_Error)).c_str());
-    FitParam->AddText(("C = " + to_string(C_Std_pol3_wKC) + " #pm " + to_string(C_Std_pol3_wKC_Error)).c_str());
-    FitParam->AddText(("D = " + to_string(D_Std_pol3_wKC) + " #pm " + to_string(D_Std_pol3_wKC_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(("C = " + to_string_with_precision(C_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(C_Std_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(("D = " + to_string_with_precision(D_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(D_Std_pol3_wKC_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Std_pol3_wKC) + " #pm " + to_string(A_Std_pol3_wKC_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Std_pol3_wKC) + " #pm " + to_string(B_Std_pol3_wKC_Error)).c_str());
+//    FitParam->AddText(("C = " + to_string(C_Std_pol3_wKC) + " #pm " + to_string(C_Std_pol3_wKC_Error)).c_str());
+//    FitParam->AddText(("D = " + to_string(D_Std_pol3_wKC) + " #pm " + to_string(D_Std_pol3_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol3_wKC / NDF_Std_pol3_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -1268,7 +1311,7 @@ void NeutronResolution::Fitter_Std_pol3_wKC(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesWidth->Add(g_Std_pol3_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesWidth->Add(g_Std_pol3_wKC); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "03_Fit_Std_pol3_wKC.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "03_Fit_Std_pol3_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -1366,16 +1409,17 @@ void NeutronResolution::Fitter_Corr_pol1(const string &Particle) {
     double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025;
 
-    auto Corr_pol1_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    auto Corr_pol1_legend = new TLegend(x_1_Corr_legend + 0.075, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+//    auto Corr_pol1_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
     TLegendEntry *Corr_pol1_legend_fit;
 
     if (Particle == "Neutron") {
-        Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f_Corr_pol1, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
+        Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f_Corr_pol1, "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
     } else if (Particle == "Proton") {
-        Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f_Corr_pol1, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
+        Corr_pol1_legend_fit = Corr_pol1_legend->AddEntry(f_Corr_pol1, "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
     }
 
-    Corr_pol1_legend->SetTextFont(12);
+    Corr_pol1_legend->SetTextFont(42);
     Corr_pol1_legend->SetTextSize(0.03);
     Corr_pol1_legend->Draw("same");
 
@@ -1383,8 +1427,12 @@ void NeutronResolution::Fitter_Corr_pol1(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Corr_pol1) + " #pm " + to_string(A_Corr_pol1_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Corr_pol1) + " #pm " + to_string(B_Corr_pol1_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol1, 4) + " #pm " + to_string_with_precision(A_Corr_pol1_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol1, 4) + " #pm " + to_string_with_precision(B_Corr_pol1_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Corr_pol1) + " #pm " + to_string(A_Corr_pol1_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Corr_pol1) + " #pm " + to_string(B_Corr_pol1_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol1 / NDF_Corr_pol1)).c_str());
     FitParam->Draw("same");
 
@@ -1396,7 +1444,7 @@ void NeutronResolution::Fitter_Corr_pol1(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol1); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol1); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "04_Fit_Corr_pol1.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "04_Fit_Corr_pol1.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -1498,16 +1546,17 @@ void NeutronResolution::Fitter_Corr_pol1_wKC(const string &Particle) {
     double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025;
 
-    auto Corr_pol1_wKC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    auto Corr_pol1_wKC_legend = new TLegend(x_1_Corr_legend + 0.075, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+//    auto Corr_pol1_wKC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
     TLegendEntry *Corr_pol1_wKC_legend_fit;
 
     if (Particle == "Neutron") {
-        Corr_pol1_wKC_legend_fit = Corr_pol1_wKC_legend->AddEntry(f_Corr_pol1_wKC, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
+        Corr_pol1_wKC_legend_fit = Corr_pol1_wKC_legend->AddEntry(f_Corr_pol1_wKC, "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD} + B", "l");
     } else if (Particle == "Proton") {
-        Corr_pol1_wKC_legend_fit = Corr_pol1_wKC_legend->AddEntry(f_Corr_pol1_wKC, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
+        Corr_pol1_wKC_legend_fit = Corr_pol1_wKC_legend->AddEntry(f_Corr_pol1_wKC, "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD} + B", "l");
     }
 
-    Corr_pol1_wKC_legend->SetTextFont(12);
+    Corr_pol1_wKC_legend->SetTextFont(42);
     Corr_pol1_wKC_legend->SetTextSize(0.03);
     Corr_pol1_wKC_legend->Draw("same");
 
@@ -1515,8 +1564,12 @@ void NeutronResolution::Fitter_Corr_pol1_wKC(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Corr_pol1_wKC) + " #pm " + to_string(A_Corr_pol1_wKC_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Corr_pol1_wKC) + " #pm " + to_string(B_Corr_pol1_wKC_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol1_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol1_wKC_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol1_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol1_wKC_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Corr_pol1_wKC) + " #pm " + to_string(A_Corr_pol1_wKC_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Corr_pol1_wKC) + " #pm " + to_string(B_Corr_pol1_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol1_wKC / NDF_Corr_pol1_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -1528,7 +1581,7 @@ void NeutronResolution::Fitter_Corr_pol1_wKC(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol1_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol1_wKC); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "04_Fit_Corr_pol1_wKC.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "04_Fit_Corr_pol1_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -1628,16 +1681,17 @@ void NeutronResolution::Fitter_Corr_pol2(const string &Particle) {
     double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05;
 
-    auto Corr_pol2_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    auto Corr_pol2_legend = new TLegend(x_1_Corr_legend + 0.075, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+//    auto Corr_pol2_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
     TLegendEntry *Corr_pol2_legend_fit;
 
     if (Particle == "Neutron") {
-        Corr_pol2_legend_fit = Corr_pol2_legend->AddEntry(f_Corr_pol2, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
+        Corr_pol2_legend_fit = Corr_pol2_legend->AddEntry(f_Corr_pol2, "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
     } else if (Particle == "Proton") {
-        Corr_pol2_legend_fit = Corr_pol2_legend->AddEntry(f_Corr_pol2, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
+        Corr_pol2_legend_fit = Corr_pol2_legend->AddEntry(f_Corr_pol2, "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
     }
 
-    Corr_pol2_legend->SetTextFont(12);
+    Corr_pol2_legend->SetTextFont(42);
     Corr_pol2_legend->SetTextSize(0.03);
     Corr_pol2_legend->Draw("same");
 
@@ -1645,9 +1699,14 @@ void NeutronResolution::Fitter_Corr_pol2(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Corr_pol2) + " #pm " + to_string(A_Corr_pol2_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Corr_pol2) + " #pm " + to_string(B_Corr_pol2_Error)).c_str());
-    FitParam->AddText(("C = " + to_string(C_Corr_pol2) + " #pm " + to_string(C_Corr_pol2_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol2, 4) + " #pm " + to_string_with_precision(A_Corr_pol2_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol2, 4) + " #pm " + to_string_with_precision(B_Corr_pol2_Error, 4)).c_str());
+    FitParam->AddText(("C = " + to_string_with_precision(C_Corr_pol2, 4) + " #pm " + to_string_with_precision(C_Corr_pol2_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Corr_pol2) + " #pm " + to_string(A_Corr_pol2_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Corr_pol2) + " #pm " + to_string(B_Corr_pol2_Error)).c_str());
+//    FitParam->AddText(("C = " + to_string(C_Corr_pol2) + " #pm " + to_string(C_Corr_pol2_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol2 / NDF_Corr_pol2)).c_str());
     FitParam->Draw("same");
 
@@ -1659,7 +1718,7 @@ void NeutronResolution::Fitter_Corr_pol2(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol2); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol2); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "05_Fit_Corr_pol2.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "05_Fit_Corr_pol2.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -1763,16 +1822,17 @@ void NeutronResolution::Fitter_Corr_pol2_wKC(const string &Particle) {
     double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05;
 
-    auto Corr_pol2_wKC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    auto Corr_pol2_wKC_legend = new TLegend(x_1_Corr_legend + 0.075, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+//    auto Corr_pol2_wKC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
     TLegendEntry *Corr_pol2_wKC_legend_fit;
 
     if (Particle == "Neutron") {
-        Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
+        Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
     } else if (Particle == "Proton") {
-        Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
+        Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
     }
 
-    Corr_pol2_wKC_legend->SetTextFont(12);
+    Corr_pol2_wKC_legend->SetTextFont(42);
     Corr_pol2_wKC_legend->SetTextSize(0.03);
     Corr_pol2_wKC_legend->Draw("same");
 
@@ -1780,9 +1840,14 @@ void NeutronResolution::Fitter_Corr_pol2_wKC(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Corr_pol2_wKC) + " #pm " + to_string(A_Corr_pol2_wKC_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Corr_pol2_wKC) + " #pm " + to_string(B_Corr_pol2_wKC_Error)).c_str());
-    FitParam->AddText(("C = " + to_string(C_Corr_pol2_wKC) + " #pm " + to_string(C_Corr_pol2_wKC_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol2_wKC_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol2_wKC_Error, 4)).c_str());
+    FitParam->AddText(("C = " + to_string_with_precision(C_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(C_Corr_pol2_wKC_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Corr_pol2_wKC) + " #pm " + to_string(A_Corr_pol2_wKC_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Corr_pol2_wKC) + " #pm " + to_string(B_Corr_pol2_wKC_Error)).c_str());
+//    FitParam->AddText(("C = " + to_string(C_Corr_pol2_wKC) + " #pm " + to_string(C_Corr_pol2_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol2_wKC / NDF_Corr_pol2_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -1794,7 +1859,7 @@ void NeutronResolution::Fitter_Corr_pol2_wKC(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol2_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol2_wKC); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "05_Fit_Corr_pol2_wKC.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "05_Fit_Corr_pol2_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -1896,16 +1961,17 @@ void NeutronResolution::Fitter_Corr_pol3(const string &Particle) {
     double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05 - 0.05;
 
-    auto Corr_pol3_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    auto Corr_pol3_legend = new TLegend(x_1_Corr_legend + 0.075, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+//    auto Corr_pol3_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
     TLegendEntry *Corr_pol3_legend_fit;
 
     if (Particle == "Neutron") {
-        Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+        Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3, "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
     } else if (Particle == "Proton") {
-        Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+        Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3, "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
     }
 
-    Corr_pol3_legend->SetTextFont(12);
+    Corr_pol3_legend->SetTextFont(42);
     Corr_pol3_legend->SetTextSize(0.03);
     Corr_pol3_legend->Draw("same");
 
@@ -1913,10 +1979,16 @@ void NeutronResolution::Fitter_Corr_pol3(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Corr_pol3) + " #pm " + to_string(A_Corr_pol3_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Corr_pol3) + " #pm " + to_string(B_Corr_pol3_Error)).c_str());
-    FitParam->AddText(("C = " + to_string(C_Corr_pol3) + " #pm " + to_string(C_Corr_pol3_Error)).c_str());
-    FitParam->AddText(("D = " + to_string(D_Corr_pol3) + " #pm " + to_string(D_Corr_pol3_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol3, 4) + " #pm " + to_string_with_precision(A_Corr_pol3_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol3, 4) + " #pm " + to_string_with_precision(B_Corr_pol3_Error, 4)).c_str());
+    FitParam->AddText(("C = " + to_string_with_precision(C_Corr_pol3, 4) + " #pm " + to_string_with_precision(C_Corr_pol3_Error, 4)).c_str());
+    FitParam->AddText(("D = " + to_string_with_precision(D_Corr_pol3, 4) + " #pm " + to_string_with_precision(D_Corr_pol3_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Corr_pol3) + " #pm " + to_string(A_Corr_pol3_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Corr_pol3) + " #pm " + to_string(B_Corr_pol3_Error)).c_str());
+//    FitParam->AddText(("C = " + to_string(C_Corr_pol3) + " #pm " + to_string(C_Corr_pol3_Error)).c_str());
+//    FitParam->AddText(("D = " + to_string(D_Corr_pol3) + " #pm " + to_string(D_Corr_pol3_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol3 / NDF_Corr_pol3)).c_str());
     FitParam->Draw("same");
 
@@ -1928,7 +2000,7 @@ void NeutronResolution::Fitter_Corr_pol3(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol3); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol3); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3.png").c_str());
     Fit_Canvas->Clear();
 }
 
@@ -2034,15 +2106,18 @@ void NeutronResolution::Fitter_Corr_pol3_wKC(const string &Particle) {
     double x_1_FitParam = x_1_Corr, y_1_FitParam = y_1_Corr + 0.025;
     double x_2_FitParam = x_2_Corr, y_2_FitParam = y_2_Corr + 0.025 - 0.05 - 0.05;
 
-    auto Corr_pol3_wKC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+    auto Corr_pol3_wKC_legend = new TLegend(x_1_Corr_legend + 0.075, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
+//    auto Corr_pol3_wKC_legend = new TLegend(x_1_Corr_legend, y_1_Corr_legend, x_2_Corr_legend, y_2_Corr_legend);
     TLegendEntry *Corr_pol3_wKC_legend_fit;
     if (Particle == "Neutron") {
-        Corr_pol3_wKC_legend_fit = Corr_pol3_wKC_legend->AddEntry(f_Corr_pol3_wKC, "f(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+        Corr_pol3_wKC_legend_fit = Corr_pol3_wKC_legend->AddEntry(f_Corr_pol3_wKC,
+                                                                  "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
     } else if (Particle == "Proton") {
-        Corr_pol3_wKC_legend_fit = Corr_pol3_wKC_legend->AddEntry(f_Corr_pol3_wKC, "f(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+        Corr_pol3_wKC_legend_fit = Corr_pol3_wKC_legend->AddEntry(f_Corr_pol3_wKC,
+                                                                  "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
     }
 
-    Corr_pol3_wKC_legend->SetTextFont(12);
+    Corr_pol3_wKC_legend->SetTextFont(42);
     Corr_pol3_wKC_legend->SetTextSize(0.03);
     Corr_pol3_wKC_legend->Draw("same");
 
@@ -2050,10 +2125,16 @@ void NeutronResolution::Fitter_Corr_pol3_wKC(const string &Particle) {
     FitParam->SetBorderSize(1);
     FitParam->SetFillColor(0);
     FitParam->SetTextAlign(12);
-    FitParam->AddText(("A = " + to_string(A_Corr_pol3_wKC) + " #pm " + to_string(A_Corr_pol3_wKC_Error)).c_str());
-    FitParam->AddText(("B = " + to_string(B_Corr_pol3_wKC) + " #pm " + to_string(B_Corr_pol3_wKC_Error)).c_str());
-    FitParam->AddText(("C = " + to_string(C_Corr_pol3_wKC) + " #pm " + to_string(C_Corr_pol3_wKC_Error)).c_str());
-    FitParam->AddText(("D = " + to_string(D_Corr_pol3_wKC) + " #pm " + to_string(D_Corr_pol3_wKC_Error)).c_str());
+    FitParam->SetTextFont(42);
+    FitParam->SetTextSize(0.03);
+    FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(("C = " + to_string_with_precision(C_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(C_Corr_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(("D = " + to_string_with_precision(D_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(D_Corr_pol3_wKC_Error, 4)).c_str());
+//    FitParam->AddText(("A = " + to_string(A_Corr_pol3_wKC) + " #pm " + to_string(A_Corr_pol3_wKC_Error)).c_str());
+//    FitParam->AddText(("B = " + to_string(B_Corr_pol3_wKC) + " #pm " + to_string(B_Corr_pol3_wKC_Error)).c_str());
+//    FitParam->AddText(("C = " + to_string(C_Corr_pol3_wKC) + " #pm " + to_string(C_Corr_pol3_wKC_Error)).c_str());
+//    FitParam->AddText(("D = " + to_string(D_Corr_pol3_wKC) + " #pm " + to_string(D_Corr_pol3_wKC_Error)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol3_wKC / NDF_Corr_pol3_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -2065,7 +2146,7 @@ void NeutronResolution::Fitter_Corr_pol3_wKC(const string &Particle) {
 
     if (Particle == "Neutron") { FittedNeutronResSlicesMean->Add(g_Corr_pol3_wKC); } else if (Particle == "Proton") { FittedProtonResSlicesMean->Add(g_Corr_pol3_wKC); }
 
-    Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3_wKC.png").c_str());
+    cout << "\n", Fit_Canvas->SaveAs((SlicesSavePath + "/" + "06_Fit_Corr_pol3_wKC.png").c_str());
     Fit_Canvas->Clear();
 }
 //</editor-fold>
@@ -2087,7 +2168,10 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const str
         ResSlicePlots->Add(FittedProtonResSlicesMean);
     }
 
-    for (int i = 0; i < NumberOfSlices; i++) { ResSlices.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, ResSlicePlots, false, true, 1., 9999, 9999, 0, false); }
+    for (int i = 0; i < NumberOfSlices; i++) {
+//        ResSlices.at(i).ClearListOfFunctions(), ResSlices.at(i).SetShowPlotCuts();
+        ResSlices.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, ResSlicePlots, false, true, 1., 9999, 9999, 0, false);
+    }
 
     /* Save res and fitted res plots to plots directory: */
     TFile *PlotsFolder_fout = new TFile((plots_path + "/" + Particle + "_resolution_plots_-_" + SampleName + ".root").c_str(), "recreate");
@@ -2134,10 +2218,18 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
             Neutron_res_fit_paramFilePath = plots_path + "/" + Particle + "_momResS2_fit_param_-_" + SampleName + ".par";
         }
     } else {
-        if (!momResTestMode) {
-            Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS1_fit_param_-_" + SampleName + ".par";
+        if (momResS2RunMode) {
+            if (!momResTestMode) {
+                Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS2_fit_param_-_" + SampleName + ".par";
+            } else {
+                Neutron_res_fit_paramFilePath = plots_path + "/" + Particle + "_momResS2_fit_param_-_" + SampleName + ".par";
+            }
         } else {
-            Neutron_res_fit_paramFilePath = plots_path + "/" + Particle + "_momResS1_fit_param_-_" + SampleName + ".par";
+            if (!momResTestMode) {
+                Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS1_fit_param_-_" + SampleName + ".par";
+            } else {
+                Neutron_res_fit_paramFilePath = plots_path + "/" + Particle + "_momResS1_fit_param_-_" + SampleName + ".par";
+            }
         }
     }
 
@@ -2315,10 +2407,18 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
             Neutron_res_Hist_paramFilePath = plots_path + "/" + Particle + "_momResS2_hist_param_-_" + SampleName + ".par";
         }
     } else {
-        if (!momResTestMode) {
-            Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS1_hist_param_-_" + SampleName + ".par";
+        if (momResS2RunMode) {
+            if (!momResTestMode) {
+                Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS2_hist_param_-_" + SampleName + ".par";
+            } else {
+                Neutron_res_Hist_paramFilePath = plots_path + "/" + Particle + "_momResS2_hist_param_-_" + SampleName + ".par";
+            }
         } else {
-            Neutron_res_Hist_paramFilePath = plots_path + "/" + Particle + "_momResS1_hist_param_-_" + SampleName + ".par";
+            if (!momResTestMode) {
+                Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + Particle + "_momResS1_hist_param_-_" + SampleName + ".par";
+            } else {
+                Neutron_res_Hist_paramFilePath = plots_path + "/" + Particle + "_momResS1_hist_param_-_" + SampleName + ".par";
+            }
         }
     }
 
@@ -2945,10 +3045,10 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
         } else if ((CorrMode == "pol1") || (CorrMode == "pol2") || (CorrMode == "pol3") ||
                    (CorrMode == "pol1_wKC") || (CorrMode == "pol2_wKC") || (CorrMode == "pol3_wKC")) {
             /* Correction using pol fit results */
-            double Correction;
+            double Mu, CorrectionFactor;
 
             if (CorrMode == "pol1") {
-                Correction = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
+                Mu = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
 
                 if (Printout_Corr_Variables) {
                     cout << "\n";
@@ -2956,7 +3056,7 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                     cout << "Loaded_B_Corr_pol1 = " << Loaded_B_Corr_pol1 << "\n\n";
                 }
             } else if (CorrMode == "pol1_wKC") {
-                Correction = Loaded_A_Corr_pol1_wKC * Momentum + Loaded_B_Corr_pol1_wKC;
+                Mu = Loaded_A_Corr_pol1_wKC * Momentum + Loaded_B_Corr_pol1_wKC;
 
                 if (Printout_Corr_Variables) {
                     cout << "\n";
@@ -2964,7 +3064,7 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                     cout << "Loaded_B_Corr_pol1_wKC = " << Loaded_B_Corr_pol1_wKC << "\n\n";
                 }
             } else if (CorrMode == "pol2") {
-                Correction = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;
+                Mu = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;
 
                 if (Printout_Corr_Variables) {
                     cout << "\n";
@@ -2973,7 +3073,7 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                     cout << "Loaded_C_Corr_pol2 = " << Loaded_C_Corr_pol2 << "\n\n";
                 }
             } else if (CorrMode == "pol2_wKC") {
-                Correction = Loaded_A_Corr_pol2_wKC * Momentum2 + Loaded_B_Corr_pol2_wKC * Momentum + Loaded_C_Corr_pol2_wKC;
+                Mu = Loaded_A_Corr_pol2_wKC * Momentum2 + Loaded_B_Corr_pol2_wKC * Momentum + Loaded_C_Corr_pol2_wKC;
 
                 if (Printout_Corr_Variables) {
                     cout << "\n";
@@ -2982,7 +3082,7 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                     cout << "Loaded_C_Corr_pol2_wKC = " << Loaded_C_Corr_pol2_wKC << "\n\n";
                 }
             } else if (CorrMode == "pol3") {
-                Correction = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
+                Mu = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
 
                 if (Printout_Corr_Variables) {
                     cout << "\n";
@@ -2992,7 +3092,7 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                     cout << "Loaded_D_Corr_pol3 = " << Loaded_D_Corr_pol3 << "\n\n";
                 }
             } else if (CorrMode == "pol3_wKC") {
-                Correction = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum + Loaded_D_Corr_pol3_wKC;
+                Mu = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum + Loaded_D_Corr_pol3_wKC;
 
                 if (Printout_Corr_Variables) {
                     cout << "\n";
@@ -3003,11 +3103,13 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                 }
             }
 
-            CorrectedMomentum = Momentum * (1 + Correction); // minus for protons and plus for neutrons
+            CorrectionFactor = 1 / (1 - Mu);
+            CorrectedMomentum = Momentum * CorrectionFactor;
 
             if (Printout) {
                 cout << "\n\nCorrMode = " << CorrMode << "\n";
-                cout << "Correction = " << Correction << "\n";
+                cout << "Mu = " << Mu << "\n";
+                cout << "CorrectionFactor = " << CorrectionFactor << "\n";
                 cout << "Momentum = " << Momentum << "\n";
                 cout << "CorrectedMomentum = " << CorrectedMomentum << "\n\n";
             }

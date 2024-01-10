@@ -117,7 +117,7 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
     bool AddToStack = false;
 
     /* Histogram cuts setup */
-    bool ApplyPlotCuts = true;
+    bool ShowPlotCuts = true;
     double PlotCuts = 0;
     double PlotXmax = 0;
     bool PlotHistogramMax = true;

@@ -64,7 +64,7 @@ protected:
     bool AddToStack = false;
 
     /* Histogram cuts setup */
-    bool ApplyPlotCuts = true;
+    bool ShowPlotCuts = true;
     //vector<double> - for cuts
     double PlotCuts = 0;
     double PlotXmax = 0;
@@ -200,6 +200,11 @@ public:
 
 //    void hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool nHistogram, bool cNormalization, double cNormalizationFactor, std::string FinalState);
 
+    void ClearListOfFunctions() {
+        auto FuncList = Histogram1D->GetListOfFunctions();
+        FuncList->Clear();
+    }
+
     //  Set methods:
     void SetHistogram1D(TH1D *Histogram) { Histogram1D = Histogram; }
 
@@ -303,7 +308,7 @@ public:
 
     void SetTitle2(bool T2 = false) { Title2 = T2; }
 
-    void SetApplyPlotCuts(bool apCuts = false) { ApplyPlotCuts = apCuts; }
+    void SetShowPlotCuts(bool apCuts = false) { ShowPlotCuts = apCuts; }
 
     void SetPlotCuts(double pCuts = 0) { PlotCuts = pCuts; }
 
@@ -374,7 +379,7 @@ public:
 
     bool GetTitle2() { return Title2; }
 
-    bool GetApplyPlotCuts() { return ApplyPlotCuts; }
+    bool GetShowPlotCuts() { return ShowPlotCuts; }
 
     double GetPlotCuts() { return PlotCuts; }
 

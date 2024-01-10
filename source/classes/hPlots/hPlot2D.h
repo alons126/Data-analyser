@@ -42,7 +42,7 @@ protected:
     bool AddToStack = false;
 
     /* Histogram cuts setup */
-    bool ApplyPlotCuts = false;
+    bool ShowPlotCuts = false;
     //vector<double> - for cuts
     double PlotCuts = 0;
     double PlotXmax = 0;
@@ -225,7 +225,7 @@ public:
 
     void SetTitle2(bool T2 = false) { Title2 = T2; }
 
-    void SetApplyPlotCuts(bool apCuts = false) { ApplyPlotCuts = apCuts; }
+    void SetShowPlotCuts(bool apCuts = false) { ShowPlotCuts = apCuts; }
 
     void SetPlotCuts(double pCuts = 0) { PlotCuts = pCuts; }
 
@@ -306,7 +306,7 @@ public:
 
     bool GetTitle2() { return Title2; }
 
-    bool GetApplyPlotCuts() { return ApplyPlotCuts; }
+    bool GetShowPlotCuts() { return ShowPlotCuts; }
 
     double GetPlotCuts() { return PlotCuts; }
 

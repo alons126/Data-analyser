@@ -132,8 +132,8 @@ void EventAnalyser() {
     bool fill_TL_plots = true;
     bool ZoomIn_On_mom_th_plots = false; // momentum th. efficiencies with zoomin
     bool Eff_calc_with_one_reco_electron = true;
-    bool Calc_inc_p_eff_with_extended_theta = true;
-    bool Rec_wTL_ES = true; // Force TL event selection on reco. plots
+    bool Calc_inc_p_eff_with_extended_theta = false;
+    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -156,14 +156,15 @@ void EventAnalyser() {
     vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
-    bool Calculate_momResS2 = false; // Calculate momResS2 variables
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool Calculate_momResS2 = true; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const bool ForceSmallpResLimits = false; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
-    const string CorrMode = "pol1_wKC";
-    bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
+    const string CorrMode = "pol2_wKC";
+//    const string CorrMode = "pol1_wKC";
+    bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
     bool nRes_test = true; // false by default
     /*
     MomRes run order guide:
@@ -222,7 +223,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndCorr = false;
+    bool apply_nucleon_SmearAndCorr = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -647,8 +648,8 @@ void EventAnalyser() {
 //     Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
         Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
 
-        Momentum_plots = true;
-//        Momentum_plots = false;
+//        Momentum_plots = true;
+        Momentum_plots = false;
 
         /* W plots */
 //     W_plots = true;
@@ -8558,6 +8559,44 @@ void EventAnalyser() {
     hPlot1D hTL_P_nFD_nRes_1n = hPlot1D("1n", "FD", "TL P_{nFD} used in nRes", "TL P_{nFD} used in nRes", "P_{nFD} [GeV/c]",
                                         directories.Resolution_Directory_map["Resolution_1n_Directory"], "06b_TL_P_nFD_used_in_nRes_1n",
                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+
+    hPlot1D hEff_dist_TL_1n = hPlot1D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT}",
+                                      "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT}", "#font[12]{l}_{eff}^{TL} [cm]",
+                                      directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_Eff_dist_TL_1n", -6000, 6000, numTH1Dbins);
+    hPlot2D hEff_dist_TL_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT} vs. P^{truth}_{nFD}",
+                                                  "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT} vs. P^{truth}_{nFD}", "#font[12]{l}_{eff}^{TL} [cm]",
+                                                  "P^{truth}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                  "00XX_Eff_dist_TL_vs_TL_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
+    hPlot1D hddist_TL_1n = hPlot1D("1n", "FD", "#Delta#font[12]{l}_{eff}^{TL}", "#Delta#font[12]{l}_{eff}^{TL}",
+                                   "#Delta#font[12]{l}_{eff}^{TL} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{TL} [cm]",
+                                   directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_TL_1n", -6000, 6000, numTH1Dbins);
+    hPlot2D hddist_TL_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "#Delta#font[12]{l}_{eff}^{TL} vs. P^{truth}_{nFD}", "#Delta#font[12]{l}_{eff}^{TL} vs. P^{truth}_{nFD}",
+                                               "#Delta#font[12]{l}_{eff}^{TL} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{TL} [cm]", "P^{truth}_{nFD} [GeV/c]",
+                                               directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_TL_vs_TL_P_nFD_1n",
+                                               -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
+
+    hPlot1D hEff_dist_Reco_1n = hPlot1D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco}",
+                                        "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{LT}", "#font[12]{l}_{eff}^{reco} [cm]",
+                                        directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_Eff_dist_Reco_1n", -6000, 6000, numTH1Dbins);
+    hPlot2D hEff_dist_Reco_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco} vs. P^{truth}_{nFD}",
+                                                    "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco} vs. P^{truth}_{nFD}", "#font[12]{l}_{eff}^{reco} [cm]",
+                                                    "P^{truth}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                    "00XX_Eff_dist_Reco_vs_TL_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
+    hPlot1D hddist_Reco_1n = hPlot1D("1n", "FD", "#Delta#font[12]{l}_{eff}^{reco}", "#Delta#font[12]{l}_{eff}^{reco}",
+                                     "#Delta#font[12]{l}_{eff}^{reco} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{reco} [cm]",
+                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_reco_1n", -6000, 6000, numTH1Dbins);
+    hPlot2D hddist_Reco_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "#Delta#font[12]{l}_{eff}^{reco} vs. P^{truth}_{nFD}",
+                                                 "#Delta#font[12]{l}_{eff}^{reco} vs. P^{truth}_{nFD}",
+                                                 "#Delta#font[12]{l}_{eff}^{reco} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{reco} [cm]",
+                                                 "P^{truth}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                 "00XX_ddist_reco_vs_reco_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
+
+    hPlot1D hTOF_error_1n = hPlot1D("1n", "FD", "TOF Error #Deltat_{TOF}", "TOF Error #Deltat_{TOF}", "#Deltat_{TOF} [ns]",
+                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TOF_error_1n", -0.5, 0.5, numTH1Dbins);
+    hPlot2D hTOF_error_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "TOF Error #Deltat_{TOF} vs. P^{truth}_{nFD}", "TOF Error #Deltat_{TOF} vs. P^{truth}_{nFD}",
+                                                "#Deltat_{TOF} [ns]", "P^{truth}_{nFD} [GeV/c]",
+                                                directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TOF_error_VS_TL_P_nFD_1n",
+                                                -0.5, 0.5, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //</editor-fold>
@@ -12946,6 +12985,35 @@ void EventAnalyser() {
                                 hP_nFD_Res_VS_P_nFD_ZOOMIN_1n->Fill(TLNeutronP, nResolution, Weight);
                                 hReco_P_nFD_nRes_1n.hFill(RecoNeutronP, Weight);
                                 hTL_P_nFD_nRes_1n.hFill(TLNeutronP, Weight);
+
+                                bool ECIN_HIT = (n_1n->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+                                bool ECOUT_HIT = (n_1n->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+                                auto Detlayer_1n = ECIN_HIT ? clas12::ECIN : clas12::ECOUT; // determine the earliest layer of the neutral hit
+                                double ts = c12->event()->getStartTime();
+                                double RecoNeutronTOF = n_1n->getTime();
+//                                double RecoNeutronTOF = n_1n->sci(Detlayer_1n)->getTime();
+//                                double RecoNeutronTOF = n_1n->sci(Detlayer_1n)->getTime() - ts;
+
+                                double TLNeutronE = sqrt(m_n * m_n + TLNeutronP * TLNeutronP);
+                                double TLNeutronBeta_From_TLNeutronP = TLNeutronP / TLNeutronE;
+                                double Eff_dist_TL = c * TLNeutronBeta_From_TLNeutronP * RecoNeutronTOF;
+                                hEff_dist_TL_1n.hFill(Eff_dist_TL, Weight);
+                                hEff_dist_TL_VS_TL_P_nFD_1n.hFill(Eff_dist_TL, TLNeutronP, Weight);
+                                hddist_TL_1n.hFill((n_1n->getPath() - Eff_dist_TL), Weight);
+                                hddist_TL_VS_TL_P_nFD_1n.hFill((n_1n->getPath() - Eff_dist_TL), TLNeutronP, Weight);
+
+                                double RecoNeutronE = sqrt(m_n * m_n + RecoNeutronP * RecoNeutronP);
+                                double RecoNeutronBeta_From_RecoNeutronP = RecoNeutronP / RecoNeutronE;
+                                double Eff_dist_Reco = c * RecoNeutronBeta_From_RecoNeutronP * RecoNeutronTOF;
+                                hEff_dist_Reco_1n.hFill(Eff_dist_Reco, Weight);
+                                hEff_dist_Reco_VS_TL_P_nFD_1n.hFill(Eff_dist_Reco, TLNeutronP, Weight);
+                                hddist_Reco_1n.hFill((n_1n->getPath() - Eff_dist_Reco), Weight);
+                                hddist_Reco_VS_TL_P_nFD_1n.hFill((n_1n->getPath() - Eff_dist_Reco), TLNeutronP, Weight);
+
+                                double Beta_Neut = n_1n->par()->getBeta();
+                                double TOF_error = -(1 - Beta_Neut * Beta_Neut) * nResolution;
+                                hTOF_error_1n.hFill(TOF_error, Weight);
+                                hTOF_error_VS_TL_P_nFD_1n.hFill(TOF_error, TLNeutronP, Weight);
                             }
                         }
 
@@ -15148,6 +15216,20 @@ void EventAnalyser() {
 
     c1->cd();
     //</editor-fold>
+
+//    hEff_dist_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+//    hEff_dist_TL_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+//    hddist_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+//    hddist_TL_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+//
+//    hEff_dist_Reco_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+//    hEff_dist_Reco_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+//    hddist_Reco_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+//    hddist_Reco_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+//
+//    hTOF_error_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+//    hTOF_error_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+//    exit(0);
 
 // ======================================================================================================================================================================
 // Cut parameters plots
@@ -20862,6 +20944,19 @@ void EventAnalyser() {
                                   settings.GetEfficiency_Status());
             nRes.DrawAndSaveResSlices(SampleName, "Neutron", c1, plots_path, NeutronResolutionDirectory);
         }
+
+        hEff_dist_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hEff_dist_TL_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+        hddist_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hddist_TL_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+
+        hEff_dist_Reco_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hEff_dist_Reco_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+        hddist_Reco_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hddist_Reco_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+
+        hTOF_error_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTOF_error_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
         //</editor-fold>
 
     } else {

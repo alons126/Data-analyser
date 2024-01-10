@@ -121,7 +121,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     bool AddToStack = false;
 
     /* Histogram cuts setup */
-    bool ApplyPlotCuts = true;
+    bool ShowPlotCuts = true;
     //vector<double> - for cuts
     double PlotCuts = 0;
     double PlotXmax = 0;

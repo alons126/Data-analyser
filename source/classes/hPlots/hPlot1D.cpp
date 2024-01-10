@@ -1117,7 +1117,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
 
     if (!ShowStats) { Histogram1D->SetStats(0); }
 
-    if (ApplyPlotCuts == true) {
+    if (ShowPlotCuts == true) {
         gPad->Update();
 
         double Upper_cut = plot_upper_cut, Lower_cut = plot_lower_cut, plot_xmax = plot_Xmax;
@@ -1290,7 +1290,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
 
     if (!ShowStats) { Histogram1D->SetStats(0); }
 
-    if (ApplyPlotCuts == true) {
+    if (ShowPlotCuts == true) {
         gPad->Update();
         double Upper_cut = plot_upper_cut;
         double Lower_cut = plot_lower_cut;
@@ -1481,7 +1481,7 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
     double x_2_FitParam = gStyle->GetStatX() - 0.2, y_2_FitParam = y_1_Cut_legend - 0.245;
     TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
 
-    if (ApplyPlotCuts == true) {
+    if (ShowPlotCuts == true) {
         double Amp, Mean, Std;
 
         if (Histogram1D->Integral() != 0.) { // don't fit if histogram is empty (leads to an error!)
@@ -1596,7 +1596,7 @@ void hPlot1D::hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool normHistogram,
     histPlotter1D(h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, Histogram1DTitles["HistogramTitle"],
                   Histogram1DTitles["Histogram1DTitleReactions"], Histogram1DTitleSizes.at(0), Histogram1DTitleSizes.at(1), Histogram1DTitleSizes.at(2), hList, LineWidth,
                   LogScalePlot, LinearScalePlot, Histogram1DSaveName, Histogram1DSaveNamePath, Histogram1DTitles["FinalState"], CenterTitle, ShowStats, Title2,
-                  ApplyPlotCuts, PlotCuts, PlotXmax, PlotHistogramMax);
+                  ShowPlotCuts, PlotCuts, PlotXmax, PlotHistogramMax);
 }
 //</editor-fold>
 
