@@ -4,8 +4,8 @@
 
 # Proton resolution parameters are for:
 #sample:	C12x4_simulation_G18_Q204_6GeV
-#Analysis_run_mode:	NC_Eff1_full_ExtSlice_wKC
-#momRes_calculation_mode:	Calculate momResS1
+#Analysis_run_mode:	NC_Eff1
+#momRes_calculation_mode:	Calculate momResS2
 #delta:		0.05
 #Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
 
@@ -34,5 +34,4 @@ fit_Slice_#22_from_2.25_to_2.40			22:2.25:2.4:0.00305988:0.00573645
 fit_Slice_#23_from_2.40_to_2.55			23:2.4:2.55:0.0026029:0.00583428
 fit_Slice_#24_from_2.55_to_2.75			24:2.55:2.75:0.0027031:0.00634217
 fit_Slice_#25_from_2.75_to_3.00			25:2.75:3:0.00220264:0.00609204
-fit_Slice_#26_from_3.00_to_3.50			26:3:3.5:0.00202875:0.00608069
-fit_Slice_#27_from_3.50_to_6.00			27:3.5:6:0.00181576:0.00520616
+fit_Slice_#26_from_3.00_to_4.00			26:3:4:0.00203665:0.00595326

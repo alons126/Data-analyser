@@ -4,7 +4,7 @@
 
 # Neutron resolution parameters are for:
 #sample:	C12x4_simulation_G18_Q204_6GeV
-#Analysis_run_mode:	NC_Eff1_full_ExtSlice_wKC
+#Analysis_run_mode:	NC_Eff1
 #momRes_calculation_mode:	Calculate momResS1
 #delta:		0.05
 #Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma
@@ -28,11 +28,10 @@ hist_Slice_#16_from_1.65_to_1.75			16:1.65:1.75:0.099717:0.130887
 hist_Slice_#17_from_1.75_to_1.85			17:1.75:1.85:0.100959:0.130353
 hist_Slice_#18_from_1.85_to_1.95			18:1.85:1.95:0.111109:0.140092
 hist_Slice_#19_from_1.95_to_2.05			19:1.95:2.05:0.117833:0.150725
-hist_Slice_#20_from_2.05_to_2.15			20:2.05:2.15:0.123481:0.147898
-hist_Slice_#21_from_2.15_to_2.25			21:2.15:2.25:0.122913:0.160461
-hist_Slice_#22_from_2.25_to_2.40			22:2.25:2.4:0.138461:0.15915
-hist_Slice_#23_from_2.40_to_2.55			23:2.4:2.55:0.137849:0.176242
-hist_Slice_#24_from_2.55_to_2.75			24:2.55:2.75:0.144193:0.193869
-hist_Slice_#25_from_2.75_to_3.00			25:2.75:3:0.167929:0.191701
-hist_Slice_#26_from_3.00_to_3.50			26:3:3.5:0.18441:0.213839
-hist_Slice_#27_from_3.50_to_6.00			27:3.5:6:0.241701:0.226308
+hist_Slice_#20_from_2.05_to_2.15			20:2.05:2.15:0.125443:0.140273
+hist_Slice_#21_from_2.15_to_2.25			21:2.15:2.25:0.127291:0.144863
+hist_Slice_#22_from_2.25_to_2.40			22:2.25:2.4:0.139885:0.15489
+hist_Slice_#23_from_2.40_to_2.55			23:2.4:2.55:0.140787:0.169363
+hist_Slice_#24_from_2.55_to_2.75			24:2.55:2.75:0.150674:0.180846
+hist_Slice_#25_from_2.75_to_3.00			25:2.75:3:0.174985:0.176974
+hist_Slice_#26_from_3.00_to_4.00			26:3:4:0.225303:0.180971

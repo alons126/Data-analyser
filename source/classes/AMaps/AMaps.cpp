@@ -2453,14 +2453,7 @@ bool AMaps::IsInFDQuery(bool Generate_AMaps, const DSCuts &ThetaFD, const string
         part_inSomeSector = true;
     }
 
-    //TODO: ask Adi is I should do an FD angle cut on electrons
     inFDQuery = (part_inSomeSector && (Theta >= ThetaFD.GetLowerCutConst()) && (Theta <= ThetaFD.GetUpperCutConst()));
-
-//    if (isElectron(Particle)) {
-//        inFDQuery = (part_inSomeSector && (Theta >= ThetaFD.GetLowerCutConst()) && (Theta <= ThetaFD.GetUpperCutConst()));
-//    } else {
-//        inFDQuery = part_inSomeSector;
-//    }
 
     return inFDQuery;
 }
