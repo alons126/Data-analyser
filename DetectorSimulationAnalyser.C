@@ -156,8 +156,9 @@ void EventAnalyser() {
     vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
 
     /* Neutron resolution setup */
+    //TODO: align neutron and proton momRes calculations!
     bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = false; // Calculate momResS2 variables
+    bool Calculate_momResS2 = true; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const bool ForceSmallpResLimits = false; // 1st momResS1 w/ VaryingDelta = false
@@ -12079,7 +12080,9 @@ void EventAnalyser() {
                         //</editor-fold>
 
                         if (pRes_TL_Pass_PIDCut && pRes_Pass_FiducialCuts && pRes_Pass_ThetaKinCut &&
-                            pRes_Reco_Pass_Proton_MomKinCut && pRes_TL_Pass_Proton_MomKinCut) {
+                            ((RecoProtonP >= p_mom_th.GetLowerCut()) && (TLProtonP >= p_mom_th.GetLowerCut()))) {
+//                        if (pRes_TL_Pass_PIDCut && pRes_Pass_FiducialCuts && pRes_Pass_ThetaKinCut &&
+//                            pRes_Reco_Pass_Proton_MomKinCut && pRes_TL_Pass_Proton_MomKinCut) {
                             /* Plots for TL Protons passing pRes cuts */
                             hdTheta_pFD_TL_BC_1p.hFill(dProtonTheta, Weight);
                             hdTheta_pFD_TL_ZOOMIN_BC_1p.hFill(dProtonTheta, Weight);
@@ -12117,7 +12120,7 @@ void EventAnalyser() {
                         }
 
                         /* Res plots for thesis */
-                        //TODO: ask adi is plots without mom KC are needed
+                        //TODO: figure out if these plots are needed
                         if (pRes_TL_Pass_PIDCut && pRes_Pass_FiducialCuts && pRes_Pass_ThetaKinCut &&
                             ((RecoProtonP >= p_mom_th.GetLowerCut()) && (RecoProtonP <= p_mom_th.GetUpperCut())) &&
                             ((TLProtonP >= p_mom_th.GetLowerCut()) && (TLProtonP <= p_mom_th.GetUpperCut()))) {

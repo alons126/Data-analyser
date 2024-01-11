@@ -528,9 +528,7 @@ Double_t CFitFunction(Double_t *v, Double_t *par) {
 void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const string &Particle, const double &beamE) {
     TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
     SliceFitCanvas->SetGrid();
-    SliceFitCanvas->SetBottomMargin(0.14);
-    SliceFitCanvas->SetLeftMargin(0.18);
-    SliceFitCanvas->SetRightMargin(0.12);
+    SliceFitCanvas->SetBottomMargin(0.14), SliceFitCanvas->SetLeftMargin(0.18), SliceFitCanvas->SetRightMargin(0.12);
     SliceFitCanvas->cd();
 
     for (int i = 0; i < NumberOfSlices; i++) {
@@ -546,13 +544,9 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
         //</editor-fold>
 
         TH1D *hSlice = (TH1D *) ResSlices.at(i).GetHistogram();
-        hSlice->GetXaxis()->SetTitleSize(0.06);
-        hSlice->GetXaxis()->SetLabelSize(0.0425);
-        hSlice->GetXaxis()->CenterTitle(true);
+        hSlice->GetXaxis()->SetTitleSize(0.06), hSlice->GetXaxis()->SetLabelSize(0.0425), hSlice->GetXaxis()->CenterTitle(true);
         hSlice->GetYaxis()->SetTitle("Arbitrary units (#events)");
-        hSlice->GetYaxis()->SetTitleSize(0.06);
-        hSlice->GetYaxis()->SetLabelSize(0.0425);
-        hSlice->GetYaxis()->CenterTitle(true);
+        hSlice->GetYaxis()->SetTitleSize(0.06), hSlice->GetYaxis()->SetLabelSize(0.0425), hSlice->GetYaxis()->CenterTitle(true);
         hSlice->Sumw2();
 
         if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
@@ -573,21 +567,24 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             TF1 *func = new TF1("fit", CFitFunction, FitLlim, FitUlim, 3); // create a function with 3 parameters in the range [-3,3]
             func->SetLineColor(kRed);
 
-            double SliceMax = hSlice->GetMaximum();
-            double SliceMean = hSlice->GetMean();
-            double SliceStd = hSlice->GetRMS();
+            double SliceMax = hSlice->GetMaximum(), SliceMean = hSlice->GetMean(), SliceStd = hSlice->GetRMS();
 
             func->SetParameters(SliceMax, SliceMean, 0.5); // start fit with histogram's max and mean
             func->SetParNames("Constant", "Mean_value", "Sigma");
 
             if (momResTestMode) { // In smear & shift test mode
+//                func->SetParLimits(1, -0.5, 0.5); // Mean limits
                 func->SetParLimits(1, -1.5, 1.5); // Mean limits
+//                func->SetParLimits(2, 0.0001, 0.35); // Sigma limits
                 func->SetParLimits(2, 0.001, 0.35); // Sigma limits
             } else {
                 if (Particle == "Neutron") {
+//                    func->SetParLimits(1, -0.5, 0.5); // Mean limits
                     func->SetParLimits(1, -1.5, 1.5); // Mean limits
+//                    func->SetParLimits(2, 0.0001, 0.35); // Sigma limits
                     func->SetParLimits(2, 0.001, 0.35); // Sigma limits
                 } else if (Particle == "Proton") {
+//                    func->SetParLimits(1, -0.5, 0.5); // Mean limits
                     func->SetParLimits(1, -1.5, 1.5); // Mean limits
                     func->SetParLimits(2, 0.0000000001, 0.35); // Sigma limits
                 }
@@ -612,11 +609,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
             double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
 
             TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam - 0.025, "NDC");
-            FitParam->SetBorderSize(1);
-            FitParam->SetFillColor(0);
-            FitParam->SetTextAlign(12);
-            FitParam->SetTextFont(42);
-            FitParam->SetTextSize(0.03);
+            FitParam->SetBorderSize(1), FitParam->SetFillColor(0), FitParam->SetTextAlign(12), FitParam->SetTextFont(42), FitParam->SetTextSize(0.03);
             FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 4)).c_str());
             FitParam->AddText(("Fit #mu = " + to_string_with_precision(FitMean, 4)).c_str());
             FitParam->AddText(("Fit #sigma = " + to_string_with_precision(FitStd, 4)).c_str());
