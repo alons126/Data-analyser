@@ -256,6 +256,10 @@ public:
 
     double NCorr(const bool &apply_nucleon_SmearAndCorr, const double &Momentum);
 
+// GetMomResMu function -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    double GetMomResMu(const bool &apply_nucleon_SmearAndCorr, const double &Momentum);
+
 // Other functions ------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // Set functions

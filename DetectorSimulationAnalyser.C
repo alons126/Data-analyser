@@ -574,7 +574,7 @@ void EventAnalyser() {
     bool FSR_1D_plots, FSR_2D_plots; // FSR_2D_plots is disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-    bool TestRun = false; // set as false for a full run
+    bool TestRun = true; // set as false for a full run
 
     if (!TestRun) {
 
@@ -8600,11 +8600,11 @@ void EventAnalyser() {
                                                  "00XX_ddist_reco_vs_reco_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
 
     hPlot1D hTOF_error_1n = hPlot1D("1n", "FD", "TOF Error #Deltat_{TOF}", "TOF Error #Deltat_{TOF}", "#Deltat_{TOF} [ns]",
-                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TOF_error_1n", -0.5, 0.5, numTH1Dbins);
+                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TOF_error_1n", -10., 10., numTH1Dbins);
     hPlot2D hTOF_error_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "TOF Error #Deltat_{TOF} vs. P^{truth}_{nFD}", "TOF Error #Deltat_{TOF} vs. P^{truth}_{nFD}",
                                                 "#Deltat_{TOF} [ns]", "P^{truth}_{nFD} [GeV/c]",
                                                 directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TOF_error_VS_TL_P_nFD_1n",
-                                                -0.5, 0.5, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
+                                                -10., 10., n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //</editor-fold>
@@ -12920,6 +12920,7 @@ void EventAnalyser() {
                         double TLNeutronPhi = atan2(mcpbank_nRes->getPy(), mcpbank_nRes->getPx()) * 180.0 / pi;
 
                         /* Reco neutron kinematic variables */
+//                        double RecoNeutronP = NeutronMomBKC_1n / (1 - nRes.GetMomResMu(apply_nucleon_SmearAndCorr, TLNeutronP));
                         double RecoNeutronP = P_n_1n_3v.Mag();
                         double RecoNeutronTheta = P_n_1n_3v.Theta() * 180.0 / pi;
                         double RecoNeutronPhi = P_n_1n_3v.Phi() * 180.0 / pi;
@@ -13001,6 +13002,7 @@ void EventAnalyser() {
 //                                double RecoNeutronTOF = n_1n->sci(Detlayer_1n)->getTime();
 //                                double RecoNeutronTOF = n_1n->sci(Detlayer_1n)->getTime() - ts;
 
+
                                 double TLNeutronE = sqrt(m_n * m_n + TLNeutronP * TLNeutronP);
                                 double TLNeutronBeta_From_TLNeutronP = TLNeutronP / TLNeutronE;
                                 double Eff_dist_TL = c * TLNeutronBeta_From_TLNeutronP * RecoNeutronTOF;
@@ -13008,6 +13010,11 @@ void EventAnalyser() {
                                 hEff_dist_TL_VS_TL_P_nFD_1n.hFill(Eff_dist_TL, TLNeutronP, Weight);
                                 hddist_TL_1n.hFill((n_1n->getPath() - Eff_dist_TL), Weight);
                                 hddist_TL_VS_TL_P_nFD_1n.hFill((n_1n->getPath() - Eff_dist_TL), TLNeutronP, Weight);
+
+
+//                                double path_n = n_1n->getPath();
+//                                double beta_n = n_1n->par()->getBeta();
+//                                double time_frombeta_n = path_n / (c*beta_n);
 
                                 double RecoNeutronE = sqrt(m_n * m_n + RecoNeutronP * RecoNeutronP);
                                 double RecoNeutronBeta_From_RecoNeutronP = RecoNeutronP / RecoNeutronE;
@@ -13017,8 +13024,12 @@ void EventAnalyser() {
                                 hddist_Reco_1n.hFill((n_1n->getPath() - Eff_dist_Reco), Weight);
                                 hddist_Reco_VS_TL_P_nFD_1n.hFill((n_1n->getPath() - Eff_dist_Reco), TLNeutronP, Weight);
 
-                                double Beta_Neut = n_1n->par()->getBeta();
-                                double TOF_error = -((1 - Beta_Neut * Beta_Neut) / RecoNeutronTOF) * nResolution;
+
+                                double path_n = n_1n->getPath();
+                                double beta_n = n_1n->par()->getBeta();
+                                double time_frombeta_n = path_n / (c*beta_n);
+                                double TOF_error = -(time_frombeta_n * (1 - beta_n * beta_n)) * nResolution;
+//                                double TOF_error = -(RecoNeutronTOF * (1 - beta_n * beta_n)) * nResolution;
                                 hTOF_error_1n.hFill(TOF_error, Weight);
                                 hTOF_error_VS_TL_P_nFD_1n.hFill(TOF_error, TLNeutronP, Weight);
                             }

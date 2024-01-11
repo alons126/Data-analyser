@@ -3250,3 +3250,94 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
     }
 }
 //</editor-fold>
+
+// GetMomResMu function -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetMomResMu function">
+/* A function to correction (calibrate) neutron momentum by fitted neutron correction */
+
+double NeutronResolution::GetMomResMu(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
+    bool Printout = false;
+    bool Printout_Corr_Variables = false;
+
+    if (!apply_nucleon_SmearAndCorr) {
+        /* Smearing and correction are disabled */
+        return 0;
+    } else {
+        /* Smearing and correction are enabled */
+
+        /* Setting corrected momentum & momentum powers */
+        double Mu, Momentum2 = Momentum * Momentum, Momentum3 = Momentum2 * Momentum;
+
+        if ((CorrMode == "pol1") || (CorrMode == "pol2") || (CorrMode == "pol3") ||
+                   (CorrMode == "pol1_wKC") || (CorrMode == "pol2_wKC") || (CorrMode == "pol3_wKC")) {
+            /* Correction using pol fit results */
+            if (CorrMode == "pol1") {
+                Mu = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol1 = " << Loaded_A_Corr_pol1 << "\n";
+                    cout << "Loaded_B_Corr_pol1 = " << Loaded_B_Corr_pol1 << "\n\n";
+                }
+            } else if (CorrMode == "pol1_wKC") {
+                Mu = Loaded_A_Corr_pol1_wKC * Momentum + Loaded_B_Corr_pol1_wKC;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol1_wKC = " << Loaded_A_Corr_pol1_wKC << "\n";
+                    cout << "Loaded_B_Corr_pol1_wKC = " << Loaded_B_Corr_pol1_wKC << "\n\n";
+                }
+            } else if (CorrMode == "pol2") {
+                Mu = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol2 = " << Loaded_A_Corr_pol2 << "\n";
+                    cout << "Loaded_B_Corr_pol2 = " << Loaded_B_Corr_pol2 << "\n";
+                    cout << "Loaded_C_Corr_pol2 = " << Loaded_C_Corr_pol2 << "\n\n";
+                }
+            } else if (CorrMode == "pol2_wKC") {
+                Mu = Loaded_A_Corr_pol2_wKC * Momentum2 + Loaded_B_Corr_pol2_wKC * Momentum + Loaded_C_Corr_pol2_wKC;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol2_wKC = " << Loaded_A_Corr_pol2_wKC << "\n";
+                    cout << "Loaded_B_Corr_pol2_wKC = " << Loaded_B_Corr_pol2_wKC << "\n";
+                    cout << "Loaded_C_Corr_pol2_wKC = " << Loaded_C_Corr_pol2_wKC << "\n\n";
+                }
+            } else if (CorrMode == "pol3") {
+                Mu = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol3 = " << Loaded_A_Corr_pol3 << "\n";
+                    cout << "Loaded_B_Corr_pol3 = " << Loaded_B_Corr_pol3 << "\n";
+                    cout << "Loaded_C_Corr_pol3 = " << Loaded_C_Corr_pol3 << "\n";
+                    cout << "Loaded_D_Corr_pol3 = " << Loaded_D_Corr_pol3 << "\n\n";
+                }
+            } else if (CorrMode == "pol3_wKC") {
+                Mu = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum + Loaded_D_Corr_pol3_wKC;
+
+                if (Printout_Corr_Variables) {
+                    cout << "\n";
+                    cout << "\n\nLoaded_A_Corr_pol3_wKC = " << Loaded_A_Corr_pol3_wKC << "\n";
+                    cout << "Loaded_B_Corr_pol3_wKC = " << Loaded_B_Corr_pol3_wKC << "\n";
+                    cout << "Loaded_C_Corr_pol3_wKC = " << Loaded_C_Corr_pol3_wKC << "\n";
+                    cout << "Loaded_D_Corr_pol3_wKC = " << Loaded_D_Corr_pol3_wKC << "\n\n";
+                }
+            }
+
+            if (Printout) {
+                cout << "\n\nCorrMode = " << CorrMode << "\n";
+                cout << "Mu = " << Mu << "\n";
+                cout << "Momentum = " << Momentum << "\n";
+            }
+        } else {
+            cout << "\n\nNeutronResolution::NCorr: CorrMode illegal! Exiting...", exit(0);
+        }
+
+        return Mu;
+    }
+}
+//</editor-fold>
