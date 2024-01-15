@@ -2029,7 +2029,7 @@ void EventAnalyser() {
                                                      Momentum_lboundary, Momentum_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins * 2, numTH2Dbins * 2);
     hPlot2D hP_p_vs_Theta_p_reco_1e_cut_CD = hPlot2D("1e cut", "CD", "P_{p} vs. #theta_{p}", "P_{p} vs. #theta_{p}", "P_{p} [GeV/c]", "#theta_{p} [Deg]",
                                                      directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"], "02d_P_p_vs_Theta_p_reco_1e_cut_CD",
-                                                     Momentum_lboundary, Momentum_uboundary, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins * 2, numTH2Dbins * 2);
+                                                     CDMomentum_lboundary, CDMomentum_uboundary, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins * 2, numTH2Dbins * 2);
 
     // leading nFD (APID):
     hPlot1D hP_LnFD_reco_APID_1e_cut_FD = hPlot1D("1e cut", "FD", "Reco leading FD neutron momentum APID", "Leading FD neutron momentum P^{reco}_{n} APID",
@@ -2125,7 +2125,7 @@ void EventAnalyser() {
                                                                "#theta_{#pi^{+}} [Deg]",
                                                                directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
                                                                "04h_P_piplus_vs_Theta_piplus_reco_1e_cut_CD",
-                                                               Momentum_lboundary, Momentum_uboundary, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins * 2,
+                                                               CDMomentum_lboundary, CDMomentum_uboundary, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins * 2,
                                                                numTH2Dbins * 2);
 
     hPlot1D hP_piminus_reco_1e_cut = hPlot1D("1e cut", "CD & FD", "Reco #pi^{-} momentum", "#pi^{-} momentum P^{reco}_{#pi^{-}}", "P^{reco}_{#pi^{-}} [GeV/c]",
@@ -2156,7 +2156,7 @@ void EventAnalyser() {
                                                                  "#theta_{#pi^{-}} [Deg]",
                                                                  directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
                                                                  "05h_P_piminus_vs_Theta_piminus_reco_1e_cut_CD",
-                                                                 Momentum_lboundary, Momentum_uboundary, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins * 2,
+                                                                 CDMomentum_lboundary, CDMomentum_uboundary, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins * 2,
                                                                  numTH2Dbins * 2);
 
     hPlot1D hP_ph_reco_APID_1e_cut_FD = hPlot1D("1e cut", "FD", "Reco FD #gamma momentum APID", "FD #gamma momentum P^{reco}_{#gamma} APID", "P^{reco}_{#gamma} [GeV/c]",
