@@ -41,6 +41,9 @@ using namespace std;
 
 class NeutronResolution {
 private:
+    bool isNeutron = false, isProton = false;
+    string MomResParticle = "";
+
     bool momResTestMode, momResS2CalcMode, momResS2RunMode;
     bool ForceSmallProtonResLimits = false;
 
@@ -171,16 +174,25 @@ private:
 
 public:
 
-// default constructor --------------------------------------------------------------------------------------------------------------------------------------------------
+// Default constructor --------------------------------------------------------------------------------------------------------------------------------------------------
 
     NeutronResolution() = default;
 
-// constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
+// Other constructors ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-    NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, const double &beamE,
+    NeutronResolution(const string &Particle);
+
+    NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
                       const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
                       const string &NeutronResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2, const bool &VaryingDelta = false,
-                      const string &SmearM = "pol1", const string &ShiftM = "pol1", bool nRes_test = false, bool ForceSmallpResLimits = false);
+                      const string &SmearM = "pol1", const string &CorrM = "pol1", bool nRes_test = false, bool ForceSmallpResLimits = false);
+
+// SetMomResCalculations function ---------------------------------------------------------------------------------------------------------------------------------------
+
+    void SetMomResCalculations(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
+                               const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
+                               const string &NeutronResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2, const bool &VaryingDelta = false,
+                               const string &SmearM = "pol1", const string &CorrM = "pol1", bool nRes_test = false, bool ForceSmallpResLimits = false);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -196,51 +208,51 @@ public:
 
 // SliceFitDrawAndSave function -----------------------------------------------------------------------------------------------------------------------------------------
 
-    void SliceFitDrawAndSave(const string &SampleName, const string &Particle, const double &beamE);
+    void SliceFitDrawAndSave(const string &SampleName, const double &beamE);
 
 // Fitter functions -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void Fitter_Std_pol1(const string &Particle);
+    void Fitter_Std_pol1();
 
-    void Fitter_Std_pol1_wKC(const string &Particle);
+    void Fitter_Std_pol1_wKC();
 
-    void Fitter_Std_pol2(const string &Particle);
+    void Fitter_Std_pol2();
 
-    void Fitter_Std_pol2_wKC(const string &Particle);
+    void Fitter_Std_pol2_wKC();
 
-    void Fitter_Std_pol3(const string &Particle);
+    void Fitter_Std_pol3();
 
-    void Fitter_Std_pol3_wKC(const string &Particle);
+    void Fitter_Std_pol3_wKC();
 
-    void Fitter_Corr_pol1(const string &Particle);
+    void Fitter_Corr_pol1();
 
-    void Fitter_Corr_pol1_wKC(const string &Particle);
+    void Fitter_Corr_pol1_wKC();
 
-    void Fitter_Corr_pol2(const string &Particle);
+    void Fitter_Corr_pol2();
 
-    void Fitter_Corr_pol2_wKC(const string &Particle);
+    void Fitter_Corr_pol2_wKC();
 
-    void Fitter_Corr_pol3(const string &Particle);
+    void Fitter_Corr_pol3();
 
-    void Fitter_Corr_pol3_wKC(const string &Particle);
+    void Fitter_Corr_pol3_wKC();
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveResSlices(const string &SampleName, const string &Particle, TCanvas *h1DCanvas, const string &plots_path, const string &NeutronResolutionDirectory);
+    void DrawAndSaveResSlices(const string &SampleName, TCanvas *h1DCanvas, const string &plots_path, const string &NeutronResolutionDirectory);
 
 // LogResDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogResDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
+    void LogResDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory,
                           const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
 
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
+    void LogFitDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory,
                           const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
 
 // LogHistDataToFile function -------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogHistDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
+    void LogHistDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory,
                            const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
 
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------

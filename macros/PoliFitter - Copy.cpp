@@ -183,7 +183,7 @@ void PoliFitter() {
 
 //    NeutronResolution nRes;
 //    nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", /* beamE */ 5.98636, /*n_mom_th.GetLowerCut()*/ 0.4,
-//                             /* directories.Resolution_Directory_map["pRes_plots_1p_Directory"] */ "03_1n/02_Neutron_resolution_plots_1n",
+//                             /* directories.Resolution_Directory_map["pRes_plots_1p_Directory"] */ "03_1n/01_Neutron_resolution_plots_1n",
 //                             DeltaSlices, VaryingDelta, SmearMode, CorrMode, nRes_test);
 
     Double_t x[] = {1, 2, 3, 4, 5, 6, 7, 8};

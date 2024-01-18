@@ -499,12 +499,10 @@ private:
 //                                                       "01_1e_cut/01_Momentum_resolution_plots_1e_cut",
 
                                                        "02_1p",
-                                                       "02_1p/01_Momentum_resolution_plots_1p",
-                                                       "02_1p/02_Proton_resolution_plots_1p",
+                                                       "02_1p/01_Proton_resolution_plots_1p",
 
                                                        "03_1n",
-                                                       "03_1n/01_Momentum_resolution_plots_1n",
-                                                       "03_1n/02_Neutron_resolution_plots_1n",
+                                                       "03_1n/01_Neutron_resolution_plots_1n",
 
 //                                                       "04_2p",
 //                                                       "04_2p/01_Momentum_resolution_plots_2p",
