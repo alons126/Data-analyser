@@ -40,8 +40,8 @@ fit_Slice_#27_from_3.50_to_6.00			27:3.5:6:0.0872287:0.349999
 
 #correction and smear fit variables:
 
-SliceUpperMomLimPC			3
-SliceLowerMomLimPC			1
+SliceUpperMomLimKC			3
+SliceLowerMomLimKC			1
 
 A_Corr_pol1					0.0391438
 A_Corr_pol1_Error			0.0460029

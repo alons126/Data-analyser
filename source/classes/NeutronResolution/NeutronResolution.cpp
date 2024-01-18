@@ -10,6 +10,8 @@
 
 // NeutronResolution constructors ----------------------------------------------------------------------------------------------------------------------------------------
 
+// NeutronResolution constructor -----------------------------------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="NeutronResolution constructor">
 NeutronResolution::NeutronResolution(const string &Particle) {
     bool PrintOut = false;
@@ -52,10 +54,10 @@ NeutronResolution::NeutronResolution(const string &Particle) {
 
 //<editor-fold desc="NeutronResolution constructor">
 NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
-                                     const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
+                                     const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
                                      const string &NeutronResolutionDirectory, const string &SavePath, const double &DeltaSlices, const bool &VaryingDelta,
                                      const string &SmearM, const string &CorrM, bool momRes_test, bool ForceSmallpResLimits) {
-    SliceUpperMomLimPC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimPC = FD_nucleon_momentum_cut.GetLowerCutConst();
+    SliceUpperMomLimKC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimKC = FD_nucleon_momentum_cut.GetLowerCutConst();
     momResS2CalcMode = Calculate_momResS2, momResS2RunMode = Run_in_momResS2;
     SlicesSavePath = SavePath;
     delta = DeltaSlices;
@@ -156,12 +158,12 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
         ResSliceFitCuts.SetSliceLowerb(SliceLowerLim);
         ResSliceFitCuts.SetSliceNumber(SliceNumber);
 
-        ResSlices.push_back(hResolutionSlice);
-        ResSlicesLimits.push_back({SliceLowerLim, SliceUpperLim});
-        ResSlicesFitVar.push_back(ResSliceFitCuts);
+        ResTLMomSlices.push_back(hResolutionSlice);
+        ResTLMomSlicesLimits.push_back({SliceLowerLim, SliceUpperLim});
+        ResTLMomSlicesFitVar.push_back(ResSliceFitCuts);
 
         ResSliceFitCuts.SetCutVariable(("hist_" + hCutName));
-        ResSlicesHistVar.push_back(ResSliceFitCuts);
+        ResTLMomSlicesHistVar.push_back(ResSliceFitCuts);
 
         if (SliceUpperLim == SliceUpperMomLim) {
             SliceAndDice = false;
@@ -303,10 +305,10 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
 
 //<editor-fold desc="SetMomResCalculations function">
 void NeutronResolution::SetMomResCalculations(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
-                                              const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
+                                              const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
                                               const string &NeutronResolutionDirectory, const string &SavePath, const double &DeltaSlices, const bool &VaryingDelta,
                                               const string &SmearM, const string &CorrM, bool momRes_test, bool ForceSmallpResLimits) {
-    SliceUpperMomLimPC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimPC = FD_nucleon_momentum_cut.GetLowerCutConst();
+    SliceUpperMomLimKC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimKC = FD_nucleon_momentum_cut.GetLowerCutConst();
     momResS2CalcMode = Calculate_momResS2, momResS2RunMode = Run_in_momResS2;
     SlicesSavePath = SavePath;
     delta = DeltaSlices;
@@ -320,6 +322,29 @@ void NeutronResolution::SetMomResCalculations(const string &SampleName, const st
     }
     //</editor-fold>
 
+    SetMomResSlicesByType(SampleName, NucleonCutsDirectory, beamE, ParticleMomTh, "TL", SavePath, VaryingDelta, momRes_test, ForceSmallpResLimits);
+    LoadFitParam(SampleName, NucleonCutsDirectory, Calculate_momResS2, NeutronResolutionDirectory);
+}
+//</editor-fold>
+
+// SetMomResSlicesByType function ----------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="SetMomResSlicesByType function">
+void NeutronResolution::SetMomResSlicesByType(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
+                                              const string &MomentumType, const string &SavePath, const bool &VaryingDelta, const bool &momRes_test,
+                                              const bool &ForceSmallpResLimits) {
+    SetMomResSlices(SampleName, NucleonCutsDirectory, beamE, ParticleMomTh, SavePath, VaryingDelta, momRes_test, ForceSmallpResLimits,
+                    ResTLMomSlices, ResTLMomSlicesLimits, ResTLMomSlicesFitVar, ResTLMomSlicesHistVar, NumberOfSlices);
+}
+//</editor-fold>
+
+// SetMomResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="SetMomResSlices function">
+void NeutronResolution::SetMomResSlices(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh, const string &SavePath,
+                                        const bool &VaryingDelta, const bool &momRes_test, const bool &ForceSmallpResLimits, vector <hPlot1D> &ResSlices0,
+                                        vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0,
+                                        int &NumberOfSlices0) {
     double Delta = delta, SliceLowerLim = ParticleMomTh, SliceUpperLim;
     SetUpperMomCut(SampleName, NucleonCutsDirectory);
 
@@ -407,12 +432,12 @@ void NeutronResolution::SetMomResCalculations(const string &SampleName, const st
         ResSliceFitCuts.SetSliceLowerb(SliceLowerLim);
         ResSliceFitCuts.SetSliceNumber(SliceNumber);
 
-        ResSlices.push_back(hResolutionSlice);
-        ResSlicesLimits.push_back({SliceLowerLim, SliceUpperLim});
-        ResSlicesFitVar.push_back(ResSliceFitCuts);
+        ResSlices0.push_back(hResolutionSlice);
+        ResSlicesLimits0.push_back({SliceLowerLim, SliceUpperLim});
+        ResSlicesFitVar0.push_back(ResSliceFitCuts);
 
         ResSliceFitCuts.SetCutVariable(("hist_" + hCutName));
-        ResSlicesHistVar.push_back(ResSliceFitCuts);
+        ResSlicesHistVar0.push_back(ResSliceFitCuts);
 
         if (SliceUpperLim == SliceUpperMomLim) {
             SliceAndDice = false;
@@ -503,8 +528,14 @@ void NeutronResolution::SetMomResCalculations(const string &SampleName, const st
 
     if (LimitsPrintOut && LimitsPrintOutAndExit) { exit(0); }
 
-    NumberOfSlices = SliceNumber;
+    NumberOfSlices0 = SliceNumber;
+}
+//</editor-fold>
 
+// LoadFitParam function ----------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="LoadFitParam function">
+void NeutronResolution::LoadFitParam(const string &SampleName, const string &NucleonCutsDirectory, bool const &Calculate_momResS2, const string &NeutronResolutionDirectory) {
     if (isNeutron) {
         if (momResS2CalcMode && !momResS2RunMode) {
             cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 calculation mode. Loading momResS1 variables...\n";
@@ -615,13 +646,13 @@ void NeutronResolution::hFillResPlots(const double &TL_momentum, const double &R
     bool Printout = false;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        if ((TL_momentum >= ResSlicesLimits.at(i).at(0)) && (TL_momentum < ResSlicesLimits.at(i).at(1))) {
-            ResSlices.at(i).hFill(Resolution, Weight);
+        if ((TL_momentum >= ResTLMomSlicesLimits.at(i).at(0)) && (TL_momentum < ResTLMomSlicesLimits.at(i).at(1))) {
+            ResTLMomSlices.at(i).hFill(Resolution, Weight);
 
             if (Printout) {
-                cout << "\n\nResSlicesLimits.at(" << i << ").at(0) = " << ResSlicesLimits.at(i).at(0) << "\n";
+                cout << "\n\nResTLMomSlicesLimits.at(" << i << ").at(0) = " << ResTLMomSlicesLimits.at(i).at(0) << "\n";
                 cout << "TL_momentum = " << TL_momentum << "\n";
-                cout << "ResSlicesLimits.at(" << i << ").at(1) = " << ResSlicesLimits.at(i).at(1) << "\n";
+                cout << "ResTLMomSlicesLimits.at(" << i << ").at(1) = " << ResTLMomSlicesLimits.at(i).at(1) << "\n";
             }
 
             break; // no need to keep the loop going after filling histogram
@@ -630,184 +661,38 @@ void NeutronResolution::hFillResPlots(const double &TL_momentum, const double &R
 }
 //</editor-fold>
 
+//<editor-fold desc="hFillResPlots function">
+void NeutronResolution::hFillResPlots(const double &Momentum, const double &Resolution, const double &Weight, vector <hPlot1D> &ResSlices0,
+                                      vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0, int &NumberOfSlices0) {
+    bool Printout = false;
+
+    for (int i = 0; i < NumberOfSlices0; i++) {
+        if ((Momentum >= ResSlicesLimits0.at(i).at(0)) && (Momentum < ResSlicesLimits0.at(i).at(1))) {
+            ResSlices0.at(i).hFill(Resolution, Weight);
+
+            if (Printout) {
+                cout << "\n\nResTLMomSlicesLimits.at(" << i << ").at(0) = " << ResSlicesLimits0.at(i).at(0) << "\n";
+                cout << "Momentum = " << Momentum << "\n";
+                cout << "ResSlicesLimits.at(" << i << ").at(1) = " << ResSlicesLimits0.at(i).at(1) << "\n";
+            }
+
+            break; // no need to keep the loop going after filling histogram
+        }
+    }
+}
+//</editor-fold>
+
+// hFillResPlotsByType function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="hFillResPlotsByType function">
+void NeutronResolution::hFillResPlotsByType(const double &TL_momentum, const double &Reco_momentum, const double &Resolution, const double &Weight) {
+    hFillResPlots(TL_momentum, Resolution, Weight, ResTLMomSlices, ResTLMomSlicesLimits, ResTLMomSlicesFitVar, ResTLMomSlicesHistVar, NumberOfSlices);
+}
+//</editor-fold>
+
 // SliceFitDrawAndSave function -----------------------------------------------------------------------------------------------------------------------------------------
 
-////<editor-fold desc="SliceFitDrawAndSave function">
-///* CFitFunction function for costume fit */
-//Double_t CFitFunction(Double_t *v, Double_t *par) {
-//    Double_t arg = 0;
-//    if (par[2] != 0) { arg = (v[0] - par[1]) / par[2]; } // 3 parameters
-//
-//    Double_t fitval = par[0] * TMath::Exp(-0.5 * arg * arg);
-//    return fitval;
-//}
-//
-///* SliceFitDrawAndSave function for the fit */
-//void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const double &beamE) {
-//    TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
-//    SliceFitCanvas->SetGrid();
-//    SliceFitCanvas->SetBottomMargin(0.14);
-//    SliceFitCanvas->SetLeftMargin(0.18);
-//    SliceFitCanvas->SetRightMargin(0.12);
-//    SliceFitCanvas->cd();
-//
-//    for (int i = 0; i < NumberOfSlices; i++) {
-//
-//        //<editor-fold desc="Setting sNameFlag">
-//        string sNameFlag;
-//
-//        if (findSubstring(SampleName, "sim")) {
-//            sNameFlag = "s";
-//        } else if (findSubstring(SampleName, "data")) {
-//            sNameFlag = "d";
-//        }
-//        //</editor-fold>
-//
-//        TH1D *hSlice = (TH1D *) ResSlices.at(i).GetHistogram();
-//        hSlice->GetXaxis()->SetTitleSize(0.06);
-//        hSlice->GetXaxis()->SetLabelSize(0.0425);
-//        hSlice->GetXaxis()->CenterTitle(true);
-//        hSlice->GetYaxis()->SetTitle("Arbitrary units (#events)");
-//        hSlice->GetYaxis()->SetTitleSize(0.06);
-//        hSlice->GetYaxis()->SetLabelSize(0.0425);
-//        hSlice->GetYaxis()->CenterTitle(true);
-//        hSlice->Sumw2();
-//
-//        if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
-//            cout << "\n\n";
-//
-//            double FitUlim, FitLlim;
-//
-//            if (momResTestMode) { // In smear & shift test mode
-//                FitUlim = 1., FitLlim = -1.; // For both neutrons and protons
-//            } else {
-//                if (isNeutron) {
-//                    FitUlim = 1., FitLlim = -1.;
-//                } else if (isProton) {
-//                    FitUlim = 0.5, FitLlim = -0.5;
-//                }
-//            }
-//
-////            TF1 *func = new TF1("fit", CFitFunction, FitLlim, FitUlim, 3); // create a function with 3 parameters in the range [-3,3]
-////            func->SetLineColor(kRed);
-//
-//            double SliceMax = hSlice->GetMaximum();
-//            double SliceMean = hSlice->GetMean();
-//            double SliceStd = hSlice->GetRMS();
-//
-////            func->SetParameters(SliceMax, SliceMean, 0.5); // start fit with histogram's max and mean
-////            func->SetParNames("Constant", "Mean_value", "Sigma");
-////
-////            if (momResTestMode) { // In smear & shift test mode
-////                func->SetParLimits(1, -1.5, 1.5); // Mean limits
-////                func->SetParLimits(2, 0.001, 0.35); // Sigma limits
-////            } else {
-////                if (isNeutron) {
-////                    func->SetParLimits(1, -1.5, 1.5); // Mean limits
-////                    func->SetParLimits(2, 0.001, 0.35); // Sigma limits
-////                } else if (isProton) {
-////                    func->SetParLimits(1, -1.5, 1.5); // Mean limits
-////                    func->SetParLimits(2, 0.0000000001, 0.35); // Sigma limits
-////                }
-////            }
-//
-//            hSlice->Fit("gaus");
-//
-//            /* Get fitted function to TF1 plot */
-//            TF1 *fit = hSlice->GetFunction("gaus");
-//
-////            //<editor-fold desc="Description">
-////            func->SetParameters(SliceMax, SliceMean, 0.5); // start fit with histogram's max and mean
-////            func->SetParNames("Constant", "Mean_value", "Sigma");
-////
-////            if (momResTestMode) { // In smear & shift test mode
-////                func->SetParLimits(1, -1.5, 1.5); // Mean limits
-////                func->SetParLimits(2, 0.001, 0.35); // Sigma limits
-////            } else {
-////                if (isNeutron) {
-////                    func->SetParLimits(1, -1.5, 1.5); // Mean limits
-////                    func->SetParLimits(2, 0.001, 0.35); // Sigma limits
-////                } else if (isProton) {
-////                    func->SetParLimits(1, -1.5, 1.5); // Mean limits
-////                    func->SetParLimits(2, 0.0000000001, 0.35); // Sigma limits
-////                }
-////            }
-////
-////            hSlice->Fit("gaus");
-////
-////            /* Get fitted function to TF1 plot */
-////            TF1 *fit = hSlice->GetFunction("gaus");
-////            //</editor-fold>
-//
-//            /* Set fitted plot parameters from TF1 plot */
-//            double FitAmp = fit->GetParameter(0);  // get p0
-//            double FitMean = fit->GetParameter(1); // get p1
-//            double FitStd = fit->GetParameter(2);  // get p2
-//
-//            ResSlicesFitVar.at(i).SetMean(FitMean); // For neutron correction
-//            ResSlicesFitVar.at(i).SetUpperCut(FitStd); // For proton smearing
-//            ResSlicesHistVar.at(i).SetMean(SliceMean);
-//            ResSlicesHistVar.at(i).SetUpperCut(SliceStd);
-//
-//            /* Remove TF1 plot from histogram */
-//            hSlice->GetListOfFunctions()->Clear();
-////            hSlice->GetListOfFunctions()->Remove(hSlice->GetFunction("fit"));
-//
-//            /* Draw TF1 plot as curved function */
-//            fit->SetLineColor(kRed);
-//            fit->Draw("same && C");
-//
-//            double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
-//            double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
-//            double x_1_FitParam = x_1_Cut_legend, y_1_FitParam = y_1_Cut_legend;
-//            double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
-//
-//            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam - 0.025, "NDC");
-//            FitParam->SetBorderSize(1);
-//            FitParam->SetFillColor(0);
-//            FitParam->SetTextAlign(12);
-//            FitParam->SetTextFont(42);
-//            FitParam->SetTextSize(0.03);
-//            FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 4)).c_str());
-//            FitParam->AddText(("Fit #mu = " + to_string_with_precision(FitMean, 4)).c_str());
-//            FitParam->AddText(("Fit #sigma = " + to_string_with_precision(FitStd, 4)).c_str());
-//            FitParam->Draw("same");
-//
-//            int SliceUpperLimPrecision;
-//            if (ResSlicesLimits.at(i).at(1) == beamE) { SliceUpperLimPrecision = 3; } else { SliceUpperLimPrecision = 2; }
-//
-//            string hSlice_CloneSaveDir = ResSlices.at(i).GetHistogram1DSaveNamePath() + "00_Fitted_res_slices/";
-//            string hSlice_CloneSaveName = hSlice_CloneSaveDir + sNameFlag + ResSlices.at(i).GetHistogram1DSaveName() + "_fitted.png";
-//            system(("mkdir -p " + hSlice_CloneSaveDir).c_str());
-//
-//            auto ListOfFunctions = hSlice->GetListOfFunctions();
-//            ListOfFunctions->Add((TF1 *) fit);
-//            ListOfFunctions->Add((TObject *) FitParam);
-//
-//            cout << "\n", SliceFitCanvas->SaveAs(hSlice_CloneSaveName.c_str());
-//
-//            if (isNeutron) {
-//                FittedNeutronResSlices->Add(hSlice);
-//            } else if (isProton) {
-//                FittedProtonResSlices->Add(hSlice);
-//            }
-//
-//            SliceFitCanvas->Clear();
-//
-//            FittedSlices.push_back(i); // Log slices that were fitted
-//        } else {
-//            continue;
-//        }
-//    }
-//
-//    Fitter_Std_pol1(Particle), Fitter_Std_pol2(Particle), Fitter_Std_pol3(Particle);
-//    Fitter_Std_pol1_wKC(Particle), Fitter_Std_pol2_wKC(Particle), Fitter_Std_pol3_wKC(Particle);
-//    Fitter_Corr_pol1(Particle), Fitter_Corr_pol2(Particle), Fitter_Corr_pol3(Particle);
-//    Fitter_Corr_pol1_wKC(Particle), Fitter_Corr_pol2_wKC(Particle), Fitter_Corr_pol3_wKC(Particle);
-//}
-////</editor-fold>
-
-//<editor-fold desc="SliceFitDrawAndSave function (original)">
+//<editor-fold desc="CFitFunction">
 /* CFitFunction function for costume fit */
 Double_t CFitFunction(Double_t *v, Double_t *par) {
     Double_t arg = 0;
@@ -816,8 +701,9 @@ Double_t CFitFunction(Double_t *v, Double_t *par) {
     Double_t fitval = par[0] * TMath::Exp(-0.5 * arg * arg);
     return fitval;
 }
+//</editor-fold>
 
-/* SliceFitDrawAndSave function for the fit */
+//<editor-fold desc="SliceFitDrawAndSave function (original)">
 void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const double &beamE) {
     TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
     SliceFitCanvas->SetGrid();
@@ -836,7 +722,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
         }
         //</editor-fold>
 
-        TH1D *hSlice = (TH1D *) ResSlices.at(i).GetHistogram();
+        TH1D *hSlice = (TH1D *) ResTLMomSlices.at(i).GetHistogram();
         hSlice->GetXaxis()->SetTitleSize(0.06), hSlice->GetXaxis()->SetLabelSize(0.0425), hSlice->GetXaxis()->CenterTitle(true);
         hSlice->GetYaxis()->SetTitle("Arbitrary units (#events)");
         hSlice->GetYaxis()->SetTitleSize(0.06), hSlice->GetYaxis()->SetLabelSize(0.0425), hSlice->GetYaxis()->CenterTitle(true);
@@ -891,10 +777,10 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
             double FitMean = func->GetParameter(1); // get p1
             double FitStd = func->GetParameter(2);  // get p2
 
-            ResSlicesFitVar.at(i).SetMean(FitMean); // For neutron correction
-            ResSlicesFitVar.at(i).SetUpperCut(FitStd); // For proton smearing
-            ResSlicesHistVar.at(i).SetMean(SliceMean);
-            ResSlicesHistVar.at(i).SetUpperCut(SliceStd);
+            ResTLMomSlicesFitVar.at(i).SetMean(FitMean); // For neutron correction
+            ResTLMomSlicesFitVar.at(i).SetUpperCut(FitStd); // For proton smearing
+            ResTLMomSlicesHistVar.at(i).SetMean(SliceMean);
+            ResTLMomSlicesHistVar.at(i).SetUpperCut(SliceStd);
 
             double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
             double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
@@ -909,10 +795,10 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
             FitParam->Draw("same");
 
             int SliceUpperLimPrecision;
-            if (ResSlicesLimits.at(i).at(1) == beamE) { SliceUpperLimPrecision = 3; } else { SliceUpperLimPrecision = 2; }
+            if (ResTLMomSlicesLimits.at(i).at(1) == beamE) { SliceUpperLimPrecision = 3; } else { SliceUpperLimPrecision = 2; }
 
-            string hSlice_CloneSaveDir = ResSlices.at(i).GetHistogram1DSaveNamePath() + "00_Fitted_res_slices/";
-            string hSlice_CloneSaveName = hSlice_CloneSaveDir + sNameFlag + ResSlices.at(i).GetHistogram1DSaveName() + "_fitted.png";
+            string hSlice_CloneSaveDir = ResTLMomSlices.at(i).GetHistogram1DSaveNamePath() + "00_Fitted_res_slices/";
+            string hSlice_CloneSaveName = hSlice_CloneSaveDir + sNameFlag + ResTLMomSlices.at(i).GetHistogram1DSaveName() + "_fitted.png";
             system(("mkdir -p " + hSlice_CloneSaveDir).c_str());
 
             auto ListOfFunctions = hSlice->GetListOfFunctions();
@@ -928,7 +814,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
 
             SliceFitCanvas->Clear();
 
-            FittedSlices.push_back(i); // Log slices that were fitted
+            FittedTLMomSlices.push_back(i); // Log slices that were fitted
         } else {
             continue;
         }
@@ -938,6 +824,139 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
     Fitter_Std_pol1_wKC(), Fitter_Std_pol2_wKC(), Fitter_Std_pol3_wKC();
     Fitter_Corr_pol1(), Fitter_Corr_pol2(), Fitter_Corr_pol3();
     Fitter_Corr_pol1_wKC(), Fitter_Corr_pol2_wKC(), Fitter_Corr_pol3_wKC();
+}
+//</editor-fold>
+
+//<editor-fold desc="SliceFitDrawAndSave function">
+void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const double &beamE, vector <hPlot1D> &ResSlices0, vector <vector<double>> &ResSlicesLimits0,
+                                            vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0, vector<int> &FittedSlices0, int &NumberOfSlices0) {
+    TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
+    SliceFitCanvas->SetGrid();
+    SliceFitCanvas->SetBottomMargin(0.14), SliceFitCanvas->SetLeftMargin(0.18), SliceFitCanvas->SetRightMargin(0.12);
+    SliceFitCanvas->cd();
+
+    for (int i = 0; i < NumberOfSlices0; i++) {
+
+        //<editor-fold desc="Setting sNameFlag">
+        string sNameFlag;
+
+        if (findSubstring(SampleName, "sim")) {
+            sNameFlag = "s";
+        } else if (findSubstring(SampleName, "data")) {
+            sNameFlag = "d";
+        }
+        //</editor-fold>
+
+        TH1D *hSlice = (TH1D *) ResTLMomSlices.at(i).GetHistogram();
+        hSlice->GetXaxis()->SetTitleSize(0.06), hSlice->GetXaxis()->SetLabelSize(0.0425), hSlice->GetXaxis()->CenterTitle(true);
+        hSlice->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        hSlice->GetYaxis()->SetTitleSize(0.06), hSlice->GetYaxis()->SetLabelSize(0.0425), hSlice->GetYaxis()->CenterTitle(true);
+        hSlice->Sumw2();
+
+        if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
+            cout << "\n\n";
+
+            double FitUlim, FitLlim;
+
+            if (momResTestMode) { // In smear & shift test mode
+                FitUlim = 1., FitLlim = -1.; // For both neutrons and protons
+            } else {
+                if (isNeutron) {
+                    FitUlim = 1., FitLlim = -1.;
+                } else if (isProton) {
+                    FitUlim = 0.5, FitLlim = -0.5;
+                }
+            }
+
+            TF1 *func = new TF1("fit", CFitFunction, FitLlim, FitUlim, 3); // create a function with 3 parameters in the range [-3,3]
+            func->SetLineColor(kRed);
+
+            double SliceMax = hSlice->GetMaximum(), SliceMean = hSlice->GetMean(), SliceStd = hSlice->GetRMS();
+
+            func->SetParameters(SliceMax, SliceMean, 0.5); // start fit with histogram's max and mean
+            func->SetParNames("Constant", "Mean_value", "Sigma");
+
+            if (momResTestMode) { // In smear & shift test mode
+//                func->SetParLimits(1, -0.5, 0.5); // Mean limits
+                func->SetParLimits(1, -1.5, 1.5); // Mean limits
+//                func->SetParLimits(2, 0.0001, 0.35); // Sigma limits
+                func->SetParLimits(2, 0.001, 0.35); // Sigma limits
+            } else {
+                if (isNeutron) {
+//                    func->SetParLimits(1, -0.5, 0.5); // Mean limits
+                    func->SetParLimits(1, -1.5, 1.5); // Mean limits
+//                    func->SetParLimits(2, 0.0001, 0.35); // Sigma limits
+                    func->SetParLimits(2, 0.001, 0.35); // Sigma limits
+                } else if (isProton) {
+//                    func->SetParLimits(1, -0.5, 0.5); // Mean limits
+                    func->SetParLimits(1, -1.5, 1.5); // Mean limits
+                    func->SetParLimits(2, 0.0000000001, 0.35); // Sigma limits
+                }
+            }
+
+            hSlice->Fit("fit");
+            hSlice->SetLineColor(kBlue);
+            hSlice->SetLineWidth(2);
+
+            double FitAmp = func->GetParameter(0);  // get p0
+            double FitMean = func->GetParameter(1); // get p1
+            double FitStd = func->GetParameter(2);  // get p2
+
+            ResSlicesFitVar0.at(i).SetMean(FitMean); // For neutron correction
+            ResSlicesFitVar0.at(i).SetUpperCut(FitStd); // For proton smearing
+            ResSlicesHistVar0.at(i).SetMean(SliceMean);
+            ResSlicesHistVar0.at(i).SetUpperCut(SliceStd);
+
+            double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
+            double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
+            double x_1_FitParam = x_1_Cut_legend, y_1_FitParam = y_1_Cut_legend;
+            double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
+
+            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam - 0.025, "NDC");
+            FitParam->SetBorderSize(1), FitParam->SetFillColor(0), FitParam->SetTextAlign(12), FitParam->SetTextFont(42), FitParam->SetTextSize(0.03);
+            FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 4)).c_str());
+            FitParam->AddText(("Fit #mu = " + to_string_with_precision(FitMean, 4)).c_str());
+            FitParam->AddText(("Fit #sigma = " + to_string_with_precision(FitStd, 4)).c_str());
+            FitParam->Draw("same");
+
+            int SliceUpperLimPrecision;
+            if (ResSlicesLimits0.at(i).at(1) == beamE) { SliceUpperLimPrecision = 3; } else { SliceUpperLimPrecision = 2; }
+
+            string hSlice_CloneSaveDir = ResSlices0.at(i).GetHistogram1DSaveNamePath() + "00_Fitted_res_slices/";
+            string hSlice_CloneSaveName = hSlice_CloneSaveDir + sNameFlag + ResSlices0.at(i).GetHistogram1DSaveName() + "_fitted.png";
+            system(("mkdir -p " + hSlice_CloneSaveDir).c_str());
+
+            auto ListOfFunctions = hSlice->GetListOfFunctions();
+            ListOfFunctions->Add((TObject *) FitParam);
+
+            cout << "\n", SliceFitCanvas->SaveAs(hSlice_CloneSaveName.c_str());
+
+            if (isNeutron) {
+                FittedNeutronResSlices->Add(hSlice);
+            } else if (isProton) {
+                FittedProtonResSlices->Add(hSlice);
+            }
+
+            SliceFitCanvas->Clear();
+
+            FittedSlices0.push_back(i); // Log slices that were fitted
+        } else {
+            continue;
+        }
+    }
+
+    Fitter_Std_pol1(), Fitter_Std_pol2(), Fitter_Std_pol3();
+    Fitter_Std_pol1_wKC(), Fitter_Std_pol2_wKC(), Fitter_Std_pol3_wKC();
+    Fitter_Corr_pol1(), Fitter_Corr_pol2(), Fitter_Corr_pol3();
+    Fitter_Corr_pol1_wKC(), Fitter_Corr_pol2_wKC(), Fitter_Corr_pol3_wKC();
+}
+//</editor-fold>
+
+// SliceFitDrawAndSaveByType function -----------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="SliceFitDrawAndSaveByType function">
+void NeutronResolution::SliceFitDrawAndSaveByType(const string &SampleName, const double &beamE) {
+    SliceFitDrawAndSave(SampleName, beamE, ResTLMomSlices, ResTLMomSlicesLimits, ResTLMomSlicesFitVar, ResTLMomSlicesHistVar, FittedTLMomSlices, NumberOfSlices);
 }
 //</editor-fold>
 
@@ -954,8 +973,8 @@ void NeutronResolution::Fitter_Std_pol1() {
     vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Std = ResSlicesFitVar.at(i).GetUpperCut();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
         MeanPn.push_back(Mean);
         Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
@@ -1084,12 +1103,12 @@ void NeutronResolution::Fitter_Std_pol1_wKC() {
     vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Std = ResSlicesFitVar.at(i).GetUpperCut();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
         if (PrintOut) { cout << "\n"; }
 
-        if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
+        if ((Mean >= SliceLowerMomLimKC) && (Mean <= SliceUpperMomLimKC)) {
             MeanPn.push_back(Mean);
             Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
 
@@ -1218,8 +1237,8 @@ void NeutronResolution::Fitter_Std_pol2() {
     vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Std = ResSlicesFitVar.at(i).GetUpperCut();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
         MeanPn.push_back(Mean);
         Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
@@ -1351,12 +1370,12 @@ void NeutronResolution::Fitter_Std_pol2_wKC() {
     vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Std = ResSlicesFitVar.at(i).GetUpperCut();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
         if (PrintOut) { cout << "\n"; }
 
-        if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
+        if ((Mean >= SliceLowerMomLimKC) && (Mean <= SliceUpperMomLimKC)) {
             MeanPn.push_back(Mean);
             Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
 
@@ -1488,8 +1507,8 @@ void NeutronResolution::Fitter_Std_pol3() {
     vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Std = ResSlicesFitVar.at(i).GetUpperCut();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
         MeanPn.push_back(Mean);
         Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
@@ -1624,12 +1643,12 @@ void NeutronResolution::Fitter_Std_pol3_wKC() {
     vector<double> MeanPn, Pn_Std;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Std = ResSlicesFitVar.at(i).GetUpperCut();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
         if (PrintOut) { cout << "\n"; }
 
-        if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
+        if ((Mean >= SliceLowerMomLimKC) && (Mean <= SliceUpperMomLimKC)) {
             MeanPn.push_back(Mean);
             Pn_Std.push_back(Std); //TODO: add a mechanism to ignore failed fits
 
@@ -1766,8 +1785,8 @@ void NeutronResolution::Fitter_Corr_pol1() {
     vector<double> MeanPn, Pn_Corr;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Corr = ResSlicesFitVar.at(i).GetMean();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
         MeanPn.push_back(Mean);
         Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
@@ -1897,12 +1916,12 @@ void NeutronResolution::Fitter_Corr_pol1_wKC() {
     vector<double> MeanPn, Pn_Corr;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Corr = ResSlicesFitVar.at(i).GetMean();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
         if (PrintOut) { cout << "\n"; }
 
-        if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
+        if ((Mean >= SliceLowerMomLimKC) && (Mean <= SliceUpperMomLimKC)) {
             MeanPn.push_back(Mean);
             Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
 
@@ -2032,8 +2051,8 @@ void NeutronResolution::Fitter_Corr_pol2() {
     vector<double> MeanPn, Pn_Corr;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Corr = ResSlicesFitVar.at(i).GetMean();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
         MeanPn.push_back(Mean);
         Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
@@ -2166,12 +2185,12 @@ void NeutronResolution::Fitter_Corr_pol2_wKC() {
     vector<double> MeanPn, Pn_Corr;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Corr = ResSlicesFitVar.at(i).GetMean();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
         if (PrintOut) { cout << "\n"; }
 
-        if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
+        if ((Mean >= SliceLowerMomLimKC) && (Mean <= SliceUpperMomLimKC)) {
             MeanPn.push_back(Mean);
             Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
 
@@ -2304,8 +2323,8 @@ void NeutronResolution::Fitter_Corr_pol3() {
     vector<double> MeanPn, Pn_Corr;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Corr = ResSlicesFitVar.at(i).GetMean();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
         MeanPn.push_back(Mean);
         Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
@@ -2441,12 +2460,12 @@ void NeutronResolution::Fitter_Corr_pol3_wKC() {
     vector<double> MeanPn, Pn_Corr;
 
     for (int i = 0; i < NumberOfSlices; i++) {
-        double Mean = (ResSlicesLimits.at(i).at(1) + ResSlicesLimits.at(i).at(0)) / 2;
-        double Corr = ResSlicesFitVar.at(i).GetMean();
+        double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
+        double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
         if (PrintOut) { cout << "\n"; }
 
-        if ((Mean >= SliceLowerMomLimPC) && (Mean <= SliceUpperMomLimPC)) {
+        if ((Mean >= SliceLowerMomLimKC) && (Mean <= SliceUpperMomLimKC)) {
             MeanPn.push_back(Mean);
             Pn_Corr.push_back(Corr); //TODO: add a mechanism to ignore failed fits
 
@@ -2677,8 +2696,8 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
     //<editor-fold desc="Logging slice fit results">
     Neutron_res_fit_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma\n\n";
 
-    for (int FittedSlice: FittedSlices) {
-        DSCuts TempCut = ResSlicesFitVar.at(FittedSlice);
+    for (int FittedSlice: FittedTLMomSlices) {
+        DSCuts TempCut = ResTLMomSlicesFitVar.at(FittedSlice);
         Neutron_res_fit_param << TempCut.GetCutVariable() << "\t\t\t" << TempCut.GetSliceNumber() << ":" << TempCut.GetSliceLowerb() << ":"
                               << TempCut.GetSliceUpperb() << ":" << TempCut.GetMean() << ":" << TempCut.GetUpperCut() << "\n";
     }
@@ -2688,8 +2707,8 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
     if (isNeutron) {
         Neutron_res_fit_param << "\n\n#correction and smear fit variables:\n\n";
 
-        Neutron_res_fit_param << "SliceUpperMomLimPC" << "\t\t\t" << SliceUpperMomLimPC << "\n";
-        Neutron_res_fit_param << "SliceLowerMomLimPC" << "\t\t\t" << SliceLowerMomLimPC << "\n\n";
+        Neutron_res_fit_param << "SliceUpperMomLimKC" << "\t\t\t" << SliceUpperMomLimKC << "\n";
+        Neutron_res_fit_param << "SliceLowerMomLimKC" << "\t\t\t" << SliceLowerMomLimKC << "\n\n";
 
         Neutron_res_fit_param << "A_Corr_pol1" << "\t\t\t\t\t" << A_Corr_pol1 << "\n";
         Neutron_res_fit_param << "A_Corr_pol1_Error" << "\t\t\t" << A_Corr_pol1_Error << "\n";
@@ -2865,7 +2884,7 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
 
     Neutron_res_Hist_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma\n\n"; //TODO: confirm order!
 
-    for (DSCuts ResSlice: ResSlicesHistVar) {
+    for (DSCuts ResSlice: ResTLMomSlicesHistVar) {
         Neutron_res_Hist_param << ResSlice.GetCutVariable() << "\t\t\t" << ResSlice.GetSliceNumber() << ":" << ResSlice.GetSliceLowerb() << ":"
                                << ResSlice.GetSliceUpperb()
                                << ":" << ResSlice.GetMean() << ":" << ResSlice.GetUpperCut() << "\n";

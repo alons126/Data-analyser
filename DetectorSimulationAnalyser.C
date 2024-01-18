@@ -12199,7 +12199,8 @@ void EventAnalyser() {
 
                                 /* Filling pRes plots */
                                 double pResolution = (TLProtonP - RecoProtonP) / TLProtonP;
-                                pRes.hFillResPlots(TLProtonP, pResolution, Weight);
+                                pRes.hFillResPlotsByType(TLProtonP, RecoProtonP, pResolution, Weight);
+//                                pRes.hFillResPlots(TLProtonP, pResolution, Weight);
 
                                 hP_pFD_Res_1p.hFill(pResolution, Weight);
                                 hP_pFD_Res_VS_TL_P_pFD_1p->Fill(TLProtonP, pResolution, Weight);
@@ -13078,7 +13079,8 @@ void EventAnalyser() {
 
                                 /* Filling nRes plots */
                                 double nResolution = (TLNeutronP - RecoNeutronP) / TLNeutronP;
-                                nRes.hFillResPlots(TLNeutronP, nResolution, Weight);
+                                nRes.hFillResPlotsByType(TLNeutronP, RecoNeutronP, nResolution, Weight);
+//                                nRes.hFillResPlots(TLNeutronP, nResolution, Weight);
 
                                 hP_nFD_Res_1n.hFill(nResolution, Weight);
                                 hP_nFD_Res_VS_TL_P_nFD_1n->Fill(TLNeutronP, nResolution, Weight);
@@ -21081,7 +21083,7 @@ void EventAnalyser() {
         hTL_P_nFD_nRes_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         if (plot_and_fit_MomRes) {
-            nRes.SliceFitDrawAndSave(SampleName, beamE);
+            nRes.SliceFitDrawAndSaveByType(SampleName, beamE);
             nRes.LogResDataToFile(SampleName, plots_path, NeutronResolutionDirectory, settings.GetNucleon_Cuts_Status(), settings.GetFD_photons_Status(),
                                   settings.GetEfficiency_Status());
             nRes.DrawAndSaveResSlices(SampleName, c1, plots_path, NeutronResolutionDirectory);

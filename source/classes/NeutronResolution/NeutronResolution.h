@@ -49,17 +49,17 @@ private:
 
     string SmearMode = "NONE", CorrMode = "NONE";
 
-    vector <hPlot1D> ResSlices;
-    vector <vector<double>> ResSlicesLimits;
-    vector <DSCuts> ResSlicesFitVar;
-    vector <DSCuts> ResSlicesHistVar;
+    vector <hPlot1D> ResTLMomSlices, ResRecoMomSlices;
+    vector <vector<double>> ResTLMomSlicesLimits, ResRecoMomSlicesLimits;
+    vector <DSCuts> ResTLMomSlicesFitVar, ResRecoMomSlicesFitVar;
+    vector <DSCuts> ResTLMomSlicesHistVar, ResRecoMomSlicesHistVar;
     vector <DSCuts> Loaded_Res_Slices_FitVar;
     vector <DSCuts> Loaded_Res_Slices_HistVar;
-    vector<int> FittedSlices;
+    vector<int> FittedTLMomSlices, FittedRecoMomSlices;
 
     double SliceUpperMomLim; // upper lim for momentum slices - loaded from file
 
-    double SliceUpperMomLimPC, SliceLowerMomLimPC; // lower lim for momentum slices - set by constructor
+    double SliceUpperMomLimKC, SliceLowerMomLimKC; // lower lim for momentum slices - set by constructor
 
     double hSliceUpperLim = 1.1;
     double hSliceLowerLim = -1.1;
@@ -183,16 +183,32 @@ public:
     NeutronResolution(const string &Particle);
 
     NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
-                      const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
+                      const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
                       const string &NeutronResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2, const bool &VaryingDelta = false,
-                      const string &SmearM = "pol1", const string &CorrM = "pol1", bool nRes_test = false, bool ForceSmallpResLimits = false);
+                      const string &SmearM = "pol1", const string &CorrM = "pol1", bool momRes_test = false, bool ForceSmallpResLimits = false);
 
 // SetMomResCalculations function ---------------------------------------------------------------------------------------------------------------------------------------
 
     void SetMomResCalculations(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
-                               const DSCuts &FD_nucleon_momentum_cut, double const &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
+                               const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
                                const string &NeutronResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2, const bool &VaryingDelta = false,
-                               const string &SmearM = "pol1", const string &CorrM = "pol1", bool nRes_test = false, bool ForceSmallpResLimits = false);
+                               const string &SmearM = "pol1", const string &CorrM = "pol1", bool momRes_test = false, bool ForceSmallpResLimits = false);
+
+// SetMomResSlicesByType function ---------------------------------------------------------------------------------------------------------------------------------------
+
+    void SetMomResSlicesByType(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
+                               const string &MomentumType, const string &SavePath = "./", const bool &VaryingDelta = false, const bool &momRes_test = false,
+                               const bool &ForceSmallpResLimits = false);
+
+// SetMomResSlices function ---------------------------------------------------------------------------------------------------------------------------------------
+
+    void SetMomResSlices(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh, const string &SavePath,
+                         const bool &VaryingDelta, const bool &momRes_test, const bool &ForceSmallpResLimits, vector <hPlot1D> &ResSlices0,
+                         vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0, int &NumberOfSlices0);
+
+// LoadFitParam function ---------------------------------------------------------------------------------------------------------------------------------------
+
+    void LoadFitParam(const string &SampleName, const string &NucleonCutsDirectory, bool const &Calculate_momResS2, const string &NeutronResolutionDirectory);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -204,11 +220,25 @@ public:
 
 // hFillResPlots function -----------------------------------------------------------------------------------------------------------------------------------------------
 
-    void hFillResPlots(const double &Momentum, const double &Resolution, const double &Weight);
+    void hFillResPlots(const double &TL_momentum, const double &Resolution, const double &Weight);
+
+    void hFillResPlots(const double &Momentum, const double &Resolution, const double &Weight, vector <hPlot1D> &ResSlices0,
+                       vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0, int &NumberOfSlices0);
+
+// hFillResPlotsByType function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+    void hFillResPlotsByType(const double &MomentumTL, const double &MomentumReco, const double &Resolution, const double &Weight);
 
 // SliceFitDrawAndSave function -----------------------------------------------------------------------------------------------------------------------------------------
 
     void SliceFitDrawAndSave(const string &SampleName, const double &beamE);
+
+    void SliceFitDrawAndSave(const string &SampleName, const double &beamE, vector <hPlot1D> &ResSlices0, vector <vector<double>> &ResSlicesLimits0,
+                             vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0, vector<int> &FittedSlices0, int &NumberOfSlices0);
+
+// SliceFitDrawAndSaveByType function -----------------------------------------------------------------------------------------------------------------------------------
+
+    void SliceFitDrawAndSaveByType(const string &SampleName, const double &beamE);
 
 // Fitter functions -----------------------------------------------------------------------------------------------------------------------------------------------------
 
