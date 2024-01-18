@@ -157,7 +157,7 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool Calculate_momResS2 = true; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
@@ -2171,6 +2171,42 @@ void EventAnalyser() {
     hPlot1D hP_ph_reco_BPID_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "Reco FD #gamma momentum BPID - ZOOMIN", "FD #gamma momentum P^{reco}_{#gamma} BPID - ZOOMIN",
                                                        "P^{reco}_{#gamma} [GeV/c]", directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
                                                        "06b_P_ph_reco_BPID_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
+
+    //TODO: move from here!!
+    hPlot1D hMultiplicity_Neutrons_By_Redef_APID_BV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of neutrons by redef.  APID BV",
+                                                                     "Multiplicity of neutrons by redef.  APID BV", "Multiplicity",
+                                                                     directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                                     "0XX_Multiplicity_Neutrons_By_Redef_APID_BV_1e_cut_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_Redef_APID_AV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of neutrons by redef.  APID AV",
+                                                                     "Multiplicity of neutrons by redef.  APID AV", "Multiplicity",
+                                                                     directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                                     "0XX_Multiplicity_Neutrons_By_Redef_APID_AV_1e_cut_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_Redef_BPID_BV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of neutrons by redef.  BPID BV",
+                                                                     "Multiplicity of neutrons by redef.  BPID BV", "Multiplicity",
+                                                                     directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                                     "0XX_Multiplicity_Neutrons_By_Redef_BPID_BV_1e_cut_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_Redef_BPID_AV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of neutrons by redef.  BPID AV",
+                                                                     "Multiplicity of neutrons by redef.  BPID AV", "Multiplicity",
+                                                                     directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                                     "0XX_Multiplicity_Neutrons_By_Redef_BPID_AV_1e_cut_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+
+    //TODO: move from here!!
+    hPlot1D hMultiplicity_Neutrons_By_clas12pid_APID_BV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of neutrons by clas12pid  APID BV",
+                                                                     "Multiplicity of neutrons by clas12pid  APID BV", "Multiplicity",
+                                                                     directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                                     "0XX_Multiplicity_Neutrons_By_clas12pid_APID_BV_1e_cut_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_clas12pid_APID_AV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of neutrons by clas12pid  APID AV",
+                                                                     "Multiplicity of neutrons by clas12pid  APID AV", "Multiplicity",
+                                                                     directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                                     "0XX_Multiplicity_Neutrons_By_clas12pid_APID_AV_1e_cut_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_clas12pid_BPID_BV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of neutrons by clas12pid  BPID BV",
+                                                                     "Multiplicity of neutrons by clas12pid  BPID BV", "Multiplicity",
+                                                                     directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                                     "0XX_Multiplicity_Neutrons_By_clas12pid_BPID_BV_1e_cut_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_clas12pid_BPID_AV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of neutrons by clas12pid  BPID AV",
+                                                                     "Multiplicity of neutrons by clas12pid  BPID AV", "Multiplicity",
+                                                                     directories.Momentum_Directory_map["Momentum_th_reco_1e_cut_Directory"],
+                                                                     "0XX_Multiplicity_Neutrons_By_clas12pid_BPID_AV_1e_cut_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //</editor-fold>
@@ -2248,6 +2284,25 @@ void EventAnalyser() {
     hPlot1D hP_n_BPID_1p_FD = hPlot1D("1p", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "06d_P_n_BPID_1p_FD",
                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+
+    //TODO: move from here!!
+    //TODO: need AV plots?
+    hPlot1D hMultiplicity_Neutrons_By_Redef_APID_BV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of neutrons by redef.  APID BV",
+                                                                        "Multiplicity of neutrons by redef.  APID BV", "Multiplicity",
+                                                                        directories.Momentum_Directory_map["Momentum_1p_Directory"],
+                                                                        "0XX_Multiplicity_Neutrons_By_Redef_APID_BV_1p_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_Redef_APID_AV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of neutrons by redef.  APID AV",
+                                                                        "Multiplicity of neutrons by redef.  APID AV", "Multiplicity",
+                                                                        directories.Momentum_Directory_map["Momentum_1p_Directory"],
+                                                                        "0XX_Multiplicity_Neutrons_By_Redef_APID_AV_1p_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_Redef_BPID_BV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of neutrons by redef.  BPID BV",
+                                                                        "Multiplicity of neutrons by redef.  BPID BV", "Multiplicity",
+                                                                        directories.Momentum_Directory_map["Momentum_1p_Directory"],
+                                                                        "0XX_Multiplicity_Neutrons_By_Redef_BPID_BV_1p_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_Redef_BPID_AV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of neutrons by redef.  BPID AV",
+                                                                        "Multiplicity of neutrons by redef.  BPID AV", "Multiplicity",
+                                                                        directories.Momentum_Directory_map["Momentum_1p_Directory"],
+                                                                        "0XX_Multiplicity_Neutrons_By_Redef_BPID_AV_1p_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Momentum threshold plots (1n)">
@@ -2349,6 +2404,25 @@ void EventAnalyser() {
     hPlot1D hP_ph_BPID_1n_FD = hPlot1D("1n", "FD", "Photon momentum BPID", "Photon momentum P_{#gamma} BPID", "P_{#gamma} [GeV/c]",
                                        directories.Momentum_Directory_map["Momentum_1n_Directory"], "08b_P_ph_BPID_1n_FD",
                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+
+    //TODO: move from here!!
+    //TODO: need AV plots?
+    hPlot1D hMultiplicity_Neutrons_By_Redef_APID_BV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of neutrons by redef.  APID BV",
+                                                                    "Multiplicity of neutrons by redef.  APID BV", "Multiplicity",
+                                                                    directories.Momentum_Directory_map["Momentum_1n_Directory"],
+                                                                    "0XX_Multiplicity_Neutrons_By_Redef_APID_BV_1n_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_Redef_APID_AV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of neutrons by redef.  APID AV",
+                                                                    "Multiplicity of neutrons by redef.  APID AV", "Multiplicity",
+                                                                    directories.Momentum_Directory_map["Momentum_1n_Directory"],
+                                                                    "0XX_Multiplicity_Neutrons_By_Redef_APID_AV_1n_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_Redef_BPID_BV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of neutrons by redef.  BPID BV",
+                                                                    "Multiplicity of neutrons by redef.  BPID BV", "Multiplicity",
+                                                                    directories.Momentum_Directory_map["Momentum_1n_Directory"],
+                                                                    "0XX_Multiplicity_Neutrons_By_Redef_BPID_BV_1n_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hMultiplicity_Neutrons_By_Redef_BPID_AV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of neutrons by redef.  BPID AV",
+                                                                    "Multiplicity of neutrons by redef.  BPID AV", "Multiplicity",
+                                                                    directories.Momentum_Directory_map["Momentum_1n_Directory"],
+                                                                    "0XX_Multiplicity_Neutrons_By_Redef_BPID_AV_1n_FD", 0, 10, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Momentum threshold plots (2p)">
@@ -10604,6 +10678,10 @@ void EventAnalyser() {
 
             //<editor-fold desc="FD neutrons">
 
+            //<editor-fold desc="FD neutrons (BPID, clas12pid)">
+            if (neutrons.size() != 0) { hMultiplicity_Neutrons_By_clas12pid_BPID_BV_1e_cut_FD.hFill(neutrons.size(), Weight); }
+            //</editor-fold>
+
             //<editor-fold desc="FD neutrons (BPID)">
             if (NeutronsFD_ind_max != -1) { // mom. distributions for leading nFD (BPID)
                 double NeutronMomentum_1e_cut = GetFDNeutronP(allParticles[NeutronsFD_ind_max], apply_nucleon_cuts);
@@ -10621,6 +10699,8 @@ void EventAnalyser() {
                 }
             }
 
+            int Neutron_multiplicity_BPID_AV_1e_cut_FD = 0;
+
             for (int &i: FD_Neutrons) { // mom. distributions for all nFD (BPID)
                 double NeutronMomentum_1e_cut = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
                 double NeutronTheta_1e_cut = allParticles[i]->getTheta() * 180.0 / pi;
@@ -10630,12 +10710,16 @@ void EventAnalyser() {
                 bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
 
                 if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
+                    ++Neutron_multiplicity_BPID_AV_1e_cut_FD;
                     hP_nFD_reco_BPID_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
                     hP_nFD_reco_BPID_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
                     hP_nFD_reco_BPID_1e_cut_FD_ZOOMOUT.hFill(NeutronMomentum_1e_cut, Weight);
                     hP_nFD_vs_Theta_nFD_reco_BPID_1e_cut_FD.hFill(NeutronMomentum_1e_cut, NeutronTheta_1e_cut, Weight);
                 }
             }
+
+            if (Neutron_multiplicity_BPID_AV_1e_cut_FD != 0) { hMultiplicity_Neutrons_By_Redef_BPID_AV_1e_cut_FD.hFill(Neutron_multiplicity_BPID_AV_1e_cut_FD, Weight); }
+            if (FD_Neutrons.size() != 0) { hMultiplicity_Neutrons_By_Redef_BPID_BV_1e_cut_FD.hFill(FD_Neutrons.size(), Weight); }
             //</editor-fold>
 
             //<editor-fold desc="FD neutrons (APID)">
@@ -10655,6 +10739,8 @@ void EventAnalyser() {
                 }
             }
 
+            int Neutron_multiplicity_APID_AV_1e_cut_FD = 0;
+
             for (int &i: NeutronsFD_ind) { // mom. distributions for all nFD (APID)
                 double NeutronMomentum_1e_cut = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
                 double NeutronTheta_1e_cut = allParticles[i]->getTheta() * 180.0 / pi;
@@ -10664,12 +10750,16 @@ void EventAnalyser() {
                 bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
 
                 if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
+                    ++Neutron_multiplicity_APID_AV_1e_cut_FD;
                     hP_nFD_reco_APID_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
                     hP_nFD_reco_APID_1e_cut_FD_ZOOMIN.hFill(NeutronMomentum_1e_cut, Weight);
                     hP_nFD_reco_APID_1e_cut_FD_ZOOMOUT.hFill(NeutronMomentum_1e_cut, Weight);
                     hP_nFD_vs_Theta_nFD_reco_APID_1e_cut_FD.hFill(NeutronMomentum_1e_cut, NeutronTheta_1e_cut, Weight);
                 }
             }
+
+            if (Neutron_multiplicity_APID_AV_1e_cut_FD != 0) { hMultiplicity_Neutrons_By_Redef_APID_AV_1e_cut_FD.hFill(Neutron_multiplicity_APID_AV_1e_cut_FD, Weight); }
+            if (NeutronsFD_ind.size() != 0) { hMultiplicity_Neutrons_By_Redef_APID_BV_1e_cut_FD.hFill(NeutronsFD_ind.size(), Weight); }
             //</editor-fold>
 
             //</editor-fold>
@@ -12030,6 +12120,9 @@ void EventAnalyser() {
                 P_N_1p_3v = TVector3(P_e_1p_3v.Px() + P_p_1p_3v.Px() - Pvx, P_e_1p_3v.Py() + P_p_1p_3v.Py() - Pvy, P_e_1p_3v.Pz() + P_p_1p_3v.Pz() - Pvz);
                 hTheta_q_p_p_vs_p_N_q_1p->Fill(P_N_1p_3v.Mag() / q_1p_3v.Mag(), Theta_q_p_p_1p, Weight_1p);
 
+                if (FD_Neutrons.size() != 0) { hMultiplicity_Neutrons_By_Redef_BPID_BV_1p_FD.hFill(FD_Neutrons.size(), Weight); }
+                if (NeutronsFD_ind.size() != 0) { hMultiplicity_Neutrons_By_Redef_APID_BV_1p_FD.hFill(NeutronsFD_ind.size(), Weight); }
+
                 //<editor-fold desc="Fill resolution histograms (1p)">
                 if (plot_and_fit_MomRes) {
                     auto mcpbank_pRes = c12->mcparts();
@@ -12335,6 +12428,10 @@ void EventAnalyser() {
             // Fillings 1n histograms -----------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Applying neutron veto and Fillings 1n histograms">
+            //TODO: move from here!
+            if (FD_Neutrons.size() != 0) { hMultiplicity_Neutrons_By_Redef_BPID_BV_1n_FD.hFill(FD_Neutrons.size(), Weight); }
+            if (NeutronsFD_ind.size() != 0) { hMultiplicity_Neutrons_By_Redef_APID_BV_1n_FD.hFill(NeutronsFD_ind.size(), Weight); }
+
             if (NeutronPassVeto_1n && Pass_Kin_Cuts_1n) {
                 ++num_of_events_1n_inFD_AV;
 
@@ -13027,7 +13124,7 @@ void EventAnalyser() {
 
                                 double path_n = n_1n->getPath();
                                 double beta_n = n_1n->par()->getBeta();
-                                double time_frombeta_n = path_n / (c*beta_n);
+                                double time_frombeta_n = path_n / (c * beta_n);
                                 double TOF_error = -(time_frombeta_n * (1 - beta_n * beta_n)) * nResolution;
 //                                double TOF_error = -(RecoNeutronTOF * (1 - beta_n * beta_n)) * nResolution;
                                 hTOF_error_1n.hFill(TOF_error, Weight);
@@ -15878,6 +15975,16 @@ void EventAnalyser() {
         hP_ph_reco_APID_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_ph_reco_BPID_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         hP_ph_reco_BPID_1e_cut_FD_ZOOMIN.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+
+        hMultiplicity_Neutrons_By_Redef_APID_BV_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_Redef_APID_AV_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_Redef_BPID_BV_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_Redef_BPID_AV_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+
+        hMultiplicity_Neutrons_By_clas12pid_APID_BV_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_clas12pid_APID_AV_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_clas12pid_BPID_BV_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_clas12pid_BPID_AV_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         //</editor-fold>
 
         //</editor-fold>
@@ -15918,6 +16025,11 @@ void EventAnalyser() {
 
         hP_n_APID_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
         hP_n_BPID_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+
+        hMultiplicity_Neutrons_By_Redef_APID_BV_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_Redef_APID_AV_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_Redef_BPID_BV_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_Redef_BPID_AV_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         //</editor-fold>
 
         //<editor-fold desc="Momentum plots (1n, CD & FD)">
@@ -15992,6 +16104,11 @@ void EventAnalyser() {
 
         hP_ph_APID_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut(), 0, false);
         hP_ph_BPID_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut(), 0, false);
+
+        hMultiplicity_Neutrons_By_Redef_APID_BV_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_Redef_APID_AV_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_Redef_BPID_BV_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
+        hMultiplicity_Neutrons_By_Redef_BPID_AV_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., -9999, 9999, 0, false);
         //</editor-fold>
 
         //<editor-fold desc="Momentum plots (2p, CD & FD)">
