@@ -642,8 +642,8 @@ void EventAnalyser() {
 //     Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
         Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
 
-        Momentum_plots = true;
-//        Momentum_plots = false;
+//        Momentum_plots = true;
+        Momentum_plots = false;
 
         /* W plots */
 //     W_plots = true;
@@ -21040,7 +21040,7 @@ void EventAnalyser() {
         hTL_P_pFD_pRes_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 
         if (plot_and_fit_MomRes) {
-            pRes.SliceFitDrawAndSave(SampleName, beamE);
+            pRes.SliceFitDrawAndSaveByType(SampleName, beamE);
             pRes.LogResDataToFile(SampleName, plots_path, NeutronResolutionDirectory, settings.GetNucleon_Cuts_Status(), settings.GetFD_photons_Status(),
                                   settings.GetEfficiency_Status());
             pRes.DrawAndSaveResSlices(SampleName, c1, plots_path, NeutronResolutionDirectory);
@@ -21084,8 +21084,7 @@ void EventAnalyser() {
 
         if (plot_and_fit_MomRes) {
             nRes.SliceFitDrawAndSaveByType(SampleName, beamE);
-            nRes.LogResDataToFile(SampleName, plots_path, NeutronResolutionDirectory, settings.GetNucleon_Cuts_Status(), settings.GetFD_photons_Status(),
-                                  settings.GetEfficiency_Status());
+            nRes.LogResDataToFile(SampleName, plots_path, NeutronResolutionDirectory);
             nRes.DrawAndSaveResSlices(SampleName, c1, plots_path, NeutronResolutionDirectory);
         }
 
