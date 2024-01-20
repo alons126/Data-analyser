@@ -54,8 +54,10 @@ NeutronResolution::NeutronResolution(const string &Particle) {
 
 //<editor-fold desc="NeutronResolution constructor">
 NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
-                                     const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
-                                     const string &NeutronResolutionDirectory, const string &SavePath, const double &DeltaSlices, const bool &VaryingDelta,
+                                     const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2,
+                                     bool const &Run_in_momResS2,
+                                     const string &NeutronResolutionDirectory, const string &SavePath, const double &DeltaSlices,
+                                     const bool &VaryingDelta,
                                      const string &SmearM, const string &CorrM, bool momRes_test, bool ForceSmallpResLimits) {
     SliceUpperMomLimKC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimKC = FD_nucleon_momentum_cut.GetLowerCutConst();
     momResS2CalcMode = Calculate_momResS2, momResS2RunMode = Run_in_momResS2;
@@ -128,7 +130,8 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
             hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
-            hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "R_{nFD} = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
+            hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "R_{nFD} = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
+                                       SlicesSavePath, hSaveName,
                                        hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
             ResSliceFitCuts = DSCuts(("fit_" + hCutName), "FD", "Neutron", "1n", 0, -9999, 9999);
         } else if (isProton) {
@@ -142,12 +145,14 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
             if (!momRes_test || ForceSmallpResLimits) {
-                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
+                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
+                                           SlicesSavePath, hSaveName,
                                            -0.2, 0.2, hSliceNumOfBin);
 //                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
 //                                           -0.75, 0.75, hSliceNumOfBin);
             } else {
-                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
+                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
+                                           SlicesSavePath, hSaveName,
                                            hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
             }
 
@@ -254,20 +259,23 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
 
     if (LimitsPrintOut && LimitsPrintOutAndExit) { exit(0); }
 
-    NumberOfSlices = SliceNumber;
+    TL_NumberOfSlices = SliceNumber;
 
     if (isNeutron) {
         if (momResS2CalcMode && !momResS2RunMode) {
             cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 calculation mode. Loading momResS1 variables...\n";
 
-            string NeutronCorrectionDataFile = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
+            string NeutronCorrectionDataFile =
+                    NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
 
             /* Load neutron correction variables (from momResS1), but not smearing variables */
             ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
 
             //<editor-fold desc="Safety checks for data files">
             if (!findSubstring(NeutronCorrectionDataFile, "Neutron") || findSubstring(NeutronCorrectionDataFile, "Proton")) {
-                cout << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+                cout
+                        << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(
+                        0);
             }
             //</editor-fold>
 
@@ -276,8 +284,10 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
             cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 run mode.\n";
             cout << "Loading correction from momResS1 variables & smearing from momResS2 variables...\n";
 
-            string NeutronCorrectionDataFile = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
-            string ProtonSmearingDataFile = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par";
+            string NeutronCorrectionDataFile =
+                    NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
+            string ProtonSmearingDataFile =
+                    NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par";
 
             /* Load neutron correction variables (from momResS1) */
             ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
@@ -287,11 +297,15 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
 
             //<editor-fold desc="Safety checks for data files">
             if (!findSubstring(NeutronCorrectionDataFile, "Neutron") || findSubstring(NeutronCorrectionDataFile, "Proton")) {
-                cout << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+                cout
+                        << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(
+                        0);
             }
 
             if (!findSubstring(ProtonSmearingDataFile, "Neutron") || findSubstring(ProtonSmearingDataFile, "Proton")) {
-                cout << "\n\nNeutronResolution::NeutronResolution: proton smearing variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+                cout
+                        << "\n\nNeutronResolution::NeutronResolution: proton smearing variables are not being loaded from neutron data! Exiting...\n\n", exit(
+                        0);
             }
             //</editor-fold>
 
@@ -305,8 +319,10 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
 
 //<editor-fold desc="SetMomResCalculations function">
 void NeutronResolution::SetMomResCalculations(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
-                                              const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
-                                              const string &NeutronResolutionDirectory, const string &SavePath, const double &DeltaSlices, const bool &VaryingDelta,
+                                              const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2,
+                                              bool const &Run_in_momResS2,
+                                              const string &NeutronResolutionDirectory, const string &SavePath, const double &DeltaSlices,
+                                              const bool &VaryingDelta,
                                               const string &SmearM, const string &CorrM, bool momRes_test, bool ForceSmallpResLimits) {
     SliceUpperMomLimKC = FD_nucleon_momentum_cut.GetUpperCutConst(), SliceLowerMomLimKC = FD_nucleon_momentum_cut.GetLowerCutConst();
     momResS2CalcMode = Calculate_momResS2, momResS2RunMode = Run_in_momResS2;
@@ -330,21 +346,27 @@ void NeutronResolution::SetMomResCalculations(const string &SampleName, const st
 // SetMomResSlicesByType function ----------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SetMomResSlicesByType function">
-void NeutronResolution::SetMomResSlicesByType(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
-                                              const string &MomentumType, const string &SavePath, const bool &VaryingDelta, const bool &momRes_test,
+void NeutronResolution::SetMomResSlicesByType(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
+                                              const double &ParticleMomTh,
+                                              const string &MomentumType, const string &SavePath, const bool &VaryingDelta,
+                                              const bool &momRes_test,
                                               const bool &ForceSmallpResLimits) {
     SetMomResSlices(SampleName, NucleonCutsDirectory, beamE, ParticleMomTh, SavePath, VaryingDelta, momRes_test, ForceSmallpResLimits,
-                    ResTLMomSlices, ResTLMomSlicesLimits, ResTLMomSlicesFitVar, ResTLMomSlicesHistVar, NumberOfSlices);
+                    ResTLMomSlices, ResTLMomSlicesLimits, ResTLMomSlicesFitVar, ResTLMomSlicesHistVar, TL_NumberOfSlices);
 }
 //</editor-fold>
 
 // SetMomResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SetMomResSlices function">
-void NeutronResolution::SetMomResSlices(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh, const string &SavePath,
-                                        const bool &VaryingDelta, const bool &momRes_test, const bool &ForceSmallpResLimits, vector <hPlot1D> &ResSlices0,
-                                        vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0,
-                                        int &NumberOfSlices0) {
+void
+NeutronResolution::SetMomResSlices(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
+                                   const string &SavePath,
+                                   const bool &VaryingDelta, const bool &momRes_test, const bool &ForceSmallpResLimits,
+                                   vector <hPlot1D> &ResSlices0,
+                                   vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0,
+                                   vector <DSCuts> &ResSlicesHistVar0,
+                                   int &NumberOfSlices0) {
     double Delta = delta, SliceLowerLim = ParticleMomTh, SliceUpperLim;
     SetUpperMomCut(SampleName, NucleonCutsDirectory);
 
@@ -402,7 +424,8 @@ void NeutronResolution::SetMomResSlices(const string &SampleName, const string &
             hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
-            hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "R_{nFD} = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
+            hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "R_{nFD} = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
+                                       SlicesSavePath, hSaveName,
                                        hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
             ResSliceFitCuts = DSCuts(("fit_" + hCutName), "FD", "Neutron", "1n", 0, -9999, 9999);
         } else if (isProton) {
@@ -416,12 +439,14 @@ void NeutronResolution::SetMomResSlices(const string &SampleName, const string &
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
             if (!momRes_test || ForceSmallpResLimits) {
-                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
+                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
+                                           SlicesSavePath, hSaveName,
                                            -0.2, 0.2, hSliceNumOfBin);
 //                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
 //                                           -0.75, 0.75, hSliceNumOfBin);
             } else {
-                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
+                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
+                                           SlicesSavePath, hSaveName,
                                            hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
             }
 
@@ -535,19 +560,23 @@ void NeutronResolution::SetMomResSlices(const string &SampleName, const string &
 // LoadFitParam function ----------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="LoadFitParam function">
-void NeutronResolution::LoadFitParam(const string &SampleName, const string &NucleonCutsDirectory, bool const &Calculate_momResS2, const string &NeutronResolutionDirectory) {
+void NeutronResolution::LoadFitParam(const string &SampleName, const string &NucleonCutsDirectory, bool const &Calculate_momResS2,
+                                     const string &NeutronResolutionDirectory) {
     if (isNeutron) {
         if (momResS2CalcMode && !momResS2RunMode) {
             cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 calculation mode. Loading momResS1 variables...\n";
 
-            string NeutronCorrectionDataFile = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
+            string NeutronCorrectionDataFile =
+                    NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
 
             /* Load neutron correction variables (from momResS1), but not smearing variables */
             ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
 
             //<editor-fold desc="Safety checks for data files">
             if (!findSubstring(NeutronCorrectionDataFile, "Neutron") || findSubstring(NeutronCorrectionDataFile, "Proton")) {
-                cout << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+                cout
+                        << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(
+                        0);
             }
             //</editor-fold>
 
@@ -556,8 +585,10 @@ void NeutronResolution::LoadFitParam(const string &SampleName, const string &Nuc
             cout << "\n\nNeutronResolution::NeutronResolution: running in momResS2 run mode.\n";
             cout << "Loading correction from momResS1 variables & smearing from momResS2 variables...\n";
 
-            string NeutronCorrectionDataFile = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
-            string ProtonSmearingDataFile = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par";
+            string NeutronCorrectionDataFile =
+                    NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
+            string ProtonSmearingDataFile =
+                    NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par";
 
             /* Load neutron correction variables (from momResS1) */
             ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
@@ -567,11 +598,15 @@ void NeutronResolution::LoadFitParam(const string &SampleName, const string &Nuc
 
             //<editor-fold desc="Safety checks for data files">
             if (!findSubstring(NeutronCorrectionDataFile, "Neutron") || findSubstring(NeutronCorrectionDataFile, "Proton")) {
-                cout << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+                cout
+                        << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(
+                        0);
             }
 
             if (!findSubstring(ProtonSmearingDataFile, "Neutron") || findSubstring(ProtonSmearingDataFile, "Proton")) {
-                cout << "\n\nNeutronResolution::NeutronResolution: proton smearing variables are not being loaded from neutron data! Exiting...\n\n", exit(0);
+                cout
+                        << "\n\nNeutronResolution::NeutronResolution: proton smearing variables are not being loaded from neutron data! Exiting...\n\n", exit(
+                        0);
             }
             //</editor-fold>
 
@@ -633,7 +668,8 @@ void NeutronResolution::ReadInputParam(const char *filename) {
 
 //<editor-fold desc="SetUpperMomCut function">
 void NeutronResolution::SetUpperMomCut(const string &SampleName, const string &NucleonCutsDirectory) {
-    ReadInputParam((NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
+    ReadInputParam(
+            (NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
     SliceUpperMomLim = Neutron_Momentum_cut;
 }
@@ -645,7 +681,7 @@ void NeutronResolution::SetUpperMomCut(const string &SampleName, const string &N
 void NeutronResolution::hFillResPlots(const double &TL_momentum, const double &Resolution, const double &Weight) {
     bool Printout = false;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         if ((TL_momentum >= ResTLMomSlicesLimits.at(i).at(0)) && (TL_momentum < ResTLMomSlicesLimits.at(i).at(1))) {
             ResTLMomSlices.at(i).hFill(Resolution, Weight);
 
@@ -663,7 +699,8 @@ void NeutronResolution::hFillResPlots(const double &TL_momentum, const double &R
 
 //<editor-fold desc="hFillResPlots function">
 void NeutronResolution::hFillResPlots(const double &Momentum, const double &Resolution, const double &Weight, vector <hPlot1D> &ResSlices0,
-                                      vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0, int &NumberOfSlices0) {
+                                      vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0,
+                                      vector <DSCuts> &ResSlicesHistVar0, int &NumberOfSlices0) {
     bool Printout = false;
 
     for (int i = 0; i < NumberOfSlices0; i++) {
@@ -685,8 +722,10 @@ void NeutronResolution::hFillResPlots(const double &Momentum, const double &Reso
 // hFillResPlotsByType function -----------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="hFillResPlotsByType function">
-void NeutronResolution::hFillResPlotsByType(const double &TL_momentum, const double &Reco_momentum, const double &Resolution, const double &Weight) {
-    hFillResPlots(TL_momentum, Resolution, Weight, ResTLMomSlices, ResTLMomSlicesLimits, ResTLMomSlicesFitVar, ResTLMomSlicesHistVar, NumberOfSlices);
+void NeutronResolution::hFillResPlotsByType(const double &TL_momentum, const double &Reco_momentum, const double &Resolution,
+                                            const double &Weight) {
+    hFillResPlots(TL_momentum, Resolution, Weight, ResTLMomSlices, ResTLMomSlicesLimits, ResTLMomSlicesFitVar, ResTLMomSlicesHistVar,
+                  TL_NumberOfSlices);
 }
 //</editor-fold>
 
@@ -710,7 +749,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
     SliceFitCanvas->SetBottomMargin(0.14), SliceFitCanvas->SetLeftMargin(0.18), SliceFitCanvas->SetRightMargin(0.12);
     SliceFitCanvas->cd();
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
 
         //<editor-fold desc="Setting sNameFlag">
         string sNameFlag;
@@ -788,7 +827,8 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
             double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
 
             TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam - 0.025, "NDC");
-            FitParam->SetBorderSize(1), FitParam->SetFillColor(0), FitParam->SetTextAlign(12), FitParam->SetTextFont(42), FitParam->SetTextSize(0.03);
+            FitParam->SetBorderSize(1), FitParam->SetFillColor(0), FitParam->SetTextAlign(12), FitParam->SetTextFont(42), FitParam->SetTextSize(
+                    0.03);
             FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 4)).c_str());
             FitParam->AddText(("Fit #mu = " + to_string_with_precision(FitMean, 4)).c_str());
             FitParam->AddText(("Fit #sigma = " + to_string_with_precision(FitStd, 4)).c_str());
@@ -828,8 +868,10 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
 //</editor-fold>
 
 //<editor-fold desc="SliceFitDrawAndSave function">
-void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const double &beamE, vector <hPlot1D> &ResSlices0, vector <vector<double>> &ResSlicesLimits0,
-                                            vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0, vector<int> &FittedSlices0, int &NumberOfSlices0) {
+void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const double &beamE, const string &MomentumType,
+                                            vector <hPlot1D> &ResSlices0, vector <vector<double>> &ResSlicesLimits0,
+                                            vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0, vector<int> &FittedSlices0,
+                                            int &NumberOfSlices0) {
     TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
     SliceFitCanvas->SetGrid();
     SliceFitCanvas->SetBottomMargin(0.14), SliceFitCanvas->SetLeftMargin(0.18), SliceFitCanvas->SetRightMargin(0.12);
@@ -913,7 +955,8 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
             double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
 
             TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam - 0.025, "NDC");
-            FitParam->SetBorderSize(1), FitParam->SetFillColor(0), FitParam->SetTextAlign(12), FitParam->SetTextFont(42), FitParam->SetTextSize(0.03);
+            FitParam->SetBorderSize(1), FitParam->SetFillColor(0);
+            FitParam->SetTextAlign(12), FitParam->SetTextFont(42), FitParam->SetTextSize(0.03);
             FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 4)).c_str());
             FitParam->AddText(("Fit #mu = " + to_string_with_precision(FitMean, 4)).c_str());
             FitParam->AddText(("Fit #sigma = " + to_string_with_precision(FitStd, 4)).c_str());
@@ -922,8 +965,9 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
             int SliceUpperLimPrecision;
             if (ResSlicesLimits0.at(i).at(1) == beamE) { SliceUpperLimPrecision = 3; } else { SliceUpperLimPrecision = 2; }
 
-            string hSlice_CloneSaveDir = ResSlices0.at(i).GetHistogram1DSaveNamePath() + "00_Fitted_res_slices/";
-            string hSlice_CloneSaveName = hSlice_CloneSaveDir + sNameFlag + ResSlices0.at(i).GetHistogram1DSaveName() + "_fitted.png";
+            string hSlice_CloneSaveDir = ResSlices0.at(i).GetHistogram1DSaveNamePath() + "00_Fitted_" + MomentumType + "_res_slices/";
+            string hSlice_CloneSaveName = hSlice_CloneSaveDir + sNameFlag + "_" + MomentumType + "_" +
+                                          ResSlices0.at(i).GetHistogram1DSaveName() + "_fitted.png";
             system(("mkdir -p " + hSlice_CloneSaveDir).c_str());
 
             auto ListOfFunctions = hSlice->GetListOfFunctions();
@@ -945,10 +989,12 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
         }
     }
 
-    Fitter_Std_pol1(), Fitter_Std_pol2(), Fitter_Std_pol3();
-    Fitter_Std_pol1_wKC(), Fitter_Std_pol2_wKC(), Fitter_Std_pol3_wKC();
-    Fitter_Corr_pol1(), Fitter_Corr_pol2(), Fitter_Corr_pol3();
-    Fitter_Corr_pol1_wKC(), Fitter_Corr_pol2_wKC(), Fitter_Corr_pol3_wKC();
+    PolyFitterByType(MomentumType, 1, "Corr", "noKC", TL_FitParam_Corr_pol1);
+    PolyFitterByType(MomentumType, 1, "Corr", "wKC", TL_FitParam_Corr_pol1_wKC);
+    PolyFitterByType(MomentumType, 2, "Corr", "noKC", TL_FitParam_Corr_pol2);
+    PolyFitterByType(MomentumType, 2, "Corr", "wKC", TL_FitParam_Corr_pol2_wKC);
+    PolyFitterByType(MomentumType, 3, "Corr", "noKC", TL_FitParam_Corr_pol3);
+    PolyFitterByType(MomentumType, 3, "Corr", "wKC", TL_FitParam_Corr_pol3_wKC);
 }
 //</editor-fold>
 
@@ -956,7 +1002,8 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
 
 //<editor-fold desc="SliceFitDrawAndSaveByType function">
 void NeutronResolution::SliceFitDrawAndSaveByType(const string &SampleName, const double &beamE) {
-    SliceFitDrawAndSave(SampleName, beamE, ResTLMomSlices, ResTLMomSlicesLimits, ResTLMomSlicesFitVar, ResTLMomSlicesHistVar, FittedTLMomSlices, NumberOfSlices);
+    SliceFitDrawAndSave(SampleName, beamE, "truth", ResTLMomSlices, ResTLMomSlicesLimits, ResTLMomSlicesFitVar, ResTLMomSlicesHistVar,
+                        FittedTLMomSlices, TL_NumberOfSlices);
 }
 //</editor-fold>
 
@@ -972,7 +1019,7 @@ void NeutronResolution::Fitter_Std_pol1() {
 
     vector<double> MeanPn, Pn_Std;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
@@ -1102,7 +1149,7 @@ void NeutronResolution::Fitter_Std_pol1_wKC() {
 
     vector<double> MeanPn, Pn_Std;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
@@ -1210,8 +1257,10 @@ void NeutronResolution::Fitter_Std_pol1_wKC() {
     FitParam->SetTextAlign(12);
     FitParam->SetTextFont(42);
     FitParam->SetTextSize(0.03);
-    FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol1_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol1_wKC_Error, 4)).c_str());
-    FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol1_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol1_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("A = " + to_string_with_precision(A_Std_pol1_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol1_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("B = " + to_string_with_precision(B_Std_pol1_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol1_wKC_Error, 4)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol1_wKC / NDF_Std_pol1_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -1236,7 +1285,7 @@ void NeutronResolution::Fitter_Std_pol2() {
 
     vector<double> MeanPn, Pn_Std;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
@@ -1369,7 +1418,7 @@ void NeutronResolution::Fitter_Std_pol2_wKC() {
 
     vector<double> MeanPn, Pn_Std;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
@@ -1464,9 +1513,11 @@ void NeutronResolution::Fitter_Std_pol2_wKC() {
     TLegendEntry *Std_pol2_wKC_legend_fit;
 
     if (isNeutron) {
-        Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
+        Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C",
+                                                                "l");
     } else if (isProton) {
-        Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
+        Std_pol2_wKC_legend_fit = Std_pol2_wKC_legend->AddEntry(f_Std_pol2_wKC, "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C",
+                                                                "l");
     }
 
     Std_pol2_wKC_legend->SetTextFont(42);
@@ -1479,9 +1530,12 @@ void NeutronResolution::Fitter_Std_pol2_wKC() {
     FitParam->SetTextAlign(12);
     FitParam->SetTextFont(42);
     FitParam->SetTextSize(0.03);
-    FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol2_wKC_Error, 4)).c_str());
-    FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol2_wKC_Error, 4)).c_str());
-    FitParam->AddText(("C = " + to_string_with_precision(C_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(C_Std_pol2_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("A = " + to_string_with_precision(A_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol2_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("B = " + to_string_with_precision(B_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol2_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("C = " + to_string_with_precision(C_Std_pol2_wKC, 4) + " #pm " + to_string_with_precision(C_Std_pol2_wKC_Error, 4)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol2_wKC / NDF_Std_pol2_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -1506,7 +1560,7 @@ void NeutronResolution::Fitter_Std_pol3() {
 
     vector<double> MeanPn, Pn_Std;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
@@ -1599,9 +1653,13 @@ void NeutronResolution::Fitter_Std_pol3() {
     TLegendEntry *Std_pol3_legend_fit;
 
     if (isNeutron) {
-        Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3, "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+        Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3,
+                                                        "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D",
+                                                        "l");
     } else if (isProton) {
-        Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3, "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+        Std_pol3_legend_fit = Std_pol3_legend->AddEntry(f_Std_pol3,
+                                                        "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D",
+                                                        "l");
     }
 
     Std_pol3_legend->SetTextFont(42);
@@ -1642,7 +1700,7 @@ void NeutronResolution::Fitter_Std_pol3_wKC() {
 
     vector<double> MeanPn, Pn_Std;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Std = ResTLMomSlicesFitVar.at(i).GetUpperCut();
 
@@ -1740,10 +1798,12 @@ void NeutronResolution::Fitter_Std_pol3_wKC() {
 
     if (isNeutron) {
         Std_pol3_wKC_legend_fit = Std_pol3_wKC_legend->AddEntry(f_Std_pol3_wKC,
-                                                                "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+                                                                "#sigma(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D",
+                                                                "l");
     } else if (isProton) {
         Std_pol3_wKC_legend_fit = Std_pol3_wKC_legend->AddEntry(f_Std_pol3_wKC,
-                                                                "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+                                                                "#sigma(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D",
+                                                                "l");
     }
 
     Std_pol3_wKC_legend->SetTextFont(42);
@@ -1756,10 +1816,14 @@ void NeutronResolution::Fitter_Std_pol3_wKC() {
     FitParam->SetTextAlign(12);
     FitParam->SetTextFont(42);
     FitParam->SetTextSize(0.03);
-    FitParam->AddText(("A = " + to_string_with_precision(A_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol3_wKC_Error, 4)).c_str());
-    FitParam->AddText(("B = " + to_string_with_precision(B_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol3_wKC_Error, 4)).c_str());
-    FitParam->AddText(("C = " + to_string_with_precision(C_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(C_Std_pol3_wKC_Error, 4)).c_str());
-    FitParam->AddText(("D = " + to_string_with_precision(D_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(D_Std_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("A = " + to_string_with_precision(A_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(A_Std_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("B = " + to_string_with_precision(B_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(B_Std_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("C = " + to_string_with_precision(C_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(C_Std_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("D = " + to_string_with_precision(D_Std_pol3_wKC, 4) + " #pm " + to_string_with_precision(D_Std_pol3_wKC_Error, 4)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Std_pol3_wKC / NDF_Std_pol3_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -1784,7 +1848,7 @@ void NeutronResolution::Fitter_Corr_pol1() {
 
     vector<double> MeanPn, Pn_Corr;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
@@ -1915,7 +1979,7 @@ void NeutronResolution::Fitter_Corr_pol1_wKC() {
 
     vector<double> MeanPn, Pn_Corr;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
@@ -2024,8 +2088,10 @@ void NeutronResolution::Fitter_Corr_pol1_wKC() {
     FitParam->SetTextAlign(12);
     FitParam->SetTextFont(42);
     FitParam->SetTextSize(0.03);
-    FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol1_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol1_wKC_Error, 4)).c_str());
-    FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol1_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol1_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("A = " + to_string_with_precision(A_Corr_pol1_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol1_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("B = " + to_string_with_precision(B_Corr_pol1_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol1_wKC_Error, 4)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol1_wKC / NDF_Corr_pol1_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -2050,7 +2116,7 @@ void NeutronResolution::Fitter_Corr_pol2() {
 
     vector<double> MeanPn, Pn_Corr;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
@@ -2184,7 +2250,7 @@ void NeutronResolution::Fitter_Corr_pol2_wKC() {
 
     vector<double> MeanPn, Pn_Corr;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
@@ -2280,9 +2346,11 @@ void NeutronResolution::Fitter_Corr_pol2_wKC() {
     TLegendEntry *Corr_pol2_wKC_legend_fit;
 
     if (isNeutron) {
-        Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C", "l");
+        Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{2} + B#bar{P}_{nFD} + C",
+                                                                  "l");
     } else if (isProton) {
-        Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C", "l");
+        Corr_pol2_wKC_legend_fit = Corr_pol2_wKC_legend->AddEntry(f_Corr_pol2_wKC, "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{2} + B#bar{P}_{pFD} + C",
+                                                                  "l");
     }
 
     Corr_pol2_wKC_legend->SetTextFont(42);
@@ -2295,9 +2363,12 @@ void NeutronResolution::Fitter_Corr_pol2_wKC() {
     FitParam->SetTextAlign(12);
     FitParam->SetTextFont(42);
     FitParam->SetTextSize(0.03);
-    FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol2_wKC_Error, 4)).c_str());
-    FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol2_wKC_Error, 4)).c_str());
-    FitParam->AddText(("C = " + to_string_with_precision(C_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(C_Corr_pol2_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("A = " + to_string_with_precision(A_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol2_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("B = " + to_string_with_precision(B_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol2_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("C = " + to_string_with_precision(C_Corr_pol2_wKC, 4) + " #pm " + to_string_with_precision(C_Corr_pol2_wKC_Error, 4)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol2_wKC / NDF_Corr_pol2_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -2322,7 +2393,7 @@ void NeutronResolution::Fitter_Corr_pol3() {
 
     vector<double> MeanPn, Pn_Corr;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
@@ -2416,9 +2487,13 @@ void NeutronResolution::Fitter_Corr_pol3() {
     TLegendEntry *Corr_pol3_legend_fit;
 
     if (isNeutron) {
-        Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3, "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+        Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3,
+                                                          "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D",
+                                                          "l");
     } else if (isProton) {
-        Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3, "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+        Corr_pol3_legend_fit = Corr_pol3_legend->AddEntry(f_Corr_pol3,
+                                                          "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D",
+                                                          "l");
     }
 
     Corr_pol3_legend->SetTextFont(42);
@@ -2459,7 +2534,7 @@ void NeutronResolution::Fitter_Corr_pol3_wKC() {
 
     vector<double> MeanPn, Pn_Corr;
 
-    for (int i = 0; i < NumberOfSlices; i++) {
+    for (int i = 0; i < TL_NumberOfSlices; i++) {
         double Mean = (ResTLMomSlicesLimits.at(i).at(1) + ResTLMomSlicesLimits.at(i).at(0)) / 2;
         double Corr = ResTLMomSlicesFitVar.at(i).GetMean();
 
@@ -2557,10 +2632,12 @@ void NeutronResolution::Fitter_Corr_pol3_wKC() {
     TLegendEntry *Corr_pol3_wKC_legend_fit;
     if (isNeutron) {
         Corr_pol3_wKC_legend_fit = Corr_pol3_wKC_legend->AddEntry(f_Corr_pol3_wKC,
-                                                                  "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D", "l");
+                                                                  "#mu(#bar{P}_{nFD}) = A#bar{P}_{nFD}^{3} + B#bar{P}_{nFD}^{2} + C#bar{P}_{nFD} + D",
+                                                                  "l");
     } else if (isProton) {
         Corr_pol3_wKC_legend_fit = Corr_pol3_wKC_legend->AddEntry(f_Corr_pol3_wKC,
-                                                                  "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D", "l");
+                                                                  "#mu(#bar{P}_{pFD}) = A#bar{P}_{pFD}^{3} + B#bar{P}_{pFD}^{2} + C#bar{P}_{pFD} + D",
+                                                                  "l");
     }
 
     Corr_pol3_wKC_legend->SetTextFont(42);
@@ -2573,10 +2650,14 @@ void NeutronResolution::Fitter_Corr_pol3_wKC() {
     FitParam->SetTextAlign(12);
     FitParam->SetTextFont(42);
     FitParam->SetTextSize(0.03);
-    FitParam->AddText(("A = " + to_string_with_precision(A_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol3_wKC_Error, 4)).c_str());
-    FitParam->AddText(("B = " + to_string_with_precision(B_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol3_wKC_Error, 4)).c_str());
-    FitParam->AddText(("C = " + to_string_with_precision(C_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(C_Corr_pol3_wKC_Error, 4)).c_str());
-    FitParam->AddText(("D = " + to_string_with_precision(D_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(D_Corr_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("A = " + to_string_with_precision(A_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(A_Corr_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("B = " + to_string_with_precision(B_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(B_Corr_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("C = " + to_string_with_precision(C_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(C_Corr_pol3_wKC_Error, 4)).c_str());
+    FitParam->AddText(
+            ("D = " + to_string_with_precision(D_Corr_pol3_wKC, 4) + " #pm " + to_string_with_precision(D_Corr_pol3_wKC_Error, 4)).c_str());
     FitParam->AddText(("#chi^{2}/NDF = " + to_string(ChiSquare_Corr_pol3_wKC / NDF_Corr_pol3_wKC)).c_str());
     FitParam->Draw("same");
 
@@ -2593,6 +2674,447 @@ void NeutronResolution::Fitter_Corr_pol3_wKC() {
 }
 //</editor-fold>
 
+//<editor-fold desc="PolyFitterByType function">
+void NeutronResolution::PolyFitterByType(const string &MomentumType, const int &PolynomialDegree, const string &FitType,
+                                         const string &MomentumFitRange, vector <vector<double>> &FitParamResults) {
+    cout << "\n\nPolyFitterByType variables:\n";
+    bool PrintOut = false;
+    bool PlotPoints = false;
+
+    //<editor-fold desc="Setting fitter particle">
+    string FitterParticle;
+
+    if (isNeutron) {
+        FitterParticle = "nFD";
+    } else if (isProton) {
+        FitterParticle = "pFD";
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Setting polynomial">
+    string PolynomialFuncName, PolynomialFuncStruct;
+
+    if (MomentumFitRange == "noKC") {
+        if (PolynomialDegree == 1) {
+            PolynomialFuncName = MomentumType + "_f_" + FitType +
+                                 "_pol1", PolynomialFuncStruct = "[0] * x + [1]"; // A*x + B
+        } else if (PolynomialDegree == 2) {
+            PolynomialFuncName = MomentumType + "_f_" + FitType +
+                                 "_pol2", PolynomialFuncStruct = "[0] * x * x + [1] * x + [2]"; // A*x*x + B*x + C
+        } else if (PolynomialDegree == 3) {
+            PolynomialFuncName = MomentumType + "_f_" + FitType +
+                                 "_pol3", PolynomialFuncStruct = "[0] * x * x * x + [1] * x * x + [2] * x + [3]"; // A*x*x*x + B*x*x + C*x + D
+        }
+    } else if (MomentumFitRange == "wKC") {
+        if (PolynomialDegree == 1) {
+            PolynomialFuncName = MomentumType + "_f_" + FitType +
+                                 "_pol1_wKC", PolynomialFuncStruct = "[0] * x + [1]"; // A*x + B
+        } else if (PolynomialDegree == 2) {
+            PolynomialFuncName = MomentumType + "_f_" + FitType +
+                                 "_pol2_wKC", PolynomialFuncStruct = "[0] * x * x + [1] * x + [2]"; // A*x*x + B*x + C
+        } else if (PolynomialDegree == 3) {
+            PolynomialFuncName = MomentumType + "_f_" + FitType +
+                                 "_pol3_wKC", PolynomialFuncStruct = "[0] * x * x * x + [1] * x * x + [2] * x + [3]"; // A*x*x*x + B*x*x + C*x + D
+        }
+    } else {
+        cout << "\n\nNeutronResolution::PolyFitterByType: MomentumFitRange is illegal! Exiting...\n\n", exit(0);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Setting fitted slices">
+    vector <hPlot1D> ResSlices0;
+    vector <vector<double>> ResSlicesLimits0;
+    vector <DSCuts> ResSlicesFitVar0, ResSlicesHistVar0;
+    int NumberOfSlices0;
+    vector<int> FittedSlices0;
+
+    if (MomentumType == "truth") {
+        ResSlices0 = ResTLMomSlices;
+        ResSlicesLimits0 = ResTLMomSlicesLimits, ResSlicesFitVar0 = ResTLMomSlicesFitVar;
+        ResSlicesHistVar0 = ResTLMomSlicesHistVar;
+        NumberOfSlices0 = TL_NumberOfSlices, FittedSlices0 = FittedTLMomSlices;
+    } else if (MomentumType == "Reco") {
+        ResSlices0 = ResRecoMomSlices;
+        ResSlicesLimits0 = ResRecoMomSlicesLimits, ResSlicesFitVar0 = ResRecoMomSlicesFitVar;
+        ResSlicesHistVar0 = ResRecoMomSlicesHistVar;
+        NumberOfSlices0 = Reco_NumberOfSlices, FittedSlices0 = FittedRecoMomSlices;
+    } else {
+        cout << "\n\nNeutronResolution::PolyFitterByType: MomentumType is illegal! Exiting...\n\n", exit(0);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Setting variable to fit">
+    string FittedVar;
+
+    if (FitType == "Std") {
+        FittedVar = "#sigma";
+    } else if (FitType == "Corr") {
+        FittedVar = "#mu";
+    } else {
+        cout << "\n\nNeutronResolution::PolyFitterByType: FitType is illegal! Exiting...\n\n", exit(0);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Setting plot x and y data">
+    vector<double> MeanPn, Pn_FitVar;
+
+    for (int i = 0; i < NumberOfSlices0; i++) {
+        double Mean = (ResSlicesLimits0.at(i).at(1) + ResSlicesLimits0.at(i).at(0)) / 2;
+
+        double Std = ResSlicesFitVar0.at(i).GetUpperCut();
+        double Corr = ResSlicesFitVar0.at(i).GetMean();
+
+        if (MomentumFitRange == "wKC") {
+            if ((Mean >= SliceLowerMomLimKC) && (Mean <= SliceUpperMomLimKC)) {
+                if (FitType == "Std") {
+                    Pn_FitVar.push_back(Std); //TODO: add a mechanism to ignore failed fits
+                    MeanPn.push_back(Mean);
+
+                    if (PrintOut) {
+                        cout << "\nMean = " << Mean << "\n";
+                        cout << "Std = " << Std << "\n";
+                        cout << "Corr = " << Corr << "\n";
+                    }
+                } else if (FitType == "Corr") {
+                    Pn_FitVar.push_back(Corr); //TODO: add a mechanism to ignore failed fits
+                    MeanPn.push_back(Mean);
+
+                    if (PrintOut) {
+                        cout << "\nMean = " << Mean << "\n";
+                        cout << "Std = " << Std << "\n";
+                        cout << "Corr = " << Corr << "\n";
+                    }
+                }
+            }
+        } else {
+            if (FitType == "Std") {
+                Pn_FitVar.push_back(Std); //TODO: add a mechanism to ignore failed fits
+                MeanPn.push_back(Mean);
+
+                if (PrintOut) {
+                    cout << "\nMean = " << Mean << "\n";
+                    cout << "Std = " << Std << "\n";
+                    cout << "Corr = " << Corr << "\n";
+                }
+            } else if (FitType == "Corr") {
+                Pn_FitVar.push_back(Corr); //TODO: add a mechanism to ignore failed fits
+                MeanPn.push_back(Mean);
+
+                if (PrintOut) {
+                    cout << "\nMean = " << Mean << "\n";
+                    cout << "Std = " << Std << "\n";
+                    cout << "Corr = " << Corr << "\n";
+                }
+            }
+        }
+    }
+
+    if (PrintOut) {
+        cout << "\nMeanPn.size() = " << MeanPn.size() << "\n";
+        cout << "Pn_FitVar.size() = " << Pn_FitVar.size() << "\n";
+        cout << "FitType = " << FitType << "\n\n";
+    }
+
+    //<editor-fold desc="Safety check">
+    if (MeanPn.size() != Pn_FitVar.size()) {
+        cout << "\n\nNeutronResolution::Fitter_Std_pol1: x and y data are of different lengths! Exiting...\n\n", exit(0);
+    }
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Setting fit canvas">
+    TCanvas *Fit_Canvas = new TCanvas("Fit_Canvas", "Fit_Canvas", 1000, 750);
+    Fit_Canvas->cd();
+    Fit_Canvas->SetGrid();
+    Fit_Canvas->SetBottomMargin(0.14), Fit_Canvas->SetLeftMargin(0.16), Fit_Canvas->SetRightMargin(0.12);
+    //</editor-fold>
+
+    //<editor-fold desc="Setting graph & preforming the fit">
+    TGraph *Graph1D = new TGraph();
+    Graph1D->SetName(PolynomialFuncName.c_str());
+
+    for (int i = 0; i < MeanPn.size(); i++) {
+        double x = MeanPn.at(i), y = Pn_FitVar.at(i);
+
+        Graph1D->AddPoint(x, y);
+
+        if (PlotPoints) {
+            TLatex *latex = new TLatex(x, y, ("(" + to_string(x) + " , " + to_string(y) + ")").c_str());
+            latex->SetTextSize(0.02);
+            Graph1D->GetListOfFunctions()->Add(latex);
+        }
+    }
+
+    Graph1D->GetXaxis()->SetTitleSize(0.06), Graph1D->GetXaxis()->SetLabelSize(0.0425), Graph1D->GetXaxis()->CenterTitle(true);
+    Graph1D->GetYaxis()->SetTitleSize(0.06), Graph1D->GetYaxis()->SetLabelSize(0.0425), Graph1D->GetYaxis()->CenterTitle(true);
+
+    Graph1D->GetXaxis()->SetTitle(("#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} [GeV/c]").c_str());
+
+    if (FitType == "Std") {
+        Graph1D->SetTitle(("Proton smear fit (" + MomentumFitRange + ", linear fit)").c_str());
+        Graph1D->GetYaxis()->SetTitle(("R_{" + FitterParticle + "} fit width").c_str());
+    } else if (FitType == "Corr") {
+        if (isNeutron) {
+            Graph1D->GetYaxis()->SetTitle(("R_{" + FitterParticle + "} fit mean").c_str());
+            Graph1D->SetTitle(("Neutron correction fit (" + MomentumFitRange + ", linear fit)").c_str());
+        } else if (isProton) {
+            Graph1D->GetYaxis()->SetTitle(("R_{" + FitterParticle + "} fit mean").c_str());
+            Graph1D->SetTitle(("Proton correction fit (" + MomentumFitRange + ", linear fit)").c_str());
+        }
+    }
+
+    TF1 *PolynomialFunc = new TF1(PolynomialFuncName.c_str(), PolynomialFuncStruct.c_str());
+
+    Graph1D->Fit(PolynomialFunc);
+    Graph1D->Draw("ap");
+    Graph1D->SetMarkerStyle(21);
+    //</editor-fold>
+
+    //<editor-fold desc="Log fit results to variables">
+    vector<double> FitVarResults, FitVarResultsErrors, FitVarResultsGoodness;
+
+    if (PolynomialDegree == 1) {
+        FitVarResults.push_back(PolynomialFunc->GetParameter(0)); // get [0]
+        FitVarResults.push_back(PolynomialFunc->GetParameter(1)); // get [1]
+        FitParamResults.push_back(FitVarResults);
+
+        FitVarResultsErrors.push_back(PolynomialFunc->GetParError(0)); // get [0]
+        FitVarResultsErrors.push_back(PolynomialFunc->GetParError(1)); // get [1]
+        FitParamResults.push_back(FitVarResultsErrors);
+
+        FitVarResultsGoodness.push_back(PolynomialFunc->GetChisquare()); // ChiSquare
+        FitVarResultsGoodness.push_back(PolynomialFunc->GetNDF()); // NDF
+        FitParamResults.push_back(FitVarResultsGoodness);
+    } else if (PolynomialDegree == 2) {
+        FitVarResults.push_back(PolynomialFunc->GetParameter(0)); // get [0]
+        FitVarResults.push_back(PolynomialFunc->GetParameter(1)); // get [1]
+        FitVarResults.push_back(PolynomialFunc->GetParameter(2)); // get [2]
+        FitParamResults.push_back(FitVarResults);
+
+        FitVarResultsErrors.push_back(PolynomialFunc->GetParError(0)); // get [0]
+        FitVarResultsErrors.push_back(PolynomialFunc->GetParError(1)); // get [1]
+        FitVarResultsErrors.push_back(PolynomialFunc->GetParError(2)); // get [2]
+        FitParamResults.push_back(FitVarResultsErrors);
+
+        FitVarResultsGoodness.push_back(PolynomialFunc->GetChisquare()); // ChiSquare
+        FitVarResultsGoodness.push_back(PolynomialFunc->GetNDF()); // NDF
+        FitParamResults.push_back(FitVarResultsGoodness);
+    } else if (PolynomialDegree == 3) {
+        FitVarResults.push_back(PolynomialFunc->GetParameter(0)); // get [0]
+        FitVarResults.push_back(PolynomialFunc->GetParameter(1)); // get [1]
+        FitVarResults.push_back(PolynomialFunc->GetParameter(2)); // get [2]
+        FitVarResults.push_back(PolynomialFunc->GetParameter(3)); // get [3]
+        FitParamResults.push_back(FitVarResults);
+
+        FitVarResultsErrors.push_back(PolynomialFunc->GetParError(0)); // get [0]
+        FitVarResultsErrors.push_back(PolynomialFunc->GetParError(1)); // get [1]
+        FitVarResultsErrors.push_back(PolynomialFunc->GetParError(2)); // get [2]
+        FitVarResultsErrors.push_back(PolynomialFunc->GetParError(3)); // get [3]
+        FitParamResults.push_back(FitVarResultsErrors);
+
+        FitVarResultsGoodness.push_back(PolynomialFunc->GetChisquare()); // ChiSquare
+        FitVarResultsGoodness.push_back(PolynomialFunc->GetNDF()); // NDF
+        FitParamResults.push_back(FitVarResultsGoodness);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Setting legened">
+
+    //<editor-fold desc="Legened location">
+    double x_1, y_1, x_2, y_2;
+    double x_1_legend, y_1_legend, x_2_legend, y_2_legend;
+    double x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam;
+    double x_1_Offset_Legened = 0.075, x_1_Offset_FitParam = 0.0375;
+
+    if (PolynomialDegree == 3) { x_1_Offset_Legened = x_1_Offset_Legened * 2; }
+
+    if (FitType == "Std") {
+        if (MomentumFitRange == "noKC") {
+            if (PolynomialDegree == 1) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025;
+            } else if (PolynomialDegree == 2) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1 + 0.1, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025 - 0.05;
+            } else if (PolynomialDegree == 3) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1 + 0.1 + 0.075, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025 - 0.05 - 0.05;
+            }
+        } else if (MomentumFitRange == "wKC") {
+            if (PolynomialDegree == 1) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025;
+            } else if (PolynomialDegree == 2) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1 + 0.1, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025 - 0.05;
+            } else if (PolynomialDegree == 3) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1 + 0.1 + 0.075, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025 - 0.05 - 0.05;
+            }
+        }
+    } else if (FitType == "Corr") {
+        if (MomentumFitRange == "noKC") {
+            if (PolynomialDegree == 1) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025;
+            } else if (PolynomialDegree == 2) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1 + 0.1, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025 - 0.05;
+            } else if (PolynomialDegree == 3) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1 + 0.1 + 0.075, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025 - 0.05 - 0.05;
+            }
+        } else if (MomentumFitRange == "wKC") {
+            if (PolynomialDegree == 1) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025;
+            } else if (PolynomialDegree == 2) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1 + 0.1, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025 - 0.05;
+            } else if (PolynomialDegree == 3) {
+                x_1 = gStyle->GetStatX() - 0.6, y_1 = gStyle->GetStatY() - 0.2;
+                x_2 = gStyle->GetStatX() - 0.2 - 0.6, y_2 = gStyle->GetStatY() - 0.3;
+                x_1_legend = x_1 + 0.1 + 0.075, y_1_legend = y_1 + 0.125;
+                x_2_legend = x_2, y_2_legend = y_2 + 0.15;
+                x_1_FitParam = x_1, y_1_FitParam = y_1 + 0.025;
+                x_2_FitParam = x_2, y_2_FitParam = y_2 + 0.025 - 0.05 - 0.05;
+            }
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Setting fit variable legened">
+    auto Graph1D_Legend = new TLegend(x_1_legend + x_1_Offset_Legened, y_1_legend, x_2_legend, y_2_legend);
+
+    TLegendEntry *Graph1D_Legend_fit;
+
+    string LegenedPolyStruct;
+
+    if (PolynomialDegree == 1) {
+        LegenedPolyStruct = FittedVar +
+                            "(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}) = A#bar{P}^{" + MomentumType + "}_{" + FitterParticle +
+                            "} + B";
+    } else if (PolynomialDegree == 2) {
+        LegenedPolyStruct = FittedVar +
+                            "(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}) = A(#bar{P}^{" + MomentumType + "}_{" + FitterParticle +
+                            "})^{2} + B#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} + C";
+    } else if (PolynomialDegree == 3) {
+        LegenedPolyStruct = FittedVar +
+                            "(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}) = A(#bar{P}^{" + MomentumType + "}_{" + FitterParticle +
+                            "})^{3} + B(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "})^{2} + C#bar{P}^{" + MomentumType + "}_{" +
+                            FitterParticle + "} + D";
+    }
+
+    Graph1D_Legend_fit = Graph1D_Legend->AddEntry(PolynomialFunc, LegenedPolyStruct.c_str(), "l");
+
+    Graph1D_Legend->SetTextFont(42);
+    Graph1D_Legend->SetTextSize(0.03);
+    Graph1D_Legend->Draw("same");
+    //</editor-fold>
+
+    //<editor-fold desc="Setting fit variable chart">
+    TPaveText *FitParam = new TPaveText(x_1_FitParam + x_1_Offset_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
+    FitParam->SetBorderSize(1), FitParam->SetFillColor(0), FitParam->SetTextAlign(12), FitParam->SetTextFont(42), FitParam->SetTextSize(0.03);
+
+    if (PolynomialDegree == 1) {
+        FitParam->AddText(("A = " + to_string_with_precision(FitParamResults.at(0).at(0), 4) +
+                           " #pm " + to_string_with_precision(FitParamResults.at(1).at(0), 4)).c_str());
+        FitParam->AddText(("B = " + to_string_with_precision(FitParamResults.at(0).at(1), 4) +
+                           " #pm " + to_string_with_precision(FitParamResults.at(1).at(1), 4)).c_str());
+    } else if (PolynomialDegree == 2) {
+        FitParam->AddText(("A = " + to_string_with_precision(FitParamResults.at(0).at(0), 4) +
+                           " #pm " + to_string_with_precision(FitParamResults.at(1).at(0), 4)).c_str());
+        FitParam->AddText(("B = " + to_string_with_precision(FitParamResults.at(0).at(1), 4) +
+                           " #pm " + to_string_with_precision(FitParamResults.at(1).at(1), 4)).c_str());
+        FitParam->AddText(("C = " + to_string_with_precision(FitParamResults.at(0).at(2), 4) +
+                           " #pm " + to_string_with_precision(FitParamResults.at(1).at(2), 4)).c_str());
+    } else if (PolynomialDegree == 3) {
+        FitParam->AddText(("A = " + to_string_with_precision(FitParamResults.at(0).at(0), 4) +
+                           " #pm " + to_string_with_precision(FitParamResults.at(1).at(0), 4)).c_str());
+        FitParam->AddText(("B = " + to_string_with_precision(FitParamResults.at(0).at(1), 4) +
+                           " #pm " + to_string_with_precision(FitParamResults.at(1).at(1), 4)).c_str());
+        FitParam->AddText(("C = " + to_string_with_precision(FitParamResults.at(0).at(2), 4) +
+                           " #pm " + to_string_with_precision(FitParamResults.at(1).at(2), 4)).c_str());
+        FitParam->AddText(("D = " + to_string_with_precision(FitParamResults.at(0).at(3), 4) +
+                           " #pm " + to_string_with_precision(FitParamResults.at(1).at(3), 4)).c_str());
+    }
+
+    FitParam->AddText(("#chi^{2}/NDF = " + to_string(FitParamResults.at(2).at(0) / FitParamResults.at(2).at(1))).c_str());
+    FitParam->Draw("same");
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Save graph and exit">
+    cout << "\n\n";
+
+    auto ListOfFunctions = Graph1D->GetListOfFunctions();
+    ListOfFunctions->Add((TLegend *) Graph1D_Legend);
+    ListOfFunctions->Add((TPaveText *) FitParam);
+
+    if (isNeutron) { FittedNeutronResSlicesWidth->Add(Graph1D); } else if (isProton) { FittedProtonResSlicesWidth->Add(Graph1D); }
+
+    string FitsDir = SlicesSavePath + "/" + "Graph1D_" + MomentumType + "_fits";
+    string FitsDirByType = FitsDir + "/" + MomentumType + "_" + FitType + "_fits";
+    TString GraphSaveName0 = FitsDirByType + "/" + "0" + PolynomialDegree + "_Fit_" + FitType + "_pol" + PolynomialDegree +
+                             "_" + MomentumFitRange + ".png";
+
+    system(("mkdir -p " + FitsDir).c_str());
+    system(("mkdir -p " + FitsDirByType).c_str());
+
+    cout << "\n", Fit_Canvas->SaveAs(GraphSaveName0);
+    Fit_Canvas->Clear();
+    delete Fit_Canvas;
+    //</editor-fold>
+
+}
+//</editor-fold>
+
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="DrawAndSaveResSlices function">
@@ -2601,12 +3123,13 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, TCanvas *
     string SampleNameTemp = SampleName;
 
     if (isNeutron) {
-        ResSlicePlots->Add(FittedNeutronResSlices), ResSlicePlots->Add(FittedNeutronResSlicesWidth), ResSlicePlots->Add(FittedNeutronResSlicesMean);
+        ResSlicePlots->Add(FittedNeutronResSlices), ResSlicePlots->Add(FittedNeutronResSlicesWidth), ResSlicePlots->Add(
+                FittedNeutronResSlicesMean);
     } else if (isProton) {
         ResSlicePlots->Add(FittedProtonResSlices), ResSlicePlots->Add(FittedProtonResSlicesWidth), ResSlicePlots->Add(FittedProtonResSlicesMean);
     }
 
-//    for (int i = 0; i < NumberOfSlices; i++) {
+//    for (int i = 0; i < TL_NumberOfSlices; i++) {
 ////        ResSlices.at(i).ClearListOfFunctions(), ResSlices.at(i).SetShowPlotCuts();
 //        ResSlices.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, ResSlicePlots, false, true, 1., 9999, 9999, 0, false);
 //    }
@@ -2882,7 +3405,8 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
     Neutron_res_Hist_param << "#delta:\t\t" << delta << "\n";
     //</editor-fold>
 
-    Neutron_res_Hist_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma\n\n"; //TODO: confirm order!
+    Neutron_res_Hist_param
+            << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma\n\n"; //TODO: confirm order!
 
     for (DSCuts ResSlice: ResTLMomSlicesHistVar) {
         Neutron_res_Hist_param << ResSlice.GetCutVariable() << "\t\t\t" << ResSlice.GetSliceNumber() << ":" << ResSlice.GetSliceLowerb() << ":"
@@ -2902,7 +3426,8 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadResDataParam function">
-void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory,
+void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName,
+                                         const string &NucleonCutsDirectory,
                                          const bool &Load_correction, const bool &Load_smearing) {
     ifstream infile;
     infile.open(filename);
@@ -3015,12 +3540,14 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         if (findSubstring(parameter, "pol1_wKC") && findSubstring(CorrMode, "pol1_wKC")) {
                             if (parameter == "A_Corr_pol1_wKC") {
                                 Loaded_A_Corr_pol1_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1_wKC");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1_wKC), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_A_Corr_pol1_wKC");
                             } else if (parameter == "A_Corr_pol1_wKC_Error") {
                                 Loaded_A_Corr_pol1_wKC_Error = stod(parameter2);
                             } else if (parameter == "B_Corr_pol1_wKC") {
                                 Loaded_B_Corr_pol1_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol1_wKC");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1_wKC), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_B_Corr_pol1_wKC");
                             } else if (parameter == "B_Corr_pol1_wKC_Error") {
                                 Loaded_B_Corr_pol1_wKC_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Corr_pol1_wKC") {
@@ -3031,12 +3558,14 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         } else if (findSubstring(parameter, "pol1") && !findSubstring(CorrMode, "pol1_wKC")) {
                             if (parameter == "A_Corr_pol1") {
                                 Loaded_A_Corr_pol1 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol1");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_A_Corr_pol1");
                             } else if (parameter == "A_Corr_pol1_Error") {
                                 Loaded_A_Corr_pol1_Error = stod(parameter2);
                             } else if (parameter == "B_Corr_pol1") {
                                 Loaded_B_Corr_pol1 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol1");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_B_Corr_pol1");
                             } else if (parameter == "B_Corr_pol1_Error") {
                                 Loaded_B_Corr_pol1_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Corr_pol1") {
@@ -3049,17 +3578,20 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         if (findSubstring(parameter, "pol2_wKC") && findSubstring(CorrMode, "pol2_wKC")) {
                             if (parameter == "A_Corr_pol2_wKC") {
                                 Loaded_A_Corr_pol2_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2_wKC");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_A_Corr_pol2_wKC");
                             } else if (parameter == "A_Corr_pol2_wKC_Error") {
                                 Loaded_A_Corr_pol2_wKC_Error = stod(parameter2);
                             } else if (parameter == "B_Corr_pol2_wKC") {
                                 Loaded_B_Corr_pol2_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol2_wKC");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_B_Corr_pol2_wKC");
                             } else if (parameter == "B_Corr_pol2_wKC_Error") {
                                 Loaded_B_Corr_pol2_wKC_Error = stod(parameter2);
                             } else if (parameter == "C_Corr_pol2_wKC") {
                                 Loaded_C_Corr_pol2_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol2_wKC");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_C_Corr_pol2_wKC");
                             } else if (parameter == "C_Corr_pol2_wKC_Error") {
                                 Loaded_C_Corr_pol2_wKC_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Corr_pol2_wKC") {
@@ -3070,17 +3602,20 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         } else if (findSubstring(parameter, "pol2") && !findSubstring(CorrMode, "pol2_wKC")) {
                             if (parameter == "A_Corr_pol2") {
                                 Loaded_A_Corr_pol2 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol2");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_A_Corr_pol2");
                             } else if (parameter == "A_Corr_pol2_Error") {
                                 Loaded_A_Corr_pol2_Error = stod(parameter2);
                             } else if (parameter == "B_Corr_pol2") {
                                 Loaded_B_Corr_pol2 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol2");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_B_Corr_pol2");
                             } else if (parameter == "B_Corr_pol2_Error") {
                                 Loaded_B_Corr_pol2_Error = stod(parameter2);
                             } else if (parameter == "C_Corr_pol2") {
                                 Loaded_C_Corr_pol2 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol2");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_C_Corr_pol2");
                             } else if (parameter == "C_Corr_pol2_Error") {
                                 Loaded_C_Corr_pol2_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Corr_pol2") {
@@ -3093,22 +3628,26 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         if (findSubstring(parameter, "pol3_wKC") && findSubstring(CorrMode, "pol3_wKC")) {
                             if (parameter == "A_Corr_pol3_wKC") {
                                 Loaded_A_Corr_pol3_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3_wKC");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_A_Corr_pol3_wKC");
                             } else if (parameter == "A_Corr_pol3_wKC_Error") {
                                 Loaded_A_Corr_pol3_wKC_Error = stod(parameter2);
                             } else if (parameter == "B_Corr_pol3_wKC") {
                                 Loaded_B_Corr_pol3_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol3_wKC");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_B_Corr_pol3_wKC");
                             } else if (parameter == "B_Corr_pol3_wKC_Error") {
                                 Loaded_B_Corr_pol3_wKC_Error = stod(parameter2);
                             } else if (parameter == "C_Corr_pol3_wKC") {
                                 Loaded_C_Corr_pol3_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol3_wKC");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_C_Corr_pol3_wKC");
                             } else if (parameter == "C_Corr_pol3_wKC_Error") {
                                 Loaded_C_Corr_pol3_wKC_Error = stod(parameter2);
                             } else if (parameter == "D_Corr_pol3_wKC") {
                                 Loaded_D_Corr_pol3_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back("Loaded_D_Corr_pol3_wKC");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_D_Corr_pol3_wKC");
                             } else if (parameter == "D_Corr_pol3_wKC_Error") {
                                 Loaded_D_Corr_pol3_wKC_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Corr_pol3_wKC") {
@@ -3119,22 +3658,26 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         } else if (findSubstring(parameter, "pol3") && !findSubstring(CorrMode, "pol3_wKC")) {
                             if (parameter == "A_Corr_pol3") {
                                 Loaded_A_Corr_pol3 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_A_Corr_pol3");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_A_Corr_pol3");
                             } else if (parameter == "A_Corr_pol3_Error") {
                                 Loaded_A_Corr_pol3_Error = stod(parameter2);
                             } else if (parameter == "B_Corr_pol3") {
                                 Loaded_B_Corr_pol3 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_B_Corr_pol3");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_B_Corr_pol3");
                             } else if (parameter == "B_Corr_pol3_Error") {
                                 Loaded_B_Corr_pol3_Error = stod(parameter2);
                             } else if (parameter == "C_Corr_pol3") {
                                 Loaded_C_Corr_pol3 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_C_Corr_pol3");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_C_Corr_pol3");
                             } else if (parameter == "C_Corr_pol3_Error") {
                                 Loaded_C_Corr_pol3_Error = stod(parameter2);
                             } else if (parameter == "D_Corr_pol3") {
                                 Loaded_D_Corr_pol3 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3), Loaded_Corr_coefficients_names.push_back("Loaded_D_Corr_pol3");
+                                Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3), Loaded_Corr_coefficients_names.push_back(
+                                        "Loaded_D_Corr_pol3");
                             } else if (parameter == "D_Corr_pol3_Error") {
                                 Loaded_D_Corr_pol3_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Corr_pol3") {
@@ -3159,12 +3702,14 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         if (findSubstring(parameter, "pol1_wKC") && findSubstring(SmearMode, "pol1_wKC")) {
                             if (parameter == "A_Std_pol1_wKC") {
                                 Loaded_A_Std_pol1_wKC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1_wKC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol1_wKC");
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1_wKC), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_A_Std_pol1_wKC");
                             } else if (parameter == "A_Std_pol1_wKC_Error") {
                                 Loaded_A_Std_pol1_wKC_Error = stod(parameter2);
                             } else if (parameter == "B_Std_pol1_wKC") {
                                 Loaded_B_Std_pol1_wKC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol1_wKC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol1_wKC");
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol1_wKC), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_B_Std_pol1_wKC");
                             } else if (parameter == "B_Std_pol1_wKC_Error") {
                                 Loaded_B_Std_pol1_wKC_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Std_pol1_wKC") {
@@ -3176,12 +3721,14 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                             if (parameter == "A_Std_pol1") {
                                 Loaded_A_Std_pol1 = stod(parameter2);
                                 cout << "\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
-                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol1");
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol1), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_A_Std_pol1");
                             } else if (parameter == "A_Std_pol1_Error") {
                                 Loaded_A_Std_pol1_Error = stod(parameter2);
                             } else if (parameter == "B_Std_pol1") {
                                 Loaded_B_Std_pol1 = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol1), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol1");
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol1), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_B_Std_pol1");
                             } else if (parameter == "B_Std_pol1_Error") {
                                 Loaded_B_Std_pol1_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Std_pol1") {
@@ -3194,17 +3741,20 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         if (findSubstring(parameter, "pol2_wKC") && findSubstring(SmearMode, "pol2_wKC")) {
                             if (parameter == "A_Std_pol2_wKC") {
                                 Loaded_A_Std_pol2_wKC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2_wKC");
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_A_Std_pol2_wKC");
                             } else if (parameter == "A_Std_pol2_wKC_Error") {
                                 Loaded_A_Std_pol2_wKC_Error = stod(parameter2);
                             } else if (parameter == "B_Std_pol2_wKC") {
                                 Loaded_B_Std_pol2_wKC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol2_wKC");
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_B_Std_pol2_wKC");
                             } else if (parameter == "B_Std_pol2_wKC_Error") {
                                 Loaded_B_Std_pol2_wKC_Error = stod(parameter2);
                             } else if (parameter == "C_Std_pol2_wKC") {
                                 Loaded_C_Std_pol2_wKC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol2_wKC");
+                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_C_Std_pol2_wKC");
                             } else if (parameter == "C_Std_pol2_wKC_Error") {
                                 Loaded_C_Std_pol2_wKC_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Std_pol2_wKC") {
@@ -3215,17 +3765,20 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         } else if (findSubstring(parameter, "pol2") && !findSubstring(SmearMode, "pol2_wKC")) {
                             if (parameter == "A_Std_pol2") {
                                 Loaded_A_Std_pol2 = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol2");
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol2), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_A_Std_pol2");
                             } else if (parameter == "A_Std_pol2_Error") {
                                 Loaded_A_Std_pol2_Error = stod(parameter2);
                             } else if (parameter == "B_Std_pol2") {
                                 Loaded_B_Std_pol2 = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol2");
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol2), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_B_Std_pol2");
                             } else if (parameter == "B_Std_pol2_Error") {
                                 Loaded_B_Std_pol2_Error = stod(parameter2);
                             } else if (parameter == "C_Std_pol2") {
                                 Loaded_C_Std_pol2 = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol2), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol2");
+                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol2), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_C_Std_pol2");
                             } else if (parameter == "C_Std_pol2_Error") {
                                 Loaded_C_Std_pol2_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Std_pol2") {
@@ -3238,22 +3791,26 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         if (findSubstring(parameter, "pol3_wKC") && findSubstring(SmearMode, "pol3_wKC")) {
                             if (parameter == "A_Std_pol3_wKC") {
                                 Loaded_A_Std_pol3_wKC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3_wKC");
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_A_Std_pol3_wKC");
                             } else if (parameter == "A_Std_pol3_wKC_Error") {
                                 Loaded_A_Std_pol3_wKC_Error = stod(parameter2);
                             } else if (parameter == "B_Std_pol3_wKC") {
                                 Loaded_B_Std_pol3_wKC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol3_wKC");
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_B_Std_pol3_wKC");
                             } else if (parameter == "B_Std_pol3_wKC_Error") {
                                 Loaded_B_Std_pol3_wKC_Error = stod(parameter2);
                             } else if (parameter == "C_Std_pol3_wKC") {
                                 Loaded_C_Std_pol3_wKC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol3_wKC");
+                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_C_Std_pol3_wKC");
                             } else if (parameter == "C_Std_pol3_wKC_Error") {
                                 Loaded_C_Std_pol3_wKC_Error = stod(parameter2);
                             } else if (parameter == "D_Std_pol3_wKC") {
                                 Loaded_D_Std_pol3_wKC = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_D_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back("Loaded_D_Std_pol3_wKC");
+                                Loaded_Std_coefficients_values.push_back(Loaded_D_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_D_Std_pol3_wKC");
                             } else if (parameter == "D_Std_pol3_wKC_Error") {
                                 Loaded_D_Std_pol3_wKC_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Std_pol3_wKC") {
@@ -3264,22 +3821,26 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                         } else if (findSubstring(parameter, "pol3") && !findSubstring(SmearMode, "pol3_wKC")) {
                             if (parameter == "A_Std_pol3") {
                                 Loaded_A_Std_pol3 = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_A_Std_pol3");
+                                Loaded_Std_coefficients_values.push_back(Loaded_A_Std_pol3), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_A_Std_pol3");
                             } else if (parameter == "A_Std_pol3_Error") {
                                 Loaded_A_Std_pol3_Error = stod(parameter2);
                             } else if (parameter == "B_Std_pol3") {
                                 Loaded_B_Std_pol3 = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_B_Std_pol3");
+                                Loaded_Std_coefficients_values.push_back(Loaded_B_Std_pol3), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_B_Std_pol3");
                             } else if (parameter == "B_Std_pol3_Error") {
                                 Loaded_B_Std_pol3_Error = stod(parameter2);
                             } else if (parameter == "C_Std_pol3") {
                                 Loaded_C_Std_pol3 = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_C_Std_pol3");
+                                Loaded_Std_coefficients_values.push_back(Loaded_C_Std_pol3), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_C_Std_pol3");
                             } else if (parameter == "C_Std_pol3_Error") {
                                 Loaded_C_Std_pol3_Error = stod(parameter2);
                             } else if (parameter == "D_Std_pol3") {
                                 Loaded_D_Std_pol3 = stod(parameter2);
-                                Loaded_Std_coefficients_values.push_back(Loaded_D_Std_pol3), Loaded_Std_coefficients_names.push_back("Loaded_D_Std_pol3");
+                                Loaded_Std_coefficients_values.push_back(Loaded_D_Std_pol3), Loaded_Std_coefficients_names.push_back(
+                                        "Loaded_D_Std_pol3");
                             } else if (parameter == "D_Std_pol3_Error") {
                                 Loaded_D_Std_pol3_Error = stod(parameter2);
                             } else if (parameter == "ChiSquare_Std_pol3") {
@@ -3350,9 +3911,12 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                 double Smearing = Rand->Gaus(1, Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut());
 
                 if (Printout) {
-                    cout << "\n\nLoaded_Res_Slices_FitVar.GetUpperCut() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut() << "\n";
-                    cout << "Loaded_res_slice.GetSliceLowerb() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceLowerb() << "\n";
-                    cout << "Loaded_res_slice.GetSliceUpperb() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceUpperb() << "\n";
+                    cout << "\n\nLoaded_Res_Slices_FitVar.GetUpperCut() = "
+                         << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut() << "\n";
+                    cout << "Loaded_res_slice.GetSliceLowerb() = "
+                         << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceLowerb() << "\n";
+                    cout << "Loaded_res_slice.GetSliceUpperb() = "
+                         << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceUpperb() << "\n";
                     cout << "Momentum = " << Momentum << "\n";
                     cout << "Smearing = " << Smearing << "\n";
                     cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
@@ -3412,7 +3976,8 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                     cout << "Loaded_D_Std_pol3 = " << Loaded_D_Std_pol3 << "\n\n";
                 }
             } else if (SmearMode == "pol3_wKC") {
-                Arg = Loaded_A_Std_pol3_wKC * Momentum3 + Loaded_B_Std_pol3_wKC * Momentum2 + Loaded_C_Std_pol3_wKC * Momentum + Loaded_D_Std_pol3_wKC;
+                Arg = Loaded_A_Std_pol3_wKC * Momentum3 + Loaded_B_Std_pol3_wKC * Momentum2 + Loaded_C_Std_pol3_wKC * Momentum +
+                      Loaded_D_Std_pol3_wKC;
 
                 if (Printout_Std_Variables) {
                     cout << "\n";
@@ -3529,7 +4094,8 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                     cout << "Loaded_D_Corr_pol3 = " << Loaded_D_Corr_pol3 << "\n\n";
                 }
             } else if (CorrMode == "pol3_wKC") {
-                Mu = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum + Loaded_D_Corr_pol3_wKC;
+                Mu = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum +
+                     Loaded_D_Corr_pol3_wKC;
 
                 if (Printout_Corr_Variables) {
                     cout << "\n";
@@ -3625,7 +4191,8 @@ double NeutronResolution::GetMomResMu(const bool &apply_nucleon_SmearAndCorr, co
                     cout << "Loaded_D_Corr_pol3 = " << Loaded_D_Corr_pol3 << "\n\n";
                 }
             } else if (CorrMode == "pol3_wKC") {
-                Mu = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum + Loaded_D_Corr_pol3_wKC;
+                Mu = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum +
+                     Loaded_D_Corr_pol3_wKC;
 
                 if (Printout_Corr_Variables) {
                     cout << "\n";
