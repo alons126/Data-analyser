@@ -480,14 +480,32 @@ void NeutronResolution::LoadFitParam(const string &SampleName, const string &Nuc
 
             string NeutronCorrectionDataFile =
                     NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
+            string ProtonSmearingDataFile =
+                    NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS1_fit_param_-_" + SampleName + ".par";
 
             /* Load neutron correction variables (from momResS1), but not smearing variables */
-            ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
+            ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory,
+                             "reco", true, false);
+
+            /* Load proton smearing variables (from momResS1) */
+            ReadResDataParam(ProtonSmearingDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory,
+                             "truth", false, true);
+
+            //            //<editor-fold desc="Original (load from TL only!)">
+//            /* Load neutron correction variables (from momResS1), but not smearing variables */
+//            ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, "truth", true, false);
+//            //</editor-fold>
 
             //<editor-fold desc="Safety checks for data files">
             if (!findSubstring(NeutronCorrectionDataFile, "Neutron") || findSubstring(NeutronCorrectionDataFile, "Proton")) {
                 cout
                         << "\n\nNeutronResolution::NeutronResolution: neutron correction variables are not being loaded from neutron data! Exiting...\n\n", exit(
+                        0);
+            }
+
+            if (!findSubstring(ProtonSmearingDataFile, "Neutron") || findSubstring(ProtonSmearingDataFile, "Proton")) {
+                cout
+                        << "\n\nNeutronResolution::NeutronResolution: proton smearing variables are not being loaded from neutron data! Exiting...\n\n", exit(
                         0);
             }
             //</editor-fold>
@@ -503,10 +521,18 @@ void NeutronResolution::LoadFitParam(const string &SampleName, const string &Nuc
                     NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_momResS2_fit_param_-_" + SampleName + ".par";
 
             /* Load neutron correction variables (from momResS1) */
-            ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, true, false);
+            ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, "reco", true, false);
 
             /* Load proton smearing variables (from momResS2) */
-            ReadResDataParam(ProtonSmearingDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, false, true);
+            ReadResDataParam(ProtonSmearingDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, "truth", false, true);
+
+            //            //<editor-fold desc="Original (load from TL only!)">
+//            /* Load neutron correction variables (from momResS1) */
+//            ReadResDataParam(NeutronCorrectionDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, "truth", true, false);
+//
+//            /* Load proton smearing variables (from momResS2) */
+//            ReadResDataParam(ProtonSmearingDataFile.c_str(), Calculate_momResS2, SampleName, NucleonCutsDirectory, "truth", false, true);
+//            //</editor-fold>
 
             //<editor-fold desc="Safety checks for data files">
             if (!findSubstring(NeutronCorrectionDataFile, "Neutron") || findSubstring(NeutronCorrectionDataFile, "Proton")) {
@@ -2615,15 +2641,53 @@ void NeutronResolution::AutoReader(const string &MomentumType, const int &Polyno
             }
         }
 
-        Loading_Dest.push_back(Loaded_FitVarResults);
-        Loading_Dest.push_back(Loaded_FitVarResultsErrors);
-        Loading_Dest.push_back(Loaded_FitVarResultsGoodness);
+        if (!findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
+            Loading_Dest.push_back(Loaded_FitVarResults);
+        } else if (findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
+            Loading_Dest.push_back(Loaded_FitVarResultsErrors);
+        } else if (!findSubstring(parameter, "error") && findSubstring(parameter, "FitGoodness")) {
+            Loading_Dest.push_back(Loaded_FitVarResultsGoodness);
+        }
 
-        //<editor-fold desc="Saftey check">
-        if ((Loaded_FitVarResults.size() != PolynomialDegree) || (Loaded_FitVarResultsErrors.size() != PolynomialDegree)) {
-            cout << "\n\nNeutronResolution::AutoReader: the parameter " << parameter << " loaded improperly! Exiting...\n\n", exit(0);
+//        Loading_Dest.push_back(Loaded_FitVarResults);
+//        Loading_Dest.push_back(Loaded_FitVarResultsErrors);
+//        Loading_Dest.push_back(Loaded_FitVarResultsGoodness);
+
+        //<editor-fold desc="Safety checks">
+        if (!findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
+            if (Loaded_FitVarResults.size() != (PolynomialDegree + 1)) {
+                cout << "\n\nNeutronResolution::AutoReader: the parameter " << parameter << " loaded improperly!\n";
+                cout << "Loaded_FitVarResults.size() = " << Loaded_FitVarResults.size() << "\n";
+                cout << "expected size (= PolynomialDegree) = " << PolynomialDegree << "\n";
+                cout << "Loaded_FitVarResultsErrors elements:\n";
+                for (int i = 0; i < Loaded_FitVarResults.size(); i++) { cout << Loaded_FitVarResults.at(i) << "\n"; }
+                cout << "\nExiting...\n\n", exit(0);
+            }
+        }
+
+        if (findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
+            if (Loaded_FitVarResultsErrors.size() != (PolynomialDegree + 1)) {
+                cout << "\n\nNeutronResolution::AutoReader: the parameter " << parameter << " loaded improperly!\n";
+                cout << "Loaded_FitVarResultsErrors.size() = " << Loaded_FitVarResultsErrors.size() << "\n";
+                cout << "expected size (= PolynomialDegree) = " << PolynomialDegree << "\n";
+                cout << "Loaded_FitVarResultsErrors elements:\n";
+                for (int i = 0; i < Loaded_FitVarResultsErrors.size(); i++) { cout << Loaded_FitVarResultsErrors.at(i) << "\n"; }
+                cout << "\nExiting...\n\n", exit(0);
+            }
+        }
+
+        if (!findSubstring(parameter, "error") && findSubstring(parameter, "FitGoodness")) {
+            if (Loaded_FitVarResultsGoodness.size() != 2) {
+                cout << "\n\nNeutronResolution::AutoReader: the parameter " << parameter << " loaded improperly!\n";
+                cout << "Loaded_FitVarResultsErrors.size() = " << Loaded_FitVarResultsGoodness.size() << "\n";
+                cout << "expected size = " << 2 << "\n";
+                cout << "Loaded_FitVarResultsErrors elements:\n";
+                for (int i = 0; i < Loaded_FitVarResultsGoodness.size(); i++) { cout << Loaded_FitVarResultsGoodness.at(i) << "\n"; }
+                cout << "\nExiting...\n\n", exit(0);
+            }
         }
         //</editor-fold>
+
     }
 }
 //</editor-fold>
@@ -2635,7 +2699,7 @@ void NeutronResolution::AutoReader(const string &MomentumType, const int &Polyno
 
 double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
     bool Printout = false;
-    bool Printout_Std_Variables = false;
+    bool Printout_Smear_Variables = false;
 
     if (!apply_nucleon_SmearAndCorr) {
         /* Smearing and correction are disabled */
@@ -2693,16 +2757,26 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                 Arg = Loaded_TL_FitParam_Smear_pol1.at(0).at(0) * Momentum +
                       Loaded_TL_FitParam_Smear_pol1.at(0).at(1);
 
-                if (Printout_Std_Variables) {
-                    cout << "\n\n\nLoaded_A_Std_pol1 = " << Loaded_TL_FitParam_Smear_pol1.at(0).at(0) << "\n";
+                if (Printout_Smear_Variables) {
+                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol1.size() << "\n";
+                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol1.at(0).size() << "\n";
+                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol1.at(1).size() << "\n";
+                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol1.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Std_pol1 = " << Loaded_TL_FitParam_Smear_pol1.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol1 = " << Loaded_TL_FitParam_Smear_pol1.at(0).at(1) << "\n\n";
                 }
             } else if (SmearMode == "pol1_wKC") {
                 Arg = Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(0) * Momentum +
                       Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(1);
 
-                if (Printout_Std_Variables) {
-                    cout << "\n\n\nLoaded_A_Std_pol1_wKC = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(0) << "\n";
+                if (Printout_Smear_Variables) {
+                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol1_wKC.size() << "\n";
+                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(0).size() << "\n";
+                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(1).size() << "\n";
+                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Std_pol1_wKC = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol1_wKC = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(1) << "\n\n";
                 }
             } else if (SmearMode == "pol2") {
@@ -2710,8 +2784,13 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                       Loaded_TL_FitParam_Smear_pol2.at(0).at(1) * Momentum +
                       Loaded_TL_FitParam_Smear_pol2.at(0).at(2);
 
-                if (Printout_Std_Variables) {
-                    cout << "\n\n\nLoaded_A_Std_pol2 = " << Loaded_TL_FitParam_Smear_pol2.at(0).at(0) << "\n";
+                if (Printout_Smear_Variables) {
+                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol2.size() << "\n";
+                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol2.at(0).size() << "\n";
+                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol2.at(1).size() << "\n";
+                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol2.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Std_pol2 = " << Loaded_TL_FitParam_Smear_pol2.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol2 = " << Loaded_TL_FitParam_Smear_pol2.at(0).at(1) << "\n";
                     cout << "Loaded_C_Std_pol2 = " << Loaded_TL_FitParam_Smear_pol2.at(0).at(2) << "\n\n";
                 }
@@ -2720,8 +2799,13 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                       Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(1) * Momentum +
                       Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(2);
 
-                if (Printout_Std_Variables) {
-                    cout << "\n\n\nLoaded_A_Std_pol2_wKC = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(0) << "\n";
+                if (Printout_Smear_Variables) {
+                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol2_wKC.size() << "\n";
+                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(0).size() << "\n";
+                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(1).size() << "\n";
+                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Std_pol2_wKC = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol2_wKC = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(1) << "\n";
                     cout << "Loaded_C_Std_pol2_wKC = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(2) << "\n\n";
                 }
@@ -2731,8 +2815,13 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                       Loaded_TL_FitParam_Smear_pol3.at(0).at(2) * Momentum +
                       Loaded_TL_FitParam_Smear_pol3.at(0).at(3);
 
-                if (Printout_Std_Variables) {
-                    cout << "\n\n\nLoaded_A_Std_pol3 = " << Loaded_TL_FitParam_Smear_pol3.at(0).at(0) << "\n";
+                if (Printout_Smear_Variables) {
+                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol3.size() << "\n";
+                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol3.at(0).size() << "\n";
+                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol3.at(1).size() << "\n";
+                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol3.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Std_pol3 = " << Loaded_TL_FitParam_Smear_pol3.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol3 = " << Loaded_TL_FitParam_Smear_pol3.at(0).at(1) << "\n";
                     cout << "Loaded_C_Std_pol3 = " << Loaded_TL_FitParam_Smear_pol3.at(0).at(2) << "\n";
                     cout << "Loaded_D_Std_pol3 = " << Loaded_TL_FitParam_Smear_pol3.at(0).at(3) << "\n\n";
@@ -2743,8 +2832,13 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                       Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(2) * Momentum +
                       Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(3);
 
-                if (Printout_Std_Variables) {
-                    cout << "\n\n\nLoaded_A_Std_pol3_wKC = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(0) << "\n";
+                if (Printout_Smear_Variables) {
+                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol3_wKC.size() << "\n";
+                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(0).size() << "\n";
+                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(1).size() << "\n";
+                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Std_pol3_wKC = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol3_wKC = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(1) << "\n";
                     cout << "Loaded_C_Std_pol3_wKC = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(2) << "\n";
                     cout << "Loaded_D_Std_pol3_wKC = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(3) << "\n\n";
@@ -2776,7 +2870,7 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
 //
 //double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
 //    bool Printout = false;
-//    bool Printout_Std_Variables = false;
+//    bool Printout_Smear_Variables = false;
 //
 //    if (!apply_nucleon_SmearAndCorr) {
 //        /* Smearing and correction are disabled */
@@ -2833,7 +2927,7 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
 //            if (SmearMode == "pol1") {
 //                Arg = Loaded_A_Std_pol1 * Momentum + Loaded_B_Std_pol1;
 //
-//                if (Printout_Std_Variables) {
+//                if (Printout_Smear_Variables) {
 //                    cout << "\n";
 //                    cout << "\n\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
 //                    cout << "Loaded_B_Std_pol1 = " << Loaded_B_Std_pol1 << "\n\n";
@@ -2841,7 +2935,7 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
 //            } else if (SmearMode == "pol1_wKC") {
 //                Arg = Loaded_A_Std_pol1_wKC * Momentum + Loaded_B_Std_pol1_wKC;
 //
-//                if (Printout_Std_Variables) {
+//                if (Printout_Smear_Variables) {
 //                    cout << "\n";
 //                    cout << "\n\nLoaded_A_Std_pol1_wKC = " << Loaded_A_Std_pol1_wKC << "\n";
 //                    cout << "Loaded_B_Std_pol1_wKC = " << Loaded_B_Std_pol1_wKC << "\n\n";
@@ -2849,7 +2943,7 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
 //            } else if (SmearMode == "pol2") {
 //                Arg = Loaded_A_Std_pol2 * Momentum2 + Loaded_B_Std_pol2 * Momentum + Loaded_C_Std_pol2;
 //
-//                if (Printout_Std_Variables) {
+//                if (Printout_Smear_Variables) {
 //                    cout << "\n";
 //                    cout << "\n\nLoaded_A_Std_pol2 = " << Loaded_A_Std_pol2 << "\n";
 //                    cout << "Loaded_B_Std_pol2 = " << Loaded_B_Std_pol2 << "\n";
@@ -2858,7 +2952,7 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
 //            } else if (SmearMode == "pol2_wKC") {
 //                Arg = Loaded_A_Std_pol2_wKC * Momentum2 + Loaded_B_Std_pol2_wKC * Momentum + Loaded_C_Std_pol2_wKC;
 //
-//                if (Printout_Std_Variables) {
+//                if (Printout_Smear_Variables) {
 //                    cout << "\n";
 //                    cout << "\n\nLoaded_A_Std_pol2_wKC = " << Loaded_A_Std_pol2_wKC << "\n";
 //                    cout << "Loaded_B_Std_pol2_wKC = " << Loaded_B_Std_pol2_wKC << "\n";
@@ -2867,7 +2961,7 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
 //            } else if (SmearMode == "pol3") {
 //                Arg = Loaded_A_Std_pol3 * Momentum3 + Loaded_B_Std_pol3 * Momentum2 + Loaded_C_Std_pol3 * Momentum + Loaded_D_Std_pol3;
 //
-//                if (Printout_Std_Variables) {
+//                if (Printout_Smear_Variables) {
 //                    cout << "\n";
 //                    cout << "\n\nLoaded_A_Std_pol3 = " << Loaded_A_Std_pol3 << "\n";
 //                    cout << "Loaded_B_Std_pol3 = " << Loaded_B_Std_pol3 << "\n";
@@ -2878,7 +2972,7 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
 //                Arg = Loaded_A_Std_pol3_wKC * Momentum3 + Loaded_B_Std_pol3_wKC * Momentum2 + Loaded_C_Std_pol3_wKC * Momentum +
 //                      Loaded_D_Std_pol3_wKC;
 //
-//                if (Printout_Std_Variables) {
+//                if (Printout_Smear_Variables) {
 //                    cout << "\n";
 //                    cout << "\n\nLoaded_A_Std_pol3_wKC = " << Loaded_A_Std_pol3_wKC << "\n";
 //                    cout << "Loaded_B_Std_pol3_wKC = " << Loaded_B_Std_pol3_wKC << "\n";
