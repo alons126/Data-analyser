@@ -53,12 +53,12 @@ NeutronResolution::NeutronResolution(const string &Particle) {
 void NeutronResolution::MomResInit(const bool &plot_and_fit_MomRes, const bool &Calculate_momResS2, const bool &Run_with_momResS2,
                                    const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
                                    const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, const string &NeutronResolutionDirectory,
-                                   const string &SavePath, const double &DeltaSlices, const bool &VaryingDelta, const string &SmearMode,
-                                   const string &CorrMode, const bool &momRes_test, const bool &ForceSmallpResLimits) {
+                                   const string &SavePath, const double &DeltaSlices, const bool &VaryingDelta, const string &SmearM,
+                                   const string &CorrM, const bool &momRes_test, const bool &ForceSmallpResLimits) {
     if (isNeutron) {
         if (plot_and_fit_MomRes) {
             SetMomResCalculations(SampleName, NucleonCutsDirectory, beamE, FD_nucleon_momentum_cut, ParticleMomTh, Calculate_momResS2,
-                                  Run_with_momResS2, NeutronResolutionDirectory, SavePath, DeltaSlices, VaryingDelta, SmearMode, CorrMode,
+                                  Run_with_momResS2, NeutronResolutionDirectory, SavePath, DeltaSlices, VaryingDelta, SmearM, CorrM,
                                   momRes_test);
 
             if (momRes_test) {
@@ -138,7 +138,7 @@ void NeutronResolution::MomResInit(const bool &plot_and_fit_MomRes, const bool &
                 }
             }
         } else { // if plot_and_fit_MomRes=false => Calculate_momResS2=false !!!
-            SetSmearAndCorrModes(SmearMode, CorrMode);
+            SetSmearAndCorrModes(SmearM, CorrM);
 
             if (Run_with_momResS2) { // if Run_with_momResS2=true => load correction from momResS1 and smearing from momResS2
                 string NeutronCorrectionDataFile = NeutronResolutionDirectory + "Res_data_-_" + SampleName +
@@ -218,7 +218,7 @@ void NeutronResolution::MomResInit(const bool &plot_and_fit_MomRes, const bool &
         }
     } else if (isProton) {
         SetMomResCalculations(SampleName, NucleonCutsDirectory, beamE, FD_nucleon_momentum_cut, ParticleMomTh, Calculate_momResS2,
-                              Run_with_momResS2, NeutronResolutionDirectory, SavePath, DeltaSlices, VaryingDelta, SmearMode, CorrMode, momRes_test,
+                              Run_with_momResS2, NeutronResolutionDirectory, SavePath, DeltaSlices, VaryingDelta, SmearM, CorrM, momRes_test,
                               ForceSmallpResLimits);
     }
 }
@@ -1057,15 +1057,15 @@ void NeutronResolution::PolyFitterByType(const string &MomentumType, const int &
     }
     //</editor-fold>
 
-    //<editor-fold desc="Setting legened">
+    //<editor-fold desc="Setting legend & fit variable chart">
 
-    //<editor-fold desc="Legened location">
+    //<editor-fold desc="Legend location">
     double x_1, y_1, x_2, y_2;
     double x_1_legend, y_1_legend, x_2_legend, y_2_legend;
     double x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam;
-    double x_1_Offset_Legened = 0.075, x_1_Offset_FitParam = 0.0375;
+    double x_1_Offset_Legend = 0.075, x_1_Offset_FitParam = 0.0375;
 
-    if (PolynomialDegree == 3) { x_1_Offset_Legened = x_1_Offset_Legened * 2; }
+    if (PolynomialDegree == 3) { x_1_Offset_Legend = x_1_Offset_Legend * 2; }
 
     if (FitType == "Smear") {
         if (MomentumFitRange == "noKC") {
@@ -1166,33 +1166,33 @@ void NeutronResolution::PolyFitterByType(const string &MomentumType, const int &
     }
     //</editor-fold>
 
-    //<editor-fold desc="Setting fit variable legened">
-    auto Graph1D_Legend = new TLegend(x_1_legend + x_1_Offset_Legened, y_1_legend, x_2_legend, y_2_legend);
+    //<editor-fold desc="Setting legend">
+    auto Graph1D_Legend = new TLegend(x_1_legend + x_1_Offset_Legend, y_1_legend, x_2_legend, y_2_legend);
 
     TLegendEntry *Graph1D_Legend_fit;
 
-    string LegenedPolyStruct;
+    string LegendPolyStruct;
 
     if (PolynomialDegree == 1) {
-        LegenedPolyStruct = FittedVar +
-                            "(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}) = A#bar{P}^{" + MomentumType + "}_{" + FitterParticle +
-                            "} + B";
+        LegendPolyStruct = FittedVar + " = " +
+                           "A#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} + " +
+                           "B";
     } else if (PolynomialDegree == 2) {
-        LegenedPolyStruct = FittedVar +
-                            "(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}) = A(#bar{P}^{" + MomentumType + "}_{" + FitterParticle +
-                            "})^{2} + B#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} + C";
+        LegendPolyStruct = FittedVar + " = " +
+                           "A#left(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}#right)^{2} + " +
+                           "B#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} + " +
+                           "C";
     } else if (PolynomialDegree == 3) {
-        LegenedPolyStruct = FittedVar +
-                            "(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}) = A(#bar{P}^{" + MomentumType + "}_{" + FitterParticle +
-                            "})^{3} + B(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "})^{2} + C#bar{P}^{" + MomentumType + "}_{" +
-                            FitterParticle + "} + D";
+        LegendPolyStruct = FittedVar + " = " +
+                           "A#left(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}#right)^{3} + " +
+                           "B#left(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}#right)^{2} + " +
+                           "C#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} + " +
+                           "D";
     }
 
-    Graph1D_Legend_fit = Graph1D_Legend->AddEntry(PolynomialFunc, LegenedPolyStruct.c_str(), "l");
+    Graph1D_Legend_fit = Graph1D_Legend->AddEntry(PolynomialFunc, LegendPolyStruct.c_str(), "l");
 
-    Graph1D_Legend->SetTextFont(42);
-    Graph1D_Legend->SetTextSize(0.03);
-    Graph1D_Legend->Draw("same");
+    Graph1D_Legend->SetTextFont(42), Graph1D_Legend->SetTextSize(0.03), Graph1D_Legend->Draw("same");
     //</editor-fold>
 
     //<editor-fold desc="Setting fit variable chart">
@@ -1235,19 +1235,37 @@ void NeutronResolution::PolyFitterByType(const string &MomentumType, const int &
     ListOfFunctions->Add((TLegend *) Graph1D_Legend);
     ListOfFunctions->Add((TPaveText *) FitParam);
 
+    //<editor-fold desc="TFolder sorting">
     if (MomentumType == "truth") {
-        if (isNeutron) {
-            FittedTLNeutronResSlicesWidth->Add(Graph1D);
-        } else if (isProton) {
-            FittedTLProtonResSlicesWidth->Add(Graph1D);
+        if (FitType == "Corr") {
+            if (isNeutron) {
+                FittedTLNeutronResSlicesMean->Add(Graph1D);
+            } else if (isProton) {
+                FittedTLProtonResSlicesMean->Add(Graph1D);
+            }
+        } else if (FitType == "Smear") {
+            if (isNeutron) {
+                FittedTLNeutronResSlicesWidth->Add(Graph1D);
+            } else if (isProton) {
+                FittedTLProtonResSlicesWidth->Add(Graph1D);
+            }
         }
     } else if (MomentumType == "reco") {
-        if (isNeutron) {
-            FittedRecoNeutronResSlicesWidth->Add(Graph1D);
-        } else if (isProton) {
-            FittedRecoProtonResSlicesWidth->Add(Graph1D);
+        if (FitType == "Corr") {
+            if (isNeutron) {
+                FittedRecoNeutronResSlicesMean->Add(Graph1D);
+            } else if (isProton) {
+                FittedRecoProtonResSlicesMean->Add(Graph1D);
+            }
+        } else if (FitType == "Smear") {
+            if (isNeutron) {
+                FittedRecoNeutronResSlicesWidth->Add(Graph1D);
+            } else if (isProton) {
+                FittedRecoProtonResSlicesWidth->Add(Graph1D);
+            }
         }
     }
+    //</editor-fold>
 
     string FitsDir = SlicesSavePath + "/" + "Graph1D_" + MomentumType + "_fits";
     string FitsDirByType = FitsDir + "/" + MomentumType + "_" + FitType + "_fits";

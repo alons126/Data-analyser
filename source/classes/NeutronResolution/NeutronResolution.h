@@ -247,7 +247,7 @@ public:
     void MomResInit(const bool &plot_and_fit_MomRes, const bool &Calculate_momResS2, const bool &Run_with_momResS2, const string &SampleName,
                     const string &NucleonCutsDirectory, const double &beamE, const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh,
                     const string &NeutronResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2,
-                    const bool &VaryingDelta = false, const string &SmearMode = "pol1", const string &CorrMode = "pol1",
+                    const bool &VaryingDelta = false, const string &SmearM = "pol1", const string &CorrM = "pol1",
                     const bool &momRes_test = false, const bool &ForceSmallpResLimits = false);
 
     void SetMomResCalculations(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
