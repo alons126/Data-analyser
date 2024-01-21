@@ -91,95 +91,93 @@ private:
     int TL_NumberOfSlices = 0, Reco_NumberOfSlices = 0;
 
     //<editor-fold desc="Correction and smear fit variables">
+    /* General vector structure:   {{A, B, ...}, {A_Err, B_Err, ...}, {ChiSquare_Smear_pol2_wKC, NDF_Smear_pol2_wKC},} */
+
+    //<editor-fold desc="Correction and smear fit variables">
     vector <vector<double>> TL_FitParam_Smear_pol1, Reco_FitParam_Smear_pol1;
-    // {{A_Smear_pol1, B_Smear_pol1},
-    // {A_Smear_pol1_Error, B_Smear_pol1_Error},
-    // {ChiSquare_Smear_pol1, NDF_Smear_pol1},}
     vector <vector<double>> TL_FitParam_Smear_pol1_wKC, Reco_FitParam_Smear_pol1_wKC;
-    // {{A_Smear_pol1_wKC, B_Smear_pol1_wKC},
-    // {A_Smear_pol1_wKC_Error, B_Smear_pol1_wKC_Error},
-    // {ChiSquare_Smear_pol1_wKC, NDF_Smear_pol1_wKC},}
 
     vector <vector<double>> TL_FitParam_Smear_pol2, Reco_FitParam_Smear_pol2;
-    // {{A_Smear_pol2, B_Smear_pol2, C_Smear_pol2},
-    // {A_Smear_pol2_Error, B_Smear_pol2_Error, C_Smear_pol2_Error},
-    // {ChiSquare_Smear_pol2, NDF_Smear_pol2},}
     vector <vector<double>> TL_FitParam_Smear_pol2_wKC, Reco_FitParam_Smear_pol2_wKC;
-    // {{A_Smear_pol2_wKC, B_Smear_pol2_wKC, C_Smear_pol2_wKC},
-    // {A_Smear_pol2_wKC_Error, B_Smear_pol2_wKC_Error, C_Smear_pol2_wKC_Error},
-    // {ChiSquare_Smear_pol2_wKC, NDF_Smear_pol2_wKC},}
 
     vector <vector<double>> TL_FitParam_Smear_pol3, Reco_FitParam_Smear_pol3;
-    // {{A_Smear_pol2, B_Smear_pol2, C_Smear_pol2, D_Smear_pol2},
-    // {A_Smear_pol2_Error, B_Smear_pol2_Error, C_Smear_pol2_Error, D_Smear_pol2_Error},
-    // {ChiSquare_Smear_pol2, NDF_Smear_pol2},}
     vector <vector<double>> TL_FitParam_Smear_pol3_wKC, Reco_FitParam_Smear_pol3_wKC;
-    // {{A_Smear_pol2_wKC, B_Smear_pol2_wKC, C_Smear_pol2_wKC, D_Smear_pol2_wKC},
-    // {A_Smear_pol2_wKC_Error, B_Smear_pol2_wKC_Error, C_Smear_pol2_wKC_Error, D_Smear_pol2_wKC_Error},
-    // {ChiSquare_Smear_pol2_wKC, NDF_Smear_pol2_wKC},}
 
     vector <vector<double>> TL_FitParam_Corr_pol1, Reco_FitParam_Corr_pol1;
-    // {{A_Corr_pol1, B_Corr_pol1},
-    // {A_Corr_pol1_Error, B_Corr_pol1_Error},
-    // {ChiSquare_Corr_pol1, NDF_Corr_pol1},}
     vector <vector<double>> TL_FitParam_Corr_pol1_wKC, Reco_FitParam_Corr_pol1_wKC;
-    // {{A_Corr_pol1_wKC, B_Corr_pol1_wKC},
-    // {A_Corr_pol1_wKC_Error, B_Corr_pol1_wKC_Error},
-    // {ChiSquare_Corr_pol1_wKC, NDF_Corr_pol1_wKC},}
 
     vector <vector<double>> TL_FitParam_Corr_pol2, Reco_FitParam_Corr_pol2;
-    // {{A_Corr_pol2, B_Corr_pol2, C_Corr_pol2},
-    // {A_Corr_pol2_Error, B_Corr_pol2_Error, C_Corr_pol2_Error},
-    // {ChiSquare_Corr_pol2, NDF_Corr_pol2},}
     vector <vector<double>> TL_FitParam_Corr_pol2_wKC, Reco_FitParam_Corr_pol2_wKC;
-    // {{A_Corr_pol2_wKC, B_Corr_pol2_wKC, C_Corr_pol2_wKC},
-    // {A_Corr_pol2_wKC_Error, B_Corr_pol2_wKC_Error, C_Corr_pol2_wKC_Error},
-    // {ChiSquare_Corr_pol2_wKC, NDF_Corr_pol2_wKC},}
 
     vector <vector<double>> TL_FitParam_Corr_pol3, Reco_FitParam_Corr_pol3;
-    // {{A_Corr_pol2, B_Corr_pol2, C_Corr_pol2, D_Corr_pol2},
-    // {A_Corr_pol2_Error, B_Corr_pol2_Error, C_Corr_pol2_Error, D_Corr_pol2_Error},
-    // {ChiSquare_Corr_pol2, NDF_Corr_pol2},}
     vector <vector<double>> TL_FitParam_Corr_pol3_wKC, Reco_FitParam_Corr_pol3_wKC;
-    // {{A_Corr_pol2_wKC, B_Corr_pol2_wKC, C_Corr_pol2_wKC, D_Corr_pol2_wKC},
-    // {A_Corr_pol2_wKC_Error, B_Corr_pol2_wKC_Error, C_Corr_pol2_wKC_Error, D_Corr_pol2_wKC_Error},
-    // {ChiSquare_Corr_pol2_wKC, NDF_Corr_pol2_wKC},}
-
-
-    //TODO: add to vectors?
-
-    double A_Corr_pol1, A_Corr_pol1_Error, B_Corr_pol1, B_Corr_pol1_Error;
-    double ChiSquare_Corr_pol1, NDF_Corr_pol1;
-    double A_Corr_pol1_wKC, A_Corr_pol1_wKC_Error, B_Corr_pol1_wKC, B_Corr_pol1_wKC_Error;
-    double ChiSquare_Corr_pol1_wKC, NDF_Corr_pol1_wKC;
-
-    double A_Corr_pol2, A_Corr_pol2_Error, B_Corr_pol2, B_Corr_pol2_Error, C_Corr_pol2, C_Corr_pol2_Error;
-    double ChiSquare_Corr_pol2, NDF_Corr_pol2;
-    double A_Corr_pol2_wKC, A_Corr_pol2_wKC_Error, B_Corr_pol2_wKC, B_Corr_pol2_wKC_Error, C_Corr_pol2_wKC, C_Corr_pol2_wKC_Error;
-    double ChiSquare_Corr_pol2_wKC, NDF_Corr_pol2_wKC;
-
-    double A_Corr_pol3, A_Corr_pol3_Error, B_Corr_pol3, B_Corr_pol3_Error, C_Corr_pol3, C_Corr_pol3_Error, D_Corr_pol3, D_Corr_pol3_Error;
-    double ChiSquare_Corr_pol3, NDF_Corr_pol3;
-    double A_Corr_pol3_wKC, A_Corr_pol3_wKC_Error, B_Corr_pol3_wKC, B_Corr_pol3_wKC_Error, C_Corr_pol3_wKC, C_Corr_pol3_wKC_Error, D_Corr_pol3_wKC, D_Corr_pol3_wKC_Error;
-    double ChiSquare_Corr_pol3_wKC, NDF_Corr_pol3_wKC;
-
-    double A_Std_pol1, A_Std_pol1_Error, B_Std_pol1, B_Std_pol1_Error;
-    double ChiSquare_Std_pol1, NDF_Std_pol1;
-    double A_Std_pol1_wKC, A_Std_pol1_wKC_Error, B_Std_pol1_wKC, B_Std_pol1_wKC_Error;
-    double ChiSquare_Std_pol1_wKC, NDF_Std_pol1_wKC;
-
-    double A_Std_pol2, A_Std_pol2_Error, B_Std_pol2, B_Std_pol2_Error, C_Std_pol2, C_Std_pol2_Error;
-    double ChiSquare_Std_pol2, NDF_Std_pol2;
-    double A_Std_pol2_wKC, A_Std_pol2_wKC_Error, B_Std_pol2_wKC, B_Std_pol2_wKC_Error, C_Std_pol2_wKC, C_Std_pol2_wKC_Error;
-    double ChiSquare_Std_pol2_wKC, NDF_Std_pol2_wKC;
-
-    double A_Std_pol3, A_Std_pol3_Error, B_Std_pol3, B_Std_pol3_Error, C_Std_pol3, C_Std_pol3_Error, D_Std_pol3, D_Std_pol3_Error;
-    double ChiSquare_Std_pol3, NDF_Std_pol3;
-    double A_Std_pol3_wKC, A_Std_pol3_wKC_Error, B_Std_pol3_wKC, B_Std_pol3_wKC_Error, C_Std_pol3_wKC, C_Std_pol3_wKC_Error, D_Std_pol3_wKC, D_Std_pol3_wKC_Error;
-    double ChiSquare_Std_pol3_wKC, NDF_Std_pol3_wKC;
     //</editor-fold>
 
     //<editor-fold desc="Loaded correction and smear fit variables">
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol1, Loaded_Reco_FitParam_Smear_pol1;
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol1_wKC, Loaded_Reco_FitParam_Smear_pol1_wKC;
+
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol2, Loaded_Reco_FitParam_Smear_pol2;
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol2_wKC, Loaded_Reco_FitParam_Smear_pol2_wKC;
+
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol3, Loaded_Reco_FitParam_Smear_pol3;
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol3_wKC, Loaded_Reco_FitParam_Smear_pol3_wKC;
+
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol1, Loaded_Reco_FitParam_Corr_pol1;
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol1_wKC, Loaded_Reco_FitParam_Corr_pol1_wKC;
+
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol2, Loaded_Reco_FitParam_Corr_pol2;
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol2_wKC, Loaded_Reco_FitParam_Corr_pol2_wKC;
+
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol3, Loaded_Reco_FitParam_Corr_pol3;
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol3_wKC, Loaded_Reco_FitParam_Corr_pol3_wKC;
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Loaded correction and smear fit variables">
+    double A_Std_pol1, B_Std_pol1;
+    double A_Std_pol1_Error, B_Std_pol1_Error;
+    double ChiSquare_Std_pol1, NDF_Std_pol1;
+    double A_Std_pol1_wKC, B_Std_pol1_wKC;
+    double A_Std_pol1_wKC_Error, B_Std_pol1_wKC_Error;
+    double ChiSquare_Std_pol1_wKC, NDF_Std_pol1_wKC;
+
+    double A_Std_pol2, B_Std_pol2, C_Std_pol2;
+    double A_Std_pol2_Error, B_Std_pol2_Error, C_Std_pol2_Error;
+    double ChiSquare_Std_pol2, NDF_Std_pol2;
+    double A_Std_pol2_wKC, B_Std_pol2_wKC, C_Std_pol2_wKC;
+    double A_Std_pol2_wKC_Error, B_Std_pol2_wKC_Error, C_Std_pol2_wKC_Error;
+    double ChiSquare_Std_pol2_wKC, NDF_Std_pol2_wKC;
+
+    double A_Std_pol3, B_Std_pol3, C_Std_pol3, D_Std_pol3;
+    double A_Std_pol3_Error, B_Std_pol3_Error, C_Std_pol3_Error, D_Std_pol3_Error;
+    double ChiSquare_Std_pol3, NDF_Std_pol3;
+    double A_Std_pol3_wKC, B_Std_pol3_wKC, C_Std_pol3_wKC, D_Std_pol3_wKC;
+    double A_Std_pol3_wKC_Error, B_Std_pol3_wKC_Error, C_Std_pol3_wKC_Error, D_Std_pol3_wKC_Error;
+    double ChiSquare_Std_pol3_wKC, NDF_Std_pol3_wKC;
+
+    double A_Corr_pol1, B_Corr_pol1;
+    double A_Corr_pol1_Error, B_Corr_pol1_Error;
+    double ChiSquare_Corr_pol1, NDF_Corr_pol1;
+    double A_Corr_pol1_wKC, B_Corr_pol1_wKC;
+    double A_Corr_pol1_wKC_Error, B_Corr_pol1_wKC_Error;
+    double ChiSquare_Corr_pol1_wKC, NDF_Corr_pol1_wKC;
+
+    double A_Corr_pol2, B_Corr_pol2, C_Corr_pol2;
+    double A_Corr_pol2_Error, B_Corr_pol2_Error, C_Corr_pol2_Error;
+    double ChiSquare_Corr_pol2, NDF_Corr_pol2;
+    double A_Corr_pol2_wKC, B_Corr_pol2_wKC, C_Corr_pol2_wKC;
+    double A_Corr_pol2_wKC_Error, B_Corr_pol2_wKC_Error, C_Corr_pol2_wKC_Error;
+    double ChiSquare_Corr_pol2_wKC, NDF_Corr_pol2_wKC;
+
+    double A_Corr_pol3, B_Corr_pol3, C_Corr_pol3, D_Corr_pol3;
+    double A_Corr_pol3_Error, B_Corr_pol3_Error, C_Corr_pol3_Error, D_Corr_pol3_Error;
+    double ChiSquare_Corr_pol3, NDF_Corr_pol3;
+    double A_Corr_pol3_wKC, B_Corr_pol3_wKC, C_Corr_pol3_wKC, D_Corr_pol3_wKC;
+    double A_Corr_pol3_wKC_Error, B_Corr_pol3_wKC_Error, C_Corr_pol3_wKC_Error, D_Corr_pol3_wKC_Error;
+    double ChiSquare_Corr_pol3_wKC, NDF_Corr_pol3_wKC;
+
     double Loaded_A_Std_pol1, Loaded_B_Std_pol1;
     double Loaded_A_Std_pol1_Error, Loaded_B_Std_pol1_Error;
     double Loaded_ChiSquare_Std_pol1, Loaded_NDF_Std_pol1;
@@ -202,7 +200,7 @@ private:
     double Loaded_ChiSquare_Std_pol3_wKC, Loaded_NDF_Std_pol3_wKC;
 
     string Loaded_Std_coefficients_path;
-    vector<double> Loaded_Std_coefficients_values;
+    vector<double> Loaded_Smear_coefficients_values;
     vector <string> Loaded_Std_coefficients_names;
 
     double Loaded_A_Corr_pol1, Loaded_B_Corr_pol1;
@@ -244,13 +242,19 @@ public:
 
     NeutronResolution(const string &Particle);
 
-// SetMomResCalculations function ---------------------------------------------------------------------------------------------------------------------------------------
+// MomResInit function --------------------------------------------------------------------------------------------------------------------------------------------------
+
+    void MomResInit(const bool &plot_and_fit_MomRes, const bool &Calculate_momResS2, const bool &Run_with_momResS2, const string &SampleName,
+                    const string &NucleonCutsDirectory, const double &beamE, const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh,
+                    const string &NeutronResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2,
+                    const bool &VaryingDelta = false, const string &SmearMode = "pol1", const string &CorrMode = "pol1",
+                    const bool &momRes_test = false, const bool &ForceSmallpResLimits = false);
 
     void SetMomResCalculations(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
                                const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2,
                                bool const &Run_in_momResS2, const string &NeutronResolutionDirectory, const string &SavePath = "./",
                                const double &DeltaSlices = 0.2, const bool &VaryingDelta = false, const string &SmearM = "pol1",
-                               const string &CorrM = "pol1", bool momRes_test = false, bool ForceSmallpResLimits = false);
+                               const string &CorrM = "pol1", const bool momRes_test = false, const bool ForceSmallpResLimits = false);
 
     void SetMomResSlicesByType(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
                                const string &MomentumType, const string &SavePath = "./", const bool &VaryingDelta = false,
@@ -270,7 +274,7 @@ public:
 
     void ReadInputParam(const char *filename);
 
-// hFillResPlotsByType function -----------------------------------------------------------------------------------------------------------------------------------------------
+// hFillResPlotsByType function -----------------------------------------------------------------------------------------------------------------------------------------
 
     void hFillResPlotsByType(const double &MomentumTL, const double &MomentumReco, const double &Resolution, const double &Weight);
 
@@ -280,7 +284,7 @@ public:
                        vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0,
                        int &NumberOfSlices0);
 
-    // SliceFitDrawAndSaveByType function -----------------------------------------------------------------------------------------------------------------------------------
+// SliceFitDrawAndSaveByType function -----------------------------------------------------------------------------------------------------------------------------------
 
     void SliceFitDrawAndSaveByType(const string &SampleName, const double &beamE);
 
@@ -291,7 +295,7 @@ public:
     void PolyFitterByType(const string &MomentumType, const int &PolynomialDegree, const string &FitType,
                           const string &MomentumFitRange, vector <vector<double>> &FitParam);
 
-    // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
+// DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
     void DrawAndSaveResSlices(const string &SampleName, TCanvas *h1DCanvas, const string &plots_path, const string &NeutronResolutionDirectory);
 
@@ -328,6 +332,9 @@ public:
     void ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory,
                           const string &MomentumType, const bool &Load_correction = false, const bool &Load_smearing = false);
 
+    void AutoReader(const string &MomentumType, const int &PolynomialDegree, const string &parameter, basic_istream<char>& ss2,
+                    vector <vector<double>> &Loading_Dest, vector<double> &Loaded_coefficients_values, vector <string> &Loaded_coefficients_names);
+
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
     double PSmear(const bool &apply_nucleon_SmearAndCorr, const double &Momentum);
@@ -336,7 +343,7 @@ public:
 
     double NCorr(const bool &apply_nucleon_SmearAndCorr, const double &Momentum);
 
-// GetMomResMu function -------------------------------------------------------------------------------------------------------------------------------------------------------
+// GetMomResMu function -------------------------------------------------------------------------------------------------------------------------------------------------
 
     double GetMomResMu(const bool &apply_nucleon_SmearAndCorr, const double &Momentum);
 
@@ -362,7 +369,7 @@ public:
 
     string Get_Loaded_Std_coefficients_path() { return Loaded_Std_coefficients_path; };
 
-    vector<double> Get_Loaded_Std_coefficients_values() { return Loaded_Std_coefficients_values; };
+    vector<double> Get_Loaded_Smear_coefficients_values() { return Loaded_Smear_coefficients_values; };
 
     vector <string> Get_Loaded_Std_coefficients_names() { return Loaded_Std_coefficients_names; };
 
