@@ -158,7 +158,7 @@ void EventAnalyser() {
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const bool ForceSmallpResLimits = false; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
-    const string CorrMode = "pol1_wKC";
+    const string CorrMode = "pol3_wKC";
     bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
     bool momRes_test = false; // false by default
     /*
@@ -13563,10 +13563,12 @@ void EventAnalyser() {
                         bool TL_Theta_kinCuts = (TLProtonTheta <= FD_nucleon_theta_cut.GetUpperCut());
                         bool pRes_Pass_ThetaKinCut = (Reco_Theta_kinCut && TL_Theta_kinCuts);
 
-                        bool pRes_Reco_Pass_Proton_MomKinCut = ((RecoProtonP >= p_mom_th.GetLowerCut()) &&
-                                                                (RecoProtonP <= nRes.GetSliceUpperMomLim()));
-                        bool pRes_TL_Pass_Proton_MomKinCut = ((TLProtonP >= p_mom_th.GetLowerCut()) &&
-                                                              (TLProtonP <= nRes.GetSliceUpperMomLim()));
+                        bool pRes_Reco_Pass_Proton_MomKinCut = ((RecoProtonP >= p_mom_th.GetLowerCut()) && (RecoProtonP <= beamE));
+                        bool pRes_TL_Pass_Proton_MomKinCut = ((TLProtonP >= p_mom_th.GetLowerCut()) && (TLProtonP <= beamE));
+//                        bool pRes_Reco_Pass_Proton_MomKinCut = ((RecoProtonP >= p_mom_th.GetLowerCut()) &&
+//                                                                (RecoProtonP <= nRes.GetSliceUpperMomLim()));
+//                        bool pRes_TL_Pass_Proton_MomKinCut = ((TLProtonP >= p_mom_th.GetLowerCut()) &&
+//                                                              (TLProtonP <= nRes.GetSliceUpperMomLim()));
                         //</editor-fold>
 
                         //<editor-fold desc="pRes matching cuts">
@@ -14463,10 +14465,8 @@ void EventAnalyser() {
                         bool TL_Theta_kinCuts = (TLNeutronTheta <= FD_nucleon_theta_cut.GetUpperCut());
                         bool nRes_Pass_ThetaKinCut = (Reco_Theta_kinCut && TL_Theta_kinCuts);
 
-                        bool nRes_Reco_Pass_Neutron_MomKinCut = ((RecoNeutronP >= n_mom_th.GetLowerCut()) &&
-                                                                 (RecoNeutronP <= nRes.GetSliceUpperMomLim()));
-                        bool nRes_TL_Pass_Neutron_MomKinCut = ((TLNeutronP >= n_mom_th.GetLowerCut()) &&
-                                                               (TLNeutronP <= nRes.GetSliceUpperMomLim()));
+                        bool nRes_Reco_Pass_Neutron_MomKinCut = ((RecoNeutronP >= n_mom_th.GetLowerCut()) && (RecoNeutronP <= beamE));
+                        bool nRes_TL_Pass_Neutron_MomKinCut = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= beamE));
                         //</editor-fold>
 
                         //<editor-fold desc="nRes matching cuts">

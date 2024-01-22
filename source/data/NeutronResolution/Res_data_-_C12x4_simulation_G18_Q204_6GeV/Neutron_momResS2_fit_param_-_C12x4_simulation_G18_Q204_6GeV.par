@@ -5,177 +5,178 @@
 # Neutron resolution parameters are for:
 #sample:	C12x4_simulation_G18_Q204_6GeV
 #particle:	Neutron
-#momRes_calculation_mode:	Run on loaded momResS2
+#momRes_calculation_mode:	Calculate momResS2
 #delta:		0.05
 #Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
 
 #Fitted TL slices:
-fit_truth_Slice_#1_from_0.40_to_0.65			1:0.4:0.65:0.0496947:0.0415518
-fit_truth_Slice_#2_from_0.65_to_0.75			2:0.65:0.75:0.0496154:0.0662765
-fit_truth_Slice_#3_from_0.75_to_0.85			3:0.75:0.85:0.0185126:0.0297553
-fit_truth_Slice_#4_from_0.85_to_0.95			4:0.85:0.95:0.0184065:0.0658558
-fit_truth_Slice_#5_from_0.95_to_1.05			5:0.95:1.05:0.0418319:0.0768344
-fit_truth_Slice_#6_from_1.05_to_1.15			6:1.05:1.15:0.016726:0.0710723
-fit_truth_Slice_#7_from_1.15_to_1.20			7:1.15:1.2:0.0456718:0.0918305
-fit_truth_Slice_#8_from_1.20_to_1.25			8:1.2:1.25:0.0184198:0.0583181
-fit_truth_Slice_#9_from_1.25_to_1.30			9:1.25:1.3:0.0464927:0.0998923
-fit_truth_Slice_#10_from_1.30_to_1.35			10:1.3:1.35:0.0154085:0.0642954
-fit_truth_Slice_#11_from_1.35_to_1.40			11:1.35:1.4:-0.049561:0.293592
-fit_truth_Slice_#12_from_1.40_to_1.45			12:1.4:1.45:0.0411041:0.0933461
-fit_truth_Slice_#13_from_1.45_to_1.50			13:1.45:1.5:0.0655411:0.166086
-fit_truth_Slice_#14_from_1.50_to_1.55			14:1.5:1.55:0.0546818:0.231743
-fit_truth_Slice_#15_from_1.55_to_1.65			15:1.55:1.65:0.0146756:0.0962259
-fit_truth_Slice_#16_from_1.65_to_1.75			16:1.65:1.75:0.047976:0.112357
-fit_truth_Slice_#17_from_1.75_to_1.85			17:1.75:1.85:0.0215306:0.209324
-fit_truth_Slice_#18_from_1.85_to_1.95			18:1.85:1.95:0.0543647:0.146425
-fit_truth_Slice_#19_from_1.95_to_2.05			19:1.95:2.05:0.117322:0.173099
-fit_truth_Slice_#20_from_2.05_to_2.15			20:2.05:2.15:0.0594721:0.218927
-fit_truth_Slice_#21_from_2.15_to_2.25			21:2.15:2.25:-0.015869:0.1854
-fit_truth_Slice_#22_from_2.25_to_2.40			22:2.25:2.4:0.0365089:0.245378
-fit_truth_Slice_#23_from_2.40_to_2.55			23:2.4:2.55:0.0462786:0.35
-fit_truth_Slice_#24_from_2.55_to_2.75			24:2.55:2.75:-0.0371731:0.35
-fit_truth_Slice_#25_from_2.75_to_3.00			25:2.75:3:0.0334046:0.35
-fit_truth_Slice_#26_from_3.00_to_3.50			26:3:3.5:0.098924:0.35
-fit_truth_Slice_#27_from_3.50_to_6.00			27:3.5:6:0.104993:0.35
+fit_truth_Slice_#1_from_0.40_to_0.65			1:0.4:0.65:0.00968437:0.0409203
+fit_truth_Slice_#2_from_0.65_to_0.75			2:0.65:0.75:-0.00867045:0.0353929
+fit_truth_Slice_#3_from_0.75_to_0.85			3:0.75:0.85:-0.00884627:0.0383396
+fit_truth_Slice_#4_from_0.85_to_0.95			4:0.85:0.95:-0.00705399:0.0495903
+fit_truth_Slice_#5_from_0.95_to_1.05			5:0.95:1.05:-0.0119861:0.0530891
+fit_truth_Slice_#6_from_1.05_to_1.15			6:1.05:1.15:-0.00911686:0.0643877
+fit_truth_Slice_#7_from_1.15_to_1.20			7:1.15:1.2:-0.014954:0.0650996
+fit_truth_Slice_#8_from_1.20_to_1.25			8:1.2:1.25:-0.0132463:0.0666985
+fit_truth_Slice_#9_from_1.25_to_1.30			9:1.25:1.3:-0.0141194:0.0760972
+fit_truth_Slice_#10_from_1.30_to_1.35			10:1.3:1.35:-0.0116097:0.0837259
+fit_truth_Slice_#11_from_1.35_to_1.40			11:1.35:1.4:-0.0105882:0.0889085
+fit_truth_Slice_#12_from_1.40_to_1.45			12:1.4:1.45:-0.0152587:0.0887073
+fit_truth_Slice_#13_from_1.45_to_1.50			13:1.45:1.5:-0.018886:0.0905029
+fit_truth_Slice_#14_from_1.50_to_1.55			14:1.5:1.55:-0.0134538:0.0931951
+fit_truth_Slice_#15_from_1.55_to_1.65			15:1.55:1.65:-0.00775358:0.111274
+fit_truth_Slice_#16_from_1.65_to_1.75			16:1.65:1.75:-0.00743468:0.114038
+fit_truth_Slice_#17_from_1.75_to_1.85			17:1.75:1.85:-0.0127356:0.121701
+fit_truth_Slice_#18_from_1.85_to_1.95			18:1.85:1.95:-0.00349411:0.134276
+fit_truth_Slice_#19_from_1.95_to_2.05			19:1.95:2.05:0.00311241:0.139447
+fit_truth_Slice_#20_from_2.05_to_2.15			20:2.05:2.15:0.00730675:0.145455
+fit_truth_Slice_#21_from_2.15_to_2.25			21:2.15:2.25:0.00389637:0.141333
+fit_truth_Slice_#22_from_2.25_to_2.40			22:2.25:2.4:0.018065:0.155822
+fit_truth_Slice_#23_from_2.40_to_2.55			23:2.4:2.55:0.0165452:0.17274
+fit_truth_Slice_#24_from_2.55_to_2.75			24:2.55:2.75:0.0564871:0.151124
+fit_truth_Slice_#25_from_2.75_to_3.00			25:2.75:3:0.100161:0.12628
+fit_truth_Slice_#26_from_3.00_to_3.50			26:3:3.5:0.123208:0.134747
+fit_truth_Slice_#27_from_3.50_to_5.986			27:3.5:5.98636:0.274377:0.0921035
 
 
 #Fitted Reco slices:
-fit_reco_Slice_#1_from_0.40_to_0.65			1:0.4:0.65:0.0742926:0.0645004
-fit_reco_Slice_#2_from_0.65_to_0.75			2:0.65:0.75:0.0347378:0.0490658
-fit_reco_Slice_#3_from_0.75_to_0.85			3:0.75:0.85:-0.264831:0.349997
-fit_reco_Slice_#4_from_0.85_to_0.95			4:0.85:0.95:0.0580651:0.0742409
-fit_reco_Slice_#5_from_0.95_to_1.05			5:0.95:1.05:0.0425868:0.0783671
-fit_reco_Slice_#6_from_1.05_to_1.15			6:1.05:1.15:0.0398981:0.0654133
-fit_reco_Slice_#7_from_1.15_to_1.20			7:1.15:1.2:0.0114312:0.067697
-fit_reco_Slice_#8_from_1.20_to_1.25			8:1.2:1.25:-0.356708:0.35
-fit_reco_Slice_#9_from_1.25_to_1.30			9:1.25:1.3:0.041268:0.0980753
-fit_reco_Slice_#10_from_1.30_to_1.35			10:1.3:1.35:0.0475761:0.0944666
-fit_reco_Slice_#11_from_1.35_to_1.40			11:1.35:1.4:-0.0180971:0.163055
-fit_reco_Slice_#12_from_1.40_to_1.45			12:1.4:1.45:0.0273736:0.102267
-fit_reco_Slice_#13_from_1.45_to_1.50			13:1.45:1.5:0.100113:0.161547
-fit_reco_Slice_#14_from_1.50_to_1.55			14:1.5:1.55:0.0446455:0.266292
-fit_reco_Slice_#15_from_1.55_to_1.65			15:1.55:1.65:0.0263048:0.159615
-fit_reco_Slice_#16_from_1.65_to_1.75			16:1.65:1.75:0.000605235:0.0953447
-fit_reco_Slice_#17_from_1.75_to_1.85			17:1.75:1.85:0.061181:0.150524
-fit_reco_Slice_#18_from_1.85_to_1.95			18:1.85:1.95:0.0277897:0.133215
-fit_reco_Slice_#19_from_1.95_to_2.05			19:1.95:2.05:0.0142894:0.181804
-fit_reco_Slice_#20_from_2.05_to_2.15			20:2.05:2.15:0.0226561:0.118563
-fit_reco_Slice_#21_from_2.15_to_2.25			21:2.15:2.25:0.0817601:0.300415
-fit_reco_Slice_#22_from_2.25_to_2.40			22:2.25:2.4:0.0155508:0.190899
-fit_reco_Slice_#23_from_2.40_to_2.55			23:2.4:2.55:0.0275094:0.260843
-fit_reco_Slice_#24_from_2.55_to_2.75			24:2.55:2.75:-0.0102681:0.263771
-fit_reco_Slice_#25_from_2.75_to_3.00			25:2.75:3:-0.00127217:0.0437492
-fit_reco_Slice_#26_from_3.00_to_3.50			26:3:3.5:-0.10688:0.35
-fit_reco_Slice_#27_from_3.50_to_6.00			27:3.5:6:-0.191975:0.35
+fit_reco_Slice_#1_from_0.40_to_0.60			1:0.4:0.6:0.0348013:0.0511694
+fit_reco_Slice_#2_from_0.60_to_0.70			2:0.6:0.7:0.00720566:0.0397788
+fit_reco_Slice_#3_from_0.70_to_0.80			3:0.7:0.8:0.00619837:0.0441968
+fit_reco_Slice_#4_from_0.80_to_0.90			4:0.8:0.9:0.0036917:0.042701
+fit_reco_Slice_#5_from_0.90_to_0.95			5:0.9:0.95:-0.00425803:0.0423763
+fit_reco_Slice_#6_from_0.95_to_1.00			6:0.95:1:-0.00424616:0.0467682
+fit_reco_Slice_#7_from_1.00_to_1.05			7:1:1.05:0.0137256:0.0607345
+fit_reco_Slice_#8_from_1.05_to_1.10			8:1.05:1.1:0.0048558:0.0633153
+fit_reco_Slice_#9_from_1.10_to_1.15			9:1.1:1.15:-0.00280073:0.0589645
+fit_reco_Slice_#10_from_1.15_to_1.20			10:1.15:1.2:0.00137437:0.0620048
+fit_reco_Slice_#11_from_1.20_to_1.25			11:1.2:1.25:-0.00466012:0.0689485
+fit_reco_Slice_#12_from_1.25_to_1.30			12:1.25:1.3:0.00108128:0.06892
+fit_reco_Slice_#13_from_1.30_to_1.35			13:1.3:1.35:0.00162496:0.0734086
+fit_reco_Slice_#14_from_1.35_to_1.40			14:1.35:1.4:-0.00406759:0.0716811
+fit_reco_Slice_#15_from_1.40_to_1.45			15:1.4:1.45:-0.00139433:0.075933
+fit_reco_Slice_#16_from_1.45_to_1.50			16:1.45:1.5:-0.00213588:0.0801381
+fit_reco_Slice_#17_from_1.50_to_1.55			17:1.5:1.55:0.00633338:0.0863061
+fit_reco_Slice_#18_from_1.55_to_1.60			18:1.55:1.6:0.00228337:0.0923498
+fit_reco_Slice_#19_from_1.60_to_1.70			19:1.6:1.7:-0.00734893:0.0941843
+fit_reco_Slice_#20_from_1.70_to_1.80			20:1.7:1.8:0.00681208:0.107541
+fit_reco_Slice_#21_from_1.80_to_1.90			21:1.8:1.9:-0.00346327:0.108024
+fit_reco_Slice_#22_from_1.90_to_2.00			22:1.9:2:-0.00538966:0.115557
+fit_reco_Slice_#23_from_2.00_to_2.10			23:2:2.1:0.00555393:0.128959
+fit_reco_Slice_#24_from_2.10_to_2.25			24:2.1:2.25:0.00192114:0.135808
+fit_reco_Slice_#25_from_2.25_to_2.40			25:2.25:2.4:0.0104404:0.149854
+fit_reco_Slice_#26_from_2.40_to_2.65			26:2.4:2.65:0.00928636:0.161925
+fit_reco_Slice_#27_from_2.65_to_3.05			27:2.65:3.05:0.00503437:0.170166
+fit_reco_Slice_#28_from_3.05_to_5.986			28:3.05:5.98636:0.0199138:0.159028
 
 
 #smearing fit variables:
 
 #pol1 fit variables (no KC):
-truth_Smear_pol1:					0.101589:-0.00862275     # A:B
-truth_Smear_pol1_error:				0.0136013:0.0267717     # A_Err:B_Err
-truth_Smear_pol1_FitGoodness:		0.0981223:25     # CHI2:NDF
-reco_Smear_pol1_wKC:					0.040587:0.0887373     # A:B
-reco_Smear_pol1_wKC_error:				0.0353025:0.0641137     # A_Err:B_Err
-reco_Smear_pol1_wKC_FitGoodness:		0.135846:19     # CHI2:NDF
+truth_Smear_pol1:					0.0285729:0.0488668     # A:B
+truth_Smear_pol1_error:				0.00673286:0.0132483     # A_Err:B_Err
+truth_Smear_pol1_FitGoodness:		0.0239976:25     # CHI2:NDF
+reco_Smear_pol1_wKC:					0.0685927:-0.0165314     # A:B
+reco_Smear_pol1_wKC_error:				0.00205423:0.00354344     # A_Err:B_Err
+reco_Smear_pol1_wKC_FitGoodness:		0.000406027:19     # CHI2:NDF
 
 
 #pol1 fit variables (with KC):
-truth_Smear_pol1_wKC:					0.149645:-0.0848392     # A:B
-truth_Smear_pol1_wKC_error:				0.0244975:0.0444905     # A_Err:B_Err
-truth_Smear_pol1_wKC_FitGoodness:		0.0654155:19     # CHI2:NDF
-reco_Smear_pol1_wKC:					0.040587:0.0887373     # A:B
-reco_Smear_pol1_wKC_error:				0.0353025:0.0641137     # A_Err:B_Err
-reco_Smear_pol1_wKC_FitGoodness:		0.135846:19     # CHI2:NDF
+truth_Smear_pol1_wKC:					0.0586913:0.00667625     # A:B
+truth_Smear_pol1_wKC_error:				0.0065376:0.0118731     # A_Err:B_Err
+truth_Smear_pol1_wKC_FitGoodness:		0.00465878:19     # CHI2:NDF
+reco_Smear_pol1_wKC:					0.0685927:-0.0165314     # A:B
+reco_Smear_pol1_wKC_error:				0.00205423:0.00354344     # A_Err:B_Err
+reco_Smear_pol1_wKC_FitGoodness:		0.000406027:19     # CHI2:NDF
 
 
 #pol2 fit variables (no KC):
-truth_Smear_pol2:					-0.0217791:0.20583:-0.107438     # A:B:C
-truth_Smear_pol2_error:				0.00872995:0.0435766:0.0464946     # A_Err:B_Err:C_Err
-truth_Smear_pol2_FitGoodness:		0.0779165:24     # CHI2:NDF
-reco_Smear_pol2:					0.00350638:0.0403399:0.0852894     # A:B:C
-reco_Smear_pol2_error:				0.014334:0.0715499:0.076341     # A_Err:B_Err:C_Err
-reco_Smear_pol2_FitGoodness:		0.210059:24     # CHI2:NDF
+truth_Smear_pol2:					-0.0218576:0.13306:-0.0501032     # A:B:C
+truth_Smear_pol2_error:				0.0019291:0.00961655:0.0102515     # A_Err:B_Err:C_Err
+truth_Smear_pol2_FitGoodness:		0.00377965:24     # CHI2:NDF
+reco_Smear_pol2:					-0.0121171:0.0989956:-0.0297998     # A:B:C
+reco_Smear_pol2_error:				0.00193906:0.0092691:0.00922338     # A_Err:B_Err:C_Err
+reco_Smear_pol2_FitGoodness:		0.00328491:25     # CHI2:NDF
 
 
 #pol2 fit variables (with KC):
-truth_Smear_pol2_wKC:					0.0374388:0.00816327:0.0377527     # A:B:C
-truth_Smear_pol2_wKC_error:				0.0485548:0.185152:0.165229     # A_Err:B_Err:C_Err
-truth_Smear_pol2_wKC_FitGoodness:		0.0633239:18     # CHI2:NDF
-reco_Smear_pol2_wKC:					-0.0851465:0.362356:-0.190072     # A:B:C
-reco_Smear_pol2_wKC_error:				0.0682263:0.260165:0.23217     # A_Err:B_Err:C_Err
-reco_Smear_pol2_wKC_FitGoodness:		0.125028:18     # CHI2:NDF
+truth_Smear_pol2_wKC:					-0.0466585:0.235014:-0.146105     # A:B:C
+truth_Smear_pol2_wKC_error:				0.00724588:0.0276304:0.0246573     # A_Err:B_Err:C_Err
+truth_Smear_pol2_wKC_FitGoodness:		0.00141021:18     # CHI2:NDF
+reco_Smear_pol2_wKC:					-0.000886663:0.0718763:-0.0193228     # A:B:C
+reco_Smear_pol2_wKC_error:				0.00401477:0.0150164:0.0131517     # A_Err:B_Err:C_Err
+reco_Smear_pol2_wKC_FitGoodness:		0.00040493:18     # CHI2:NDF
 
 
 #pol3 fit variables (no KC):
-truth_Smear_pol3:					-0.0151797:0.0952654:-0.0450283:0.0404043     # A:B:C:D
-truth_Smear_pol3_error:				0.00802681:0.0624449:0.138963:0.0897987     # A_Err:B_Err:C_Err:D_Err
-truth_Smear_pol3_FitGoodness:		0.0674313:23     # CHI2:NDF
-reco_Smear_pol3:					-0.000233939:0.00526729:0.0366909:0.0873515     # A:B:C:D
-reco_Smear_pol3_error:				0.0141669:0.110212:0.245263:0.15849     # A_Err:B_Err:C_Err:D_Err
-reco_Smear_pol3_FitGoodness:		0.210052:23     # CHI2:NDF
+truth_Smear_pol3:					-0.000861609:-0.015222:0.118849:-0.0417328     # A:B:C:D
+truth_Smear_pol3_error:				0.00189803:0.0147486:0.0327967:0.0211823     # A_Err:B_Err:C_Err:D_Err
+truth_Smear_pol3_FitGoodness:		0.00374609:23     # CHI2:NDF
+reco_Smear_pol3:					-0.00998228:0.0604463:-0.0452165:0.0492079     # A:B:C:D
+reco_Smear_pol3_error:				0.000930839:0.00681626:0.0140104:0.0083414     # A_Err:B_Err:C_Err:D_Err
+reco_Smear_pol3_FitGoodness:		0.000567165:24     # CHI2:NDF
 
 
 #pol3 fit variables (with KC):
-truth_Smear_pol3_wKC:					0.0447011:-0.220285:0.478478:-0.232792     # A:B:C:D
-truth_Smear_pol3_wKC_error:				0.0948114:0.548884:1.01534:0.598173     # A_Err:B_Err:C_Err:D_Err
-truth_Smear_pol3_wKC_FitGoodness:		0.0625066:17     # CHI2:NDF
-reco_Smear_pol3_wKC:					-0.117527:0.592457:-0.874187:0.521239     # A:B:C:D
-reco_Smear_pol3_wKC_error:				0.131027:0.758542:1.40317:0.826657     # A_Err:B_Err:C_Err:D_Err
-reco_Smear_pol3_wKC_FitGoodness:		0.119378:17     # CHI2:NDF
+truth_Smear_pol3_wKC:					-0.0461971:0.21969:-0.25104:0.133493     # A:B:C:D
+truth_Smear_pol3_wKC_error:				0.00879014:0.0508881:0.0941342:0.0554577     # A_Err:B_Err:C_Err:D_Err
+truth_Smear_pol3_wKC_FitGoodness:		0.000537275:17     # CHI2:NDF
+reco_Smear_pol3_wKC:					-0.0283896:0.161271:-0.220847:0.147258     # A:B:C:D
+reco_Smear_pol3_wKC_error:				0.0044578:0.0255611:0.0467248:0.0271712     # A_Err:B_Err:C_Err:D_Err
+reco_Smear_pol3_wKC_FitGoodness:		0.000119597:17     # CHI2:NDF
 
 
 #correction fit variables:
 
 #pol1 fit variables (no KC):
-truth_Corr_pol1:					0.0133878:0.0140631     # A:B
-truth_Corr_pol1_error:				0.00779324:0.0153396     # A_Err:B_Err
-truth_Corr_pol1_FitGoodness:		0.0322137:25     # CHI2:NDF
-reco_Corr_pol1:					-0.0257969:0.0397654     # A:B
-reco_Corr_pol1_error:				0.0227744:0.0448272     # A_Err:B_Err
-reco_Corr_pol1_FitGoodness:		0.275106:25     # CHI2:NDF
+truth_Corr_pol1:					0.059754:-0.0893068     # A:B
+truth_Corr_pol1_error:				0.00680848:0.0133971     # A_Err:B_Err
+truth_Corr_pol1_FitGoodness:		0.0245397:25     # CHI2:NDF
+reco_Corr_pol1:					0.00167452:0.00103118     # A:B
+reco_Corr_pol1_error:				0.00209406:0.00368405     # A_Err:B_Err
+reco_Corr_pol1_FitGoodness:		0.00203564:26     # CHI2:NDF
 
 
 #pol1 fit variables (with KC):
-truth_Corr_pol1_wKC:					-0.00320307:0.0377047     # A:B
-truth_Corr_pol1_wKC_error:				0.0154456:0.028051     # A_Err:B_Err
-truth_Corr_pol1_wKC_FitGoodness:		0.0260042:19     # CHI2:NDF
-reco_Corr_pol1_wKC:					0.0201697:-0.0233574     # A:B
-reco_Corr_pol1_wKC_error:				0.0378708:0.0687781     # A_Err:B_Err
-reco_Corr_pol1_wKC_FitGoodness:		0.156331:19     # CHI2:NDF
+truth_Corr_pol1_wKC:					0.0437624:-0.0741659     # A:B
+truth_Corr_pol1_wKC_error:				0.00675032:0.0122594     # A_Err:B_Err
+truth_Corr_pol1_wKC_FitGoodness:		0.00496689:19     # CHI2:NDF
+reco_Corr_pol1_wKC:					0.00276722:-0.00271549     # A:B
+reco_Corr_pol1_wKC_error:				0.00249868:0.00431009     # A_Err:B_Err
+reco_Corr_pol1_wKC_FitGoodness:		0.000600726:19     # CHI2:NDF
 
 
 #pol2 fit variables (no KC):
-truth_Corr_pol2:					0.00691815:-0.0197243:0.0454519     # A:B:C
-truth_Corr_pol2_error:				0.00543275:0.0271182:0.0289341     # A_Err:B_Err:C_Err
-truth_Corr_pol2_FitGoodness:		0.0301749:24     # CHI2:NDF
-reco_Corr_pol2:					-0.0278821:0.107654:-0.0867403     # A:B:C
-reco_Corr_pol2_error:				0.0153849:0.0767956:0.081938     # A_Err:B_Err:C_Err
-reco_Corr_pol2_FitGoodness:		0.241989:24     # CHI2:NDF
+truth_Corr_pol2:					0.0220727:-0.045761:0.010637     # A:B:C
+truth_Corr_pol2_error:				0.00196507:0.00979588:0.0104427     # A_Err:B_Err:C_Err
+truth_Corr_pol2_FitGoodness:		0.00392193:24     # CHI2:NDF
+reco_Corr_pol2:					0.00406119:-0.0168888:0.0175616     # A:B:C
+reco_Corr_pol2_error:				0.0012924:0.00617792:0.00614745     # A_Err:B_Err:C_Err
+reco_Corr_pol2_FitGoodness:		0.00145926:25     # CHI2:NDF
 
 
 #pol2 fit variables (with KC):
-truth_Corr_pol2_wKC:					-0.0314521:0.115585:-0.0651593     # A:B:C
-truth_Corr_pol2_wKC_error:				0.0301597:0.115007:0.102632     # A_Err:B_Err:C_Err
-truth_Corr_pol2_wKC_FitGoodness:		0.0244319:18     # CHI2:NDF
-reco_Corr_pol2_wKC:					-0.062956:0.258081:-0.229504     # A:B:C
-reco_Corr_pol2_wKC_error:				0.0748336:0.28536:0.254654     # A_Err:B_Err:C_Err
-reco_Corr_pol2_wKC_FitGoodness:		0.150417:18     # CHI2:NDF
+truth_Corr_pol2_wKC:					0.0506974:-0.147725:0.0916641     # A:B:C
+truth_Corr_pol2_wKC_error:				0.00581716:0.0221823:0.0197954     # A_Err:B_Err:C_Err
+truth_Corr_pol2_wKC_FitGoodness:		0.000908917:18     # CHI2:NDF
+reco_Corr_pol2_wKC:					0.00756739:-0.0252569:0.021108     # A:B:C
+reco_Corr_pol2_wKC_error:				0.00455309:0.0170299:0.0149152     # A_Err:B_Err:C_Err
+reco_Corr_pol2_wKC_FitGoodness:		0.000520801:18     # CHI2:NDF
 
 
 #pol3 fit variables (no KC):
-truth_Corr_pol3:					-0.000381107:0.0098567:-0.0260225:0.0491637     # A:B:C:D
-truth_Corr_pol3_error:				0.00536892:0.0417677:0.092949:0.060064     # A_Err:B_Err:C_Err:D_Err
-truth_Corr_pol3_FitGoodness:		0.0301683:23     # CHI2:NDF
-reco_Corr_pol3:					-4.54472e-05:-0.0275316:0.106903:-0.0862977     # A:B:C:D
-reco_Corr_pol3_error:				0.0152058:0.118294:0.263249:0.170113     # A_Err:B_Err:C_Err:D_Err
-reco_Corr_pol3_FitGoodness:		0.241989:23     # CHI2:NDF
+truth_Corr_pol3:					-0.00692184:0.0753808:-0.159925:0.0778816     # A:B:C:D
+truth_Corr_pol3_error:				0.00129942:0.0100971:0.0224531:0.0145017     # A_Err:B_Err:C_Err:D_Err
+truth_Corr_pol3_FitGoodness:		0.00175578:23     # CHI2:NDF
+reco_Corr_pol3:					-0.00420589:0.0346347:-0.0776504:0.0508504     # A:B:C:D
+reco_Corr_pol3_error:				0.00122158:0.00894528:0.0183865:0.0109468     # A_Err:B_Err:C_Err:D_Err
+reco_Corr_pol3_FitGoodness:		0.000976797:24     # CHI2:NDF
 
 
 #pol3 fit variables (with KC):
-truth_Corr_pol3_wKC:					-0.0137413:0.0467495:-0.025053:0.0145299     # A:B:C:D
-truth_Corr_pol3_wKC_error:				0.05918:0.342606:0.633762:0.373371     # A_Err:B_Err:C_Err:D_Err
-truth_Corr_pol3_wKC_FitGoodness:		0.0243531:17     # CHI2:NDF
-reco_Corr_pol3_wKC:					-0.0440613:0.191079:-0.205502:0.0371673     # A:B:C:D
-reco_Corr_pol3_wKC_error:				0.146689:0.849212:1.5709:0.92547     # A_Err:B_Err:C_Err:D_Err
-reco_Corr_pol3_wKC_FitGoodness:		0.149623:17     # CHI2:NDF
+truth_Corr_pol3_wKC:					0.0324434:-0.134883:0.187961:-0.0996961     # A:B:C:D
+truth_Corr_pol3_wKC_error:				0.00826585:0.0478528:0.0885195:0.0521499     # A_Err:B_Err:C_Err:D_Err
+truth_Corr_pol3_wKC_FitGoodness:		0.000475094:17     # CHI2:NDF
+reco_Corr_pol3_wKC:					-0.0182302:0.111696:-0.213227:0.128077     # A:B:C:D
+reco_Corr_pol3_wKC_error:				0.00818447:0.0469299:0.0857863:0.049886     # A_Err:B_Err:C_Err:D_Err
+reco_Corr_pol3_wKC_FitGoodness:		0.000403145:17     # CHI2:NDF
