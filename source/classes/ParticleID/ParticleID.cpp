@@ -2,9 +2,9 @@
 // Created by alons on 22/01/2024.
 //
 
-#include "ParticlePID.h"
+#include "ParticleID.h"
 
-// NeutronECAL_Cut_Veto functions -------------------------------------------------------------------------------------------------------------------------------------------
+// NeutronECAL_Cut_Veto functions ----------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="NeutronECAL_Cut_Veto function">
 /* NOTE: this code is valid for a single neutral only. */
@@ -13,7 +13,7 @@
  * const std::unique_ptr<clas12::clas12reader> &c12 - the event
  * beamE
  * index - of the particle in question (the neutral) */
-bool ParticlePID::NeutronECAL_Cut_Veto(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons,
+bool ParticleID::NeutronECAL_Cut_Veto(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons,
                                        const double &beamE, const int &index, const double &veto_cut) {
     TVector3 p_b(0, 0, beamE); /* beam energy */
 
@@ -93,10 +93,10 @@ bool ParticlePID::NeutronECAL_Cut_Veto(vector <region_part_ptr> &allParticles, v
 }
 //</editor-fold>
 
-// ChargedParticleID function -------------------------------------------------------------------------------------------------------------------------------------------
+// ChargedParticleID function --------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ChargedParticleID function">
-vector<int> ParticlePID::ChargedParticleID(vector <region_part_ptr> &Particle, const DSCuts &Momentum_th) {
+vector<int> ParticleID::ChargedParticleID(vector <region_part_ptr> &Particle, const DSCuts &Momentum_th) {
     vector<int> ChargedParticle;
 
     for (int i = 0; i < Particle.size(); i++) {
@@ -114,7 +114,7 @@ vector<int> ParticlePID::ChargedParticleID(vector <region_part_ptr> &Particle, c
 }
 //</editor-fold>
 
-// FDNeutralParticleID function -------------------------------------------------------------------------------------------------------------------------------------------
+// FDNeutralParticleID function ------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="FDNeutralParticleID function">
 
@@ -123,7 +123,7 @@ vector<int> ParticlePID::ChargedParticleID(vector <region_part_ptr> &Particle, c
  * Neutron = a neutral particle (i.e., neutron or photon) in the FD with no PCal hit and with an ECal hit.
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
-void ParticlePID::FDNeutralParticleID(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons,
+void ParticleID::FDNeutralParticleID(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons,
                                       vector<int> &FD_Neutrons_within_PID_cuts, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th,
                                       vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th,
                                       DSCuts &Neutron_veto_cut, const double &beamE, const double &ECAL_V_edge_cut, const double &ECAL_W_edge_cut,
@@ -178,7 +178,7 @@ void ParticlePID::FDNeutralParticleID(vector <region_part_ptr> allParticles, vec
  * Neutron = a neutral particle (i.e., neutron or photon) in the FD with no PCal hit and with an ECal hit.
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
-void ParticlePID::FDNeutralParticleID(vector <region_part_ptr> allParticles,
+void ParticleID::FDNeutralParticleID(vector <region_part_ptr> allParticles,
                                       vector<int> &FD_Neutrons_within_th, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th,
                                       vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th,
                                       const bool &apply_nucleon_cuts) {
@@ -220,7 +220,7 @@ void ParticlePID::FDNeutralParticleID(vector <region_part_ptr> allParticles,
 //</editor-fold>
 
 //<editor-fold desc="Get leading neutron (ORIGINAL!)">
-int ParticlePID::FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, const bool &apply_nucleon_cuts) {
+int ParticleID::FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, const bool &apply_nucleon_cuts) {
     double P_max = -1;
     int MaxPIndex = -1;
     bool PrintLog = false;
@@ -258,7 +258,7 @@ int ParticlePID::FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int
 
 //</editor-fold>
 
-// FDNeutralParticle functions ------------------------------------------------------------------------------------------------------------------------------------------
+// FDNeutralParticle functions -------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="FDNeutralParticle functions">
 /* The NeutralParticleID function gets neutrons or photons from the FD, according to the definition from Larry:
@@ -266,7 +266,7 @@ int ParticlePID::FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
 /* FDNeutralParticle without ECAL veto */
-void ParticlePID::FDNeutralParticle(vector <region_part_ptr> allParticles, vector<int> &ID_Neutrons_FD, vector<int> &ID_Photons_FD) {
+void ParticleID::FDNeutralParticle(vector <region_part_ptr> allParticles, vector<int> &ID_Neutrons_FD, vector<int> &ID_Photons_FD) {
     for (int i = 0; i < allParticles.size(); i++) {
         int ParticlePDG = allParticles[i]->par()->getPid();
 
@@ -290,7 +290,7 @@ void ParticlePID::FDNeutralParticle(vector <region_part_ptr> allParticles, vecto
 }
 
 /* FDNeutralParticle with ECAL veto */
-void ParticlePID::FDNeutralParticle(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons,
+void ParticleID::FDNeutralParticle(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons,
                                     vector<int> &ID_Neutrons_FD, vector<int> &ID_Photons_FD,
                                     const DSCuts &Neutron_veto_cut, const double &beamE) {
     for (int i = 0; i < allParticles.size(); i++) {
@@ -323,10 +323,10 @@ void ParticlePID::FDNeutralParticle(vector <region_part_ptr> allParticles, vecto
 }
 //</editor-fold>
 
-// GetFDNeutronP functions ------------------------------------------------------------------------------------------------------------------------------------------
+// GetFDNeutronP functions -----------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetFDNeutronP functions">
-double ParticlePID::GetFDNeutronP(region_part_ptr &Neutron, const bool &apply_nucleon_cuts) {
+double ParticleID::GetFDNeutronP(region_part_ptr &Neutron, const bool &apply_nucleon_cuts) {
     double Momentum;
 
     if (apply_nucleon_cuts) {
@@ -392,13 +392,13 @@ double ParticlePID::GetFDNeutronP(region_part_ptr &Neutron, const bool &apply_nu
 }
 //</editor-fold>
 
-// GetFDNeutrons functions ------------------------------------------------------------------------------------------------------------------------------------------
+// GetFDNeutrons functions -----------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetFDNeutrons functions">
 /* The GetFDNeutrons function gets neutrons from the FD, according to the definition from Larry:
  * Neutron = a neutral particle (i.e., neutron or photon) in the FD with no PCal hit and with an ECal hit. */
 
-vector<int> ParticlePID::GetFDNeutrons(vector <region_part_ptr> &allParticles, const DSCuts &Momentum_cuts, const bool &apply_nucleon_cuts) {
+vector<int> ParticleID::GetFDNeutrons(vector <region_part_ptr> &allParticles, const DSCuts &Momentum_cuts, const bool &apply_nucleon_cuts) {
     vector<int> Neutrons_indices_in_allParticles;
 
     for (int i = 0; i < allParticles.size(); i++) {
@@ -425,13 +425,13 @@ vector<int> ParticlePID::GetFDNeutrons(vector <region_part_ptr> &allParticles, c
 }
 //</editor-fold>
 
-// GetFDPhotons functions ------------------------------------------------------------------------------------------------------------------------------------------
+// GetFDPhotons functions ------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetFDPhotons functions">
 /* The GetFDPhotons function gets photons from the FD, according to the definition from Larry:
  * Photon = a photon in the FD with a PCAL hit. */
 
-vector<int> ParticlePID::GetFDPhotons(vector <region_part_ptr> &allParticles, const DSCuts &Momentum_cuts) {
+vector<int> ParticleID::GetFDPhotons(vector <region_part_ptr> &allParticles, const DSCuts &Momentum_cuts) {
     vector<int> Photons_indices_in_allParticles;
 
     for (int i = 0; i < allParticles.size(); i++) {
@@ -456,10 +456,10 @@ vector<int> ParticlePID::GetFDPhotons(vector <region_part_ptr> &allParticles, co
 }
 //</editor-fold>
 
-// GetGoodParticles functions ------------------------------------------------------------------------------------------------------------------------------------------
+// GetGoodParticles functions --------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetGoodParticles functions">
-vector<int> ParticlePID::GetGoodParticles(vector <region_part_ptr> &Particle, // particle
+vector<int> ParticleID::GetGoodParticles(vector <region_part_ptr> &Particle, // particle
                                           const DSCuts &Momentum_cuts // corresponding momentum cuts
 ) {
     vector<int> GoodParticles;
@@ -475,12 +475,12 @@ vector<int> ParticlePID::GetGoodParticles(vector <region_part_ptr> &Particle, //
 }
 //</editor-fold>
 
-// GetGoodProtons functions ------------------------------------------------------------------------------------------------------------------------------------------
+// GetGoodProtons functions ----------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetGoodProtons functions">
 
 //<editor-fold desc="GetGoodProtons function">
-vector<int> ParticlePID::GetGoodProtons(const bool &apply_nucleon_cuts, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind,
+vector<int> ParticleID::GetGoodProtons(const bool &apply_nucleon_cuts, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind,
                                         const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p) {
     vector<int> GoodProtons; // good protons vector after the cuts
 
@@ -557,7 +557,7 @@ vector<int> ParticlePID::GetGoodProtons(const bool &apply_nucleon_cuts, vector <
 //</editor-fold>
 
 //<editor-fold desc="SetGPMonitoringPlots function">
-void ParticlePID::SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, string CToF_hits_monitoring_2p_Directory,
+void ParticleID::SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, string CToF_hits_monitoring_2p_Directory,
                                        string Double_detection_monitoring_2p_Directory) {
     if (GoodProtonsMonitorPlots) {
 // Monitoring histograms definitions ------------------------------------------------------------------------------------------------------------------------------------
@@ -733,7 +733,7 @@ void ParticlePID::SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, stri
 //</editor-fold>
 
 //<editor-fold desc="GPMonitoring function">
-void ParticlePID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind,
+void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind,
                                const vector<int> &Protons_ind, const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p,
                                const DSCuts &dphi_p1_p2_2p,
                                const double &Weight) {
@@ -864,14 +864,14 @@ void ParticlePID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <regi
 
 //</editor-fold>
 
-// nParticleID functions ------------------------------------------------------------------------------------------------------------------------------------------
+// nParticleID functions -------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="nParticleID functions">
 /* The NeutralParticleID function gets neutrons or photons from the FD, according to the definition from Larry:
  * Neutron = a neutral particle (i.e., neutron or photon) in the FD with no PCal hit and with an ECal hit.
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
-void ParticlePID::nParticleID(vector <region_part_ptr> &allParticles,
+void ParticleID::nParticleID(vector <region_part_ptr> &allParticles,
                               vector<int> &ID_Neutrons_FD, const DSCuts &Neutron_momentum_th,
                               vector<int> &ID_Photons_FD, const DSCuts &Photon_momentum_th,
                               const bool &apply_nucleon_cuts) {

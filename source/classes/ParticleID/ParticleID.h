@@ -2,8 +2,8 @@
 // Created by alons on 22/01/2024.
 //
 
-#ifndef PARTICLEPID_H
-#define PARTICLEPID_H
+#ifndef PARTICLEID_H
+#define PARTICLEID_H
 
 #include <iostream>
 #include <vector>
@@ -25,9 +25,10 @@
 using namespace std;
 using namespace clas12;
 
-class ParticlePID {
-private:
+class ParticleID {
+public:
 
+    //TODO: move from here!
     //<editor-fold desc="Good protons monitoring histograms">
     // Theta_p1_p2 vs. TOF1-TOF2 plots (2p, CD only) ------------------------------------------------------------------------------------------------------------------------
 
@@ -94,29 +95,27 @@ private:
     int num_of_RM_2p_events_dCDaFDd = 0, num_of_AD_2p_events_from_3p_dCDaFDd = 0, num_of_AD_2p_events_from_4p_dCDaFDd = 0;
     //</editor-fold>
 
-public:
+// Default constructor ---------------------------------------------------------------------------------------------------------------------------
 
-// Default constructor --------------------------------------------------------------------------------------------------------------------------------------------------
+    ParticleID() = default;
 
-    ParticlePID() = default;
-
-// NeutronECAL_Cut_Veto function -------------------------------------------------------------------------------------------------------------------------------------------
+// NeutronECAL_Cut_Veto function -----------------------------------------------------------------------------------------------------------------
 
     bool NeutronECAL_Cut_Veto(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &beamE,
                               const int &index, const double &veto_cut);
 
-// ChargedParticleID function -------------------------------------------------------------------------------------------------------------------------------------------
+// ChargedParticleID function --------------------------------------------------------------------------------------------------------------------
 
     vector<int> ChargedParticleID(vector <region_part_ptr> &Particle, const DSCuts &Momentum_th);
 
-// FDNeutralParticle function -------------------------------------------------------------------------------------------------------------------------------------------
+// FDNeutralParticle function --------------------------------------------------------------------------------------------------------------------
 
     void FDNeutralParticle(vector <region_part_ptr> allParticles, vector<int> &ID_Neutrons_FD, vector<int> &ID_Photons_FD);
 
     void FDNeutralParticle(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons, vector<int> &ID_Neutrons_FD,
                            vector<int> &ID_Photons_FD, const DSCuts &Neutron_veto_cut, const double &beamE);
 
-// FDNeutralParticleID function -------------------------------------------------------------------------------------------------------------------------------------------
+// FDNeutralParticleID function ------------------------------------------------------------------------------------------------------------------
 
     void FDNeutralParticleID(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons, vector<int> &FD_Neutrons_within_PID_cuts,
                              vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th, vector<int> &FD_Photons_within_th,
@@ -127,27 +126,27 @@ public:
                              DSCuts &Neutron_momentum_th, vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD,
                              DSCuts &Photon_momentum_th, const bool &apply_nucleon_cuts);
 
-// FDNeutralMaxP function -------------------------------------------------------------------------------------------------------------------------------------------
+// FDNeutralMaxP function ------------------------------------------------------------------------------------------------------------------------
 
     int FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, const bool &apply_nucleon_cuts);
 
-// GetFDNeutronP function -------------------------------------------------------------------------------------------------------------------------------------------
+// GetFDNeutronP function ------------------------------------------------------------------------------------------------------------------------
 
     double GetFDNeutronP(region_part_ptr &Neutron, const bool &apply_nucleon_cuts);
 
-// GetFDNeutrons function -------------------------------------------------------------------------------------------------------------------------------------------
+// GetFDNeutrons function ------------------------------------------------------------------------------------------------------------------------
 
     vector<int> GetFDNeutrons(vector <region_part_ptr> &allParticles, const DSCuts &Momentum_cuts, const bool &apply_nucleon_cuts);
 
-// GetFDPhotons function -------------------------------------------------------------------------------------------------------------------------------------------
+// GetFDPhotons function -------------------------------------------------------------------------------------------------------------------------
 
     vector<int> GetFDPhotons(vector <region_part_ptr> &allParticles, const DSCuts &Momentum_cuts);
 
-// GetGoodParticles function -------------------------------------------------------------------------------------------------------------------------------------------
+// GetGoodParticles function ---------------------------------------------------------------------------------------------------------------------
 
     vector<int> GetGoodParticles(vector <region_part_ptr> &Particle, const DSCuts &Momentum_cuts);
 
-// GetGoodProtons function -------------------------------------------------------------------------------------------------------------------------------------------
+// GetGoodProtons function -----------------------------------------------------------------------------------------------------------------------
 
     vector<int> GetGoodProtons(const bool &apply_nucleon_cuts, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind,
                                const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p);
@@ -159,12 +158,11 @@ public:
                       const vector<int> &Protons_ind, const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p,
                       const double &Weight);
 
-// nParticleID function -------------------------------------------------------------------------------------------------------------------------------------------
+// nParticleID function --------------------------------------------------------------------------------------------------------------------------
 
     void nParticleID(vector <region_part_ptr> &allParticles, vector<int> &ID_Neutrons_FD, const DSCuts &Neutron_momentum_th,
                      vector<int> &ID_Photons_FD, const DSCuts &Photon_momentum_th, const bool &apply_nucleon_cuts);
 
 };
 
-
-#endif //PARTICLEPID_H
+#endif //PARTICLEID_H
