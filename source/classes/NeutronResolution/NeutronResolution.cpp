@@ -2649,10 +2649,6 @@ void NeutronResolution::AutoReader(const string &MomentumType, const int &Polyno
             Loading_Dest.push_back(Loaded_FitVarResultsGoodness);
         }
 
-//        Loading_Dest.push_back(Loaded_FitVarResults);
-//        Loading_Dest.push_back(Loaded_FitVarResultsErrors);
-//        Loading_Dest.push_back(Loaded_FitVarResultsGoodness);
-
         //<editor-fold desc="Safety checks">
         if (!findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
             if (Loaded_FitVarResults.size() != (PolynomialDegree + 1)) {
