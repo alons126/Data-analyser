@@ -20,7 +20,6 @@
 #include "../../classes/DSCuts/DSCuts.h"
 #include "../NeutronECAL_Cut_Veto.h"
 
-
 using namespace std;
 
 /* The NeutralParticleID function gets neutrons or photons from the FD, according to the definition from Larry:
@@ -53,7 +52,7 @@ void FDNeutralParticle(vector <region_part_ptr> allParticles, vector<int> &ID_Ne
 /* FDNeutralParticle with ECAL veto */
 void FDNeutralParticle(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons,
                        vector<int> &ID_Neutrons_FD, vector<int> &ID_Photons_FD,
-                       DSCuts &Neutron_veto_cut, double beamE) {
+                       DSCuts &Neutron_veto_cut, const double &beamE) {
     for (int i = 0; i < allParticles.size(); i++) {
         int ParticlePDG = allParticles[i]->par()->getPid();
 

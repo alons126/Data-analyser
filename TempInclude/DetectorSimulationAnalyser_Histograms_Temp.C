@@ -20794,7 +20794,7 @@ void EventAnalyser() {
     myLogFile << "Smearing loading path:\n" << nRes.Get_Loaded_Std_coefficients_path() << "\n\n";
 
     vector<double> Std_coefficients_values = nRes.Get_Loaded_Smear_coefficients_values();
-    vector <string> Std_coefficients_names = nRes.Get_Loaded_Std_coefficients_names();
+    vector <string> Std_coefficients_names = nRes.Get_Loaded_Smear_coefficients_names();
 
     for (int i = 0; i < Std_coefficients_values.size(); i++) { myLogFile << Std_coefficients_names.at(i) << " = " << Std_coefficients_values.at(i) << "\n"; }
 
@@ -20820,7 +20820,7 @@ void EventAnalyser() {
         myLogFile << "Smearing loading path:\n" << nRes.Get_Loaded_Std_coefficients_path() << "\n\n";
 
         vector<double> Std_coefficients_values = nRes.Get_Loaded_Smear_coefficients_values();
-        vector <string> Std_coefficients_names = nRes.Get_Loaded_Std_coefficients_names();
+        vector <string> Std_coefficients_names = nRes.Get_Loaded_Smear_coefficients_names();
 
         for (int i = 0; i < Std_coefficients_values.size(); i++) { myLogFile << Std_coefficients_names.at(i) << " = " << Std_coefficients_values.at(i) << "\n"; }
 

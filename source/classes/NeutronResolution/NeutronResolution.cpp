@@ -377,73 +377,135 @@ void NeutronResolution::SetMomResSlices(const string &SampleName, const string &
             SliceLowerLim = SliceUpperLim;
 
             if (VaryingDelta) {
-                if (beamE == 5.98636) {
-                    if (SampleName == "C12_simulation_G18_Q204_6GeV") {
-                        if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.60)) { // 0.4-0.65
-                            Delta = delta * 5;
-                        } else if ((SliceLowerLim >= 0.60) && (SliceLowerLim < 1.00)) { // 0.65-1.05
-                            Delta = delta * 2;
-                        } else if ((SliceLowerLim >= 1.00) && (SliceLowerLim < 1.70)) { // 1.05-1.70
-                            Delta = delta * 1;
-                        } else if ((SliceLowerLim >= 1.70) && (SliceLowerLim < 2.25)) { // 1.70-2.30
-                            Delta = delta * 2;
-                        } else if ((SliceLowerLim >= 2.25) && (SliceLowerLim < 2.55)) { // 2.30-2.60
-                            Delta = delta * 3;
-                        } else if ((SliceLowerLim >= 2.55) && (SliceLowerLim < 2.95)) { // 2.60-3.00
-                            Delta = delta * 4;
-                        } else if ((SliceLowerLim >= 2.95) && (SliceLowerLim < 3.25)) { // 3.00-3.30
-                            Delta = delta * 6;
-                        } else if (SliceLowerLim >= 3.25) { // 3.00-SliceUpperMomLim
-                            Delta = SliceUpperMomLim - SliceLowerLim;
+                if (MomentumType == "truth") {
+                    if (beamE == 5.98636) {
+                        if (SampleName == "C12_simulation_G18_Q204_6GeV") {
+                            if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.60)) { // 0.4-0.65
+                                Delta = delta * 5;
+                            } else if ((SliceLowerLim >= 0.60) && (SliceLowerLim < 1.00)) { // 0.65-1.05
+                                Delta = delta * 2;
+                            } else if ((SliceLowerLim >= 1.00) && (SliceLowerLim < 1.70)) { // 1.05-1.70
+                                Delta = delta * 1;
+                            } else if ((SliceLowerLim >= 1.70) && (SliceLowerLim < 2.25)) { // 1.70-2.30
+                                Delta = delta * 2;
+                            } else if ((SliceLowerLim >= 2.25) && (SliceLowerLim < 2.55)) { // 2.30-2.60
+                                Delta = delta * 3;
+                            } else if ((SliceLowerLim >= 2.55) && (SliceLowerLim < 2.95)) { // 2.60-3.00
+                                Delta = delta * 4;
+                            } else if ((SliceLowerLim >= 2.95) && (SliceLowerLim < 3.25)) { // 3.00-3.30
+                                Delta = delta * 6;
+                            } else if (SliceLowerLim >= 3.25) { // 3.00-SliceUpperMomLim
+                                Delta = SliceUpperMomLim - SliceLowerLim;
+                            }
+                        } else if (SampleName == "C12x4_simulation_G18_Q204_6GeV") { // Slices by option 2
+                            if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.60)) { // 0.4-0.65
+                                Delta = delta * 5;
+                            } else if ((SliceLowerLim >= 0.60) && (SliceLowerLim < 1.10)) { // 0.65-1.15
+                                Delta = delta * 2;
+                            } else if ((SliceLowerLim >= 1.10) && (SliceLowerLim < 1.55)) { // 1.15-1.55
+                                Delta = delta * 1;
+                            } else if ((SliceLowerLim >= 1.55) && (SliceLowerLim < 2.25)) { // 1.55-2.25
+                                Delta = delta * 2;
+                            } else if ((SliceLowerLim >= 2.25) && (SliceLowerLim < 2.55)) { // 2.25-2.55
+                                Delta = delta * 3;
+                            } else if ((SliceLowerLim >= 2.55) && (SliceLowerLim < 2.75)) { // 2.55-2.75
+                                Delta = delta * 4;
+                            } else if ((SliceLowerLim >= 2.75) && (SliceLowerLim < 3.00)) { // 2.75-3.00
+                                Delta = delta * 5;
+                            } else if ((SliceLowerLim >= 3.00) && (SliceLowerLim < 3.50)) { // 3.00-3.50
+                                Delta = delta * 10;
+                            } else if (SliceLowerLim >= 3.50) { // 3.00-SliceUpperMomLim
+                                Delta = SliceUpperMomLim - SliceLowerLim;
+                            }
+                        } else {
+                            if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.65)) { // 0.4-0.7
+                                Delta = delta * 6;
+                            } else if ((SliceLowerLim >= 0.65) && (SliceLowerLim < 0.85)) { // 0.7-0.9
+                                Delta = delta * 4;
+                            } else if ((SliceLowerLim >= 0.85) && (SliceLowerLim < 1.85)) { // 0.9-1.90
+                                Delta = delta * 2;
+                            } else if ((SliceLowerLim >= 1.85) && (SliceLowerLim < 2.15)) { // 1.90-2.20
+                                Delta = delta * 3;
+                            } else if ((SliceLowerLim >= 2.15) && (SliceLowerLim < 2.35)) { // 2.20-2.40
+                                Delta = delta * 4;
+                            } else if ((SliceLowerLim >= 2.35) && (SliceLowerLim < 2.60)) { // 2.40-2.65
+                                Delta = delta * 5;
+                            } else if ((SliceLowerLim >= 2.60) && (SliceLowerLim < 2.95)) { // 2.65-3.00
+                                Delta = delta * 7;
+                            } else if (SliceLowerLim >= 2.95) { // 3.00-SliceUpperMomLim
+                                Delta = SliceUpperMomLim - SliceLowerLim;
+                            }
                         }
-                    } else if (SampleName == "C12x4_simulation_G18_Q204_6GeV") { // Slices by option 2
-                        if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.60)) { // 0.4-0.65
-                            Delta = delta * 5;
-                        } else if ((SliceLowerLim >= 0.60) && (SliceLowerLim < 1.10)) { // 0.65-1.15
-                            Delta = delta * 2;
-                        } else if ((SliceLowerLim >= 1.10) && (SliceLowerLim < 1.55)) { // 1.15-1.55
-                            Delta = delta * 1;
-                        } else if ((SliceLowerLim >= 1.55) && (SliceLowerLim < 2.25)) { // 1.55-2.25
-                            Delta = delta * 2;
-                        } else if ((SliceLowerLim >= 2.25) && (SliceLowerLim < 2.55)) { // 2.25-2.55
+                    } else if (beamE == 2.07052) {
+                        if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.50)) { // 0.4-0.55
                             Delta = delta * 3;
-                        } else if ((SliceLowerLim >= 2.55) && (SliceLowerLim < 2.75)) { // 2.55-2.75
-                            Delta = delta * 4;
-                        } else if ((SliceLowerLim >= 2.75) && (SliceLowerLim < 3.00)) { // 2.75-3.00
-                            Delta = delta * 5;
-                        } else if ((SliceLowerLim >= 3.00) && (SliceLowerLim < 3.50)) { // 3.00-3.50
-                            Delta = delta * 10;
-                        } else if (SliceLowerLim >= 3.50) { // 3.00-SliceUpperMomLim
-                            Delta = SliceUpperMomLim - SliceLowerLim;
-                        }
-                    } else {
-                        if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.65)) { // 0.4-0.7
-                            Delta = delta * 6;
-                        } else if ((SliceLowerLim >= 0.65) && (SliceLowerLim < 0.85)) { // 0.7-0.9
-                            Delta = delta * 4;
-                        } else if ((SliceLowerLim >= 0.85) && (SliceLowerLim < 1.85)) { // 0.9-1.90
+                        } else if ((SliceLowerLim >= 0.50) && (SliceLowerLim < 1.10)) { // 0.55-1.15
                             Delta = delta * 2;
-                        } else if ((SliceLowerLim >= 1.85) && (SliceLowerLim < 2.15)) { // 1.90-2.20
+                        } else if ((SliceLowerLim >= 1.10) && (SliceLowerLim < 1.25)) { // 1.15-1.30
                             Delta = delta * 3;
-                        } else if ((SliceLowerLim >= 2.15) && (SliceLowerLim < 2.35)) { // 2.20-2.40
-                            Delta = delta * 4;
-                        } else if ((SliceLowerLim >= 2.35) && (SliceLowerLim < 2.60)) { // 2.40-2.65
-                            Delta = delta * 5;
-                        } else if ((SliceLowerLim >= 2.60) && (SliceLowerLim < 2.95)) { // 2.65-3.00
-                            Delta = delta * 7;
-                        } else if (SliceLowerLim >= 2.95) { // 3.00-SliceUpperMomLim
-                            Delta = SliceUpperMomLim - SliceLowerLim;
+                        } else if (SliceLowerLim >= 1.25) { // 1.30-beamE
+                            Delta = beamE - SliceLowerLim;
                         }
                     }
-                } else if (beamE == 2.07052) {
-                    if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.50)) { // 0.4-0.55
-                        Delta = delta * 3;
-                    } else if ((SliceLowerLim >= 0.50) && (SliceLowerLim < 1.10)) { // 0.55-1.15
-                        Delta = delta * 2;
-                    } else if ((SliceLowerLim >= 1.10) && (SliceLowerLim < 1.25)) { // 1.15-1.30
-                        Delta = delta * 3;
-                    } else if (SliceLowerLim >= 1.25) { // 1.30-beamE
-                        Delta = beamE - SliceLowerLim;
+                } else if (MomentumType == "reco") {
+                    if (beamE == 5.98636) {
+                        if (SampleName == "C12_simulation_G18_Q204_6GeV") {
+                            if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.60)) { // 0.4-0.65
+                                Delta = delta * 5;
+                            } else if ((SliceLowerLim >= 0.60) && (SliceLowerLim < 1.00)) { // 0.65-1.05
+                                Delta = delta * 2;
+                            } else if ((SliceLowerLim >= 1.00) && (SliceLowerLim < 1.70)) { // 1.05-1.70
+                                Delta = delta * 1;
+                            } else if ((SliceLowerLim >= 1.70) && (SliceLowerLim < 2.25)) { // 1.70-2.30
+                                Delta = delta * 2;
+                            } else if ((SliceLowerLim >= 2.25) && (SliceLowerLim < 2.55)) { // 2.30-2.60
+                                Delta = delta * 3;
+                            } else if ((SliceLowerLim >= 2.55) && (SliceLowerLim < 2.95)) { // 2.60-3.00
+                                Delta = delta * 4;
+                            } else if ((SliceLowerLim >= 2.95) && (SliceLowerLim < 3.25)) { // 3.00-3.30
+                                Delta = delta * 6;
+                            } else if (SliceLowerLim >= 3.25) { // 3.00-SliceUpperMomLim
+                                Delta = SliceUpperMomLim - SliceLowerLim;
+                            }
+                        } else if (SampleName == "C12x4_simulation_G18_Q204_6GeV") { // Slices by option 2
+                            if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.60)) { // 0.4-0.65
+                                Delta = delta * 5;
+                            } else if ((SliceLowerLim >= 0.60) && (SliceLowerLim < 1.10)) { // 0.65-1.15
+                                Delta = delta * 2;
+                            } else if ((SliceLowerLim >= 1.10) && (SliceLowerLim < 1.55)) { // 1.15-1.55
+                                Delta = delta * 1;
+                            } else if ((SliceLowerLim >= 1.55) && (SliceLowerLim < 2.25)) { // 1.55-2.25
+                                Delta = delta * 2;
+                            } else if ((SliceLowerLim >= 2.25) && (SliceLowerLim < 2.55)) { // 2.25-2.55
+                                Delta = delta * 3;
+                            } else if ((SliceLowerLim >= 2.55) && (SliceLowerLim < 2.75)) { // 2.55-2.75
+                                Delta = delta * 4;
+                            } else if ((SliceLowerLim >= 2.75) && (SliceLowerLim < 3.00)) { // 2.75-3.00
+                                Delta = delta * 5;
+                            } else if ((SliceLowerLim >= 3.00) && (SliceLowerLim < 3.50)) { // 3.00-3.50
+                                Delta = delta * 10;
+                            } else if (SliceLowerLim >= 3.50) { // 3.00-SliceUpperMomLim
+                                Delta = SliceUpperMomLim - SliceLowerLim;
+                            }
+                        } else {
+                            if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.65)) { // 0.4-0.7
+                                Delta = delta * 6;
+                            } else if ((SliceLowerLim >= 0.65) && (SliceLowerLim < 0.85)) { // 0.7-0.9
+                                Delta = delta * 4;
+                            } else if ((SliceLowerLim >= 0.85) && (SliceLowerLim < 1.85)) { // 0.9-1.90
+                                Delta = delta * 2;
+                            } else if ((SliceLowerLim >= 1.85) && (SliceLowerLim < 2.15)) { // 1.90-2.20
+                                Delta = delta * 3;
+                            } else if ((SliceLowerLim >= 2.15) && (SliceLowerLim < 2.35)) { // 2.20-2.40
+                                Delta = delta * 4;
+                            } else if ((SliceLowerLim >= 2.35) && (SliceLowerLim < 2.60)) { // 2.40-2.65
+                                Delta = delta * 5;
+                            } else if ((SliceLowerLim >= 2.60) && (SliceLowerLim < 2.95)) { // 2.65-3.00
+                                Delta = delta * 7;
+                            } else if (SliceLowerLim >= 2.95) { // 3.00-SliceUpperMomLim
+                                Delta = SliceUpperMomLim - SliceLowerLim;
+                            }
+                        }
                     }
                 }
             }
@@ -611,26 +673,6 @@ void NeutronResolution::hFillResPlotsByType(const double &TL_momentum, const dou
                   TL_NumberOfSlices);
     hFillResPlots(Reco_momentum, Resolution, Weight, ResRecoMomSlices, ResRecoMomSlicesLimits, ResRecoMomSlicesFitVar, ResRecoMomSlicesHistVar,
                   Reco_NumberOfSlices);
-}
-//</editor-fold>
-
-//<editor-fold desc="hFillResPlots function">
-void NeutronResolution::hFillResPlots(const double &TL_momentum, const double &Resolution, const double &Weight) {
-    bool Printout = false;
-
-    for (int i = 0; i < TL_NumberOfSlices; i++) {
-        if ((TL_momentum >= ResTLMomSlicesLimits.at(i).at(0)) && (TL_momentum < ResTLMomSlicesLimits.at(i).at(1))) {
-            ResTLMomSlices.at(i).hFill(Resolution, Weight);
-
-            if (Printout) {
-                cout << "\n\nResTLMomSlicesLimits.at(" << i << ").at(0) = " << ResTLMomSlicesLimits.at(i).at(0) << "\n";
-                cout << "TL_momentum = " << TL_momentum << "\n";
-                cout << "ResTLMomSlicesLimits.at(" << i << ").at(1) = " << ResTLMomSlicesLimits.at(i).at(1) << "\n";
-            }
-
-            break; // no need to keep the loop going after filling histogram
-        }
-    }
 }
 //</editor-fold>
 
@@ -809,39 +851,39 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const doub
     }
 
     if (MomentumType == "truth") {
-        PolyFitterByType(MomentumType, 1, "Corr", "noKC", TL_FitParam_Corr_pol1);
-        PolyFitterByType(MomentumType, 1, "Corr", "wKC", TL_FitParam_Corr_pol1_wKC);
-        PolyFitterByType(MomentumType, 2, "Corr", "noKC", TL_FitParam_Corr_pol2);
-        PolyFitterByType(MomentumType, 2, "Corr", "wKC", TL_FitParam_Corr_pol2_wKC);
-        PolyFitterByType(MomentumType, 3, "Corr", "noKC", TL_FitParam_Corr_pol3);
-        PolyFitterByType(MomentumType, 3, "Corr", "wKC", TL_FitParam_Corr_pol3_wKC);
-        PolyFitterByType(MomentumType, 1, "Smear", "noKC", TL_FitParam_Smear_pol1);
-        PolyFitterByType(MomentumType, 1, "Smear", "wKC", TL_FitParam_Smear_pol1_wKC);
-        PolyFitterByType(MomentumType, 2, "Smear", "noKC", TL_FitParam_Smear_pol2);
-        PolyFitterByType(MomentumType, 2, "Smear", "wKC", TL_FitParam_Smear_pol2_wKC);
-        PolyFitterByType(MomentumType, 3, "Smear", "noKC", TL_FitParam_Smear_pol3);
-        PolyFitterByType(MomentumType, 3, "Smear", "wKC", TL_FitParam_Smear_pol3_wKC);
+        PolyFitter(MomentumType, 1, "Corr", "noKC", TL_FitParam_Corr_pol1);
+        PolyFitter(MomentumType, 1, "Corr", "wKC", TL_FitParam_Corr_pol1_wKC);
+        PolyFitter(MomentumType, 2, "Corr", "noKC", TL_FitParam_Corr_pol2);
+        PolyFitter(MomentumType, 2, "Corr", "wKC", TL_FitParam_Corr_pol2_wKC);
+        PolyFitter(MomentumType, 3, "Corr", "noKC", TL_FitParam_Corr_pol3);
+        PolyFitter(MomentumType, 3, "Corr", "wKC", TL_FitParam_Corr_pol3_wKC);
+        PolyFitter(MomentumType, 1, "Smear", "noKC", TL_FitParam_Smear_pol1);
+        PolyFitter(MomentumType, 1, "Smear", "wKC", TL_FitParam_Smear_pol1_wKC);
+        PolyFitter(MomentumType, 2, "Smear", "noKC", TL_FitParam_Smear_pol2);
+        PolyFitter(MomentumType, 2, "Smear", "wKC", TL_FitParam_Smear_pol2_wKC);
+        PolyFitter(MomentumType, 3, "Smear", "noKC", TL_FitParam_Smear_pol3);
+        PolyFitter(MomentumType, 3, "Smear", "wKC", TL_FitParam_Smear_pol3_wKC);
     } else if (MomentumType == "reco") {
-        PolyFitterByType(MomentumType, 1, "Corr", "noKC", Reco_FitParam_Corr_pol1);
-        PolyFitterByType(MomentumType, 1, "Corr", "wKC", Reco_FitParam_Corr_pol1_wKC);
-        PolyFitterByType(MomentumType, 2, "Corr", "noKC", Reco_FitParam_Corr_pol2);
-        PolyFitterByType(MomentumType, 2, "Corr", "wKC", Reco_FitParam_Corr_pol2_wKC);
-        PolyFitterByType(MomentumType, 3, "Corr", "noKC", Reco_FitParam_Corr_pol3);
-        PolyFitterByType(MomentumType, 3, "Corr", "wKC", Reco_FitParam_Corr_pol3_wKC);
-        PolyFitterByType(MomentumType, 1, "Smear", "noKC", Reco_FitParam_Smear_pol1);
-        PolyFitterByType(MomentumType, 1, "Smear", "wKC", Reco_FitParam_Smear_pol1_wKC);
-        PolyFitterByType(MomentumType, 2, "Smear", "noKC", Reco_FitParam_Smear_pol2);
-        PolyFitterByType(MomentumType, 2, "Smear", "wKC", Reco_FitParam_Smear_pol2_wKC);
-        PolyFitterByType(MomentumType, 3, "Smear", "noKC", Reco_FitParam_Smear_pol3);
-        PolyFitterByType(MomentumType, 3, "Smear", "wKC", Reco_FitParam_Smear_pol3_wKC);
+        PolyFitter(MomentumType, 1, "Corr", "noKC", Reco_FitParam_Corr_pol1);
+        PolyFitter(MomentumType, 1, "Corr", "wKC", Reco_FitParam_Corr_pol1_wKC);
+        PolyFitter(MomentumType, 2, "Corr", "noKC", Reco_FitParam_Corr_pol2);
+        PolyFitter(MomentumType, 2, "Corr", "wKC", Reco_FitParam_Corr_pol2_wKC);
+        PolyFitter(MomentumType, 3, "Corr", "noKC", Reco_FitParam_Corr_pol3);
+        PolyFitter(MomentumType, 3, "Corr", "wKC", Reco_FitParam_Corr_pol3_wKC);
+        PolyFitter(MomentumType, 1, "Smear", "noKC", Reco_FitParam_Smear_pol1);
+        PolyFitter(MomentumType, 1, "Smear", "wKC", Reco_FitParam_Smear_pol1_wKC);
+        PolyFitter(MomentumType, 2, "Smear", "noKC", Reco_FitParam_Smear_pol2);
+        PolyFitter(MomentumType, 2, "Smear", "wKC", Reco_FitParam_Smear_pol2_wKC);
+        PolyFitter(MomentumType, 3, "Smear", "noKC", Reco_FitParam_Smear_pol3);
+        PolyFitter(MomentumType, 3, "Smear", "wKC", Reco_FitParam_Smear_pol3_wKC);
     }
 }
 //</editor-fold>
 
-//<editor-fold desc="PolyFitterByType function">
-void NeutronResolution::PolyFitterByType(const string &MomentumType, const int &PolynomialDegree, const string &FitType,
-                                         const string &MomentumFitRange, vector <vector<double>> &FitParamResults) {
-    cout << "\n\nPolyFitterByType variables:\n";
+//<editor-fold desc="PolyFitter function">
+void NeutronResolution::PolyFitter(const string &MomentumType, const int &PolynomialDegree, const string &FitType,
+                                   const string &MomentumFitRange, vector <vector<double>> &FitParamResults) {
+    cout << "\n\nPolyFitter variables:\n";
     bool PrintOut = false;
     bool PlotPoints = false;
 
@@ -856,32 +898,38 @@ void NeutronResolution::PolyFitterByType(const string &MomentumType, const int &
     //</editor-fold>
 
     //<editor-fold desc="Setting polynomial">
-    string PolynomialFuncName, PolynomialFuncStruct;
+    string PolynomialFuncName, PolynomialFuncStruct, PolynomialFitType;
 
     if (MomentumFitRange == "noKC") {
         if (PolynomialDegree == 1) {
             PolynomialFuncName = MomentumType + "_f_" + FitType +
                                  "_pol1", PolynomialFuncStruct = "[0] * x + [1]"; // A*x + B
+            PolynomialFitType = "linear";
         } else if (PolynomialDegree == 2) {
             PolynomialFuncName = MomentumType + "_f_" + FitType +
                                  "_pol2", PolynomialFuncStruct = "[0] * x * x + [1] * x + [2]"; // A*x*x + B*x + C
+            PolynomialFitType = "quadratic";
         } else if (PolynomialDegree == 3) {
             PolynomialFuncName = MomentumType + "_f_" + FitType +
                                  "_pol3", PolynomialFuncStruct = "[0] * x * x * x + [1] * x * x + [2] * x + [3]"; // A*x*x*x + B*x*x + C*x + D
+            PolynomialFitType = "cubic";
         }
     } else if (MomentumFitRange == "wKC") {
         if (PolynomialDegree == 1) {
             PolynomialFuncName = MomentumType + "_f_" + FitType +
                                  "_pol1_wKC", PolynomialFuncStruct = "[0] * x + [1]"; // A*x + B
+            PolynomialFitType = "linear";
         } else if (PolynomialDegree == 2) {
             PolynomialFuncName = MomentumType + "_f_" + FitType +
                                  "_pol2_wKC", PolynomialFuncStruct = "[0] * x * x + [1] * x + [2]"; // A*x*x + B*x + C
+            PolynomialFitType = "quadratic";
         } else if (PolynomialDegree == 3) {
             PolynomialFuncName = MomentumType + "_f_" + FitType +
                                  "_pol3_wKC", PolynomialFuncStruct = "[0] * x * x * x + [1] * x * x + [2] * x + [3]"; // A*x*x*x + B*x*x + C*x + D
+            PolynomialFitType = "cubic";
         }
     } else {
-        cout << "\n\nNeutronResolution::PolyFitterByType: MomentumFitRange is illegal! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::PolyFitter: MomentumFitRange is illegal! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -903,7 +951,7 @@ void NeutronResolution::PolyFitterByType(const string &MomentumType, const int &
         ResSlicesHistVar0 = ResRecoMomSlicesHistVar;
         NumberOfSlices0 = Reco_NumberOfSlices, FittedSlices0 = FittedRecoMomSlices;
     } else {
-        cout << "\n\nNeutronResolution::PolyFitterByType: MomentumType is illegal! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::PolyFitter: MomentumType is illegal! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -915,7 +963,7 @@ void NeutronResolution::PolyFitterByType(const string &MomentumType, const int &
     } else if (FitType == "Corr") {
         FittedVar = "#mu";
     } else {
-        cout << "\n\nNeutronResolution::PolyFitterByType: FitType is illegal! Exiting...\n\n", exit(0);
+        cout << "\n\nNeutronResolution::PolyFitter: FitType is illegal! Exiting...\n\n", exit(0);
     }
     //</editor-fold>
 
@@ -1012,19 +1060,18 @@ void NeutronResolution::PolyFitterByType(const string &MomentumType, const int &
 
     Graph1D->GetXaxis()->SetTitleSize(0.06), Graph1D->GetXaxis()->SetLabelSize(0.0425), Graph1D->GetXaxis()->CenterTitle(true);
     Graph1D->GetYaxis()->SetTitleSize(0.06), Graph1D->GetYaxis()->SetLabelSize(0.0425), Graph1D->GetYaxis()->CenterTitle(true);
-
     Graph1D->GetXaxis()->SetTitle(("#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} [GeV/c]").c_str());
 
     if (FitType == "Smear") {
-        Graph1D->SetTitle(("Proton smear fit (" + MomentumFitRange + ", linear fit)").c_str());
+        Graph1D->SetTitle(("Proton smear fit (" + MomentumFitRange + ", " + PolynomialFitType + " fit)").c_str());
         Graph1D->GetYaxis()->SetTitle(("R_{" + FitterParticle + "} fit width").c_str());
     } else if (FitType == "Corr") {
         if (isNeutron) {
             Graph1D->GetYaxis()->SetTitle(("R_{" + FitterParticle + "} fit mean").c_str());
-            Graph1D->SetTitle(("Neutron correction fit (" + MomentumFitRange + ", linear fit)").c_str());
+            Graph1D->SetTitle(("Neutron correction fit (" + MomentumFitRange + ", " + PolynomialFitType + " fit)").c_str());
         } else if (isProton) {
             Graph1D->GetYaxis()->SetTitle(("R_{" + FitterParticle + "} fit mean").c_str());
-            Graph1D->SetTitle(("Proton correction fit (" + MomentumFitRange + ", linear fit)").c_str());
+            Graph1D->SetTitle(("Proton correction fit (" + MomentumFitRange + ", " + PolynomialFitType + " fit)").c_str());
         }
     }
 
@@ -1340,24 +1387,6 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, TCanvas *
 // LogResDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="LogResDataToFile function">
-void NeutronResolution::LogResDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory,
-                                         const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
-    //TODO: reorder file save in test mode properly
-    string SaveDateDir = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/";
-
-    if (!momResTestMode) {
-        system(("mkdir -p " + SaveDateDir).c_str());
-
-        LogFitDataToFile(SampleName, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
-        LogHistDataToFile(SampleName, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
-    } else {
-        LogFitDataToFile(SampleName, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
-        LogHistDataToFile(SampleName, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
-    }
-}
-//</editor-fold>
-
-//<editor-fold desc="LogResDataToFile function">
 void NeutronResolution::LogResDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory) {
     //TODO: reorder file save in test mode properly
     string SaveDateDir = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/";
@@ -1375,201 +1404,6 @@ void NeutronResolution::LogResDataToFile(const string &SampleName, const string 
 //</editor-fold>
 
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="LogFitDataToFile function">
-void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory,
-                                         const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
-    ofstream Neutron_res_fit_param;
-    std::string Neutron_res_fit_paramFilePath;
-
-    if (momResS2CalcMode) {
-        if (!momResTestMode) {
-            Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + MomResParticle + "_momResS2_fit_param_-_" + SampleName + ".par";
-        } else {
-            Neutron_res_fit_paramFilePath = plots_path + "/" + MomResParticle + "_momResS2_fit_param_-_" + SampleName + ".par";
-        }
-    } else {
-        if (momResS2RunMode) {
-            if (!momResTestMode) {
-                Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + MomResParticle + "_momResS2_fit_param_-_" + SampleName + ".par";
-            } else {
-                Neutron_res_fit_paramFilePath = plots_path + "/" + MomResParticle + "_momResS2_fit_param_-_" + SampleName + ".par";
-            }
-        } else {
-            if (!momResTestMode) {
-                Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + MomResParticle + "_momResS1_fit_param_-_" + SampleName + ".par";
-            } else {
-                Neutron_res_fit_paramFilePath = plots_path + "/" + MomResParticle + "_momResS1_fit_param_-_" + SampleName + ".par";
-            }
-        }
-    }
-
-    //<editor-fold desc="Writing log header">
-    string momRes_calculation_mode;
-
-    if (momResS2CalcMode && !momResS2RunMode) {
-        momRes_calculation_mode = "Calculate momResS2";
-    } else if (!momResS2CalcMode && momResS2RunMode) {
-        momRes_calculation_mode = "Run on loaded momResS2";
-    } else if (!momResS2CalcMode && !momResS2RunMode) {
-        momRes_calculation_mode = "Calculate momResS1";
-    }
-
-    Neutron_res_fit_param.open(Neutron_res_fit_paramFilePath);
-    Neutron_res_fit_param << "######################################################################\n";
-    Neutron_res_fit_param << "# CLAS12 analysis cuts and parameters file (after nRes Gaussian fit) #\n";
-    Neutron_res_fit_param << "######################################################################\n";
-    Neutron_res_fit_param << "\n";
-    Neutron_res_fit_param << "# " + MomResParticle + " resolution parameters are for:\n";
-    Neutron_res_fit_param << "#sample:\t" << SampleName << "\n";
-    Neutron_res_fit_param << "#Analysis_run_mode:\t" << Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status << "\n";
-    Neutron_res_fit_param << "#momRes_calculation_mode:\t" << momRes_calculation_mode << "\n";
-    Neutron_res_fit_param << "#delta:\t\t" << delta << "\n";
-    //</editor-fold>
-
-    //<editor-fold desc="Logging slice fit results">
-    Neutron_res_fit_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma\n\n";
-
-    Neutron_res_fit_param << "#Fitted TL slices:\n";
-    for (int FittedSlice: FittedTLMomSlices) {
-        DSCuts TempCut = ResTLMomSlicesFitVar.at(FittedSlice);
-        Neutron_res_fit_param << TempCut.GetCutVariable() << "\t\t\t" << TempCut.GetSliceNumber() << ":" << TempCut.GetSliceLowerb() << ":"
-                              << TempCut.GetSliceUpperb() << ":" << TempCut.GetMean() << ":" << TempCut.GetUpperCut() << "\n";
-    }
-
-    Neutron_res_fit_param << "\n\n#Fitted Reco slices:\n";
-    for (int FittedSlice: FittedRecoMomSlices) {
-        DSCuts TempCut = ResRecoMomSlicesFitVar.at(FittedSlice);
-        Neutron_res_fit_param << TempCut.GetCutVariable() << "\t\t\t" << TempCut.GetSliceNumber() << ":" << TempCut.GetSliceLowerb() << ":"
-                              << TempCut.GetSliceUpperb() << ":" << TempCut.GetMean() << ":" << TempCut.GetUpperCut() << "\n";
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Logging Stdection and smear fit variables">
-    if (isNeutron) {
-        Neutron_res_fit_param << "\n\n#correction and smear fit variables:\n\n";
-
-        Neutron_res_fit_param << "SliceUpperMomLimKC" << "\t\t\t" << SliceUpperMomLimKC << "\n";
-        Neutron_res_fit_param << "SliceLowerMomLimKC" << "\t\t\t" << SliceLowerMomLimKC << "\n\n";
-
-        Neutron_res_fit_param << "A_Corr_pol1" << "\t\t\t\t\t" << A_Corr_pol1 << "\n";
-        Neutron_res_fit_param << "A_Corr_pol1_Error" << "\t\t\t" << A_Corr_pol1_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1" << "\t\t\t\t\t" << B_Corr_pol1 << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1_Error" << "\t\t\t" << B_Corr_pol1_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol1" << "\t\t\t" << ChiSquare_Corr_pol1 << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol1" << "\t\t\t\t" << NDF_Corr_pol1 << "\n\n";
-
-        Neutron_res_fit_param << "A_Corr_pol1_wKC" << "\t\t\t\t" << A_Corr_pol1_wKC << "\n";
-        Neutron_res_fit_param << "A_Corr_pol1_wKC_Error" << "\t\t" << A_Corr_pol1_wKC_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1_wKC" << "\t\t\t\t" << B_Corr_pol1_wKC << "\n";
-        Neutron_res_fit_param << "B_Corr_pol1_wKC_Error" << "\t\t" << B_Corr_pol1_wKC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol1_wKC" << "\t\t" << ChiSquare_Corr_pol1_wKC << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol1_wKC" << "\t\t\t" << NDF_Corr_pol1_wKC << "\n\n";
-
-        Neutron_res_fit_param << "A_Corr_pol2" << "\t\t\t\t\t" << A_Corr_pol2 << "\n";
-        Neutron_res_fit_param << "A_Corr_pol2_Error" << "\t\t\t" << A_Corr_pol2_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol2" << "\t\t\t\t\t" << B_Corr_pol2 << "\n";
-        Neutron_res_fit_param << "B_Corr_pol2_Error" << "\t\t\t" << B_Corr_pol2_Error << "\n";
-        Neutron_res_fit_param << "C_Corr_pol2" << "\t\t\t\t\t" << C_Corr_pol2 << "\n";
-        Neutron_res_fit_param << "C_Corr_pol2_Error" << "\t\t\t" << C_Corr_pol2_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol2" << "\t\t\t" << ChiSquare_Corr_pol2 << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol2" << "\t\t\t\t" << NDF_Corr_pol2 << "\n\n";
-
-        Neutron_res_fit_param << "A_Corr_pol2_wKC" << "\t\t\t\t" << A_Corr_pol2_wKC << "\n";
-        Neutron_res_fit_param << "A_Corr_pol2_wKC_Error" << "\t\t" << A_Corr_pol2_wKC_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol2_wKC" << "\t\t\t\t" << B_Corr_pol2_wKC << "\n";
-        Neutron_res_fit_param << "B_Corr_pol2_wKC_Error" << "\t\t" << B_Corr_pol2_wKC_Error << "\n";
-        Neutron_res_fit_param << "C_Corr_pol2_wKC" << "\t\t\t\t" << C_Corr_pol2_wKC << "\n";
-        Neutron_res_fit_param << "C_Corr_pol2_wKC_Error" << "\t\t" << C_Corr_pol2_wKC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol2_wKC" << "\t\t" << ChiSquare_Corr_pol2_wKC << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol2_wKC" << "\t\t\t" << NDF_Corr_pol2_wKC << "\n\n";
-
-        Neutron_res_fit_param << "A_Corr_pol3" << "\t\t\t\t\t" << A_Corr_pol3 << "\n";
-        Neutron_res_fit_param << "A_Corr_pol3_Error" << "\t\t\t" << A_Corr_pol3_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol3" << "\t\t\t\t\t" << B_Corr_pol3 << "\n";
-        Neutron_res_fit_param << "B_Corr_pol3_Error" << "\t\t\t" << B_Corr_pol3_Error << "\n";
-        Neutron_res_fit_param << "C_Corr_pol3" << "\t\t\t\t\t" << C_Corr_pol3 << "\n";
-        Neutron_res_fit_param << "C_Corr_pol3_Error" << "\t\t\t" << C_Corr_pol3_Error << "\n";
-        Neutron_res_fit_param << "D_Corr_pol3" << "\t\t\t\t\t" << D_Corr_pol3 << "\n";
-        Neutron_res_fit_param << "D_Corr_pol3_Error" << "\t\t\t" << D_Corr_pol3_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol3" << "\t\t\t" << ChiSquare_Corr_pol3 << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol3" << "\t\t\t\t" << NDF_Corr_pol3 << "\n\n";
-
-        Neutron_res_fit_param << "A_Corr_pol3_wKC" << "\t\t\t\t" << A_Corr_pol3_wKC << "\n";
-        Neutron_res_fit_param << "A_Corr_pol3_wKC_Error" << "\t\t" << A_Corr_pol3_wKC_Error << "\n";
-        Neutron_res_fit_param << "B_Corr_pol3_wKC" << "\t\t\t\t" << B_Corr_pol3_wKC << "\n";
-        Neutron_res_fit_param << "B_Corr_pol3_wKC_Error" << "\t\t" << B_Corr_pol3_wKC_Error << "\n";
-        Neutron_res_fit_param << "C_Corr_pol3_wKC" << "\t\t\t\t" << C_Corr_pol3_wKC << "\n";
-        Neutron_res_fit_param << "C_Corr_pol3_wKC_Error" << "\t\t" << C_Corr_pol3_wKC_Error << "\n";
-        Neutron_res_fit_param << "D_Corr_pol3_wKC" << "\t\t\t\t" << D_Corr_pol3_wKC << "\n";
-        Neutron_res_fit_param << "D_Corr_pol3_wKC_Error" << "\t\t" << D_Corr_pol3_wKC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Corr_pol3_wKC" << "\t\t" << ChiSquare_Corr_pol3_wKC << "\n";
-        Neutron_res_fit_param << "NDF_Corr_pol3_wKC" << "\t\t\t" << NDF_Corr_pol3_wKC << "\n\n";
-
-        Neutron_res_fit_param << "A_Std_pol1" << "\t\t\t\t\t" << A_Std_pol1 << "\n";
-        Neutron_res_fit_param << "A_Std_pol1_Error" << "\t\t\t" << A_Std_pol1_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol1" << "\t\t\t\t\t" << B_Std_pol1 << "\n";
-        Neutron_res_fit_param << "B_Std_pol1_Error" << "\t\t\t" << B_Std_pol1_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol1" << "\t\t\t" << ChiSquare_Std_pol1 << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol1" << "\t\t\t\t" << NDF_Std_pol1 << "\n\n";
-
-        Neutron_res_fit_param << "A_Std_pol1_wKC" << "\t\t\t\t" << A_Std_pol1_wKC << "\n";
-        Neutron_res_fit_param << "A_Std_pol1_wKC_Error" << "\t\t" << A_Std_pol1_wKC_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol1_wKC" << "\t\t\t\t" << B_Std_pol1_wKC << "\n";
-        Neutron_res_fit_param << "B_Std_pol1_wKC_Error" << "\t\t" << B_Std_pol1_wKC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol1_wKC" << "\t\t" << ChiSquare_Std_pol1_wKC << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol1_wKC" << "\t\t\t" << NDF_Std_pol1_wKC << "\n\n";
-
-        Neutron_res_fit_param << "A_Std_pol2" << "\t\t\t\t\t" << A_Std_pol2 << "\n";
-        Neutron_res_fit_param << "A_Std_pol2_Error" << "\t\t\t" << A_Std_pol2_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol2" << "\t\t\t\t\t" << B_Std_pol2 << "\n";
-        Neutron_res_fit_param << "B_Std_pol2_Error" << "\t\t\t" << B_Std_pol2_Error << "\n";
-        Neutron_res_fit_param << "C_Std_pol2" << "\t\t\t\t\t" << C_Std_pol2 << "\n";
-        Neutron_res_fit_param << "C_Std_pol2_Error" << "\t\t\t" << C_Std_pol2_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol2" << "\t\t\t" << ChiSquare_Std_pol2 << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol2" << "\t\t\t\t" << NDF_Std_pol2 << "\n\n";
-
-        Neutron_res_fit_param << "A_Std_pol2_wKC" << "\t\t\t\t" << A_Std_pol2_wKC << "\n";
-        Neutron_res_fit_param << "A_Std_pol2_wKC_Error" << "\t\t" << A_Std_pol2_wKC_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol2_wKC" << "\t\t\t\t" << B_Std_pol2_wKC << "\n";
-        Neutron_res_fit_param << "B_Std_pol2_wKC_Error" << "\t\t" << B_Std_pol2_wKC_Error << "\n";
-        Neutron_res_fit_param << "C_Std_pol2_wKC" << "\t\t\t\t" << C_Std_pol2_wKC << "\n";
-        Neutron_res_fit_param << "C_Std_pol2_wKC_Error" << "\t\t" << C_Std_pol2_wKC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol2_wKC" << "\t\t" << ChiSquare_Std_pol2_wKC << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol2_wKC" << "\t\t\t" << NDF_Std_pol2_wKC << "\n\n";
-
-        Neutron_res_fit_param << "A_Std_pol3" << "\t\t\t\t\t" << A_Std_pol3 << "\n";
-        Neutron_res_fit_param << "A_Std_pol3_Error" << "\t\t\t" << A_Std_pol3_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol3" << "\t\t\t\t\t" << B_Std_pol3 << "\n";
-        Neutron_res_fit_param << "B_Std_pol3_Error" << "\t\t\t" << B_Std_pol3_Error << "\n";
-        Neutron_res_fit_param << "C_Std_pol3" << "\t\t\t\t\t" << C_Std_pol3 << "\n";
-        Neutron_res_fit_param << "C_Std_pol3_Error" << "\t\t\t" << C_Std_pol3_Error << "\n";
-        Neutron_res_fit_param << "D_Std_pol3" << "\t\t\t\t\t" << D_Std_pol3 << "\n";
-        Neutron_res_fit_param << "D_Std_pol3_Error" << "\t\t\t" << D_Std_pol3_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol3" << "\t\t\t" << ChiSquare_Std_pol3 << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol3" << "\t\t\t\t" << NDF_Std_pol3 << "\n\n";
-
-        Neutron_res_fit_param << "A_Std_pol3_wKC" << "\t\t\t\t" << A_Std_pol3_wKC << "\n";
-        Neutron_res_fit_param << "A_Std_pol3_wKC_Error" << "\t\t" << A_Std_pol3_wKC_Error << "\n";
-        Neutron_res_fit_param << "B_Std_pol3_wKC" << "\t\t\t\t" << B_Std_pol3_wKC << "\n";
-        Neutron_res_fit_param << "B_Std_pol3_wKC_Error" << "\t\t" << B_Std_pol3_wKC_Error << "\n";
-        Neutron_res_fit_param << "C_Std_pol3_wKC" << "\t\t\t\t" << C_Std_pol3_wKC << "\n";
-        Neutron_res_fit_param << "C_Std_pol3_wKC_Error" << "\t\t" << C_Std_pol3_wKC_Error << "\n";
-        Neutron_res_fit_param << "D_Std_pol3_wKC" << "\t\t\t\t" << D_Std_pol3_wKC << "\n";
-        Neutron_res_fit_param << "D_Std_pol3_wKC_Error" << "\t\t" << D_Std_pol3_wKC_Error << "\n";
-        Neutron_res_fit_param << "ChiSquare_Std_pol3_wKC" << "\t\t" << ChiSquare_Std_pol3_wKC << "\n";
-        Neutron_res_fit_param << "NDF_Std_pol3_wKC" << "\t\t\t" << NDF_Std_pol3_wKC << "\n\n";
-    }
-    //</editor-fold>
-
-    Neutron_res_fit_param.close();
-
-    if (!momResTestMode) {
-        /* Copy fitted parameters file to plots folder for easy download from the ifarm */
-        system(("cp " + Neutron_res_fit_paramFilePath + " " + plots_path).c_str());
-    }
-}
-//</editor-fold>
 
 //<editor-fold desc="LogFitDataToFile function">
 void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory) {
@@ -1768,83 +1602,6 @@ void NeutronResolution::AutoLogger(const string &SampleName, const string &plots
 // LogHistDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="LogHistDataToFile function">
-void NeutronResolution::LogHistDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory,
-                                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
-    ofstream Neutron_res_Hist_param;
-    std::string Neutron_res_Hist_paramFilePath;
-
-    if (momResS2CalcMode) {
-        if (!momResTestMode) {
-            Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + MomResParticle + "_momResS2_hist_param_-_" + SampleName + ".par";
-        } else {
-            Neutron_res_Hist_paramFilePath = plots_path + "/" + MomResParticle + "_momResS2_hist_param_-_" + SampleName + ".par";
-        }
-    } else {
-        if (momResS2RunMode) {
-            if (!momResTestMode) {
-                Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + MomResParticle + "_momResS2_hist_param_-_" + SampleName + ".par";
-            } else {
-                Neutron_res_Hist_paramFilePath = plots_path + "/" + MomResParticle + "_momResS2_hist_param_-_" + SampleName + ".par";
-            }
-        } else {
-            if (!momResTestMode) {
-                Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + MomResParticle + "_momResS1_hist_param_-_" + SampleName + ".par";
-            } else {
-                Neutron_res_Hist_paramFilePath = plots_path + "/" + MomResParticle + "_momResS1_hist_param_-_" + SampleName + ".par";
-            }
-        }
-    }
-
-    //<editor-fold desc="Writing log header">
-    string momRes_calculation_mode;
-
-    if (momResS2CalcMode && !momResS2RunMode) {
-        momRes_calculation_mode = "Calculate momResS2";
-    } else if (!momResS2CalcMode && momResS2RunMode) {
-        momRes_calculation_mode = "Run on loaded momResS2";
-    } else if (!momResS2CalcMode && !momResS2RunMode) {
-        momRes_calculation_mode = "Calculate momResS1";
-    }
-
-    Neutron_res_Hist_param.open(Neutron_res_Hist_paramFilePath);
-    Neutron_res_Hist_param << "######################################################################\n";
-    Neutron_res_Hist_param << "# CLAS12 analysis cuts and parameters file (after nRes Gaussian Hist) #\n";
-    Neutron_res_Hist_param << "######################################################################\n";
-    Neutron_res_Hist_param << "\n";
-    Neutron_res_Hist_param << "# " + MomResParticle + " resolution parameters are for:\n";
-    Neutron_res_Hist_param << "#sample:\t" << SampleName << "\n";
-    Neutron_res_Hist_param << "#Analysis_run_mode:\t" << Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status << "\n";
-    Neutron_res_Hist_param << "#momRes_calculation_mode:\t" << momRes_calculation_mode << "\n";
-    Neutron_res_Hist_param << "#delta:\t\t" << delta << "\n";
-    //</editor-fold>
-
-    Neutron_res_Hist_param
-            << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma\n\n"; //TODO: confirm order!
-
-    Neutron_res_Hist_param << "#Fitted TL slices:\n";
-    for (DSCuts ResSlice: ResTLMomSlicesHistVar) {
-        Neutron_res_Hist_param << ResSlice.GetCutVariable() << "\t\t\t" << ResSlice.GetSliceNumber() << ":" << ResSlice.GetSliceLowerb() << ":"
-                               << ResSlice.GetSliceUpperb()
-                               << ":" << ResSlice.GetMean() << ":" << ResSlice.GetUpperCut() << "\n";
-    }
-
-    Neutron_res_Hist_param << "\n\n#Fitted Reco slices:\n";
-    for (DSCuts ResSlice: ResRecoMomSlicesHistVar) {
-        Neutron_res_Hist_param << ResSlice.GetCutVariable() << "\t\t\t" << ResSlice.GetSliceNumber() << ":" << ResSlice.GetSliceLowerb() << ":"
-                               << ResSlice.GetSliceUpperb()
-                               << ":" << ResSlice.GetMean() << ":" << ResSlice.GetUpperCut() << "\n";
-    }
-
-    Neutron_res_Hist_param.close();
-
-    if (!momResTestMode) {
-        /* Copy histogram parameters file to plots folder for easy download from the ifarm */
-        system(("cp " + Neutron_res_Hist_paramFilePath + " " + plots_path).c_str());
-    }
-}
-//</editor-fold>
-
-//<editor-fold desc="LogHistDataToFile function">
 void NeutronResolution::LogHistDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory) {
     ofstream Neutron_res_Hist_param;
     std::string Neutron_res_Hist_paramFilePath;
@@ -1920,450 +1677,6 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
 //</editor-fold>
 
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="ReadResDataParam function">
-void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName,
-                                         const string &NucleonCutsDirectory, const bool &Load_correction, const bool &Load_smearing) {
-    ifstream infile;
-    infile.open(filename);
-
-    momResS2CalcMode = Calculate_momResS2;
-    SName = SampleName;
-    SetUpperMomCut(SampleName, NucleonCutsDirectory);
-
-    if (Load_correction) { cout << "\n\nLoading neutron correction from:\n" << filename << "\n"; }
-
-    if (Load_smearing) { cout << "\nLoading proton smearing from:\n" << filename << "\n"; }
-
-    if (infile.is_open()) {
-        string tp;
-
-        // remove 3 lines of header
-        for (int i = 0; i < 3; i++) { getline(infile, tp); }
-
-        // getline(infile, tp) = read data from file object and put it into string.
-        while (getline(infile, tp)) {
-            stringstream ss(tp);
-            string parameter, parameter2;
-            ss >> parameter; // get cut identifier
-
-            if (!Load_correction && !Load_smearing) {
-                if (findSubstring(parameter, "fit_Slice_#")) {
-                    // get cut values
-                    ss >> parameter2;
-                    stringstream ss2(parameter2);
-                    string SliceParam;
-                    int count = 0; // parameter number
-
-                    string CutNameTemp = parameter;
-                    int SliceNumberTemp;
-                    double SliceLowerBoundaryTemp, SliceUpperBoundaryTemp, FitMeanTemp, FitSigmaTemp;
-
-                    while (getline(ss2, SliceParam, ':')) {
-                        if (count == 0) {
-                            SliceNumberTemp = stoi(SliceParam);
-                        } else if (count == 1) {
-                            SliceLowerBoundaryTemp = stod(SliceParam);
-                        } else if (count == 2) {
-                            SliceUpperBoundaryTemp = stod(SliceParam);
-                        } else if (count == 3) {
-                            FitMeanTemp = stod(SliceParam);
-                        } else if (count == 4) {
-                            FitSigmaTemp = stod(SliceParam);
-                        }
-
-                        count++;
-                    }
-
-                    DSCuts TempFitCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", FitMeanTemp, -9999, FitSigmaTemp);
-                    TempFitCut.SetSliceLowerb(SliceLowerBoundaryTemp);
-                    TempFitCut.SetSliceUpperb(SliceUpperBoundaryTemp);
-                    TempFitCut.SetSliceNumber(SliceNumberTemp);
-
-                    Loaded_Res_Slices_FitVar.push_back(TempFitCut);
-                } else if (findSubstring(parameter, "hist_Slice_#")) {
-                    // get cut values
-                    ss >> parameter2;
-                    stringstream ss2(parameter2);
-                    string SliceParam;
-                    int count = 0; // parameter number
-
-                    string CutNameTemp = parameter;
-                    int SliceNumberTemp;
-                    double SliceLowerBoundaryTemp, SliceUpperBoundaryTemp, HistMeanTemp, HistSigmaTemp;
-
-                    while (getline(ss2, SliceParam, ':')) {
-                        if (count == 0) {
-                            SliceNumberTemp = stoi(SliceParam);
-                        } else if (count == 1) {
-                            SliceLowerBoundaryTemp = stod(SliceParam);
-                        } else if (count == 2) {
-                            SliceUpperBoundaryTemp = stod(SliceParam);
-                        } else if (count == 3) {
-                            HistMeanTemp = stod(SliceParam);
-                        } else if (count == 4) {
-                            HistSigmaTemp = stod(SliceParam);
-                        }
-
-                        count++;
-                    }
-
-                    DSCuts TempHistCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", HistMeanTemp, -9999, HistSigmaTemp);
-                    TempHistCut.SetSliceLowerb(SliceLowerBoundaryTemp);
-                    TempHistCut.SetSliceUpperb(SliceUpperBoundaryTemp);
-                    TempHistCut.SetSliceNumber(SliceNumberTemp);
-
-                    Loaded_Res_Slices_HistVar.push_back(TempHistCut);
-                }
-            } else {
-                ss >> parameter2;
-                stringstream ss2(parameter2);
-
-                //TODO: reorganize these into vectors!
-                if (Load_correction && findSubstring(parameter, "Corr")) {
-                    Loaded_Corr_coefficients_path = filename;
-
-                    //<editor-fold desc="Safety checks for loading correction variables">
-                    if (Loaded_Corr_coefficients_path == "") {
-                        cout << "\n\nNeutronResolution::ReadResDataParam: Loaded_Corr_coefficients_path is empty!\n";
-                        cout << "The file:\n" << filename << "\n";
-                        cout << "is not found! Exiting...\n\n", exit(0);
-                    }
-                    //</editor-fold>
-
-                    if (findSubstring(parameter, "pol1") && findSubstring(CorrMode, "pol1")) {
-                        if (findSubstring(parameter, "pol1_wKC") && findSubstring(CorrMode, "pol1_wKC")) {
-                            if (parameter == "A_Corr_pol1_wKC") {
-                                Loaded_A_Corr_pol1_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1_wKC), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_A_Corr_pol1_wKC");
-                            } else if (parameter == "A_Corr_pol1_wKC_Error") {
-                                Loaded_A_Corr_pol1_wKC_Error = stod(parameter2);
-                            } else if (parameter == "B_Corr_pol1_wKC") {
-                                Loaded_B_Corr_pol1_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1_wKC), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_B_Corr_pol1_wKC");
-                            } else if (parameter == "B_Corr_pol1_wKC_Error") {
-                                Loaded_B_Corr_pol1_wKC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Corr_pol1_wKC") {
-                                Loaded_ChiSquare_Corr_pol1_wKC = stod(parameter2);
-                            } else if (parameter == "NDF_Corr_pol1_wKC") {
-                                Loaded_NDF_Corr_pol1_wKC = stod(parameter2);
-                            }
-                        } else if (findSubstring(parameter, "pol1") && !findSubstring(CorrMode, "pol1_wKC")) {
-                            if (parameter == "A_Corr_pol1") {
-                                Loaded_A_Corr_pol1 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol1), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_A_Corr_pol1");
-                            } else if (parameter == "A_Corr_pol1_Error") {
-                                Loaded_A_Corr_pol1_Error = stod(parameter2);
-                            } else if (parameter == "B_Corr_pol1") {
-                                Loaded_B_Corr_pol1 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol1), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_B_Corr_pol1");
-                            } else if (parameter == "B_Corr_pol1_Error") {
-                                Loaded_B_Corr_pol1_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Corr_pol1") {
-                                Loaded_ChiSquare_Corr_pol1 = stod(parameter2);
-                            } else if (parameter == "NDF_Corr_pol1") {
-                                Loaded_NDF_Corr_pol1 = stod(parameter2);
-                            }
-                        }
-                    } else if (findSubstring(parameter, "pol2") && findSubstring(CorrMode, "pol2")) {
-                        if (findSubstring(parameter, "pol2_wKC") && findSubstring(CorrMode, "pol2_wKC")) {
-                            if (parameter == "A_Corr_pol2_wKC") {
-                                Loaded_A_Corr_pol2_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_A_Corr_pol2_wKC");
-                            } else if (parameter == "A_Corr_pol2_wKC_Error") {
-                                Loaded_A_Corr_pol2_wKC_Error = stod(parameter2);
-                            } else if (parameter == "B_Corr_pol2_wKC") {
-                                Loaded_B_Corr_pol2_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_B_Corr_pol2_wKC");
-                            } else if (parameter == "B_Corr_pol2_wKC_Error") {
-                                Loaded_B_Corr_pol2_wKC_Error = stod(parameter2);
-                            } else if (parameter == "C_Corr_pol2_wKC") {
-                                Loaded_C_Corr_pol2_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2_wKC), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_C_Corr_pol2_wKC");
-                            } else if (parameter == "C_Corr_pol2_wKC_Error") {
-                                Loaded_C_Corr_pol2_wKC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Corr_pol2_wKC") {
-                                Loaded_ChiSquare_Corr_pol2_wKC = stod(parameter2);
-                            } else if (parameter == "NDF_Corr_pol2_wKC") {
-                                Loaded_NDF_Corr_pol2_wKC = stod(parameter2);
-                            }
-                        } else if (findSubstring(parameter, "pol2") && !findSubstring(CorrMode, "pol2_wKC")) {
-                            if (parameter == "A_Corr_pol2") {
-                                Loaded_A_Corr_pol2 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol2), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_A_Corr_pol2");
-                            } else if (parameter == "A_Corr_pol2_Error") {
-                                Loaded_A_Corr_pol2_Error = stod(parameter2);
-                            } else if (parameter == "B_Corr_pol2") {
-                                Loaded_B_Corr_pol2 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol2), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_B_Corr_pol2");
-                            } else if (parameter == "B_Corr_pol2_Error") {
-                                Loaded_B_Corr_pol2_Error = stod(parameter2);
-                            } else if (parameter == "C_Corr_pol2") {
-                                Loaded_C_Corr_pol2 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol2), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_C_Corr_pol2");
-                            } else if (parameter == "C_Corr_pol2_Error") {
-                                Loaded_C_Corr_pol2_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Corr_pol2") {
-                                Loaded_ChiSquare_Corr_pol2 = stod(parameter2);
-                            } else if (parameter == "NDF_Corr_pol2") {
-                                Loaded_NDF_Corr_pol2 = stod(parameter2);
-                            }
-                        }
-                    } else if (findSubstring(parameter, "pol3") && findSubstring(CorrMode, "pol3")) {
-                        if (findSubstring(parameter, "pol3_wKC") && findSubstring(CorrMode, "pol3_wKC")) {
-                            if (parameter == "A_Corr_pol3_wKC") {
-                                Loaded_A_Corr_pol3_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_A_Corr_pol3_wKC");
-                            } else if (parameter == "A_Corr_pol3_wKC_Error") {
-                                Loaded_A_Corr_pol3_wKC_Error = stod(parameter2);
-                            } else if (parameter == "B_Corr_pol3_wKC") {
-                                Loaded_B_Corr_pol3_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_B_Corr_pol3_wKC");
-                            } else if (parameter == "B_Corr_pol3_wKC_Error") {
-                                Loaded_B_Corr_pol3_wKC_Error = stod(parameter2);
-                            } else if (parameter == "C_Corr_pol3_wKC") {
-                                Loaded_C_Corr_pol3_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_C_Corr_pol3_wKC");
-                            } else if (parameter == "C_Corr_pol3_wKC_Error") {
-                                Loaded_C_Corr_pol3_wKC_Error = stod(parameter2);
-                            } else if (parameter == "D_Corr_pol3_wKC") {
-                                Loaded_D_Corr_pol3_wKC = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3_wKC), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_D_Corr_pol3_wKC");
-                            } else if (parameter == "D_Corr_pol3_wKC_Error") {
-                                Loaded_D_Corr_pol3_wKC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Corr_pol3_wKC") {
-                                Loaded_ChiSquare_Corr_pol3_wKC = stod(parameter2);
-                            } else if (parameter == "NDF_Corr_pol3_wKC") {
-                                Loaded_NDF_Corr_pol3_wKC = stod(parameter2);
-                            }
-                        } else if (findSubstring(parameter, "pol3") && !findSubstring(CorrMode, "pol3_wKC")) {
-                            if (parameter == "A_Corr_pol3") {
-                                Loaded_A_Corr_pol3 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_A_Corr_pol3), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_A_Corr_pol3");
-                            } else if (parameter == "A_Corr_pol3_Error") {
-                                Loaded_A_Corr_pol3_Error = stod(parameter2);
-                            } else if (parameter == "B_Corr_pol3") {
-                                Loaded_B_Corr_pol3 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_B_Corr_pol3), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_B_Corr_pol3");
-                            } else if (parameter == "B_Corr_pol3_Error") {
-                                Loaded_B_Corr_pol3_Error = stod(parameter2);
-                            } else if (parameter == "C_Corr_pol3") {
-                                Loaded_C_Corr_pol3 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_C_Corr_pol3), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_C_Corr_pol3");
-                            } else if (parameter == "C_Corr_pol3_Error") {
-                                Loaded_C_Corr_pol3_Error = stod(parameter2);
-                            } else if (parameter == "D_Corr_pol3") {
-                                Loaded_D_Corr_pol3 = stod(parameter2);
-                                Loaded_Corr_coefficients_values.push_back(Loaded_D_Corr_pol3), Loaded_Corr_coefficients_names.push_back(
-                                        "Loaded_D_Corr_pol3");
-                            } else if (parameter == "D_Corr_pol3_Error") {
-                                Loaded_D_Corr_pol3_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Corr_pol3") {
-                                Loaded_ChiSquare_Corr_pol3 = stod(parameter2);
-                            } else if (parameter == "NDF_Corr_pol3") {
-                                Loaded_NDF_Corr_pol3 = stod(parameter2);
-                            }
-                        }
-                    }
-                } else if (Load_smearing && findSubstring(parameter, "Smear")) {
-                    Loaded_Std_coefficients_path = filename;
-
-                    //<editor-fold desc="Safety checks for loading smearing variables">
-                    if (Load_smearing && Loaded_Std_coefficients_path == "") {
-                        cout << "\n\nNeutronResolution::ReadResDataParam: Loaded_Std_coefficients_path is empty!\n";
-                        cout << "The file:\n" << filename << "\n";
-                        cout << "is not found! Exiting...\n\n", exit(0);
-                    }
-                    //</editor-fold>
-
-                    if (findSubstring(parameter, "pol1") && findSubstring(SmearMode, "pol1")) {
-                        if (findSubstring(parameter, "pol1_wKC") && findSubstring(SmearMode, "pol1_wKC")) {
-                            if (parameter == "A_Std_pol1_wKC") {
-                                Loaded_A_Std_pol1_wKC = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_A_Std_pol1_wKC), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_A_Std_pol1_wKC");
-                            } else if (parameter == "A_Std_pol1_wKC_Error") {
-                                Loaded_A_Std_pol1_wKC_Error = stod(parameter2);
-                            } else if (parameter == "B_Std_pol1_wKC") {
-                                Loaded_B_Std_pol1_wKC = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_B_Std_pol1_wKC), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_B_Std_pol1_wKC");
-                            } else if (parameter == "B_Std_pol1_wKC_Error") {
-                                Loaded_B_Std_pol1_wKC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Std_pol1_wKC") {
-                                Loaded_ChiSquare_Std_pol1_wKC = stod(parameter2);
-                            } else if (parameter == "NDF_Std_pol1_wKC") {
-                                Loaded_NDF_Std_pol1_wKC = stod(parameter2);
-                            }
-                        } else if (findSubstring(parameter, "pol1") && !findSubstring(SmearMode, "pol1_wKC")) {
-                            if (parameter == "A_Std_pol1") {
-                                Loaded_A_Std_pol1 = stod(parameter2);
-                                cout << "\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
-                                Loaded_Smear_coefficients_values.push_back(Loaded_A_Std_pol1), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_A_Std_pol1");
-                            } else if (parameter == "A_Std_pol1_Error") {
-                                Loaded_A_Std_pol1_Error = stod(parameter2);
-                            } else if (parameter == "B_Std_pol1") {
-                                Loaded_B_Std_pol1 = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_B_Std_pol1), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_B_Std_pol1");
-                            } else if (parameter == "B_Std_pol1_Error") {
-                                Loaded_B_Std_pol1_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Std_pol1") {
-                                Loaded_ChiSquare_Std_pol1 = stod(parameter2);
-                            } else if (parameter == "NDF_Std_pol1") {
-                                Loaded_NDF_Std_pol1 = stod(parameter2);
-                            }
-                        }
-                    } else if (findSubstring(parameter, "pol2") && findSubstring(SmearMode, "pol2")) {
-                        if (findSubstring(parameter, "pol2_wKC") && findSubstring(SmearMode, "pol2_wKC")) {
-                            if (parameter == "A_Std_pol2_wKC") {
-                                Loaded_A_Std_pol2_wKC = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_A_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_A_Std_pol2_wKC");
-                            } else if (parameter == "A_Std_pol2_wKC_Error") {
-                                Loaded_A_Std_pol2_wKC_Error = stod(parameter2);
-                            } else if (parameter == "B_Std_pol2_wKC") {
-                                Loaded_B_Std_pol2_wKC = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_B_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_B_Std_pol2_wKC");
-                            } else if (parameter == "B_Std_pol2_wKC_Error") {
-                                Loaded_B_Std_pol2_wKC_Error = stod(parameter2);
-                            } else if (parameter == "C_Std_pol2_wKC") {
-                                Loaded_C_Std_pol2_wKC = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_C_Std_pol2_wKC), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_C_Std_pol2_wKC");
-                            } else if (parameter == "C_Std_pol2_wKC_Error") {
-                                Loaded_C_Std_pol2_wKC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Std_pol2_wKC") {
-                                Loaded_ChiSquare_Std_pol2_wKC = stod(parameter2);
-                            } else if (parameter == "NDF_Std_pol2_wKC") {
-                                Loaded_NDF_Std_pol2_wKC = stod(parameter2);
-                            }
-                        } else if (findSubstring(parameter, "pol2") && !findSubstring(SmearMode, "pol2_wKC")) {
-                            if (parameter == "A_Std_pol2") {
-                                Loaded_A_Std_pol2 = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_A_Std_pol2), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_A_Std_pol2");
-                            } else if (parameter == "A_Std_pol2_Error") {
-                                Loaded_A_Std_pol2_Error = stod(parameter2);
-                            } else if (parameter == "B_Std_pol2") {
-                                Loaded_B_Std_pol2 = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_B_Std_pol2), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_B_Std_pol2");
-                            } else if (parameter == "B_Std_pol2_Error") {
-                                Loaded_B_Std_pol2_Error = stod(parameter2);
-                            } else if (parameter == "C_Std_pol2") {
-                                Loaded_C_Std_pol2 = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_C_Std_pol2), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_C_Std_pol2");
-                            } else if (parameter == "C_Std_pol2_Error") {
-                                Loaded_C_Std_pol2_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Std_pol2") {
-                                Loaded_ChiSquare_Std_pol2 = stod(parameter2);
-                            } else if (parameter == "NDF_Std_pol2") {
-                                Loaded_NDF_Std_pol2 = stod(parameter2);
-                            }
-                        }
-                    } else if (findSubstring(parameter, "pol3") && findSubstring(SmearMode, "pol3")) {
-                        if (findSubstring(parameter, "pol3_wKC") && findSubstring(SmearMode, "pol3_wKC")) {
-                            if (parameter == "A_Std_pol3_wKC") {
-                                Loaded_A_Std_pol3_wKC = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_A_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_A_Std_pol3_wKC");
-                            } else if (parameter == "A_Std_pol3_wKC_Error") {
-                                Loaded_A_Std_pol3_wKC_Error = stod(parameter2);
-                            } else if (parameter == "B_Std_pol3_wKC") {
-                                Loaded_B_Std_pol3_wKC = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_B_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_B_Std_pol3_wKC");
-                            } else if (parameter == "B_Std_pol3_wKC_Error") {
-                                Loaded_B_Std_pol3_wKC_Error = stod(parameter2);
-                            } else if (parameter == "C_Std_pol3_wKC") {
-                                Loaded_C_Std_pol3_wKC = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_C_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_C_Std_pol3_wKC");
-                            } else if (parameter == "C_Std_pol3_wKC_Error") {
-                                Loaded_C_Std_pol3_wKC_Error = stod(parameter2);
-                            } else if (parameter == "D_Std_pol3_wKC") {
-                                Loaded_D_Std_pol3_wKC = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_D_Std_pol3_wKC), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_D_Std_pol3_wKC");
-                            } else if (parameter == "D_Std_pol3_wKC_Error") {
-                                Loaded_D_Std_pol3_wKC_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Std_pol3_wKC") {
-                                Loaded_ChiSquare_Std_pol3_wKC = stod(parameter2);
-                            } else if (parameter == "NDF_Std_pol3_wKC") {
-                                Loaded_NDF_Std_pol3_wKC = stod(parameter2);
-                            }
-                        } else if (findSubstring(parameter, "pol3") && !findSubstring(SmearMode, "pol3_wKC")) {
-                            if (parameter == "A_Std_pol3") {
-                                Loaded_A_Std_pol3 = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_A_Std_pol3), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_A_Std_pol3");
-                            } else if (parameter == "A_Std_pol3_Error") {
-                                Loaded_A_Std_pol3_Error = stod(parameter2);
-                            } else if (parameter == "B_Std_pol3") {
-                                Loaded_B_Std_pol3 = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_B_Std_pol3), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_B_Std_pol3");
-                            } else if (parameter == "B_Std_pol3_Error") {
-                                Loaded_B_Std_pol3_Error = stod(parameter2);
-                            } else if (parameter == "C_Std_pol3") {
-                                Loaded_C_Std_pol3 = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_C_Std_pol3), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_C_Std_pol3");
-                            } else if (parameter == "C_Std_pol3_Error") {
-                                Loaded_C_Std_pol3_Error = stod(parameter2);
-                            } else if (parameter == "D_Std_pol3") {
-                                Loaded_D_Std_pol3 = stod(parameter2);
-                                Loaded_Smear_coefficients_values.push_back(Loaded_D_Std_pol3), Loaded_Std_coefficients_names.push_back(
-                                        "Loaded_D_Std_pol3");
-                            } else if (parameter == "D_Std_pol3_Error") {
-                                Loaded_D_Std_pol3_Error = stod(parameter2);
-                            } else if (parameter == "ChiSquare_Std_pol3") {
-                                Loaded_ChiSquare_Std_pol3 = stod(parameter2);
-                            } else if (parameter == "NDF_Std_pol3") {
-                                Loaded_NDF_Std_pol3 = stod(parameter2);
-                            }
-                        }
-                    }
-                }
-
-                //<editor-fold desc="Safety checks">
-                if (Loaded_Smear_coefficients_values.size() != Loaded_Std_coefficients_names.size()) {
-                    cout << "\n\nNeutronResolution::ReadResDataParam: smearing coefficients load registered improperly! Exiting...\n\n", exit(0);
-                }
-
-                if (Loaded_Corr_coefficients_values.size() != Loaded_Corr_coefficients_names.size()) {
-                    cout << "\n\nNeutronResolution::ReadResDataParam: correction coefficients load registered improperly! Exiting...\n\n", exit(0);
-                }
-                //</editor-fold>
-
-            }
-        }
-    } else {
-        cout << "\n\nNeutronResolution::ReadResDataParam: file not found! Exiting...\n\n", exit(0);
-    }
-}
-//</editor-fold>
 
 //<editor-fold desc="ReadResDataParam function">
 void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName,
@@ -2479,55 +1792,67 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                     if (findSubstring(parameter, "pol1") && findSubstring(CorrMode, "pol1")) {
                         if (findSubstring(parameter, "pol1_wKC") && findSubstring(CorrMode, "pol1_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Corr_pol1_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Corr_pol1_wKC);
+//                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Corr_pol1_wKC, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Corr_pol1_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Corr_pol1_wKC);
+//                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Corr_pol1_wKC, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             }
                         } else if (findSubstring(parameter, "pol1") && !findSubstring(CorrMode, "pol1_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Corr_pol1, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Corr_pol1);
+//                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Corr_pol1, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Corr_pol1, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Corr_pol1);
+//                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Corr_pol1, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             }
                         }
                     } else if (findSubstring(parameter, "pol2") && findSubstring(CorrMode, "pol2")) {
                         if (findSubstring(parameter, "pol2_wKC") && findSubstring(CorrMode, "pol2_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Corr_pol2_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Corr_pol2_wKC);
+//                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Corr_pol2_wKC, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Corr_pol2_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Corr_pol2_wKC);
+//                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Corr_pol2_wKC, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             }
                         } else if (findSubstring(parameter, "pol2") && !findSubstring(CorrMode, "pol2_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Corr_pol2, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Corr_pol2);
+//                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Corr_pol2, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Corr_pol2, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Corr_pol2);
+//                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Corr_pol2, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             }
                         }
                     } else if (findSubstring(parameter, "pol3") && findSubstring(CorrMode, "pol3")) {
                         if (findSubstring(parameter, "pol3_wKC") && findSubstring(CorrMode, "pol3_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Corr_pol3_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Corr_pol3_wKC);
+//                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Corr_pol3_wKC, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Corr_pol3_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Corr_pol3_wKC);
+//                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Corr_pol3_wKC, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             }
                         } else if (findSubstring(parameter, "pol3") && !findSubstring(CorrMode, "pol3_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Corr_pol3, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Corr_pol3);
+//                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Corr_pol3, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Corr_pol3, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Corr_pol3);
+//                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Corr_pol3, Loaded_Corr_coefficients_values,
+//                                           Loaded_Corr_coefficients_names);
                             }
                         }
                     }
@@ -2545,62 +1870,74 @@ void NeutronResolution::ReadResDataParam(const char *filename, const bool &Calcu
                     if (findSubstring(parameter, "pol1") && findSubstring(SmearMode, "pol1")) {
                         if (findSubstring(parameter, "pol1_wKC") && findSubstring(SmearMode, "pol1_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Smear_pol1_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Smear_pol1_wKC);
+//                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Smear_pol1_wKC, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Smear_pol1_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Smear_pol1_wKC);
+//                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Smear_pol1_wKC, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             }
                         } else if (findSubstring(parameter, "pol1") && !findSubstring(SmearMode, "pol1_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Smear_pol1, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Smear_pol1);
+//                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_TL_FitParam_Smear_pol1, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Smear_pol1, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Smear_pol1);
+//                                AutoReader(MomentumType, 1, parameter, ss2, Loaded_Reco_FitParam_Smear_pol1, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             }
                         }
                     } else if (findSubstring(parameter, "pol2") && findSubstring(SmearMode, "pol2")) {
                         if (findSubstring(parameter, "pol2_wKC") && findSubstring(SmearMode, "pol2_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Smear_pol2_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Smear_pol2_wKC);
+//                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Smear_pol2_wKC, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Smear_pol2_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Smear_pol2_wKC);
+//                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Smear_pol2_wKC, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             }
                         } else if (findSubstring(parameter, "pol2") && !findSubstring(SmearMode, "pol2_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Smear_pol2, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Smear_pol2);
+//                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_TL_FitParam_Smear_pol2, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Smear_pol2, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Smear_pol2);
+//                                AutoReader(MomentumType, 2, parameter, ss2, Loaded_Reco_FitParam_Smear_pol2, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             }
                         }
                     } else if (findSubstring(parameter, "pol3") && findSubstring(SmearMode, "pol3")) {
                         if (findSubstring(parameter, "pol3_wKC") && findSubstring(SmearMode, "pol3_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Smear_pol3_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Smear_pol3_wKC);
+//                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Smear_pol3_wKC, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Smear_pol3_wKC, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Smear_pol3_wKC);
+//                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Smear_pol3_wKC, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             }
                         } else if (findSubstring(parameter, "pol3") && !findSubstring(SmearMode, "pol3_wKC")) {
                             if (MomentumType == "truth") {
-                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Smear_pol3, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Smear_pol3);
+//                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_TL_FitParam_Smear_pol3, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             } else if (MomentumType == "reco") {
-                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Smear_pol3, Loaded_Corr_coefficients_values,
-                                           Loaded_Corr_coefficients_names);
+                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Smear_pol3);
+//                                AutoReader(MomentumType, 3, parameter, ss2, Loaded_Reco_FitParam_Smear_pol3, Loaded_Smear_coefficients_values,
+//                                           Loaded_Smear_coefficients_names);
                             }
                         }
                     }
                 }
 
                 //<editor-fold desc="Safety checks">
-                if (Loaded_Smear_coefficients_values.size() != Loaded_Std_coefficients_names.size()) {
+                if (Loaded_Smear_coefficients_values.size() != Loaded_Smear_coefficients_names.size()) {
                     cout << "\n\nNeutronResolution::ReadResDataParam: smearing coefficients load registered improperly! Exiting...\n\n", exit(0);
                 }
 
@@ -2634,6 +1971,71 @@ void NeutronResolution::AutoReader(const string &MomentumType, const int &Polyno
                 Loaded_coefficients_values.push_back(stod(Loaded_FitVar));
                 Loaded_coefficients_names.push_back((VarNames.at(counter) + " (" + MomentumType + ")"));
                 ++counter;
+            } else if (findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
+                Loaded_FitVarResultsErrors.push_back(stod(Loaded_FitVar));
+            } else if (!findSubstring(parameter, "error") && findSubstring(parameter, "FitGoodness")) {
+                Loaded_FitVarResultsGoodness.push_back(stod(Loaded_FitVar));
+            }
+        }
+
+        if (!findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
+            Loading_Dest.push_back(Loaded_FitVarResults);
+        } else if (findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
+            Loading_Dest.push_back(Loaded_FitVarResultsErrors);
+        } else if (!findSubstring(parameter, "error") && findSubstring(parameter, "FitGoodness")) {
+            Loading_Dest.push_back(Loaded_FitVarResultsGoodness);
+        }
+
+        //<editor-fold desc="Safety checks">
+        if (!findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
+            if (Loaded_FitVarResults.size() != (PolynomialDegree + 1)) {
+                cout << "\n\nNeutronResolution::AutoReader: the parameter " << parameter << " loaded improperly!\n";
+                cout << "Loaded_FitVarResults.size() = " << Loaded_FitVarResults.size() << "\n";
+                cout << "expected size (= PolynomialDegree) = " << PolynomialDegree << "\n";
+                cout << "Loaded_FitVarResultsErrors elements:\n";
+                for (int i = 0; i < Loaded_FitVarResults.size(); i++) { cout << Loaded_FitVarResults.at(i) << "\n"; }
+                cout << "\nExiting...\n\n", exit(0);
+            }
+        }
+
+        if (findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
+            if (Loaded_FitVarResultsErrors.size() != (PolynomialDegree + 1)) {
+                cout << "\n\nNeutronResolution::AutoReader: the parameter " << parameter << " loaded improperly!\n";
+                cout << "Loaded_FitVarResultsErrors.size() = " << Loaded_FitVarResultsErrors.size() << "\n";
+                cout << "expected size (= PolynomialDegree) = " << PolynomialDegree << "\n";
+                cout << "Loaded_FitVarResultsErrors elements:\n";
+                for (int i = 0; i < Loaded_FitVarResultsErrors.size(); i++) { cout << Loaded_FitVarResultsErrors.at(i) << "\n"; }
+                cout << "\nExiting...\n\n", exit(0);
+            }
+        }
+
+        if (!findSubstring(parameter, "error") && findSubstring(parameter, "FitGoodness")) {
+            if (Loaded_FitVarResultsGoodness.size() != 2) {
+                cout << "\n\nNeutronResolution::AutoReader: the parameter " << parameter << " loaded improperly!\n";
+                cout << "Loaded_FitVarResultsErrors.size() = " << Loaded_FitVarResultsGoodness.size() << "\n";
+                cout << "expected size = " << 2 << "\n";
+                cout << "Loaded_FitVarResultsErrors elements:\n";
+                for (int i = 0; i < Loaded_FitVarResultsGoodness.size(); i++) { cout << Loaded_FitVarResultsGoodness.at(i) << "\n"; }
+                cout << "\nExiting...\n\n", exit(0);
+            }
+        }
+        //</editor-fold>
+
+    }
+}
+//</editor-fold>
+
+//<editor-fold desc="AutoReader function">
+void NeutronResolution::AutoReader(const string &MomentumType, const int &PolynomialDegree, const string &parameter, basic_istream<char> &ss2,
+                                   vector <vector<double>> &Loading_Dest) {
+    if (findSubstring(parameter, MomentumType)) {
+        vector <string> VarNames = {"A", "B", "C", "D"};
+        vector<double> Loaded_FitVarResults, Loaded_FitVarResultsErrors, Loaded_FitVarResultsGoodness;
+        string Loaded_FitVar;
+
+        while (getline(ss2, Loaded_FitVar, ':')) {
+            if (!findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
+                Loaded_FitVarResults.push_back(stod(Loaded_FitVar));
             } else if (findSubstring(parameter, "error") && !findSubstring(parameter, "FitGoodness")) {
                 Loaded_FitVarResultsErrors.push_back(stod(Loaded_FitVar));
             } else if (!findSubstring(parameter, "error") && findSubstring(parameter, "FitGoodness")) {
@@ -2748,16 +2150,24 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                    (SmearMode == "pol1_wKC") || (SmearMode == "pol2_wKC") || (SmearMode == "pol3_wKC")) {
             /* Smear using pol fit results */
             double Smearing, Arg;
+            vector <string> VarNames = {"A", "B", "C", "D"};
 
             if (SmearMode == "pol1") {
                 Arg = Loaded_TL_FitParam_Smear_pol1.at(0).at(0) * Momentum +
                       Loaded_TL_FitParam_Smear_pol1.at(0).at(1);
 
+                if ((Loaded_Smear_coefficients_values.size() == 0) || (Loaded_Smear_coefficients_names.size() == 0)) {
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol1.at(0).at(0));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol1.at(0).at(1));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(1));
+                }
+
                 if (Printout_Smear_Variables) {
-                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol1.size() << "\n";
-                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol1.at(0).size() << "\n";
-                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol1.at(1).size() << "\n";
-                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol1.at(2).size() << "\n\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_TL_FitParam_Smear_pol1.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_TL_FitParam_Smear_pol1.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_TL_FitParam_Smear_pol1.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_TL_FitParam_Smear_pol1.at(2).size() << "\n\n";
 
                     cout << "Loaded_A_Std_pol1 = " << Loaded_TL_FitParam_Smear_pol1.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol1 = " << Loaded_TL_FitParam_Smear_pol1.at(0).at(1) << "\n\n";
@@ -2766,11 +2176,18 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                 Arg = Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(0) * Momentum +
                       Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(1);
 
+                if ((Loaded_Smear_coefficients_values.size() == 0) || (Loaded_Smear_coefficients_names.size() == 0)) {
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(0));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(1));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(1));
+                }
+
                 if (Printout_Smear_Variables) {
-                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol1_wKC.size() << "\n";
-                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(0).size() << "\n";
-                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(1).size() << "\n";
-                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(2).size() << "\n\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_TL_FitParam_Smear_pol1_wKC.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(2).size() << "\n\n";
 
                     cout << "Loaded_A_Std_pol1_wKC = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol1_wKC = " << Loaded_TL_FitParam_Smear_pol1_wKC.at(0).at(1) << "\n\n";
@@ -2780,11 +2197,20 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                       Loaded_TL_FitParam_Smear_pol2.at(0).at(1) * Momentum +
                       Loaded_TL_FitParam_Smear_pol2.at(0).at(2);
 
+                if ((Loaded_Smear_coefficients_values.size() == 0) || (Loaded_Smear_coefficients_names.size() == 0)) {
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol2.at(0).at(0));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol2.at(0).at(1));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(1));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol2.at(0).at(2));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(2));
+                }
+
                 if (Printout_Smear_Variables) {
-                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol2.size() << "\n";
-                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol2.at(0).size() << "\n";
-                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol2.at(1).size() << "\n";
-                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol2.at(2).size() << "\n\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_TL_FitParam_Smear_pol2.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_TL_FitParam_Smear_pol2.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_TL_FitParam_Smear_pol2.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_TL_FitParam_Smear_pol2.at(2).size() << "\n\n";
 
                     cout << "Loaded_A_Std_pol2 = " << Loaded_TL_FitParam_Smear_pol2.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol2 = " << Loaded_TL_FitParam_Smear_pol2.at(0).at(1) << "\n";
@@ -2795,11 +2221,20 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                       Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(1) * Momentum +
                       Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(2);
 
+                if ((Loaded_Smear_coefficients_values.size() == 0) || (Loaded_Smear_coefficients_names.size() == 0)) {
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(0));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(1));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(1));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(2));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(2));
+                }
+
                 if (Printout_Smear_Variables) {
-                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol2_wKC.size() << "\n";
-                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(0).size() << "\n";
-                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(1).size() << "\n";
-                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(2).size() << "\n\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_TL_FitParam_Smear_pol2_wKC.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(2).size() << "\n\n";
 
                     cout << "Loaded_A_Std_pol2_wKC = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol2_wKC = " << Loaded_TL_FitParam_Smear_pol2_wKC.at(0).at(1) << "\n";
@@ -2811,11 +2246,22 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                       Loaded_TL_FitParam_Smear_pol3.at(0).at(2) * Momentum +
                       Loaded_TL_FitParam_Smear_pol3.at(0).at(3);
 
+                if ((Loaded_Smear_coefficients_values.size() == 0) || (Loaded_Smear_coefficients_names.size() == 0)) {
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol3.at(0).at(0));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol3.at(0).at(1));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(1));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol3.at(0).at(2));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(2));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol3.at(0).at(3));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(3));
+                }
+
                 if (Printout_Smear_Variables) {
-                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol3.size() << "\n";
-                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol3.at(0).size() << "\n";
-                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol3.at(1).size() << "\n";
-                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol3.at(2).size() << "\n\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_TL_FitParam_Smear_pol3.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_TL_FitParam_Smear_pol3.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_TL_FitParam_Smear_pol3.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_TL_FitParam_Smear_pol3.at(2).size() << "\n\n";
 
                     cout << "Loaded_A_Std_pol3 = " << Loaded_TL_FitParam_Smear_pol3.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol3 = " << Loaded_TL_FitParam_Smear_pol3.at(0).at(1) << "\n";
@@ -2828,11 +2274,22 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
                       Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(2) * Momentum +
                       Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(3);
 
+                if ((Loaded_Smear_coefficients_values.size() == 0) || (Loaded_Smear_coefficients_names.size() == 0)) {
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(0));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(1));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(1));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(2));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(2));
+                    Loaded_Smear_coefficients_values.push_back(Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(3));
+                    Loaded_Smear_coefficients_names.push_back(VarNames.at(3));
+                }
+
                 if (Printout_Smear_Variables) {
-                    cout << "\n\n\n#FitParam groups = " << Loaded_TL_FitParam_Smear_pol3_wKC.size() << "\n";
-                    cout << "#FitParam variables = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(0).size() << "\n";
-                    cout << "#FitParam errors = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(1).size() << "\n";
-                    cout << "#FitParam FQV = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(2).size() << "\n\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_TL_FitParam_Smear_pol3_wKC.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(2).size() << "\n\n";
 
                     cout << "Loaded_A_Std_pol3_wKC = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(0) << "\n";
                     cout << "Loaded_B_Std_pol3_wKC = " << Loaded_TL_FitParam_Smear_pol3_wKC.at(0).at(1) << "\n";
@@ -2860,142 +2317,6 @@ double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const d
     }
 }
 //</editor-fold>
-
-////<editor-fold desc="PSmear function (original)">
-///* A function to smear protons by fitted neutron resolution */
-//
-//double NeutronResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
-//    bool Printout = false;
-//    bool Printout_Smear_Variables = false;
-//
-//    if (!apply_nucleon_SmearAndCorr) {
-//        /* Smearing and correction are disabled */
-//        return Momentum;
-//    } else {
-//        /* Smearing and correction are enabled */
-//
-//        /* Setting momentum powers */
-//        double SmearedMomentum, Momentum2 = Momentum * Momentum, Momentum3 = Momentum2 * Momentum;
-//
-//        if (SmearMode == "slices") {
-//            /* Smear using slice fit results */
-//
-//            //<editor-fold desc="Original (smearing from loaded nRes fit variables)">
-//            if (Momentum < SliceUpperMomLim) { // NOTE: changed according to upper neutron mom. th.
-//                for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
-//                    if ((Loaded_res_slice.GetSliceLowerb() < Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-//                        double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
-//
-//                        if (Printout) {
-//                            cout << "\n\nLoaded_res_slice.GetUpperCut() = " << Loaded_res_slice.GetUpperCut() << "\n";
-//                            cout << "Momentum = " << Momentum << "\n";
-//                            cout << "Smearing = " << Smearing << "\n";
-//                            cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
-//                        }
-//
-//                        return Smearing * Momentum;
-//                    }
-//                }
-//            } else {
-//                double Smearing = Rand->Gaus(1, Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut());
-//
-//                if (Printout) {
-//                    cout << "\n\nLoaded_Res_Slices_FitVar.GetUpperCut() = "
-//                         << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut() << "\n";
-//                    cout << "Loaded_res_slice.GetSliceLowerb() = "
-//                         << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceLowerb() << "\n";
-//                    cout << "Loaded_res_slice.GetSliceUpperb() = "
-//                         << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceUpperb() << "\n";
-//                    cout << "Momentum = " << Momentum << "\n";
-//                    cout << "Smearing = " << Smearing << "\n";
-//                    cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
-//                }
-//
-//                return Smearing * Momentum;
-//            }
-//            //</editor-fold>
-//
-//        } else if ((SmearMode == "pol1") || (SmearMode == "pol2") || (SmearMode == "pol3") ||
-//                   (SmearMode == "pol1_wKC") || (SmearMode == "pol2_wKC") || (SmearMode == "pol3_wKC")) {
-//            /* Smear using pol fit results */
-//            double Smearing, Arg;
-//
-//            if (SmearMode == "pol1") {
-//                Arg = Loaded_A_Std_pol1 * Momentum + Loaded_B_Std_pol1;
-//
-//                if (Printout_Smear_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Std_pol1 = " << Loaded_A_Std_pol1 << "\n";
-//                    cout << "Loaded_B_Std_pol1 = " << Loaded_B_Std_pol1 << "\n\n";
-//                }
-//            } else if (SmearMode == "pol1_wKC") {
-//                Arg = Loaded_A_Std_pol1_wKC * Momentum + Loaded_B_Std_pol1_wKC;
-//
-//                if (Printout_Smear_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Std_pol1_wKC = " << Loaded_A_Std_pol1_wKC << "\n";
-//                    cout << "Loaded_B_Std_pol1_wKC = " << Loaded_B_Std_pol1_wKC << "\n\n";
-//                }
-//            } else if (SmearMode == "pol2") {
-//                Arg = Loaded_A_Std_pol2 * Momentum2 + Loaded_B_Std_pol2 * Momentum + Loaded_C_Std_pol2;
-//
-//                if (Printout_Smear_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Std_pol2 = " << Loaded_A_Std_pol2 << "\n";
-//                    cout << "Loaded_B_Std_pol2 = " << Loaded_B_Std_pol2 << "\n";
-//                    cout << "Loaded_C_Std_pol2 = " << Loaded_C_Std_pol2 << "\n\n";
-//                }
-//            } else if (SmearMode == "pol2_wKC") {
-//                Arg = Loaded_A_Std_pol2_wKC * Momentum2 + Loaded_B_Std_pol2_wKC * Momentum + Loaded_C_Std_pol2_wKC;
-//
-//                if (Printout_Smear_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Std_pol2_wKC = " << Loaded_A_Std_pol2_wKC << "\n";
-//                    cout << "Loaded_B_Std_pol2_wKC = " << Loaded_B_Std_pol2_wKC << "\n";
-//                    cout << "Loaded_C_Std_pol2_wKC = " << Loaded_C_Std_pol2_wKC << "\n\n";
-//                }
-//            } else if (SmearMode == "pol3") {
-//                Arg = Loaded_A_Std_pol3 * Momentum3 + Loaded_B_Std_pol3 * Momentum2 + Loaded_C_Std_pol3 * Momentum + Loaded_D_Std_pol3;
-//
-//                if (Printout_Smear_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Std_pol3 = " << Loaded_A_Std_pol3 << "\n";
-//                    cout << "Loaded_B_Std_pol3 = " << Loaded_B_Std_pol3 << "\n";
-//                    cout << "Loaded_C_Std_pol3 = " << Loaded_C_Std_pol3 << "\n";
-//                    cout << "Loaded_D_Std_pol3 = " << Loaded_D_Std_pol3 << "\n\n";
-//                }
-//            } else if (SmearMode == "pol3_wKC") {
-//                Arg = Loaded_A_Std_pol3_wKC * Momentum3 + Loaded_B_Std_pol3_wKC * Momentum2 + Loaded_C_Std_pol3_wKC * Momentum +
-//                      Loaded_D_Std_pol3_wKC;
-//
-//                if (Printout_Smear_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Std_pol3_wKC = " << Loaded_A_Std_pol3_wKC << "\n";
-//                    cout << "Loaded_B_Std_pol3_wKC = " << Loaded_B_Std_pol3_wKC << "\n";
-//                    cout << "Loaded_C_Std_pol3_wKC = " << Loaded_C_Std_pol3_wKC << "\n";
-//                    cout << "Loaded_D_Std_pol3_wKC = " << Loaded_D_Std_pol3_wKC << "\n\n";
-//                }
-//            }
-//
-//            Smearing = Rand->Gaus(1, Arg);
-//            SmearedMomentum = Smearing * Momentum; // minus for protons and plus for protons
-//
-//            if (Printout) {
-//                cout << "\n\nSmearMode = " << SmearMode << "\n";
-//                cout << "Arg = " << Arg << "\n";
-//                cout << "Smearing = " << Smearing << "\n";
-//                cout << "Momentum = " << Momentum << "\n";
-//                cout << "SmearedMomentum = " << SmearedMomentum << "\n\n";
-//            }
-//
-//        } else {
-//            cout << "\n\nNeutronResolution::PSmear: SmearMode illegal! Exiting...", exit(0);
-//        }
-//
-//        return SmearedMomentum;
-//    }
-//}
-////</editor-fold>
 
 // NCorr function -------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -3037,6 +2358,7 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                    (CorrMode == "pol1_wKC") || (CorrMode == "pol2_wKC") || (CorrMode == "pol3_wKC")) {
             /* Correction using pol fit results */
             double Mu, CorrectionFactor;
+            vector <string> VarNames = {"A", "B", "C", "D"};
 
             //TODO: add choice mechanism between truth and reco correction factors
 
@@ -3044,16 +2366,40 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                 Mu = Loaded_Reco_FitParam_Corr_pol1.at(0).at(0) * Momentum +
                      Loaded_Reco_FitParam_Corr_pol1.at(0).at(1);
 
+                if ((Loaded_Corr_coefficients_values.size() == 0) || (Loaded_Corr_coefficients_names.size() == 0)) {
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol1.at(0).at(0));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol1.at(0).at(1));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(1));
+                }
+
                 if (Printout_Corr_Variables) {
-                    cout << "\n\n\nLoaded_A_Corr_pol1 = " << Loaded_Reco_FitParam_Corr_pol1.at(0).at(0) << "\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_Reco_FitParam_Corr_pol1.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_Reco_FitParam_Corr_pol1.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_Reco_FitParam_Corr_pol1.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_Reco_FitParam_Corr_pol1.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Corr_pol1 = " << Loaded_Reco_FitParam_Corr_pol1.at(0).at(0) << "\n";
                     cout << "Loaded_B_Corr_pol1 = " << Loaded_Reco_FitParam_Corr_pol1.at(0).at(1) << "\n\n";
                 }
             } else if (CorrMode == "pol1_wKC") {
                 Mu = Loaded_Reco_FitParam_Corr_pol1_wKC.at(0).at(0) * Momentum +
                      Loaded_Reco_FitParam_Corr_pol1_wKC.at(0).at(1);
 
+                if ((Loaded_Corr_coefficients_values.size() == 0) || (Loaded_Corr_coefficients_names.size() == 0)) {
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol1_wKC.at(0).at(0));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol1_wKC.at(0).at(1));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(1));
+                }
+
                 if (Printout_Corr_Variables) {
-                    cout << "\n\n\nLoaded_A_Corr_pol1_wKC = " << Loaded_Reco_FitParam_Corr_pol1_wKC.at(0).at(0) << "\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_Reco_FitParam_Corr_pol1_wKC.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_Reco_FitParam_Corr_pol1_wKC.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_Reco_FitParam_Corr_pol1_wKC.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_Reco_FitParam_Corr_pol1_wKC.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Corr_pol1_wKC = " << Loaded_Reco_FitParam_Corr_pol1_wKC.at(0).at(0) << "\n";
                     cout << "Loaded_B_Corr_pol1_wKC = " << Loaded_Reco_FitParam_Corr_pol1_wKC.at(0).at(1) << "\n\n";
                 }
             } else if (CorrMode == "pol2") {
@@ -3061,8 +2407,22 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                      Loaded_Reco_FitParam_Corr_pol2.at(0).at(1) * Momentum +
                      Loaded_Reco_FitParam_Corr_pol2.at(0).at(2);
 
+                if ((Loaded_Corr_coefficients_values.size() == 0) || (Loaded_Corr_coefficients_names.size() == 0)) {
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol2.at(0).at(0));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol2.at(0).at(1));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(1));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol2.at(0).at(2));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(2));
+                }
+
                 if (Printout_Corr_Variables) {
-                    cout << "\n\n\nLoaded_A_Corr_pol2 = " << Loaded_Reco_FitParam_Corr_pol2.at(0).at(0) << "\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_Reco_FitParam_Corr_pol2.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_Reco_FitParam_Corr_pol2.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_Reco_FitParam_Corr_pol2.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_Reco_FitParam_Corr_pol2.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Corr_pol2 = " << Loaded_Reco_FitParam_Corr_pol2.at(0).at(0) << "\n";
                     cout << "Loaded_B_Corr_pol2 = " << Loaded_Reco_FitParam_Corr_pol2.at(0).at(1) << "\n";
                     cout << "Loaded_C_Corr_pol2 = " << Loaded_Reco_FitParam_Corr_pol2.at(0).at(2) << "\n\n";
                 }
@@ -3071,8 +2431,22 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                      Loaded_Reco_FitParam_Corr_pol2_wKC.at(0).at(1) * Momentum +
                      Loaded_Reco_FitParam_Corr_pol2_wKC.at(0).at(2);
 
+                if ((Loaded_Corr_coefficients_values.size() == 0) || (Loaded_Corr_coefficients_names.size() == 0)) {
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol2_wKC.at(0).at(0));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol2_wKC.at(0).at(1));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(1));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol2_wKC.at(0).at(2));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(2));
+                }
+
                 if (Printout_Corr_Variables) {
-                    cout << "\n\n\nLoaded_A_Corr_pol2_wKC = " << Loaded_Reco_FitParam_Corr_pol2_wKC.at(0).at(0) << "\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_Reco_FitParam_Corr_pol2_wKC.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_Reco_FitParam_Corr_pol2_wKC.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_Reco_FitParam_Corr_pol2_wKC.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_Reco_FitParam_Corr_pol2_wKC.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Corr_pol2_wKC = " << Loaded_Reco_FitParam_Corr_pol2_wKC.at(0).at(0) << "\n";
                     cout << "Loaded_B_Corr_pol2_wKC = " << Loaded_Reco_FitParam_Corr_pol2_wKC.at(0).at(1) << "\n";
                     cout << "Loaded_C_Corr_pol2_wKC = " << Loaded_Reco_FitParam_Corr_pol2_wKC.at(0).at(2) << "\n\n";
                 }
@@ -3082,8 +2456,24 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                      Loaded_Reco_FitParam_Corr_pol3.at(0).at(2) * Momentum +
                      Loaded_Reco_FitParam_Corr_pol3.at(0).at(3);
 
+                if ((Loaded_Corr_coefficients_values.size() == 0) || (Loaded_Corr_coefficients_names.size() == 0)) {
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol3.at(0).at(0));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol3.at(0).at(1));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(1));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol3.at(0).at(2));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(2));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol3.at(0).at(3));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(3));
+                }
+
                 if (Printout_Corr_Variables) {
-                    cout << "\n\n\nLoaded_A_Corr_pol3 = " << Loaded_Reco_FitParam_Corr_pol3.at(0).at(0) << "\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_Reco_FitParam_Corr_pol3.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_Reco_FitParam_Corr_pol3.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_Reco_FitParam_Corr_pol3.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_Reco_FitParam_Corr_pol3.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Corr_pol3 = " << Loaded_Reco_FitParam_Corr_pol3.at(0).at(0) << "\n";
                     cout << "Loaded_B_Corr_pol3 = " << Loaded_Reco_FitParam_Corr_pol3.at(0).at(1) << "\n";
                     cout << "Loaded_C_Corr_pol3 = " << Loaded_Reco_FitParam_Corr_pol3.at(0).at(2) << "\n";
                     cout << "Loaded_D_Corr_pol3 = " << Loaded_Reco_FitParam_Corr_pol3.at(0).at(3) << "\n\n";
@@ -3094,8 +2484,24 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
                      Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(2) * Momentum +
                      Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(3);
 
+                if ((Loaded_Corr_coefficients_values.size() == 0) || (Loaded_Corr_coefficients_names.size() == 0)) {
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(0));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(0));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(1));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(1));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(2));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(2));
+                    Loaded_Corr_coefficients_values.push_back(Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(3));
+                    Loaded_Corr_coefficients_names.push_back(VarNames.at(3));
+                }
+
                 if (Printout_Corr_Variables) {
-                    cout << "\n\n\nLoaded_A_Corr_pol3_wKC = " << Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(0) << "\n";
+                    cout << "\n\n\n#(FitParam groups) = " << Loaded_Reco_FitParam_Corr_pol3_wKC.size() << "\n";
+                    cout << "#(FitParam variables) = " << Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).size() << "\n";
+                    cout << "#(FitParam errors) = " << Loaded_Reco_FitParam_Corr_pol3_wKC.at(1).size() << "\n";
+                    cout << "#(FitParam fit goodness variables) = " << Loaded_Reco_FitParam_Corr_pol3_wKC.at(2).size() << "\n\n";
+
+                    cout << "Loaded_A_Corr_pol3_wKC = " << Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(0) << "\n";
                     cout << "Loaded_B_Corr_pol3_wKC = " << Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(1) << "\n";
                     cout << "Loaded_C_Corr_pol3_wKC = " << Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(2) << "\n";
                     cout << "Loaded_D_Corr_pol3_wKC = " << Loaded_Reco_FitParam_Corr_pol3_wKC.at(0).at(3) << "\n\n";
@@ -3117,213 +2523,6 @@ double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const do
         }
 
         return CorrectedMomentum;
-    }
-}
-//</editor-fold>
-
-////<editor-fold desc="NCorr function (original)">
-///* A function to correction (calibrate) neutron momentum by fitted neutron correction */
-//
-//double NeutronResolution::NCorr(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
-//    bool Printout = false;
-//    bool Printout_Corr_Variables = false;
-//
-//    if (!apply_nucleon_SmearAndCorr) {
-//        /* Smearing and correction are disabled */
-//        return Momentum;
-//    } else {
-//        /* Smearing and correction are enabled */
-//
-//        /* Setting corrected momentum & momentum powers */
-//        double CorrectedMomentum, Momentum2 = Momentum * Momentum, Momentum3 = Momentum2 * Momentum;
-//
-//        if (CorrMode == "slices") {
-//            /* Correction using slice fit results */
-//
-//            //<editor-fold desc="Original (correction from loaded nRes fit variables)">
-//            for (DSCuts Loaded_res_slice: Loaded_Res_Slices_HistVar) {
-//                if ((Loaded_res_slice.GetSliceLowerb() < Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-//                    CorrectedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
-//
-//                    if (Printout) {
-//                        cout << "\n\nLoaded_res_slice.GetMean() = " << Loaded_res_slice.GetMean() << "\n";
-//                        cout << "Momentum = " << Momentum << "\n";
-//                        cout << "Correction = " << Loaded_res_slice.GetMean() << "\n";
-//                        cout << "CorrectedMomentum = " << CorrectedMomentum << "\n\n";
-//                    }
-//                }
-//            }
-//            //</editor-fold>
-//
-//        } else if ((CorrMode == "pol1") || (CorrMode == "pol2") || (CorrMode == "pol3") ||
-//                   (CorrMode == "pol1_wKC") || (CorrMode == "pol2_wKC") || (CorrMode == "pol3_wKC")) {
-//            /* Correction using pol fit results */
-//            double Mu, CorrectionFactor;
-//
-//            if (CorrMode == "pol1") {
-//                Mu = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
-//
-//                if (Printout_Corr_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Corr_pol1 = " << Loaded_A_Corr_pol1 << "\n";
-//                    cout << "Loaded_B_Corr_pol1 = " << Loaded_B_Corr_pol1 << "\n\n";
-//                }
-//            } else if (CorrMode == "pol1_wKC") {
-//                Mu = Loaded_A_Corr_pol1_wKC * Momentum + Loaded_B_Corr_pol1_wKC;
-//
-//                if (Printout_Corr_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Corr_pol1_wKC = " << Loaded_A_Corr_pol1_wKC << "\n";
-//                    cout << "Loaded_B_Corr_pol1_wKC = " << Loaded_B_Corr_pol1_wKC << "\n\n";
-//                }
-//            } else if (CorrMode == "pol2") {
-//                Mu = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;
-//
-//                if (Printout_Corr_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Corr_pol2 = " << Loaded_A_Corr_pol2 << "\n";
-//                    cout << "Loaded_B_Corr_pol2 = " << Loaded_B_Corr_pol2 << "\n";
-//                    cout << "Loaded_C_Corr_pol2 = " << Loaded_C_Corr_pol2 << "\n\n";
-//                }
-//            } else if (CorrMode == "pol2_wKC") {
-//                Mu = Loaded_A_Corr_pol2_wKC * Momentum2 + Loaded_B_Corr_pol2_wKC * Momentum + Loaded_C_Corr_pol2_wKC;
-//
-//                if (Printout_Corr_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Corr_pol2_wKC = " << Loaded_A_Corr_pol2_wKC << "\n";
-//                    cout << "Loaded_B_Corr_pol2_wKC = " << Loaded_B_Corr_pol2_wKC << "\n";
-//                    cout << "Loaded_C_Corr_pol2_wKC = " << Loaded_C_Corr_pol2_wKC << "\n\n";
-//                }
-//            } else if (CorrMode == "pol3") {
-//                Mu = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
-//
-//                if (Printout_Corr_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Corr_pol3 = " << Loaded_A_Corr_pol3 << "\n";
-//                    cout << "Loaded_B_Corr_pol3 = " << Loaded_B_Corr_pol3 << "\n";
-//                    cout << "Loaded_C_Corr_pol3 = " << Loaded_C_Corr_pol3 << "\n";
-//                    cout << "Loaded_D_Corr_pol3 = " << Loaded_D_Corr_pol3 << "\n\n";
-//                }
-//            } else if (CorrMode == "pol3_wKC") {
-//                Mu = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum +
-//                     Loaded_D_Corr_pol3_wKC;
-//
-//                if (Printout_Corr_Variables) {
-//                    cout << "\n";
-//                    cout << "\n\nLoaded_A_Corr_pol3_wKC = " << Loaded_A_Corr_pol3_wKC << "\n";
-//                    cout << "Loaded_B_Corr_pol3_wKC = " << Loaded_B_Corr_pol3_wKC << "\n";
-//                    cout << "Loaded_C_Corr_pol3_wKC = " << Loaded_C_Corr_pol3_wKC << "\n";
-//                    cout << "Loaded_D_Corr_pol3_wKC = " << Loaded_D_Corr_pol3_wKC << "\n\n";
-//                }
-//            }
-//
-//            CorrectionFactor = 1 / (1 - Mu);
-//            CorrectedMomentum = Momentum * CorrectionFactor;
-//
-//            if (Printout) {
-//                cout << "\n\nCorrMode = " << CorrMode << "\n";
-//                cout << "Mu = " << Mu << "\n";
-//                cout << "CorrectionFactor = " << CorrectionFactor << "\n";
-//                cout << "Momentum = " << Momentum << "\n";
-//                cout << "CorrectedMomentum = " << CorrectedMomentum << "\n\n";
-//            }
-//        } else {
-//            cout << "\n\nNeutronResolution::NCorr: CorrMode illegal! Exiting...", exit(0);
-//        }
-//
-//        return CorrectedMomentum;
-//    }
-//}
-////</editor-fold>
-
-// GetMomResMu function -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="GetMomResMu function">
-/* A function to correction (calibrate) neutron momentum by fitted neutron correction */
-
-double NeutronResolution::GetMomResMu(const bool &apply_nucleon_SmearAndCorr, const double &Momentum) {
-    bool Printout = false;
-    bool Printout_Corr_Variables = false;
-
-    if (!apply_nucleon_SmearAndCorr) {
-        /* Smearing and correction are disabled */
-        return 0;
-    } else {
-        /* Smearing and correction are enabled */
-
-        /* Setting corrected momentum & momentum powers */
-        double Mu, Momentum2 = Momentum * Momentum, Momentum3 = Momentum2 * Momentum;
-
-        if ((CorrMode == "pol1") || (CorrMode == "pol2") || (CorrMode == "pol3") ||
-            (CorrMode == "pol1_wKC") || (CorrMode == "pol2_wKC") || (CorrMode == "pol3_wKC")) {
-            /* Correction using pol fit results */
-            if (CorrMode == "pol1") {
-                Mu = Loaded_A_Corr_pol1 * Momentum + Loaded_B_Corr_pol1;
-
-                if (Printout_Corr_Variables) {
-                    cout << "\n";
-                    cout << "\n\nLoaded_A_Corr_pol1 = " << Loaded_A_Corr_pol1 << "\n";
-                    cout << "Loaded_B_Corr_pol1 = " << Loaded_B_Corr_pol1 << "\n\n";
-                }
-            } else if (CorrMode == "pol1_wKC") {
-                Mu = Loaded_A_Corr_pol1_wKC * Momentum + Loaded_B_Corr_pol1_wKC;
-
-                if (Printout_Corr_Variables) {
-                    cout << "\n";
-                    cout << "\n\nLoaded_A_Corr_pol1_wKC = " << Loaded_A_Corr_pol1_wKC << "\n";
-                    cout << "Loaded_B_Corr_pol1_wKC = " << Loaded_B_Corr_pol1_wKC << "\n\n";
-                }
-            } else if (CorrMode == "pol2") {
-                Mu = Loaded_A_Corr_pol2 * Momentum2 + Loaded_B_Corr_pol2 * Momentum + Loaded_C_Corr_pol2;
-
-                if (Printout_Corr_Variables) {
-                    cout << "\n";
-                    cout << "\n\nLoaded_A_Corr_pol2 = " << Loaded_A_Corr_pol2 << "\n";
-                    cout << "Loaded_B_Corr_pol2 = " << Loaded_B_Corr_pol2 << "\n";
-                    cout << "Loaded_C_Corr_pol2 = " << Loaded_C_Corr_pol2 << "\n\n";
-                }
-            } else if (CorrMode == "pol2_wKC") {
-                Mu = Loaded_A_Corr_pol2_wKC * Momentum2 + Loaded_B_Corr_pol2_wKC * Momentum + Loaded_C_Corr_pol2_wKC;
-
-                if (Printout_Corr_Variables) {
-                    cout << "\n";
-                    cout << "\n\nLoaded_A_Corr_pol2_wKC = " << Loaded_A_Corr_pol2_wKC << "\n";
-                    cout << "Loaded_B_Corr_pol2_wKC = " << Loaded_B_Corr_pol2_wKC << "\n";
-                    cout << "Loaded_C_Corr_pol2_wKC = " << Loaded_C_Corr_pol2_wKC << "\n\n";
-                }
-            } else if (CorrMode == "pol3") {
-                Mu = Loaded_A_Corr_pol3 * Momentum3 + Loaded_B_Corr_pol3 * Momentum2 + Loaded_C_Corr_pol3 * Momentum + Loaded_D_Corr_pol3;
-
-                if (Printout_Corr_Variables) {
-                    cout << "\n";
-                    cout << "\n\nLoaded_A_Corr_pol3 = " << Loaded_A_Corr_pol3 << "\n";
-                    cout << "Loaded_B_Corr_pol3 = " << Loaded_B_Corr_pol3 << "\n";
-                    cout << "Loaded_C_Corr_pol3 = " << Loaded_C_Corr_pol3 << "\n";
-                    cout << "Loaded_D_Corr_pol3 = " << Loaded_D_Corr_pol3 << "\n\n";
-                }
-            } else if (CorrMode == "pol3_wKC") {
-                Mu = Loaded_A_Corr_pol3_wKC * Momentum3 + Loaded_B_Corr_pol3_wKC * Momentum2 + Loaded_C_Corr_pol3_wKC * Momentum +
-                     Loaded_D_Corr_pol3_wKC;
-
-                if (Printout_Corr_Variables) {
-                    cout << "\n";
-                    cout << "\n\nLoaded_A_Corr_pol3_wKC = " << Loaded_A_Corr_pol3_wKC << "\n";
-                    cout << "Loaded_B_Corr_pol3_wKC = " << Loaded_B_Corr_pol3_wKC << "\n";
-                    cout << "Loaded_C_Corr_pol3_wKC = " << Loaded_C_Corr_pol3_wKC << "\n";
-                    cout << "Loaded_D_Corr_pol3_wKC = " << Loaded_D_Corr_pol3_wKC << "\n\n";
-                }
-            }
-
-            if (Printout) {
-                cout << "\n\nCorrMode = " << CorrMode << "\n";
-                cout << "Mu = " << Mu << "\n";
-                cout << "Momentum = " << Momentum << "\n";
-            }
-        } else {
-            cout << "\n\nNeutronResolution::NCorr: CorrMode illegal! Exiting...", exit(0);
-        }
-
-        return Mu;
     }
 }
 //</editor-fold>

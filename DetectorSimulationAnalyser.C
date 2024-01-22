@@ -158,9 +158,9 @@ void EventAnalyser() {
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
     bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = true; // Calculate momResS2 variables
+    bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
-    const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
+    const bool VaryingDelta = false; // 1st momResS1 w/ VaryingDelta = false
     const bool ForceSmallpResLimits = false; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
@@ -277,11 +277,9 @@ void EventAnalyser() {
     const bool custom_cuts_naming = true;
     settings.SetCustomCutsNaming(custom_cuts_naming);
     settings.ConfigureStatuses(apply_cuts, clas12ana_particles, only_preselection_cuts, apply_chi2_cuts_1e_cut, only_electron_quality_cuts,
-                               apply_nucleon_cuts,
-                               Enable_FD_photons,
-                               apply_nucleon_SmearAndCorr, apply_kinematical_cuts, apply_kinematical_weights, apply_fiducial_cuts, Generate_AMaps,
-                               plot_and_fit_MomRes, VaryingDelta, Calculate_momResS2, Run_with_momResS2, momRes_test, Rec_wTL_ES,
-                               ZoomIn_On_mom_th_plots);
+                               apply_nucleon_cuts, Enable_FD_photons, apply_nucleon_SmearAndCorr, apply_kinematical_cuts,
+                               apply_kinematical_weights, apply_fiducial_cuts, Generate_AMaps, plot_and_fit_MomRes, VaryingDelta,
+                               Calculate_momResS2, Run_with_momResS2, momRes_test, Rec_wTL_ES, ZoomIn_On_mom_th_plots);
     settings.SetPaths(WorkingDirectory, SampleName, plots_path, apply_cuts, apply_chi2_cuts_1e_cut, apply_nucleon_cuts);
     settings.GetPlotsPath(plots_path);
     settings.GetPlotsLogSaveDirectory(plots_log_save_Directory);
@@ -579,7 +577,7 @@ void EventAnalyser() {
     bool FSR_1D_plots, FSR_2D_plots; // FSR_2D_plots is disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-    bool TestRun = true; // set as false for a full run
+    bool TestRun = false; // set as false for a full run
 
     if (!TestRun) {
 
@@ -718,10 +716,8 @@ void EventAnalyser() {
     bool wider_margin = true;
     bool debug_plots = true; // Print out clas12ana debugging plots
 
-    bool Log_scale_Vx_plots = false, Log_scale_Vy_plots = false;
-    bool Log_scale_Vz_plots = true;
-    bool Log_scale_dVx_plots = false, Log_scale_dVy_plots = false;
-    bool Log_scale_dVz_plots = true;
+    bool Log_scale_Vx_plots = false, Log_scale_Vy_plots = false, Log_scale_Vz_plots = true;
+    bool Log_scale_dVx_plots = false, Log_scale_dVy_plots = false, Log_scale_dVz_plots = true;
 
     //<editor-fold desc="Auto-disable plot selector variables">
     if (!Plot_selector_master) {
@@ -1033,10 +1029,12 @@ void EventAnalyser() {
     //<editor-fold desc="Neutron resolution class declaration & definition">
     NeutronResolution nRes("Neutron"), pRes("Proton");
 
-    nRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE, FD_nucleon_momentum_cut,
+    nRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE,
+                    FD_nucleon_momentum_cut,
                     n_mom_th.GetLowerCut(), NeutronResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"],
                     DeltaSlices, VaryingDelta, SmearMode, CorrMode, momRes_test);
-    pRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE, FD_nucleon_momentum_cut,
+    pRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE,
+                    FD_nucleon_momentum_cut,
                     p_mom_th.GetLowerCut(), NeutronResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"],
                     DeltaSlices, VaryingDelta, SmearMode, CorrMode, momRes_test, ForceSmallpResLimits);
 
@@ -10248,17 +10246,28 @@ void EventAnalyser() {
 
         //<editor-fold desc="Neutral particles' identification (FD only)">
         /* Get FD neutrons and photons, according to the definitions: */
-        vector<int> FD_Neutrons, FD_Photons; // FD neutrons and photons to be set by definition - before momentum th.
-        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons); // Get FD neutrons and photons, according to the definitions (ORIGINAL!)
-//        FDNeutralParticle(allParticles, electrons, FD_Neutrons, FD_Photons, Neutron_veto_cut, beamE);      // Get FD neutrons and photons, according to the definitions
-        int NeutronsFD_ind_max = FDNeutralMaxP(allParticles, FD_Neutrons, apply_nucleon_cuts); // FD neutron with maximal momentum
+        // FD neutrons and photons to be set by definition - before momentum th. & any cuts:
+        vector<int> FD_Neutrons, FD_Photons;
+        // Get FD neutrons and photons, according to the definitions (ORIGINAL!):
+        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons);
+        // FD neutron with maximal momentum:
+        int NeutronsFD_ind_max = FDNeutralMaxP(allParticles, FD_Neutrons, apply_nucleon_cuts);
 
         /* Get FD neutrons and photons above momentum threshold: */
-        vector<int> NeutronsFD_ind, PhotonsFD_ind; // FD neutrons and photons by definition - after momentum th.
-        FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_nucleon_cuts);
-        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind,
-                                                   apply_nucleon_cuts); // FD neutron (with momentum th.) with maximal momentum (ORIGINAL!)
-//        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts, apply_nucleon_SmearAndCorr, nRes); // FD neutron (with momentum th.) with maximal momentum after correction
+        // FD neutrons and photons by definition (after momentum th. only!):
+        vector<int> NeutronsFD_ind_noNeutCuts, PhotonsFD_ind_noNeutCuts;
+        FDNeutralParticleID(allParticles, NeutronsFD_ind_noNeutCuts, FD_Neutrons, n_mom_th, PhotonsFD_ind_noNeutCuts, FD_Photons, ph_mom_th,
+                            apply_nucleon_cuts);
+        // FD neutron (with momentum th.) with maximal momentum:
+        int NeutronsFD_ind_mom_max_noNeutCuts = FDNeutralMaxP(allParticles, NeutronsFD_ind_noNeutCuts, apply_nucleon_cuts);
+
+        /* Get FD neutrons and photons above momentum threshold and after ECAL veto and after ECAL edge cuts: */
+        // FD neutrons and photons by definition - after momentum th. (ECAL & edge cuts):
+        vector<int> NeutronsFD_ind, PhotonsFD_ind;
+        FDNeutralParticleID(allParticles, electrons, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th,
+                            Neutron_veto_cut, beamE, clasAna.getEcalEdgeCuts(), clasAna.getEcalEdgeCuts(), apply_nucleon_cuts);
+        // FD neutron (with momentum th.) with maximal momentum:
+        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts);
 
         //<editor-fold desc="Counting events with good FD neutrons">
         if (NeutronsFD_ind.size() == 1) {
@@ -13141,38 +13150,31 @@ void EventAnalyser() {
 
             TVector3 P_e_1p_3v, q_1p_3v, P_p_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v, P_N_1p_3v;
 
-            P_e_1p_3v.SetMagThetaPhi(e_1p->getP(), e_1p->getTheta(),
-                                     e_1p->getPhi());                                                              // electron 3 momentum
-            q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(),
-                               Pvz - P_e_1p_3v.Pz());                                                  // 3 momentum transfer
-            P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndCorr, ProtonMomBKC_1p), p_1p->getTheta(),
-                                     p_1p->getPhi());                   // proton 3 momentum
-            P_T_e_1p_3v = TVector3(P_e_1p_3v.Px(), P_e_1p_3v.Py(),
-                                   0);                                                                    // electron transverse momentum
-            P_T_p_1p_3v = TVector3(P_p_1p_3v.Px(), P_p_1p_3v.Py(),
-                                   0);                                                                      // proton transverse momentum
+            P_e_1p_3v.SetMagThetaPhi(e_1p->getP(), e_1p->getTheta(), e_1p->getPhi()); // electron 3 momentum
+            q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz()); // 3 momentum transfer
+            P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndCorr, ProtonMomBKC_1p),
+                                     p_1p->getTheta(), p_1p->getPhi()); // proton 3 momentum
+            P_T_e_1p_3v = TVector3(P_e_1p_3v.Px(), P_e_1p_3v.Py(), 0); // electron transverse momentum
+            P_T_p_1p_3v = TVector3(P_p_1p_3v.Px(), P_p_1p_3v.Py(), 0); // proton transverse momentum
 
             double E_e_1p = sqrt(m_e * m_e + P_e_1p_3v.Mag2()), E_p_1p = sqrt(m_p * m_p + P_p_1p_3v.Mag2()), Ecal_1p, dAlpha_T_1p, dPhi_T_1p;
             double omega_1p = beamE - E_e_1p, W_1p = sqrt((omega_1p + m_p) * (omega_1p + m_p) - q_1p_3v.Mag2());
             double Theta_p_e_p_p_1p, Theta_q_p_p_1p;
-            double EoP_e_1p =
-                    (e_1p->cal(clas12::PCAL)->getEnergy() + e_1p->cal(ECIN)->getEnergy() + e_1p->cal(ECOUT)->getEnergy()) / P_e_1p_3v.Mag();
+            double EoP_e_1p = (e_1p->cal(clas12::PCAL)->getEnergy() + e_1p->cal(ECIN)->getEnergy() + e_1p->cal(ECOUT)->getEnergy())
+                              / P_e_1p_3v.Mag();
             double Vx_e_1p = e_1p->par()->getVx(), Vy_e_1p = e_1p->par()->getVy(), Vz_e_1p = e_1p->par()->getVz();
 
             /* Setting Q2 (1p) */
             TLorentzVector e_out_1p, Q_1p;
             double Q2_1p;
             e_out_1p.SetPxPyPzE(e_1p->par()->getPx(), e_1p->par()->getPy(), e_1p->par()->getPz(), E_e_1p);
-            Q_1p = beam -
-                   e_out_1p;                                                                                                  // definition of 4-momentum transfer
+            Q_1p = beam - e_out_1p; // definition of 4-momentum transfer
             Q2_1p = fabs(Q_1p.Mag2());
             double xB_1p = Q2_1p / (2 * m_p * omega_1p);
 
             /* Setting particle angles (1p) */
-            double Theta_e_1p = e_1p->getTheta() * 180.0 / pi, Phi_e_1p =
-                    e_1p->getPhi() * 180.0 / pi;                                     // Theta_e_1p, Phi_e_1p in deg
-            double Theta_p_1p = p_1p->getTheta() * 180.0 / pi, Phi_p_1p =
-                    p_1p->getPhi() * 180.0 / pi;                                 // Theta_pFD_1p, Phi_pFD_1p in deg
+            double Theta_e_1p = e_1p->getTheta() * 180.0 / pi, Phi_e_1p = e_1p->getPhi() * 180.0 / pi; // Theta_e_1p, Phi_e_1p in deg
+            double Theta_p_1p = p_1p->getTheta() * 180.0 / pi, Phi_p_1p = p_1p->getPhi() * 180.0 / pi; // Theta_pFD_1p, Phi_pFD_1p in deg
 
             /* Weights -> before proton shifting; because proton detection is good! */
             double Weight_1p = wMaps.GetWeight(apply_kinematical_weights, "Proton", ProtonMomBKC_1p, Theta_p_1p, Phi_p_1p);
@@ -13534,7 +13536,8 @@ void EventAnalyser() {
 
                         bool pRes_Reco_Pass_Proton_MomKinCut = ((RecoProtonP >= p_mom_th.GetLowerCut()) &&
                                                                 (RecoProtonP <= nRes.GetSliceUpperMomLim()));
-                        bool pRes_TL_Pass_Proton_MomKinCut = ((TLProtonP >= p_mom_th.GetLowerCut()) && (TLProtonP <= nRes.GetSliceUpperMomLim()));
+                        bool pRes_TL_Pass_Proton_MomKinCut = ((TLProtonP >= p_mom_th.GetLowerCut()) &&
+                                                              (TLProtonP <= nRes.GetSliceUpperMomLim()));
                         //</editor-fold>
 
                         //<editor-fold desc="pRes matching cuts">
@@ -13546,7 +13549,7 @@ void EventAnalyser() {
                         //</editor-fold>
 
                         if (pRes_TL_Pass_PIDCut && pRes_Pass_FiducialCuts && pRes_Pass_ThetaKinCut &&
-                            ((RecoProtonP >= p_mom_th.GetLowerCut()) && (TLProtonP >= p_mom_th.GetLowerCut()))) {
+                            pRes_Reco_Pass_Proton_MomKinCut && pRes_TL_Pass_Proton_MomKinCut) {
 //                        if (pRes_TL_Pass_PIDCut && pRes_Pass_FiducialCuts && pRes_Pass_ThetaKinCut &&
 //                            pRes_Reco_Pass_Proton_MomKinCut && pRes_TL_Pass_Proton_MomKinCut) {
                             /* Plots for TL Protons passing pRes cuts */
@@ -14406,7 +14409,6 @@ void EventAnalyser() {
                         double TLNeutronPhi = atan2(mcpbank_nRes->getPy(), mcpbank_nRes->getPx()) * 180.0 / pi;
 
                         /* Reco neutron kinematic variables */
-//                        double RecoNeutronP = NeutronMomBKC_1n / (1 - nRes.GetMomResMu(apply_nucleon_SmearAndCorr, TLNeutronP));
                         double RecoNeutronP = P_n_1n_3v.Mag();
                         double RecoNeutronTheta = P_n_1n_3v.Theta() * 180.0 / pi;
                         double RecoNeutronPhi = P_n_1n_3v.Phi() * 180.0 / pi;
@@ -14446,7 +14448,7 @@ void EventAnalyser() {
                         //</editor-fold>
 
                         if (nRes_TL_Pass_PIDCut && nRes_Pass_FiducialCuts && nRes_Pass_ThetaKinCut &&
-                            ((RecoNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP >= n_mom_th.GetLowerCut()))) {
+                            nRes_Reco_Pass_Neutron_MomKinCut && nRes_TL_Pass_Neutron_MomKinCut) {
                             /* Plots for TL neutrons passing nRes cuts */
                             hdTheta_nFD_TL_BC_1n.hFill(dNeutronTheta, Weight);
                             hdTheta_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronTheta, Weight);
@@ -23622,9 +23624,7 @@ void EventAnalyser() {
 
         if (plot_and_fit_MomRes) {
             pRes.SliceFitDrawAndSaveByType(SampleName, beamE);
-            pRes.LogResDataToFile(SampleName, plots_path, NeutronResolutionDirectory, settings.GetNucleon_Cuts_Status(),
-                                  settings.GetFD_photons_Status(),
-                                  settings.GetEfficiency_Status());
+            pRes.LogResDataToFile(SampleName, plots_path, NeutronResolutionDirectory);
             pRes.DrawAndSaveResSlices(SampleName, c1, plots_path, NeutronResolutionDirectory);
         }
         //</editor-fold>
@@ -23716,21 +23716,19 @@ void EventAnalyser() {
         std::string FittedPIDCutsFilePath = PIDCutsDirectory + "Fitted_PID_Cuts_-_" + SampleName + ".par";
 
         FittedPIDCuts.open(FittedPIDCutsFilePath);
+
         FittedPIDCuts << "######################################################################\n";
         FittedPIDCuts << "# CLAS12 analysis cuts and parameters file (after chi2 Gaussian fit) #\n";
         FittedPIDCuts << "######################################################################\n";
-        FittedPIDCuts << "\n";
-        FittedPIDCuts << "# Cuts are fitted for - " + SampleName << "\n";
-        FittedPIDCuts << "\n";
-        FittedPIDCuts << "# pid cuts by detector (pid:mean:sigma) - sigma_CD=" << Chi2_Proton_cuts_CD.FitStdFactor << ";sigma_FD="
-                      << Chi2_Proton_cuts_FD.FitStdFactor
-                      << ":\n";
+        FittedPIDCuts << "\n# Cuts are fitted for - " + SampleName << "\n";
+        FittedPIDCuts << "\n# pid cuts by detector (pid:mean:sigma) - sigma_CD=" << Chi2_Proton_cuts_CD.FitStdFactor
+                      << ";sigma_FD=" << Chi2_Proton_cuts_FD.FitStdFactor << ":\n";
 
         for (int i = 0; i < chi2cuts_length; i++) {
             FittedPIDCuts << "pid_cuts" << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut()
-                          << ":"
-                          << chi2cuts[i].GetRegion() << "\n";
+                          << ":" << chi2cuts[i].GetRegion() << "\n";
         }
+
         FittedPIDCuts.close();
 
         system(("cp " + FittedPIDCutsFilePath + " " + plots_path).c_str()); // Copy fitted chi2 cuts file for easy download from ifarm
@@ -23746,20 +23744,14 @@ void EventAnalyser() {
         Nucleon_Cuts << "######################################################################\n";
         Nucleon_Cuts << "# CLAS12 analysis cuts and parameters file (after Beta Gaussian fit) #\n";
         Nucleon_Cuts << "######################################################################\n";
-        Nucleon_Cuts << "\n";
-        Nucleon_Cuts
-                << "# Cuts are fitted for - " + SampleName + ":\t" + settings.GetNucleon_Cuts_Status() + settings.GetFD_photons_Status() +
-                   settings.GetEfficiency_Status() << "\n";
-        Nucleon_Cuts << "\n";
+        Nucleon_Cuts << "\n# Cuts are fitted for - " + SampleName + ":\t" + settings.GetNucleon_Cuts_Status() + settings.GetFD_photons_Status() +
+                        settings.GetEfficiency_Status() << "\n\n";
 
         //<editor-fold desc="Neutron momentum cuts">
         Nucleon_Cuts << "# Neutron momentum cuts (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
 
         Nucleon_Cuts << n_mom_th.GetCutVariable() << "\t\t\t" << n_mom_th.GetPartPDG() << ":" << n_mom_th.Cuts.at(0) << ":"
-                     << n_mom_th.GetLowerCut() << ":"
-                     << n_mom_th.GetRegion() << "\n";
-
-        Nucleon_Cuts << "\n";
+                     << n_mom_th.GetLowerCut() << ":" << n_mom_th.GetRegion() << "\n\n";
 
         DSCuts Neutron_Momentum_Cuts[] = {n_momentum_cuts_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph_apprax};
         int Neutron_Momentum_Cuts_length = 2;
@@ -23767,8 +23759,7 @@ void EventAnalyser() {
         for (int i = 0; i < Neutron_Momentum_Cuts_length; i++) {
             Nucleon_Cuts << Neutron_Momentum_Cuts[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts[i].GetPartPDG() << ":"
                          << Neutron_Momentum_Cuts[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts[i].GetUpperCut() << ":"
-                         << Neutron_Momentum_Cuts[i].GetRegion()
-                         << "\n";
+                         << Neutron_Momentum_Cuts[i].GetRegion() << "\n";
         }
 
         Nucleon_Cuts << "\n";
@@ -23776,19 +23767,16 @@ void EventAnalyser() {
 
         if (is6GeVSample) {
             //TODO: check if this should stay here!
-            Nucleon_Cuts << "nRes_Momentum_cut\t\t\t2112:0:6.0:FD-ECAL  # was set manually!" << "\n";
-//            Nucleon_Cuts << "nRes_Momentum_cut\t\t\t2112:0:4.0:FD-ECAL  # was set manually!" << "\n";
-
-            Nucleon_Cuts << "\n";
+            Nucleon_Cuts << "nRes_Momentum_cut\t\t\t2112:0:" << beamE << ":FD-ECAL  # was set manually!" << "\n\n";
         }
 
         //<editor-fold desc="Proton CD-FD double detection dPhi_p1_p2 cuts">
         Nucleon_Cuts << "# Proton CD-FD double detection dPhi cuts (pid:mean:sigma) - sigma=" << dphi_p1_p2_2p.FitStdFactor << ":\n";
 
-        Nucleon_Cuts << dphi_p1_p2_2p.GetCutVariable() << "\t\t\t" << dphi_p1_p2_2p.GetPartPDG() << ":" << dphi_p1_p2_2p.GetMean() << ":" <<
-                     dphi_p1_p2_2p.GetUpperCut() << ":" << dphi_p1_p2_2p.GetRegion() << "\n";
-        Nucleon_Cuts << dphi_pFD_pCD_2p.GetCutVariable() << "\t\t\t" << dphi_pFD_pCD_2p.GetPartPDG() << ":" << dphi_pFD_pCD_2p.GetMean() << ":" <<
-                     dphi_pFD_pCD_2p.GetUpperCut() << ":" << dphi_pFD_pCD_2p.GetRegion() << "\n";
+        Nucleon_Cuts << dphi_p1_p2_2p.GetCutVariable() << "\t\t\t" << dphi_p1_p2_2p.GetPartPDG() << ":" << dphi_p1_p2_2p.GetMean() << ":"
+                     << dphi_p1_p2_2p.GetUpperCut() << ":" << dphi_p1_p2_2p.GetRegion() << "\n";
+        Nucleon_Cuts << dphi_pFD_pCD_2p.GetCutVariable() << "\t\t\t" << dphi_pFD_pCD_2p.GetPartPDG() << ":" << dphi_pFD_pCD_2p.GetMean() << ":"
+                     << dphi_pFD_pCD_2p.GetUpperCut() << ":" << dphi_pFD_pCD_2p.GetRegion() << "\n";
 
         Nucleon_Cuts << "\n";
         //</editor-fold>
@@ -24397,7 +24385,7 @@ void EventAnalyser() {
     myLogFile << "Smearing loading path:\n" << nRes.Get_Loaded_Std_coefficients_path() << "\n\n";
 
     vector<double> Std_coefficients_values = nRes.Get_Loaded_Smear_coefficients_values();
-    vector <string> Std_coefficients_names = nRes.Get_Loaded_Std_coefficients_names();
+    vector <string> Std_coefficients_names = nRes.Get_Loaded_Smear_coefficients_names();
 
     for (int i = 0; i < Std_coefficients_values.size(); i++) {
         myLogFile << Std_coefficients_names.at(i) << " = " << Std_coefficients_values.at(i) << "\n";

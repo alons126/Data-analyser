@@ -114,119 +114,29 @@ private:
     //</editor-fold>
 
     //<editor-fold desc="Loaded correction and smear fit variables">
-    vector <vector<double>> Loaded_TL_FitParam_Smear_pol1, Loaded_Reco_FitParam_Smear_pol1;
-    vector <vector<double>> Loaded_TL_FitParam_Smear_pol1_wKC, Loaded_Reco_FitParam_Smear_pol1_wKC;
-
-    vector <vector<double>> Loaded_TL_FitParam_Smear_pol2, Loaded_Reco_FitParam_Smear_pol2;
-    vector <vector<double>> Loaded_TL_FitParam_Smear_pol2_wKC, Loaded_Reco_FitParam_Smear_pol2_wKC;
-
-    vector <vector<double>> Loaded_TL_FitParam_Smear_pol3, Loaded_Reco_FitParam_Smear_pol3;
-    vector <vector<double>> Loaded_TL_FitParam_Smear_pol3_wKC, Loaded_Reco_FitParam_Smear_pol3_wKC;
-
-    vector <vector<double>> Loaded_TL_FitParam_Corr_pol1, Loaded_Reco_FitParam_Corr_pol1;
-    vector <vector<double>> Loaded_TL_FitParam_Corr_pol1_wKC, Loaded_Reco_FitParam_Corr_pol1_wKC;
-
-    vector <vector<double>> Loaded_TL_FitParam_Corr_pol2, Loaded_Reco_FitParam_Corr_pol2;
-    vector <vector<double>> Loaded_TL_FitParam_Corr_pol2_wKC, Loaded_Reco_FitParam_Corr_pol2_wKC;
-
-    vector <vector<double>> Loaded_TL_FitParam_Corr_pol3, Loaded_Reco_FitParam_Corr_pol3;
-    vector <vector<double>> Loaded_TL_FitParam_Corr_pol3_wKC, Loaded_Reco_FitParam_Corr_pol3_wKC;
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //<editor-fold desc="Loaded correction and smear fit variables">
-    double A_Std_pol1, B_Std_pol1;
-    double A_Std_pol1_Error, B_Std_pol1_Error;
-    double ChiSquare_Std_pol1, NDF_Std_pol1;
-    double A_Std_pol1_wKC, B_Std_pol1_wKC;
-    double A_Std_pol1_wKC_Error, B_Std_pol1_wKC_Error;
-    double ChiSquare_Std_pol1_wKC, NDF_Std_pol1_wKC;
-
-    double A_Std_pol2, B_Std_pol2, C_Std_pol2;
-    double A_Std_pol2_Error, B_Std_pol2_Error, C_Std_pol2_Error;
-    double ChiSquare_Std_pol2, NDF_Std_pol2;
-    double A_Std_pol2_wKC, B_Std_pol2_wKC, C_Std_pol2_wKC;
-    double A_Std_pol2_wKC_Error, B_Std_pol2_wKC_Error, C_Std_pol2_wKC_Error;
-    double ChiSquare_Std_pol2_wKC, NDF_Std_pol2_wKC;
-
-    double A_Std_pol3, B_Std_pol3, C_Std_pol3, D_Std_pol3;
-    double A_Std_pol3_Error, B_Std_pol3_Error, C_Std_pol3_Error, D_Std_pol3_Error;
-    double ChiSquare_Std_pol3, NDF_Std_pol3;
-    double A_Std_pol3_wKC, B_Std_pol3_wKC, C_Std_pol3_wKC, D_Std_pol3_wKC;
-    double A_Std_pol3_wKC_Error, B_Std_pol3_wKC_Error, C_Std_pol3_wKC_Error, D_Std_pol3_wKC_Error;
-    double ChiSquare_Std_pol3_wKC, NDF_Std_pol3_wKC;
-
-    double A_Corr_pol1, B_Corr_pol1;
-    double A_Corr_pol1_Error, B_Corr_pol1_Error;
-    double ChiSquare_Corr_pol1, NDF_Corr_pol1;
-    double A_Corr_pol1_wKC, B_Corr_pol1_wKC;
-    double A_Corr_pol1_wKC_Error, B_Corr_pol1_wKC_Error;
-    double ChiSquare_Corr_pol1_wKC, NDF_Corr_pol1_wKC;
-
-    double A_Corr_pol2, B_Corr_pol2, C_Corr_pol2;
-    double A_Corr_pol2_Error, B_Corr_pol2_Error, C_Corr_pol2_Error;
-    double ChiSquare_Corr_pol2, NDF_Corr_pol2;
-    double A_Corr_pol2_wKC, B_Corr_pol2_wKC, C_Corr_pol2_wKC;
-    double A_Corr_pol2_wKC_Error, B_Corr_pol2_wKC_Error, C_Corr_pol2_wKC_Error;
-    double ChiSquare_Corr_pol2_wKC, NDF_Corr_pol2_wKC;
-
-    double A_Corr_pol3, B_Corr_pol3, C_Corr_pol3, D_Corr_pol3;
-    double A_Corr_pol3_Error, B_Corr_pol3_Error, C_Corr_pol3_Error, D_Corr_pol3_Error;
-    double ChiSquare_Corr_pol3, NDF_Corr_pol3;
-    double A_Corr_pol3_wKC, B_Corr_pol3_wKC, C_Corr_pol3_wKC, D_Corr_pol3_wKC;
-    double A_Corr_pol3_wKC_Error, B_Corr_pol3_wKC_Error, C_Corr_pol3_wKC_Error, D_Corr_pol3_wKC_Error;
-    double ChiSquare_Corr_pol3_wKC, NDF_Corr_pol3_wKC;
-
-    double Loaded_A_Std_pol1, Loaded_B_Std_pol1;
-    double Loaded_A_Std_pol1_Error, Loaded_B_Std_pol1_Error;
-    double Loaded_ChiSquare_Std_pol1, Loaded_NDF_Std_pol1;
-    double Loaded_A_Std_pol1_wKC, Loaded_B_Std_pol1_wKC;
-    double Loaded_A_Std_pol1_wKC_Error, Loaded_B_Std_pol1_wKC_Error;
-    double Loaded_ChiSquare_Std_pol1_wKC, Loaded_NDF_Std_pol1_wKC;
-
-    double Loaded_A_Std_pol2, Loaded_B_Std_pol2, Loaded_C_Std_pol2;
-    double Loaded_A_Std_pol2_Error, Loaded_B_Std_pol2_Error, Loaded_C_Std_pol2_Error;
-    double Loaded_ChiSquare_Std_pol2, Loaded_NDF_Std_pol2;
-    double Loaded_A_Std_pol2_wKC, Loaded_B_Std_pol2_wKC, Loaded_C_Std_pol2_wKC;
-    double Loaded_A_Std_pol2_wKC_Error, Loaded_B_Std_pol2_wKC_Error, Loaded_C_Std_pol2_wKC_Error;
-    double Loaded_ChiSquare_Std_pol2_wKC, Loaded_NDF_Std_pol2_wKC;
-
-    double Loaded_A_Std_pol3, Loaded_B_Std_pol3, Loaded_C_Std_pol3, Loaded_D_Std_pol3;
-    double Loaded_A_Std_pol3_Error, Loaded_B_Std_pol3_Error, Loaded_C_Std_pol3_Error, Loaded_D_Std_pol3_Error;
-    double Loaded_ChiSquare_Std_pol3, Loaded_NDF_Std_pol3;
-    double Loaded_A_Std_pol3_wKC, Loaded_B_Std_pol3_wKC, Loaded_C_Std_pol3_wKC, Loaded_D_Std_pol3_wKC;
-    double Loaded_A_Std_pol3_wKC_Error, Loaded_B_Std_pol3_wKC_Error, Loaded_C_Std_pol3_wKC_Error, Loaded_D_Std_pol3_wKC_Error;
-    double Loaded_ChiSquare_Std_pol3_wKC, Loaded_NDF_Std_pol3_wKC;
-
     string Loaded_Std_coefficients_path;
     vector<double> Loaded_Smear_coefficients_values;
-    vector <string> Loaded_Std_coefficients_names;
+    vector <string> Loaded_Smear_coefficients_names;
 
-    double Loaded_A_Corr_pol1, Loaded_B_Corr_pol1;
-    double Loaded_A_Corr_pol1_Error, Loaded_B_Corr_pol1_Error;
-    double Loaded_ChiSquare_Corr_pol1, Loaded_NDF_Corr_pol1;
-    double Loaded_A_Corr_pol1_wKC, Loaded_B_Corr_pol1_wKC;
-    double Loaded_A_Corr_pol1_wKC_Error, Loaded_B_Corr_pol1_wKC_Error;
-    double Loaded_ChiSquare_Corr_pol1_wKC, Loaded_NDF_Corr_pol1_wKC;
-
-    double Loaded_A_Corr_pol2, Loaded_B_Corr_pol2, Loaded_C_Corr_pol2;
-    double Loaded_A_Corr_pol2_Error, Loaded_B_Corr_pol2_Error, Loaded_C_Corr_pol2_Error;
-    double Loaded_ChiSquare_Corr_pol2, Loaded_NDF_Corr_pol2;
-    double Loaded_A_Corr_pol2_wKC, Loaded_B_Corr_pol2_wKC, Loaded_C_Corr_pol2_wKC;
-    double Loaded_A_Corr_pol2_wKC_Error, Loaded_B_Corr_pol2_wKC_Error, Loaded_C_Corr_pol2_wKC_Error;
-    double Loaded_ChiSquare_Corr_pol2_wKC, Loaded_NDF_Corr_pol2_wKC;
-
-    double Loaded_A_Corr_pol3, Loaded_B_Corr_pol3, Loaded_C_Corr_pol3, Loaded_D_Corr_pol3;
-    double Loaded_A_Corr_pol3_Error, Loaded_B_Corr_pol3_Error, Loaded_C_Corr_pol3_Error, Loaded_D_Corr_pol3_Error;
-    double Loaded_ChiSquare_Corr_pol3, Loaded_NDF_Corr_pol3;
-    double Loaded_A_Corr_pol3_wKC, Loaded_B_Corr_pol3_wKC, Loaded_C_Corr_pol3_wKC, Loaded_D_Corr_pol3_wKC;
-    double Loaded_A_Corr_pol3_wKC_Error, Loaded_B_Corr_pol3_wKC_Error, Loaded_C_Corr_pol3_wKC_Error, Loaded_D_Corr_pol3_wKC_Error;
-    double Loaded_ChiSquare_Corr_pol3_wKC, Loaded_NDF_Corr_pol3_wKC;
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol1, Loaded_Reco_FitParam_Smear_pol1;
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol1_wKC, Loaded_Reco_FitParam_Smear_pol1_wKC;
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol2, Loaded_Reco_FitParam_Smear_pol2;
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol2_wKC, Loaded_Reco_FitParam_Smear_pol2_wKC;
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol3, Loaded_Reco_FitParam_Smear_pol3;
+    vector <vector<double>> Loaded_TL_FitParam_Smear_pol3_wKC, Loaded_Reco_FitParam_Smear_pol3_wKC;
 
     string Loaded_Corr_coefficients_path;
     vector<double> Loaded_Corr_coefficients_values;
     vector <string> Loaded_Corr_coefficients_names;
+
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol1, Loaded_Reco_FitParam_Corr_pol1;
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol1_wKC, Loaded_Reco_FitParam_Corr_pol1_wKC;
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol2, Loaded_Reco_FitParam_Corr_pol2;
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol2_wKC, Loaded_Reco_FitParam_Corr_pol2_wKC;
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol3, Loaded_Reco_FitParam_Corr_pol3;
+    vector <vector<double>> Loaded_TL_FitParam_Corr_pol3_wKC, Loaded_Reco_FitParam_Corr_pol3_wKC;
+    //</editor-fold>
+
     //</editor-fold>
 
     double Neutron_Momentum_cut = 9999.; // from clas12ana
@@ -278,8 +188,6 @@ public:
 
     void hFillResPlotsByType(const double &MomentumTL, const double &MomentumReco, const double &Resolution, const double &Weight);
 
-    void hFillResPlots(const double &TL_momentum, const double &Resolution, const double &Weight);
-
     void hFillResPlots(const double &Momentum, const double &Resolution, const double &Weight, vector <hPlot1D> &ResSlices0,
                        vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0,
                        int &NumberOfSlices0);
@@ -292,8 +200,8 @@ public:
                              vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0,
                              vector<int> &FittedSlices0, int &NumberOfSlices0);
 
-    void PolyFitterByType(const string &MomentumType, const int &PolynomialDegree, const string &FitType,
-                          const string &MomentumFitRange, vector <vector<double>> &FitParam);
+    void PolyFitter(const string &MomentumType, const int &PolynomialDegree, const string &FitType,
+                    const string &MomentumFitRange, vector <vector<double>> &FitParam);
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -301,15 +209,9 @@ public:
 
 // LogResDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogResDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory,
-                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
-
     void LogResDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory);
 
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
-
-    void LogFitDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory,
-                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
 
     void LogFitDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory);
 
@@ -319,21 +221,18 @@ public:
 
 // LogHistDataToFile function -------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogHistDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory,
-                           const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
-
     void LogHistDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory);
 
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory,
-                          const bool &Load_correction = false, const bool &Load_smearing = false);
-
-    void ReadResDataParam(const char *filename, const bool &Calculate_momResS2, const string &SampleName, const string &NucleonCutsDirectory,
                           const string &MomentumType, const bool &Load_correction = false, const bool &Load_smearing = false);
 
-    void AutoReader(const string &MomentumType, const int &PolynomialDegree, const string &parameter, basic_istream<char>& ss2,
+    void AutoReader(const string &MomentumType, const int &PolynomialDegree, const string &parameter, basic_istream<char> &ss2,
                     vector <vector<double>> &Loading_Dest, vector<double> &Loaded_coefficients_values, vector <string> &Loaded_coefficients_names);
+
+    void AutoReader(const string &MomentumType, const int &PolynomialDegree, const string &parameter, basic_istream<char> &ss2,
+                    vector <vector<double>> &Loading_Dest);
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -342,10 +241,6 @@ public:
 // NCorr function -------------------------------------------------------------------------------------------------------------------------------------------------------
 
     double NCorr(const bool &apply_nucleon_SmearAndCorr, const double &Momentum);
-
-// GetMomResMu function -------------------------------------------------------------------------------------------------------------------------------------------------
-
-    double GetMomResMu(const bool &apply_nucleon_SmearAndCorr, const double &Momentum);
 
 // Other functions ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -371,7 +266,7 @@ public:
 
     vector<double> Get_Loaded_Smear_coefficients_values() { return Loaded_Smear_coefficients_values; };
 
-    vector <string> Get_Loaded_Std_coefficients_names() { return Loaded_Std_coefficients_names; };
+    vector <string> Get_Loaded_Smear_coefficients_names() { return Loaded_Smear_coefficients_names; };
 
     string Get_CorrMode() { return CorrMode; };
 
