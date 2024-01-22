@@ -2,14 +2,16 @@
 // Created by alons on 23/12/2023.
 //
 
-#ifndef PROJECT_SETTINGS_H
-#define PROJECT_SETTINGS_H
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
 #include "CustomPlotsDirectory.cpp"
 
 using namespace std;
 
 class Settings: public CustomPlotsDirectory {
+private:
+
 public:
 
 // Default constructor ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -23,4 +25,4 @@ public:
 };
 
 
-#endif //PROJECT_SETTINGS_H
+#endif //SETTINGS_H

@@ -15,8 +15,6 @@
 #include "region_particle.h"
 
 #include "GetFDNeutronP.h"
-
-
 #include "../../classes/DSCuts/DSCuts.h"
 #include "../NeutronECAL_Cut_Veto.h"
 

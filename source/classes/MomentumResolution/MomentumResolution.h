@@ -2,8 +2,8 @@
 // Created by alons on 20/06/2023.
 //
 
-#ifndef NEUTRONRESOLUTION_H
-#define NEUTRONRESOLUTION_H
+#ifndef MomentumResolution_H
+#define MomentumResolution_H
 
 #include <iostream>
 #include <fstream>
@@ -39,7 +39,7 @@
 
 using namespace std;
 
-class NeutronResolution {
+class MomentumResolution {
 private:
     bool isNeutron = false, isProton = false;
     string MomResParticle = "";
@@ -146,29 +146,33 @@ public:
 
 // Default constructor --------------------------------------------------------------------------------------------------------------------------------------------------
 
-    NeutronResolution() = default;
+    MomentumResolution() = default;
 
 // Other constructors ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-    NeutronResolution(const string &Particle);
+    MomentumResolution(const string &Particle);
 
 // MomResInit function --------------------------------------------------------------------------------------------------------------------------------------------------
 
     void MomResInit(const bool &plot_and_fit_MomRes, const bool &Calculate_momResS2, const bool &Run_with_momResS2, const string &SampleName,
                     const string &NucleonCutsDirectory, const double &beamE, const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh,
-                    const string &NeutronResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2,
+                    const string &MomentumResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2,
                     const bool &VaryingDelta = false, const string &SmearM = "pol1", const string &CorrM = "pol1",
                     const bool &momRes_test = false, const bool &ForceSmallpResLimits = false);
 
     void SetMomResCalculations(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
                                const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2,
-                               bool const &Run_in_momResS2, const string &NeutronResolutionDirectory, const string &SavePath = "./",
+                               bool const &Run_in_momResS2, const string &MomentumResolutionDirectory, const string &SavePath = "./",
                                const double &DeltaSlices = 0.2, const bool &VaryingDelta = false, const string &SmearM = "pol1",
                                const string &CorrM = "pol1", const bool momRes_test = false, const bool ForceSmallpResLimits = false);
 
     void SetMomResSlicesByType(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
                                const string &MomentumType, const string &SavePath = "./", const bool &VaryingDelta = false,
                                const bool &momRes_test = false, const bool &ForceSmallpResLimits = false);
+
+//    void LimDeltaBySample(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
+//                          const string &MomentumType, const string &SavePath = "./", const bool &VaryingDelta = false,
+//                          const bool &momRes_test = false, const bool &ForceSmallpResLimits = false);
 
     void SetMomResSlices(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
                          const string &MomentumType, const string &SavePath, const bool &VaryingDelta, const bool &momRes_test,
@@ -178,7 +182,7 @@ public:
     void SetUpperMomCut(const string &SampleName, const string &NucleonCutsDirectory);
 
     void LoadFitParam(const string &SampleName, const string &NucleonCutsDirectory, bool const &Calculate_momResS2,
-                      const string &NeutronResolutionDirectory);
+                      const string &MomentumResolutionDirectory);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -205,23 +209,23 @@ public:
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveResSlices(const string &SampleName, TCanvas *h1DCanvas, const string &plots_path, const string &NeutronResolutionDirectory);
+    void DrawAndSaveResSlices(const string &SampleName, TCanvas *h1DCanvas, const string &plots_path, const string &MomentumResolutionDirectory);
 
 // LogResDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogResDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory);
+    void LogResDataToFile(const string &SampleName, const string &plots_path, const string &MomentumResolutionDirectory);
 
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogFitDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory);
+    void LogFitDataToFile(const string &SampleName, const string &plots_path, const string &MomentumResolutionDirectory);
 
-    void AutoLogger(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory,
+    void AutoLogger(const string &SampleName, const string &plots_path, const string &MomentumResolutionDirectory,
                     const string &LogHeader, const vector <vector<double>> &Vector2Log,
                     ofstream &Neutron_res_fit_param);
 
 // LogHistDataToFile function -------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogHistDataToFile(const string &SampleName, const string &plots_path, const string &NeutronResolutionDirectory);
+    void LogHistDataToFile(const string &SampleName, const string &plots_path, const string &MomentumResolutionDirectory);
 
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -278,4 +282,4 @@ public:
 
 };
 
-#endif //NEUTRONRESOLUTION_H
+#endif //MomentumResolution_H

@@ -24,7 +24,7 @@
 //#include "../source/classes/DSCuts/DSCuts.h"
 //#include "../source/classes/hPlots/hPlot1D.cpp"
 //#include "../source/classes/hPlots/hPlot2D.cpp"
-//#include "../source/classes/NeutronResolution/NeutronResolution.cpp"
+//#include "../source/classes/MomentumResolution/MomentumResolution.cpp"
 //#include "../source/classes/TLCuts/TLCuts.cpp"
 //#include "../source/functions/AngleCalc/GetBinFromAng.h"
 //#include "../source/functions/FitFunctions/BetaFit.h"
@@ -76,7 +76,7 @@ using namespace std;
 #include "../source/functions/to_string_with_precision.h"
 #include "../source/constants.h"
 
-#include "../source/classes/NeutronResolution/NeutronResolution.cpp"
+#include "../source/classes/MomentumResolution/MomentumResolution.cpp"
 
 using namespace std;
 */

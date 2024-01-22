@@ -590,24 +590,24 @@
 //// Neutron resolution & proton smearing ---------------------------------------------------------------------------------------------------------------------------------
 //
 //    //<editor-fold desc="Neutron resolution">
-//    /* Neutron resolution fits is handled completely by the NeutronResolution class */
+//    /* Neutron resolution fits is handled completely by the MomentumResolution class */
 //    cout << "\nSetting neutron resolution data...";
 //
 //    if (!calculate_truth_level) { plot_and_fit_MomRes = false; } // Disable resolution-realted operations if not calculating TL plots
 //    if (apply_nucleon_SmearAndCorr) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
 //
 //    //<editor-fold desc="Neutron resolution class declaration & definition">
-//    NeutronResolution nRes, pRes;
+//    MomentumResolution nRes, pRes;
 //
 //    if (plot_and_fit_MomRes) {
-//        nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, n_mom_th.GetLowerCut(),
+//        nRes = MomentumResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, n_mom_th.GetLowerCut(),
 //                                 directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta);
-//        pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, p_mom_th.GetLowerCut(),
+//        pRes = MomentumResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, p_mom_th.GetLowerCut(),
 //                                 directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta);
 //    } else {
-//        nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str(),
+//        nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str(),
 //                              SampleName, NucleonCutsDirectory);
-//        nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_hist_param_-_" + SampleName + ".par").c_str(),
+//        nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_hist_param_-_" + SampleName + ".par").c_str(),
 //                              SampleName, NucleonCutsDirectory);
 //    }
 //    //</editor-fold>
@@ -618,7 +618,7 @@
 //// Acceptance correction data -------------------------------------------------------------------------------------------------------------------------------------------
 //
 //    //<editor-fold desc="Acceptance correction">
-//    /* Neutron resolution fits is handled completely by the NeutronResolution class */
+//    /* Neutron resolution fits is handled completely by the MomentumResolution class */
 //    cout << "\nSetting acceptance correction data...";
 //
 //    if (!calculate_truth_level) { save_ACorr_data = false; }
