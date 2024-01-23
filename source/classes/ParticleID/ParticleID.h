@@ -21,6 +21,7 @@
 #include "../hPlots/hPlot1D.h"
 #include "../hPlots/hPlot2D.h"
 #include "../../functions/AngleCalc/CalcdPhi.h"
+//#include "../MomentumResolution/MomentumResolution.cpp"
 
 using namespace std;
 using namespace clas12;
@@ -126,9 +127,12 @@ public:
                              DSCuts &Neutron_momentum_th, vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD,
                              DSCuts &Photon_momentum_th, const bool &apply_nucleon_cuts);
 
-// FDNeutralMaxP function ------------------------------------------------------------------------------------------------------------------------
+// GetLnFDIndex function ------------------------------------------------------------------------------------------------------------------------
 
-    int FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, const bool &apply_nucleon_cuts);
+    int GetLnFDIndex(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, const bool &apply_nucleon_cuts);
+
+    int GetCorrLnFDIndex(MomentumResolution &nRes, vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th,
+                         const bool &apply_nucleon_cuts, const bool &apply_nucleon_SmearAndCorr);
 
 // GetFDNeutronP function ------------------------------------------------------------------------------------------------------------------------
 

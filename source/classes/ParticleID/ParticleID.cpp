@@ -14,7 +14,7 @@
  * beamE
  * index - of the particle in question (the neutral) */
 bool ParticleID::NeutronECAL_Cut_Veto(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons,
-                                       const double &beamE, const int &index, const double &veto_cut) {
+                                      const double &beamE, const int &index, const double &veto_cut) {
     TVector3 p_b(0, 0, beamE); /* beam energy */
 
     TVector3 p_e; /* our electron */
@@ -124,26 +124,29 @@ vector<int> ParticleID::ChargedParticleID(vector <region_part_ptr> &Particle, co
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
 void ParticleID::FDNeutralParticleID(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons,
-                                      vector<int> &FD_Neutrons_within_PID_cuts, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th,
-                                      vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th,
-                                      DSCuts &Neutron_veto_cut, const double &beamE, const double &ECAL_V_edge_cut, const double &ECAL_W_edge_cut,
-                                      const bool &apply_nucleon_cuts) {
+                                     vector<int> &FD_Neutrons_within_PID_cuts, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th,
+                                     vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th,
+                                     DSCuts &Neutron_veto_cut, const double &beamE, const double &ECAL_V_edge_cut, const double &ECAL_W_edge_cut,
+                                     const bool &apply_nucleon_cuts) {
     for (int &i: ID_Neutrons_FD) { // Identify neutron above momentum threshold
         /* Particles that get in here are neutrons. Now we take neutrons who pass momentum cuts. */
 
         int NeutralPDG = allParticles[i]->par()->getPid();
+        double Momentum = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
+        bool Neutron_with_PCAL_hit = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
+        bool Neutron_with_ECIN_hit = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+        bool Neutron_with_ECOUT_hit = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+        auto Neutron_ECAL_detlayer = Neutron_with_ECIN_hit ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
-        //<editor-fold desc="Safety check">
+        //<editor-fold desc="Safety checks">
         if (!((NeutralPDG == 22) || (NeutralPDG == 2112))) {
             cout << "\n\nFDNeutralParticleID (Neutrons): neutron PDG is not 2112 or 22 (" << NeutralPDG << "). Exiting...\n\n", exit(0);
         }
-        //</editor-fold>
 
-        double Momentum = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
-        bool Neutron_with_ECIN_hit = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
-        bool Neutron_with_ECOUT_hit = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
-        auto Neutron_ECAL_detlayer = Neutron_with_ECIN_hit ? clas12::ECIN
-                                                           : clas12::ECOUT;                                // find first layer of hit
+        if (Neutron_with_PCAL_hit) {
+            cout << "\n\nFDNeutralParticleID (Neutrons): redefined neutron is in the PCAL!! Exiting...\n\n", exit(0);
+        }
+        //</editor-fold>
 
         bool Neutron_pass_momentum_th = (Momentum >= Neutron_momentum_th.GetLowerCutConst() && Momentum <= Neutron_momentum_th.GetUpperCutConst());
         bool Neutron_pass_ECAL_veto = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCutConst());
@@ -168,7 +171,8 @@ void ParticleID::FDNeutralParticleID(vector <region_part_ptr> allParticles, vect
         double Momentum = allParticles[i]->getP();
 
         /* Log photons above momentum cuts (given by Momentum_cuts): */
-        if (Momentum >= Photon_momentum_th.GetLowerCutConst() && Momentum <= Photon_momentum_th.GetUpperCutConst()) { FD_Photons_within_th.push_back(i); }
+        if (Momentum >= Photon_momentum_th.GetLowerCutConst() &&
+            Momentum <= Photon_momentum_th.GetUpperCutConst()) { FD_Photons_within_th.push_back(i); }
     } // end of loop over ID_Photons_FD vector
 }
 //</editor-fold>
@@ -179,9 +183,9 @@ void ParticleID::FDNeutralParticleID(vector <region_part_ptr> allParticles, vect
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
 void ParticleID::FDNeutralParticleID(vector <region_part_ptr> allParticles,
-                                      vector<int> &FD_Neutrons_within_th, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th,
-                                      vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th,
-                                      const bool &apply_nucleon_cuts) {
+                                     vector<int> &FD_Neutrons_within_th, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th,
+                                     vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th,
+                                     const bool &apply_nucleon_cuts) {
 
     for (int &i: ID_Neutrons_FD) { // Identify neutron above momentum threshold
         /* Particles that get in here are neutrons. Now we take neutrons who pass momentum cuts. */
@@ -197,7 +201,8 @@ void ParticleID::FDNeutralParticleID(vector <region_part_ptr> allParticles,
         double Momentum = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
         /* Log neutrons above momentum cuts (given by Momentum_th): */
-        if (Momentum >= Neutron_momentum_th.GetLowerCutConst() && Momentum <= Neutron_momentum_th.GetUpperCutConst()) { FD_Neutrons_within_th.push_back(i); }
+        if (Momentum >= Neutron_momentum_th.GetLowerCutConst() &&
+            Momentum <= Neutron_momentum_th.GetUpperCutConst()) { FD_Neutrons_within_th.push_back(i); }
     } // end of loop over ID_Neutrons_FD vector
 
     for (int &i: ID_Photons_FD) { // Identify photons above momentum threshold
@@ -214,21 +219,30 @@ void ParticleID::FDNeutralParticleID(vector <region_part_ptr> allParticles,
         double Momentum = allParticles[i]->getP();
 
         /* Log photons above momentum cuts (given by Momentum_cuts): */
-        if (Momentum >= Photon_momentum_th.GetLowerCutConst() && Momentum <= Photon_momentum_th.GetUpperCutConst()) { FD_Photons_within_th.push_back(i); }
+        if (Momentum >= Photon_momentum_th.GetLowerCutConst() &&
+            Momentum <= Photon_momentum_th.GetUpperCutConst()) { FD_Photons_within_th.push_back(i); }
     } // end of loop over ID_Photons_FD vector
 }
 //</editor-fold>
 
 //<editor-fold desc="Get leading neutron (ORIGINAL!)">
-int ParticleID::FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, const bool &apply_nucleon_cuts) {
+int ParticleID::GetLnFDIndex(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, const bool &apply_nucleon_cuts) {
+    bool PrintOut = false;
+
     double P_max = -1;
     int MaxPIndex = -1;
-    bool PrintLog = false;
 
-    bool PrintOut = (PrintLog && (FD_Neutrons_within_th.size() > 0));
+    bool PrintLog = (PrintOut && (FD_Neutrons_within_th.size() > 0));
 
-    for (int &i: FD_Neutrons_within_th) { // Identified neutron above momentum threshold
+    for (int &i: FD_Neutrons_within_th) { // Identify the leading neutron
         double P_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
+        int NeutralPDG_temp = allParticles[i]->par()->getPid();
+
+        //<editor-fold desc="Safety check">
+        if (!((NeutralPDG_temp == 22) || (NeutralPDG_temp == 2112))) {
+            cout << "\n\nFDNeutralParticleID (Neutrons): neutron PDG is not 2112 or 22 (" << NeutralPDG_temp << "). Exiting...\n\n", exit(0);
+        }
+        //</editor-fold>
 
         if (P_temp >= P_max) {
             P_max = P_temp;
@@ -247,7 +261,7 @@ int ParticleID::FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int>
         }
     }
 
-    if (PrintOut) {
+    if (PrintLog) {
         cout << "P_max = " << P_max << " (MaxPIndex = " << MaxPIndex << ")\n\n";
         cout << "==========================================================\n\n\n";
     }
@@ -256,6 +270,77 @@ int ParticleID::FDNeutralMaxP(vector <region_part_ptr> allParticles, vector<int>
 }
 //</editor-fold>
 
+//</editor-fold>
+
+// GetCorrLnFDIndex function ---------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetCorrLnFDIndex function">
+/* A function similar to GetLnFDIndex that selects the leading (LnFD) after correction.
+   This function might be usefully if the neutron correction factor (1/(1 - mu)) is not increasing/desreasing monotonically! */
+int ParticleID::GetCorrLnFDIndex(MomentumResolution &nRes, vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th,
+                                 const bool &apply_nucleon_cuts, const bool &apply_nucleon_SmearAndCorr) {
+    bool PrintOut = false;
+    bool PrintOutCorr = false;
+    bool PrintLog = (PrintOut && (FD_Neutrons_within_th.size() > 0));
+
+    double P_max_ACorr = -1;
+    int MaxPIndex_ACorr = -1;
+    vector<double> FD_Neutrons_within_th_ACorr;
+
+    // Create a vector of corrected neutron momenta, corresponding to the i-th neutron in FD_Neutrons_within_th:
+    for (int i = 0; i < FD_Neutrons_within_th.size(); i++) {
+        double P_temp = GetFDNeutronP(allParticles[FD_Neutrons_within_th.at(i)], apply_nucleon_cuts);
+        int NeutralPDG_temp = allParticles[FD_Neutrons_within_th.at(i)]->par()->getPid();
+
+        //<editor-fold desc="Safety check">
+        if (!((NeutralPDG_temp == 22) || (NeutralPDG_temp == 2112))) {
+            cout << "\n\nFDNeutralParticleID (Neutrons): neutron PDG is not 2112 or 22 (" << NeutralPDG_temp << "). Exiting...\n\n", exit(0);
+        }
+        //</editor-fold>
+
+        double P_temp_ACorr = nRes.NCorr(apply_nucleon_SmearAndCorr, P_temp);
+
+        FD_Neutrons_within_th_ACorr.push_back(P_temp_ACorr);
+    }
+
+    //<editor-fold desc="Safety check">
+    if (FD_Neutrons_within_th.size() != FD_Neutrons_within_th_ACorr.size()) {
+        cout << "\n\nParticleID::GetCorrLnFDIndex: FD_Neutrons_within_th_ACorr have been filled incorrectly! Exiting...", exit(0);
+    }
+    //</editor-fold>
+
+    for (int j = 0; j < FD_Neutrons_within_th_ACorr.size(); j++) { // Identify the leading neutron after correction
+        double P_temp_ACorr = FD_Neutrons_within_th_ACorr.at(j);
+
+        if (P_temp_ACorr >= P_max_ACorr) {
+            P_max_ACorr = P_temp_ACorr;
+            MaxPIndex_ACorr = FD_Neutrons_within_th.at(j);
+        }
+    }
+
+    if (PrintLog) {
+        for (int i = 0; i < FD_Neutrons_within_th.size(); i++) {
+            double P_temp0 = GetFDNeutronP(allParticles[FD_Neutrons_within_th.at(i)], apply_nucleon_cuts);
+
+            cout << "P_temp = " << P_temp0 << " (ind = " << FD_Neutrons_within_th.at(i) << ")\n";
+        }
+
+        cout << "\n";
+
+        for (int i = 0; i < FD_Neutrons_within_th_ACorr.size(); i++) {
+            double P_temp_ACorr0 = FD_Neutrons_within_th_ACorr.at(i);
+
+            cout << "P_temp_ACorr = " << P_temp_ACorr0 << " (ind = " << FD_Neutrons_within_th.at(i) << ")\n";
+        }
+
+        cout << "\n";
+
+        cout << "P_max_ACorr = " << P_max_ACorr << " (MaxPIndex_ACorr = " << MaxPIndex_ACorr << ")\n\n";
+        cout << "==========================================================\n\n\n";
+    }
+
+    return MaxPIndex_ACorr;
+}
 //</editor-fold>
 
 // FDNeutralParticle functions -------------------------------------------------------------------------------------------------------------------
@@ -291,8 +376,8 @@ void ParticleID::FDNeutralParticle(vector <region_part_ptr> allParticles, vector
 
 /* FDNeutralParticle with ECAL veto */
 void ParticleID::FDNeutralParticle(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons,
-                                    vector<int> &ID_Neutrons_FD, vector<int> &ID_Photons_FD,
-                                    const DSCuts &Neutron_veto_cut, const double &beamE) {
+                                   vector<int> &ID_Neutrons_FD, vector<int> &ID_Photons_FD,
+                                   const DSCuts &Neutron_veto_cut, const double &beamE) {
     for (int i = 0; i < allParticles.size(); i++) {
         int ParticlePDG = allParticles[i]->par()->getPid();
 
@@ -460,7 +545,7 @@ vector<int> ParticleID::GetFDPhotons(vector <region_part_ptr> &allParticles, con
 
 //<editor-fold desc="GetGoodParticles functions">
 vector<int> ParticleID::GetGoodParticles(vector <region_part_ptr> &Particle, // particle
-                                          const DSCuts &Momentum_cuts // corresponding momentum cuts
+                                         const DSCuts &Momentum_cuts // corresponding momentum cuts
 ) {
     vector<int> GoodParticles;
 
@@ -481,7 +566,7 @@ vector<int> ParticleID::GetGoodParticles(vector <region_part_ptr> &Particle, // 
 
 //<editor-fold desc="GetGoodProtons function">
 vector<int> ParticleID::GetGoodProtons(const bool &apply_nucleon_cuts, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind,
-                                        const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p) {
+                                       const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p) {
     vector<int> GoodProtons; // good protons vector after the cuts
 
     /* Monitoring variables */
@@ -558,7 +643,7 @@ vector<int> ParticleID::GetGoodProtons(const bool &apply_nucleon_cuts, vector <r
 
 //<editor-fold desc="SetGPMonitoringPlots function">
 void ParticleID::SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, string CToF_hits_monitoring_2p_Directory,
-                                       string Double_detection_monitoring_2p_Directory) {
+                                      string Double_detection_monitoring_2p_Directory) {
     if (GoodProtonsMonitorPlots) {
 // Monitoring histograms definitions ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -734,9 +819,9 @@ void ParticleID::SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, strin
 
 //<editor-fold desc="GPMonitoring function">
 void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind,
-                               const vector<int> &Protons_ind, const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p,
-                               const DSCuts &dphi_p1_p2_2p,
-                               const double &Weight) {
+                              const vector<int> &Protons_ind, const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p,
+                              const DSCuts &dphi_p1_p2_2p,
+                              const double &Weight) {
     if (GoodProtonsMonitorPlots) {
         for (int i = 0; i < IDProtons_ind.size(); i++) {
             auto proton_i_2p = protons[IDProtons_ind.at(i)];
@@ -872,9 +957,9 @@ void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <regio
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
 void ParticleID::nParticleID(vector <region_part_ptr> &allParticles,
-                              vector<int> &ID_Neutrons_FD, const DSCuts &Neutron_momentum_th,
-                              vector<int> &ID_Photons_FD, const DSCuts &Photon_momentum_th,
-                              const bool &apply_nucleon_cuts) {
+                             vector<int> &ID_Neutrons_FD, const DSCuts &Neutron_momentum_th,
+                             vector<int> &ID_Photons_FD, const DSCuts &Photon_momentum_th,
+                             const bool &apply_nucleon_cuts) {
 
     for (int i = 0; i < allParticles.size(); i++) {
         if ((allParticles[i]->par()->getCharge() == 0) && (allParticles[i]->getRegion() == FD)) { // If particle is neutral and in the FD

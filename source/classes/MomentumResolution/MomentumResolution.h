@@ -33,6 +33,7 @@
 
 #include "clas12reader.h"
 
+//#include "../hPlots/hPlot1D.cpp"
 #include "../hPlots/hPlot1D.h"
 #include "../DSCuts/DSCuts.h"
 #include "../../functions/GeneralFunctions.h"
@@ -46,6 +47,8 @@ private:
 
     bool momResTestMode, momResS2CalcMode, momResS2RunMode;
     bool ForceSmallProtonResLimits = false;
+    bool FitDebuggingMode = false;
+    double Ebeam;
 
     string SmearMode = "NONE", CorrMode = "NONE";
 
@@ -158,28 +161,26 @@ public:
                     const string &NucleonCutsDirectory, const double &beamE, const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh,
                     const string &MomentumResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2,
                     const bool &VaryingDelta = false, const string &SmearM = "pol1", const string &CorrM = "pol1",
-                    const bool &momRes_test = false, const bool &ForceSmallpResLimits = false);
+                    const bool &momRes_test = false, const bool &ForceSmallpResLimits = false, const bool &FitDebugging = false);
 
     void SetMomResCalculations(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE,
                                const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh, bool const &Calculate_momResS2,
                                bool const &Run_in_momResS2, const string &MomentumResolutionDirectory, const string &SavePath = "./",
                                const double &DeltaSlices = 0.2, const bool &VaryingDelta = false, const string &SmearM = "pol1",
-                               const string &CorrM = "pol1", const bool momRes_test = false, const bool ForceSmallpResLimits = false);
+                               const string &CorrM = "pol1", const bool momRes_test = false, const bool ForceSmallpResLimits = false,
+                               const bool &FitDebugging = false);
 
     void SetMomResSlicesByType(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
                                const string &MomentumType, const string &SavePath = "./", const bool &VaryingDelta = false,
-                               const bool &momRes_test = false, const bool &ForceSmallpResLimits = false);
-
-//    void LimDeltaBySample(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
-//                          const string &MomentumType, const string &SavePath = "./", const bool &VaryingDelta = false,
-//                          const bool &momRes_test = false, const bool &ForceSmallpResLimits = false);
+                               const bool &momRes_test = false, const bool &ForceSmallpResLimits = false, const bool &FitDebugging = false);
 
     void SetMomResSlices(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh,
                          const string &MomentumType, const string &SavePath, const bool &VaryingDelta, const bool &momRes_test,
                          const bool &ForceSmallpResLimits, vector <hPlot1D> &ResSlices0, vector <vector<double>> &ResSlicesLimits0,
-                         vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0, int &NumberOfSlices0);
+                         vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0, int &NumberOfSlices0,
+                         const bool &FitDebugging = false);
 
-    void SetUpperMomCut(const string &SampleName, const string &NucleonCutsDirectory);
+    void SetUpperMomCut(const string &SampleName, const string &NucleonCutsDirectory, const bool &FitDebugging = false);
 
     void LoadFitParam(const string &SampleName, const string &NucleonCutsDirectory, bool const &Calculate_momResS2,
                       const string &MomentumResolutionDirectory);
@@ -193,8 +194,7 @@ public:
     void hFillResPlotsByType(const double &MomentumTL, const double &MomentumReco, const double &Resolution, const double &Weight);
 
     void hFillResPlots(const double &Momentum, const double &Resolution, const double &Weight, vector <hPlot1D> &ResSlices0,
-                       vector <vector<double>> &ResSlicesLimits0, vector <DSCuts> &ResSlicesFitVar0, vector <DSCuts> &ResSlicesHistVar0,
-                       int &NumberOfSlices0);
+                       vector <vector<double>> &ResSlicesLimits0, int &NumberOfSlices0);
 
 // SliceFitDrawAndSaveByType function -----------------------------------------------------------------------------------------------------------------------------------
 
@@ -261,6 +261,18 @@ public:
 
     void SetForceSmallpResLimits(const bool &fsprl) { ForceSmallProtonResLimits = fsprl; };
 
+    void OverwriteResRecoMomSlices(vector<TH1D *> ResSlices0) {
+        for (int i = 0; i < ResRecoMomSlices.size(); i++) { ResRecoMomSlices.at(i).SetHistogram1D(ResSlices0.at(i)); }
+    }
+
+    void SetResRecoMomSlicesLimits(vector <vector<double>> ResSlicesLimits0) { ResRecoMomSlicesLimits = ResSlicesLimits0; };
+
+    void SetResRecoMomSlicesFitVar(vector <DSCuts> ResSlicesFitVar0) { ResRecoMomSlicesFitVar = ResSlicesFitVar0; };
+
+    void SetResRecoMomSlicesHistVar(vector <DSCuts> ResSlicesHistVar0) { ResRecoMomSlicesHistVar = ResSlicesHistVar0; };
+
+    void SetFittedRecoMomSlices(vector<int> FittedSlices0) { FittedRecoMomSlices = FittedSlices0; };
+
     // Get functions
     double GetSliceUpperMomLim() { return SliceUpperMomLim; };
 
@@ -279,6 +291,14 @@ public:
     vector<double> Get_Loaded_Corr_coefficients_values() { return Loaded_Corr_coefficients_values; };
 
     vector <string> Get_Loaded_Corr_coefficients_names() { return Loaded_Corr_coefficients_names; };
+
+    vector <vector<double>> GetResRecoMomSlicesLimits() { return ResRecoMomSlicesLimits; };
+
+    vector <DSCuts> GetResRecoMomSlicesFitVar() { return ResRecoMomSlicesFitVar; };
+
+    vector <DSCuts> GetResRecoMomSlicesHistVar() { return ResRecoMomSlicesHistVar; };
+
+    vector<int> GetFittedRecoMomSlices() { return FittedRecoMomSlices; };
 
 };
 
