@@ -140,7 +140,7 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
                     Efficiency_Status = "Eff2";
                 }
             } else {
-                Efficiency_Status = "Eff1_pol2_wKC";
+                Efficiency_Status = "Eff1_512_test2";
 //                Efficiency_Status = "Eff1_noBataThTest";
 //                Efficiency_Status = "Eff1";
             }

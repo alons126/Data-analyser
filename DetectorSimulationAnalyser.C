@@ -153,12 +153,12 @@ void EventAnalyser() {
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
     bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = true; // Calculate momResS2 variables
+    bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const bool ForceSmallpResLimits = false; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
-    const string CorrMode = "pol2_wKC";
+    const string CorrMode = "pol1_wKC";
     bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
     bool momRes_test = false; // false by default
     /*
@@ -575,7 +575,7 @@ void EventAnalyser() {
     bool FSR_1D_plots, FSR_2D_plots; // FSR_2D_plots is disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-    bool TestRun = false; // set as false for a full run
+    bool TestRun = true; // set as false for a full run
 
     if (!TestRun) {
 
@@ -9809,6 +9809,12 @@ void EventAnalyser() {
                                                 "#Deltat_{TOF} [ns]", "P^{truth}_{nFD} [GeV/c]",
                                                 directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TOF_error_VS_TL_P_nFD_1n",
                                                 -10., 10., n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
+
+    hPlot2D hTL_P_nFD_vs_Reco_P_nFD_1n = hPlot2D("1n", "FD", "P^{truth}_{nFD} vs. P^{reco}_{nFD}", "P^{truth}_{nFD} vs. P^{reco}_{nFD}",
+                                                 "P^{truth}_{nFD} [GeV/c]", "P^{reco}_{nFD} [GeV/c]",
+                                                 directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                 "00XX_TL_P_nFD_vs_Reco_P_nFD_1n", Momentum_lboundary, Momentum_uboundary, Momentum_lboundary,
+                                                 Momentum_uboundary, numTH2Dbins,                                                 numTH2Dbins);
     //</editor-fold>
 
     //</editor-fold>
@@ -14385,6 +14391,8 @@ void EventAnalyser() {
                     auto mcpbank_nRes = c12->mcparts();
                     const Int_t Ngen_nRes = mcpbank_nRes->getRows();
 
+                    bool nResHasBeenFilled = false;
+
                     for (Int_t i = 0; i < Ngen_nRes; i++) {
                         mcpbank_nRes->setEntry(i);
 
@@ -14409,9 +14417,10 @@ void EventAnalyser() {
                         //<editor-fold desc="nRes good neutron cuts">
                         bool nRes_TL_Pass_PIDCut = (pid == 2112);
 
-                        bool Reco_InFD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", RecoNeutronP, RecoNeutronTheta, RecoNeutronPhi,
-                                                           false);
-                        bool TL_InFD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", TLNeutronP, TLNeutronTheta, TLNeutronPhi, false);
+                        bool Reco_InFD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron",
+                                                           RecoNeutronP, RecoNeutronTheta, RecoNeutronPhi, false);
+                        bool TL_InFD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron",
+                                                         TLNeutronP, TLNeutronTheta, TLNeutronPhi, false);
                         bool nRes_Pass_FiducialCuts = (Reco_InFD && TL_InFD);
 
                         bool Reco_Theta_kinCut = (RecoNeutronTheta <= FD_nucleon_theta_cut.GetUpperCut());
@@ -14453,6 +14462,10 @@ void EventAnalyser() {
                             }
 
                             if (nRes_Pass_dThetaCut && nRes_Pass_dPhiCut) {
+//                                if (nResHasBeenFilled) {
+//                                    cout << "\nnRes has already been filled! Exiting...\n\n", exit(0);
+//                                }
+
                                 /* Plots for TL neutrons passing matching cuts */
                                 hTheta_nFD_TL_MatchedN_1n.hFill(TLNeutronTheta, Weight);
                                 hPhi_nFD_TL_MatchedN_1n.hFill(TLNeutronPhi, Weight);
@@ -14461,7 +14474,8 @@ void EventAnalyser() {
                                 /* Filling nRes plots */
                                 double nResolution = (TLNeutronP - RecoNeutronP) / TLNeutronP;
                                 nRes.hFillResPlotsByType(TLNeutronP, RecoNeutronP, nResolution, Weight);
-//                                nRes.hFillResPlots(TLNeutronP, nResolution, Weight);
+                                nResHasBeenFilled = true;
+//                                break;
 
                                 hP_nFD_Res_1n.hFill(nResolution, Weight);
                                 hP_nFD_Res_VS_TL_P_nFD_1n->Fill(TLNeutronP, nResolution, Weight);
@@ -14470,6 +14484,7 @@ void EventAnalyser() {
                                 hP_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n->Fill(RecoNeutronP, nResolution, Weight);
                                 hReco_P_nFD_nRes_1n.hFill(RecoNeutronP, Weight);
                                 hTL_P_nFD_nRes_1n.hFill(TLNeutronP, Weight);
+                                hTL_P_nFD_vs_Reco_P_nFD_1n.hFill(RecoNeutronP, TLNeutronP, Weight);
 
                                 bool ECIN_HIT = (n_1n->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
                                 bool ECOUT_HIT = (n_1n->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
@@ -23628,6 +23643,7 @@ void EventAnalyser() {
 
         hReco_P_nFD_nRes_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hTL_P_nFD_nRes_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hTL_P_nFD_vs_Reco_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, true);
 
         if (plot_and_fit_MomRes) {
             nRes.SliceFitDrawAndSaveByType(SampleName, beamE);
