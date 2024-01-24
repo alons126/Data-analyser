@@ -10224,8 +10224,7 @@ void EventAnalyser() {
         vector<int> Electron_ind = pid.ChargedParticleID(electrons, e_mom_th);
 
         vector<int> IDed_Protons_ind = pid.ChargedParticleID(protons, p_mom_th); // indices of identified protons (i.e., within P_p th.)
-        vector<int> Protons_ind = pid.GetGoodProtons(apply_nucleon_cuts, protons, IDed_Protons_ind,
-                                                     Theta_p1_cuts_2p, Theta_p2_cuts_2p,
+        vector<int> Protons_ind = pid.GetGoodProtons(apply_nucleon_cuts, protons, IDed_Protons_ind,                                                     Theta_p1_cuts_2p, Theta_p2_cuts_2p,
                                                      dphi_pFD_pCD_2p); // good identified protons (no sCTOFhp and no dCDaFDd)
 
         vector<int> Piplus_ind = pid.ChargedParticleID(piplus, pip_mom_th);
@@ -10234,8 +10233,7 @@ void EventAnalyser() {
         //<editor-fold desc="Charged particles for inclusive efficiency">
         // Proton vectors for (e,e'Xp)Y efficiency
         vector<int> All_Protons_ind = pid.ChargedParticleID(protons, no_p_mom_th); // indices of all protons (i.e., without P_p th.)
-        vector<int> All_gProtons_ind = pid.GetGoodProtons(apply_nucleon_cuts, protons, All_Protons_ind,
-                                                          Theta_p1_cuts_2p, Theta_p2_cuts_2p,
+        vector<int> All_gProtons_ind = pid.GetGoodProtons(apply_nucleon_cuts, protons, All_Protons_ind,                                                          Theta_p1_cuts_2p, Theta_p2_cuts_2p,
                                                           dphi_pFD_pCD_2p); // good protons (no sCTOFhp and no dCDaFDd) - WITHOUT mom. th.
         //</editor-fold>
 

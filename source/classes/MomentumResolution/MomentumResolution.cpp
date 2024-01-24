@@ -317,18 +317,18 @@ void MomentumResolution::SetMomResSlices(const string &SampleName, const string 
         ++SliceNumber;
 
         if (TLLimitsPrintOut && (MomentumType == "truth")) {
-            cout << "\n\nSliceLowerLim = " << SliceLowerLim << "\n";
-            cout << "SliceUpperLim = " << SliceUpperLim << "\n";
+            cout << "\n\nSliceLowerLim = " << SliceLowerLim << " (MomentumType == " << MomentumType << ")\n";
+            cout << "SliceUpperLim = " << SliceUpperLim << " (MomentumType == " << MomentumType << ")\n";
         }
 
         if (RecoLimitsPrintOut && (MomentumType == "reco")) {
-            cout << "\n\nSliceLowerLim = " << SliceLowerLim << "\n";
-            cout << "SliceUpperLim = " << SliceUpperLim << "\n";
+            cout << "\n\nSliceLowerLim = " << SliceLowerLim << " (MomentumType == " << MomentumType << ")\n";
+            cout << "SliceUpperLim = " << SliceUpperLim << " (MomentumType == " << MomentumType << ")\n";
         }
 
         //<editor-fold desc="Safety check">
         if ((abs(SliceUpperLim) > beamE * 1.5) || (abs(SliceLowerLim) > beamE * 1.5)) {
-            cout << "MomentumResolution::MomentumResolution: slice limits are not defined properly! Exiting...\n\n", exit(0);
+            cout << "\n\nMomentumResolution::SetMomResSlices: slice limits are not defined properly! Exiting...\n\n", exit(0);
         }
         //</editor-fold>
 
