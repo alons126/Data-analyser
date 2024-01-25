@@ -152,7 +152,7 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
@@ -575,7 +575,7 @@ void EventAnalyser() {
     bool FSR_1D_plots, FSR_2D_plots; // FSR_2D_plots is disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-    bool TestRun = false; // set as false for a full run
+    bool TestRun = true; // set as false for a full run
 
     if (!TestRun) {
 
@@ -646,8 +646,8 @@ void EventAnalyser() {
 //     Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
         Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
 
-//        Momentum_plots = true;
-        Momentum_plots = false;
+        Momentum_plots = true;
+//        Momentum_plots = false;
 
         /* W plots */
 //     W_plots = true;
@@ -691,18 +691,18 @@ void EventAnalyser() {
         ToF_plots = false;
 
         /* Efficiency plots */
-//        Efficiency_plots = true;
-        Efficiency_plots = false;
-//        TL_after_Acceptance_Maps_plots = true;
-        TL_after_Acceptance_Maps_plots = false;
+        Efficiency_plots = true;
+//        Efficiency_plots = false;
+        TL_after_Acceptance_Maps_plots = true;
+//        TL_after_Acceptance_Maps_plots = false;
 
         /* Resolution plots */
 //        AMaps_plots = true;
         AMaps_plots = false;
 
         /* Resolution plots */
-        Resolution_plots = true;
-//        Resolution_plots = false;
+//        Resolution_plots = true;
+        Resolution_plots = false;
 
         /* Multiplicity plots */
 //        Multiplicity_plots = true;
@@ -11498,9 +11498,17 @@ void EventAnalyser() {
                             hTheta_ph_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_ph_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if (inFD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // inclusive efficiency plots
-                                hP_ph_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
-                                hP_ph_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
+                            if (!Calc_inc_p_eff_with_extended_theta) {
+                                if (inFD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // inclusive efficiency plots
+                                    hP_ph_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
+                                    hP_ph_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
+                                }
+                            } else {
+                                if (((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= 35.)) &&
+                                    (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // inclusive efficiency plots
+                                    hP_ph_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
+                                    hP_ph_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
+                                }
                             }
                         }
 
@@ -12121,17 +12129,23 @@ void EventAnalyser() {
             }
 
             //<editor-fold desc="FD photons">
+
+            //<editor-fold desc="FD photons (BPID)">
             for (int &i: FD_Photons) {
                 hP_ph_reco_BPID_1e_cut_FD.hFill(allParticles[i]->getP(), Weight);
                 hP_ph_reco_BPID_1e_cut_FD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
                 hP_ph_vs_Theta_ph_reco_BPID_1e_cut_FD.hFill(allParticles[i]->getP(), allParticles[i]->getTheta() * 180.0 / pi, Weight);
             }
+            //</editor-fold>
 
+            //<editor-fold desc="FD photons (APID)">
             for (int &i: PhotonsFD_ind) {
                 hP_ph_reco_APID_1e_cut_FD.hFill(allParticles[i]->getP(), Weight);
                 hP_ph_reco_APID_1e_cut_FD_ZOOMIN.hFill(allParticles[i]->getP(), Weight);
                 hP_ph_vs_Theta_ph_reco_APID_1e_cut_FD.hFill(allParticles[i]->getP(), allParticles[i]->getTheta() * 180.0 / pi, Weight);
             }
+            //</editor-fold>
+
             //</editor-fold>
         }
         //</editor-fold>
@@ -22691,10 +22705,8 @@ void EventAnalyser() {
 
         if (ZoomIn_On_mom_th_plots) {
             DrawAndSaveEfficiencyPlots(SampleName, hP_ph_truth_1e_cut_FD_ZOOMIN, hP_ph_reco_BPID_1e_cut_FD_ZOOMIN, plots);
-//            DrawAndSaveEfficiencyPlots(SampleName, hP_ph_truth_1e_cut_FD_ZOOMIN, hP_ph_reco_APID_1e_cut_FD_ZOOMIN, plots);
         } else {
             DrawAndSaveEfficiencyPlots(SampleName, hP_ph_truth_1e_cut_FD, hP_ph_reco_BPID_1e_cut_FD, plots);
-//            DrawAndSaveEfficiencyPlots(SampleName, hP_ph_truth_1e_cut_FD, hP_ph_reco_APID_1e_cut_FD, plots);
         }
         //</editor-fold>
 

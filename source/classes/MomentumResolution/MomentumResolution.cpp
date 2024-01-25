@@ -218,9 +218,11 @@ void MomentumResolution::MomResInit(const bool &plot_and_fit_MomRes, const bool 
             }
         }
     } else if (isProton) {
-        SetMomResCalculations(SampleName, NucleonCutsDirectory, beamE, FD_nucleon_momentum_cut, ParticleMomTh, Calculate_momResS2,
-                              Run_with_momResS2, MomentumResolutionDirectory, SavePath, DeltaSlices, VaryingDelta, SmearM, CorrM, momRes_test,
-                              ForceSmallpResLimits, FitDebugging);
+        if (plot_and_fit_MomRes) {
+            SetMomResCalculations(SampleName, NucleonCutsDirectory, beamE, FD_nucleon_momentum_cut, ParticleMomTh, Calculate_momResS2,
+                                  Run_with_momResS2, MomentumResolutionDirectory, SavePath, DeltaSlices, VaryingDelta, SmearM, CorrM, momRes_test,
+                                  ForceSmallpResLimits, FitDebugging);
+        }
     }
 }
 //</editor-fold>
@@ -317,12 +319,14 @@ void MomentumResolution::SetMomResSlices(const string &SampleName, const string 
         ++SliceNumber;
 
         if (TLLimitsPrintOut && (MomentumType == "truth")) {
-            cout << "\n\nSliceLowerLim = " << SliceLowerLim << " (MomentumType == " << MomentumType << ")\n";
+            cout << "\n\nMomResParticle = " << MomResParticle << " (MomentumType == " << MomentumType << ")\n";
+            cout << "SliceLowerLim = " << SliceLowerLim << " (MomentumType == " << MomentumType << ")\n";
             cout << "SliceUpperLim = " << SliceUpperLim << " (MomentumType == " << MomentumType << ")\n";
         }
 
         if (RecoLimitsPrintOut && (MomentumType == "reco")) {
-            cout << "\n\nSliceLowerLim = " << SliceLowerLim << " (MomentumType == " << MomentumType << ")\n";
+            cout << "\n\nMomResParticle = " << MomResParticle << " (MomentumType == " << MomentumType << ")\n";
+            cout << "SliceLowerLim = " << SliceLowerLim << " (MomentumType == " << MomentumType << ")\n";
             cout << "SliceUpperLim = " << SliceUpperLim << " (MomentumType == " << MomentumType << ")\n";
         }
 

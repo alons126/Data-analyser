@@ -368,7 +368,12 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     Efficiency_plot->GetYaxis()->SetLabelSize(0.0425);
     Efficiency_plot->GetYaxis()->CenterTitle(true);
     Efficiency_plot->SetLineWidth(2);
-    Efficiency_plot->GetYaxis()->SetRangeUser(0., 1.);
+
+    if ((EfficiencyFS == "1e cut") && (EfficiencyParticle == "Photon")) {
+        Efficiency_plot->GetYaxis()->SetRangeUser(0., 1.1);
+    } else {
+        Efficiency_plot->GetYaxis()->SetRangeUser(0., 1.);
+    }
 
     if (plot_errorbars) { Efficiency_plot->Sumw2(); }
 
@@ -712,7 +717,6 @@ void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot,
     Efficiency_plot->GetYaxis()->SetLabelSize(0.0425);
     Efficiency_plot->GetYaxis()->CenterTitle(true);
     Efficiency_plot->SetLineWidth(2);
-
     Efficiency_plot->GetYaxis()->SetRangeUser(0., 1.);
 
     if (plot_errorbars) { Efficiency_plot->Sumw2(); }
