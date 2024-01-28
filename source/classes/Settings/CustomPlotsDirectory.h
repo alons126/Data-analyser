@@ -26,7 +26,10 @@ private:
 
     string Added_PreStatuses, Added_Statuses;
 
-    string Global_Run_Status = "_v2";
+    string Global_Run_Status = "v2";
+//    string Global_Run_Status = "512_v2_wMomTh_with_smaller_theta";
+//    string Global_Run_Status = "512_v2_wMomTh_reg";
+//    string Global_Run_Status = "512_v2_wMomTh_with_smaller_theta";
 //    string Global_Run_Status = "NoBetaTh_v2";
 
 public:

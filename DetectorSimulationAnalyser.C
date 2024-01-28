@@ -128,6 +128,7 @@ void EventAnalyser() {
     bool ZoomIn_On_mom_th_plots = false; // momentum th. efficiencies with zoomin
     bool Eff_calc_with_one_reco_electron = true;
     bool Calc_inc_p_eff_with_extended_theta = false;
+    bool Calc_1n_n_eff_with_smaller_theta = false;
     bool Rec_wTL_ES = false; // Calculate efficiency - force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
@@ -10253,8 +10254,8 @@ void EventAnalyser() {
         /* Get FD neutrons and photons above momentum threshold: */
         // FD neutrons and photons by definition (after momentum th. only!):
         vector<int> NeutronsFD_ind_noNeutCuts, PhotonsFD_ind_noNeutCuts;
-        pid.FDNeutralParticleID(allParticles, NeutronsFD_ind_noNeutCuts, FD_Neutrons, n_mom_th, PhotonsFD_ind_noNeutCuts, FD_Photons, ph_mom_th,
-                                apply_nucleon_cuts);
+        pid.FDNeutralParticleID(allParticles, NeutronsFD_ind_noNeutCuts, FD_Neutrons, n_mom_th, PhotonsFD_ind_noNeutCuts, FD_Photons,
+                                ph_mom_th, apply_nucleon_cuts);
         // FD neutron (with momentum th.) with maximal momentum:
         int NeutronsFD_ind_mom_max_noNeutCuts = pid.GetLnFDIndex(allParticles, NeutronsFD_ind_noNeutCuts, apply_nucleon_cuts);
 
@@ -10927,7 +10928,9 @@ void EventAnalyser() {
                                 hTheta_n_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
                                 hPhi_n_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
 
-                                if (n_inFD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // 1n efficiency plots (LnFD)
+                                if (n_inFD &&
+                                    (!Calc_1n_n_eff_with_smaller_theta || (Particle_TL_Theta <= 35.)) &&
+                                    (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // 1n efficiency plots (LnFD)
                                     if (ES_by_leading_FDneutron) {
                                         if ((TL_IDed_Leading_nFD_ind != -1) && (i == TL_IDed_Leading_nFD_ind)) {
                                             hP_nFD_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
@@ -23881,6 +23884,7 @@ void EventAnalyser() {
     myLogFile << "ZoomIn_On_mom_th_plots = " << BoolToString(ZoomIn_On_mom_th_plots) << "\n";
     myLogFile << "Eff_calc_with_one_reco_electron = " << BoolToString(Eff_calc_with_one_reco_electron) << "\n";
     myLogFile << "Calc_inc_p_eff_with_extended_theta = " << BoolToString(Calc_inc_p_eff_with_extended_theta) << "\n";
+    myLogFile << "Calc_1n_n_eff_with_smaller_theta = " << BoolToString(Calc_1n_n_eff_with_smaller_theta) << "\n";
     myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n\n";
 
     myLogFile << "limless_mom_eff_plots = " << BoolToString(limless_mom_eff_plots) << "\n\n";
