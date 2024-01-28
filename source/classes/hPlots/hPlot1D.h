@@ -30,6 +30,10 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
+#include "../hData/hData.h"
+
+using namespace std;
+
 class hPlot1D {
 protected:
     /* 1D histogram declaration */

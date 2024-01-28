@@ -2,8 +2,8 @@
 // Created by alons on 20/12/2023.
 //
 
-#ifndef PROJECT_RECOSETTINGS_H
-#define PROJECT_RECOSETTINGS_H
+#ifndef RECOSETTINGS_H
+#define RECOSETTINGS_H
 
 
 class RecoSettings {
@@ -2358,4 +2358,4 @@ public:
     }
 };
 
-#endif //PROJECT_RECOSETTINGS_H
+#endif //RECOSETTINGS_H

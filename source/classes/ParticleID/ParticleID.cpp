@@ -149,9 +149,15 @@ void ParticleID::FDNeutralParticleID(vector <region_part_ptr> allParticles, vect
         //</editor-fold>
 
         bool Neutron_pass_momentum_th = (Momentum >= Neutron_momentum_th.GetLowerCutConst() && Momentum <= Neutron_momentum_th.GetUpperCutConst());
-        bool Neutron_pass_ECAL_veto = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCutConst());
-        bool Neutron_pass_ECAL_edge_cuts = (allParticles[i]->cal(Neutron_ECAL_detlayer)->getLv() > ECAL_V_edge_cut &&
-                                            allParticles[i]->cal(Neutron_ECAL_detlayer)->getLw() > ECAL_W_edge_cut);
+        bool Neutron_pass_ECAL_veto, Neutron_pass_ECAL_edge_cuts;
+
+        if (apply_nucleon_cuts) {
+            Neutron_pass_ECAL_veto = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCutConst());
+            Neutron_pass_ECAL_edge_cuts = (allParticles[i]->cal(Neutron_ECAL_detlayer)->getLv() > ECAL_V_edge_cut &&
+                                           allParticles[i]->cal(Neutron_ECAL_detlayer)->getLw() > ECAL_W_edge_cut);
+        } else {
+            Neutron_pass_ECAL_veto = Neutron_pass_ECAL_edge_cuts = true;
+        }
 
         /* Log neutrons above momentum cuts (given by Momentum_th): */
         if (Neutron_pass_momentum_th && Neutron_pass_ECAL_veto && Neutron_pass_ECAL_edge_cuts) { FD_Neutrons_within_PID_cuts.push_back(i); }

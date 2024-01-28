@@ -2,8 +2,8 @@
 // Created by alons on 20/06/2023.
 //
 
-#ifndef MomentumResolution_H
-#define MomentumResolution_H
+#ifndef MOMENTUMRESOLUTION_H
+#define MOMENTUMRESOLUTION_H
 
 #include <iostream>
 #include <fstream>
@@ -302,4 +302,4 @@ public:
 
 };
 
-#endif //MomentumResolution_H
+#endif //MOMENTUMRESOLUTION_H

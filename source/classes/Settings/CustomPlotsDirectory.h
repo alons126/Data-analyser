@@ -2,8 +2,8 @@
 // Created by alons on 23/12/2023.
 //
 
-#ifndef PROJECT_CUSTOMPLOTSDIRECTORY_H
-#define PROJECT_CUSTOMPLOTSDIRECTORY_H
+#ifndef CUSTOMPLOTSDIRECTORY_H
+#define CUSTOMPLOTSDIRECTORY_H
 
 using namespace std;
 
@@ -19,13 +19,15 @@ private:
 
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
     bool Custom_cuts_naming = true;
-    string Clas12ana_particles_status = "";
-    string Preselection_Cuts_Status = "", Electron_Quality_Cuts_Status = "";
+    string Clas12ana_particles_status = "", Preselection_Cuts_Status = "", Electron_Quality_Cuts_Status = "";
 
     string Nucleon_Cuts_Status = "", FD_photons_Status = "", PSmearing_Status = "", FiducialCuts_Status = "";
     string KinCuts_Status = "", KinWei_Status = "", Additional_Status = "", Efficiency_Status = "";
 
     string Added_PreStatuses, Added_Statuses;
+
+    string Global_Run_Status = "_v2";
+//    string Global_Run_Status = "NoBetaTh_v2";
 
 public:
 
@@ -79,4 +81,4 @@ public:
 };
 
 
-#endif //PROJECT_CUSTOMPLOTSDIRECTORY_H
+#endif //CUSTOMPLOTSDIRECTORY_H

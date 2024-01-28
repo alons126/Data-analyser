@@ -2,8 +2,8 @@
 // Created by alons on 09/07/2023.
 //
 
-#ifndef hData_H
-#define hData_H
+#ifndef HDATA_H
+#define HDATA_H
 
 #include <iostream>
 #include <vector>
@@ -126,4 +126,4 @@ public:
 
 };
 
-#endif //hData_H
+#endif //HDATA_H

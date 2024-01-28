@@ -128,7 +128,7 @@ void EventAnalyser() {
     bool ZoomIn_On_mom_th_plots = false; // momentum th. efficiencies with zoomin
     bool Eff_calc_with_one_reco_electron = true;
     bool Calc_inc_p_eff_with_extended_theta = false;
-    bool Rec_wTL_ES = false; // Force TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Calculate efficiency - force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -400,9 +400,11 @@ void EventAnalyser() {
     if (Rec_wTL_ES || limless_mom_eff_plots) {
         /* If we enforce TL cuts, don't use momentum thresholds on nucleons. */
         e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
-        p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
+//        p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
+        p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.4, 9999);
         no_p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
-        n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, -9999, 9999);
+//        n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, -9999, 9999);
+        n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.4, 9999);
         pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
         pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
         ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
@@ -575,7 +577,7 @@ void EventAnalyser() {
     bool FSR_1D_plots, FSR_2D_plots; // FSR_2D_plots is disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-    bool TestRun = true; // set as false for a full run
+    bool TestRun = false; // set as false for a full run
 
     if (!TestRun) {
 
@@ -9814,7 +9816,7 @@ void EventAnalyser() {
                                                  "P^{truth}_{nFD} [GeV/c]", "P^{reco}_{nFD} [GeV/c]",
                                                  directories.Resolution_Directory_map["Resolution_1n_Directory"],
                                                  "00XX_TL_P_nFD_vs_Reco_P_nFD_1n", Momentum_lboundary, Momentum_uboundary, Momentum_lboundary,
-                                                 Momentum_uboundary, numTH2Dbins, numTH2Dbins);
+                                                 Momentum_uboundary, numTH2Dbins_nRes_Plots, numTH2Dbins_nRes_Plots);
     //</editor-fold>
 
     //</editor-fold>
@@ -12667,19 +12669,19 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Redefined neutrons (leading FD neutron)">
-        if (NeutronsFD_ind_mom_max != -1) { // if there's an electron hit in the PCAL
+        if (NeutronsFD_ind_mom_max_noNeutCuts != -1) { // if there's an electron hit in the PCAL
             // check neutron hits in the PCAL, ECIN and ECOUT:
-            bool LnFD_hit_PCAL_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::PCAL)->getDetector() == 7);
-            bool LnFD_hit_ECIN_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECIN)->getDetector() == 7);
-            bool LnFD_hit_ECOUT_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECOUT)->getDetector() == 7);
+            bool LnFD_hit_PCAL_1e_cut = (allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(clas12::PCAL)->getDetector() == 7);
+            bool LnFD_hit_ECIN_1e_cut = (allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(clas12::ECIN)->getDetector() == 7);
+            bool LnFD_hit_ECOUT_1e_cut = (allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(clas12::ECOUT)->getDetector() == 7);
 
             if (!LnFD_hit_PCAL_1e_cut && (LnFD_hit_ECIN_1e_cut || LnFD_hit_ECOUT_1e_cut)) {
                 auto LnFD_detlayer_1e_cut = LnFD_hit_ECIN_1e_cut ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
                 // neutron ECIN/ECAL hit vector and angles:
-                TVector3 LnFD_hit_1e_cut_3v(allParticles[NeutronsFD_ind_mom_max]->cal(LnFD_detlayer_1e_cut)->getX(),
-                                            allParticles[NeutronsFD_ind_mom_max]->cal(LnFD_detlayer_1e_cut)->getY(),
-                                            allParticles[NeutronsFD_ind_mom_max]->cal(LnFD_detlayer_1e_cut)->getZ());
+                TVector3 LnFD_hit_1e_cut_3v(allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(LnFD_detlayer_1e_cut)->getX(),
+                                            allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(LnFD_detlayer_1e_cut)->getY(),
+                                            allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(LnFD_detlayer_1e_cut)->getZ());
                 TVector3 e_hit_1e_cut_3v, dist_1e_cut_3v;
 
                 if ((LnFD_detlayer_1e_cut == clas12::ECIN) && (electrons[0]->cal(clas12::ECIN)->getZ() != 0)) {
@@ -12707,7 +12709,7 @@ void EventAnalyser() {
                 hdTheta_LnFD_e_VS_dPhi_LnFD_e_Electrons_BV_1e_cut.hFill(CalcdPhi(LnFD_hit_Phi_1e_cut - e_hit_Phi_1e_cut),
                                                                         LnFD_hit_Theta_1e_cut - e_hit_Theta_1e_cut, Weight);
 
-                bool NeutronPassVeto_1e_cut = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max,
+                bool NeutronPassVeto_1e_cut = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max_noNeutCuts,
                                                                        Neutron_veto_cut.GetLowerCut());
 
                 if (NeutronPassVeto_1e_cut) {
@@ -12723,7 +12725,7 @@ void EventAnalyser() {
 
         //<editor-fold desc="Redefined neutrons (all FD neutrons)">
         if (e_hit_PCAL_1e_cut) { // if there's an electron hit in the PCAL
-            for (auto &i: NeutronsFD_ind) {
+            for (auto &i: NeutronsFD_ind_noNeutCuts) {
                 // check neutron hits in the PCAL, ECIN and ECOUT:
                 bool nFD_hit_PCAL_1e_cut = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);
                 bool nFD_hit_ECIN_1e_cut = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);
@@ -12817,20 +12819,20 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Redefined neutrons (leading FD neutron)">
-        if (NeutronsFD_ind_mom_max != -1) {
+        if (NeutronsFD_ind_mom_max_noNeutCuts != -1) {
             // check neutron (n) hits in the PCAL, ECIN and ECOUT:
-            bool LnFD_hit_PCAL_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::PCAL)->getDetector() == 7);
-            bool LnFD_hit_ECIN_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECIN)->getDetector() == 7);
-            bool LnFD_hit_ECOUT_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECOUT)->getDetector() == 7);
+            bool LnFD_hit_PCAL_1e_cut = (allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(clas12::PCAL)->getDetector() == 7);
+            bool LnFD_hit_ECIN_1e_cut = (allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(clas12::ECIN)->getDetector() == 7);
+            bool LnFD_hit_ECOUT_1e_cut = (allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(clas12::ECOUT)->getDetector() == 7);
 
             // if neutron (n) did not hit PCAL & hit either ECIN or ECOUT // if neutron (n) did not hit PCAL & hit either ECIN or ECOUT:
             if (!LnFD_hit_PCAL_1e_cut && (LnFD_hit_ECIN_1e_cut || LnFD_hit_ECOUT_1e_cut)) {
                 auto LnFD_detlayer_1e_cut = LnFD_hit_ECIN_1e_cut ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
                 // neutron (n)'s ECIN/ECAL hit vector and angles:
-                TVector3 LnFD_hit_1e_cut_3v(allParticles[NeutronsFD_ind_mom_max]->cal(LnFD_detlayer_1e_cut)->getX(),
-                                            allParticles[NeutronsFD_ind_mom_max]->cal(LnFD_detlayer_1e_cut)->getY(),
-                                            allParticles[NeutronsFD_ind_mom_max]->cal(LnFD_detlayer_1e_cut)->getZ());
+                TVector3 LnFD_hit_1e_cut_3v(allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(LnFD_detlayer_1e_cut)->getX(),
+                                            allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(LnFD_detlayer_1e_cut)->getY(),
+                                            allParticles[NeutronsFD_ind_mom_max_noNeutCuts]->cal(LnFD_detlayer_1e_cut)->getZ());
 
                 for (auto &i: Protons_ind) { // loop over protons vector
                     if (protons[i]->getRegion() == FD) {
@@ -12862,7 +12864,7 @@ void EventAnalyser() {
                         hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_BV_1e_cut.hFill(CalcdPhi(LnFD_hit_Phi_1e_cut - p_hit_Phi_1e_cut),
                                                                               LnFD_hit_Theta_1e_cut - p_hit_Theta_1e_cut, Weight);
 
-                        bool NeutronPassVeto_1e_cut = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max,
+                        bool NeutronPassVeto_1e_cut = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max_noNeutCuts,
                                                                                Neutron_veto_cut.GetLowerCut());
 
                         if (NeutronPassVeto_1e_cut) {
@@ -12879,7 +12881,7 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Redefined neutrons (all FD neutrons)">
-        for (auto &i: NeutronsFD_ind) {
+        for (auto &i: NeutronsFD_ind_noNeutCuts) {
             // check neutron (n) hits in the PCAL, ECIN and ECOUT:
             bool nFD_hit_PCAL_1e_cut = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);
             bool nFD_hit_ECIN_1e_cut = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);
@@ -22864,11 +22866,9 @@ void EventAnalyser() {
 
         if (!apply_kinematical_cuts) {
             hP_nFD_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(),
-                                            TL_n_mom_cuts.GetUpperCut(), 0,
-                                            false);
+                                            TL_n_mom_cuts.GetUpperCut(), 0, false);
             hP_nFD_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_n_mom_cuts.GetLowerCut(),
-                                            TL_n_mom_cuts.GetUpperCut(), 0,
-                                            false);
+                                            TL_n_mom_cuts.GetUpperCut(), 0, false);
         } else {
             hP_nFD_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
                                             FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
@@ -22892,64 +22892,48 @@ void EventAnalyser() {
         hP_p_BC_truth_1n_undet.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
 
         hP_pip_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(),
-                                        TL_pip_mom_cuts.GetUpperCut(), 0,
-                                        false);
+                                        TL_pip_mom_cuts.GetUpperCut(), 0, false);
         hP_pip_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(),
-                                        TL_pip_mom_cuts.GetUpperCut(), 0,
-                                        false);
+                                        TL_pip_mom_cuts.GetUpperCut(), 0, false);
         hP_pip_AC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(),
-                                           TL_pip_mom_cuts.GetUpperCut(), 0,
-                                           false);
+                                           TL_pip_mom_cuts.GetUpperCut(), 0, false);
         hP_pip_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(),
-                                           TL_pip_mom_cuts.GetUpperCut(), 0,
-                                           false);
+                                           TL_pip_mom_cuts.GetUpperCut(), 0, false);
         hP_pip_AC_truth_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(),
-                                           TL_pip_mom_cuts.GetUpperCut(), 0,
-                                           false);
+                                           TL_pip_mom_cuts.GetUpperCut(), 0, false);
         hP_pip_BC_truth_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pip_mom_cuts.GetLowerCut(),
-                                           TL_pip_mom_cuts.GetUpperCut(), 0,
-                                           false);
+                                           TL_pip_mom_cuts.GetUpperCut(), 0, false);
         hP_pip_AC_truth_1n_undet.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
         hP_pip_BC_truth_1n_undet.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
 
         hP_pim_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pim_mom_cuts.GetLowerCut(),
-                                        TL_pim_mom_cuts.GetUpperCut(), 0,
-                                        false);
+                                        TL_pim_mom_cuts.GetUpperCut(), 0, false);
         hP_pim_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pim_mom_cuts.GetLowerCut(),
-                                        TL_pim_mom_cuts.GetUpperCut(), 0,
-                                        false);
+                                        TL_pim_mom_cuts.GetUpperCut(), 0, false);
         hP_pim_AC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pim_mom_cuts.GetLowerCut(),
-                                           TL_pim_mom_cuts.GetUpperCut(), 0,
-                                           false);
+                                           TL_pim_mom_cuts.GetUpperCut(), 0, false);
         hP_pim_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pim_mom_cuts.GetLowerCut(),
-                                           TL_pim_mom_cuts.GetUpperCut(), 0,
-                                           false);
+                                           TL_pim_mom_cuts.GetUpperCut(), 0, false);
         hP_pim_AC_truth_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pim_mom_cuts.GetLowerCut(),
-                                           TL_pim_mom_cuts.GetUpperCut(), 0,
-                                           false);
+                                           TL_pim_mom_cuts.GetUpperCut(), 0, false);
         hP_pim_BC_truth_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pim_mom_cuts.GetLowerCut(),
-                                           TL_pim_mom_cuts.GetUpperCut(), 0,
-                                           false);
+                                           TL_pim_mom_cuts.GetUpperCut(), 0, false);
         hP_pim_AC_truth_1n_undet.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
         hP_pim_BC_truth_1n_undet.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
 
         hP_pi0_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pi0_mom_cuts.GetLowerCut(),
-                                        TL_pi0_mom_cuts.GetUpperCut(), 0,
-                                        false);
+                                        TL_pi0_mom_cuts.GetUpperCut(), 0, false);
         hP_pi0_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_pi0_mom_cuts.GetLowerCut(),
-                                        TL_pi0_mom_cuts.GetUpperCut(), 0,
-                                        false);
+                                        TL_pi0_mom_cuts.GetUpperCut(), 0, false);
 
         hP_ph_AC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_ph_mom_cuts.GetLowerCut(),
                                        TL_ph_mom_cuts.GetUpperCut(), 0, false);
         hP_ph_BC_truth_1n.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_ph_mom_cuts.GetLowerCut(),
                                        TL_ph_mom_cuts.GetUpperCut(), 0, false);
         hP_ph_AC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_ph_mom_cuts.GetLowerCut(),
-                                          TL_ph_mom_cuts.GetUpperCut(), 0,
-                                          false);
+                                          TL_ph_mom_cuts.GetUpperCut(), 0, false);
         hP_ph_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., TL_ph_mom_cuts.GetLowerCut(),
-                                          TL_ph_mom_cuts.GetUpperCut(), 0,
-                                          false);
+                                          TL_ph_mom_cuts.GetUpperCut(), 0, false);
 
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_e_AC_truth_1n, hP_e_APID_1n_FD, plots, ACorr_data, ACorr_data_Dir);
         eff.DrawAndSaveACorrPlots(save_ACorr_data, SampleName, hP_nFD_AC_truth_1n, hP_nFD_APIDandNS_1n, plots, ACorr_data, ACorr_data_Dir);
