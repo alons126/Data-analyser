@@ -427,7 +427,7 @@ double ParticleID::GetFDNeutronP(region_part_ptr &Neutron, const bool &apply_nuc
 
         if (ParticlePDG == 2112) {
             /* Momentum for neutrons - get from file. */
-            Momentum = Neutron->getP();
+            Momentum = Neutron->par()->getP();
 
             //        //<editor-fold desc="how neutron momentum is calculated in clas12">
 //        TVector3 P_n;

@@ -153,7 +153,7 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
@@ -395,29 +395,20 @@ void EventAnalyser() {
 
     //<editor-fold desc="Reco particles momentum thresholds">
     /* Momentum thresholds (declarations) */
-    DSCuts e_mom_th, p_mom_th, n_mom_th, pip_mom_th, pim_mom_th, ph_mom_th; // Momentum thresholds for PID
-    DSCuts no_p_mom_th; // (no) momentum thresholds for (e,e'Xp)Y efficiency
+    DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
+    DSCuts no_p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999); // (no) momentum thresholds for (e,e'Xp)Y efficiency
+    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
+    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
+    DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
 
-    if (Rec_wTL_ES || limless_mom_eff_plots) {
+    DSCuts p_mom_th, n_mom_th; // Nucleons momentum thresholds for PID
+
+    if (limless_mom_eff_plots) {
         /* If we enforce TL cuts, don't use momentum thresholds on nucleons. */
-        e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
-//        p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
-        p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.4, 9999);
-        no_p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
-//        n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, -9999, 9999);
-        n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.4, 9999);
-        pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-        pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-        ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
+        p_mom_th = DSCuts("Momentum_th", "", "Protons", "", 0, -9999, 9999), n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, -9999, 9999);
     } else {
         /* If we don't enforce TL cuts, use momentum thresholds on nucleons. */
-        e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
-        p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.4, 9999);
-        no_p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
-        n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.4, 9999);
-        pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-        pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-        ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
+        p_mom_th = DSCuts("Momentum_th", "", "Protons", "", 0, 0.4, 9999), n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.4, 9999);
     }
     //</editor-fold>
 
@@ -468,10 +459,8 @@ void EventAnalyser() {
     DSCuts Theta_pCD_cuts_2p = DSCuts("Theta_p2 recoil", "", "Proton", "2p", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_2p = DSCuts("dPhi_pFD_pCD", "", "Proton", "2p", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
 
-    DSCuts Theta_L_cuts_pFDpCD = DSCuts("Theta_L leading", "", "Proton", "pFDpCD", Theta_p1_cuts_2p.GetMean(), -9999,
-                                        Theta_p1_cuts_2p.GetUpperCut());
-    DSCuts Theta_R_cuts_pFDpCD = DSCuts("Theta_R recoil", "", "Proton", "pFDpCD", Theta_p2_cuts_2p.GetMean(), -9999,
-                                        Theta_p2_cuts_2p.GetUpperCut());
+    DSCuts Theta_L_cuts_pFDpCD = DSCuts("Theta_L", "", "Proton", "pFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
+    DSCuts Theta_R_cuts_pFDpCD = DSCuts("Theta_R", "", "Proton", "pFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_pFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "pFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
 
     DSCuts Theta_L_cuts_nFDpCD = DSCuts("Theta_L", "", "", "nFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
@@ -481,8 +470,9 @@ void EventAnalyser() {
     /* reco. kinematic cuts (based on nucleons' efficiency) */
     DSCuts FD_nucleon_theta_cut = DSCuts("FD Nucleon theta cut", "FD", "", "", 0, 0, 32.);
     DSCuts Nucleon_momentum_cut = DSCuts("Nucleon momentum cut", "FD", "", "", 0, n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut());
-    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1.,
-                                            3.); // new upper cut, following Larry meeting (10/08/23)
+//    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 4.); // Original mom. KC
+//    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 3.); // Larry meeting (10/08/23)
+    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 2.5); // Adi meeting (29/01/24)
     //</editor-fold>
 
     //</editor-fold>
@@ -578,7 +568,7 @@ void EventAnalyser() {
     bool FSR_1D_plots, FSR_2D_plots; // FSR_2D_plots is disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-    bool TestRun = false; // set as false for a full run
+    bool TestRun = true; // set as false for a full run
 
     if (!TestRun) {
 

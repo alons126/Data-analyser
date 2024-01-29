@@ -24,7 +24,7 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
         if (only_electron_quality_cuts) { Electron_Quality_Cuts_Status = "_eQC"; }
 
         if (apply_nucleon_cuts) {
-            Nucleon_Cuts_Status = "NC_";
+            Nucleon_Cuts_Status = "_NC";
         } else {
             Nucleon_Cuts_Status = "noNC";
         }
@@ -37,7 +37,7 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
             }
         } else {
             if (Enable_FD_photons) {
-                FD_photons_Status = "wFDph_";
+                FD_photons_Status = "_wFDph";
             } else {
                 FD_photons_Status = "";
             }
@@ -50,7 +50,7 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
                 if (ZoomIn_On_mom_th_plots) {
                     Efficiency_Status = "EffCalc_ZoomIn";
                 } else {
-                    Efficiency_Status = "EffCalc_";
+                    Efficiency_Status = "_Eff";
                 }
             }
         }
@@ -58,83 +58,83 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
         if (!apply_nucleon_SmearAndCorr) {
             PSmearing_Status = "";
         } else {
-            PSmearing_Status = "wNSaC_";
+            PSmearing_Status = "_wNSaC";
         }
 
         if (!apply_kinematical_cuts && !apply_kinematical_weights) {
             KinCuts_Status = "";
             KinWei_Status = "";
         } else if (apply_kinematical_cuts && !apply_kinematical_weights) {
-            KinCuts_Status = "wKC_";
+            KinCuts_Status = "_wKC";
             KinWei_Status = "";
         } else if (!apply_kinematical_cuts && apply_kinematical_weights) {
             KinCuts_Status = "";
-            KinWei_Status = "wKW_";
+            KinWei_Status = "_wKW";
         } else if (apply_kinematical_cuts && apply_kinematical_weights) {
             KinCuts_Status = "wKC";
-            KinWei_Status = "wKW_";
+            KinWei_Status = "_wKW";
         }
 
         if (!apply_fiducial_cuts) {
             FiducialCuts_Status = "";
         } else {
-            FiducialCuts_Status = "wFC_";
+            FiducialCuts_Status = "_wFC";
         }
 
         if (apply_chi2_cuts_1e_cut) {
             if (!Generate_AMaps && !plot_and_fit_MomRes) {
                 Additional_Status = "";
             } else if (Generate_AMaps && !plot_and_fit_MomRes) {
-                Additional_Status = "AMaps_";
+                Additional_Status = "_AMaps";
             } else if (!Generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
-                    Additional_Status = "momResSS_";
+                    Additional_Status = "_momResSS";
                 } else {
                     if (!Calculate_momResS2) {
                         if (!nRes_test) {
                             if (!Run_in_momResS2) {
-                                Additional_Status = "momResS1_";
+                                Additional_Status = "_momResS1";
                             } else {
-                                Additional_Status = "momResS2R_"; // R for Run
+                                Additional_Status = "_momResS2R"; // R for Run
                             }
                         } else {
                             if (!Run_in_momResS2) {
-                                Additional_Status = "momResS1T_";
+                                Additional_Status = "_momResS1T";
                             } else {
-                                Additional_Status = "momResS2RT_"; // R for Run; T for Test
+                                Additional_Status = "_momResS2RT"; // R for Run; T for Test
                             }
                         }
                     } else {
                         if (!nRes_test) {
-                            Additional_Status = "momResS2_";
+                            Additional_Status = "_momResS2";
                         } else {
-                            Additional_Status = "momResS2T_"; // T for Test
+                            Additional_Status = "_momResS2T"; // T for Test
                         }
                     }
                 }
             } else if (Generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
-                    Additional_Status = "momResSS_AMaps_";
+                    Additional_Status = "_momResSS_AMaps";
                 } else {
                     if (!Calculate_momResS2) {
                         if (!nRes_test) {
                             if (!Run_in_momResS2) {
-                                Additional_Status = "momResS1_";
+                                Additional_Status = "_momResS1";
                             } else {
-                                Additional_Status = "momResS2R_";
+                                Additional_Status = "_momResS2R";
                             }
                         } else {
                             if (!Run_in_momResS2) {
-                                Additional_Status = "momResS1T_";
+                                Additional_Status = "_momResS1T";
                             } else {
-                                Additional_Status = "momResS2RT_";
+                                Additional_Status = "_momResS2RT";
                             }
                         }
                     } else {
                         if (!nRes_test) {
-                            Additional_Status = "momResS2_";
+                            Additional_Status = "_momResS2";
                         } else {
-                            Additional_Status = "momResS2T_";
+                            Additional_Status = "_momResS2T";
                         }
                     }
                 }
