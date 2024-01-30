@@ -181,10 +181,10 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    bool apply_cuts = false; // master ON/OFF switch for applying cuts
+    bool apply_cuts = true; // master ON/OFF switch for applying cuts
     bool clas12ana_particles = true; //TODO: move form here!
-    bool only_preselection_cuts = true; // keep as false for regular runs!
-    bool only_electron_quality_cuts = true; // keep as false for regular runs!
+    bool only_preselection_cuts = false; // keep as false for regular runs!
+    bool only_electron_quality_cuts = false; // keep as false for regular runs!
 
     /* Preselection cuts (event cuts) */
     bool apply_preselection_cuts = true; // master ON/OFF switch for preselection cuts
