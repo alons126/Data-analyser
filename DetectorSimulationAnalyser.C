@@ -182,7 +182,7 @@ void EventAnalyser() {
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
     bool apply_cuts = false; // master ON/OFF switch for applying cuts
-    bool clas12ana_particles = false; //TODO: move form here!
+    bool clas12ana_particles = true; //TODO: move form here!
     bool only_preselection_cuts = false; // keep as false for regular runs!
     bool only_electron_quality_cuts = false; // keep as false for regular runs!
 
