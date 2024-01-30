@@ -1325,12 +1325,13 @@ void MomentumResolution::PolyFitter(const string &MomentumType, const int &Polyn
 
     string FitsDir = SlicesSavePath + "/" + "Graph1D_" + MomentumType + "_fits";
     string FitsDirByType = FitsDir + "/" + MomentumType + "_" + FitType + "_fits";
-    string GraphSaveName0 = FitsDirByType + "/" + "0" + PolynomialDegree + "_Fit_" + FitType + "_pol" + PolynomialDegree + "_" + MomentumFitRange + ".png";
+    string GraphSaveName = FitsDirByType + "/" + "0" + to_string(PolynomialDegree) + "_Fit_" + FitType + "_pol" + to_string(PolynomialDegree) + "_" +
+                           MomentumFitRange + ".png";
 
     system(("mkdir -p " + FitsDir).c_str());
     system(("mkdir -p " + FitsDirByType).c_str());
 
-    cout << "\n", Fit_Canvas->SaveAs(GraphSaveName0.c_str());
+    cout << "\n", Fit_Canvas->SaveAs(GraphSaveName.c_str());
     Fit_Canvas->Clear();
     delete Fit_Canvas;
     //</editor-fold>

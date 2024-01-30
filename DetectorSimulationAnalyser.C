@@ -181,7 +181,7 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    bool apply_cuts = false; // master ON/OFF switch for applying cuts
     bool clas12ana_particles = false; //TODO: move form here!
     bool only_preselection_cuts = false; // keep as false for regular runs!
     bool only_electron_quality_cuts = false; // keep as false for regular runs!
@@ -9736,10 +9736,9 @@ void EventAnalyser() {
     chain.db()->turnOffQADB();
 
     //<editor-fold desc="Auto-disable variables accoding to HipoChain length">
-    if (HipoChainLength < 100) {
-        /* This avoids a crush when plotting 2D final state ratios */
-        FSR_2D_plots = false;
-    }
+    cout << "HipoChain loaded! HipoChainLength = " << HipoChainLength << "\n";
+
+    if (HipoChainLength < 100) { /* This avoids a crush when plotting 2D final state ratios */ FSR_2D_plots = false; }
     //</editor-fold>
 
     //</editor-fold>
