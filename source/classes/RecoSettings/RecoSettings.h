@@ -2,8 +2,8 @@
 // Created by alons on 20/12/2023.
 //
 
-#ifndef PROJECT_RECOSETTINGS_H
-#define PROJECT_RECOSETTINGS_H
+#ifndef RECOSETTINGS_H
+#define RECOSETTINGS_H
 
 
 class RecoSettings {
@@ -1033,7 +1033,7 @@ private:
 // Acceptance correction data -------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Acceptance correction">
-    /* Neutron resolution fits is handled completely by the NeutronResolution class */
+    /* Neutron resolution fits is handled completely by the MomentumResolution class */
     cout << "\nSetting acceptance correction data...";
 
     bool save_ACorr_data = false;
@@ -1053,7 +1053,7 @@ private:
 // Neutron resolution & proton smearing ---------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Neutron resolution">
-    /* Neutron resolution fits is handled completely by the NeutronResolution class */
+    /* Neutron resolution fits is handled completely by the MomentumResolution class */
     cout << "\nSetting neutron resolution data...";
 
     if (!calculate_truth_level) { plot_and_fit_MomRes = false; } // Disable resolution-realted operations if not calculating TL plots
@@ -1064,47 +1064,47 @@ private:
 //    if (apply_nucleon_SmearAndCorr) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
 
     //<editor-fold desc="Neutron resolution class declaration & definition">
-    NeutronResolution nRes, pRes;
+    MomentumResolution nRes, pRes;
 
     if (plot_and_fit_MomRes) {
-        nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
-                                 NeutronResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
+        nRes = MomentumResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
+                                 MomentumResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
                                  CorrMode, nRes_test);
-        pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
-                                 NeutronResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
+        pRes = MomentumResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
+                                 MomentumResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
                                  CorrMode, nRes_test);
 
         if (nRes_test) {
             if (Calculate_momResS2) { // if Calculate_momResS2 = true => load everything from momResS1 files
                 /* Load neutron correction fit parameters */
                 nRes.ReadResDataParam(
-                        (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                        (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                         Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                 /* Load proton smearing fit parameters */
                 nRes.ReadResDataParam(
-                        (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                        (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                         Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
             } else { // if Calculate_momResS2 = false => load everything from either momResS1 or momResS2
                 if (Run_in_momResS2) { // if Calculate_momResS2 = false and Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                     /* Load proton smearing fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                 } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                     /* Load proton smearing fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                 }
             }
@@ -1114,19 +1114,19 @@ private:
 
         if (Run_in_momResS2) { // if Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
             /* Load neutron correction fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+            nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                   Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+            nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                   Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
         } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
             /* Load neutron correction fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+            nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                   Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+            nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                   Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
         }
     }
@@ -2209,7 +2209,7 @@ public:
 // Acceptance correction data -------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Acceptance correction">
-        /* Neutron resolution fits is handled completely by the NeutronResolution class */
+        /* Neutron resolution fits is handled completely by the MomentumResolution class */
         cout << "\nSetting acceptance correction data...";
 
         bool save_ACorr_data = false;
@@ -2229,7 +2229,7 @@ public:
 // Neutron resolution & proton smearing ---------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Neutron resolution">
-        /* Neutron resolution fits is handled completely by the NeutronResolution class */
+        /* Neutron resolution fits is handled completely by the MomentumResolution class */
         cout << "\nSetting neutron resolution data...";
 
         if (!calculate_truth_level) { plot_and_fit_MomRes = false; } // Disable resolution-realted operations if not calculating TL plots
@@ -2240,47 +2240,47 @@ public:
 //    if (apply_nucleon_SmearAndCorr) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
 
         //<editor-fold desc="Neutron resolution class declaration & definition">
-        NeutronResolution nRes, pRes;
+        MomentumResolution nRes, pRes;
 
         if (plot_and_fit_MomRes) {
-            nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
-                                     NeutronResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
+            nRes = MomentumResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
+                                     MomentumResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
                                      CorrMode, nRes_test);
-            pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
-                                     NeutronResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
+            pRes = MomentumResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
+                                     MomentumResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
                                      CorrMode, nRes_test);
 
             if (nRes_test) {
                 if (Calculate_momResS2) { // if Calculate_momResS2 = true => load everything from momResS1 files
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                     /* Load proton smearing fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                 } else { // if Calculate_momResS2 = false => load everything from either momResS1 or momResS2
                     if (Run_in_momResS2) { // if Calculate_momResS2 = false and Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
                         /* Load neutron correction fit parameters */
                         nRes.ReadResDataParam(
-                                (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                 Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                         /* Load proton smearing fit parameters */
                         nRes.ReadResDataParam(
-                                (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                 Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                     } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
                         /* Load neutron correction fit parameters */
                         nRes.ReadResDataParam(
-                                (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                 Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                         /* Load proton smearing fit parameters */
                         nRes.ReadResDataParam(
-                                (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                                (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                 Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                     }
                 }
@@ -2290,19 +2290,19 @@ public:
 
             if (Run_in_momResS2) { // if Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
                 /* Load neutron correction fit parameters */
-                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                       Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                 /* Load proton smearing fit parameters */
-                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                       Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
             } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
                 /* Load neutron correction fit parameters */
-                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                       Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                 /* Load proton smearing fit parameters */
-                nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                       Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
             }
         }
@@ -2358,4 +2358,4 @@ public:
     }
 };
 
-#endif //PROJECT_RECOSETTINGS_H
+#endif //RECOSETTINGS_H

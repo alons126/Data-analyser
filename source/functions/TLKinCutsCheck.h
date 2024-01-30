@@ -69,17 +69,17 @@ bool TLKinCutsCheck(const std::unique_ptr<clas12::clas12reader> &c12, bool apply
 }
 
 /* TLKinCutsCheck for leading FD neutrons */
-bool TLKinCutsCheck(const std::unique_ptr<clas12::clas12reader> &c12, bool apply_kinematical_cuts, const int TL_NeutronsFD_ind_mom_max,
+bool TLKinCutsCheck(const std::unique_ptr<clas12::clas12reader> &c12, bool apply_kinematical_cuts, const int TL_IDed_neutrons_FD_mom_max,
                     const DSCuts &FD_nucleon_theta_cut, const DSCuts &FD_nucleon_momentum_cut) {
     auto mcpbank = c12->mcparts();
 
     if (!apply_kinematical_cuts) {
         return true;
     } else {
-        if (TL_NeutronsFD_ind_mom_max == -1) {
+        if (TL_IDed_neutrons_FD_mom_max == -1) {
             return false;
         } else {
-            mcpbank->setEntry(TL_NeutronsFD_ind_mom_max);
+            mcpbank->setEntry(TL_IDed_neutrons_FD_mom_max);
 
             double Particle_TL_Momentum = rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz());
             double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;

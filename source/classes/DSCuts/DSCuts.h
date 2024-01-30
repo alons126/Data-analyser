@@ -49,6 +49,8 @@ public:
 
     double GetMean() { return Cuts.at(0); }
 
+    double GetMeanConst() const { return Cuts.at(0); }
+
     double GetLowerCut() { return Cuts.at(1); }
 
     double GetLowerCutConst() const { return Cuts.at(1); }

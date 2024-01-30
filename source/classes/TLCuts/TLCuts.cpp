@@ -67,7 +67,7 @@ TLCuts::TLCuts(const string &SampleName, bool calculate_truth_level, bool Enable
                     if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCutConst()) &&
                         (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCutConst())) { TL_NeutronsFD_mom_ind.push_back(i); }
 
-                    TL_NeutronsFD_ind.push_back(i);
+                    TL_IDed_neutrons_FD.push_back(i);
                 }
             } else if (particlePDGtmp == 2212) {
                 if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCutConst()) &&

@@ -80,16 +80,17 @@ public:
 
 // DrawAndSaveACorrPlots function ---------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list, TList *ACorr_data,
-                               string &ACorr_data_Dir);
+    void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list,
+                               TList *ACorr_data, string &ACorr_data_Dir);
 
-    void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list, TList *ACorr_data,
-                               string &ACorr_data_Dir);
+    void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list,
+                               TList *ACorr_data, string &ACorr_data_Dir);
 
 // DrawAndSaveHistogram1D function --------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_list, TFolder *Histogram_folder, TH1D *Histogram1D, int LineStyle, int kColor, bool ShowStats,
-                                bool plot_errorbars, bool rebin_plots, const string &HistSaveDir);
+    void
+    DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_list, TFolder *Histogram_folder, TH1D *Histogram1D, int LineStyle, int kColor,
+                           bool ShowStats, bool plot_errorbars, bool rebin_plots, const string &HistSaveDir);
 
 };
 

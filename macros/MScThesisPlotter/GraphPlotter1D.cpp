@@ -117,7 +117,7 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
     bool AddToStack = false;
 
     /* Histogram cuts setup */
-    bool ApplyPlotCuts = true;
+    bool ShowPlotCuts = true;
     double PlotCuts = 0;
     double PlotXmax = 0;
     bool PlotHistogramMax = true;
@@ -138,7 +138,7 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
 //    Graph1D->GetXaxis()->SetTitleSize(0.06);
 //    Graph1D->GetXaxis()->SetLabelSize(0.0425);
 //    Graph1D->GetXaxis()->CenterTitle(true);
-////    Graph1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+////    Graph1D->GetYaxis()->SetTitle("Number of events");
 //    Graph1D->GetYaxis()->SetTitleSize(0.06);
 //    Graph1D->GetYaxis()->SetLabelSize(0.0425);
 //    Graph1D->GetYaxis()->CenterTitle(true);

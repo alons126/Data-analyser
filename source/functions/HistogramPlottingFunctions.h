@@ -105,7 +105,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
 //            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
@@ -300,7 +300,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
         }
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
@@ -474,7 +474,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
 //            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
@@ -668,7 +668,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
         }
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
@@ -837,7 +837,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
 //            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
@@ -1014,7 +1014,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
         }
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
@@ -1179,7 +1179,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
                 "#splitline{" + title + "}{        (|#chi^{2}_{" + Particle + "," + Histogram1DTitle3 + "} - (#chi^{2}_{" + Particle + "," + Histogram1DTitle3 +
                 "})_{max}| #leq " + to_string_with_precision(plot_cuts) + ")}";
         Histogram1D->SetTitle(HistogramTitle.c_str());
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         gStyle->SetTitleFontSize(0.04);
         gROOT->ForceStyle();
 
@@ -1353,7 +1353,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
                 "#splitline{" + title + "}{        (|#chi^{2}_{" + Particle + "," + Histogram1DTitle3 + "} - (#chi^{2}_{" + Particle + "," + Histogram1DTitle3 +
                 "})_{max}| #leq " + to_string_with_precision(plot_cuts) + ")}";
         Histogram1D->SetTitle(HistogramTitle.c_str());
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         gStyle->SetTitleFontSize(0.04);
         gROOT->ForceStyle();
 
@@ -1542,7 +1542,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
                          Histogram1DTitle3 + "})_{max}| #leq " + to_string_with_precision(plot_cuts1) + ", " + "|#chi^{2}_{" + Particle2 + "," + Histogram1DTitle3 +
                          "} - (#chi^{2}_{" + Particle2 + "," + Histogram1DTitle3 + "})_{max}| #leq " + to_string_with_precision(plot_cuts2) + ")}";
         Histogram1D->SetTitle(HistogramTitle.c_str());
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         gStyle->SetTitleFontSize(0.04);
         gROOT->ForceStyle();
 
@@ -1715,7 +1715,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
                          Histogram1DTitle3 + "})_{max}| #leq " + to_string_with_precision(plot_cuts1) + ", " + "|#chi^{2}_{" + Particle2 + "," + Histogram1DTitle3 +
                          "} - (#chi^{2}_{" + Particle2 + "," + Histogram1DTitle3 + "})_{max}| #leq " + to_string_with_precision(plot_cuts2) + ")}";
         Histogram1D->SetTitle(HistogramTitle.c_str());
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         gStyle->SetTitleFontSize(0.04);
         gROOT->ForceStyle();
 
@@ -1889,7 +1889,7 @@ void histPlotter1DwFit(TCanvas *Histogram1DCanvas,
 
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
 
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
@@ -2110,7 +2110,7 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
             displayText->Draw();
         } else if (H1D_All_Int->Integral() != 0.) {
 //            Histogram1DStack->GetXaxis()->SetTitle(xLable.c_str());
-            Histogram1DStack->GetYaxis()->SetTitle("Arbitrary units (#events)");
+            Histogram1DStack->GetYaxis()->SetTitle("Number of events");
             Histogram1DStack->GetHistogram()->GetYaxis()->SetTitleSize(TitleSize);
         }
     }
@@ -2121,7 +2121,7 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
 
     if (H1D_All_Int->Integral() != 0.) {
         TLegendEntry *H1D_All_Int_Entry = Histogram1DStackLegend->AddEntry(H1D_All_Int, "All int.", "l");
-        TLegendEntry *H1D_QEL_Entry = Histogram1DStackLegend->AddEntry(H1D_QEL, "QEL", "l");
+        TLegendEntry *H1D_QEL_Entry = Histogram1DStackLegend->AddEntry(H1D_QEL, "QE", "l");
         TLegendEntry *H1D_MEC_Entry = Histogram1DStackLegend->AddEntry(H1D_MEC, "MEC", "l");
         TLegendEntry *H1D_RES_Entry = Histogram1DStackLegend->AddEntry(H1D_RES, "RES", "l");
         TLegendEntry *H1D_DIS_Entry = Histogram1DStackLegend->AddEntry(H1D_DIS, "DIS", "l");

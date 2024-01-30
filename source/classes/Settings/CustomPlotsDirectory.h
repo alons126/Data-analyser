@@ -2,8 +2,8 @@
 // Created by alons on 23/12/2023.
 //
 
-#ifndef PROJECT_CUSTOMPLOTSDIRECTORY_H
-#define PROJECT_CUSTOMPLOTSDIRECTORY_H
+#ifndef CUSTOMPLOTSDIRECTORY_H
+#define CUSTOMPLOTSDIRECTORY_H
 
 using namespace std;
 
@@ -19,13 +19,14 @@ private:
 
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
     bool Custom_cuts_naming = true;
-    string Clas12ana_particles_status = "";
-    string Preselection_Cuts_Status = "", Electron_Quality_Cuts_Status = "";
+    string Clas12ana_particles_status = "", Preselection_Cuts_Status = "", Electron_Quality_Cuts_Status = "";
 
     string Nucleon_Cuts_Status = "", FD_photons_Status = "", PSmearing_Status = "", FiducialCuts_Status = "";
     string KinCuts_Status = "", KinWei_Status = "", Additional_Status = "", Efficiency_Status = "";
 
     string Added_PreStatuses, Added_Statuses;
+
+    string Global_Run_Status = "v2";
 
 public:
 
@@ -35,17 +36,16 @@ public:
 
 // ConfigureStatuses function ------------------------------------------------------------------------------------------------------------------------------------
 
-    void ConfigureStatuses(const bool &apply_cuts, const bool &clas12ana_particles, const bool &only_preselection_cuts,
-                           const bool &apply_chi2_cuts_1e_cut, const bool &only_electron_quality_cuts, const bool &apply_nucleon_cuts,
-                           const bool &Enable_FD_photons, const bool &apply_nucleon_SmearAndCorr, const bool &apply_kinematical_cuts,
-                           const bool &apply_kinematical_weights, const bool &apply_fiducial_cuts, const bool &Generate_AMaps,
-                           const bool &plot_and_fit_MomRes, const bool &VaryingDelta, const bool &Calculate_momResS2, const bool &Run_in_momResS2,
-                           const bool &nRes_test, const bool &Rec_wTL_ES, const bool &ZoomIn_On_mom_th_plots);
+    void ConfigureStatuses(const bool &apply_cuts, const bool &clas12ana_particles, const bool &only_preselection_cuts, const bool &apply_chi2_cuts_1e_cut,
+                           const bool &only_electron_quality_cuts, const bool &apply_nucleon_cuts, const bool &Enable_FD_photons, const bool &apply_nucleon_SmearAndCorr,
+                           const bool &apply_kinematical_cuts, const bool &apply_kinematical_weights, const bool &apply_fiducial_cuts, const bool &Generate_AMaps,
+                           const bool &plot_and_fit_MomRes, const bool &VaryingDelta, const bool &Calculate_momResS2, const bool &Run_in_momResS2, const bool &nRes_test,
+                           const bool &Rec_wTL_ES, const bool &ZoomIn_On_mom_th_plots);
 
 // SetPaths function -----------------------------------------------------------------------------------------------------------------------------------------------
 
-    void SetPaths(const string &WorkingDirectory, const string &SampleName, const string &plots_path,
-                  const bool &apply_cuts, const bool &apply_chi2_cuts_1e_cut, const bool &apply_nucleon_cuts);
+    void SetPaths(const string &WorkingDirectory, const string &SampleName, const string &plots_path, const bool &apply_cuts, const bool &apply_chi2_cuts_1e_cut,
+                  const bool &apply_nucleon_cuts);
 
 // Set functions ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -79,4 +79,4 @@ public:
 };
 
 
-#endif //PROJECT_CUSTOMPLOTSDIRECTORY_H
+#endif //CUSTOMPLOTSDIRECTORY_H

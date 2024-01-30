@@ -8,10 +8,16 @@
 #include "../DSCuts/DSCuts.h"
 #include "../../functions/GeneralFunctions.h"
 
+#include "HipoChain.h"
+#include "clas12reader.h"
+
+using namespace std;
+using namespace clas12;
+
 class ExperimentParameters : public TargetParameters {
 protected:
-    std::string SampleName;
-    std::string VaryingSampleName; // for AMaps, WMaps and nRes
+    string SampleName;
+    string VaryingSampleName; // for AMaps, WMaps and nRes
     double BeanEnergy;
 
     bool LocalSample = false;
@@ -27,7 +33,12 @@ protected:
     DSCuts Vz_cuts, Vz_cuts_FD, Vz_cuts_CD, Vz_cuts_FD_def = Vz_cuts_def, Vz_cuts_CD_def = Vz_cuts_def;
     DSCuts dVz_cuts_def = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
     DSCuts dVz_cuts, dVz_cuts_FD, dVz_cuts_CD, dVz_cuts_FD_def = dVz_cuts_def, dVz_cuts_CD_def = dVz_cuts_def;
+
 public:
+
+// Constructor ----------------------------------------------------------------------------------------------------------------------------------------
+
+    ExperimentParameters(const string &AnalyseFilePath, const string &AnalyseFileSample);
 
 // ConfigureSampleName function -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -77,9 +88,9 @@ public:
 
     DSCuts GetdVz_cuts_CD() { return dVz_cuts_CD; };
 
-// ExperimentParameters function ----------------------------------------------------------------------------------------------------------------------------------------
+// AddToHipoChain function ----------------------------------------------------------------------------------------------------------------------------------------
 
-    ExperimentParameters(const string &AnalyseFilePath, const string &AnalyseFileSample);
+    void AddToHipoChain(HipoChain &chain, const string &sn, const string &AnalyseFilePath, const string &AnalyseFileSample, const string &AnalyseFile);
 
 // other functions ------------------------------------------------------------------------------------------------------------------------------------------------------
 

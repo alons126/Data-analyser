@@ -25,6 +25,7 @@
 using namespace std;
 
 /* sudo mount -t drvfs E: /mnt/e */
+/* clas12root macros/MScThesisPlotter/MScThesisPlotter.cpp -b -q */
 
 void MScThesisPlotter() {
     hData utilities;
@@ -52,11 +53,16 @@ void MScThesisPlotter() {
                                "/C12x4_simulation_G18_Q204_6GeV_plots.root";
     const char *plots_noNC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S02ACnoNC_v2"
                              "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_NC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_Eff1_v2"
+    const char *plots_NC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_v2"
                            "/C12x4_simulation_G18_Q204_6GeV_plots.root";
     //</editor-fold>
 
     //<editor-fold desc="AMaps runs">
+//    const char *plots_AMaps = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/01_AMaps_testing_and_debugging/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_eTh08_v2"
+//                              "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+//    const char *plots_AMaps_plotsPath = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/01_AMaps_testing_and_debugging/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_eTh08_v2/";
+//    const char *plots_AMaps_GenMaps = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/01_AMaps_testing_and_debugging/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_eTh08_v2/"
+//                                      "12_Acceptance_maps_plots/01_AMaps_1e_cut/05_Generated_maps/";
     const char *plots_AMaps = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_v2"
                               "/C12x4_simulation_G18_Q204_6GeV_plots.root";
     const char *plots_AMaps_plotsPath = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_v2/";
@@ -70,21 +76,25 @@ void MScThesisPlotter() {
     //<editor-fold desc="Efficiency runs">
     const char *plots_Efficiency_reg = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_Eff2_v2"
                                        "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+    const char *plots_Efficiency_reg_wMomTh = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_EffCalc_v2_wMomTh"
+                                              "/C12x4_simulation_G18_Q204_6GeV_plots.root";
     const char *plots_Efficiency_wFC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wFC_Eff2_v2"
                                        "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+    const char *plots_Efficiency_wFC_wMomTh = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/"
+                                              "C12x4_simulation_G18_Q204_6GeV_S03ACNC_EffCalc_wFC_v2_wMomTh/C12x4_simulation_G18_Q204_6GeV_plots.root";
     //</editor-fold>
 
     //<editor-fold desc="momRes runs">
     const char *plots_momResS1_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
                                      "/C12x4_simulation_G18_Q204_6GeV_plots.root";
     const char *plots_momResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
-                                           "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+                                             "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
                                            "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     const char *plots_momResS2_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
                                      "/C12x4_simulation_G18_Q204_6GeV_plots.root";
     const char *plots_momResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
-                                           "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+                                             "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
                                            "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     //</editor-fold>
@@ -268,15 +278,19 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     TCanvas *c = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 1.25, utilities.GetStandardCanvasHeight() * 1.25); // normal res
-    c->cd()->SetGrid(), c->cd()->SetBottomMargin(0.14), c->cd()->SetLeftMargin(0.16), c->cd()->SetRightMargin(0.16), c->cd()->SetTopMargin(0.12), c->cd();
+    c->cd()->SetGrid(), c->cd()->SetBottomMargin(0.14), c->cd()->SetLeftMargin(0.16), c->cd()->SetRightMargin(0.16), c->cd()->SetTopMargin(
+            0.12), c->cd();
 
     TList *MScThesisPlots = new TList();
     string listName = EventSelectionSimFolder + "/" + SampleName + ".root";
     const char *TListName = listName.c_str();
 
     //<editor-fold desc="Preselection">
+    cout << "\n\n\nPlotting preselection cut plots\n";
 
     //<editor-fold desc="Vertex plots">
+    cout << "\n\n\nPlotting vertex cuts plots\n";
+
     /* Before cuts */
     HistPlotter1D(c, MScThesisPlots, plots_NO_CUTS,
                   "V_{z}^{e} (1e cut)", SampleName,
@@ -373,6 +387,8 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="Vertex correlation plots">
+    cout << "\n\n\nPlotting vertex correlation cuts plots\n";
+
     /* Before cuts */
     HistPlotter1D(c, MScThesisPlots, plots_NO_CUTS,
                   "Vertex corr. dV^{p}_{z} (1e cut, FD)", SampleName,
@@ -461,6 +477,8 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="DC fiducial cuts">
+    cout << "\n\n\nPlotting vertex DC fiducial cuts plots\n";
+
     /* Before cuts */
     HistPlotter2D(c, MScThesisPlots, plots_NO_CUTS_DC,
                   "dc_hitmap_before_1", SampleName,
@@ -527,6 +545,8 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="Electron ID">
+    cout << "\n\n\nPlotting Electron ID plots\n";
+
     /* Before cuts */
     HistPlotter2D(c, MScThesisPlots, NO_CUTS_beta_VS_P_no_clas12ana,
                   "#beta vs. P (all particles, no #(e) cut, CD)", SampleName,
@@ -597,6 +617,8 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="Proton ID">
+    cout << "\n\n\nPlotting Proton ID plots\n";
+
     /* Before cuts */
     HistPlotter1D(c, MScThesisPlots, plots_woChi2,
                   "#chi^{2}_{p} (1e cut, FD)", SampleName,
@@ -634,6 +656,13 @@ void MScThesisPlotter() {
                   "#Delta#phi for small #Delta#theta_{pFD/pCD} - ZOOMIN", SampleName,
                   ProtonIDFolderSimBC, "05_dPhi_pFD_pCD_for_small_dTheta_pFD_pCD_2p");
 
+    HistPlotter2D(c, MScThesisPlots, plots_woChi2,
+                  "P_{p} vs. #theta_{p} (1e cut, FD)", SampleName,
+                  ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_FD");
+    HistPlotter2D(c, MScThesisPlots, plots_woChi2,
+                  "P_{p} vs. #theta_{p} (1e cut, CD)", SampleName,
+                  ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_CD");
+
     /* After cuts */
     HistPlotter1D(c, MScThesisPlots, plots_NC,
                   "#theta_{p_{1},p_{2}} (All Int., 2p)", SampleName,
@@ -652,20 +681,29 @@ void MScThesisPlotter() {
     HistPlotter2D(c, MScThesisPlots, plots_NC,
                   "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName,
                   ProtonIDFolderSimAC, "04_theta_pFD_vs_pCD_for_small_theta_pFD_pCD_2p");
+
+    HistPlotter2D(c, MScThesisPlots, plots_NC,
+                  "P_{p} vs. #theta_{p} (1e cut, FD)", SampleName,
+                  ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_FD");
+    HistPlotter2D(c, MScThesisPlots, plots_NC,
+                  "P_{p} vs. #theta_{p} (1e cut, CD)", SampleName,
+                  ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_CD");
     //</editor-fold>
 
     //<editor-fold desc="Neutrals ID">
+    cout << "\n\n\nPlotting Neutrals ID plots\n";
+
     /* ECAL veto before cuts */
-    HistPlotter2D(c, MScThesisPlots, plots_NC,
+    HistPlotter2D(c, MScThesisPlots, plots_woChi2,
                   "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e} BV (1e cut, FD)", SampleName,
                   NeutralsFDIDFolderSimBC, "01_ECAL_veto_LnFD_e_1e_cut");
-    HistPlotter2D(c, MScThesisPlots, plots_NC,
+    HistPlotter2D(c, MScThesisPlots, plots_woChi2,
                   "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} BV (1e cut, FD)", SampleName,
                   NeutralsFDIDFolderSimBC, "01_ECAL_veto_LnFD_pDF_1e_cut");
-    HistPlotter2D(c, MScThesisPlots, plots_NC,
+    HistPlotter2D(c, MScThesisPlots, plots_woChi2,
                   "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e} BV (1e cut, FD)", SampleName,
                   NeutralsFDIDFolderSimBC, "02_ECAL_veto_nFD_e_1e_cut");
-    HistPlotter2D(c, MScThesisPlots, plots_NC,
+    HistPlotter2D(c, MScThesisPlots, plots_woChi2,
                   "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD} BV (1e cut, FD)", SampleName,
                   NeutralsFDIDFolderSimBC, "02_ECAL_veto_nFD_pFD_1e_cut");
 
@@ -684,23 +722,31 @@ void MScThesisPlotter() {
                   NeutralsFDIDFolderSimAC, "02_ECAL_veto_nFD_pFD_1e_cut");
 
     /* Before nFD momentum threshold */
-    HistPlotter1D(c, MScThesisPlots, plots_noNC,
-                  "Reco FD neutrons momentum (1e cut, FD)", SampleName,
-                  NeutralsFDIDFolderSimBC, "03a_P_nFD_1e_cut_FD");
-    HistPlotter1D(c, MScThesisPlots, plots_noNC,
-                  "Reco FD neutron momentum - ZOOMOUT (1e cut, FD)", SampleName,
-                  NeutralsFDIDFolderSimBC, "03b_P_nFD_ZOOMOUT_1e_cut_FD");
+    HistPlotter1D(c, MScThesisPlots, plots_woChi2,
+                  "FD neutron momentum BPID (1e_cut, FD)", SampleName,
+                  NeutralsFDIDFolderSimBC, "03a_P_nFD_BPID_1e_cut_FD");
+//    HistPlotter1D(c, MScThesisPlots, plots_woChi2,
+//                  "Reco FD neutrons momentum BPID (1e cut, FD)", SampleName,
+//                  NeutralsFDIDFolderSimBC, "03a_P_nFD_BPID_1e_cut_FD");
+    HistPlotter1D(c, MScThesisPlots, plots_woChi2,
+                  "FD neutron momentum BPID - ZOOMOUT (1e_cut, FD)", SampleName,
+                  NeutralsFDIDFolderSimBC, "03b_P_nFD_ZOOMOUT_BPID_1e_cut_FD");
+//    HistPlotter1D(c, MScThesisPlots, plots_woChi2,
+//                  "Reco FD neutron momentum BPID - ZOOMOUT (1e cut, FD)", SampleName,
+//                  NeutralsFDIDFolderSimBC, "03b_P_nFD_ZOOMOUT_1e_cut_FD");
 
     /* After nFD momentum threshold */
     HistPlotter1D(c, MScThesisPlots, plots_NC,
-                  "Reco FD neutrons momentum APID (1e cut, FD)", SampleName,
-                  NeutralsFDIDFolderSimAC, "03a_P_nFD_1e_cut_FD");
+                  "FD neutron momentum APID (1e_cut, FD)", SampleName,
+                  NeutralsFDIDFolderSimAC, "03a_P_nFD_APID_1e_cut_FD");
     HistPlotter1D(c, MScThesisPlots, plots_NC,
-                  "Reco FD neutron momentum APID - ZOOMOUT (1e cut, FD)", SampleName,
-                  NeutralsFDIDFolderSimAC, "03b_P_nFD_ZOOMOUT_1e_cut_FD");
+                  "FD neutron momentum APID - ZOOMOUT (1e_cut, FD)", SampleName,
+                  NeutralsFDIDFolderSimAC, "03b_P_nFD_ZOOMOUT_APID_1e_cut_FD");
     //</editor-fold>
 
     //<editor-fold desc="Pions ID">
+    cout << "\n\n\nPlotting Pions ID plots\n";
+
     /* Before cuts */
     HistPlotter1D(c, MScThesisPlots, plots_woChi2,
                   "#chi^{2}_{#pi^{+}} (1e cut, FD)", SampleName,
@@ -715,6 +761,19 @@ void MScThesisPlotter() {
                   "#chi^{2}_{#pi^{-}} (1e cut, CD)", SampleName,
                   PionsIDFolderSimBC, "02_chi2_pim_CD_1e_cut");
 
+    HistPlotter2D(c, MScThesisPlots, plots_woChi2,
+                  "P_{#pi^{+}} vs. #theta_{#pi^{+}} (1e cut, FD)", SampleName,
+                  PionsIDFolderSimBC, "05_P_pip_vs_Theta_pip_1e_cut_FD");
+    HistPlotter2D(c, MScThesisPlots, plots_woChi2,
+                  "P_{#pi^{+}} vs. #theta_{#pi^{+}} (1e cut, CD)", SampleName,
+                  PionsIDFolderSimBC, "05_P_pip_vs_Theta_pip_1e_cut_CD");
+    HistPlotter2D(c, MScThesisPlots, plots_woChi2,
+                  "P_{#pi^{-}} vs. #theta_{#pi^{-}} (1e cut, FD)", SampleName,
+                  PionsIDFolderSimBC, "05_P_pim_vs_Theta_pim_1e_cut_FD");
+    HistPlotter2D(c, MScThesisPlots, plots_woChi2,
+                  "P_{#pi^{-}} vs. #theta_{#pi^{-}} (1e cut, CD)", SampleName,
+                  PionsIDFolderSimBC, "05_P_pim_vs_Theta_pim_1e_cut_CD");
+
     HistPlotter1D(c, MScThesisPlots, plots_NC,
                   "CD & FD Piplus momentum #epsilon_{eff} (1e cut)", SampleName,
                   PionsIDFolderSimBC, "03_P_pip_eff_1e_cut");
@@ -724,6 +783,8 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="Other particles ID">
+    cout << "\n\n\nPlotting Other particles ID plots\n";
+
     /* Before cuts */
     HistPlotter1D(c, MScThesisPlots, plots_woChi2,
                   "#chi^{2}_{D} (1e cut, FD)", SampleName,
@@ -747,6 +808,8 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="AMaps">
+    cout << "\n\n\nPlotting AMaps plots\n";
+
     string TL_root_file_prefix = "01_AMap_TL_-_C12x4_simulation_G18_Q204_6GeV.root";
     string Reco_root_file_prefix = "02_AMap_Reco_-_C12x4_simulation_G18_Q204_6GeV.root";
     string Ratio_root_file_prefix = "03_AMap_Ratio_-_C12x4_simulation_G18_Q204_6GeV.root";
@@ -778,7 +841,9 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="Efficiency">
-    /* No fiducial cuts */
+    cout << "\n\n\nPlotting Efficiency plots\n";
+
+    /* No fiducial cuts & no momentum th. */
     HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg,
                   "Electron momentum #epsilon_{eff} (1p)", SampleName,
                   EfficiencyRegFolderSim, "01_electron_mom_eff_1p");
@@ -807,37 +872,97 @@ void MScThesisPlotter() {
                   "Neutron theta #epsilon_{eff} (1n)", SampleName,
                   EfficiencyRegFolderSim, "04_neutron_theta_eff_1n");
 
-//    /* With fiducial cuts */
-//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-//                  "Electron momentum #epsilon_{eff} (1p)", SampleName,
-//                  EfficiencyWithFCFolderSim, "01_electron_mom_eff_1p");
-//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-//                  "Electron theta #epsilon_{eff} (1p)", SampleName,
-//                  EfficiencyWithFCFolderSim, "01_electron_theta_eff_1p");
-//
-//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-//                  "FD Proton momentum #epsilon_{eff} (1p)", SampleName,
-//                  EfficiencyWithFCFolderSim, "02_proton_mom_eff_1p");
-//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-//                  "Proton theta #epsilon_{eff} (1p)", SampleName,
-//                  EfficiencyWithFCFolderSim, "02_proton_theta_eff_1p");
-//
-//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-//                  "Electron momentum #epsilon_{eff} (1n)", SampleName,
-//                  EfficiencyWithFCFolderSim, "03_electron_mom_eff_1n");
-//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-//                  "Electron theta #epsilon_{eff} (1n)", SampleName,
-//                  EfficiencyWithFCFolderSim, "03_electron_theta_eff_1n");
-//
-//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-//                  "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName,
-//                  EfficiencyWithFCFolderSim, "04_neutron_mom_eff_1n");
-//    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
-//                  "Neutron theta #epsilon_{eff} (1n)", SampleName,
-//                  EfficiencyWithFCFolderSim, "04_neutron_theta_eff_1n");
+    /* No fiducial cuts & with momentum th. */
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg_wMomTh,
+                  "Electron momentum #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyRegFolderSim, "01_electron_mom_eff_1p_wMomTh");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg_wMomTh,
+                  "Electron theta #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyRegFolderSim, "01_electron_theta_eff_1p_wMomTh");
+
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg_wMomTh,
+                  "FD Proton momentum #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyRegFolderSim, "02_proton_mom_eff_1p_wMomTh");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg_wMomTh,
+                  "Proton theta #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyRegFolderSim, "02_proton_theta_eff_1p_wMomTh");
+
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg_wMomTh,
+                  "Electron momentum #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyRegFolderSim, "03_electron_mom_eff_1n_wMomTh");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg_wMomTh,
+                  "Electron theta #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyRegFolderSim, "03_electron_theta_eff_1n_wMomTh");
+
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg_wMomTh,
+                  "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyRegFolderSim, "04_neutron_mom_eff_1n_wMomTh");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_reg_wMomTh,
+                  "Neutron theta #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyRegFolderSim, "04_neutron_theta_eff_1n_wMomTh");
+
+    /* With fiducial cuts & no momentum th. */
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+                  "Electron momentum #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyWithFCFolderSim, "01_electron_mom_eff_1p");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+                  "Electron theta #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyWithFCFolderSim, "01_electron_theta_eff_1p");
+
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+                  "FD Proton momentum #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyWithFCFolderSim, "02_proton_mom_eff_1p");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+                  "Proton theta #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyWithFCFolderSim, "02_proton_theta_eff_1p");
+
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+                  "Electron momentum #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyWithFCFolderSim, "03_electron_mom_eff_1n");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+                  "Electron theta #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyWithFCFolderSim, "03_electron_theta_eff_1n");
+
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+                  "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyWithFCFolderSim, "04_neutron_mom_eff_1n");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC,
+                  "Neutron theta #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyWithFCFolderSim, "04_neutron_theta_eff_1n");
+
+    /* With fiducial cuts & with momentum th. */
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC_wMomTh,
+                  "Electron momentum #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyWithFCFolderSim, "01_electron_mom_eff_1p_wMomTh");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC_wMomTh,
+                  "Electron theta #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyWithFCFolderSim, "01_electron_theta_eff_1p_wMomTh");
+
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC_wMomTh,
+                  "FD Proton momentum #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyWithFCFolderSim, "02_proton_mom_eff_1p_wMomTh");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC_wMomTh,
+                  "Proton theta #epsilon_{eff} (1p)", SampleName,
+                  EfficiencyWithFCFolderSim, "02_proton_theta_eff_1p_wMomTh");
+
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC_wMomTh,
+                  "Electron momentum #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyWithFCFolderSim, "03_electron_mom_eff_1n_wMomTh");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC_wMomTh,
+                  "Electron theta #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyWithFCFolderSim, "03_electron_theta_eff_1n_wMomTh");
+
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC_wMomTh,
+                  "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyWithFCFolderSim, "04_neutron_mom_eff_1n_wMomTh");
+    HistPlotter1D(c, MScThesisPlots, plots_Efficiency_wFC_wMomTh,
+                  "Neutron theta #epsilon_{eff} (1n)", SampleName,
+                  EfficiencyWithFCFolderSim, "04_neutron_theta_eff_1n_wMomTh");
     //</editor-fold>
 
     //<editor-fold desc="momRes">
+    cout << "\n\n\nPlotting Efficiency plots\n";
+
     /* Mean fit before correction */
     GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted neutron resolution slice width", "g_Std_pol1_wKC",
                    SampleName, MomResS1FolderSim, "01_g_Std_pol1_wKC");

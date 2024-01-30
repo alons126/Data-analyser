@@ -24,7 +24,7 @@
 //#include "../source/classes/DSCuts/DSCuts.h"
 //#include "../source/classes/hPlots/hPlot1D.cpp"
 //#include "../source/classes/hPlots/hPlot2D.cpp"
-//#include "../source/classes/NeutronResolution/NeutronResolution.cpp"
+//#include "../source/classes/MomentumResolution/MomentumResolution.cpp"
 //#include "../source/classes/TLCuts/TLCuts.cpp"
 //#include "../source/functions/AngleCalc/GetBinFromAng.h"
 //#include "../source/functions/FitFunctions/BetaFit.h"
@@ -76,7 +76,7 @@ using namespace std;
 #include "../source/functions/to_string_with_precision.h"
 #include "../source/constants.h"
 
-#include "../source/classes/NeutronResolution/NeutronResolution.cpp"
+#include "../source/classes/MomentumResolution/MomentumResolution.cpp"
 
 using namespace std;
 */
@@ -169,7 +169,7 @@ void PoliFitter() {
 //    std::string ACorrDirectory = DataDirectory + "AcceptanceCorrections" + "/";
 //    std::string AcceptanceMapsDirectory = DataDirectory + "AcceptanceMaps" + "/";
 //    std::string AcceptanceWeightsDirectory = DataDirectory + "AcceptanceWeights" + "/";
-//    std::string NeutronResolutionDirectory = DataDirectory + "NeutronResolution" + "/";
+//    std::string MomentumResolutionDirectory = DataDirectory + "MomentumResolution" + "/";
 //    std::string NucleonCutsDirectory = DataDirectory + "NucleonCuts" + "/";
 //    std::string PIDCutsDirectory = DataDirectory + "PIDCuts" + "/";
 //
@@ -181,9 +181,9 @@ void PoliFitter() {
 //    const string SmearMode = "pol1", CorrMode = "pol1";
 //    bool nRes_test = false; // false by default
 
-//    NeutronResolution nRes;
-//    nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", /* beamE */ 5.98636, /*n_mom_th.GetLowerCut()*/ 0.4,
-//                             /* directories.Resolution_Directory_map["pRes_plots_1p_Directory"] */ "03_1n/02_Neutron_resolution_plots_1n",
+//    MomentumResolution nRes;
+//    nRes = MomentumResolution(SampleName, NucleonCutsDirectory, "Neutron", /* beamE */ 5.98636, /*n_mom_th.GetLowerCut()*/ 0.4,
+//                             /* directories.Resolution_Directory_map["pRes_plots_1p_Directory"] */ "03_1n/01_Neutron_resolution_plots_1n",
 //                             DeltaSlices, VaryingDelta, SmearMode, CorrMode, nRes_test);
 
     Double_t x[] = {1, 2, 3, 4, 5, 6, 7, 8};

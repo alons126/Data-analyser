@@ -42,7 +42,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/classes/DSCuts/DSCuts.h"
 #include "source/classes/hPlots/hPlot1D.cpp"
 #include "source/classes/hPlots/hPlot2D.cpp"
-#include "source/classes/NeutronResolution/NeutronResolution.cpp"
+#include "source/classes/MomentumResolution/MomentumResolution.cpp"
 #include "source/classes/TLCuts/TLCuts.cpp"
 #include "source/functions/AngleCalc/GetBinFromAng.h"
 #include "source/functions/FitFunctions/BetaFit.h"
@@ -1110,7 +1110,7 @@ void EventAnalyser() {
 // Acceptance correction data -------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Acceptance correction">
-    /* Neutron resolution fits is handled completely by the NeutronResolution class */
+    /* Neutron resolution fits is handled completely by the MomentumResolution class */
     cout << "\nSetting acceptance correction data...";
 
     bool save_ACorr_data = false;
@@ -1130,7 +1130,7 @@ void EventAnalyser() {
 // Neutron resolution & proton smearing ---------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Neutron resolution">
-    /* Neutron resolution fits is handled completely by the NeutronResolution class */
+    /* Neutron resolution fits is handled completely by the MomentumResolution class */
     cout << "\nSetting neutron resolution data...";
 
     if (!calculate_truth_level) { plot_and_fit_MomRes = false; } // Disable resolution-realted operations if not calculating TL plots
@@ -1141,47 +1141,47 @@ void EventAnalyser() {
 //    if (apply_nucleon_SmearAndCorr) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
 
     //<editor-fold desc="Neutron resolution class declaration & definition">
-    NeutronResolution nRes, pRes;
+    MomentumResolution nRes, pRes;
 
     if (plot_and_fit_MomRes) {
-        nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
-                                 NeutronResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
+        nRes = MomentumResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
+                                 MomentumResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
                                  CorrMode, nRes_test);
-        pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
-                                 NeutronResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
+        pRes = MomentumResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), Calculate_momResS2, Run_in_momResS2,
+                                 MomentumResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
                                  CorrMode, nRes_test);
 
         if (nRes_test) {
             if (Calculate_momResS2) { // if Calculate_momResS2 = true => load everything from momResS1 files
                 /* Load neutron correction fit parameters */
                 nRes.ReadResDataParam(
-                        (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                        (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                         Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                 /* Load proton smearing fit parameters */
                 nRes.ReadResDataParam(
-                        (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                        (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                         Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
             } else { // if Calculate_momResS2 = false => load everything from either momResS1 or momResS2
                 if (Run_in_momResS2) { // if Calculate_momResS2 = false and Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                     /* Load proton smearing fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                 } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
                     /* Load neutron correction fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
                     /* Load proton smearing fit parameters */
                     nRes.ReadResDataParam(
-                            (NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+                            (MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                             Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
                 }
             }
@@ -1191,19 +1191,19 @@ void EventAnalyser() {
 
         if (Run_in_momResS2) { // if Run_in_momResS2 = true => load everything correction from momResS1 and smearing from momResS2
             /* Load neutron correction fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+            nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                   Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+            nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS2_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                   Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
         } else { // if Calculate_momResS2 = false and Run_in_momResS2 = false => load both correction and smearing from momResS1
             /* Load neutron correction fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+            nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                   Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, true, false);
 
             /* Load proton smearing fit parameters */
-            nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
+            nRes.ReadResDataParam((MomentumResolutionDirectory + "Res_data_-_" + VaryingSampleName + "/Neutron_momResS1_fit_param_-_" + VaryingSampleName + ".par").c_str(),
                                   Calculate_momResS2, VaryingSampleName, NucleonCutsDirectory, false, true);
         }
     }
@@ -8685,24 +8685,24 @@ void EventAnalyser() {
 
         //<editor-fold desc="Neutral particles' identification (FD only)">
         /* Get FD neutrons and photons, according to the definitions: */
-        vector<int> FD_Neutrons, FD_Photons;                                                          // FD neutrons and photons to be set by definition
-        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons);                              // Get FD neutrons and photons, according to the definitions (ORIGINAL!)
-//        FDNeutralParticle(allParticles, electrons, FD_Neutrons, FD_Photons, Neutron_veto_cut, beamE);      // Get FD neutrons and photons, according to the definitions
+        vector<int> ReDef_neutrons_FD, ReDef_photons_FD;                                                          // FD neutrons and photons to be set by definition
+        FDNeutralParticle(allParticles, ReDef_neutrons_FD, FD_Photons);                              // Get FD neutrons and photons, according to the definitions (ORIGINAL!)
+//        FDNeutralParticle(allParticles, electrons, ReDef_neutrons_FD, FD_Photons, Neutron_veto_cut, beamE);      // Get FD neutrons and photons, according to the definitions
 
         /* Get FD neutrons and photons above momentum threshold: */
-        vector<int> NeutronsFD_ind, PhotonsFD_ind;                                                    // FD neutrons and photons by definition - within momentum th.
-        FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_nucleon_cuts);
-        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts); // FD neutron (with momentum th.) with maximal momentum (ORIGINAL!)
-//        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts, apply_nucleon_SmearAndCorr, nRes); // FD neutron (with momentum th.) with maximal momentum after correction
+        vector<int> IDed_neutrons_FD, PhotonsFD_ind;                                                    // FD neutrons and photons by definition - within momentum th.
+        FDNeutralParticleID(allParticles, IDed_neutrons_FD, ReDef_neutrons_FD, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_nucleon_cuts);
+        int IDed_neutrons_FD_mom_max = GetLnFDIndex(allParticles, IDed_neutrons_FD, apply_nucleon_cuts); // FD neutron (with momentum th.) with maximal momentum (ORIGINAL!)
+//        int IDed_neutrons_FD_mom_max = GetLnFDIndex(allParticles, IDed_neutrons_FD, apply_nucleon_cuts, apply_nucleon_SmearAndCorr, nRes); // FD neutron (with momentum th.) with maximal momentum after correction
 
         //<editor-fold desc="Counting events with good FD neutrons">
-        if (NeutronsFD_ind.size() == 1) {
+        if (IDed_neutrons_FD.size() == 1) {
             ++num_of_events_1n_in_FD;
-        } else if (NeutronsFD_ind.size() == 2) {
+        } else if (IDed_neutrons_FD.size() == 2) {
             ++num_of_events_2n_in_FD;
-        } else if (NeutronsFD_ind.size() == 3) {
+        } else if (IDed_neutrons_FD.size() == 3) {
             ++num_of_events_3n_in_FD;
-        } else if (NeutronsFD_ind.size() > 3) {
+        } else if (IDed_neutrons_FD.size() > 3) {
             ++num_of_events_Xn_in_FD;
         }
         //</editor-fold>
@@ -8779,17 +8779,17 @@ void EventAnalyser() {
         if (ES_by_leading_FDneutron) {
 
             //<editor-fold desc="Safety checks that leading nFD is neutron by definition">
-            if (NeutronsFD_ind_mom_max != -1) {
-                bool LeadingnFDPCAL = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
-                bool LeadingnFDECIN = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
-                bool LeadingnFDECOUT = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+            if (IDed_neutrons_FD_mom_max != -1) {
+                bool LeadingnFDPCAL = (allParticles[IDed_neutrons_FD_mom_max]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
+                bool LeadingnFDECIN = (allParticles[IDed_neutrons_FD_mom_max]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+                bool LeadingnFDECOUT = (allParticles[IDed_neutrons_FD_mom_max]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
-                if (allParticles[NeutronsFD_ind_mom_max]->getRegion() != FD) {
+                if (allParticles[IDed_neutrons_FD_mom_max]->getRegion() != FD) {
                     cout << "\n\nLeading reco nFD check: Leading nFD is not in the FD! Exiting...\n\n", exit(0);
                 }
 
-                if (!((allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 2112) || (allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 22))) {
-                    cout << "\n\nLeading reco nFD check: A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid()
+                if (!((allParticles[IDed_neutrons_FD_mom_max]->par()->getPid() == 2112) || (allParticles[IDed_neutrons_FD_mom_max]->par()->getPid() == 22))) {
+                    cout << "\n\nLeading reco nFD check: A neutron PDG is not 2112 or 22 (" << allParticles[IDed_neutrons_FD_mom_max]->par()->getPid()
                          << ")! Exiting...\n\n", exit(
                             0);
                 }
@@ -8801,17 +8801,17 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Safety check for leading nFD assignment">
-            if ((NeutronsFD_ind.size() > 0) && (NeutronsFD_ind_mom_max == -1)) {
+            if ((IDed_neutrons_FD.size() > 0) && (IDed_neutrons_FD_mom_max == -1)) {
                 cout << "\n\nLeading reco nFD check: leading was not assigned! Exiting...\n\n", exit(0);
             }
 
-            if (NeutronsFD_ind.size() == 1) {
-                if (NeutronsFD_ind.at(0) != NeutronsFD_ind_mom_max) {
+            if (IDed_neutrons_FD.size() == 1) {
+                if (IDed_neutrons_FD.at(0) != IDed_neutrons_FD_mom_max) {
                     cout << "\n\nLeading reco nFD check: leading was assigned incorrectly! Exiting...\n\n", exit(0);
                 }
-            } else if (NeutronsFD_ind.size() > 1) {
-                for (int &i: NeutronsFD_ind) {
-                    double Leading_neutron_momentum = GetFDNeutronP(allParticles[NeutronsFD_ind_mom_max], apply_nucleon_cuts);
+            } else if (IDed_neutrons_FD.size() > 1) {
+                for (int &i: IDed_neutrons_FD) {
+                    double Leading_neutron_momentum = GetFDNeutronP(allParticles[IDed_neutrons_FD_mom_max], apply_nucleon_cuts);
                     double Temp_neutron_momentum = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
                     double dMomentum = Leading_neutron_momentum - Temp_neutron_momentum;
 
@@ -8826,26 +8826,26 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Safety checks for FD neutrons">
-//        if (NeutronsFD_ind.size() > 0) { cout << "\n\n"; }
+//        if (IDed_neutrons_FD.size() > 0) { cout << "\n\n"; }
 
-        for (int i = 0; i < NeutronsFD_ind.size(); i++) {
-            double Reco_Neutron_Momentum = GetFDNeutronP(allParticles[NeutronsFD_ind.at(i)], apply_nucleon_cuts);
+        for (int i = 0; i < IDed_neutrons_FD.size(); i++) {
+            double Reco_Neutron_Momentum = GetFDNeutronP(allParticles[IDed_neutrons_FD.at(i)], apply_nucleon_cuts);
 
             if (!((Reco_Neutron_Momentum <= n_mom_th.GetUpperCut()) && (Reco_Neutron_Momentum >= n_mom_th.GetLowerCut()))) {
-                cout << "\n\nallParticles[NeutronsFD_ind.at(i)]->par()->getPid() = " << allParticles[NeutronsFD_ind.at(i)]->par()->getPid() << "\n";
+                cout << "\n\nallParticles[IDed_neutrons_FD.at(i)]->par()->getPid() = " << allParticles[IDed_neutrons_FD.at(i)]->par()->getPid() << "\n";
                 cout << "Reco_Neutron_Momentum = " << Reco_Neutron_Momentum << "\n";
                 cout << "n_mom_th.GetUpperCut() = " << n_mom_th.GetUpperCut() << "\n";
                 cout << "n_mom_th.GetLowerCut() = " << n_mom_th.GetLowerCut() << "\n";
                 cout << "\n\nFD neutron check: there are FD neutrons outside momentum th. range! Exiting...\n\n", exit(0);
             }
 
-            for (int j = i + 1; j < NeutronsFD_ind.size(); j++) {
-                if (NeutronsFD_ind.at(i) == NeutronsFD_ind.at(j)) { cout << "\n\nFD neutron check: duplicated FD neutrons! Exiting...\n\n", exit(0); }
+            for (int j = i + 1; j < IDed_neutrons_FD.size(); j++) {
+                if (IDed_neutrons_FD.at(i) == IDed_neutrons_FD.at(j)) { cout << "\n\nFD neutron check: duplicated FD neutrons! Exiting...\n\n", exit(0); }
             }
 
-//            if (NeutronsFD_ind.size() > 0) {
-//                cout << "allParticles[NeutronsFD_ind.at(i)]->par()->getPid() = " << allParticles[NeutronsFD_ind.at(i)]->par()->getPid() << "\n";
-//                cout << "NeutronsFD_ind.at(" << i << ") = " << NeutronsFD_ind.at(i) << "\n";
+//            if (IDed_neutrons_FD.size() > 0) {
+//                cout << "allParticles[IDed_neutrons_FD.at(i)]->par()->getPid() = " << allParticles[IDed_neutrons_FD.at(i)]->par()->getPid() << "\n";
+//                cout << "IDed_neutrons_FD.at(" << i << ") = " << IDed_neutrons_FD.at(i) << "\n";
 //            }
         }
         //</editor-fold>
@@ -11592,7 +11592,7 @@ void EventAnalyser() {
                 //<editor-fold desc="Neutron momentum (1p)">
                 for (int &i: NeutronsFD_ind) { hP_n_APID_1p_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_1p); } // after mom. th.
 
-                for (int &i: FD_Neutrons) { hP_n_BPID_1p_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_1p); } // before mom. th.
+                for (int &i: ReDef_neutrons_FD) { hP_n_BPID_1p_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_1p); } // before mom. th.
                 //</editor-fold>
 
                 //</editor-fold>
@@ -12109,7 +12109,7 @@ void EventAnalyser() {
                 }
 
                 /* FD Neutrons before mom. th. */
-                for (int &i: FD_Neutrons) {
+                for (int &i: ReDef_neutrons_FD) {
                     hP_n_BPID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_1n);
                     hP_n_BPID_1n_ZOOMOUT_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_1n);
                 }
@@ -12917,7 +12917,7 @@ void EventAnalyser() {
             //<editor-fold desc="Neutron momentum (2p)">
             for (int &i: NeutronsFD_ind) { hP_n_APID_2p_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // after mom. th.
 
-            for (int &i: FD_Neutrons) { hP_n_BPID_2p_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // before mom. th.
+            for (int &i: ReDef_neutrons_FD) { hP_n_BPID_2p_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // before mom. th.
             //</editor-fold>
 
             //</editor-fold>
@@ -13518,7 +13518,7 @@ void EventAnalyser() {
                 //<editor-fold desc="Neutron momentum (pFDpCD)">
                 for (int &i: NeutronsFD_ind) { hP_n_APID_pFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_pFDpCD); } // after mom. th.
 
-                for (int &i: FD_Neutrons) { hP_n_BPID_pFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_pFDpCD); } // before mom. th.
+                for (int &i: ReDef_neutrons_FD) { hP_n_BPID_pFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_pFDpCD); } // before mom. th.
                 //</editor-fold>
 
                 //</editor-fold>
@@ -14303,7 +14303,7 @@ void EventAnalyser() {
                     hP_n_APIDandNS_nFDpCD_FD.hFill(nRes.NCorr(apply_nucleon_SmearAndCorr, TempNeutonMomentum), Weight_nFDpCD);
                 } // after mom. th.
 
-                for (int &i: FD_Neutrons) { hP_n_BPID_nFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_nFDpCD); } // before mom. th.
+                for (int &i: ReDef_neutrons_FD) { hP_n_BPID_nFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_nFDpCD); } // before mom. th.
                 //</editor-fold>
 
                 //</editor-fold>
@@ -20102,8 +20102,8 @@ void EventAnalyser() {
 
         if (plot_and_fit_MomRes) {
             pRes.SliceFitDrawAndSave(SampleName, "Proton", beamE);
-            pRes.LogResDataToFile(SampleName, "Proton", plots_path, NeutronResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
-            pRes.DrawAndSaveResSlices(SampleName, "Proton", c1, plots_path, NeutronResolutionDirectory);
+            pRes.LogResDataToFile(SampleName, "Proton", plots_path, MomentumResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+            pRes.DrawAndSaveResSlices(SampleName, "Proton", c1, plots_path, MomentumResolutionDirectory);
         }
         //</editor-fold>
 
@@ -20135,8 +20135,8 @@ void EventAnalyser() {
 
         if (plot_and_fit_MomRes) {
             nRes.SliceFitDrawAndSave(SampleName, "Neutron", beamE);
-            nRes.LogResDataToFile(SampleName, "Neutron", plots_path, NeutronResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
-            nRes.DrawAndSaveResSlices(SampleName, "Neutron", c1, plots_path, NeutronResolutionDirectory);
+            nRes.LogResDataToFile(SampleName, "Neutron", plots_path, MomentumResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+            nRes.DrawAndSaveResSlices(SampleName, "Neutron", c1, plots_path, MomentumResolutionDirectory);
         }
         //</editor-fold>
 
@@ -20793,8 +20793,8 @@ void EventAnalyser() {
     myLogFile << "SmearMode = " << nRes.Get_SmearMode() << "\n\n";
     myLogFile << "Smearing loading path:\n" << nRes.Get_Loaded_Std_coefficients_path() << "\n\n";
 
-    vector<double> Std_coefficients_values = nRes.Get_Loaded_Std_coefficients_values();
-    vector <string> Std_coefficients_names = nRes.Get_Loaded_Std_coefficients_names();
+    vector<double> Std_coefficients_values = nRes.Get_Loaded_Smear_coefficients_values();
+    vector <string> Std_coefficients_names = nRes.Get_Loaded_Smear_coefficients_names();
 
     for (int i = 0; i < Std_coefficients_values.size(); i++) { myLogFile << Std_coefficients_names.at(i) << " = " << Std_coefficients_values.at(i) << "\n"; }
 
@@ -20819,8 +20819,8 @@ void EventAnalyser() {
         myLogFile << "SmearMode = " << nRes.Get_SmearMode() << "\n\n";
         myLogFile << "Smearing loading path:\n" << nRes.Get_Loaded_Std_coefficients_path() << "\n\n";
 
-        vector<double> Std_coefficients_values = nRes.Get_Loaded_Std_coefficients_values();
-        vector <string> Std_coefficients_names = nRes.Get_Loaded_Std_coefficients_names();
+        vector<double> Std_coefficients_values = nRes.Get_Loaded_Smear_coefficients_values();
+        vector <string> Std_coefficients_names = nRes.Get_Loaded_Smear_coefficients_names();
 
         for (int i = 0; i < Std_coefficients_values.size(); i++) { myLogFile << Std_coefficients_names.at(i) << " = " << Std_coefficients_values.at(i) << "\n"; }
 

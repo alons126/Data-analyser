@@ -55,7 +55,7 @@ void GetTruthLevelCuts(const string &SampleName, bool calculate_truth_level, boo
         vector<int> TL_Electron_ind, TL_Neutrons_ind, TL_Protons_ind, TL_piplus_ind, TL_piminus_ind, TL_pizero_ind, TL_Photons_ind, TL_OtherPart_ind;
 
         /* Particle index vectors (for FD particles) */
-        vector<int> TL_ElectronFD_ind, TL_NeutronsFD_ind, TL_ProtonsFD_ind, TL_ProtonsCD_ind, TL_pi0FD_ind, TL_PhotonsFD_ind;
+        vector<int> TL_ElectronFD_ind, TL_IDed_neutrons_FD, TL_ProtonsFD_ind, TL_ProtonsCD_ind, TL_pi0FD_ind, TL_PhotonsFD_ind;
 
         /* Particle index vectors (for particles above momentum threshold) */
         vector<int> TL_Electron_mom_ind, TL_Neutrons_mom_ind, TL_Protons_mom_ind, TL_piplus_mom_ind, TL_piminus_mom_ind, TL_pizero_mom_ind, TL_Photons_mom_ind;
@@ -117,7 +117,7 @@ void GetTruthLevelCuts(const string &SampleName, bool calculate_truth_level, boo
                     if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCutConst()) &&
                         (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCutConst())) { TL_NeutronsFD_mom_ind.push_back(i); }
 
-                    TL_NeutronsFD_ind.push_back(i);
+                    TL_IDed_neutrons_FD.push_back(i);
                 }
             } else if (particlePDGtmp == 2212) {
                 if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCutConst()) &&

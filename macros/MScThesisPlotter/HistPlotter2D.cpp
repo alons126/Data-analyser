@@ -123,23 +123,20 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         Histogram2D->Draw();
         displayText->Draw();
     } else if (Histogram2D->Integral() != 0.) {
-        Histogram2D->Draw("colz");
-
-        gPad->Update();
-
         if (findSubstring(Histogram2DNameCopy, "dc_hitmap")) {
+
             ShowStats = false;
 
             Histogram2D->GetXaxis()->SetTitle("x [cm]");
             Histogram2D->GetYaxis()->SetTitle("y [cm]");
-        }
-
-        if (findSubstring(Histogram2DNameCopy, "#beta vs. P")) {
+            Histogram2D->Draw("colz"), gPad->Update();
+        } else if (findSubstring(Histogram2DNameCopy, "#beta vs. P") &&
+                   !(Histogram2DNameCopy == "#beta vs. P (electrons only, 1e cut)")) {
             if ((Histogram2DNameCopy == "#beta vs. P (all particles, no #(e) cut, CD)") ||
                 (Histogram2DNameCopy == "#beta vs. P (all particles, no #(e) cut, FD)") ||
                 (Histogram2DNameCopy == "#beta vs. P (all particles, 1e cut, CD)") ||
                 (Histogram2DNameCopy == "#beta vs. P (all particles, 1e cut, FD)")) {
-//            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
+                Histogram2D->Draw("colz"), gPad->Update();
 
                 TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
                 EquiLine->SetLineWidth(3);
@@ -175,10 +172,10 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 //            beta_electron->SetLineColor(8);
 
             }
-        }
-
-        if ((Histogram2DNameCopy == "SF vs. P_{e} BC (1e cut, FD)") || (Histogram2DNameCopy == "SF vs. P_{e} (1e cut, FD)")) {
-//            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
+        } else if ((Histogram2DNameCopy == "SF vs. P_{e} BC (1e cut, FD)") || (Histogram2DNameCopy == "SF vs. P_{e} (1e cut, FD)")) {
+            Histogram2D->SetTitle("Electron sampling fraction vs. momentum in ^{12}C(e,e')");
+            Histogram2D->GetYaxis()->SetTitle("f_{e}");
+            Histogram2D->Draw("colz"), gPad->Update();
 
             TLine *UpperFScut = new TLine(gPad->GetUxmin(), 0.28, gPad->GetUxmax(), 0.28);
             UpperFScut->SetLineWidth(3);
@@ -189,19 +186,29 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerFScut->SetLineWidth(3);
             LowerFScut->SetLineColor(kRed);
             LowerFScut->Draw("same");
-        }
+        } else if ((Histogram2DNameCopy == "Vcal vs. SF BC (1e cut, PCAL)" || Histogram2DNameCopy == "Wcal vs. SF BC (1e cut, PCAL)") ||
+                   (Histogram2DNameCopy == "Vcal vs. SF (1e cut, PCAL)" || Histogram2DNameCopy == "Wcal vs. SF (1e cut, PCAL)")) {
+            if ((Histogram2DNameCopy == "Vcal vs. SF BC (1e cut, PCAL)") || (Histogram2DNameCopy == "Vcal vs. SF (1e cut, PCAL)")) {
+                Histogram2D->SetTitle("PCAL #font[12]{l}_{V} coordinate vs. SF in ^{12}C(e,e')");
+                Histogram2D->GetXaxis()->SetTitle("#font[12]{l}_{V} [cm]");
+            } else if ((Histogram2DNameCopy == "Wcal vs. SF BC (1e cut, PCAL)") || (Histogram2DNameCopy == "Wcal vs. SF (1e cut, PCAL)")) {
+                Histogram2D->SetTitle("PCAL #font[12]{l}_{W} coordinate vs. SF in ^{12}C(e,e')");
+                Histogram2D->GetXaxis()->SetTitle("#font[12]{l}_{W} [cm]");
+            }
 
-        if ((Histogram2DNameCopy == "Vcal vs. SF BC (1e cut, PCAL)" || Histogram2DNameCopy == "Wcal vs. SF BC (1e cut, PCAL)") ||
-            (Histogram2DNameCopy == "Vcal vs. SF (1e cut, PCAL)" || Histogram2DNameCopy == "Wcal vs. SF (1e cut, PCAL)")) {
+            Histogram2D->GetYaxis()->SetTitle("f_{e}");
+            Histogram2D->Draw("colz"), gPad->Update();
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
             TLine *LowerECALcoorCut = new TLine(14., gPad->GetUymin(), 14., gPad->GetUymax());
             LowerECALcoorCut->SetLineWidth(3);
             LowerECALcoorCut->SetLineColor(kRed);
             LowerECALcoorCut->Draw("same");
-        }
-
-        if (Histogram2DNameCopy == "#beta vs. P (electrons only, 1e cut)") {
+        } else if (Histogram2DNameCopy == "#beta vs. P (electrons only, 1e cut)") {
+            Histogram2D->SetTitle("Electron #beta_{e} vs. momentum in ^{12}C(e,e')");
+            Histogram2D->GetXaxis()->SetTitle("P_{e} [GeV/c]");
+            Histogram2D->GetYaxis()->SetTitle("#beta_{e}");
+            Histogram2D->Draw("colz"), gPad->Update();
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
             TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
@@ -213,10 +220,20 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             UpperBetaElectronCut->SetLineWidth(3);
             UpperBetaElectronCut->SetLineColor(kRed);
             UpperBetaElectronCut->Draw("same");
-        }
+        } else if (Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC (2p, CD-CTOF)" ||
+                   Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC (2p, CD-CTOF)") {
 
-        if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)" ||
-            Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)") {
+//            if (Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC (2p, CD-CTOF)") {
+//                Histogram2D->SetTitle("#theta_{p_{1},p_{2}} vs. CTOF time-of-flight difference");
+//                Histogram2D->SetTitle("#theta_{p_{1},p_{2}} vs. CTOF time-of-flight difference");
+//            } else if (Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC (2p, CD-CTOF)") {
+//                Histogram2D->SetTitle("#theta_{p_{1},p_{2}} vs. CTOF hit position difference");
+//            }
+
+            Histogram2D->Draw("colz"), gPad->Update();
+        } else if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)" ||
+                   Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)") {
+            Histogram2D->Draw("colz"), gPad->Update();
 //            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
 //            TGraph *ClusterCenter = new TGraph();
@@ -228,12 +245,12 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             TLine *UpperThetapFDcut = new TLine(gPad->GetUxmin(), 45., gPad->GetUxmax(), 45.);
             UpperThetapFDcut->SetLineWidth(3);
-            UpperThetapFDcut->SetLineColor(kBlue);
+            UpperThetapFDcut->SetLineColor(kGreen);
             UpperThetapFDcut->Draw("same");
 
             TLine *LowerThetapFDcut = new TLine(gPad->GetUxmin(), 35., gPad->GetUxmax(), 35.);
             LowerThetapFDcut->SetLineWidth(3);
-            LowerThetapFDcut->SetLineColor(kBlue);
+            LowerThetapFDcut->SetLineColor(kGreen);
             LowerThetapFDcut->Draw("same");
 
             TLine *UpperThetapCDcut = new TLine(45., gPad->GetUymin(), 45., gPad->GetUymax());
@@ -245,11 +262,90 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerThetapCDcut->SetLineWidth(3);
             LowerThetapCDcut->SetLineColor(kRed);
             LowerThetapCDcut->Draw("same");
-        }
+        } else if (findSubstring(Histogram2DNameCopy, "P_{p} vs. #theta_{p}")) {
+            ShowStats = false;
 
-//        if (findSubstring(Histogram2DNameCopy, "AMaps") || findSubstring(Histogram2DNameCopy, "WMaps")) {
-//
-//        }
+            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
+            double LowerMomentumTh = 0.4;
+
+
+            if (findSubstring(Histogram2DNameCopy, "FD")) {
+                Histogram2D->SetTitle("Forward-going proton momentum vs. scattering angle in ^{12}C(e,e')");
+            } else if (findSubstring(Histogram2DNameCopy, "CD")) {
+                Histogram2D->SetTitle("Central-going proton momentum vs. scattering angle in ^{12}C(e,e')");
+            }
+
+            Histogram2D->Draw("colz"), gPad->Update();
+
+            TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, gPad->GetUymax());
+            LowerMomTh->SetLineWidth(3);
+            LowerMomTh->SetLineColor(kRed);
+            LowerMomTh->Draw("same");
+
+            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset,
+                                      Legend_y2_OneLine + yOffset);
+
+            TLegendEntry *LowerMomThEntry;
+
+            LowerMomThEntry = Legend->AddEntry(LowerMomTh,
+                                               ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+            Histogram2D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
+
+            Legend->SetTextSize(0.03);
+            Legend->SetTextAlign(12);
+            Legend->Draw("same");
+        } else if (findSubstring(Histogram2DNameCopy, "P_{#pi^{+}} vs. #theta_{#pi^{+}}") ||
+                   findSubstring(Histogram2DNameCopy, "P_{#pi^{-}} vs. #theta_{#pi^{-}}")) {
+            ShowStats = false;
+
+            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
+            double LowerMomentumTh = 0.2;
+
+            if (findSubstring(Histogram2DNameCopy, "P_{#pi^{+}} vs. #theta_{#pi^{+}}")) {
+                if (findSubstring(Histogram2DNameCopy, "FD")) {
+                    Histogram2D->SetTitle("Forward-going #pi^{+} momentum vs. scattering angle in ^{12}C(e,e')");
+                } else if (findSubstring(Histogram2DNameCopy, "CD")) {
+                    Histogram2D->SetTitle("Central-going #pi^{+} momentum vs. scattering angle in ^{12}C(e,e')");
+                }
+            } else if (findSubstring(Histogram2DNameCopy, "P_{#pi^{-}} vs. #theta_{#pi^{-}}")) {
+                if (findSubstring(Histogram2DNameCopy, "FD")) {
+                    Histogram2D->SetTitle("Forward-going #pi^{-} momentum vs. scattering angle in ^{12}C(e,e')");
+                } else if (findSubstring(Histogram2DNameCopy, "CD")) {
+                    Histogram2D->SetTitle("Central-going #pi^{-} momentum vs. scattering angle in ^{12}C(e,e')");
+                }
+            }
+
+            Histogram2D->Draw("colz"), gPad->Update();
+
+            TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, gPad->GetUymax());
+            LowerMomTh->SetLineWidth(3);
+            LowerMomTh->SetLineColor(kRed);
+            LowerMomTh->Draw("same");
+
+            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset,
+                                      Legend_y2_OneLine + yOffset);
+
+            TLegendEntry *LowerMomThEntry;
+
+            if (findSubstring(Histogram2DNameCopy, "#pi^{+}")) {
+                LowerMomThEntry = Legend->AddEntry(LowerMomTh,
+                                                   ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) +
+                                                    " [GeV/c]").c_str(), "l");
+                Histogram2D->GetXaxis()->SetTitle("P_{#pi^{+}} [GeV/c]");
+            } else if (findSubstring(Histogram2DNameCopy, "#pi^{-}")) {
+                LowerMomThEntry = Legend->AddEntry(LowerMomTh,
+                                                   ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]")
+                                                           .c_str(), "l");
+                Histogram2D->GetXaxis()->SetTitle("P_{#pi^{-}} [GeV/c]");
+            }
+
+            Legend->SetTextSize(0.03);
+            Legend->SetTextAlign(12);
+            Legend->Draw("same");
+        } else {
+            Histogram2D->Draw("colz"), gPad->Update();
+
+        }
     }
 
     gStyle->SetStatX(0.87);
