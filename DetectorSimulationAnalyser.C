@@ -472,7 +472,10 @@ void EventAnalyser() {
     DSCuts Nucleon_momentum_cut = DSCuts("Nucleon momentum cut", "FD", "", "", 0, n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut());
 //    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 4.); // Original mom. KC
 //    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 3.); // Larry meeting (10/08/23)
-    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 2.5); // Adi meeting (29/01/24)
+
+    // E4nu meeting (29/01/24):
+    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 2.5);
+    DSCuts FD_nucleon_momentum_cut_nRes = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 2.2);
     //</editor-fold>
 
     //</editor-fold>
@@ -684,18 +687,18 @@ void EventAnalyser() {
         ToF_plots = false;
 
         /* Efficiency plots */
-        Efficiency_plots = true;
-//        Efficiency_plots = false;
-        TL_after_Acceptance_Maps_plots = true;
-//        TL_after_Acceptance_Maps_plots = false;
+//        Efficiency_plots = true;
+        Efficiency_plots = false;
+//        TL_after_Acceptance_Maps_plots = true;
+        TL_after_Acceptance_Maps_plots = false;
 
         /* Resolution plots */
 //        AMaps_plots = true;
         AMaps_plots = false;
 
         /* Resolution plots */
-//        Resolution_plots = true;
-        Resolution_plots = false;
+        Resolution_plots = true;
+//        Resolution_plots = false;
 
         /* Multiplicity plots */
 //        Multiplicity_plots = true;
@@ -1028,10 +1031,10 @@ void EventAnalyser() {
     MomentumResolution nRes("Neutron"), pRes("Proton");
 
     nRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE,
-                    FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), MomentumResolutionDirectory,
+                    FD_nucleon_momentum_cut_nRes, n_mom_th.GetLowerCut(), MomentumResolutionDirectory,
                     directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode, CorrMode, momRes_test);
     pRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE,
-                    FD_nucleon_momentum_cut, p_mom_th.GetLowerCut(), MomentumResolutionDirectory,
+                    FD_nucleon_momentum_cut_nRes, p_mom_th.GetLowerCut(), MomentumResolutionDirectory,
                     directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode, CorrMode, momRes_test,
                     ForceSmallpResLimits);
 
@@ -11998,7 +12001,8 @@ void EventAnalyser() {
             //<editor-fold desc="FD neutrons">
 
             //<editor-fold desc="FD neutrons (BPID, clas12pid)">
-            if (neutrons.size() != 0) { hMultiplicity_Neutrons_By_clas12pid_BPID_BV_1e_cut_FD.hFill(neutrons.size(), Weight); }
+            hMultiplicity_Neutrons_By_clas12pid_BPID_BV_1e_cut_FD.hFill(neutrons.size(), Weight);
+//            if (neutrons.size() != 0) { hMultiplicity_Neutrons_By_clas12pid_BPID_BV_1e_cut_FD.hFill(neutrons.size(), Weight); }
             //</editor-fold>
 
             //<editor-fold desc="FD neutrons (BPID)">
@@ -12040,10 +12044,12 @@ void EventAnalyser() {
                 }
             }
 
-            if (Neutron_multiplicity_BPID_AV_1e_cut_FD != 0) {
-                hMultiplicity_Neutrons_By_Redef_BPID_AV_1e_cut_FD.hFill(Neutron_multiplicity_BPID_AV_1e_cut_FD, Weight);
-            }
-            if (FD_Neutrons.size() != 0) { hMultiplicity_Neutrons_By_Redef_BPID_BV_1e_cut_FD.hFill(FD_Neutrons.size(), Weight); }
+            hMultiplicity_Neutrons_By_Redef_BPID_AV_1e_cut_FD.hFill(Neutron_multiplicity_BPID_AV_1e_cut_FD, Weight);
+            hMultiplicity_Neutrons_By_Redef_BPID_BV_1e_cut_FD.hFill(FD_Neutrons.size(), Weight);
+//            if (Neutron_multiplicity_BPID_AV_1e_cut_FD != 0) {
+//                hMultiplicity_Neutrons_By_Redef_BPID_AV_1e_cut_FD.hFill(Neutron_multiplicity_BPID_AV_1e_cut_FD, Weight);
+//            }
+//            if (FD_Neutrons.size() != 0) { hMultiplicity_Neutrons_By_Redef_BPID_BV_1e_cut_FD.hFill(FD_Neutrons.size(), Weight); }
             //</editor-fold>
 
             //<editor-fold desc="FD neutrons (APID)">
@@ -12085,10 +12091,12 @@ void EventAnalyser() {
                 }
             }
 
-            if (Neutron_multiplicity_APID_AV_1e_cut_FD != 0) {
-                hMultiplicity_Neutrons_By_Redef_APID_AV_1e_cut_FD.hFill(Neutron_multiplicity_APID_AV_1e_cut_FD, Weight);
-            }
-            if (NeutronsFD_ind.size() != 0) { hMultiplicity_Neutrons_By_Redef_APID_BV_1e_cut_FD.hFill(NeutronsFD_ind.size(), Weight); }
+            hMultiplicity_Neutrons_By_Redef_APID_AV_1e_cut_FD.hFill(Neutron_multiplicity_APID_AV_1e_cut_FD, Weight);
+            hMultiplicity_Neutrons_By_Redef_APID_BV_1e_cut_FD.hFill(NeutronsFD_ind.size(), Weight);
+//            if (Neutron_multiplicity_APID_AV_1e_cut_FD != 0) {
+//                hMultiplicity_Neutrons_By_Redef_APID_AV_1e_cut_FD.hFill(Neutron_multiplicity_APID_AV_1e_cut_FD, Weight);
+//            }
+//            if (NeutronsFD_ind.size() != 0) { hMultiplicity_Neutrons_By_Redef_APID_BV_1e_cut_FD.hFill(NeutronsFD_ind.size(), Weight); }
             //</editor-fold>
 
             //</editor-fold>
@@ -13489,8 +13497,10 @@ void EventAnalyser() {
                                      P_e_1p_3v.Pz() + P_p_1p_3v.Pz() - Pvz);
                 hTheta_q_p_p_vs_p_N_q_1p->Fill(P_N_1p_3v.Mag() / q_1p_3v.Mag(), Theta_q_p_p_1p, Weight_1p);
 
-                if (FD_Neutrons.size() != 0) { hMultiplicity_Neutrons_By_Redef_BPID_BV_1p_FD.hFill(FD_Neutrons.size(), Weight); }
-                if (NeutronsFD_ind.size() != 0) { hMultiplicity_Neutrons_By_Redef_APID_BV_1p_FD.hFill(NeutronsFD_ind.size(), Weight); }
+                hMultiplicity_Neutrons_By_Redef_BPID_BV_1p_FD.hFill(FD_Neutrons.size(), Weight);
+                hMultiplicity_Neutrons_By_Redef_APID_BV_1p_FD.hFill(NeutronsFD_ind.size(), Weight);
+//                if (FD_Neutrons.size() != 0) { hMultiplicity_Neutrons_By_Redef_BPID_BV_1p_FD.hFill(FD_Neutrons.size(), Weight); }
+//                if (NeutronsFD_ind.size() != 0) { hMultiplicity_Neutrons_By_Redef_APID_BV_1p_FD.hFill(NeutronsFD_ind.size(), Weight); }
 
                 //<editor-fold desc="Fill resolution histograms (1p)">
                 if (plot_and_fit_MomRes) {
@@ -13800,8 +13810,10 @@ void EventAnalyser() {
 
             //<editor-fold desc="Applying neutron veto and Fillings 1n histograms">
             //TODO: move from here!
-            if (FD_Neutrons.size() != 0) { hMultiplicity_Neutrons_By_Redef_BPID_BV_1n_FD.hFill(FD_Neutrons.size(), Weight); }
-            if (NeutronsFD_ind.size() != 0) { hMultiplicity_Neutrons_By_Redef_APID_BV_1n_FD.hFill(NeutronsFD_ind.size(), Weight); }
+            hMultiplicity_Neutrons_By_Redef_BPID_BV_1n_FD.hFill(FD_Neutrons.size(), Weight);
+            hMultiplicity_Neutrons_By_Redef_APID_BV_1n_FD.hFill(NeutronsFD_ind.size(), Weight);
+//            if (FD_Neutrons.size() != 0) { hMultiplicity_Neutrons_By_Redef_BPID_BV_1n_FD.hFill(FD_Neutrons.size(), Weight); }
+//            if (NeutronsFD_ind.size() != 0) { hMultiplicity_Neutrons_By_Redef_APID_BV_1n_FD.hFill(NeutronsFD_ind.size(), Weight); }
 
             if (NeutronPassVeto_1n && Pass_Kin_Cuts_1n) {
                 ++num_of_events_1n_inFD_AV;
