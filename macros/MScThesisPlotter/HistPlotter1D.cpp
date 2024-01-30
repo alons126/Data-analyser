@@ -143,7 +143,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     Histogram1D->GetXaxis()->SetTitleSize(0.06);
     Histogram1D->GetXaxis()->SetLabelSize(0.0425);
     Histogram1D->GetXaxis()->CenterTitle(true);
-    Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+    Histogram1D->GetYaxis()->SetTitle("Number of events");
     Histogram1D->GetYaxis()->SetTitleSize(0.06);
     Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Histogram1D->GetYaxis()->CenterTitle(true);

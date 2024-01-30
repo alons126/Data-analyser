@@ -182,7 +182,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
 //            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
@@ -353,7 +353,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
@@ -505,7 +505,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 //        std::string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
         const char *HistogramTitle0 = title.c_str();
         Histogram1D->SetTitle(HistogramTitle0);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
 //            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
@@ -682,7 +682,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
@@ -834,7 +834,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 
         const char *HistogramTitle0 = title.c_str();
         Histogram1D->SetTitle(HistogramTitle0);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
@@ -981,7 +981,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
         }
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
@@ -1149,7 +1149,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
 
         const char *HistogramTitle0 = title.c_str();
         Histogram1D->SetTitle(HistogramTitle0);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
@@ -1338,7 +1338,7 @@ void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DC
 
         const char *HistogramTitle0 = title.c_str();
         Histogram1D->SetTitle(HistogramTitle0);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
@@ -1522,7 +1522,7 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
 
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        Histogram1D->GetYaxis()->SetTitle("Number of events");
 
         if (Histogram1D->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");

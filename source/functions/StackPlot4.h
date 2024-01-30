@@ -190,7 +190,7 @@ void StackPlot4(string &SampleName, TList *Histogram_list,
             HistogramStack->Draw();
             displayText->Draw();
         } else if (Histogram1->Integral() != 0.) {
-            HistogramStack->GetYaxis()->SetTitle("Arbitrary units (#events)");
+            HistogramStack->GetYaxis()->SetTitle("Number of events");
             HistogramStack->GetHistogram()->GetYaxis()->SetTitleSize(TitleSize);
         }
     }

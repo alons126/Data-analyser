@@ -723,7 +723,7 @@ void MomentumResolution::SliceFitDrawAndSave(const string &SampleName, const dou
 
         TH1D *hSlice = (TH1D *) ResSlices0.at(i).GetHistogram();
         hSlice->GetXaxis()->SetTitleSize(0.06), hSlice->GetXaxis()->SetLabelSize(0.0425), hSlice->GetXaxis()->CenterTitle(true);
-        hSlice->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        hSlice->GetYaxis()->SetTitle("Number of events");
         hSlice->GetYaxis()->SetTitleSize(0.06), hSlice->GetYaxis()->SetLabelSize(0.0425), hSlice->GetYaxis()->CenterTitle(true);
         hSlice->Sumw2();
 

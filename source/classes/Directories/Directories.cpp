@@ -1233,13 +1233,19 @@ Directories::Directories(const string &plots_path) {
     }
 
     Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"] = Plots_Folder + "/" + Multiplicity_Parent_Directory + "/" +
-                                                          Find(Multiplicity_Daughter_Folders, "01_1e_cut") + "/";
+                                                                  Find(Multiplicity_Daughter_Folders, "01_1e_cut") + "/";
 
     Multiplicity_Directory_map["Multiplicity_1p_Directory"] = Plots_Folder + "/" + Multiplicity_Parent_Directory + "/" +
-                                                          Find(Multiplicity_Daughter_Folders, "02_1p") + "/";
+                                                              Find(Multiplicity_Daughter_Folders, "02_1p") + "/";
 
     Multiplicity_Directory_map["Multiplicity_1n_Directory"] = Plots_Folder + "/" + Multiplicity_Parent_Directory + "/" +
-                                                          Find(Multiplicity_Daughter_Folders, "03_1n") + "/";
+                                                              Find(Multiplicity_Daughter_Folders, "03_1n") + "/";
+
+    Multiplicity_Directory_map["Multiplicity_pFDpCD_Directory"] = Plots_Folder + "/" + Multiplicity_Parent_Directory + "/" +
+                                                                  Find(Multiplicity_Daughter_Folders, "05_pFDpCD") + "/";
+
+    Multiplicity_Directory_map["Multiplicity_nFDpCD_Directory"] = Plots_Folder + "/" + Multiplicity_Parent_Directory + "/" +
+                                                                  Find(Multiplicity_Daughter_Folders, "06_nFDpCD") + "/";
     //</editor-fold>
 
 }

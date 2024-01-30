@@ -1,10 +1,52 @@
 
 #include "ExperimentParameters.h"
 
+// Constructor ----------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="Constructor">
+ExperimentParameters::ExperimentParameters(const string &AnalyseFilePath, const string &AnalyseFileSample) {
+    SampleName = ConfigureSampleName(AnalyseFilePath, AnalyseFileSample);
+    BeanEnergy = ConfigureBeanEnergy(SampleName);
+
+    if (SampleName.find("H1") <= SampleName[SampleName.size() - 1]) {
+        TargetElement = "H1";
+        TargetElementPDG = 1000010010;
+        TotalBaryonNumber_A = 1;
+        TotalChargeNumber_Z = 1;
+        StrangeQuarksNumber_L = IsomerNumber_I = 0;
+    } else if ((SampleName.find("c12") <= SampleName[SampleName.size() - 1]) || (SampleName.find("C12") <= SampleName[SampleName.size() - 1]) ||
+               (SampleName.find("12c") <= SampleName[SampleName.size() - 1]) || (SampleName.find("12C") <= SampleName[SampleName.size() - 1]) ||
+               (SampleName.find("_c_") <= SampleName[SampleName.size() - 1]) || (SampleName.find("_C_") <= SampleName[SampleName.size() - 1])) {
+        TargetElement = "C12";
+        TargetElementPDG = 1000060120;
+        TotalBaryonNumber_A = 12;
+        TotalChargeNumber_Z = 6;
+        StrangeQuarksNumber_L = IsomerNumber_I = 0;
+    } else if (SampleName.find("Ca48") <= SampleName[SampleName.size() - 1]) {
+        TargetElement = "Ca48";
+        TargetElementPDG = 1000200480;
+        TotalBaryonNumber_A = 48;
+        TotalChargeNumber_Z = 20;
+        StrangeQuarksNumber_L = IsomerNumber_I = 0;
+    } else if (SampleName.find("Ar40") <= SampleName[SampleName.size() - 1]) {
+        TargetElement = "Ar40";
+        TargetElementPDG = 1000180400;
+        TotalBaryonNumber_A = 40;
+        TotalChargeNumber_Z = 18;
+        StrangeQuarksNumber_L = IsomerNumber_I = 0;
+    } else {
+        TargetElement = "UNKOWN";
+        TargetElementPDG = -9999;
+        TotalBaryonNumber_A = TotalChargeNumber_Z = StrangeQuarksNumber_L = IsomerNumber_I = 0;
+    }
+}
+//</editor-fold>
+
 // ConfigureSampleName function -----------------------------------------------------------------------------------------------------------------------------------------
 
-std::string ExperimentParameters::ConfigureSampleName(const std::string &AnalyseFilePath, const std::string &AnalyseFileSample) {
-    std::string sName = "unknown_sample_598636MeV"; // to set beamE = 5.98636 by default;
+//<editor-fold desc="ConfigureSampleName function">
+string ExperimentParameters::ConfigureSampleName(const string &AnalyseFilePath, const string &AnalyseFileSample) {
+    string sName = "unknown_sample_598636MeV"; // to set beamE = 5.98636 by default;
 
     if ((AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") // Storage (D:)
         || (AnalyseFilePath == "mnt/g/e4nu/hipo_data_files") // Alon's Portable (G:)
@@ -143,6 +185,9 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
             } else if (AnalyseFileSample == "015195") {
                 BeamAt6GeV = DataSample = true;
                 sName = "C12x4_data_6GeV_run_015195";
+            } else if (AnalyseFileSample == "") {
+                BeamAt6GeV = DataSample = true;
+                sName = "C12x4_data_6GeV";
             }
         }
         //</editor-fold>
@@ -165,16 +210,16 @@ std::string ExperimentParameters::ConfigureSampleName(const std::string &Analyse
 
     return sName;
 }
+//</editor-fold>
 
 // ConfigureVaryingSampleName function -----------------------------------------------------------------------------------------------------------------------------------------
 
+//<editor-fold desc="ConfigureVaryingSampleName function">
 void ExperimentParameters::ConfigureVaryingSampleName(const string &sn) {
     if (findSubstring(sn, "sim")) { // Sample is simulation
         VaryingSampleName = SampleName;
     } else if (findSubstring(sn, "data")) { // Sample is data
         if (findSubstring(sn, "C12") && BeamAt6GeV) {
-            //TODO: change VaryingSampleName to simulation of a 4-foil!
-//            VaryingSampleName = "C12_simulation_G18_Q204_6GeV";
             VaryingSampleName = "C12x4_simulation_G18_Q204_6GeV";
         } else {
             cout << "\n\n\nExperimentParameters::GetVaryingSampleName: no corresponding simulation sample! Exiting...", exit(0);
@@ -183,15 +228,17 @@ void ExperimentParameters::ConfigureVaryingSampleName(const string &sn) {
         cout << "\n\n\nExperimentParameters::ConfigureVaryingSampleName: sample can't be configured! Exiting...", exit(0);
     }
 }
+//</editor-fold>
 
 // ConfigureVz_cuts function -----------------------------------------------------------------------------------------------------------------------------------------
 
+//<editor-fold desc="ConfigureVz_cuts function">
 void ExperimentParameters::ConfigureVz_cuts(const string &sn) {
     if (sn == "C12x4_simulation_G18_Q204_6GeV") { // 4-foil
         Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -7., 2.);
         Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -8., 3.);
         Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -7., 2.);
-    } else if (SampleName == "C12_simulation_G18_Q204_6GeV") { // 1-foil
+    } else if (sn == "C12_simulation_G18_Q204_6GeV") { // 1-foil
         Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -5, 5);
         Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -5, 5);
         Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -2, 1);
@@ -213,7 +260,11 @@ void ExperimentParameters::ConfigureVz_cuts(const string &sn) {
             Vz_cuts_FD = Vz_cuts_FD_def;
             Vz_cuts_CD = Vz_cuts_CD_def;
         }
-    } else if (SampleName == "LH2_data_6GeV_run_015032") {
+    } else if (sn == "C12x4_data_6GeV") { // Sample is data (full 4-foil run)
+        Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -7., 2.);
+        Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -7., 2.);
+        Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -7., 2.);
+    } else if (sn == "LH2_data_6GeV_run_015032") {
         Vz_cuts = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5);
         Vz_cuts_FD = DSCuts("Vertex z component", "FD", "", "1e cut", 0, -15, 5);
         Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -15, 5);
@@ -223,15 +274,17 @@ void ExperimentParameters::ConfigureVz_cuts(const string &sn) {
         Vz_cuts_CD = DSCuts("Vertex z component", "CD", "", "1e cut", 0, -5, 5);
     }
 }
+//</editor-fold>
 
 // ConfigureVz_cuts function -----------------------------------------------------------------------------------------------------------------------------------------
 
+//<editor-fold desc="ConfigureVz_cuts function">
 void ExperimentParameters::ConfiguredVz_cuts(const string &sn) {
     if (sn == "C12x4_simulation_G18_Q204_6GeV") { // 4-foil
         dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
         dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
         dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -5, 4);
-    } else if (SampleName == "C12_simulation_G18_Q204_6GeV") { // 1-foil
+    } else if (sn == "C12_simulation_G18_Q204_6GeV") { // 1-foil
         dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
         dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
         dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -5, 4);
@@ -253,7 +306,11 @@ void ExperimentParameters::ConfiguredVz_cuts(const string &sn) {
             dVz_cuts_FD = dVz_cuts_FD_def;
             dVz_cuts_CD = dVz_cuts_CD_def;
         }
-    } else if (SampleName == "LH2_data_6GeV_run_015032") {
+    } else if (sn == "C12x4_data_6GeV") { // Sample is data (full 4-foil run)
+        dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -5, 4);
+        dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -5, 4);
+        dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -5, 4);
+    } else if (sn == "LH2_data_6GeV_run_015032") {
         dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
         dVz_cuts_FD = DSCuts("dVz", "FD", "", "1e cut", 0, -8, 4);
         dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -8, 4);
@@ -263,9 +320,11 @@ void ExperimentParameters::ConfiguredVz_cuts(const string &sn) {
         dVz_cuts_CD = DSCuts("dVz", "CD", "", "1e cut", 0, -8, 4);
     }
 }
+//</editor-fold>
 
 // ConfigureBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------
 
+//<editor-fold desc="ConfigureBeanEnergy function">
 double ExperimentParameters::ConfigureBeanEnergy(const string &sn) {
     double be;
 
@@ -282,46 +341,49 @@ double ExperimentParameters::ConfigureBeanEnergy(const string &sn) {
 
     return be;
 }
+//</editor-fold>
 
 // GetBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------
 
+//<editor-fold desc="GetBeanEnergy function">
 double ExperimentParameters::GetBeanEnergy() { return BeanEnergy; }
+//</editor-fold>
 
-// ExperimentParameters function -----------------------------------------------------------------------------------------------------------------------------------------
+// AddToHipoChain function ----------------------------------------------------------------------------------------------------------------------------------------
 
-ExperimentParameters::ExperimentParameters(const string &AnalyseFilePath, const string &AnalyseFileSample) {
-    SampleName = ConfigureSampleName(AnalyseFilePath, AnalyseFileSample);
-    BeanEnergy = ConfigureBeanEnergy(SampleName);
+//<editor-fold desc="Description">
+void ExperimentParameters::AddToHipoChain(HipoChain &chain, const string &sn, const string &AnalyseFilePath, const string &AnalyseFileSample, const string &AnalyseFile) {
+    bool PrintOut = true;
 
-    if (SampleName.find("H1") <= SampleName[SampleName.size() - 1]) {
-        TargetElement = "H1";
-        TargetElementPDG = 1000010010;
-        TotalBaryonNumber_A = 1;
-        TotalChargeNumber_Z = 1;
-        StrangeQuarksNumber_L = IsomerNumber_I = 0;
-    } else if ((SampleName.find("c12") <= SampleName[SampleName.size() - 1]) || (SampleName.find("C12") <= SampleName[SampleName.size() - 1]) ||
-               (SampleName.find("12c") <= SampleName[SampleName.size() - 1]) || (SampleName.find("12C") <= SampleName[SampleName.size() - 1]) ||
-               (SampleName.find("_c_") <= SampleName[SampleName.size() - 1]) || (SampleName.find("_C_") <= SampleName[SampleName.size() - 1])) {
-        TargetElement = "C12";
-        TargetElementPDG = 1000060120;
-        TotalBaryonNumber_A = 12;
-        TotalChargeNumber_Z = 6;
-        StrangeQuarksNumber_L = IsomerNumber_I = 0;
-    } else if (SampleName.find("Ca48") <= SampleName[SampleName.size() - 1]) {
-        TargetElement = "Ca48";
-        TargetElementPDG = 1000200480;
-        TotalBaryonNumber_A = 48;
-        TotalChargeNumber_Z = 20;
-        StrangeQuarksNumber_L = IsomerNumber_I = 0;
-    } else if (SampleName.find("Ar40") <= SampleName[SampleName.size() - 1]) {
-        TargetElement = "Ar40";
-        TargetElementPDG = 1000180400;
-        TotalBaryonNumber_A = 40;
-        TotalChargeNumber_Z = 18;
-        StrangeQuarksNumber_L = IsomerNumber_I = 0;
-    } else {
-        TargetElement = "UNKOWN";
-        TargetElementPDG = -9999;
-        TotalBaryonNumber_A = TotalChargeNumber_Z = StrangeQuarksNumber_L = IsomerNumber_I = 0;
+    if (DataSample) {
+        if (sn == "C12x4_data_6GeV") {
+            if (AnalyseFileSample == "") {
+                /* Data in cache/clas12/rg-m/production/pass1/6gev/Cx4/dst/recon */
+                vector <string> Runs = {"015186", "015187", "015188", "015189", "015190", "015191", "015192", "015193", "015194", "015196", "015199", "015200", "015202",
+                                        "015203", "015204", "015205", "015206", "015207", "015210", "015212", "015213", "015214", "015215", "015217", "015219", "015220",
+                                        "015221", "015223", "015224", "015225", "015226", "015228", "015234", "015235", "015236", "015238", "015239", "015240", "015241",
+                                        "015242", "015243", "015245", "015246", "015247", "015248", "015249", "015250", "015252", "015253", "015254", "015255", "015257",
+                                        "015258", "015259", "015260", "015261", "015262", "015263", "015264", "015265", "015266", "015269", "015270", "015271", "015272",
+                                        "015273", "015274", "015275", "015278", "015279", "015280", "015282", "015283", "015284", "015286", "015287", "015288", "015289",
+                                        "015290", "015291", "015292", "015293", "015294", "015295", "015296", "015298", "015300", "015301", "015302", "015303", "015304",
+                                        "015305", "015306", "015307", "015308", "015309", "015310", "015311", "015312", "015313", "015314", "015316", "015317"};
+
+                for (int i = 0; i < Runs.size(); i++) {
+                    string TempAnalyseFile = "/" + AnalyseFilePath + "/" + Runs.at(i) + "/*.hipo";
+                    chain.Add(TempAnalyseFile.c_str());
+
+                    if (PrintOut) { cout << TempAnalyseFile << " directory added to HipoChain!\n"; }
+                }
+
+                if (PrintOut) { cout << "\n"; }
+            }
+        } else {
+            chain.Add(AnalyseFile.c_str());
+        }
+    } else if (SimulationSample) {
+        chain.Add(AnalyseFile.c_str());
+
+        if (PrintOut) { cout << AnalyseFile << " directory added to HipoChain!\n\n"; }
     }
 }
+//</editor-fold>

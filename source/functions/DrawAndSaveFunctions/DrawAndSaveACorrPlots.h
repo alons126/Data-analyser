@@ -522,7 +522,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const
     RPlot_Clone_test->GetXaxis()->SetTitleSize(0.06);
     RPlot_Clone_test->GetXaxis()->SetLabelSize(0.0425);
     RPlot_Clone_test->GetXaxis()->CenterTitle(true);
-    RPlot_Clone_test->GetYaxis()->SetTitle("Arbitrary units (#events)");
+    RPlot_Clone_test->GetYaxis()->SetTitle("Number of events");
     RPlot_Clone_test->GetYaxis()->SetTitleSize(0.06);
     RPlot_Clone_test->GetYaxis()->SetLabelSize(0.0425);
     RPlot_Clone_test->GetYaxis()->CenterTitle(true);
@@ -553,7 +553,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const
     RPlot_Clone_test_rebined->GetXaxis()->SetTitleSize(0.06);
     RPlot_Clone_test_rebined->GetXaxis()->SetLabelSize(0.0425);
     RPlot_Clone_test_rebined->GetXaxis()->CenterTitle(true);
-    RPlot_Clone_test_rebined->GetYaxis()->SetTitle("Arbitrary units (#events)");
+    RPlot_Clone_test_rebined->GetYaxis()->SetTitle("Number of events");
     RPlot_Clone_test_rebined->GetYaxis()->SetTitleSize(0.06);
     RPlot_Clone_test_rebined->GetYaxis()->SetLabelSize(0.0425);
     RPlot_Clone_test_rebined->GetYaxis()->CenterTitle(true);
@@ -585,7 +585,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const
     RPlot_Clone->GetXaxis()->SetTitleSize(0.06);
     RPlot_Clone->GetXaxis()->SetLabelSize(0.0425);
     RPlot_Clone->GetXaxis()->CenterTitle(true);
-    RPlot_Clone->GetYaxis()->SetTitle("Arbitrary units (#events)");
+    RPlot_Clone->GetYaxis()->SetTitle("Number of events");
     RPlot_Clone->GetYaxis()->SetTitleSize(0.06);
     RPlot_Clone->GetYaxis()->SetLabelSize(0.0425);
     RPlot_Clone->GetYaxis()->CenterTitle(true);

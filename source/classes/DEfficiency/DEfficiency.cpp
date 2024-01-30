@@ -171,7 +171,7 @@ void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, const string &Sample
     ACorrection_plot->GetXaxis()->SetTitleSize(0.06);
     ACorrection_plot->GetXaxis()->SetLabelSize(0.0425);
     ACorrection_plot->GetXaxis()->CenterTitle(true);
-    ACorrection_plot->GetYaxis()->SetTitle("Arbitrary units (#events)");
+    ACorrection_plot->GetYaxis()->SetTitle("Number of events");
     ACorrection_plot->GetYaxis()->SetTitleSize(0.06);
     ACorrection_plot->GetYaxis()->SetLabelSize(0.0425);
     ACorrection_plot->GetYaxis()->CenterTitle(true);
@@ -263,7 +263,7 @@ void DEfficiency::DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_l
     Histogram1D->GetXaxis()->SetTitleSize(0.06);
     Histogram1D->GetXaxis()->SetLabelSize(0.0425);
     Histogram1D->GetXaxis()->CenterTitle(true);
-    Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+    Histogram1D->GetYaxis()->SetTitle("Number of events");
     Histogram1D->GetYaxis()->SetTitleSize(0.06);
     Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Histogram1D->GetYaxis()->CenterTitle(true);

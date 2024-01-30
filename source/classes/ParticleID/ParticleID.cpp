@@ -1000,3 +1000,61 @@ void ParticleID::nParticleID(vector <region_part_ptr> &allParticles,
     } // end of loop over allparticle vector
 }
 //</editor-fold>
+
+// Fill neutron multiplicity plots functions -----------------------------------------------------------------------------------------------------
+
+//TODO: move from this class
+
+//<editor-fold desc="Neutrons by CLAS12PID">
+void ParticleID::FillNeutMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &Weight,
+                                    const double &beamE, const double &ECAL_veto_cut, hPlot1D &hNeutronMulti_BPID_BV,
+                                    hPlot1D &hNeutronMulti_BPID_AV, vector <region_part_ptr> &Neutrons_BPID, hPlot1D &hNeutronMulti_APID_BV,
+                                    hPlot1D &hNeutronMulti_APID_AV, vector <region_part_ptr> &Neutrons_APID) {
+    FillMultiPlots(allParticles, electrons, Weight, beamE, ECAL_veto_cut, hNeutronMulti_BPID_BV, hNeutronMulti_BPID_AV, Neutrons_BPID);
+    FillMultiPlots(allParticles, electrons, Weight, beamE, ECAL_veto_cut, hNeutronMulti_APID_BV, hNeutronMulti_APID_AV, Neutrons_APID);
+}
+
+void ParticleID::FillMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &Weight,
+                                const double &beamE, const double &ECAL_veto_cut, hPlot1D &hNeutronMulti_BV, hPlot1D &hNeutronMulti_AV,
+                                vector <region_part_ptr> &Neutrons) {
+    int Multiplicity_BV = Neutrons.size();
+    int Multiplicity_AV = 0;
+
+    for (int i = 0; i < allParticles.size(); i++) {
+        if ((allParticles[i]->par()->getCharge() == 0) && (allParticles[i]->par()->getPid() == 2112) && (allParticles[i]->getRegion() == FD)) {
+            bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, ECAL_veto_cut);
+
+            if (NeutronPassVeto_Test) { ++Multiplicity_AV; }
+        }
+    }
+
+    hNeutronMulti_BV.hFill(Multiplicity_BV, Weight);
+    hNeutronMulti_AV.hFill(Multiplicity_AV, Weight);
+}
+//</editor-fold>
+
+//<editor-fold desc="Neutrons by redefinition">
+void ParticleID::FillNeutMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &Weight,
+                                    const double &beamE, const double &ECAL_veto_cut, hPlot1D &hNeutronMulti_BPID_BV,
+                                    hPlot1D &hNeutronMulti_BPID_AV, vector<int> &Neutrons_BPID, hPlot1D &hNeutronMulti_APID_BV,
+                                    hPlot1D &hNeutronMulti_APID_AV, vector<int> &Neutrons_APID) {
+    FillMultiPlots(allParticles, electrons, Weight, beamE, ECAL_veto_cut, hNeutronMulti_BPID_BV, hNeutronMulti_BPID_AV, Neutrons_BPID);
+    FillMultiPlots(allParticles, electrons, Weight, beamE, ECAL_veto_cut, hNeutronMulti_APID_BV, hNeutronMulti_APID_AV, Neutrons_APID);
+}
+
+void ParticleID::FillMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons,
+                                const double &Weight, const double &beamE, const double &ECAL_veto_cut,
+                                hPlot1D &hNeutronMulti_BV, hPlot1D &hNeutronMulti_AV, vector<int> &Neutrons_indices) {
+    int Multiplicity_BV = Neutrons_indices.size();
+    int Multiplicity_AV = 0;
+
+    for (int &i: Neutrons_indices) {
+        bool NeutronPassVeto_Test = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, ECAL_veto_cut);
+
+        if (NeutronPassVeto_Test) { ++Multiplicity_AV; }
+    }
+
+    hNeutronMulti_BV.hFill(Multiplicity_BV, Weight);
+    hNeutronMulti_AV.hFill(Multiplicity_AV, Weight);
+}
+//</editor-fold>

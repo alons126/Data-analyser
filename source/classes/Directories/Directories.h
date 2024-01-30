@@ -162,44 +162,6 @@ private:
                                              "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/02_fPhotons_noPCAL_hit_plots_1n",
                                              "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/03_fPhotons_noPCAL_yesECIN_plots_1n",
                                              "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/01_fPhotons_All_plots_S1_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/02_fPhotons_noPCAL_hit_plots_S1_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/03_fPhotons_noPCAL_yesECIN_plots_S1_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S1_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/01_fPhotons_All_plots_S2_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/02_fPhotons_noPCAL_hit_plots_S2_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/03_fPhotons_noPCAL_yesECIN_plots_S2_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S2_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/01_fPhotons_All_plots_S3_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/02_fPhotons_noPCAL_hit_plots_S3_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/03_fPhotons_noPCAL_yesECIN_plots_S3_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S3_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/01_fPhotons_All_plots_S4_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/02_fPhotons_noPCAL_hit_plots_S4_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/03_fPhotons_noPCAL_yesECIN_plots_S4_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S4_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/01_fPhotons_All_plots_S5_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/02_fPhotons_noPCAL_hit_plots_S5_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/03_fPhotons_noPCAL_yesECIN_plots_S5_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S5_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/01_fPhotons_All_plots_S6_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/02_fPhotons_noPCAL_hit_plots_S6_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/03_fPhotons_noPCAL_yesECIN_plots_S6_1n",
-//                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S6_1n",
-
-//                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n",
-//                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/01_All_FD_neutrals_All_plots_1n",
-//                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/02_All_FD_neutrals_noPCAL_hit_plots_1n",
-//                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/03_All_FD_neutrals_noPCAL_yesECIN_plots_1n",
-//                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/04_All_FD_neutrals_noPCAL_noECIN_yesECOUT_plots_1n",
-//
-//                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n",
-//                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/01_FD_neutrals_noPDG0_All_plots_1n",
-//                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/02_FD_neutrals_noPDG0_noPCAL_hit_plots_1n",
-//                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/03_FD_neutrals_noPDG0_noPCAL_yesECIN_plots_1n",
-//                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/04_FD_neutrals_noPDG0_noPCAL_noECIN_yesECOUT_plots_1n",
-
                                              "01_Beta_fit_plots/03_1n/04_Beta_vs_other_variables_plots_1n",
 
                                              "01_Beta_fit_plots/06_nFDpCD",
@@ -306,7 +268,6 @@ private:
                                            "01_1e_cut",
                                            "02_1p",
                                            "03_1n",
-//                                               "04_1e2p",
                                            "04_2p",
                                            "05_pFDpCD",
                                            "06_nFDpCD"
@@ -317,7 +278,6 @@ private:
     bool create_E_e_Dir = true;
     string E_e_Parent_Directory = "06_E_e_plots";
     vector <string> E_e_Daughter_Folders = {"",
-
                                             "01_1e_cut",
                                             "01_1e_cut/E_e_plots_1e_cut", "01_1e_cut/E_e_VS_Theta_e_1e_cut",
 
@@ -526,23 +486,11 @@ private:
     bool create_Resolution_Dir = true;
     string Resolution_Parent_Directory = "13_Resolution_plots";
     vector <string> Resolution_Daughter_Folders = {"",
-//                                                       "01_1e_cut",
-//                                                       "01_1e_cut/01_Momentum_resolution_plots_1e_cut",
-
                                                    "02_1p",
                                                    "02_1p/01_Proton_resolution_plots_1p",
 
                                                    "03_1n",
                                                    "03_1n/01_Neutron_resolution_plots_1n",
-
-//                                                       "04_2p",
-//                                                       "04_2p/01_Momentum_resolution_plots_2p",
-
-//                                                       "05_pFDpCD",
-//                                                       "05_pFDpCD/01_Momentum_resolution_plots_pFDpCD",
-
-//                                                       "06_nFDpCD",
-//                                                       "06_nFDpCD/01_Momentum_resolution_plots_nFDpCD",
     };
     //</editor-fold>
 
@@ -551,10 +499,11 @@ private:
     string Multiplicity_Parent_Directory = "14_Multiplicity_plots";
     vector <string> Multiplicity_Daughter_Folders = {"",
                                                      "01_1e_cut",
-
                                                      "02_1p",
-
                                                      "03_1n",
+                                                     "05_pFDpCD",
+                                                     "06_nFDpCD",
+
     };
     //</editor-fold>
 
