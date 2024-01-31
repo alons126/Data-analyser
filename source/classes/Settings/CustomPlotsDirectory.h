@@ -27,6 +27,7 @@ private:
     string Added_PreStatuses, Added_Statuses;
 
     string Global_Run_Status = "v2";
+//    string Global_Run_Status = "noBetaTh_v2";
 
 public:
 
