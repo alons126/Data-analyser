@@ -768,7 +768,20 @@ void MomentumResolution::SliceFitDrawAndSave(const string &SampleName, const dou
                 }
             }
 
-            hSlice->Fit("fit");
+            if (MomentumType == "truth") {
+                if (TLSliceFitAlgorithm == "") {
+                    hSlice->Fit("fit");
+                } else if (TLSliceFitAlgorithm == "W") {
+                    hSlice->Fit("fit", "W");
+                }
+            } else if (MomentumType == "reco") {
+                if (RecoSliceFitAlgorithm == "") {
+                    hSlice->Fit("fit");
+                } else if (RecoSliceFitAlgorithm == "W") {
+                    hSlice->Fit("fit", "W");
+                }
+            }
+
             hSlice->SetLineColor(kBlue);
             hSlice->SetLineWidth(2);
 

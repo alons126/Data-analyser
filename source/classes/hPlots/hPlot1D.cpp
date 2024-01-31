@@ -3,6 +3,7 @@
 //
 
 #include "hPlot1D.h"
+
 #include "../../functions/GeneralFunctions.h"
 
 bool hPlot1D::findSubstring(std::string string1, std::string string2) {

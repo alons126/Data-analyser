@@ -33,8 +33,15 @@
 
 #include "clas12reader.h"
 
-//#include "../hPlots/hPlot1D.cpp"
+#if MomResDebugMacro
+#include "../hData/hData.cpp"
+#include "../hPlots/hPlot1D.cpp"
+#else
+
 #include "../hPlots/hPlot1D.h"
+
+#endif
+
 #include "../DSCuts/DSCuts.h"
 #include "../../functions/GeneralFunctions.h"
 
@@ -52,6 +59,8 @@ private:
 
     string SmearMode = "NONE", CorrMode = "NONE";
 
+    string RecoSliceFitAlgorithm = "", TLSliceFitAlgorithm = "";
+
     vector <hPlot1D> ResTLMomSlices, ResRecoMomSlices;
     vector <vector<double>> ResTLMomSlicesLimits, ResRecoMomSlicesLimits;
     vector <DSCuts> ResTLMomSlicesFitVar, ResRecoMomSlicesFitVar;
@@ -61,7 +70,6 @@ private:
     vector<int> FittedTLMomSlices, FittedRecoMomSlices;
 
     double SliceUpperMomLim; // upper lim for momentum slices - loaded from file
-
     double SliceUpperMomLimKC, SliceLowerMomLimKC; // lower lim for momentum slices - set by constructor
 
     double hSliceUpperLim = 1.1;

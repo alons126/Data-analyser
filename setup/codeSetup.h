@@ -2,6 +2,8 @@
 #ifndef ANALYSER_CODESETUP_H
 #define ANALYSER_CODESETUP_H
 
+#define MomResDebugMacro false
+
 #include "../source/constants.h"
 #include "../source/classes/Directories/Directories.cpp"
 #include "../source/classes/ExperimentParameters/ExperimentParameters.cpp"
@@ -24,7 +26,7 @@ std::string Ver = "DetSim testings";
    * Storage (D:) = d
    * Alon's Passport (F:) = h
    * Alon's Portable (G:) = g
- */
+*/
 
 // ======================================================================================================================================================================
 // Path definitions
