@@ -53,8 +53,11 @@ private:
     string MomResParticle = "";
 
     bool momResTestMode, momResS2CalcMode, momResS2RunMode;
+
     bool ForceSmallProtonResLimits = false;
+
     bool FitDebuggingMode = false;
+
     double Ebeam;
 
     string SmearMode = "NONE", CorrMode = "NONE";
