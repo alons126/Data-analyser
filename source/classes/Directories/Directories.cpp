@@ -4,48 +4,18 @@
 
 #include "Directories.h"
 
-// Private methods ------------------------------------------------------------------------------------------------------------------------------------------------------
-
-bool Directories::FindSubstring(string string1, string string2) {
-    if (string1.find(string2) != string::npos) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-string Directories::Find(vector <string> Vector, string String) {
-    for (string Element: Vector) {
-        if (FindSubstring(Element, String)) {
-            return Element;
-        }
-    }
-
-    return "";
-}
-
-// MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------
-
-void Directories::MakeDirectory(const bool &Create_Directory, const string &Plots_Parent_Folder, const string &Plots_Daughter_Folder,
-                                const bool &Clear_Parent_Folder_content,
-                                const string &Parent_Folder) {
-    string MakeDirectory = "mkdir -p " + Parent_Folder;
-    string RemoveDirectoryContent = "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*";
-
-    if (Clear_Parent_Folder_content == true && Create_Directory == true) {
-        system(RemoveDirectoryContent.c_str());
-        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
-    } else if (Clear_Parent_Folder_content == false && Create_Directory == true) {
-        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
-    }
-}
-
 // Constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Directories::Directories(const string &plots_path) {
+//<editor-fold desc="Constructor">
+Directories::Directories(const string &plots_path, const bool Clear_Old_Directories) {
+    ClearOldDirectories = Clear_Old_Directories;
+
     string Plots_Folder = plots_path; // Plots_Folder = Parent_Folder
     system(("mkdir -p " + Plots_Folder).c_str()); // clear old stuff in Parent_Folder
-    system(("rm -r " + Plots_Folder + "/*").c_str()); // clear old stuff in Parent_Folder
+
+    if (ClearOldDirectories) {
+        system(("rm -r " + Plots_Folder + "/*").c_str()); // clear old stuff in Parent_Folder
+    }
 
     //<editor-fold desc="Cut parameters plots directories">
 
@@ -1248,4 +1218,46 @@ Directories::Directories(const string &plots_path) {
                                                                   Find(Multiplicity_Daughter_Folders, "06_nFDpCD") + "/";
     //</editor-fold>
 
+}
+//</editor-fold>
+
+// Private methods ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+bool Directories::FindSubstring(string string1, string string2) {
+    if (string1.find(string2) != string::npos) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+string Directories::Find(vector <string> Vector, string String) {
+    for (string Element: Vector) {
+        if (FindSubstring(Element, String)) {
+            return Element;
+        }
+    }
+
+    return "";
+}
+
+// MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+void Directories::MakeDirectory(const bool &Create_Directory, const string &Plots_Parent_Folder, const string &Plots_Daughter_Folder, const bool &Clear_Parent_Folder_content,
+                                const string &Parent_Folder) {
+    string MakeDirectory = "mkdir -p " + Parent_Folder;
+    string RemoveDirectoryContent = "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*";
+
+    if (Create_Directory) {
+        if (Clear_Parent_Folder_content) { system(RemoveDirectoryContent.c_str()); }
+
+        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
+    }
+
+//    if (Clear_Parent_Folder_content == true && Create_Directory == true) {
+//        system(RemoveDirectoryContent.c_str());
+//        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
+//    } else if (Clear_Parent_Folder_content == false && Create_Directory == true) {
+//        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
+//    }
 }

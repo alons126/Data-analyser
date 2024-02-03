@@ -48,7 +48,7 @@ void EventAnalyser() {
     cout << "\t\t\tDetector simulation analyser\n";
     cout << "===========================================================================\n\n";
 
-    string AnalyserVersion = "Version 1.9";
+    string AnalyserVersion = "Version 1.10";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code setup                                                                               //
@@ -105,6 +105,7 @@ void EventAnalyser() {
     bool Eff_calc_with_one_reco_electron = true;
     bool Calc_inc_p_eff_with_extended_theta = false;
     bool Calc_1n_n_eff_with_smaller_theta = false;
+    bool Calc_eff_overlapping_FC = true;
     bool Rec_wTL_ES = false; // Calculate efficiency - force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
@@ -129,14 +130,14 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
-    bool Calculate_momResS2 = false; // Calculate momResS2 variables
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool Calculate_momResS2 = true; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const bool ForceSmallpResLimits = false; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
-    bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
+    bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
     bool momRes_test = false; // false by default
     /*
     MomRes run order guide:
@@ -181,16 +182,16 @@ void EventAnalyser() {
 
     // My analysis cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = false; // apply neutron upper mom. th.
+    bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndCorr = true;
+    bool apply_nucleon_SmearAndCorr = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -232,6 +233,9 @@ void EventAnalyser() {
         /* if Rec_wTL_ES = true, there are no momentum thresholds, and we get an infinite loop in the nRes slice calculations!
            Additionally, there is no need to calculate the resolution and efficiency in the same time! */
         plot_and_fit_MomRes = false;
+    } else if (!Rec_wTL_ES) {
+        /* if Rec_wTL_ES = false, keep fiducial cuts with the overlapping maps! (safety measure) */
+        Calc_eff_overlapping_FC = true;
     }
 
     if (!plot_and_fit_MomRes) { Calculate_momResS2 = false; }
@@ -451,7 +455,10 @@ void EventAnalyser() {
 
     // E4nu meeting (29/01/24):
     DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 2.5);
-    DSCuts FD_nucleon_momentum_cut_nRes = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 2.2);
+
+    DSCuts MomRes_mu_cuts = DSCuts("MomRes_mu_cuts", "FD", "", "Protons and neutrons", 0, FD_nucleon_momentum_cut.GetLowerCut(), 2.2);
+    DSCuts MomRes_sigma_cuts = DSCuts("MomRes_sigma_cuts", "FD", "", "Protons and neutrons", 0, FD_nucleon_momentum_cut.GetLowerCut(), 2.5);
+//    DSCuts MomRes_sigma_cuts = DSCuts("MomRes_sigma_cuts", "FD", "", "Protons and neutrons", 0, FD_nucleon_momentum_cut.GetLowerCut(), 2.2);
     //</editor-fold>
 
     //</editor-fold>
@@ -471,9 +478,9 @@ void EventAnalyser() {
     const char *TListName = listName.c_str();
     //</editor-fold>
 
-//  Creating directories ------------------------------------------------------------------------------------------------------------------------------------------------
+//  Directory settings ------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Creating directories">
+    //<editor-fold desc="Directory settings">
     /* Code for creating directories.
      * Directory creation is done in the Directories class.
      * Added for the case that plots out folder does not exist and for organization.
@@ -481,7 +488,9 @@ void EventAnalyser() {
     cout << "\nCreating plot directories...";
 
     string Plots_Folder = plots_path;
-    Directories directories = Directories(Plots_Folder);
+    const bool Clear_Old_Directories = true;
+
+    Directories directories = Directories(Plots_Folder, Clear_Old_Directories);
 
     cout << " done.\n\n";
     //</editor-fold>
@@ -673,12 +682,12 @@ void EventAnalyser() {
         AMaps_plots = false;
 
         /* Resolution plots */
-//        Resolution_plots = true;
-        Resolution_plots = false;
+        Resolution_plots = true;
+//        Resolution_plots = false;
 
         /* Multiplicity plots */
-        Multiplicity_plots = true;
-//        Multiplicity_plots = false;
+//        Multiplicity_plots = true;
+        Multiplicity_plots = false;
 
         /* Final state ratio plots */
 //        FSR_1D_plots = true;
@@ -862,17 +871,13 @@ void EventAnalyser() {
 
     if (apply_cuts) {
         double dVertex_boundary = Vz_cut.GetUpperCut() - Vz_cut.GetLowerCut();
-        double dVertex_boundary_FD = Vz_cut_FD.GetUpperCut() - Vz_cut_FD.GetLowerCut(), dVertex_boundary_CD =
-                Vz_cut_CD.GetUpperCut() - Vz_cut_CD.GetLowerCut();
+        double dVertex_boundary_FD = Vz_cut_FD.GetUpperCut() - Vz_cut_FD.GetLowerCut(), dVertex_boundary_CD = Vz_cut_CD.GetUpperCut() - Vz_cut_CD.GetLowerCut();
         double ddV_boundary = dVz_cuts.GetUpperCut() - dVz_cuts.GetLowerCut();
-        double ddV_boundary_FD = dVz_cuts_FD.GetUpperCut() - dVz_cuts_FD.GetLowerCut(), ddV_boundary_CD =
-                dVz_cuts_CD.GetUpperCut() - dVz_cuts_CD.GetLowerCut();
+        double ddV_boundary_FD = dVz_cuts_FD.GetUpperCut() - dVz_cuts_FD.GetLowerCut(), ddV_boundary_CD = dVz_cuts_CD.GetUpperCut() - dVz_cuts_CD.GetLowerCut();
 
         Vertex_uboundary = Vz_cut.GetUpperCut() + 0.2 * dVertex_boundary, Vertex_lboundary = Vz_cut.GetLowerCut() - 0.1 * dVertex_boundary;
-        Vertex_uboundary_FD = Vz_cut_FD.GetUpperCut() + 0.2 * dVertex_boundary_FD, Vertex_lboundary_FD =
-                                                                                           Vz_cut_FD.GetLowerCut() - 0.1 * dVertex_boundary_FD;
-        Vertex_uboundary_CD = Vz_cut_CD.GetUpperCut() + 0.2 * dVertex_boundary_CD, Vertex_lboundary_CD =
-                                                                                           Vz_cut_CD.GetLowerCut() - 0.1 * dVertex_boundary_CD;
+        Vertex_uboundary_FD = Vz_cut_FD.GetUpperCut() + 0.2 * dVertex_boundary_FD, Vertex_lboundary_FD = Vz_cut_FD.GetLowerCut() - 0.1 * dVertex_boundary_FD;
+        Vertex_uboundary_CD = Vz_cut_CD.GetUpperCut() + 0.2 * dVertex_boundary_CD, Vertex_lboundary_CD = Vz_cut_CD.GetLowerCut() - 0.1 * dVertex_boundary_CD;
         dV_uboundary = dVz_cuts.GetUpperCut() + 0.2 * ddV_boundary, dV_lboundary = dVz_cuts.GetLowerCut() - 0.1 * ddV_boundary;
         dV_uboundary_FD = dVz_cuts_FD.GetUpperCut() + 0.2 * ddV_boundary_FD, dV_lboundary_FD = dVz_cuts_FD.GetLowerCut() - 0.1 * ddV_boundary_FD;
         dV_uboundary_CD = dVz_cuts_CD.GetUpperCut() + 0.2 * ddV_boundary_CD, dV_lboundary_CD = dVz_cuts_CD.GetLowerCut() - 0.1 * ddV_boundary_CD;
@@ -1012,13 +1017,12 @@ void EventAnalyser() {
     //<editor-fold desc="Neutron resolution class declaration & definition">
     MomentumResolution nRes("Neutron"), pRes("Proton");
 
-    nRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE,
-                    FD_nucleon_momentum_cut_nRes, n_mom_th.GetLowerCut(), MomentumResolutionDirectory,
-                    directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode, CorrMode, momRes_test);
-    pRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE,
-                    FD_nucleon_momentum_cut_nRes, p_mom_th.GetLowerCut(), MomentumResolutionDirectory,
-                    directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode, CorrMode, momRes_test,
-                    ForceSmallpResLimits);
+    nRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE, MomRes_mu_cuts, MomRes_sigma_cuts,
+                    n_mom_th.GetLowerCut(), MomentumResolutionDirectory, directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode,
+                    CorrMode, momRes_test);
+    pRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE, MomRes_mu_cuts, MomRes_sigma_cuts,
+                    p_mom_th.GetLowerCut(), MomentumResolutionDirectory, directories.Resolution_Directory_map["pRes_plots_1p_Directory"], DeltaSlices, VaryingDelta, SmearMode,
+                    CorrMode, momRes_test, ForceSmallpResLimits);
     //</editor-fold>
 
     cout << "\ndone.\n\n";
@@ -3298,81 +3302,74 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Theta_e histograms (1e cut)">
-    TH1D *hTheta_e_1e_cut_FD = new TH1D("#theta_{e} (1e Cut, FD)", "#theta_{e} of Outgoing Electron (1e Cut, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_1e_cut_FD = new TH1D("#theta_{e} (1e Cut, FD)", "#theta_{e} of Outgoing Electron (1e Cut, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots, Theta_lboundary_FD,
+                                        Theta_uboundary_FD);
     string hTheta_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Theta_e_1e_cut_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_e histograms (1p)">
-    TH1D *hTheta_e_All_Int_1p_FD = new TH1D("#theta_{e} (All Int., 1p, FD)",
-                                            "#theta_{e} of Outgoing Electron (All Int., 1p, FD);#theta_{e} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_QEL_1p_FD = new TH1D("#theta_{e} (QEL Only, 1p, FD)", "#theta_{e} of Outgoing Electron (QEL Only, 1p, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_MEC_1p_FD = new TH1D("#theta_{e} (MEC Only, 1p, FD)", "#theta_{e} of Outgoing Electron (MEC Only, 1p, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_RES_1p_FD = new TH1D("#theta_{e} (RES Only, 1p, FD)", "#theta_{e} of Outgoing Electron (RES Only, 1p, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_DIS_1p_FD = new TH1D("#theta_{e} (DIS Only, 1p, FD)", "#theta_{e} of Outgoing Electron (DIS Only, 1p, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_All_Int_1p_FD = new TH1D("#theta_{e} (All Int., 1p, FD)", "#theta_{e} of Outgoing Electron (All Int., 1p, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_QEL_1p_FD = new TH1D("#theta_{e} (QEL Only, 1p, FD)", "#theta_{e} of Outgoing Electron (QEL Only, 1p, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_MEC_1p_FD = new TH1D("#theta_{e} (MEC Only, 1p, FD)", "#theta_{e} of Outgoing Electron (MEC Only, 1p, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_RES_1p_FD = new TH1D("#theta_{e} (RES Only, 1p, FD)", "#theta_{e} of Outgoing Electron (RES Only, 1p, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_DIS_1p_FD = new TH1D("#theta_{e} (DIS Only, 1p, FD)", "#theta_{e} of Outgoing Electron (DIS Only, 1p, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_All_Int_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
     string hTheta_e_QEL_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
     string hTheta_e_MEC_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
     string hTheta_e_RES_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
     string hTheta_e_DIS_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
 
-    TH2D *hTheta_e_VS_P_e_1p_FD = new TH2D("#theta_{e} vs. P_{e} (All Int., 1p)",
-                                           "#theta_{e} vs. P_{e} (All Int., 1p);P_{e} [GeV/c];#theta_{e} [Deg]",
-                                           numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH2D *hTheta_e_VS_P_e_1p_FD = new TH2D("#theta_{e} vs. P_{e} (All Int., 1p)", "#theta_{e} vs. P_{e} (All Int., 1p);P_{e} [GeV/c];#theta_{e} [Deg]", numTH2Dbins_Ang_Plots,
+                                           0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     TH2D *hTheta_e_VS_W_1p_FD = new TH2D("#theta_{e} vs. W (All Int., 1p)",
-                                         "#theta_{e} vs. W (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{e} [Deg]",
-                                         numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                         Theta_uboundary_FD);
+                                         "#theta_{e} vs. W (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{e} [Deg]", numTH2Dbins_Ang_Plots,
+                                         W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_VS_P_e_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
     string hTheta_e_VS_W_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_e histograms (1n)">
-    TH1D *hTheta_e_All_Int_1n_FD = new TH1D("#theta_{e} (All Int., 1n, FD)",
-                                            "#theta_{e} of Outgoing Electron (All Int., 1n, FD);#theta_{e} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_QEL_1n_FD = new TH1D("#theta_{e} (QEL Only, 1n, FD)", "#theta_{e} of Outgoing Electron (QEL Only, 1n, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_MEC_1n_FD = new TH1D("#theta_{e} (MEC Only, 1n, FD)", "#theta_{e} of Outgoing Electron (MEC Only, 1n, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_RES_1n_FD = new TH1D("#theta_{e} (RES Only, 1n, FD)", "#theta_{e} of Outgoing Electron (RES Only, 1n, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_DIS_1n_FD = new TH1D("#theta_{e} (DIS Only, 1n, FD)", "#theta_{e} of Outgoing Electron (DIS Only, 1n, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_All_Int_1n_FD = new TH1D("#theta_{e} (All Int., 1n, FD)", "#theta_{e} of Outgoing Electron (All Int., 1n, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_QEL_1n_FD = new TH1D("#theta_{e} (QEL Only, 1n, FD)", "#theta_{e} of Outgoing Electron (QEL Only, 1n, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_MEC_1n_FD = new TH1D("#theta_{e} (MEC Only, 1n, FD)", "#theta_{e} of Outgoing Electron (MEC Only, 1n, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_RES_1n_FD = new TH1D("#theta_{e} (RES Only, 1n, FD)", "#theta_{e} of Outgoing Electron (RES Only, 1n, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_DIS_1n_FD = new TH1D("#theta_{e} (DIS Only, 1n, FD)", "#theta_{e} of Outgoing Electron (DIS Only, 1n, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_All_Int_1n_FD_Dir = directories.Angle_Directory_map["Theta_e_1n_Directory"];
     string hTheta_e_QEL_1n_FD_Dir = directories.Angle_Directory_map["Theta_e_1n_Directory"];
     string hTheta_e_MEC_1n_FD_Dir = directories.Angle_Directory_map["Theta_e_1n_Directory"];
     string hTheta_e_RES_1n_FD_Dir = directories.Angle_Directory_map["Theta_e_1n_Directory"];
     string hTheta_e_DIS_1n_FD_Dir = directories.Angle_Directory_map["Theta_e_1n_Directory"];
 
-    TH2D *hTheta_e_VS_P_e_1n_FD = new TH2D("#theta_{e} vs. P_{e} (All Int., 1n)",
-                                           "#theta_{e} vs. P_{e} (All Int., 1n);P_{e} [GeV/c];#theta_{e} [Deg]",
-                                           numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH2D *hTheta_e_VS_P_e_1n_FD = new TH2D("#theta_{e} vs. P_{e} (All Int., 1n)", "#theta_{e} vs. P_{e} (All Int., 1n);P_{e} [GeV/c];#theta_{e} [Deg]", numTH2Dbins_Ang_Plots,
+                                           0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     TH2D *hTheta_e_VS_W_1n_FD = new TH2D("#theta_{e} vs. W (All Int., 1n)",
-                                         "#theta_{e} vs. W (All Int., 1n);W = #sqrt{(#omega + m_{n})^{2} - #vec{q}^{2}}  [GeV];#theta_{e} [Deg]",
-                                         numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                         Theta_uboundary_FD);
+                                         "#theta_{e} vs. W (All Int., 1n);W = #sqrt{(#omega + m_{n})^{2} - #vec{q}^{2}}  [GeV];#theta_{e} [Deg]", numTH2Dbins_Ang_Plots,
+                                         W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_VS_P_e_1n_FD_Dir = directories.Angle_Directory_map["Theta_e_1n_Directory"];
     string hTheta_e_VS_W_1n_FD_Dir = directories.Angle_Directory_map["Theta_e_1n_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_e histograms (2p)">
-    TH1D *hTheta_e_All_Int_2p_FD = new TH1D("#theta_{e} (All Int., 2p, FD)",
-                                            "#theta_{e} of Outgoing Electron (All Int., 2p, FD);#theta_{e} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_QEL_2p_FD = new TH1D("#theta_{e} (QEL Only, 2p, FD)", "#theta_{e} of Outgoing Electron (QEL Only, 2p, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_MEC_2p_FD = new TH1D("#theta_{e} (MEC Only, 2p, FD)", "#theta_{e} of Outgoing Electron (MEC Only, 2p, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_RES_2p_FD = new TH1D("#theta_{e} (RES Only, 2p, FD)", "#theta_{e} of Outgoing Electron (RES Only, 2p, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_DIS_2p_FD = new TH1D("#theta_{e} (DIS Only, 2p, FD)", "#theta_{e} of Outgoing Electron (DIS Only, 2p, FD);#theta_{e} [Deg];",
-                                        numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_All_Int_2p_FD = new TH1D("#theta_{e} (All Int., 2p, FD)", "#theta_{e} of Outgoing Electron (All Int., 2p, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_QEL_2p_FD = new TH1D("#theta_{e} (QEL Only, 2p, FD)", "#theta_{e} of Outgoing Electron (QEL Only, 2p, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_MEC_2p_FD = new TH1D("#theta_{e} (MEC Only, 2p, FD)", "#theta_{e} of Outgoing Electron (MEC Only, 2p, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_RES_2p_FD = new TH1D("#theta_{e} (RES Only, 2p, FD)", "#theta_{e} of Outgoing Electron (RES Only, 2p, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_e_DIS_2p_FD = new TH1D("#theta_{e} (DIS Only, 2p, FD)", "#theta_{e} of Outgoing Electron (DIS Only, 2p, FD);#theta_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                        Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_All_Int_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_2p_Directory"];
     string hTheta_e_QEL_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_2p_Directory"];
     string hTheta_e_MEC_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_2p_Directory"];
@@ -3381,20 +3378,15 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Theta_e histograms (pFDpCD)">
-    TH1D *hTheta_e_All_Int_pFDpCD_FD = new TH1D("#theta_{e} (All Int., pFDpCD, FD)",
-                                                "#theta_{e} of Outgoing Electron (All Int., pFDpCD, FD);#theta_{e} [Deg];",
+    TH1D *hTheta_e_All_Int_pFDpCD_FD = new TH1D("#theta_{e} (All Int., pFDpCD, FD)", "#theta_{e} of Outgoing Electron (All Int., pFDpCD, FD);#theta_{e} [Deg];",
                                                 numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_QEL_pFDpCD_FD = new TH1D("#theta_{e} (QEL Only, pFDpCD, FD)",
-                                            "#theta_{e} of Outgoing Electron (QEL Only, pFDpCD, FD);#theta_{e} [Deg];",
+    TH1D *hTheta_e_QEL_pFDpCD_FD = new TH1D("#theta_{e} (QEL Only, pFDpCD, FD)", "#theta_{e} of Outgoing Electron (QEL Only, pFDpCD, FD);#theta_{e} [Deg];",
                                             numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_MEC_pFDpCD_FD = new TH1D("#theta_{e} (MEC Only, pFDpCD, FD)",
-                                            "#theta_{e} of Outgoing Electron (MEC Only, pFDpCD, FD);#theta_{e} [Deg];",
+    TH1D *hTheta_e_MEC_pFDpCD_FD = new TH1D("#theta_{e} (MEC Only, pFDpCD, FD)", "#theta_{e} of Outgoing Electron (MEC Only, pFDpCD, FD);#theta_{e} [Deg];",
                                             numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_RES_pFDpCD_FD = new TH1D("#theta_{e} (RES Only, pFDpCD, FD)",
-                                            "#theta_{e} of Outgoing Electron (RES Only, pFDpCD, FD);#theta_{e} [Deg];",
+    TH1D *hTheta_e_RES_pFDpCD_FD = new TH1D("#theta_{e} (RES Only, pFDpCD, FD)", "#theta_{e} of Outgoing Electron (RES Only, pFDpCD, FD);#theta_{e} [Deg];",
                                             numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_DIS_pFDpCD_FD = new TH1D("#theta_{e} (DIS Only, pFDpCD, FD)",
-                                            "#theta_{e} of Outgoing Electron (DIS Only, pFDpCD, FD);#theta_{e} [Deg];",
+    TH1D *hTheta_e_DIS_pFDpCD_FD = new TH1D("#theta_{e} (DIS Only, pFDpCD, FD)", "#theta_{e} of Outgoing Electron (DIS Only, pFDpCD, FD);#theta_{e} [Deg];",
                                             numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_All_Int_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_pFDpCD_Directory"];
     string hTheta_e_QEL_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_pFDpCD_Directory"];
@@ -3402,33 +3394,25 @@ void EventAnalyser() {
     string hTheta_e_RES_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_pFDpCD_Directory"];
     string hTheta_e_DIS_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_pFDpCD_Directory"];
 
-    TH2D *hTheta_e_VS_P_e_pFDpCD_FD = new TH2D("#theta_{e} vs. P_{e} (All Int., pFDpCD)",
-                                               "#theta_{e} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];#theta_{e} [Deg]",
-                                               numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                               Theta_uboundary_FD);
+    TH2D *hTheta_e_VS_P_e_pFDpCD_FD = new TH2D("#theta_{e} vs. P_{e} (All Int., pFDpCD)", "#theta_{e} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];#theta_{e} [Deg]",
+                                               numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     TH2D *hTheta_e_VS_W_pFDpCD_FD = new TH2D("#theta_{e} vs. W (All Int., pFDpCD)",
                                              "#theta_{e} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{e} [Deg]",
-                                             numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                             Theta_uboundary_FD);
+                                             numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_VS_P_e_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_pFDpCD_Directory"];
     string hTheta_e_VS_W_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_e histograms (nFDpCD)">
-    TH1D *hTheta_e_All_Int_nFDpCD_FD = new TH1D("#theta_{e} (All Int., nFDpCD, FD)",
-                                                "#theta_{e} of Outgoing Electron (All Int., nFDpCD, FD);#theta_{e} [Deg];",
+    TH1D *hTheta_e_All_Int_nFDpCD_FD = new TH1D("#theta_{e} (All Int., nFDpCD, FD)", "#theta_{e} of Outgoing Electron (All Int., nFDpCD, FD);#theta_{e} [Deg];",
                                                 numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_QEL_nFDpCD_FD = new TH1D("#theta_{e} (QEL Only, nFDpCD, FD)",
-                                            "#theta_{e} of Outgoing Electron (QEL Only, nFDpCD, FD);#theta_{e} [Deg];",
+    TH1D *hTheta_e_QEL_nFDpCD_FD = new TH1D("#theta_{e} (QEL Only, nFDpCD, FD)", "#theta_{e} of Outgoing Electron (QEL Only, nFDpCD, FD);#theta_{e} [Deg];",
                                             numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_MEC_nFDpCD_FD = new TH1D("#theta_{e} (MEC Only, nFDpCD, FD)",
-                                            "#theta_{e} of Outgoing Electron (MEC Only, nFDpCD, FD);#theta_{e} [Deg];",
+    TH1D *hTheta_e_MEC_nFDpCD_FD = new TH1D("#theta_{e} (MEC Only, nFDpCD, FD)", "#theta_{e} of Outgoing Electron (MEC Only, nFDpCD, FD);#theta_{e} [Deg];",
                                             numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_RES_nFDpCD_FD = new TH1D("#theta_{e} (RES Only, nFDpCD, FD)",
-                                            "#theta_{e} of Outgoing Electron (RES Only, nFDpCD, FD);#theta_{e} [Deg];",
+    TH1D *hTheta_e_RES_nFDpCD_FD = new TH1D("#theta_{e} (RES Only, nFDpCD, FD)", "#theta_{e} of Outgoing Electron (RES Only, nFDpCD, FD);#theta_{e} [Deg];",
                                             numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_e_DIS_nFDpCD_FD = new TH1D("#theta_{e} (DIS Only, nFDpCD, FD)",
-                                            "#theta_{e} of Outgoing Electron (DIS Only, nFDpCD, FD);#theta_{e} [Deg];",
+    TH1D *hTheta_e_DIS_nFDpCD_FD = new TH1D("#theta_{e} (DIS Only, nFDpCD, FD)", "#theta_{e} of Outgoing Electron (DIS Only, nFDpCD, FD);#theta_{e} [Deg];",
                                             numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_All_Int_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_nFDpCD_Directory"];
     string hTheta_e_QEL_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_nFDpCD_Directory"];
@@ -3436,14 +3420,11 @@ void EventAnalyser() {
     string hTheta_e_RES_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_nFDpCD_Directory"];
     string hTheta_e_DIS_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_nFDpCD_Directory"];
 
-    TH2D *hTheta_e_VS_P_e_nFDpCD_FD = new TH2D("#theta_{e} vs. P_{e} (All Int., nFDpCD)",
-                                               "#theta_{e} vs. P_{e} (All Int., nFDpCD);P_{e} [GeV/c];#theta_{e} [Deg]",
-                                               numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                               Theta_uboundary_FD);
+    TH2D *hTheta_e_VS_P_e_nFDpCD_FD = new TH2D("#theta_{e} vs. P_{e} (All Int., nFDpCD)", "#theta_{e} vs. P_{e} (All Int., nFDpCD);P_{e} [GeV/c];#theta_{e} [Deg]",
+                                               numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     TH2D *hTheta_e_VS_W_nFDpCD_FD = new TH2D("#theta_{e} vs. W (All Int., nFDpCD)",
                                              "#theta_{e} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{e} [Deg]",
-                                             numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                             Theta_uboundary_FD);
+                                             numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_VS_P_e_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_nFDpCD_Directory"];
     string hTheta_e_VS_W_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_nFDpCD_Directory"];
     //</editor-fold>
@@ -3456,83 +3437,78 @@ void EventAnalyser() {
     THStack *sPhi_e = new THStack("#phi_{e} stack (CD & FD)", "#phi_{e} of Outgoing Electron (no #(e) cut, CD & FD);#phi_{e} [Deg];");
 
     //<editor-fold desc="Phi_e histograms (no #(e) cut)">
-    TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", "#phi_{e} of Outgoing Electron (All Int., no #(e) cut, FD);#phi_{e} [Deg];",
-                                     numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", "#phi_{e} of Outgoing Electron (All Int., no #(e) cut, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                     Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_e_FD_Dir = directories.Angle_Directory_map["Phi_e_All_e_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (1e cut)">
-    TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", "#phi_{e} of Outgoing Electron (All Int., 1e Cut, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots,
-                                      Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", "#phi_{e} of Outgoing Electron (All Int., 1e Cut, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots, Phi_lboundary,
+                                      Phi_uboundary);
     string hPhi_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Phi_e_1e_cut_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (1p)">
-    TH1D *hPhi_e_All_Int_1p_FD = new TH1D("#phi_{e} 1p (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 1p, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_QEL_1p_FD = new TH1D("#phi_{e} for 1p (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 1p, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_MEC_1p_FD = new TH1D("#phi_{e} for 1p (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 1p, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_RES_1p_FD = new TH1D("#phi_{e} for 1p (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 1p, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_DIS_1p_FD = new TH1D("#phi_{e} for 1p (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 1p, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_All_Int_1p_FD = new TH1D("#phi_{e} 1p (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 1p, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_QEL_1p_FD = new TH1D("#phi_{e} for 1p (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 1p, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_MEC_1p_FD = new TH1D("#phi_{e} for 1p (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 1p, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_RES_1p_FD = new TH1D("#phi_{e} for 1p (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 1p, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_DIS_1p_FD = new TH1D("#phi_{e} for 1p (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 1p, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_QEL_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_MEC_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_RES_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_DIS_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
 
-    TH2D *hPhi_e_VS_P_e_1p_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., 1p)",
-                                         "#phi_{e} vs. P_{e} (All Int., 1p);P_{e} [GeV/c];#phi_{e} [Deg]",
-                                         numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH2D *hPhi_e_VS_W_1p_FD = new TH2D("#phi_{e} vs. W (All Int., 1p)",
-                                       "#phi_{e} vs. W (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{e} [Deg]",
+    TH2D *hPhi_e_VS_P_e_1p_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., 1p)", "#phi_{e} vs. P_{e} (All Int., 1p);P_{e} [GeV/c];#phi_{e} [Deg]", numTH2Dbins_Ang_Plots, 0,
+                                         beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH2D *hPhi_e_VS_W_1p_FD = new TH2D("#phi_{e} vs. W (All Int., 1p)", "#phi_{e} vs. W (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{e} [Deg]",
                                        numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     string hPhi_e_VS_P_e_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_VS_W_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (1n)">
-    TH1D *hPhi_e_All_Int_1n_FD = new TH1D("#phi_{e} 1n (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 1n, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_QEL_1n_FD = new TH1D("#phi_{e} for 1n (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 1n, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_MEC_1n_FD = new TH1D("#phi_{e} for 1n (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 1n, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_RES_1n_FD = new TH1D("#phi_{e} for 1n (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 1n, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_DIS_1n_FD = new TH1D("#phi_{e} for 1n (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 1n, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_All_Int_1n_FD = new TH1D("#phi_{e} 1n (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 1n, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_QEL_1n_FD = new TH1D("#phi_{e} for 1n (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 1n, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_MEC_1n_FD = new TH1D("#phi_{e} for 1n (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 1n, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_RES_1n_FD = new TH1D("#phi_{e} for 1n (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 1n, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_DIS_1n_FD = new TH1D("#phi_{e} for 1n (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 1n, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     string hPhi_e_QEL_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     string hPhi_e_MEC_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     string hPhi_e_RES_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     string hPhi_e_DIS_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
 
-    TH2D *hPhi_e_VS_P_e_1n_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., 1n)",
-                                         "#phi_{e} vs. P_{e} (All Int., 1n);P_{e} [GeV/c];#phi_{e} [Deg]",
-                                         numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH2D *hPhi_e_VS_W_1n_FD = new TH2D("#phi_{e} vs. W (All Int., 1n)",
-                                       "#phi_{e} vs. W (All Int., 1n);W = #sqrt{(#omega + m_{n})^{2} - #vec{q}^{2}}  [GeV];#phi_{e} [Deg]",
+    TH2D *hPhi_e_VS_P_e_1n_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., 1n)", "#phi_{e} vs. P_{e} (All Int., 1n);P_{e} [GeV/c];#phi_{e} [Deg]", numTH2Dbins_Ang_Plots, 0,
+                                         beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH2D *hPhi_e_VS_W_1n_FD = new TH2D("#phi_{e} vs. W (All Int., 1n)", "#phi_{e} vs. W (All Int., 1n);W = #sqrt{(#omega + m_{n})^{2} - #vec{q}^{2}}  [GeV];#phi_{e} [Deg]",
                                        numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     string hPhi_e_VS_P_e_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     string hPhi_e_VS_W_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (2p)">
-    TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 2p, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_QEL_2p_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 2p, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 2p, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 2p, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 2p, FD);#phi_{e} [Deg];",
-                                      numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 2p, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_QEL_2p_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 2p, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 2p, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 2p, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 2p, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                      Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
     string hPhi_e_QEL_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
     string hPhi_e_MEC_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
@@ -3541,65 +3517,53 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (pFDpCD)">
-    TH1D *hPhi_e_All_Int_pFDpCD_FD = new TH1D("#phi_{e} pFDpCD (All Int., FD)",
-                                              "#phi_{e} of Outgoing Electron (All Int., pFDpCD, FD);#phi_{e} [Deg];",
-                                              numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_QEL_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (QEL Only, FD)",
-                                          "#phi_{e} of Outgoing Electron (QEL Only, pFDpCD, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_MEC_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (MEC Only, FD)",
-                                          "#phi_{e} of Outgoing Electron (MEC Only, pFDpCD, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_RES_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (RES Only, FD)",
-                                          "#phi_{e} of Outgoing Electron (RES Only, pFDpCD, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_DIS_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (DIS Only, FD)",
-                                          "#phi_{e} of Outgoing Electron (DIS Only, pFDpCD, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_All_Int_pFDpCD_FD = new TH1D("#phi_{e} pFDpCD (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., pFDpCD, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                              Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_QEL_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, pFDpCD, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_MEC_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, pFDpCD, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_RES_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, pFDpCD, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_DIS_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, pFDpCD, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     string hPhi_e_QEL_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     string hPhi_e_MEC_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     string hPhi_e_RES_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     string hPhi_e_DIS_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
 
-    TH2D *hPhi_e_VS_P_e_pFDpCD_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., pFDpCD)",
-                                             "#phi_{e} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];#phi_{e} [Deg]",
+    TH2D *hPhi_e_VS_P_e_pFDpCD_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., pFDpCD)", "#phi_{e} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];#phi_{e} [Deg]",
                                              numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_e_VS_W_pFDpCD_FD = new TH2D("#phi_{e} vs. W (All Int., pFDpCD)",
-                                           "#phi_{e} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{e} [Deg]",
-                                           numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+                                           "#phi_{e} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{e} [Deg]", numTH2Dbins_Ang_Plots,
+                                           W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     string hPhi_e_VS_P_e_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     string hPhi_e_VS_W_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (nFDpCD)">
-    TH1D *hPhi_e_All_Int_nFDpCD_FD = new TH1D("#phi_{e} nFDpCD (All Int., FD)",
-                                              "#phi_{e} of Outgoing Electron (All Int., nFDpCD, FD);#phi_{e} [Deg];",
-                                              numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_QEL_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (QEL Only, FD)",
-                                          "#phi_{e} of Outgoing Electron (QEL Only, nFDpCD, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_MEC_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (MEC Only, FD)",
-                                          "#phi_{e} of Outgoing Electron (MEC Only, nFDpCD, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_RES_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (RES Only, FD)",
-                                          "#phi_{e} of Outgoing Electron (RES Only, nFDpCD, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_DIS_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (DIS Only, FD)",
-                                          "#phi_{e} of Outgoing Electron (DIS Only, nFDpCD, FD);#phi_{e} [Deg];",
-                                          numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_All_Int_nFDpCD_FD = new TH1D("#phi_{e} nFDpCD (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., nFDpCD, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                              Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_QEL_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, nFDpCD, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_MEC_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, nFDpCD, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_RES_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, nFDpCD, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_DIS_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, nFDpCD, FD);#phi_{e} [Deg];", numTH1Dbins_Ang_Plots,
+                                          Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
     string hPhi_e_QEL_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
     string hPhi_e_MEC_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
     string hPhi_e_RES_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
     string hPhi_e_DIS_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
 
-    TH2D *hPhi_e_VS_P_e_nFDpCD_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., nFDpCD)",
-                                             "#phi_{e} vs. P_{e} (All Int., nFDpCD);P_{e} [GeV/c];#phi_{e} [Deg]",
+    TH2D *hPhi_e_VS_P_e_nFDpCD_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., nFDpCD)", "#phi_{e} vs. P_{e} (All Int., nFDpCD);P_{e} [GeV/c];#phi_{e} [Deg]",
                                              numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_e_VS_W_nFDpCD_FD = new TH2D("#phi_{e} vs. W (All Int., nFDpCD)",
-                                           "#phi_{e} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{e} [Deg]",
-                                           numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+                                           "#phi_{e} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{e} [Deg]", numTH2Dbins_Ang_Plots,
+                                           W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     string hPhi_e_VS_P_e_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
     string hPhi_e_VS_W_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
     //</editor-fold>
@@ -3610,52 +3574,45 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_e vs. Phi_e">
     /* Theta_e vs. Phi_e histograms (no #(e) cut) */
-    TH2D *hTheta_e_VS_Phi_e_All_e_FD = new TH2D("#theta_{e} vs. #phi_{e} (no #(e) cut, FD)",
-                                                "#theta_{e} vs. #phi_{e}  (no #(e) cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                                numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                                numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH2D *hTheta_e_VS_Phi_e_All_e_FD = new TH2D("#theta_{e} vs. #phi_{e} (no #(e) cut, FD)", "#theta_{e} vs. #phi_{e}  (no #(e) cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
+                                                numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD,
+                                                Theta_uboundary_FD);
     string hTheta_e_VS_Phi_e_All_e_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_All_e_Directory"];
 
     /* Theta_e vs. Phi_e histograms (1e cut) */
-    TH2D *hTheta_e_VS_Phi_e_1e_cut_FD = new TH2D("#theta_{e} vs. #phi_{e} (1e Cut, FD)",
-                                                 "#theta_{e} vs. #phi_{e} (1e Cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                                 numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                                 numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH2D *hTheta_e_VS_Phi_e_1e_cut_FD = new TH2D("#theta_{e} vs. #phi_{e} (1e Cut, FD)", "#theta_{e} vs. #phi_{e} (1e Cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
+                                                 numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD,
+                                                 Theta_uboundary_FD);
     string hTheta_e_VS_Phi_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_1e_cut_Directory"];
 
     /* Theta_e vs. Phi_e histograms (1p) */
-    TH2D *hTheta_e_VS_Phi_e_1p_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 1p, FD)",
-                                             "#theta_{e} vs. #phi_{e} (All Int., 1p, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                             numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                             numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH2D *hTheta_e_VS_Phi_e_1p_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 1p, FD)", "#theta_{e} vs. #phi_{e} (All Int., 1p, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
+                                             numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD,
+                                             Theta_uboundary_FD);
     string hTheta_e_VS_Phi_e_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_1p_Directory"];
 
     /* Theta_e vs. Phi_e histograms (1n) */
-    TH2D *hTheta_e_VS_Phi_e_1n_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 1n, FD)",
-                                             "#theta_{e} vs. #phi_{e} (All Int., 1n, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                             numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                             numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH2D *hTheta_e_VS_Phi_e_1n_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 1n, FD)", "#theta_{e} vs. #phi_{e} (All Int., 1n, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
+                                             numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD,
+                                             Theta_uboundary_FD);
     string hTheta_e_VS_Phi_e_1n_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_1n_Directory"];
 
     /* Theta_e vs. Phi_e histograms (2p) */
-    TH2D *hTheta_e_VS_Phi_e_2p_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 2p, FD)",
-                                             "#theta_{e} vs. #phi_{e} (All Int., 2p, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                             numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                             numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH2D *hTheta_e_VS_Phi_e_2p_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 2p, FD)", "#theta_{e} vs. #phi_{e} (All Int., 2p, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
+                                             numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD,
+                                             Theta_uboundary_FD);
     string hTheta_e_VS_Phi_e_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_2p_Directory"];
 
     /* Theta_e vs. Phi_e histograms (pFDpCD) */
     TH2D *hTheta_e_VS_Phi_e_pFDpCD_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., pFDpCD, FD)",
-                                                 "#theta_{e} vs. #phi_{e} (All Int., pFDpCD, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                                 numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                                 numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                 "#theta_{e} vs. #phi_{e} (All Int., pFDpCD, FD);#phi_{e} [Deg];#theta_{e} [Deg]", numTH2Dbins_Electron_Ang_Plots,
+                                                 Phi_lboundary, Phi_uboundary, numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_VS_Phi_e_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_pFDpCD_Directory"];
 
     /* Theta_e vs. Phi_e histograms (nFDpCD) */
     TH2D *hTheta_e_VS_Phi_e_nFDpCD_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD)",
-                                                 "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                                 numTH2Dbins_Electron_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                                 numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                 "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD);#phi_{e} [Deg];#theta_{e} [Deg]", numTH2Dbins_Electron_Ang_Plots,
+                                                 Phi_lboundary, Phi_uboundary, numTH2Dbins_Electron_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_VS_Phi_e_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -3674,12 +3631,11 @@ void EventAnalyser() {
                                                                   "#Delta#theta_{n,e} = #theta_{n}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
                                                                   directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
                                                                   "01_Neutron_hits_vs_electron_hits_BV_1e_cut", -180, 180, -50, 50, 100, 100);
-    hPlot2D hdTheta_n_p_VS_dPhi_n_p_Protons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{n,p} vs. #Delta#phi_{n,p} BV",
-                                                                "'Neutron Hits' vs. Proton Hits - Before Veto",
+    hPlot2D hdTheta_n_p_VS_dPhi_n_p_Protons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{n,p} vs. #Delta#phi_{n,p} BV", "'Neutron Hits' vs. Proton Hits - Before Veto",
                                                                 "#Delta#phi_{n,p} = #phi_{n}^{ECAL} - #phi_{p}^{ECAL} [Deg]",
                                                                 "#Delta#theta_{n,p} = #theta_{n}^{ECAL} - #theta_{p}^{ECAL} [Deg]",
-                                                                directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                "02_Neutron_hits_vs_proton_hits_BV_1e_cut", -180, 180, -50, 50, 100, 100);
+                                                                directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"], "02_Neutron_hits_vs_proton_hits_BV_1e_cut",
+                                                                -180, 180, -50, 50, 100, 100);
     //</editor-fold>
 
     //<editor-fold desc="Electrons and redefined neutrons">
@@ -3690,22 +3646,19 @@ void EventAnalyser() {
                                                                         "#Delta#phi_{LnFD,e} = #phi_{n}^{ECAL} - #phi_{e}^{ECAL} [Deg]",
                                                                         "#Delta#theta_{LnFD,e} = #theta_{n}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
                                                                         directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                        "03_LnFD_Neutron_hits_vs_electron_hits_BV_1e_cut", -180, 180, -50, 50, 100,
-                                                                        100);
+                                                                        "03_LnFD_Neutron_hits_vs_electron_hits_BV_1e_cut", -180, 180, -50, 50, 100, 100);
     hPlot2D hdTheta_LnFD_e_VS_dPhi_LnFD_e_Electrons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e} AV",
                                                                         "'Leading Neutron Hits' vs. Electron Hits - After Veto",
                                                                         "#Delta#phi_{LnFD,e} = #phi_{n}^{ECAL} - #phi_{e}^{ECAL} [Deg]",
                                                                         "#Delta#theta_{LnFD,e} = #theta_{n}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
                                                                         directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                        "04_LnFD_Neutron_hits_vs_electron_hits_AV_1e_cut", -180, 180, -50, 50, 100,
-                                                                        100);
+                                                                        "04_LnFD_Neutron_hits_vs_electron_hits_AV_1e_cut", -180, 180, -50, 50, 100, 100);
     hPlot2D hdTheta_LnFD_e_VS_dPhi_LnFD_e_Electrons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e} Vetoed",
                                                                             "'Leading Neutron Hits' vs. Electron Hits - Vetoed Neutrons",
                                                                             "#Delta#phi_{LnFD,e} = #phi_{n}^{ECAL} - #phi_{e}^{ECAL} [Deg]",
                                                                             "#Delta#theta_{LnFD,e} = #theta_{n}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
                                                                             directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                            "05_LnFD_Neutron_hits_vs_electron_hits_Vetoed_1e_cut", -180, 180, -50,
-                                                                            50, 100, 100);
+                                                                            "05_LnFD_Neutron_hits_vs_electron_hits_Vetoed_1e_cut", -180, 180, -50, 50, 100, 100);
     //</editor-fold>
 
     //<editor-fold desc="Electrons and all FD neutrons">
@@ -3714,22 +3667,19 @@ void EventAnalyser() {
                                                                       "#Delta#phi_{nFD,e} = #phi_{n}^{ECAL} - #phi_{e}^{ECAL} [Deg]",
                                                                       "#Delta#theta_{nFD,e} = #theta_{n}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
                                                                       directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                      "06_nFD_Neutron_hits_vs_electron_hits_BV_1e_cut", -180, 180, -50, 50, 100,
-                                                                      100);
+                                                                      "06_nFD_Neutron_hits_vs_electron_hits_BV_1e_cut", -180, 180, -50, 50, 100, 100);
     hPlot2D hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e} AV",
                                                                       "'Neutron Hits' vs. Electron Hits - After Veto",
                                                                       "#Delta#phi_{nFD,e} = #phi_{n}^{ECAL} - #phi_{e}^{ECAL} [Deg]",
                                                                       "#Delta#theta_{nFD,e} = #theta_{n}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
                                                                       directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                      "07_nFD_Neutron_hits_vs_electron_hits_AV_1e_cut", -180, 180, -50, 50, 100,
-                                                                      100);
+                                                                      "07_nFD_Neutron_hits_vs_electron_hits_AV_1e_cut", -180, 180, -50, 50, 100, 100);
     hPlot2D hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e} Vetoed",
                                                                           "'Neutron Hits' vs. Electron Hits - Vetoed Neutrons",
                                                                           "#Delta#phi_{nFD,e} = #phi_{n}^{ECAL} - #phi_{e}^{ECAL} [Deg]",
                                                                           "#Delta#theta_{nFD,e} = #theta_{n}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
                                                                           directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                          "08_nFD_Neutron_hits_vs_electron_hits_Vetoed_1e_cut", -180, 180, -50, 50,
-                                                                          100, 100);
+                                                                          "08_nFD_Neutron_hits_vs_electron_hits_Vetoed_1e_cut", -180, 180, -50, 50, 100, 100);
     //</editor-fold>
 
     //</editor-fold>
@@ -3742,23 +3692,19 @@ void EventAnalyser() {
                                                                       "#Delta#phi_{LnFD,pFD} = #phi_{n}^{ECAL} - #phi_{pFD}^{ECAL} [Deg]",
                                                                       "#Delta#theta_{LnFD,pFD} = #theta_{n}^{ECAL} - #theta_{pFD}^{ECAL} [Deg]",
                                                                       directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                      "09_LnFD_Neutron_hits_vs_proton_hits_BV_1e_cut", -180, 180, -50, 50, 100,
-                                                                      100);
+                                                                      "09_LnFD_Neutron_hits_vs_proton_hits_BV_1e_cut", -180, 180, -50, 50, 100, 100);
     hPlot2D hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_AV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} AV",
                                                                       "'Leading Neutron Hits' vs. Proton Hits - After Veto",
                                                                       "#Delta#phi_{LnFD,pFD} = #phi_{n}^{ECAL} - #phi_{pFD}^{ECAL} [Deg]",
                                                                       "#Delta#theta_{LnFD,pFD} = #theta_{n}^{ECAL} - #theta_{pFD}^{ECAL} [Deg]",
                                                                       directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                      "10_LnFD_Neutron_hits_vs_proton_hits_AV_1e_cut", -180, 180, -50, 50, 100,
-                                                                      100);
-    hPlot2D hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_Vetoed_1e_cut = hPlot2D("1e cut", "FD",
-                                                                          "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} Vetoed",
+                                                                      "10_LnFD_Neutron_hits_vs_proton_hits_AV_1e_cut", -180, 180, -50, 50, 100, 100);
+    hPlot2D hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_Vetoed_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} Vetoed",
                                                                           "'Leading Neutron Hits' vs. Proton Hits - Vetoed Neutrons",
                                                                           "#Delta#phi_{LnFD,pFD} = #phi_{n}^{ECAL} - #phi_{pFD}^{ECAL} [Deg]",
                                                                           "#Delta#theta_{LnFD,pFD} = #theta_{n}^{ECAL} - #theta_{pFD}^{ECAL} [Deg]",
                                                                           directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                          "11_LnFD_Neutron_hits_vs_proton_hits_Vetoed_1e_cut", -180, 180, -50, 50,
-                                                                          100, 100);
+                                                                          "11_LnFD_Neutron_hits_vs_proton_hits_Vetoed_1e_cut", -180, 180, -50, 50, 100, 100);
     //</editor-fold>
 
     //<editor-fold desc="Identified protons and all FD neutrons">
@@ -3779,8 +3725,7 @@ void EventAnalyser() {
                                                                         "#Delta#phi_{nFD,pFD} = #phi_{n}^{ECAL} - #phi_{pFD}^{ECAL} [Deg]",
                                                                         "#Delta#theta_{nFD,pFD} = #theta_{n}^{ECAL} - #theta_{pFD}^{ECAL} [Deg]",
                                                                         directories.Angle_Directory_map["Neutron_veto_1e_cut_Directory"],
-                                                                        "14_nFD_Neutron_hits_vs_proton_hits_Vetoed_1e_cut", -180, 180, -50, 50,
-                                                                        100, 100);
+                                                                        "14_nFD_Neutron_hits_vs_proton_hits_Vetoed_1e_cut", -180, 180, -50, 50, 100, 100);
     //</editor-fold>
 
     //</editor-fold>
@@ -3795,17 +3740,15 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_p (1p, FD only)">
     THStack *sTheta_p_1p = new THStack("#theta_{p} (All Int., 1p, FD)", "#theta_{p} of Outgoing FD Proton (All Int., 1p, FD);#theta_{p} [Deg];");
-    TH1D *hTheta_p_All_Int_1p = new TH1D("#theta_{p} (All Int., 1p, FD)", "#theta_{p} of Outgoing FD Proton (All Int., 1p, FD);#theta_{p} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_p_All_Int_1p = new TH1D("#theta_{p} (All Int., 1p, FD)", "#theta_{p} of Outgoing FD Proton (All Int., 1p, FD);#theta_{p} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_p_All_Int_1p_Dir = directories.Angle_Directory_map["Theta_p_1p_Directory"];
 
-    TH2D *hTheta_p_VS_P_p_1p_FD = new TH2D("#theta_{p} vs. P_{p} (All Int., 1p, FD)",
-                                           "#theta_{p} vs. P_{p} (All Int., 1p, FD);P_{p} [GeV/c];#theta_{p} [Deg]",
+    TH2D *hTheta_p_VS_P_p_1p_FD = new TH2D("#theta_{p} vs. P_{p} (All Int., 1p, FD)", "#theta_{p} vs. P_{p} (All Int., 1p, FD);P_{p} [GeV/c];#theta_{p} [Deg]",
                                            numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     TH2D *hTheta_p_VS_W_1p_FD = new TH2D("#theta_{p} vs. W (All Int., 1p, FD)",
-                                         "#theta_{p} vs. W (All Int., 1p, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{p} [Deg]",
-                                         numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                         Theta_uboundary_FD);
+                                         "#theta_{p} vs. W (All Int., 1p, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{p} [Deg]", numTH2Dbins_Ang_Plots,
+                                         W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_p_VS_P_p_1p_FD_Dir = directories.Angle_Directory_map["Theta_p_1p_Directory"];
     string hTheta_p_VS_W_1p_FD_Dir = directories.Angle_Directory_map["Theta_p_1p_Directory"];
     //</editor-fold>
@@ -3814,8 +3757,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Phi_p (1p, FD only)">
     THStack *sPhi_p_1p = new THStack("#phi_{p} (All Int., 1p, FD)", "#phi_{p} of Outgoing Proton (All Int., 1p, FD);#phi_{p} [Deg];");
-    TH1D *hPhi_p_All_Int_1p = new TH1D("#phi_{p} (All Int., 1p, FD)", "#phi_{p} of Outgoing Proton (All Int., 1p, FD);#phi_{p} [Deg];",
-                                       numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_p_All_Int_1p = new TH1D("#phi_{p} (All Int., 1p, FD)", "#phi_{p} of Outgoing Proton (All Int., 1p, FD);#phi_{p} [Deg];", numTH1Dbins_Ang_Plots, Phi_lboundary,
+                                       Phi_uboundary);
     string hPhi_p_All_Int_1p_Dir = directories.Angle_Directory_map["Phi_p_1p_Directory"];
     //</editor-fold>
 
@@ -3823,9 +3766,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_p vs. Phi_p histograms">
     TH2D *hTheta_p_VS_Phi_p_1p_FD = new TH2D("#theta_{p} vs. #phi_{p} of FD proton (All Int., 1p)",
-                                             "#theta_{p} vs. #phi_{p} of FD proton (All Int., 1p);#phi_{p} [Deg];#theta_{p} [Deg]",
-                                             numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                             numTH2Dbins_Nucleon_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+                                             "#theta_{p} vs. #phi_{p} of FD proton (All Int., 1p);#phi_{p} [Deg];#theta_{p} [Deg]", numTH2Dbins_Nucleon_Ang_Plots,
+                                             Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_p_VS_Phi_p_1p_FD_Dir = directories.Angle_Directory_map["Theta_p_VS_Phi_p_1p_Directory"];
     //</editor-fold>
 
@@ -3877,17 +3819,15 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_n (1n, FD only)">
     THStack *sTheta_n_1n = new THStack("#theta_{n} (All Int., 1n, FD)", "#theta_{n} of Outgoing FD Neutron (All Int., 1n, FD);#theta_{n} [Deg];");
-    TH1D *hTheta_n_All_Int_1n = new TH1D("#theta_{n} (All Int., 1n, FD)", "#theta_{n} of Outgoing FD Neutron (All Int., 1n, FD);#theta_{n} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_n_All_Int_1n = new TH1D("#theta_{n} (All Int., 1n, FD)", "#theta_{n} of Outgoing FD Neutron (All Int., 1n, FD);#theta_{n} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_n_All_Int_1n_Dir = directories.Angle_Directory_map["Theta_n_1n_Directory"];
 
-    TH2D *hTheta_n_VS_P_n_1n_FD = new TH2D("#theta_{n} vs. P_{n} (All Int., 1n, FD)",
-                                           "#theta_{n} vs. P_{n} (All Int., 1n, FD);P_{n} [GeV/c];#theta_{n} [Deg]",
+    TH2D *hTheta_n_VS_P_n_1n_FD = new TH2D("#theta_{n} vs. P_{n} (All Int., 1n, FD)", "#theta_{n} vs. P_{n} (All Int., 1n, FD);P_{n} [GeV/c];#theta_{n} [Deg]",
                                            numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     TH2D *hTheta_n_VS_W_1n_FD = new TH2D("#theta_{n} vs. W (All Int., 1n, FD)",
-                                         "#theta_{n} vs. W (All Int., 1n, FD);W = #sqrt{(#omega + m_{n})^{2} - #vec{q}^{2}}  [GeV];#theta_{n} [Deg]",
-                                         numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                         Theta_uboundary_FD);
+                                         "#theta_{n} vs. W (All Int., 1n, FD);W = #sqrt{(#omega + m_{n})^{2} - #vec{q}^{2}}  [GeV];#theta_{n} [Deg]", numTH2Dbins_Ang_Plots,
+                                         W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_n_VS_P_n_1n_FD_Dir = directories.Angle_Directory_map["Theta_n_1n_Directory"];
     string hTheta_n_VS_W_1n_FD_Dir = directories.Angle_Directory_map["Theta_n_1n_Directory"];
     //</editor-fold>
@@ -3896,8 +3836,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Phi_n (1n, FD only)">
     THStack *sPhi_n_1n = new THStack("#phi_{n} (All Int., 1n, FD)", "#phi_{n} of Outgoing Neutron (All Int., 1n, FD);#phi_{n} [Deg];");
-    TH1D *hPhi_n_All_Int_1n = new TH1D("#phi_{n} (All Int., 1n, FD)", "#phi_{n} of Outgoing Neutron (All Int., 1n, FD);#phi_{n} [Deg];",
-                                       numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_n_All_Int_1n = new TH1D("#phi_{n} (All Int., 1n, FD)", "#phi_{n} of Outgoing Neutron (All Int., 1n, FD);#phi_{n} [Deg];", numTH1Dbins_Ang_Plots, Phi_lboundary,
+                                       Phi_uboundary);
     string hPhi_n_All_Int_1n_Dir = directories.Angle_Directory_map["Phi_n_1n_Directory"];
     //</editor-fold>
 
@@ -3905,9 +3845,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_n vs. Phi_n histograms">
     TH2D *hTheta_n_VS_Phi_n_1n_FD = new TH2D("#theta_{nFD} vs. #phi_{nFD} of FD neutron (All Int., 1n)",
-                                             "#theta_{nFD} vs. #phi_{nFD} of FD neutron (All Int., 1n);#phi_{nFD} [Deg];#theta_{nFD} [Deg]",
-                                             numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                             numTH2Dbins_Nucleon_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+                                             "#theta_{nFD} vs. #phi_{nFD} of FD neutron (All Int., 1n);#phi_{nFD} [Deg];#theta_{nFD} [Deg]", numTH2Dbins_Nucleon_Ang_Plots,
+                                             Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_n_VS_Phi_n_1n_FD_Dir = directories.Angle_Directory_map["Theta_n_VS_Phi_n_1n_Directory"];
     //</editor-fold>
 
@@ -3954,25 +3893,22 @@ void EventAnalyser() {
 // Neutron veto plots (1n) ----------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Neutron veto plots (1n)">
-    hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e} BV",
-                                                              "'Neutron Hits' vs. Electron Hits - Before Veto",
+    hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e} BV", "'Neutron Hits' vs. Electron Hits - Before Veto",
                                                               "#Delta#phi_{n,e} = #phi_{n}^{ECAL} - #phi_{e}^{ECAL} [Deg]",
                                                               "#Delta#theta_{n,e} = #theta_{n}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
-                                                              directories.Angle_Directory_map["Neutron_veto_1n_Directory"],
-                                                              "01_Neutron_hits_vs_electron_hits_BV_1n", -180, 180, -50, 50, 65, 65);
-    hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e} AV",
-                                                              "'Neutron Hits' vs. Electron Hits - After Veto",
+                                                              directories.Angle_Directory_map["Neutron_veto_1n_Directory"], "01_Neutron_hits_vs_electron_hits_BV_1n", -180,
+                                                              180, -50, 50, 65, 65);
+    hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e} AV", "'Neutron Hits' vs. Electron Hits - After Veto",
                                                               "#Delta#phi_{n,e} = #phi_{n}^{ECAL} - #phi_{e}^{ECAL} [Deg]",
                                                               "#Delta#theta_{n,e} = #theta_{n}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
-                                                              directories.Angle_Directory_map["Neutron_veto_1n_Directory"],
-                                                              "02_Neutron_hits_vs_electron_hits_AV_1n", -180, 180, -50, 50, 65, 65);
+                                                              directories.Angle_Directory_map["Neutron_veto_1n_Directory"], "02_Neutron_hits_vs_electron_hits_AV_1n", -180,
+                                                              180, -50, 50, 65, 65);
     hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_Vetoed_Neutrons_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e}",
                                                                            "'Neutron Hits' vs. Electron Hits - Vetoed Neutrons",
                                                                            "#Delta#phi_{n,e} = #phi_{n}^{ECAL} - #phi_{e}^{ECAL} [Deg]",
                                                                            "#Delta#theta_{n,e} = #theta_{n}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
                                                                            directories.Angle_Directory_map["Neutron_veto_1n_Directory"],
-                                                                           "03_Neutron_hits_vs_electron_hits_Vetoed_1n", -180, 180, -50, 50, 65,
-                                                                           65);
+                                                                           "03_Neutron_hits_vs_electron_hits_Vetoed_1n", -180, 180, -50, 50, 65, 65);
     //</editor-fold>
 
     //</editor-fold>
@@ -4049,20 +3985,15 @@ void EventAnalyser() {
     THStack *sTheta_p1_p2_2p = new THStack("#theta_{p_{1},p_{2}} (All Int., stack, 2p)",
                                            "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (2p);#theta_{p_{1},p_{2}} [Deg];");
     TH1D *hTheta_p1_p2_All_Int_2p = new TH1D("#theta_{p_{1},p_{2}} (All Int., 2p)",
-                                             "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (All Int., 2p);#theta_{p_{1},p_{2}} [Deg];",
-                                             numTH1Dbins_Ang_Plots, 0, 180);
+                                             "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (All Int., 2p);#theta_{p_{1},p_{2}} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     TH1D *hTheta_p1_p2_QEL_2p = new TH1D("#theta_{p_{1},p_{2}} (QEL only, 2p)",
-                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (QEL only, 2p);#theta_{p_{1},p_{2}} [Deg];",
-                                         numTH1Dbins_Ang_Plots, 0, 180);
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (QEL only, 2p);#theta_{p_{1},p_{2}} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     TH1D *hTheta_p1_p2_MEC_2p = new TH1D("#theta_{p_{1},p_{2}} (MEC only, 2p)",
-                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (MEC only, 2p);#theta_{p_{1},p_{2}} [Deg];",
-                                         numTH1Dbins_Ang_Plots, 0, 180);
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (MEC only, 2p);#theta_{p_{1},p_{2}} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     TH1D *hTheta_p1_p2_RES_2p = new TH1D("#theta_{p_{1},p_{2}} (RES only, 2p)",
-                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (RES only, 2p);#theta_{p_{1},p_{2}} [Deg];",
-                                         numTH1Dbins_Ang_Plots, 0, 180);
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (RES only, 2p);#theta_{p_{1},p_{2}} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     TH1D *hTheta_p1_p2_DIS_2p = new TH1D("#theta_{p_{1},p_{2}} (DIS only, 2p)",
-                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, 2p);#theta_{p_{1},p_{2}} [Deg];",
-                                         numTH1Dbins_Ang_Plots, 0, 180);
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, 2p);#theta_{p_{1},p_{2}} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     string sTheta_p1_p2_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
     string hTheta_p1_p2_All_Int_2p_Dir = directories.Angle_Directory_map["Opening_angle_by_interaction_2p_Directory"];
     string hTheta_p1_p2_QEL_2p_Dir = directories.Angle_Directory_map["Opening_angle_by_interaction_2p_Directory"];
@@ -4083,10 +4014,9 @@ void EventAnalyser() {
 // Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (CD & FD)">
-    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p = new TH2D(
-            "#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
-            "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#theta_{p_{2}} [Deg];"
-            "#theta_{p_{1}} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30, 50);
+    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
+                                                                 "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#theta_{p_{2}} [Deg];"
+                                                                 "#theta_{p_{1}} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30, 50);
     string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
@@ -4095,8 +4025,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (CD & FD)">
     TH2D *hTheta_pFD_vs_Theta_pCD_for_Theta_pFD_pCD_20_2p = new TH2D("#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)",
                                                                      "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p);#theta_{pCD} [Deg];"
-                                                                     "#theta_{pFD} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots,
-                                                                     30, 50);
+                                                                     "#theta_{pFD} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30, 50);
     string hTheta_pFD_vs_Theta_pCD_for_Theta_pFD_pCD_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
@@ -4105,8 +4034,7 @@ void EventAnalyser() {
     //<editor-fold desc="dPhi_p1_p2 for Theta_p1_p2 < 20 (CD & FD)">
     TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_2p = new TH1D("#Delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
                                                        "#Delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);"
-                                                       "#Delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", numTH1Dbins_Ang_Plots, Phi_lboundary,
-                                                       Phi_uboundary);
+                                                       "#Delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     string hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
 
     TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p = new TH1D("#Delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p)",
@@ -4118,9 +4046,9 @@ void EventAnalyser() {
 // dPhi_pFD_pCD for Theta_pFD_pCD < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="dPhi_p1_p2 for Theta_pFD_pCD < 20 (CD & FD)">
-    TH1D *hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p = new TH1D("#Delta#phi for #theta_{pFD,pCD}<20#circ (All Int., 2p)",
-                                                           "#Delta#phi for #theta_{pFD,pCD}<20#circ (All Int., 2p);"
-                                                           "#Delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, Phi_lboundary, Phi_uboundary);
+    TH1D *hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p = new TH1D("#Delta#phi for #theta_{pFD,pCD}<20#circ (All Int., 2p)", "#Delta#phi for #theta_{pFD,pCD}<20#circ (All Int., 2p);"
+                                                                                                                     "#Delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50,
+                                                           Phi_lboundary, Phi_uboundary);
     string hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
 
     TH1D *hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_2p = new TH1D("#Delta#phi for #theta_{pFD,pCD}<20#circ - ZOOMIN (All Int., 2p)",
@@ -4134,8 +4062,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (CD & FD)">
     TH2D *hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
                                                                  "#theta_{p_{1}} vs. #theta_{p_{2}} for every #theta_{p_{1},p_{2}} (All Int., 2p);#theta_{p_{2}} [Deg];"
-                                                                 "#theta_{p_{1}} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30,
-                                                                 50);
+                                                                 "#theta_{p_{1}} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30, 50);
     string hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
@@ -4144,17 +4071,16 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_pFD_vs_Theta_pCD for every Theta_pFD_pCD (CD & FD)">
     TH2D *hTheta_pFD_vs_Theta_pCD_forall_Theta_pFD_pCD_2p = new TH2D("#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)",
                                                                      "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p);#theta_{pCD} [Deg];"
-                                                                     "#theta_{pFD} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots,
-                                                                     30, 50);
+                                                                     "#theta_{pFD} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30, 50);
     string hTheta_pFD_vs_Theta_pCD_forall_Theta_pFD_pCD_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
 // dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) -----------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="dPhi_p1_p2 for every Theta_p1_p2 (CD & FD)">
-    TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_2p = new TH1D("#Delta#phi #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
-                                                        "#Delta#phi for every #theta_{p_{1},p_{2}} (All Int., 2p);"
-                                                        "#Delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 50, Phi_lboundary, Phi_uboundary);
+    TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_2p = new TH1D("#Delta#phi #forall#theta_{p_{1},p_{2}} (All Int., 2p)", "#Delta#phi for every #theta_{p_{1},p_{2}} (All Int., 2p);"
+                                                                                                                 "#Delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 50,
+                                                        Phi_lboundary, Phi_uboundary);
     string hdPhi_p1_p2_for_all_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
 
     TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p = new TH1D("#Delta#phi #forall#theta_{p_{1},p_{2}} - ZOOMIN (All Int., 2p)",
@@ -4176,9 +4102,9 @@ void EventAnalyser() {
 // dPhi_pFD_pCD for every Theta_pFD_pCD (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="dPhi_pFD_pCD for every Theta_pFD_pCD (CD & FD)">
-    TH1D *hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_2p = new TH1D("#Delta#phi for #theta_{pFD,pCD} (All Int., 2p)",
-                                                            "#Delta#phi for #theta_{pFD,pCD} (All Int., 2p);"
-                                                            "#Delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, Phi_lboundary, Phi_uboundary);
+    TH1D *hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_2p = new TH1D("#Delta#phi for #theta_{pFD,pCD} (All Int., 2p)", "#Delta#phi for #theta_{pFD,pCD} (All Int., 2p);"
+                                                                                                              "#Delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, Phi_lboundary,
+                                                            Phi_uboundary);
     string hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
 
     TH1D *hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_2p = new TH1D("#Delta#phi for #theta_{pFD,pCD} - ZOOMIN (All Int., 2p)",
@@ -4200,20 +4126,16 @@ void EventAnalyser() {
 // Ghost tracks handling (2p, CD only) ----------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (2p)">
-    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_AC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC",
-                                                      "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC",
-                                                      "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
-                                                      directories.Angle_Directory_map["CToF_hits_2p_Directory"],
-                                                      "01_Theta_p1_p2_VS_ToF1-ToF2_AC_2p", 0, 180, -3, 3, numTH2Dbins_Ang_Plots,
-                                                      numTH2Dbins_Ang_Plots);
+    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_AC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC",
+                                                      "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]", directories.Angle_Directory_map["CToF_hits_2p_Directory"],
+                                                      "01_Theta_p1_p2_VS_ToF1-ToF2_AC_2p", 0, 180, -3, 3, numTH2Dbins_Ang_Plots, numTH2Dbins_Ang_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (2p)">
     hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_AC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC",
-                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC", "#theta_{p_{1},p_{2}} [Deg]",
-                                                      "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["CToF_hits_2p_Directory"],
-                                                      "02_Theta_p1_p2_VS_Pos1-Pos2_AC_2p", 0, 180, 0, 100, numTH2Dbins_Ang_Plots,
-                                                      numTH2Dbins_Ang_Plots);
+                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC", "#theta_{p_{1},p_{2}} [Deg]", "Position_{1}-Position_{2} [cm]",
+                                                      directories.Angle_Directory_map["CToF_hits_2p_Directory"], "02_Theta_p1_p2_VS_Pos1-Pos2_AC_2p", 0, 180, 0, 100,
+                                                      numTH2Dbins_Ang_Plots, numTH2Dbins_Ang_Plots);
     //</editor-fold>
 
     //</editor-fold>
@@ -4227,21 +4149,16 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_pFD histograms">
     THStack *sTheta_pFD_pFDpCD_FD = new THStack("#theta_{pFD} (pFDpCD)", "#theta_{pFD} of FD proton (pFDpCD);#theta_{pFD} [Deg];");
 
-    TH1D *hTheta_pFD_All_Int_pFDpCD_FD = new TH1D("#theta_{pFD} (All Int., pFDpCD)",
-                                                  "#theta_{pFD} of FD proton (All Int., pFDpCD);#theta_{pFD} [Deg];",
-                                                  numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_pFD_QEL_pFDpCD_FD = new TH1D("#theta_{pFD} (QEL Only, pFDpCD)",
-                                              "#theta_{pFD} of FD proton (QEL Only, pFDpCD);#theta_{pFD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_pFD_MEC_pFDpCD_FD = new TH1D("#theta_{pFD} (MEC Only, pFDpCD)",
-                                              "#theta_{pFD} of FD proton (MEC Only, pFDpCD);#theta_{pFD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_pFD_RES_pFDpCD_FD = new TH1D("#theta_{pFD} (RES Only, pFDpCD)",
-                                              "#theta_{pFD} of FD proton (RES Only, pFDpCD);#theta_{pFD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_pFD_DIS_pFDpCD_FD = new TH1D("#theta_{pFD} (DIS Only, pFDpCD)",
-                                              "#theta_{pFD} of FD proton (DIS Only, pFDpCD);#theta_{pFD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_pFD_All_Int_pFDpCD_FD = new TH1D("#theta_{pFD} (All Int., pFDpCD)", "#theta_{pFD} of FD proton (All Int., pFDpCD);#theta_{pFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                                  Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_pFD_QEL_pFDpCD_FD = new TH1D("#theta_{pFD} (QEL Only, pFDpCD)", "#theta_{pFD} of FD proton (QEL Only, pFDpCD);#theta_{pFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_pFD_MEC_pFDpCD_FD = new TH1D("#theta_{pFD} (MEC Only, pFDpCD)", "#theta_{pFD} of FD proton (MEC Only, pFDpCD);#theta_{pFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_pFD_RES_pFDpCD_FD = new TH1D("#theta_{pFD} (RES Only, pFDpCD)", "#theta_{pFD} of FD proton (RES Only, pFDpCD);#theta_{pFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_pFD_DIS_pFDpCD_FD = new TH1D("#theta_{pFD} (DIS Only, pFDpCD)", "#theta_{pFD} of FD proton (DIS Only, pFDpCD);#theta_{pFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_pFD_All_Int_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
     string hTheta_pFD_QEL_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
     string hTheta_pFD_MEC_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
@@ -4249,13 +4166,11 @@ void EventAnalyser() {
     string hTheta_pFD_DIS_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
 
     TH2D *hTheta_pFD_VS_P_pFD_pFDpCD_FD = new TH2D("#theta_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
-                                                   "#theta_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD);P_{pFD} [GeV/c];#theta_{pFD} [Deg]",
-                                                   numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                                   Theta_uboundary_FD);
+                                                   "#theta_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD);P_{pFD} [GeV/c];#theta_{pFD} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                   numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     TH2D *hTheta_pFD_VS_W_pFDpCD_FD = new TH2D("#theta_{pFD} vs. W (All Int., pFDpCD, FD)",
                                                "#theta_{pFD} vs. W (All Int., pFDpCD, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{pFD} [Deg]",
-                                               numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                               Theta_uboundary_FD);
+                                               numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_pFD_VS_P_pFD_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
     string hTheta_pFD_VS_W_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
     //</editor-fold>
@@ -4265,16 +4180,16 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_pFD histograms">
     THStack *sPhi_pFD_pFDpCD_FD = new THStack("#phi_{pFD} (pFDpCD)", "#phi_{pFD} of FD proton (pFDpCD);#phi_{pFD} [Deg];");
 
-    TH1D *hPhi_pFD_All_Int_pFDpCD_FD = new TH1D("#phi_{pFD} (All Int., pFDpCD)", "#phi_{pFD} of FD proton (All Int., pFDpCD);#phi_{pFD} [Deg];",
-                                                numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pFD_QEL_pFDpCD_FD = new TH1D("#phi_{pFD} (QEL Only, pFDpCD)", "#phi_{pFD} of FD proton (QEL Only, pFDpCD);#phi_{pFD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pFD_MEC_pFDpCD_FD = new TH1D("#phi_{pFD} (MEC Only, pFDpCD)", "#phi_{pFD} of FD proton (MEC Only, pFDpCD);#phi_{pFD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pFD_RES_pFDpCD_FD = new TH1D("#phi_{pFD} (RES Only, pFDpCD)", "#phi_{pFD} of FD proton (RES Only, pFDpCD);#phi_{pFD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pFD_DIS_pFDpCD_FD = new TH1D("#phi_{pFD} (DIS Only, pFDpCD)", "#phi_{pFD} of FD proton (DIS Only, pFDpCD);#phi_{pFD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pFD_All_Int_pFDpCD_FD = new TH1D("#phi_{pFD} (All Int., pFDpCD)", "#phi_{pFD} of FD proton (All Int., pFDpCD);#phi_{pFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                                Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pFD_QEL_pFDpCD_FD = new TH1D("#phi_{pFD} (QEL Only, pFDpCD)", "#phi_{pFD} of FD proton (QEL Only, pFDpCD);#phi_{pFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pFD_MEC_pFDpCD_FD = new TH1D("#phi_{pFD} (MEC Only, pFDpCD)", "#phi_{pFD} of FD proton (MEC Only, pFDpCD);#phi_{pFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pFD_RES_pFDpCD_FD = new TH1D("#phi_{pFD} (RES Only, pFDpCD)", "#phi_{pFD} of FD proton (RES Only, pFDpCD);#phi_{pFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pFD_DIS_pFDpCD_FD = new TH1D("#phi_{pFD} (DIS Only, pFDpCD)", "#phi_{pFD} of FD proton (DIS Only, pFDpCD);#phi_{pFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
     string hPhi_pFD_All_Int_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
     string hPhi_pFD_QEL_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
     string hPhi_pFD_MEC_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
@@ -4282,13 +4197,11 @@ void EventAnalyser() {
     string hPhi_pFD_DIS_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
 
     TH2D *hPhi_pFD_VS_P_pFD_pFDpCD_FD = new TH2D("#phi_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
-                                                 "#phi_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD);P_{pFD} [GeV/c];#phi_{pFD} [Deg]",
-                                                 numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+                                                 "#phi_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD);P_{pFD} [GeV/c];#phi_{pFD} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                 numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_pFD_VS_W_pFDpCD_FD = new TH2D("#phi_{pFD} vs. W (All Int., pFDpCD, FD)",
                                              "#phi_{pFD} vs. W (All Int., pFDpCD, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                             "#phi_{pFD} [Deg]", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
-                                             Phi_lboundary,
-                                             Phi_uboundary);
+                                             "#phi_{pFD} [Deg]", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     string hPhi_pFD_VS_P_pFD_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
     string hPhi_pFD_VS_W_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
     //</editor-fold>
@@ -4298,8 +4211,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_pFD vs. Phi_pFD histograms">
     TH2D *hTheta_pFD_VS_Phi_pFD_pFDpCD_FD = new TH2D("#theta_{pFD} vs. #phi_{pFD} of FD proton (All Int., pFDpCD)",
                                                      "#theta_{pFD} vs. #phi_{pFD} of FD proton (All Int., pFDpCD);#phi_{pFD} [Deg];#theta_{pFD} [Deg]",
-                                                     numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                                     numTH2Dbins_Nucleon_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                     numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, Theta_lboundary_FD,
+                                                     Theta_uboundary_FD);
     string hTheta_pFD_VS_Phi_pFD_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_VS_Phi_pFD_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4308,21 +4221,16 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_pCD histograms">
     THStack *sTheta_pCD_pFDpCD_CD = new THStack("#theta_{pCD} (pFDpCD)", "#theta_{pCD} of CD proton (pFDpCD);#theta_{pCD} [Deg];");
 
-    TH1D *hTheta_pCD_All_Int_pFDpCD_CD = new TH1D("#theta_{pCD} (All Int., pFDpCD)",
-                                                  "#theta_{pCD} of CD proton (All Int., pFDpCD);#theta_{pCD} [Deg];",
-                                                  numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_pCD_QEL_pFDpCD_CD = new TH1D("#theta_{pCD} (QEL Only, pFDpCD)",
-                                              "#theta_{pCD} of CD proton (QEL Only, pFDpCD);#theta_{pCD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_pCD_MEC_pFDpCD_CD = new TH1D("#theta_{pCD} (MEC Only, pFDpCD)",
-                                              "#theta_{pCD} of CD proton (MEC Only, pFDpCD);#theta_{pCD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_pCD_RES_pFDpCD_CD = new TH1D("#theta_{pCD} (RES Only, pFDpCD)",
-                                              "#theta_{pCD} of CD proton (RES Only, pFDpCD);#theta_{pCD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_pCD_DIS_pFDpCD_CD = new TH1D("#theta_{pCD} (DIS Only, pFDpCD)",
-                                              "#theta_{pCD} of CD proton (DIS Only, pFDpCD);#theta_{pCD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, 30, 155);
+    TH1D *hTheta_pCD_All_Int_pFDpCD_CD = new TH1D("#theta_{pCD} (All Int., pFDpCD)", "#theta_{pCD} of CD proton (All Int., pFDpCD);#theta_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                                  30, 155);
+    TH1D *hTheta_pCD_QEL_pFDpCD_CD = new TH1D("#theta_{pCD} (QEL Only, pFDpCD)", "#theta_{pCD} of CD proton (QEL Only, pFDpCD);#theta_{pCD} [Deg];", numTH1Dbins_Ang_Plots, 30,
+                                              155);
+    TH1D *hTheta_pCD_MEC_pFDpCD_CD = new TH1D("#theta_{pCD} (MEC Only, pFDpCD)", "#theta_{pCD} of CD proton (MEC Only, pFDpCD);#theta_{pCD} [Deg];", numTH1Dbins_Ang_Plots, 30,
+                                              155);
+    TH1D *hTheta_pCD_RES_pFDpCD_CD = new TH1D("#theta_{pCD} (RES Only, pFDpCD)", "#theta_{pCD} of CD proton (RES Only, pFDpCD);#theta_{pCD} [Deg];", numTH1Dbins_Ang_Plots, 30,
+                                              155);
+    TH1D *hTheta_pCD_DIS_pFDpCD_CD = new TH1D("#theta_{pCD} (DIS Only, pFDpCD)", "#theta_{pCD} of CD proton (DIS Only, pFDpCD);#theta_{pCD} [Deg];", numTH1Dbins_Ang_Plots, 30,
+                                              155);
     string hTheta_pCD_All_Int_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_pFDpCD_Directory"];
     string hTheta_pCD_QEL_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_pFDpCD_Directory"];
     string hTheta_pCD_MEC_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_pFDpCD_Directory"];
@@ -4330,8 +4238,8 @@ void EventAnalyser() {
     string hTheta_pCD_DIS_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_pFDpCD_Directory"];
 
     TH2D *hTheta_pCD_VS_P_pCD_pFDpCD_CD = new TH2D("#theta_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
-                                                   "#theta_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD);P_{pCD} [GeV/c];#theta_{pCD} [Deg]",
-                                                   numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, 30, 155);
+                                                   "#theta_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD);P_{pCD} [GeV/c];#theta_{pCD} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                   numTH2Dbins_Ang_Plots, 30, 155);
     TH2D *hTheta_pCD_VS_W_pFDpCD_CD = new TH2D("#theta_{pCD} vs. W (All Int., pFDpCD, CD)",
                                                "#theta_{pCD} vs. W (All Int., pFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{pCD} [Deg]",
                                                numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 30, 155);
@@ -4344,16 +4252,16 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_pCD histograms">
     THStack *sPhi_pCD_pFDpCD_CD = new THStack("#phi_{pCD} (pFDpCD)", "#phi_{pCD} of CD proton (pFDpCD);#phi_{pCD} [Deg];");
 
-    TH1D *hPhi_pCD_All_Int_pFDpCD_CD = new TH1D("#phi_{pCD} (All Int., pFDpCD)", "#phi_{pCD} of CD proton (All Int., pFDpCD);#phi_{pCD} [Deg];",
-                                                numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pCD_QEL_pFDpCD_CD = new TH1D("#phi_{pCD} (QEL Only, pFDpCD)", "#phi_{pCD} of CD proton (QEL Only, pFDpCD);#phi_{pCD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pCD_MEC_pFDpCD_CD = new TH1D("#phi_{pCD} (MEC Only, pFDpCD)", "#phi_{pCD} of CD proton (MEC Only, pFDpCD);#phi_{pCD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pCD_RES_pFDpCD_CD = new TH1D("#phi_{pCD} (RES Only, pFDpCD)", "#phi_{pCD} of CD proton (RES Only, pFDpCD);#phi_{pCD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pCD_DIS_pFDpCD_CD = new TH1D("#phi_{pCD} (DIS Only, pFDpCD)", "#phi_{pCD} of CD proton (DIS Only, pFDpCD);#phi_{pCD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pCD_All_Int_pFDpCD_CD = new TH1D("#phi_{pCD} (All Int., pFDpCD)", "#phi_{pCD} of CD proton (All Int., pFDpCD);#phi_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                                Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pCD_QEL_pFDpCD_CD = new TH1D("#phi_{pCD} (QEL Only, pFDpCD)", "#phi_{pCD} of CD proton (QEL Only, pFDpCD);#phi_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pCD_MEC_pFDpCD_CD = new TH1D("#phi_{pCD} (MEC Only, pFDpCD)", "#phi_{pCD} of CD proton (MEC Only, pFDpCD);#phi_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pCD_RES_pFDpCD_CD = new TH1D("#phi_{pCD} (RES Only, pFDpCD)", "#phi_{pCD} of CD proton (RES Only, pFDpCD);#phi_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pCD_DIS_pFDpCD_CD = new TH1D("#phi_{pCD} (DIS Only, pFDpCD)", "#phi_{pCD} of CD proton (DIS Only, pFDpCD);#phi_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
     string hPhi_pCD_All_Int_pFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_pFDpCD_Directory"];
     string hPhi_pCD_QEL_pFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_pFDpCD_Directory"];
     string hPhi_pCD_MEC_pFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_pFDpCD_Directory"];
@@ -4361,8 +4269,8 @@ void EventAnalyser() {
     string hPhi_pCD_DIS_pFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_pFDpCD_Directory"];
 
     TH2D *hPhi_pCD_VS_P_pCD_pFDpCD_CD = new TH2D("#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
-                                                 "#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD);P_{pCD} [GeV/c];#phi_{pCD} [Deg]",
-                                                 numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+                                                 "#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD);P_{pCD} [GeV/c];#phi_{pCD} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                 numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_pCD_VS_W_pFDpCD_CD = new TH2D("#phi_{pCD} vs. W (All Int., pFDpCD, CD)",
                                              "#phi_{pCD} vs. W (All Int., pFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{pCD} [Deg]",
                                              numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
@@ -4375,8 +4283,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_pCD vs. Phi_pCD histograms">
     TH2D *hTheta_pCD_VS_Phi_pCD_pFDpCD_CD = new TH2D("#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., pFDpCD)",
                                                      "#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., pFDpCD);#phi_{pCD} [Deg];#theta_{pCD} [Deg]",
-                                                     numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots,
-                                                     30, 155);
+                                                     numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, 30, 155);
     string hTheta_pCD_VS_Phi_pCD_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_VS_Phi_pCD_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4385,21 +4292,16 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_tot histograms">
     THStack *sTheta_tot_pFDpCD = new THStack("#theta_{tot} (pFDpCD)", "#theta_{tot} of total 3-momentum (pFDpCD);#theta_{tot} [Deg];");
 
-    TH1D *hTheta_tot_All_Int_pFDpCD = new TH1D("#theta_{tot} (All Int., pFDpCD)",
-                                               "#theta_{tot} of total 3-momentum (All Int., pFDpCD);#theta_{tot} [Deg];",
+    TH1D *hTheta_tot_All_Int_pFDpCD = new TH1D("#theta_{tot} (All Int., pFDpCD)", "#theta_{tot} of total 3-momentum (All Int., pFDpCD);#theta_{tot} [Deg];",
                                                numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
-    TH1D *hTheta_tot_QEL_pFDpCD = new TH1D("#theta_{tot} (QEL Only, pFDpCD)",
-                                           "#theta_{tot} of total 3-momentum (QEL Only, pFDpCD);#theta_{tot} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
-    TH1D *hTheta_tot_MEC_pFDpCD = new TH1D("#theta_{tot} (MEC Only, pFDpCD)",
-                                           "#theta_{tot} of total 3-momentum (MEC Only, pFDpCD);#theta_{tot} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
-    TH1D *hTheta_tot_RES_pFDpCD = new TH1D("#theta_{tot} (RES Only, pFDpCD)",
-                                           "#theta_{tot} of total 3-momentum (RES Only, pFDpCD);#theta_{tot} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
-    TH1D *hTheta_tot_DIS_pFDpCD = new TH1D("#theta_{tot} (DIS Only, pFDpCD)",
-                                           "#theta_{tot} of total 3-momentum (DIS Only, pFDpCD);#theta_{tot} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+    TH1D *hTheta_tot_QEL_pFDpCD = new TH1D("#theta_{tot} (QEL Only, pFDpCD)", "#theta_{tot} of total 3-momentum (QEL Only, pFDpCD);#theta_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                           Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+    TH1D *hTheta_tot_MEC_pFDpCD = new TH1D("#theta_{tot} (MEC Only, pFDpCD)", "#theta_{tot} of total 3-momentum (MEC Only, pFDpCD);#theta_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                           Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+    TH1D *hTheta_tot_RES_pFDpCD = new TH1D("#theta_{tot} (RES Only, pFDpCD)", "#theta_{tot} of total 3-momentum (RES Only, pFDpCD);#theta_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                           Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+    TH1D *hTheta_tot_DIS_pFDpCD = new TH1D("#theta_{tot} (DIS Only, pFDpCD)", "#theta_{tot} of total 3-momentum (DIS Only, pFDpCD);#theta_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                           Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_tot_All_Int_pFDpCD_Dir = directories.Angle_Directory_map["Theta_tot_pFDpCD_Directory"];
     string hTheta_tot_QEL_pFDpCD_Dir = directories.Angle_Directory_map["Theta_tot_pFDpCD_Directory"];
     string hTheta_tot_MEC_pFDpCD_Dir = directories.Angle_Directory_map["Theta_tot_pFDpCD_Directory"];
@@ -4407,9 +4309,8 @@ void EventAnalyser() {
     string hTheta_tot_DIS_pFDpCD_Dir = directories.Angle_Directory_map["Theta_tot_pFDpCD_Directory"];
 
     TH2D *hTheta_tot_VS_P_tot_pFDpCD = new TH2D("#theta_{tot} vs. P_{tot} (All Int., pFDpCD, CD)",
-                                                "#theta_{tot} vs. P_{tot} (All Int., pFDpCD, CD);P_{tot} [GeV/c];#theta_{tot} [Deg]",
-                                                numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
-                                                Opening_Ang_narrow_uboundary);
+                                                "#theta_{tot} vs. P_{tot} (All Int., pFDpCD, CD);P_{tot} [GeV/c];#theta_{tot} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     TH2D *hTheta_tot_VS_W_pFDpCD = new TH2D("#theta_{tot} vs. W (All Int., pFDpCD, CD)",
                                             "#theta_{tot} vs. W (All Int., pFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{tot} [Deg]",
                                             numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
@@ -4423,17 +4324,16 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_tot histograms">
     THStack *sPhi_tot_pFDpCD = new THStack("#phi_{tot} (pFDpCD)", "#phi_{tot} of total 3-momentum (pFDpCD);#phi_{tot} [Deg];");
 
-    TH1D *hPhi_tot_All_Int_pFDpCD = new TH1D("#phi_{tot} (All Int., pFDpCD)",
-                                             "#phi_{tot} of total 3-momentum (All Int., pFDpCD);#phi_{tot} [Deg];",
-                                             numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_tot_QEL_pFDpCD = new TH1D("#phi_{tot} (QEL Only, pFDpCD)", "#phi_{tot} of total 3-momentum (QEL Only, pFDpCD);#phi_{tot} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_tot_MEC_pFDpCD = new TH1D("#phi_{tot} (MEC Only, pFDpCD)", "#phi_{tot} of total 3-momentum (MEC Only, pFDpCD);#phi_{tot} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_tot_RES_pFDpCD = new TH1D("#phi_{tot} (RES Only, pFDpCD)", "#phi_{tot} of total 3-momentum (RES Only, pFDpCD);#phi_{tot} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_tot_DIS_pFDpCD = new TH1D("#phi_{tot} (DIS Only, pFDpCD)", "#phi_{tot} of total 3-momentum (DIS Only, pFDpCD);#phi_{tot} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_tot_All_Int_pFDpCD = new TH1D("#phi_{tot} (All Int., pFDpCD)", "#phi_{tot} of total 3-momentum (All Int., pFDpCD);#phi_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                             Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_tot_QEL_pFDpCD = new TH1D("#phi_{tot} (QEL Only, pFDpCD)", "#phi_{tot} of total 3-momentum (QEL Only, pFDpCD);#phi_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_tot_MEC_pFDpCD = new TH1D("#phi_{tot} (MEC Only, pFDpCD)", "#phi_{tot} of total 3-momentum (MEC Only, pFDpCD);#phi_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_tot_RES_pFDpCD = new TH1D("#phi_{tot} (RES Only, pFDpCD)", "#phi_{tot} of total 3-momentum (RES Only, pFDpCD);#phi_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_tot_DIS_pFDpCD = new TH1D("#phi_{tot} (DIS Only, pFDpCD)", "#phi_{tot} of total 3-momentum (DIS Only, pFDpCD);#phi_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
     string hPhi_tot_All_Int_pFDpCD_Dir = directories.Angle_Directory_map["Phi_tot_pFDpCD_Directory"];
     string hPhi_tot_QEL_pFDpCD_Dir = directories.Angle_Directory_map["Phi_tot_pFDpCD_Directory"];
     string hPhi_tot_MEC_pFDpCD_Dir = directories.Angle_Directory_map["Phi_tot_pFDpCD_Directory"];
@@ -4441,8 +4341,8 @@ void EventAnalyser() {
     string hPhi_tot_DIS_pFDpCD_Dir = directories.Angle_Directory_map["Phi_tot_pFDpCD_Directory"];
 
     TH2D *hPhi_tot_VS_P_tot_pFDpCD = new TH2D("#phi_{tot} vs. P_{tot} (All Int., pFDpCD, CD)",
-                                              "#phi_{tot} vs. P_{tot} (All Int., pFDpCD, CD);P_{tot} [GeV/c];#phi_{tot} [Deg]",
-                                              numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+                                              "#phi_{tot} vs. P_{tot} (All Int., pFDpCD, CD);P_{tot} [GeV/c];#phi_{tot} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                              numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_tot_VS_W_pFDpCD = new TH2D("#phi_{tot} vs. W (All Int., pFDpCD, CD)",
                                           "#phi_{tot} vs. W (All Int., pFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{tot} [Deg]",
                                           numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
@@ -4455,8 +4355,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_tot vs. Phi_tot histograms">
     TH2D *hTheta_tot_VS_Phi_tot_pFDpCD = new TH2D("#theta_{tot} vs. #phi_{tot} of total 3-momentum (All Int., pFDpCD)",
                                                   "#theta_{tot} vs. #phi_{tot} of total 3-momentum (All Int., pFDpCD);#phi_{tot} [Deg];#theta_{tot} [Deg]",
-                                                  numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                                  numTH2Dbins_Nucleon_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                                  numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, Opening_Ang_narrow_lboundary,
+                                                  Opening_Ang_narrow_uboundary);
     string hTheta_tot_VS_Phi_tot_pFDpCD_Dir = directories.Angle_Directory_map["Theta_tot_VS_Phi_tot_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4465,20 +4365,15 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_rel histograms">
     THStack *sTheta_rel_pFDpCD = new THStack("#theta_{rel} (pFDpCD)", "#theta_{rel} of relative 3-momentum (pFDpCD);#theta_{rel} [Deg];");
 
-    TH1D *hTheta_rel_All_Int_pFDpCD = new TH1D("#theta_{rel} (All Int., pFDpCD)",
-                                               "#theta_{rel} of relative 3-momentum (All Int., pFDpCD);#theta_{rel} [Deg];",
+    TH1D *hTheta_rel_All_Int_pFDpCD = new TH1D("#theta_{rel} (All Int., pFDpCD)", "#theta_{rel} of relative 3-momentum (All Int., pFDpCD);#theta_{rel} [Deg];",
                                                numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_rel_QEL_pFDpCD = new TH1D("#theta_{rel} (QEL Only, pFDpCD)",
-                                           "#theta_{rel} of relative 3-momentum (QEL Only, pFDpCD);#theta_{rel} [Deg];",
+    TH1D *hTheta_rel_QEL_pFDpCD = new TH1D("#theta_{rel} (QEL Only, pFDpCD)", "#theta_{rel} of relative 3-momentum (QEL Only, pFDpCD);#theta_{rel} [Deg];",
                                            numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_rel_MEC_pFDpCD = new TH1D("#theta_{rel} (MEC Only, pFDpCD)",
-                                           "#theta_{rel} of relative 3-momentum (MEC Only, pFDpCD);#theta_{rel} [Deg];",
+    TH1D *hTheta_rel_MEC_pFDpCD = new TH1D("#theta_{rel} (MEC Only, pFDpCD)", "#theta_{rel} of relative 3-momentum (MEC Only, pFDpCD);#theta_{rel} [Deg];",
                                            numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_rel_RES_pFDpCD = new TH1D("#theta_{rel} (RES Only, pFDpCD)",
-                                           "#theta_{rel} of relative 3-momentum (RES Only, pFDpCD);#theta_{rel} [Deg];",
+    TH1D *hTheta_rel_RES_pFDpCD = new TH1D("#theta_{rel} (RES Only, pFDpCD)", "#theta_{rel} of relative 3-momentum (RES Only, pFDpCD);#theta_{rel} [Deg];",
                                            numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_rel_DIS_pFDpCD = new TH1D("#theta_{rel} (DIS Only, pFDpCD)",
-                                           "#theta_{rel} of relative 3-momentum (DIS Only, pFDpCD);#theta_{rel} [Deg];",
+    TH1D *hTheta_rel_DIS_pFDpCD = new TH1D("#theta_{rel} (DIS Only, pFDpCD)", "#theta_{rel} of relative 3-momentum (DIS Only, pFDpCD);#theta_{rel} [Deg];",
                                            numTH1Dbins_Ang_Plots, 30, 155);
     string hTheta_rel_All_Int_pFDpCD_Dir = directories.Angle_Directory_map["Theta_rel_pFDpCD_Directory"];
     string hTheta_rel_QEL_pFDpCD_Dir = directories.Angle_Directory_map["Theta_rel_pFDpCD_Directory"];
@@ -4487,8 +4382,8 @@ void EventAnalyser() {
     string hTheta_rel_DIS_pFDpCD_Dir = directories.Angle_Directory_map["Theta_rel_pFDpCD_Directory"];
 
     TH2D *hTheta_rel_VS_P_rel_pFDpCD = new TH2D("#theta_{rel} vs. P_{rel} (All Int., pFDpCD, CD)",
-                                                "#theta_{rel} vs. P_{rel} (All Int., pFDpCD, CD);P_{rel} [GeV/c];#theta_{rel} [Deg]",
-                                                numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, 30, 155);
+                                                "#theta_{rel} vs. P_{rel} (All Int., pFDpCD, CD);P_{rel} [GeV/c];#theta_{rel} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                numTH2Dbins_Ang_Plots, 30, 155);
     TH2D *hTheta_rel_VS_W_pFDpCD = new TH2D("#theta_{rel} vs. W (All Int., pFDpCD, CD)",
                                             "#theta_{rel} vs. W (All Int., pFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{rel} [Deg]",
                                             numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 30, 155);
@@ -4501,17 +4396,16 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_rel histograms">
     THStack *sPhi_rel_pFDpCD = new THStack("#phi_{rel} (pFDpCD)", "#phi_{rel} of relative 3-momentum (pFDpCD);#phi_{rel} [Deg];");
 
-    TH1D *hPhi_rel_All_Int_pFDpCD = new TH1D("#phi_{rel} (All Int., pFDpCD)",
-                                             "#phi_{rel} of relative 3-momentum (All Int., pFDpCD);#phi_{rel} [Deg];",
-                                             numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_rel_QEL_pFDpCD = new TH1D("#phi_{rel} (QEL Only, pFDpCD)", "#phi_{rel} of relative 3-momentum (QEL Only, pFDpCD);#phi_{rel} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_rel_MEC_pFDpCD = new TH1D("#phi_{rel} (MEC Only, pFDpCD)", "#phi_{rel} of relative 3-momentum (MEC Only, pFDpCD);#phi_{rel} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_rel_RES_pFDpCD = new TH1D("#phi_{rel} (RES Only, pFDpCD)", "#phi_{rel} of relative 3-momentum (RES Only, pFDpCD);#phi_{rel} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_rel_DIS_pFDpCD = new TH1D("#phi_{rel} (DIS Only, pFDpCD)", "#phi_{rel} of relative 3-momentum (DIS Only, pFDpCD);#phi_{rel} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_rel_All_Int_pFDpCD = new TH1D("#phi_{rel} (All Int., pFDpCD)", "#phi_{rel} of relative 3-momentum (All Int., pFDpCD);#phi_{rel} [Deg];", numTH1Dbins_Ang_Plots,
+                                             Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_rel_QEL_pFDpCD = new TH1D("#phi_{rel} (QEL Only, pFDpCD)", "#phi_{rel} of relative 3-momentum (QEL Only, pFDpCD);#phi_{rel} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_rel_MEC_pFDpCD = new TH1D("#phi_{rel} (MEC Only, pFDpCD)", "#phi_{rel} of relative 3-momentum (MEC Only, pFDpCD);#phi_{rel} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_rel_RES_pFDpCD = new TH1D("#phi_{rel} (RES Only, pFDpCD)", "#phi_{rel} of relative 3-momentum (RES Only, pFDpCD);#phi_{rel} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_rel_DIS_pFDpCD = new TH1D("#phi_{rel} (DIS Only, pFDpCD)", "#phi_{rel} of relative 3-momentum (DIS Only, pFDpCD);#phi_{rel} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
     string hPhi_rel_All_Int_pFDpCD_Dir = directories.Angle_Directory_map["Phi_rel_pFDpCD_Directory"];
     string hPhi_rel_QEL_pFDpCD_Dir = directories.Angle_Directory_map["Phi_rel_pFDpCD_Directory"];
     string hPhi_rel_MEC_pFDpCD_Dir = directories.Angle_Directory_map["Phi_rel_pFDpCD_Directory"];
@@ -4519,8 +4413,8 @@ void EventAnalyser() {
     string hPhi_rel_DIS_pFDpCD_Dir = directories.Angle_Directory_map["Phi_rel_pFDpCD_Directory"];
 
     TH2D *hPhi_rel_VS_P_rel_pFDpCD = new TH2D("#phi_{rel} vs. P_{rel} (All Int., pFDpCD, CD)",
-                                              "#phi_{rel} vs. P_{rel} (All Int., pFDpCD, CD);P_{rel} [GeV/c];#phi_{rel} [Deg]",
-                                              numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+                                              "#phi_{rel} vs. P_{rel} (All Int., pFDpCD, CD);P_{rel} [GeV/c];#phi_{rel} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                              numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_rel_VS_W_pFDpCD = new TH2D("#phi_{rel} vs. W (All Int., pFDpCD, CD)",
                                           "#phi_{rel} vs. W (All Int., pFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{rel} [Deg]",
                                           numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
@@ -4533,8 +4427,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_rel vs. Phi_rel histograms">
     TH2D *hTheta_rel_VS_Phi_rel_pFDpCD = new TH2D("#theta_{rel} vs. #phi_{rel} of relative 3-momentum (All Int., pFDpCD)",
                                                   "#theta_{rel} vs. #phi_{rel} of relative 3-momentum (All Int., pFDpCD);#phi_{rel} [Deg];#theta_{rel} [Deg]",
-                                                  numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, 30,
-                                                  155);
+                                                  numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, 30, 155);
     string hTheta_rel_VS_Phi_rel_pFDpCD_Dir = directories.Angle_Directory_map["Theta_rel_VS_Phi_rel_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4548,8 +4441,8 @@ void EventAnalyser() {
                                                    "(All Int., pFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];");
     TH1D *hTheta_p_e_p_tot_pFDpCD = new TH1D("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., pFDpCD)",
                                              "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{pFD}+#vec{P}_{pCD} "
-                                             "(All Int., pFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];",
-                                             numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                             "(All Int., pFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
+                                             Opening_Ang_narrow_uboundary);
     string hTheta_p_e_p_tot_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4558,10 +4451,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_p_e_p_tot vs. W (pFDpCD)">
     TH2D *hTheta_p_e_p_tot_vs_W_pFDpCD = new TH2D("#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
                                                   "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                                  "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];",
-                                                  numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
-                                                  Opening_Ang_narrow_lboundary,
-                                                  Opening_Ang_narrow_uboundary);
+                                                  "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
+                                                  Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_p_e_p_tot_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4575,16 +4466,16 @@ void EventAnalyser() {
                                                  "(All Int., pFDpCD);#theta_{#vec{q},#vec{P}_{tot}} [Deg];");
     TH1D *hTheta_q_p_tot_pFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{tot}} (All Int., pFDpCD)",
                                            "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{pFD}+#vec{P}_{pCD} "
-                                           "(All Int., pFDpCD);#theta_{#vec{q},#vec{P}_{tot}} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                           "(All Int., pFDpCD);#theta_{#vec{q},#vec{P}_{tot}} [Deg];", numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
+                                           Opening_Ang_narrow_uboundary);
     string hTheta_q_p_tot_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_p_max (CD & FD)">
     TH1D *hTheta_q_p_max_pFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{max}} (All Int., pFDpCD)",
                                            "#theta_{#vec{q},#vec{P}_{max}} - Opening Angle Between #vec{q} and #vec{P}_{max} "
-                                           "(All Int., pFDpCD);#theta_{#vec{q},#vec{P}_{max}} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                           "(All Int., pFDpCD);#theta_{#vec{q},#vec{P}_{max}} [Deg];", numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
+                                           Opening_Ang_narrow_uboundary);
     string hTheta_q_p_max_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4594,8 +4485,8 @@ void EventAnalyser() {
                                                          "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} [Deg];");
     TH1D *hTheta_P_pL_minus_q_pR_pFDpCD = new TH1D("#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
                                                    "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} - Opening Angle Between #vec{P}_{pL}-#vec{q} and #vec{P}_{pR} (All Int., pFDpCD)"
-                                                   ";#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} [Deg]",
-                                                   numTH1Dbins_Ang_Plots, Opening_Ang_wide_lboundary, Opening_Ang_wide_uboundary);
+                                                   ";#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} [Deg]", numTH1Dbins_Ang_Plots, Opening_Ang_wide_lboundary,
+                                                   Opening_Ang_wide_uboundary);
     string hTheta_P_pL_minus_q_pR_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4604,12 +4495,10 @@ void EventAnalyser() {
                                                  "#theta_{#vec{q},#vec{P}} - Opening Angle Between #vec{q} and #vec{P} (All Int., pFDpCD);#theta_{#vec{q},#vec{P}} [Deg];");
     TH1D *hTheta_q_p_L_pFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{pL}} (All Int., pFDpCD)",
                                          "#theta_{#vec{q},#vec{P}_{pL}} - Opening Angle Between #vec{q} and Leading Proton #vec{P}_{pL} (All Int., pFDpCD)"
-                                         ";#theta_{#vec{q},#vec{P}_{pL}} [Deg]",
-                                         numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                         ";#theta_{#vec{q},#vec{P}_{pL}} [Deg]", numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     TH1D *hTheta_q_p_R_pFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
                                          "#theta_{#vec{q},#vec{P}_{pR}} - Opening Angle Between #vec{q} and Recoil Proton #vec{P}_{pR} (All Int., pFDpCD)"
-                                         ";#theta_{#vec{q},#vec{P}_{pR}} [Deg]",
-                                         numTH1Dbins_Ang_Plots, 0, 180);
+                                         ";#theta_{#vec{q},#vec{P}_{pR}} [Deg]", numTH1Dbins_Ang_Plots, 0, 180);
     string hTheta_q_p_L_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     string hTheta_q_p_R_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
@@ -4619,12 +4508,10 @@ void EventAnalyser() {
                                              "#theta_{#vec{q},#vec{P}} - Opening Angle Between #vec{q} and #vec{P} (All Int., pFDpCD);#theta_{#vec{q},#vec{P}} [Deg];");
     TH1D *hTheta_q_pFD_pFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{pFD}} (All Int., pFDpCD)",
                                          "#theta_{#vec{q},#vec{P}_{pFD}} - Opening Angle Between #vec{q} and FD Proton #vec{P}_{pFD} (All Int., pFDpCD)"
-                                         ";#theta_{#vec{q},#vec{P}_{pFD}} [Deg]",
-                                         numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                         ";#theta_{#vec{q},#vec{P}_{pFD}} [Deg]", numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     TH1D *hTheta_q_pCD_pFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{pCD}} (All Int., pFDpCD)",
                                          "#theta_{#vec{q},#vec{P}_{pCD}} - Opening Angle Between #vec{q} and CD Proton #vec{P}_{pCD} (All Int., pFDpCD)"
-                                         ";#theta_{#vec{q},#vec{P}_{pCD}} [Deg]",
-                                         numTH1Dbins_Ang_Plots, 0, 180);
+                                         ";#theta_{#vec{q},#vec{P}_{pCD}} [Deg]", numTH1Dbins_Ang_Plots, 0, 180);
     string hTheta_q_pFD_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     string hTheta_q_pCD_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
@@ -4636,54 +4523,46 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_q_p_tot vs. W (CD & FD)">
     TH2D *hTheta_q_p_tot_vs_W_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
                                                 "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                                "#theta_{#vec{q},#vec{P}_{tot}} [Deg];",
-                                                numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
-                                                Opening_Ang_narrow_lboundary,
-                                                Opening_Ang_narrow_uboundary);
+                                                "#theta_{#vec{q},#vec{P}_{tot}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
+                                                Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_q_p_tot_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_P_pL_minus_q_pR vs. W (CD & FD)">
     TH2D *hTheta_P_pL_minus_q_pR_vs_W_pFDpCD = new TH2D("#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} vs. W (All Int., pFDpCD)",
                                                         "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                                        "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} [Deg];",
-                                                        numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
-                                                        Opening_Ang_wide_lboundary,
-                                                        Opening_Ang_wide_uboundary);
+                                                        "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary,
+                                                        numTH2Dbins_Ang_Plots, Opening_Ang_wide_lboundary, Opening_Ang_wide_uboundary);
     string hTheta_P_pL_minus_q_pR_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_p_L vs. W (CD & FD)">
     TH2D *hTheta_q_p_L_vs_W_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{pL}} vs. W (All Int., pFDpCD)",
                                               "#theta_{#vec{q},#vec{P}_{pL}} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                              "#theta_{#vec{q},#vec{P}_{pL}} [Deg];",
-                                              numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
-                                              Opening_Ang_narrow_uboundary);
+                                              "#theta_{#vec{q},#vec{P}_{pL}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
+                                              Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_q_p_L_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_p_R vs. W (CD & FD)">
     TH2D *hTheta_q_p_R_vs_W_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{pR}} vs. W (All Int., pFDpCD)",
                                               "#theta_{#vec{q},#vec{P}_{pR}} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                              "#theta_{#vec{q},#vec{P}_{pR}} [Deg];",
-                                              numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
+                                              "#theta_{#vec{q},#vec{P}_{pR}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
     string hTheta_q_p_R_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_pFD vs. W (CD & FD)">
     TH2D *hTheta_q_pFD_vs_W_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{pFD}} vs. W (All Int., pFDpCD)",
                                               "#theta_{#vec{q},#vec{P}_{pFD}} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                              "#theta_{#vec{q},#vec{P}_{pFD}} [Deg];",
-                                              numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
-                                              Opening_Ang_narrow_uboundary);
+                                              "#theta_{#vec{q},#vec{P}_{pFD}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
+                                              Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_q_pFD_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_pCD vs. W (CD & FD)">
     TH2D *hTheta_q_pCD_vs_W_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., pFDpCD)",
                                               "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                              "#theta_{#vec{q},#vec{P}_{pCD}} [Deg];",
-                                              numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
+                                              "#theta_{#vec{q},#vec{P}_{pCD}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
     string hTheta_q_pCD_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4694,9 +4573,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_q_p_L vs |P_p_L|/|q|">
     TH2D *hTheta_q_p_L_vs_p_L_q_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{pL}} vs. r_{pL} (All Int., pFDpCD)",
                                                   "#theta_{#vec{q},#vec{P}_{pL}} vs. r_{pL}=|#vec{P}_{pL}|/|#vec{q}| (All Int., pFDpCD);"
-                                                  "r_{pL};#theta_{#vec{q},#vec{P}_{pL}} [Deg]",
-                                                  numTH2Dbins_Ang_Plots, 0, 1.05, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
-                                                  Opening_Ang_narrow_uboundary);
+                                                  "r_{pL};#theta_{#vec{q},#vec{P}_{pL}} [Deg]", numTH2Dbins_Ang_Plots, 0, 1.05, numTH2Dbins_Ang_Plots,
+                                                  Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_q_p_L_vs_p_L_q_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4707,43 +4585,34 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_q_p_L vs Theta_q_p_R">
     TH2D *hTheta_q_p_L_vs_Theta_q_p_R_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{pL}} vs. #theta_{#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
                                                         "#theta_{#vec{q},#vec{P}_{pL}} vs. #theta_{#vec{q},#vec{P}_{pR}} (All Int., pFDpCD);"
-                                                        "#theta_{#vec{q},#vec{P}_{pL}};#theta_{#vec{q},#vec{P}_{pR}} [Deg]",
-                                                        numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary,
-                                                        numTH2Dbins_Ang_Plots, 0,
-                                                        180);
+                                                        "#theta_{#vec{q},#vec{P}_{pL}};#theta_{#vec{q},#vec{P}_{pR}} [Deg]", numTH2Dbins_Ang_Plots,
+                                                        Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
     string hTheta_q_p_L_vs_Theta_q_p_R_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_pFD vs Theta_q_pCD">
     TH2D *hTheta_q_pFD_vs_Theta_q_pCD_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{pFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}} (All Int., pFDpCD)",
                                                         "#theta_{#vec{q},#vec{P}_{pFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}} (All Int., pFDpCD);"
-                                                        "#theta_{#vec{q},#vec{P}_{pFD}} [Deg];#theta_{#vec{q},#vec{P}_{pCD}} [Deg]",
-                                                        numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary,
-                                                        numTH2Dbins_Ang_Plots, 0,
-                                                        180);
+                                                        "#theta_{#vec{q},#vec{P}_{pFD}} [Deg];#theta_{#vec{q},#vec{P}_{pCD}} [Deg]", numTH2Dbins_Ang_Plots,
+                                                        Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
     string hTheta_q_pFD_vs_Theta_q_pCD_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
 // Theta_pFD_pCD (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_pFD_pCD (CD & FD)">
-    THStack *sTheta_pFD_pCD_pFDpCD = new THStack("#theta_{pFD,pCD} (All Int., pFDpCD)",
-                                                 "#theta_{pFD,pCD} - Opening Angle Between Protons (pFDpCD);#theta_{pFD,pCD} [Deg];");
+    THStack *sTheta_pFD_pCD_pFDpCD = new THStack("#theta_{pFD,pCD} (All Int., pFDpCD)", "#theta_{pFD,pCD} - Opening Angle Between Protons (pFDpCD);#theta_{pFD,pCD} [Deg];");
     TH1D *hTheta_pFD_pCD_All_Int_pFDpCD = new TH1D("#theta_{pFD,pCD} (All Int., pFDpCD)",
-                                                   "#theta_{pFD,pCD} - Opening Angle Between Protons (All Int., pFDpCD);#theta_{pFD,pCD} [Deg];",
-                                                   numTH1Dbins_Ang_Plots, 0, 180);
+                                                   "#theta_{pFD,pCD} - Opening Angle Between Protons (All Int., pFDpCD);#theta_{pFD,pCD} [Deg];", numTH1Dbins_Ang_Plots, 0,
+                                                   180);
     TH1D *hTheta_pFD_pCD_QEL_pFDpCD = new TH1D("#theta_{pFD,pCD} (QEL only, pFDpCD)",
-                                               "#theta_{pFD,pCD} - Opening Angle Between Protons (QEL only, pFDpCD);#theta_{pFD,pCD} [Deg];",
-                                               numTH1Dbins_Ang_Plots, 0, 180);
+                                               "#theta_{pFD,pCD} - Opening Angle Between Protons (QEL only, pFDpCD);#theta_{pFD,pCD} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     TH1D *hTheta_pFD_pCD_MEC_pFDpCD = new TH1D("#theta_{pFD,pCD} (MEC only, pFDpCD)",
-                                               "#theta_{pFD,pCD} - Opening Angle Between Protons (MEC only, pFDpCD);#theta_{pFD,pCD} [Deg];",
-                                               numTH1Dbins_Ang_Plots, 0, 180);
+                                               "#theta_{pFD,pCD} - Opening Angle Between Protons (MEC only, pFDpCD);#theta_{pFD,pCD} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     TH1D *hTheta_pFD_pCD_RES_pFDpCD = new TH1D("#theta_{pFD,pCD} (RES only, pFDpCD)",
-                                               "#theta_{pFD,pCD} - Opening Angle Between Protons (RES only, pFDpCD);#theta_{pFD,pCD} [Deg];",
-                                               numTH1Dbins_Ang_Plots, 0, 180);
+                                               "#theta_{pFD,pCD} - Opening Angle Between Protons (RES only, pFDpCD);#theta_{pFD,pCD} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     TH1D *hTheta_pFD_pCD_DIS_pFDpCD = new TH1D("#theta_{pFD,pCD} (DIS only, pFDpCD)",
-                                               "#theta_{pFD,pCD} - Opening Angle Between Protons (DIS only, pFDpCD);#theta_{pFD,pCD} [Deg];",
-                                               numTH1Dbins_Ang_Plots, 0, 180);
+                                               "#theta_{pFD,pCD} - Opening Angle Between Protons (DIS only, pFDpCD);#theta_{pFD,pCD} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     string sTheta_pFD_pCD_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     string hTheta_pFD_pCD_All_Int_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_pFDpCD_Directory"];
     string hTheta_pFD_pCD_QEL_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_pFDpCD_Directory"];
@@ -4764,11 +4633,10 @@ void EventAnalyser() {
 // Theta_pFD_vs_Theta_pCD for Theta_pFD_pCD < 20 (CD & FD) ------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_pFD_vs_Theta_pCD for Theta_pFD_pCD < 20 (CD & FD)">
-    TH2D *hTheta_pFD_vs_theta_pCD_for_Theta_pFD_pCD_20_pFDpCD = new TH2D(
-            "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., pFDpCD)",
-            "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., pFDpCD);"
-            "#theta_{pCD} [Deg];#theta_{pFD} [Deg];",
-            numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30, 50);
+    TH2D *hTheta_pFD_vs_theta_pCD_for_Theta_pFD_pCD_20_pFDpCD = new TH2D("#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., pFDpCD)",
+                                                                         "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., pFDpCD);"
+                                                                         "#theta_{pCD} [Deg];#theta_{pFD} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30,
+                                                                         50);
     string hTheta_pFD_vs_theta_pCD_for_Theta_pFD_pCD_20_pFDpCD_Dir = directories.Angle_Directory_map["Double_detection_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4789,11 +4657,10 @@ void EventAnalyser() {
 // Theta_pFD_vs_Theta_pCD for every Theta_pFD_pCD (pFDpCD, CD & FD) -----------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_pFD_vs_Theta_pCD for every Theta_pFD_pCD (CD & FD)">
-    TH2D *hTheta_pFD_vs_theta_pCD_forall_Theta_pFD_pCD_pFDpCD = new TH2D(
-            "#theta_{pFD} vs. #theta_{pFD} #forall#theta_{pFD,pCD} (All Int., pFDpCD)",
-            "#theta_{pFD} vs. #theta_{pCD} for every #theta_{pFD,pCD} (All Int., pFDpCD);"
-            "#theta_{pCD} [Deg];#theta_{pFD} [Deg];",
-            numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30, 50);
+    TH2D *hTheta_pFD_vs_theta_pCD_forall_Theta_pFD_pCD_pFDpCD = new TH2D("#theta_{pFD} vs. #theta_{pFD} #forall#theta_{pFD,pCD} (All Int., pFDpCD)",
+                                                                         "#theta_{pFD} vs. #theta_{pCD} for every #theta_{pFD,pCD} (All Int., pFDpCD);"
+                                                                         "#theta_{pCD} [Deg];#theta_{pFD} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30,
+                                                                         50);
     string hTheta_pFD_vs_theta_pCD_forall_Theta_pFD_pCD_pFDpCD_Dir = directories.Angle_Directory_map["Double_detection_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -4825,20 +4692,16 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_pFD_pCD vs. TOFpFD-TOFpCD plots (pFDpCD)">
     hPlot2D hTheta_pFD_pCD_VS_ToFpFD_ToFpCD_AC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{pFD,pCD} vs. ToF_{pFD}-ToF_{pCD} AC",
-                                                                "#theta_{pFD,pCD} vs. ToF_{pFD}-ToF_{pCD} AC", "#theta_{pFD,pCD} [Deg]",
-                                                                "ToF_{pFD}-ToF_{pCD} [ns]",
-                                                                directories.Angle_Directory_map["CToF_hits_pFDpCD_Directory"],
-                                                                "01_Theta_pFD_pCD_VS_ToFpFD_ToFpCD_AC_pFDpCD",
+                                                                "#theta_{pFD,pCD} vs. ToF_{pFD}-ToF_{pCD} AC", "#theta_{pFD,pCD} [Deg]", "ToF_{pFD}-ToF_{pCD} [ns]",
+                                                                directories.Angle_Directory_map["CToF_hits_pFDpCD_Directory"], "01_Theta_pFD_pCD_VS_ToFpFD_ToFpCD_AC_pFDpCD",
                                                                 0, 180, -3, 3, numTH2Dbins_Ang_Plots, numTH2Dbins_Ang_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Theta_pFD_pCD vs. positionpFD-positionpCD plots (pFDpCD)">
     hPlot2D hTheta_pFD_pCD_VS_PospFD_PospCD_AC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{pFD,pCD} vs. Position_{pFD}-Position_{pCD} AC",
                                                                 "#theta_{pFD,pCD} vs. Position_{pFD}-Position_{pCD} AC", "#theta_{pFD,pCD} [Deg]",
-                                                                "Position_{pFD}-Position_{pCD} [cm]",
-                                                                directories.Angle_Directory_map["CToF_hits_pFDpCD_Directory"],
-                                                                "02_Theta_p1_p2_VS_Pos1-Pos2_AC_pFDpCD",
-                                                                0, 180, 0, 100, numTH2Dbins_Ang_Plots, numTH2Dbins_Ang_Plots);
+                                                                "Position_{pFD}-Position_{pCD} [cm]", directories.Angle_Directory_map["CToF_hits_pFDpCD_Directory"],
+                                                                "02_Theta_p1_p2_VS_Pos1-Pos2_AC_pFDpCD", 0, 180, 0, 100, numTH2Dbins_Ang_Plots, numTH2Dbins_Ang_Plots);
     //</editor-fold>
 
     //</editor-fold>
@@ -4852,21 +4715,16 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_nFD histograms">
     THStack *sTheta_nFD_nFDpCD_FD = new THStack("#theta_{nFD} (nFDpCD)", "#theta_{nFD} of FD neutron (nFDpCD);#theta_{nFD} [Deg];");
 
-    TH1D *hTheta_nFD_All_Int_nFDpCD_FD = new TH1D("#theta_{nFD} (All Int., nFDpCD)",
-                                                  "#theta_{nFD} of FD neutron (All Int., nFDpCD);#theta_{nFD} [Deg];",
+    TH1D *hTheta_nFD_All_Int_nFDpCD_FD = new TH1D("#theta_{nFD} (All Int., nFDpCD)", "#theta_{nFD} of FD neutron (All Int., nFDpCD);#theta_{nFD} [Deg];",
                                                   numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_nFD_QEL_nFDpCD_FD = new TH1D("#theta_{nFD} (QEL Only, nFDpCD)",
-                                              "#theta_{nFD} of FD neutron (QEL Only, nFDpCD);#theta_{nFD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_nFD_MEC_nFDpCD_FD = new TH1D("#theta_{nFD} (MEC Only, nFDpCD)",
-                                              "#theta_{nFD} of FD neutron (MEC Only, nFDpCD);#theta_{nFD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_nFD_RES_nFDpCD_FD = new TH1D("#theta_{nFD} (RES Only, nFDpCD)",
-                                              "#theta_{nFD} of FD neutron (RES Only, nFDpCD);#theta_{nFD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
-    TH1D *hTheta_nFD_DIS_nFDpCD_FD = new TH1D("#theta_{nFD} (DIS Only, nFDpCD)",
-                                              "#theta_{nFD} of FD neutron (DIS Only, nFDpCD);#theta_{nFD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_nFD_QEL_nFDpCD_FD = new TH1D("#theta_{nFD} (QEL Only, nFDpCD)", "#theta_{nFD} of FD neutron (QEL Only, nFDpCD);#theta_{nFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_nFD_MEC_nFDpCD_FD = new TH1D("#theta_{nFD} (MEC Only, nFDpCD)", "#theta_{nFD} of FD neutron (MEC Only, nFDpCD);#theta_{nFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_nFD_RES_nFDpCD_FD = new TH1D("#theta_{nFD} (RES Only, nFDpCD)", "#theta_{nFD} of FD neutron (RES Only, nFDpCD);#theta_{nFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD);
+    TH1D *hTheta_nFD_DIS_nFDpCD_FD = new TH1D("#theta_{nFD} (DIS Only, nFDpCD)", "#theta_{nFD} of FD neutron (DIS Only, nFDpCD);#theta_{nFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_nFD_All_Int_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_nFD_nFDpCD_Directory"];
     string hTheta_nFD_QEL_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_nFD_nFDpCD_Directory"];
     string hTheta_nFD_MEC_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_nFD_nFDpCD_Directory"];
@@ -4874,13 +4732,11 @@ void EventAnalyser() {
     string hTheta_nFD_DIS_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_nFD_nFDpCD_Directory"];
 
     TH2D *hTheta_nFD_VS_P_nFD_nFDpCD_FD = new TH2D("#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)",
-                                                   "#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD);P_{nFD} [GeV/c];#theta_{nFD} [Deg]",
-                                                   numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                                   Theta_uboundary_FD);
+                                                   "#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD);P_{nFD} [GeV/c];#theta_{nFD} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                   numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     TH2D *hTheta_nFD_VS_W_nFDpCD_FD = new TH2D("#theta_{nFD} vs. W (All Int., nFDpCD, FD)",
                                                "#theta_{nFD} vs. W (All Int., nFDpCD, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{nFD} [Deg]",
-                                               numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD,
-                                               Theta_uboundary_FD);
+                                               numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_nFD_VS_P_nFD_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_nFD_nFDpCD_Directory"];
     string hTheta_nFD_VS_W_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_nFD_nFDpCD_Directory"];
     //</editor-fold>
@@ -4890,16 +4746,16 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_nFD histograms">
     THStack *sPhi_nFD_nFDpCD_FD = new THStack("#phi_{nFD} (nFDpCD)", "#phi_{nFD} of FD neutron (nFDpCD);#phi_{nFD} [Deg];");
 
-    TH1D *hPhi_nFD_All_Int_nFDpCD_FD = new TH1D("#phi_{nFD} (All Int., nFDpCD)", "#phi_{nFD} of FD neutron (All Int., nFDpCD);#phi_{nFD} [Deg];",
-                                                numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_nFD_QEL_nFDpCD_FD = new TH1D("#phi_{nFD} (QEL Only, nFDpCD)", "#phi_{nFD} of FD neutron (QEL Only, nFDpCD);#phi_{nFD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_nFD_MEC_nFDpCD_FD = new TH1D("#phi_{nFD} (MEC Only, nFDpCD)", "#phi_{nFD} of FD neutron (MEC Only, nFDpCD);#phi_{nFD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_nFD_RES_nFDpCD_FD = new TH1D("#phi_{nFD} (RES Only, nFDpCD)", "#phi_{nFD} of FD neutron (RES Only, nFDpCD);#phi_{nFD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_nFD_DIS_nFDpCD_FD = new TH1D("#phi_{nFD} (DIS Only, nFDpCD)", "#phi_{nFD} of FD neutron (DIS Only, nFDpCD);#phi_{nFD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_nFD_All_Int_nFDpCD_FD = new TH1D("#phi_{nFD} (All Int., nFDpCD)", "#phi_{nFD} of FD neutron (All Int., nFDpCD);#phi_{nFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                                Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_nFD_QEL_nFDpCD_FD = new TH1D("#phi_{nFD} (QEL Only, nFDpCD)", "#phi_{nFD} of FD neutron (QEL Only, nFDpCD);#phi_{nFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_nFD_MEC_nFDpCD_FD = new TH1D("#phi_{nFD} (MEC Only, nFDpCD)", "#phi_{nFD} of FD neutron (MEC Only, nFDpCD);#phi_{nFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_nFD_RES_nFDpCD_FD = new TH1D("#phi_{nFD} (RES Only, nFDpCD)", "#phi_{nFD} of FD neutron (RES Only, nFDpCD);#phi_{nFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_nFD_DIS_nFDpCD_FD = new TH1D("#phi_{nFD} (DIS Only, nFDpCD)", "#phi_{nFD} of FD neutron (DIS Only, nFDpCD);#phi_{nFD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
     string hPhi_nFD_All_Int_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_nFD_nFDpCD_Directory"];
     string hPhi_nFD_QEL_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_nFD_nFDpCD_Directory"];
     string hPhi_nFD_MEC_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_nFD_nFDpCD_Directory"];
@@ -4907,8 +4763,8 @@ void EventAnalyser() {
     string hPhi_nFD_DIS_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_nFD_nFDpCD_Directory"];
 
     TH2D *hPhi_nFD_VS_P_nFD_nFDpCD_FD = new TH2D("#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)",
-                                                 "#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD);P_{nFD} [GeV/c];#phi_{nFD} [Deg]",
-                                                 numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+                                                 "#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD);P_{nFD} [GeV/c];#phi_{nFD} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                 numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_nFD_VS_W_nFDpCD_FD = new TH2D("#phi_{nFD} vs. W (All Int., nFDpCD, FD)",
                                              "#phi_{nFD} vs. W (All Int., nFDpCD, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{nFD} [Deg]",
                                              numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
@@ -4921,8 +4777,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_nFD vs. Phi_nFD histograms">
     TH2D *hTheta_nFD_VS_Phi_nFD_nFDpCD_FD = new TH2D("#theta_{nFD} vs. #phi_{nFD} of FD neutron (All Int., nFDpCD)",
                                                      "#theta_{nFD} vs. #phi_{nFD} of FD neutron (All Int., nFDpCD);#phi_{nFD} [Deg];#theta_{nFD} [Deg]",
-                                                     numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                                     numTH2Dbins_Nucleon_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                     numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, Theta_lboundary_FD,
+                                                     Theta_uboundary_FD);
     string hTheta_nFD_VS_Phi_nFD_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_nFD_VS_Phi_nFD_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -4931,21 +4787,16 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_pCD histograms">
     THStack *sTheta_pCD_nFDpCD_CD = new THStack("#theta_{pCD} (nFDpCD)", "#theta_{pCD} of CD proton (nFDpCD);#theta_{pCD} [Deg];");
 
-    TH1D *hTheta_pCD_All_Int_nFDpCD_CD = new TH1D("#theta_{pCD} (All Int., nFDpCD)",
-                                                  "#theta_{pCD} of CD proton (All Int., nFDpCD);#theta_{pCD} [Deg];",
-                                                  numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_pCD_QEL_nFDpCD_CD = new TH1D("#theta_{pCD} (QEL Only, nFDpCD)",
-                                              "#theta_{pCD} of CD proton (QEL Only, nFDpCD);#theta_{pCD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_pCD_MEC_nFDpCD_CD = new TH1D("#theta_{pCD} (MEC Only, nFDpCD)",
-                                              "#theta_{pCD} of CD proton (MEC Only, nFDpCD);#theta_{pCD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_pCD_RES_nFDpCD_CD = new TH1D("#theta_{pCD} (RES Only, nFDpCD)",
-                                              "#theta_{pCD} of CD proton (RES Only, nFDpCD);#theta_{pCD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_pCD_DIS_nFDpCD_CD = new TH1D("#theta_{pCD} (DIS Only, nFDpCD)",
-                                              "#theta_{pCD} of CD proton (DIS Only, nFDpCD);#theta_{pCD} [Deg];",
-                                              numTH1Dbins_Ang_Plots, 30, 155);
+    TH1D *hTheta_pCD_All_Int_nFDpCD_CD = new TH1D("#theta_{pCD} (All Int., nFDpCD)", "#theta_{pCD} of CD proton (All Int., nFDpCD);#theta_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                                  30, 155);
+    TH1D *hTheta_pCD_QEL_nFDpCD_CD = new TH1D("#theta_{pCD} (QEL Only, nFDpCD)", "#theta_{pCD} of CD proton (QEL Only, nFDpCD);#theta_{pCD} [Deg];", numTH1Dbins_Ang_Plots, 30,
+                                              155);
+    TH1D *hTheta_pCD_MEC_nFDpCD_CD = new TH1D("#theta_{pCD} (MEC Only, nFDpCD)", "#theta_{pCD} of CD proton (MEC Only, nFDpCD);#theta_{pCD} [Deg];", numTH1Dbins_Ang_Plots, 30,
+                                              155);
+    TH1D *hTheta_pCD_RES_nFDpCD_CD = new TH1D("#theta_{pCD} (RES Only, nFDpCD)", "#theta_{pCD} of CD proton (RES Only, nFDpCD);#theta_{pCD} [Deg];", numTH1Dbins_Ang_Plots, 30,
+                                              155);
+    TH1D *hTheta_pCD_DIS_nFDpCD_CD = new TH1D("#theta_{pCD} (DIS Only, nFDpCD)", "#theta_{pCD} of CD proton (DIS Only, nFDpCD);#theta_{pCD} [Deg];", numTH1Dbins_Ang_Plots, 30,
+                                              155);
     string hTheta_pCD_All_Int_nFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_nFDpCD_Directory"];
     string hTheta_pCD_QEL_nFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_nFDpCD_Directory"];
     string hTheta_pCD_MEC_nFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_nFDpCD_Directory"];
@@ -4953,8 +4804,8 @@ void EventAnalyser() {
     string hTheta_pCD_DIS_nFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_nFDpCD_Directory"];
 
     TH2D *hTheta_pCD_VS_P_pCD_nFDpCD_CD = new TH2D("#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)",
-                                                   "#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD);P_{pCD} [GeV/c];#theta_{pCD} [Deg]",
-                                                   numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, 30, 155);
+                                                   "#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD);P_{pCD} [GeV/c];#theta_{pCD} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                   numTH2Dbins_Ang_Plots, 30, 155);
     TH2D *hTheta_pCD_VS_W_nFDpCD_CD = new TH2D("#theta_{pCD} vs. W (All Int., nFDpCD, CD)",
                                                "#theta_{pCD} vs. W (All Int., nFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{pCD} [Deg]",
                                                numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 30, 155);
@@ -4967,16 +4818,16 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_pCD histograms">
     THStack *sPhi_pCD_nFDpCD_CD = new THStack("#phi_{pCD} (nFDpCD)", "#phi_{pCD} of CD proton (nFDpCD);#phi_{pCD} [Deg];");
 
-    TH1D *hPhi_pCD_All_Int_nFDpCD_CD = new TH1D("#phi_{pCD} (All Int., nFDpCD)", "#phi_{pCD} of CD proton (All Int., nFDpCD);#phi_{pCD} [Deg];",
-                                                numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pCD_QEL_nFDpCD_CD = new TH1D("#phi_{pCD} (QEL Only, nFDpCD)", "#phi_{pCD} of CD proton (QEL Only, nFDpCD);#phi_{pCD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pCD_MEC_nFDpCD_CD = new TH1D("#phi_{pCD} (MEC Only, nFDpCD)", "#phi_{pCD} of CD proton (MEC Only, nFDpCD);#phi_{pCD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pCD_RES_nFDpCD_CD = new TH1D("#phi_{pCD} (RES Only, nFDpCD)", "#phi_{pCD} of CD proton (RES Only, nFDpCD);#phi_{pCD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_pCD_DIS_nFDpCD_CD = new TH1D("#phi_{pCD} (DIS Only, nFDpCD)", "#phi_{pCD} of CD proton (DIS Only, nFDpCD);#phi_{pCD} [Deg];",
-                                            numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pCD_All_Int_nFDpCD_CD = new TH1D("#phi_{pCD} (All Int., nFDpCD)", "#phi_{pCD} of CD proton (All Int., nFDpCD);#phi_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                                Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pCD_QEL_nFDpCD_CD = new TH1D("#phi_{pCD} (QEL Only, nFDpCD)", "#phi_{pCD} of CD proton (QEL Only, nFDpCD);#phi_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pCD_MEC_nFDpCD_CD = new TH1D("#phi_{pCD} (MEC Only, nFDpCD)", "#phi_{pCD} of CD proton (MEC Only, nFDpCD);#phi_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pCD_RES_nFDpCD_CD = new TH1D("#phi_{pCD} (RES Only, nFDpCD)", "#phi_{pCD} of CD proton (RES Only, nFDpCD);#phi_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_pCD_DIS_nFDpCD_CD = new TH1D("#phi_{pCD} (DIS Only, nFDpCD)", "#phi_{pCD} of CD proton (DIS Only, nFDpCD);#phi_{pCD} [Deg];", numTH1Dbins_Ang_Plots,
+                                            Phi_lboundary, Phi_uboundary);
     string hPhi_pCD_All_Int_nFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_nFDpCD_Directory"];
     string hPhi_pCD_QEL_nFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_nFDpCD_Directory"];
     string hPhi_pCD_MEC_nFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_nFDpCD_Directory"];
@@ -4984,8 +4835,8 @@ void EventAnalyser() {
     string hPhi_pCD_DIS_nFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_nFDpCD_Directory"];
 
     TH2D *hPhi_pCD_VS_P_pCD_nFDpCD_CD = new TH2D("#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)",
-                                                 "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD);P_{pCD} [GeV/c];#phi_{pCD} [Deg]",
-                                                 numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+                                                 "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD);P_{pCD} [GeV/c];#phi_{pCD} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                 numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_pCD_VS_W_nFDpCD_CD = new TH2D("#phi_{pCD} vs. W (All Int., nFDpCD, CD)",
                                              "#phi_{pCD} vs. W (All Int., nFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{pCD} [Deg]",
                                              numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
@@ -4998,8 +4849,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_pCD vs. Phi_pCD histograms">
     TH2D *hTheta_pCD_VS_Phi_pCD_nFDpCD_CD = new TH2D("#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., nFDpCD)",
                                                      "#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., nFDpCD);#phi_{pCD} [Deg];#theta_{pCD} [Deg]",
-                                                     numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots,
-                                                     30, 155);
+                                                     numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, 30, 155);
     string hTheta_pCD_VS_Phi_pCD_nFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_VS_Phi_pCD_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5008,21 +4858,16 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_tot histograms">
     THStack *sTheta_tot_nFDpCD = new THStack("#theta_{tot} (nFDpCD)", "#theta_{tot} of total 3-momentum (nFDpCD);#theta_{tot} [Deg];");
 
-    TH1D *hTheta_tot_All_Int_nFDpCD = new TH1D("#theta_{tot} (All Int., nFDpCD)",
-                                               "#theta_{tot} of total 3-momentum (All Int., nFDpCD);#theta_{tot} [Deg];",
+    TH1D *hTheta_tot_All_Int_nFDpCD = new TH1D("#theta_{tot} (All Int., nFDpCD)", "#theta_{tot} of total 3-momentum (All Int., nFDpCD);#theta_{tot} [Deg];",
                                                numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
-    TH1D *hTheta_tot_QEL_nFDpCD = new TH1D("#theta_{tot} (QEL Only, nFDpCD)",
-                                           "#theta_{tot} of total 3-momentum (QEL Only, nFDpCD);#theta_{tot} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
-    TH1D *hTheta_tot_MEC_nFDpCD = new TH1D("#theta_{tot} (MEC Only, nFDpCD)",
-                                           "#theta_{tot} of total 3-momentum (MEC Only, nFDpCD);#theta_{tot} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
-    TH1D *hTheta_tot_RES_nFDpCD = new TH1D("#theta_{tot} (RES Only, nFDpCD)",
-                                           "#theta_{tot} of total 3-momentum (RES Only, nFDpCD);#theta_{tot} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
-    TH1D *hTheta_tot_DIS_nFDpCD = new TH1D("#theta_{tot} (DIS Only, nFDpCD)",
-                                           "#theta_{tot} of total 3-momentum (DIS Only, nFDpCD);#theta_{tot} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+    TH1D *hTheta_tot_QEL_nFDpCD = new TH1D("#theta_{tot} (QEL Only, nFDpCD)", "#theta_{tot} of total 3-momentum (QEL Only, nFDpCD);#theta_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                           Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+    TH1D *hTheta_tot_MEC_nFDpCD = new TH1D("#theta_{tot} (MEC Only, nFDpCD)", "#theta_{tot} of total 3-momentum (MEC Only, nFDpCD);#theta_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                           Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+    TH1D *hTheta_tot_RES_nFDpCD = new TH1D("#theta_{tot} (RES Only, nFDpCD)", "#theta_{tot} of total 3-momentum (RES Only, nFDpCD);#theta_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                           Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+    TH1D *hTheta_tot_DIS_nFDpCD = new TH1D("#theta_{tot} (DIS Only, nFDpCD)", "#theta_{tot} of total 3-momentum (DIS Only, nFDpCD);#theta_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                           Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_tot_All_Int_nFDpCD_Dir = directories.Angle_Directory_map["Theta_tot_nFDpCD_Directory"];
     string hTheta_tot_QEL_nFDpCD_Dir = directories.Angle_Directory_map["Theta_tot_nFDpCD_Directory"];
     string hTheta_tot_MEC_nFDpCD_Dir = directories.Angle_Directory_map["Theta_tot_nFDpCD_Directory"];
@@ -5030,9 +4875,8 @@ void EventAnalyser() {
     string hTheta_tot_DIS_nFDpCD_Dir = directories.Angle_Directory_map["Theta_tot_nFDpCD_Directory"];
 
     TH2D *hTheta_tot_VS_P_tot_nFDpCD = new TH2D("#theta_{tot} vs. P_{tot} (All Int., nFDpCD, CD)",
-                                                "#theta_{tot} vs. P_{tot} (All Int., nFDpCD, CD);P_{tot} [GeV/c];#theta_{tot} [Deg]",
-                                                numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
-                                                Opening_Ang_narrow_uboundary);
+                                                "#theta_{tot} vs. P_{tot} (All Int., nFDpCD, CD);P_{tot} [GeV/c];#theta_{tot} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     TH2D *hTheta_tot_VS_W_nFDpCD = new TH2D("#theta_{tot} vs. W (All Int., nFDpCD, CD)",
                                             "#theta_{tot} vs. W (All Int., nFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{tot} [Deg]",
                                             numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
@@ -5046,17 +4890,16 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_tot histograms">
     THStack *sPhi_tot_nFDpCD = new THStack("#phi_{tot} (nFDpCD)", "#phi_{tot} of total 3-momentum (nFDpCD);#phi_{tot} [Deg];");
 
-    TH1D *hPhi_tot_All_Int_nFDpCD = new TH1D("#phi_{tot} (All Int., nFDpCD)",
-                                             "#phi_{tot} of total 3-momentum (All Int., nFDpCD);#phi_{tot} [Deg];",
-                                             numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_tot_QEL_nFDpCD = new TH1D("#phi_{tot} (QEL Only, nFDpCD)", "#phi_{tot} of total 3-momentum (QEL Only, nFDpCD);#phi_{tot} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_tot_MEC_nFDpCD = new TH1D("#phi_{tot} (MEC Only, nFDpCD)", "#phi_{tot} of total 3-momentum (MEC Only, nFDpCD);#phi_{tot} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_tot_RES_nFDpCD = new TH1D("#phi_{tot} (RES Only, nFDpCD)", "#phi_{tot} of total 3-momentum (RES Only, nFDpCD);#phi_{tot} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_tot_DIS_nFDpCD = new TH1D("#phi_{tot} (DIS Only, nFDpCD)", "#phi_{tot} of total 3-momentum (DIS Only, nFDpCD);#phi_{tot} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_tot_All_Int_nFDpCD = new TH1D("#phi_{tot} (All Int., nFDpCD)", "#phi_{tot} of total 3-momentum (All Int., nFDpCD);#phi_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                             Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_tot_QEL_nFDpCD = new TH1D("#phi_{tot} (QEL Only, nFDpCD)", "#phi_{tot} of total 3-momentum (QEL Only, nFDpCD);#phi_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_tot_MEC_nFDpCD = new TH1D("#phi_{tot} (MEC Only, nFDpCD)", "#phi_{tot} of total 3-momentum (MEC Only, nFDpCD);#phi_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_tot_RES_nFDpCD = new TH1D("#phi_{tot} (RES Only, nFDpCD)", "#phi_{tot} of total 3-momentum (RES Only, nFDpCD);#phi_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_tot_DIS_nFDpCD = new TH1D("#phi_{tot} (DIS Only, nFDpCD)", "#phi_{tot} of total 3-momentum (DIS Only, nFDpCD);#phi_{tot} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
     string hPhi_tot_All_Int_nFDpCD_Dir = directories.Angle_Directory_map["Phi_tot_nFDpCD_Directory"];
     string hPhi_tot_QEL_nFDpCD_Dir = directories.Angle_Directory_map["Phi_tot_nFDpCD_Directory"];
     string hPhi_tot_MEC_nFDpCD_Dir = directories.Angle_Directory_map["Phi_tot_nFDpCD_Directory"];
@@ -5064,8 +4907,8 @@ void EventAnalyser() {
     string hPhi_tot_DIS_nFDpCD_Dir = directories.Angle_Directory_map["Phi_tot_nFDpCD_Directory"];
 
     TH2D *hPhi_tot_VS_P_tot_nFDpCD = new TH2D("#phi_{tot} vs. P_{tot} (All Int., nFDpCD, CD)",
-                                              "#phi_{tot} vs. P_{tot} (All Int., nFDpCD, CD);P_{tot} [GeV/c];#phi_{tot} [Deg]",
-                                              numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+                                              "#phi_{tot} vs. P_{tot} (All Int., nFDpCD, CD);P_{tot} [GeV/c];#phi_{tot} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                              numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_tot_VS_W_nFDpCD = new TH2D("#phi_{tot} vs. W (All Int., nFDpCD, CD)",
                                           "#phi_{tot} vs. W (All Int., nFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{tot} [Deg]",
                                           numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
@@ -5078,8 +4921,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_tot vs. Phi_tot histograms">
     TH2D *hTheta_tot_VS_Phi_tot_nFDpCD = new TH2D("#theta_{tot} vs. #phi_{tot} of total 3-momentum (All Int., nFDpCD)",
                                                   "#theta_{tot} vs. #phi_{tot} of total 3-momentum (All Int., nFDpCD);#phi_{tot} [Deg];#theta_{tot} [Deg]",
-                                                  numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary,
-                                                  numTH2Dbins_Nucleon_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                                  numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, Opening_Ang_narrow_lboundary,
+                                                  Opening_Ang_narrow_uboundary);
     string hTheta_tot_VS_Phi_tot_nFDpCD_Dir = directories.Angle_Directory_map["Theta_tot_VS_Phi_tot_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5088,20 +4931,15 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_rel histograms">
     THStack *sTheta_rel_nFDpCD = new THStack("#theta_{rel} (nFDpCD)", "#theta_{rel} of relative 3-momentum (nFDpCD);#theta_{rel} [Deg];");
 
-    TH1D *hTheta_rel_All_Int_nFDpCD = new TH1D("#theta_{rel} (All Int., nFDpCD)",
-                                               "#theta_{rel} of relative 3-momentum (All Int., nFDpCD);#theta_{rel} [Deg];",
+    TH1D *hTheta_rel_All_Int_nFDpCD = new TH1D("#theta_{rel} (All Int., nFDpCD)", "#theta_{rel} of relative 3-momentum (All Int., nFDpCD);#theta_{rel} [Deg];",
                                                numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_rel_QEL_nFDpCD = new TH1D("#theta_{rel} (QEL Only, nFDpCD)",
-                                           "#theta_{rel} of relative 3-momentum (QEL Only, nFDpCD);#theta_{rel} [Deg];",
+    TH1D *hTheta_rel_QEL_nFDpCD = new TH1D("#theta_{rel} (QEL Only, nFDpCD)", "#theta_{rel} of relative 3-momentum (QEL Only, nFDpCD);#theta_{rel} [Deg];",
                                            numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_rel_MEC_nFDpCD = new TH1D("#theta_{rel} (MEC Only, nFDpCD)",
-                                           "#theta_{rel} of relative 3-momentum (MEC Only, nFDpCD);#theta_{rel} [Deg];",
+    TH1D *hTheta_rel_MEC_nFDpCD = new TH1D("#theta_{rel} (MEC Only, nFDpCD)", "#theta_{rel} of relative 3-momentum (MEC Only, nFDpCD);#theta_{rel} [Deg];",
                                            numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_rel_RES_nFDpCD = new TH1D("#theta_{rel} (RES Only, nFDpCD)",
-                                           "#theta_{rel} of relative 3-momentum (RES Only, nFDpCD);#theta_{rel} [Deg];",
+    TH1D *hTheta_rel_RES_nFDpCD = new TH1D("#theta_{rel} (RES Only, nFDpCD)", "#theta_{rel} of relative 3-momentum (RES Only, nFDpCD);#theta_{rel} [Deg];",
                                            numTH1Dbins_Ang_Plots, 30, 155);
-    TH1D *hTheta_rel_DIS_nFDpCD = new TH1D("#theta_{rel} (DIS Only, nFDpCD)",
-                                           "#theta_{rel} of relative 3-momentum (DIS Only, nFDpCD);#theta_{rel} [Deg];",
+    TH1D *hTheta_rel_DIS_nFDpCD = new TH1D("#theta_{rel} (DIS Only, nFDpCD)", "#theta_{rel} of relative 3-momentum (DIS Only, nFDpCD);#theta_{rel} [Deg];",
                                            numTH1Dbins_Ang_Plots, 30, 155);
     string hTheta_rel_All_Int_nFDpCD_Dir = directories.Angle_Directory_map["Theta_rel_nFDpCD_Directory"];
     string hTheta_rel_QEL_nFDpCD_Dir = directories.Angle_Directory_map["Theta_rel_nFDpCD_Directory"];
@@ -5110,8 +4948,8 @@ void EventAnalyser() {
     string hTheta_rel_DIS_nFDpCD_Dir = directories.Angle_Directory_map["Theta_rel_nFDpCD_Directory"];
 
     TH2D *hTheta_rel_VS_P_rel_nFDpCD = new TH2D("#theta_{rel} vs. P_{rel} (All Int., nFDpCD, CD)",
-                                                "#theta_{rel} vs. P_{rel} (All Int., nFDpCD, CD);P_{rel} [GeV/c];#theta_{rel} [Deg]",
-                                                numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, 30, 155);
+                                                "#theta_{rel} vs. P_{rel} (All Int., nFDpCD, CD);P_{rel} [GeV/c];#theta_{rel} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                                numTH2Dbins_Ang_Plots, 30, 155);
     TH2D *hTheta_rel_VS_W_nFDpCD = new TH2D("#theta_{rel} vs. W (All Int., nFDpCD, CD)",
                                             "#theta_{rel} vs. W (All Int., nFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{rel} [Deg]",
                                             numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 30, 155);
@@ -5124,17 +4962,16 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_rel histograms">
     THStack *sPhi_rel_nFDpCD = new THStack("#phi_{rel} (nFDpCD)", "#phi_{rel} of relative 3-momentum (nFDpCD);#phi_{rel} [Deg];");
 
-    TH1D *hPhi_rel_All_Int_nFDpCD = new TH1D("#phi_{rel} (All Int., nFDpCD)",
-                                             "#phi_{rel} of relative 3-momentum (All Int., nFDpCD);#phi_{rel} [Deg];",
-                                             numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_rel_QEL_nFDpCD = new TH1D("#phi_{rel} (QEL Only, nFDpCD)", "#phi_{rel} of relative 3-momentum (QEL Only, nFDpCD);#phi_{rel} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_rel_MEC_nFDpCD = new TH1D("#phi_{rel} (MEC Only, nFDpCD)", "#phi_{rel} of relative 3-momentum (MEC Only, nFDpCD);#phi_{rel} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_rel_RES_nFDpCD = new TH1D("#phi_{rel} (RES Only, nFDpCD)", "#phi_{rel} of relative 3-momentum (RES Only, nFDpCD);#phi_{rel} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_rel_DIS_nFDpCD = new TH1D("#phi_{rel} (DIS Only, nFDpCD)", "#phi_{rel} of relative 3-momentum (DIS Only, nFDpCD);#phi_{rel} [Deg];",
-                                         numTH1Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_rel_All_Int_nFDpCD = new TH1D("#phi_{rel} (All Int., nFDpCD)", "#phi_{rel} of relative 3-momentum (All Int., nFDpCD);#phi_{rel} [Deg];", numTH1Dbins_Ang_Plots,
+                                             Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_rel_QEL_nFDpCD = new TH1D("#phi_{rel} (QEL Only, nFDpCD)", "#phi_{rel} of relative 3-momentum (QEL Only, nFDpCD);#phi_{rel} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_rel_MEC_nFDpCD = new TH1D("#phi_{rel} (MEC Only, nFDpCD)", "#phi_{rel} of relative 3-momentum (MEC Only, nFDpCD);#phi_{rel} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_rel_RES_nFDpCD = new TH1D("#phi_{rel} (RES Only, nFDpCD)", "#phi_{rel} of relative 3-momentum (RES Only, nFDpCD);#phi_{rel} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_rel_DIS_nFDpCD = new TH1D("#phi_{rel} (DIS Only, nFDpCD)", "#phi_{rel} of relative 3-momentum (DIS Only, nFDpCD);#phi_{rel} [Deg];", numTH1Dbins_Ang_Plots,
+                                         Phi_lboundary, Phi_uboundary);
     string hPhi_rel_All_Int_nFDpCD_Dir = directories.Angle_Directory_map["Phi_rel_nFDpCD_Directory"];
     string hPhi_rel_QEL_nFDpCD_Dir = directories.Angle_Directory_map["Phi_rel_nFDpCD_Directory"];
     string hPhi_rel_MEC_nFDpCD_Dir = directories.Angle_Directory_map["Phi_rel_nFDpCD_Directory"];
@@ -5142,8 +4979,8 @@ void EventAnalyser() {
     string hPhi_rel_DIS_nFDpCD_Dir = directories.Angle_Directory_map["Phi_rel_nFDpCD_Directory"];
 
     TH2D *hPhi_rel_VS_P_rel_nFDpCD = new TH2D("#phi_{rel} vs. P_{rel} (All Int., nFDpCD, CD)",
-                                              "#phi_{rel} vs. P_{rel} (All Int., nFDpCD, CD);P_{rel} [GeV/c];#phi_{rel} [Deg]",
-                                              numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
+                                              "#phi_{rel} vs. P_{rel} (All Int., nFDpCD, CD);P_{rel} [GeV/c];#phi_{rel} [Deg]", numTH2Dbins_Ang_Plots, 0, beamE * 1.1,
+                                              numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_rel_VS_W_nFDpCD = new TH2D("#phi_{rel} vs. W (All Int., nFDpCD, CD)",
                                           "#phi_{rel} vs. W (All Int., nFDpCD, CD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{rel} [Deg]",
                                           numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
@@ -5156,8 +4993,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_rel vs. Phi_rel histograms">
     TH2D *hTheta_rel_VS_Phi_rel_nFDpCD = new TH2D("#theta_{rel} vs. #phi_{rel} of relative 3-momentum (All Int., nFDpCD)",
                                                   "#theta_{rel} vs. #phi_{rel} of relative 3-momentum (All Int., nFDpCD);#phi_{rel} [Deg];#theta_{rel} [Deg]",
-                                                  numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, 30,
-                                                  155);
+                                                  numTH2Dbins_Nucleon_Ang_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_Nucleon_Ang_Plots, 30, 155);
     string hTheta_rel_VS_Phi_rel_nFDpCD_Dir = directories.Angle_Directory_map["Theta_rel_VS_Phi_rel_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5171,8 +5007,8 @@ void EventAnalyser() {
                                                    "(All Int., nFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];");
     TH1D *hTheta_p_e_p_tot_nFDpCD = new TH1D("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)",
                                              "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{nFD}+#vec{P}_{pCD} "
-                                             "(All Int., nFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];",
-                                             numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                             "(All Int., nFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
+                                             Opening_Ang_narrow_uboundary);
     string hTheta_p_e_p_tot_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5181,10 +5017,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_p_e_p_tot vs. W (nFDpCD)">
     TH2D *hTheta_p_e_p_tot_vs_W_nFDpCD = new TH2D("#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
                                                   "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                                  "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];",
-                                                  numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
-                                                  Opening_Ang_narrow_lboundary,
-                                                  Opening_Ang_narrow_uboundary);
+                                                  "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
+                                                  Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_p_e_p_tot_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5198,8 +5032,8 @@ void EventAnalyser() {
                                                  "(All Int., nFDpCD);#theta_{#vec{q},#vec{P}_{tot}} [Deg];");
     TH1D *hTheta_q_p_tot_nFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)",
                                            "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{nFD}+#vec{P}_{pCD} "
-                                           "(All Int., nFDpCD);#theta_{#vec{q},#vec{P}_{tot}} [Deg];",
-                                           numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                           "(All Int., nFDpCD);#theta_{#vec{q},#vec{P}_{tot}} [Deg];", numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
+                                           Opening_Ang_narrow_uboundary);
     string hTheta_q_p_tot_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5209,8 +5043,8 @@ void EventAnalyser() {
                                                          "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} [Deg];");
     TH1D *hTheta_P_nL_minus_q_nR_nFDpCD = new TH1D("#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)",
                                                    "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} - Opening Angle Between #vec{q} and #vec{P}_{nL} (All Int., nFDpCD)"
-                                                   ";#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} [Deg]",
-                                                   numTH1Dbins_Ang_Plots, Opening_Ang_wide_lboundary, Opening_Ang_wide_uboundary);
+                                                   ";#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} [Deg]", numTH1Dbins_Ang_Plots, Opening_Ang_wide_lboundary,
+                                                   Opening_Ang_wide_uboundary);
     string hTheta_P_nL_minus_q_nR_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5219,12 +5053,10 @@ void EventAnalyser() {
                                                  "#theta_{#vec{q},#vec{P}} - Opening Angle Between #vec{q} and #vec{P} (All Int., nFDpCD);#theta_{#vec{q},#vec{P}} [Deg];");
     TH1D *hTheta_q_p_L_nFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{nL}} (All Int., nFDpCD)",
                                          "#theta_{#vec{q},#vec{P}_{nL}} - Opening Angle Between #vec{q} and Leading Nucleon #vec{P}_{nL} (All Int., nFDpCD);"
-                                         "#theta_{#vec{q},#vec{P}_{nL}} [Deg]",
-                                         numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                         "#theta_{#vec{q},#vec{P}_{nL}} [Deg]", numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     TH1D *hTheta_q_p_R_nFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)",
                                          "#theta_{#vec{q},#vec{P}_{nR}} - Opening Angle Between #vec{q} and Recoil Nucleon #vec{P}_{nR} (All Int., nFDpCD);"
-                                         "#theta_{#vec{q},#vec{P}_{nR}} [Deg]",
-                                         numTH1Dbins_Ang_Plots, 0, 180);
+                                         "#theta_{#vec{q},#vec{P}_{nR}} [Deg]", numTH1Dbins_Ang_Plots, 0, 180);
     string hTheta_q_p_L_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     string hTheta_q_p_R_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
@@ -5234,12 +5066,10 @@ void EventAnalyser() {
                                              "#theta_{#vec{q},#vec{P}} - Opening Angle Between #vec{q} and #vec{P} (All Int., nFDpCD);#theta_{#vec{q},#vec{P}} [Deg];");
     TH1D *hTheta_q_nFD_nFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{nFD}} (All Int., nFDpCD)",
                                          "#theta_{#vec{q},#vec{P}_{nFD}} - Opening Angle Between #vec{q} and FD Neutron #vec{P}_{nFD} (All Int., nFDpCD);"
-                                         "#theta_{#vec{q},#vec{P}_{nFD}} [Deg]",
-                                         numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
+                                         "#theta_{#vec{q},#vec{P}_{nFD}} [Deg]", numTH1Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     TH1D *hTheta_q_pCD_nFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)",
                                          "#theta_{#vec{q},#vec{P}_{pCD}} - Opening Angle Between #vec{q} and CD Proton #vec{P}_{pCD} (All Int., nFDpCD);"
-                                         "#theta_{#vec{q},#vec{P}_{pCD}} [Deg]",
-                                         numTH1Dbins_Ang_Plots, 0, 180);
+                                         "#theta_{#vec{q},#vec{P}_{pCD}} [Deg]", numTH1Dbins_Ang_Plots, 0, 180);
     string hTheta_q_nFD_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     string hTheta_q_pCD_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
@@ -5251,55 +5081,46 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_nFD_pCD vs. W (CD & FD)">
     TH2D *hTheta_q_p_tot_vs_W_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
                                                 "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                                "#theta_{#vec{q},#vec{P}_{tot}} [Deg];",
-                                                numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
-                                                Opening_Ang_narrow_lboundary,
-                                                Opening_Ang_narrow_uboundary);
+                                                "#theta_{#vec{q},#vec{P}_{tot}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
+                                                Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_q_p_tot_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_P_nL_minus_q_nR vs. W (CD & FD)">
     TH2D *hTheta_P_nL_minus_q_nR_vs_W_nFDpCD = new TH2D("#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD)",
                                                         "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                                        "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} [Deg];",
-                                                        numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
-                                                        Opening_Ang_wide_lboundary,
-                                                        Opening_Ang_wide_uboundary);
+                                                        "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary,
+                                                        numTH2Dbins_Ang_Plots, Opening_Ang_wide_lboundary, Opening_Ang_wide_uboundary);
     string hTheta_P_nL_minus_q_nR_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_p_L vs. W (CD & FD)">
     TH2D *hTheta_q_p_L_vs_W_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD)",
                                               "#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                              "#theta_{#vec{q},#vec{P}_{nL}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary,
-                                              numTH2Dbins_Ang_Plots,
-                                              Opening_Ang_narrow_lboundary,
-                                              Opening_Ang_narrow_uboundary);
+                                              "#theta_{#vec{q},#vec{P}_{nL}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
+                                              Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_q_p_L_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_p_R vs. W (CD & FD)">
     TH2D *hTheta_q_p_R_vs_W_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD)",
                                               "#theta_{#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                              "#theta_{#vec{q},#vec{P}_{nR}} [Deg];",
-                                              numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
+                                              "#theta_{#vec{q},#vec{P}_{nR}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
     string hTheta_q_p_R_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_nFD vs. W (CD & FD)">
     TH2D *hTheta_q_nFD_vs_W_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{nFD}} vs. W (All Int., nFDpCD)",
                                               "#theta_{#vec{q},#vec{P}_{nFD}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                              "#theta_{#vec{q},#vec{P}_{nFD}} [Deg];",
-                                              numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
-                                              Opening_Ang_narrow_uboundary);
+                                              "#theta_{#vec{q},#vec{P}_{nFD}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots,
+                                              Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_q_nFD_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_pCD vs. W (CD & FD)">
     TH2D *hTheta_q_pCD_vs_W_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., nFDpCD)",
                                               "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                              "#theta_{#vec{q},#vec{P}_{pCD}} [Deg];",
-                                              numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
+                                              "#theta_{#vec{q},#vec{P}_{pCD}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
     string hTheta_q_pCD_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5308,9 +5129,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_q_p vs |P_p|/|q| (CD & FD)">
     TH2D *hTheta_q_p_L_vs_p_L_q_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{nL}} vs. r_{nL} (All Int., nFDpCD)",
                                                   "#theta_{#vec{q},#vec{P}_{nL}} vs. r_{nL}=|#vec{P}_{nL}|/|#vec{q}| (All Int., nFDpCD);"
-                                                  "r_{nFD};#theta_{#vec{q},#vec{P}_{nFD}} [Deg]",
-                                                  numTH2Dbins_Ang_Plots, 0, 1.05, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
-                                                  Opening_Ang_narrow_uboundary);
+                                                  "r_{nFD};#theta_{#vec{q},#vec{P}_{nFD}} [Deg]", numTH2Dbins_Ang_Plots, 0, 1.05, numTH2Dbins_Ang_Plots,
+                                                  Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_q_p_L_vs_p_L_q_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5319,43 +5139,34 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_q_p_L vs Theta_q_p_R">
     TH2D *hTheta_q_p_L_vs_Theta_q_p_R_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{nL}} vs. #theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)",
                                                         "#theta_{#vec{q},#vec{P}_{nL}} vs. #theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD);"
-                                                        "#theta_{#vec{q},#vec{P}_{nL}};#theta_{#vec{q},#vec{P}_{nR}} [Deg]",
-                                                        numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary,
-                                                        numTH2Dbins_Ang_Plots, 0,
-                                                        180);
+                                                        "#theta_{#vec{q},#vec{P}_{nL}};#theta_{#vec{q},#vec{P}_{nR}} [Deg]", numTH2Dbins_Ang_Plots,
+                                                        Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
     string hTheta_q_p_L_vs_Theta_q_p_R_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_nFD vs Theta_q_pCD">
     TH2D *hTheta_q_nFD_vs_Theta_q_pCD_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{nFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)",
                                                         "#theta_{#vec{q},#vec{P}_{nFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD);"
-                                                        "#theta_{#vec{q},#vec{P}_{nFD}} [Deg];#theta_{#vec{q},#vec{P}_{pCD}} [Deg]",
-                                                        numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary,
-                                                        numTH2Dbins_Ang_Plots, 0,
-                                                        180);
+                                                        "#theta_{#vec{q},#vec{P}_{nFD}} [Deg];#theta_{#vec{q},#vec{P}_{pCD}} [Deg]", numTH2Dbins_Ang_Plots,
+                                                        Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
     string hTheta_q_nFD_vs_Theta_q_pCD_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
 // Theta_nFD_pCD (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_nFD_pCD (CD & FD)">
-    THStack *sTheta_nFD_pCD_nFDpCD = new THStack("#theta_{nFD,pCD} (All Int., nFDpCD)",
-                                                 "#theta_{nFD,pCD} - Opening Angle Between Protons (nFDpCD);#theta_{nFD,pCD} [Deg];");
+    THStack *sTheta_nFD_pCD_nFDpCD = new THStack("#theta_{nFD,pCD} (All Int., nFDpCD)", "#theta_{nFD,pCD} - Opening Angle Between Protons (nFDpCD);#theta_{nFD,pCD} [Deg];");
     TH1D *hTheta_nFD_pCD_All_Int_nFDpCD = new TH1D("#theta_{nFD,pCD} (All Int., nFDpCD)",
-                                                   "#theta_{nFD,pCD} - Opening Angle Between Protons (All Int., nFDpCD);#theta_{nFD,pCD} [Deg];",
-                                                   numTH1Dbins_Ang_Plots, 0, 180);
+                                                   "#theta_{nFD,pCD} - Opening Angle Between Protons (All Int., nFDpCD);#theta_{nFD,pCD} [Deg];", numTH1Dbins_Ang_Plots, 0,
+                                                   180);
     TH1D *hTheta_nFD_pCD_QEL_nFDpCD = new TH1D("#theta_{nFD,pCD} (QEL only, nFDpCD)",
-                                               "#theta_{nFD,pCD} - Opening Angle Between Protons (QEL only, nFDpCD);#theta_{nFD,pCD} [Deg];",
-                                               numTH1Dbins_Ang_Plots, 0, 180);
+                                               "#theta_{nFD,pCD} - Opening Angle Between Protons (QEL only, nFDpCD);#theta_{nFD,pCD} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     TH1D *hTheta_nFD_pCD_MEC_nFDpCD = new TH1D("#theta_{nFD,pCD} (MEC only, nFDpCD)",
-                                               "#theta_{nFD,pCD} - Opening Angle Between Protons (MEC only, nFDpCD);#theta_{nFD,pCD} [Deg];",
-                                               numTH1Dbins_Ang_Plots, 0, 180);
+                                               "#theta_{nFD,pCD} - Opening Angle Between Protons (MEC only, nFDpCD);#theta_{nFD,pCD} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     TH1D *hTheta_nFD_pCD_RES_nFDpCD = new TH1D("#theta_{nFD,pCD} (RES only, nFDpCD)",
-                                               "#theta_{nFD,pCD} - Opening Angle Between Protons (RES only, nFDpCD);#theta_{nFD,pCD} [Deg];",
-                                               numTH1Dbins_Ang_Plots, 0, 180);
+                                               "#theta_{nFD,pCD} - Opening Angle Between Protons (RES only, nFDpCD);#theta_{nFD,pCD} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     TH1D *hTheta_nFD_pCD_DIS_nFDpCD = new TH1D("#theta_{nFD,pCD} (DIS only, nFDpCD)",
-                                               "#theta_{nFD,pCD} - Opening Angle Between Protons (DIS only, nFDpCD);#theta_{nFD,pCD} [Deg];",
-                                               numTH1Dbins_Ang_Plots, 0, 180);
+                                               "#theta_{nFD,pCD} - Opening Angle Between Protons (DIS only, nFDpCD);#theta_{nFD,pCD} [Deg];", numTH1Dbins_Ang_Plots, 0, 180);
     string sTheta_nFD_pCD_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_nFDpCD_Directory"];
     string hTheta_nFD_pCD_All_Int_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_nFDpCD_Directory"];
     string hTheta_nFD_pCD_QEL_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_nFDpCD_Directory"];
@@ -5376,11 +5187,10 @@ void EventAnalyser() {
 // Theta_nFD_vs_theta_pCD for Theta_nFD_pCD < 20 (nFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_nFD_vs_theta_pCD for Theta_nFD_pCD < 20 (CD & FD)">
-    TH2D *hTheta_nFD_vs_theta_pCD_for_Theta_nFD_pCD_20_nFDpCD = new TH2D(
-            "#theta_{nFD} vs. #theta_{pCD} for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD)",
-            "#theta_{nFD} vs. #theta_{pCD} for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD);"
-            "#theta_{pCD} [Deg];#theta_{nFD} [Deg];",
-            numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30, 50);
+    TH2D *hTheta_nFD_vs_theta_pCD_for_Theta_nFD_pCD_20_nFDpCD = new TH2D("#theta_{nFD} vs. #theta_{pCD} for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD)",
+                                                                         "#theta_{nFD} vs. #theta_{pCD} for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD);"
+                                                                         "#theta_{pCD} [Deg];#theta_{nFD} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30,
+                                                                         50);
     string hTheta_nFD_vs_theta_pCD_for_Theta_nFD_pCD_20_nFDpCD_Dir = directories.Angle_Directory_map["Double_detection_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5401,11 +5211,10 @@ void EventAnalyser() {
 // Theta_nFD_vs_theta_pCD for every Theta_nFD_pCD (nFDpCD, CD & FD) -------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_nFD_vs_theta_pCD for Theta_nFD_pCD (CD & FD)">
-    TH2D *hTheta_nFD_vs_theta_pCD_forall_Theta_nFD_pCD_nFDpCD = new TH2D(
-            "#theta_{nFD} vs. #theta_{nFD} #forall#theta_{nFD,pCD} (All Int., nFDpCD)",
-            "#theta_{nFD} vs. #theta_{pCD} for every #theta_{nFD,pCD} (All Int., nFDpCD);"
-            "#theta_{pCD} [Deg];#theta_{nFD} [Deg];",
-            numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30, 50);
+    TH2D *hTheta_nFD_vs_theta_pCD_forall_Theta_nFD_pCD_nFDpCD = new TH2D("#theta_{nFD} vs. #theta_{nFD} #forall#theta_{nFD,pCD} (All Int., nFDpCD)",
+                                                                         "#theta_{nFD} vs. #theta_{pCD} for every #theta_{nFD,pCD} (All Int., nFDpCD);"
+                                                                         "#theta_{pCD} [Deg];#theta_{nFD} [Deg];", numTH2Dbins_Ang_Plots, 30, 50, numTH2Dbins_Ang_Plots, 30,
+                                                                         50);
     string hTheta_nFD_vs_theta_pCD_forall_Theta_nFD_pCD_nFDpCD_Dir = directories.Angle_Directory_map["Double_detection_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5455,8 +5264,7 @@ void EventAnalyser() {
                                                                                    "#Delta#phi_{nFD,e} = #phi_{nFD}^{ECAL} - #phi_{e}^{ECAL} [Deg]",
                                                                                    "#Delta#theta_{nFD,e} = #theta_{nFD}^{ECAL} - #theta_{e}^{ECAL} [Deg]",
                                                                                    directories.Angle_Directory_map["Neutron_veto_nFDpCD_Directory"],
-                                                                                   "03_Neutron_hits_vs_electron_hits_Vetoed_nFDpCD", -180, 180,
-                                                                                   -50, 50, 65, 65);
+                                                                                   "03_Neutron_hits_vs_electron_hits_Vetoed_nFDpCD", -180, 180, -50, 50, 65, 65);
     //</editor-fold>
 
     //</editor-fold>
@@ -5507,8 +5315,8 @@ void EventAnalyser() {
     string hQ2_pFDpCD_Dir = directories.Q2_Directory_map["Q2_pFDpCD_Directory"];
 
     TH2D *hQ2_VS_W_pFDpCD = new TH2D("Q^{2} vs. W (All Int., pFDpCD)",
-                                     "Q^{2} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];Q^{2} [GeV^{2}/c^{2}]",
-                                     numTH2Dbins_Q2_Plots, W_lboundary, W_uboundary, numTH2Dbins_Q2_Plots, 0, beamE * 1.1);
+                                     "Q^{2} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];Q^{2} [GeV^{2}/c^{2}]", numTH2Dbins_Q2_Plots,
+                                     W_lboundary, W_uboundary, numTH2Dbins_Q2_Plots, 0, beamE * 1.1);
     string hQ2_VS_W_pFDpCD_Dir = directories.Q2_Directory_map["Q2_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -5518,8 +5326,8 @@ void EventAnalyser() {
     string hQ2_nFDpCD_Dir = directories.Q2_Directory_map["Q2_nFDpCD_Directory"];
 
     TH2D *hQ2_VS_W_nFDpCD = new TH2D("Q^{2} vs. W (All Int., nFDpCD)",
-                                     "Q^{2} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];Q^{2} [GeV^{2}/c^{2}]",
-                                     numTH2Dbins_Q2_Plots, W_lboundary, W_uboundary, numTH2Dbins_Q2_Plots, 0, beamE * 1.1);
+                                     "Q^{2} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];Q^{2} [GeV^{2}/c^{2}]", numTH2Dbins_Q2_Plots,
+                                     W_lboundary, W_uboundary, numTH2Dbins_Q2_Plots, 0, beamE * 1.1);
     string hQ2_VS_W_nFDpCD_Dir = directories.Q2_Directory_map["Q2_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5536,36 +5344,26 @@ void EventAnalyser() {
     THStack *sE_e_1e_cut = new THStack("E_{e} (1e Cut)", "E_{e} Histogram (1e Cut);E_{e} [GeV]");
     string sE_e_1e_cut_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_stack_Directory"];
 
-    TH1D *hE_e_All_Int_1e_cut_FD = new TH1D("E_{e} (1e Cut)", "E_{e} Histogram (All Int., 1e Cut);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                            beamE * 1.1);
-    TH1D *hE_e_QEL_1e_cut_FD = new TH1D("E_{e} (QEL Only, 1e cut)", "E_{e} Histogram (QEL Only, 1e cut);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
-    TH1D *hE_e_MEC_1e_cut_FD = new TH1D("E_{e} (MEC Only, 1e cut)", "E_{e} Histogram (MEC Only, 1e cut);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
-    TH1D *hE_e_RES_1e_cut_FD = new TH1D("E_{e} (RES Only, 1e cut)", "E_{e} Histogram (RES Only, 1e cut);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
-    TH1D *hE_e_DIS_1e_cut_FD = new TH1D("E_{e} (DIS Only, 1e cut)", "E_{e} Histogram (DIS Only, 1e cut);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
+    TH1D *hE_e_All_Int_1e_cut_FD = new TH1D("E_{e} (1e Cut)", "E_{e} Histogram (All Int., 1e Cut);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_QEL_1e_cut_FD = new TH1D("E_{e} (QEL Only, 1e cut)", "E_{e} Histogram (QEL Only, 1e cut);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_MEC_1e_cut_FD = new TH1D("E_{e} (MEC Only, 1e cut)", "E_{e} Histogram (MEC Only, 1e cut);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_RES_1e_cut_FD = new TH1D("E_{e} (RES Only, 1e cut)", "E_{e} Histogram (RES Only, 1e cut);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_DIS_1e_cut_FD = new TH1D("E_{e} (DIS Only, 1e cut)", "E_{e} Histogram (DIS Only, 1e cut);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_All_Int_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
     string hE_e_QEL_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
     string hE_e_MEC_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
     string hE_e_RES_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
     string hE_e_DIS_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
 
-    TH2D *hE_e_VS_Theta_e_All_Int_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1e Cut)",
-                                                       "E_{e} vs. #theta_{e} (All Int., 1e Cut);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_All_Int_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1e Cut)", "E_{e} vs. #theta_{e} (All Int., 1e Cut);#theta_{e} [Deg];E_{e} [GeV]",
                                                        numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_QEL_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 1e cut)",
-                                                   "E_{e} vs. #theta_{e} (QEL Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_QEL_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 1e cut)", "E_{e} vs. #theta_{e} (QEL Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_MEC_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, 1e cut)",
-                                                   "E_{e} vs. #theta_{e} (MEC Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_MEC_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, 1e cut)", "E_{e} vs. #theta_{e} (MEC Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_RES_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, 1e cut)",
-                                                   "E_{e} vs. #theta_{e} (RES Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_RES_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, 1e cut)", "E_{e} vs. #theta_{e} (RES Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_DIS_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, 1e cut)",
-                                                   "E_{e} vs. #theta_{e} (DIS Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_DIS_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, 1e cut)", "E_{e} vs. #theta_{e} (DIS Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_VS_Theta_e_All_Int_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"];
     string hE_e_VS_Theta_e_QEL_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"];
@@ -5579,8 +5377,7 @@ void EventAnalyser() {
     THStack *sE_e_1p_FD = new THStack("E_{e} (1p)", "E_{e} Histogram (1p);E_{e} [GeV]");
     string sE_e_1p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1p_stack_Directory"];
 
-    TH1D *hE_e_All_Int_1p_FD = new TH1D("E_{e} (All Int., 1p)", "E_{e} Histogram (All Int., 1p);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
+    TH1D *hE_e_All_Int_1p_FD = new TH1D("E_{e} (All Int., 1p)", "E_{e} Histogram (All Int., 1p);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     TH1D *hE_e_QEL_1p_FD = new TH1D("E_{e} (QEL Only, 1p)", "E_{e} Histogram (QEL Only, 1p);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     TH1D *hE_e_MEC_1p_FD = new TH1D("E_{e} (MEC Only, 1p)", "E_{e} Histogram (MEC Only, 1p);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     TH1D *hE_e_RES_1p_FD = new TH1D("E_{e} (RES Only, 1p)", "E_{e} Histogram (RES Only, 1p);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
@@ -5592,20 +5389,15 @@ void EventAnalyser() {
     string hE_e_DIS_1p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1p_Directory"];
 
     /* E_e vs. Theta_e (1p, CD & FD) */
-    TH2D *hE_e_VS_Theta_e_All_Int_1p_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1p)",
-                                                   "E_{e} vs. #theta_{e} (All Int., 1p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_All_Int_1p_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1p)", "E_{e} vs. #theta_{e} (All Int., 1p);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_QEL_1p_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 1p)",
-                                               "E_{e} vs. #theta_{e} (QEL Only, 1p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_QEL_1p_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 1p)", "E_{e} vs. #theta_{e} (QEL Only, 1p);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_MEC_1p_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, 1p)",
-                                               "E_{e} vs. #theta_{e} (MEC Only, 1p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_MEC_1p_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, 1p)", "E_{e} vs. #theta_{e} (MEC Only, 1p);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_RES_1p_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, 1p)",
-                                               "E_{e} vs. #theta_{e} (RES Only, 1p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_RES_1p_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, 1p)", "E_{e} vs. #theta_{e} (RES Only, 1p);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_DIS_1p_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, 1p)",
-                                               "E_{e} vs. #theta_{e} (DIS Only, 1p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_DIS_1p_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, 1p)", "E_{e} vs. #theta_{e} (DIS Only, 1p);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_VS_Theta_e_All_Int_1p_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1p_Directory"];
     string hE_e_VS_Theta_e_QEL_1p_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1p_Directory"];
@@ -5618,20 +5410,15 @@ void EventAnalyser() {
     string sE_e_15_1p_CD_Dir = directories.E_e_Directory_map["E_e_All_Int_1p_stack_Directory"];
     string sE_e_15_1p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1p_stack_Directory"];
 
-    TH1D *hE_e_15_All_Int_1p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., 1p)",
-                                           "E_{e} around #theta_{e} = 15#circ (All Int., 1p);E_{e} [GeV]",
+    TH1D *hE_e_15_All_Int_1p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., 1p)", "E_{e} around #theta_{e} = 15#circ (All Int., 1p);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_QEL_1p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (QEL Only, 1p)",
-                                       "E_{e} around #theta_{e} = 15#circ (QEL Only, 1p);E_{e} [GeV]",
+    TH1D *hE_e_15_QEL_1p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (QEL Only, 1p)", "E_{e} around #theta_{e} = 15#circ (QEL Only, 1p);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_MEC_1p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (MEC Only, 1p)",
-                                       "E_{e} around #theta_{e} = 15#circ (MEC Only, 1p);E_{e} [GeV]",
+    TH1D *hE_e_15_MEC_1p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (MEC Only, 1p)", "E_{e} around #theta_{e} = 15#circ (MEC Only, 1p);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_RES_1p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (RES Only, 1p)",
-                                       "E_{e} around #theta_{e} = 15#circ (RES Only, 1p);E_{e} [GeV]",
+    TH1D *hE_e_15_RES_1p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (RES Only, 1p)", "E_{e} around #theta_{e} = 15#circ (RES Only, 1p);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_DIS_1p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, 1p)",
-                                       "E_{e} around #theta_{e} = 15#circ (DIS Only, 1p);E_{e} [GeV]",
+    TH1D *hE_e_15_DIS_1p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, 1p)", "E_{e} around #theta_{e} = 15#circ (DIS Only, 1p);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_15_All_Int_1p_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_1p_Directory"];
     string hE_e_15_QEL_1p_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_1p_Directory"];
@@ -5645,8 +5432,7 @@ void EventAnalyser() {
     THStack *sE_e_1n_FD = new THStack("E_{e} (1n)", "E_{e} Histogram (1n);E_{e} [GeV]");
     string sE_e_1n_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1n_stack_Directory"];
 
-    TH1D *hE_e_All_Int_1n_FD = new TH1D("E_{e} (All Int., 1n)", "E_{e} Histogram (All Int., 1n);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
+    TH1D *hE_e_All_Int_1n_FD = new TH1D("E_{e} (All Int., 1n)", "E_{e} Histogram (All Int., 1n);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     TH1D *hE_e_QEL_1n_FD = new TH1D("E_{e} (QEL Only, 1n)", "E_{e} Histogram (QEL Only, 1n);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     TH1D *hE_e_MEC_1n_FD = new TH1D("E_{e} (MEC Only, 1n)", "E_{e} Histogram (MEC Only, 1n);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     TH1D *hE_e_RES_1n_FD = new TH1D("E_{e} (RES Only, 1n)", "E_{e} Histogram (RES Only, 1n);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
@@ -5658,20 +5444,15 @@ void EventAnalyser() {
     string hE_e_DIS_1n_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1n_Directory"];
 
     /* E_e vs. Theta_e (1n, CD & FD) */
-    TH2D *hE_e_VS_Theta_e_All_Int_1n_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1n)",
-                                                   "E_{e} vs. #theta_{e} (All Int., 1n);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_All_Int_1n_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1n)", "E_{e} vs. #theta_{e} (All Int., 1n);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_QEL_1n_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 1n)",
-                                               "E_{e} vs. #theta_{e} (QEL Only, 1n);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_QEL_1n_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 1n)", "E_{e} vs. #theta_{e} (QEL Only, 1n);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_MEC_1n_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, 1n)",
-                                               "E_{e} vs. #theta_{e} (MEC Only, 1n);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_MEC_1n_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, 1n)", "E_{e} vs. #theta_{e} (MEC Only, 1n);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_RES_1n_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, 1n)",
-                                               "E_{e} vs. #theta_{e} (RES Only, 1n);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_RES_1n_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, 1n)", "E_{e} vs. #theta_{e} (RES Only, 1n);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_DIS_1n_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, 1n)",
-                                               "E_{e} vs. #theta_{e} (DIS Only, 1n);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_DIS_1n_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, 1n)", "E_{e} vs. #theta_{e} (DIS Only, 1n);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_VS_Theta_e_All_Int_1n_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1n_Directory"];
     string hE_e_VS_Theta_e_QEL_1n_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1n_Directory"];
@@ -5684,20 +5465,15 @@ void EventAnalyser() {
     string sE_e_15_1n_CD_Dir = directories.E_e_Directory_map["E_e_All_Int_1n_stack_Directory"];
     string sE_e_15_1n_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1n_stack_Directory"];
 
-    TH1D *hE_e_15_All_Int_1n_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., 1n)",
-                                           "E_{e} around #theta_{e} = 15#circ (All Int., 1n);E_{e} [GeV]",
+    TH1D *hE_e_15_All_Int_1n_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., 1n)", "E_{e} around #theta_{e} = 15#circ (All Int., 1n);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_QEL_1n_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (QEL Only, 1n)",
-                                       "E_{e} around #theta_{e} = 15#circ (QEL Only, 1n);E_{e} [GeV]",
+    TH1D *hE_e_15_QEL_1n_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (QEL Only, 1n)", "E_{e} around #theta_{e} = 15#circ (QEL Only, 1n);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_MEC_1n_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (MEC Only, 1n)",
-                                       "E_{e} around #theta_{e} = 15#circ (MEC Only, 1n);E_{e} [GeV]",
+    TH1D *hE_e_15_MEC_1n_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (MEC Only, 1n)", "E_{e} around #theta_{e} = 15#circ (MEC Only, 1n);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_RES_1n_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (RES Only, 1n)",
-                                       "E_{e} around #theta_{e} = 15#circ (RES Only, 1n);E_{e} [GeV]",
+    TH1D *hE_e_15_RES_1n_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (RES Only, 1n)", "E_{e} around #theta_{e} = 15#circ (RES Only, 1n);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_DIS_1n_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, 1n)",
-                                       "E_{e} around #theta_{e} = 15#circ (DIS Only, 1n);E_{e} [GeV]",
+    TH1D *hE_e_15_DIS_1n_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, 1n)", "E_{e} around #theta_{e} = 15#circ (DIS Only, 1n);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_15_All_Int_1n_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_1n_Directory"];
     string hE_e_15_QEL_1n_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_1n_Directory"];
@@ -5712,8 +5488,7 @@ void EventAnalyser() {
     string sE_e_2p_CD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_stack_Directory"];
     string sE_e_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_stack_Directory"];
 
-    TH1D *hE_e_All_Int_2p_FD = new TH1D("E_{e} (All Int., 2p)", "E_{e} Histogram (All Int., 2p);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
+    TH1D *hE_e_All_Int_2p_FD = new TH1D("E_{e} (All Int., 2p)", "E_{e} Histogram (All Int., 2p);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     TH1D *hE_e_QEL_2p_FD = new TH1D("E_{e} (QEL Only, 2p)", "E_{e} Histogram (QEL Only, 2p);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     TH1D *hE_e_MEC_2p_FD = new TH1D("E_{e} (MEC Only, 2p)", "E_{e} Histogram (MEC Only, 2p);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     TH1D *hE_e_RES_2p_FD = new TH1D("E_{e} (RES Only, 2p)", "E_{e} Histogram (RES Only, 2p);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
@@ -5725,20 +5500,15 @@ void EventAnalyser() {
     string hE_e_DIS_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_Directory"];
 
     /* E_e vs. Theta_e (2p, CD & FD) */
-    TH2D *hE_e_VS_Theta_e_All_Int_2p_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 2p)",
-                                                   "E_{e} vs. #theta_{e} (All Int., 2p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_All_Int_2p_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 2p)", "E_{e} vs. #theta_{e} (All Int., 2p);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_QEL_2p_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 2p)",
-                                               "E_{e} vs. #theta_{e} (QEL Only, 2p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_QEL_2p_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 2p)", "E_{e} vs. #theta_{e} (QEL Only, 2p);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_MEC_2p_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, 2p)",
-                                               "E_{e} vs. #theta_{e} (MEC Only, 2p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_MEC_2p_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, 2p)", "E_{e} vs. #theta_{e} (MEC Only, 2p);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_RES_2p_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, 2p)",
-                                               "E_{e} vs. #theta_{e} (RES Only, 2p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_RES_2p_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, 2p)", "E_{e} vs. #theta_{e} (RES Only, 2p);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_DIS_2p_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, 2p)",
-                                               "E_{e} vs. #theta_{e} (DIS Only, 2p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_DIS_2p_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, 2p)", "E_{e} vs. #theta_{e} (DIS Only, 2p);#theta_{e} [Deg];E_{e} [GeV]",
                                                numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_VS_Theta_e_All_Int_2p_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_2p_Directory"];
     string hE_e_VS_Theta_e_QEL_2p_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_2p_Directory"];
@@ -5751,20 +5521,15 @@ void EventAnalyser() {
     string sE_e_15_2p_CD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_stack_Directory"];
     string sE_e_15_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_stack_Directory"];
 
-    TH1D *hE_e_15_All_Int_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., 2p)",
-                                           "E_{e} around #theta_{e} = 15#circ (All Int., 2p);E_{e} [GeV]",
+    TH1D *hE_e_15_All_Int_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., 2p)", "E_{e} around #theta_{e} = 15#circ (All Int., 2p);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_QEL_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (QEL Only, 2p)",
-                                       "E_{e} around #theta_{e} = 15#circ (QEL Only, 2p);E_{e} [GeV]",
+    TH1D *hE_e_15_QEL_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (QEL Only, 2p)", "E_{e} around #theta_{e} = 15#circ (QEL Only, 2p);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_MEC_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (MEC Only, 2p)",
-                                       "E_{e} around #theta_{e} = 15#circ (MEC Only, 2p);E_{e} [GeV]",
+    TH1D *hE_e_15_MEC_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (MEC Only, 2p)", "E_{e} around #theta_{e} = 15#circ (MEC Only, 2p);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_RES_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (RES Only, 2p)",
-                                       "E_{e} around #theta_{e} = 15#circ (RES Only, 2p);E_{e} [GeV]",
+    TH1D *hE_e_15_RES_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (RES Only, 2p)", "E_{e} around #theta_{e} = 15#circ (RES Only, 2p);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_DIS_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, 2p)",
-                                       "E_{e} around #theta_{e} = 15#circ (DIS Only, 2p);E_{e} [GeV]",
+    TH1D *hE_e_15_DIS_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, 2p)", "E_{e} around #theta_{e} = 15#circ (DIS Only, 2p);E_{e} [GeV]",
                                        numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_15_All_Int_2p_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_2p_Directory"];
     string hE_e_15_QEL_2p_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_2p_Directory"];
@@ -5779,16 +5544,11 @@ void EventAnalyser() {
     string sE_e_pFDpCD_CD_Dir = directories.E_e_Directory_map["E_e_All_Int_pFDpCD_stack_Directory"];
     string sE_e_pFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_pFDpCD_stack_Directory"];
 
-    TH1D *hE_e_All_Int_pFDpCD_FD = new TH1D("E_{e} (All Int., pFDpCD)", "E_{e} Histogram (All Int., pFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                            beamE * 1.1);
-    TH1D *hE_e_QEL_pFDpCD_FD = new TH1D("E_{e} (QEL Only, pFDpCD)", "E_{e} Histogram (QEL Only, pFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
-    TH1D *hE_e_MEC_pFDpCD_FD = new TH1D("E_{e} (MEC Only, pFDpCD)", "E_{e} Histogram (MEC Only, pFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
-    TH1D *hE_e_RES_pFDpCD_FD = new TH1D("E_{e} (RES Only, pFDpCD)", "E_{e} Histogram (RES Only, pFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
-    TH1D *hE_e_DIS_pFDpCD_FD = new TH1D("E_{e} (DIS Only, pFDpCD)", "E_{e} Histogram (DIS Only, pFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
+    TH1D *hE_e_All_Int_pFDpCD_FD = new TH1D("E_{e} (All Int., pFDpCD)", "E_{e} Histogram (All Int., pFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_QEL_pFDpCD_FD = new TH1D("E_{e} (QEL Only, pFDpCD)", "E_{e} Histogram (QEL Only, pFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_MEC_pFDpCD_FD = new TH1D("E_{e} (MEC Only, pFDpCD)", "E_{e} Histogram (MEC Only, pFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_RES_pFDpCD_FD = new TH1D("E_{e} (RES Only, pFDpCD)", "E_{e} Histogram (RES Only, pFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_DIS_pFDpCD_FD = new TH1D("E_{e} (DIS Only, pFDpCD)", "E_{e} Histogram (DIS Only, pFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_All_Int_pFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_pFDpCD_Directory"];
     string hE_e_QEL_pFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_pFDpCD_Directory"];
     string hE_e_MEC_pFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_pFDpCD_Directory"];
@@ -5796,20 +5556,15 @@ void EventAnalyser() {
     string hE_e_DIS_pFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_pFDpCD_Directory"];
 
     /* E_e vs. Theta_e (pFDpCD, CD & FD) */
-    TH2D *hE_e_VS_Theta_e_All_Int_pFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., pFDpCD)",
-                                                       "E_{e} vs. #theta_{e} (All Int., pFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_All_Int_pFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., pFDpCD)", "E_{e} vs. #theta_{e} (All Int., pFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
                                                        numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_QEL_pFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, pFDpCD)",
-                                                   "E_{e} vs. #theta_{e} (QEL Only, pFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_QEL_pFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, pFDpCD)", "E_{e} vs. #theta_{e} (QEL Only, pFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_MEC_pFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, pFDpCD)",
-                                                   "E_{e} vs. #theta_{e} (MEC Only, pFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_MEC_pFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, pFDpCD)", "E_{e} vs. #theta_{e} (MEC Only, pFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_RES_pFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, pFDpCD)",
-                                                   "E_{e} vs. #theta_{e} (RES Only, pFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_RES_pFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, pFDpCD)", "E_{e} vs. #theta_{e} (RES Only, pFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_DIS_pFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, pFDpCD)",
-                                                   "E_{e} vs. #theta_{e} (DIS Only, pFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_DIS_pFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, pFDpCD)", "E_{e} vs. #theta_{e} (DIS Only, pFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_VS_Theta_e_All_Int_pFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_pFDpCD_Directory"];
     string hE_e_VS_Theta_e_QEL_pFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_pFDpCD_Directory"];
@@ -5822,20 +5577,15 @@ void EventAnalyser() {
     string sE_e_15_pFDpCD_CD_Dir = directories.E_e_Directory_map["E_e_All_Int_pFDpCD_stack_Directory"];
     string sE_e_15_pFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_pFDpCD_stack_Directory"];
 
-    TH1D *hE_e_15_All_Int_pFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., pFDpCD)",
-                                               "E_{e} around #theta_{e} = 15#circ (All Int., pFDpCD);E_{e} [GeV]",
+    TH1D *hE_e_15_All_Int_pFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., pFDpCD)", "E_{e} around #theta_{e} = 15#circ (All Int., pFDpCD);E_{e} [GeV]",
                                                numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_QEL_pFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (QEL Only, pFDpCD)",
-                                           "E_{e} around #theta_{e} = 15#circ (QEL Only, pFDpCD);E_{e} [GeV]",
+    TH1D *hE_e_15_QEL_pFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (QEL Only, pFDpCD)", "E_{e} around #theta_{e} = 15#circ (QEL Only, pFDpCD);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_MEC_pFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (MEC Only, pFDpCD)",
-                                           "E_{e} around #theta_{e} = 15#circ (MEC Only, pFDpCD);E_{e} [GeV]",
+    TH1D *hE_e_15_MEC_pFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (MEC Only, pFDpCD)", "E_{e} around #theta_{e} = 15#circ (MEC Only, pFDpCD);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_RES_pFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (RES Only, pFDpCD)",
-                                           "E_{e} around #theta_{e} = 15#circ (RES Only, pFDpCD);E_{e} [GeV]",
+    TH1D *hE_e_15_RES_pFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (RES Only, pFDpCD)", "E_{e} around #theta_{e} = 15#circ (RES Only, pFDpCD);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_DIS_pFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, pFDpCD)",
-                                           "E_{e} around #theta_{e} = 15#circ (DIS Only, pFDpCD);E_{e} [GeV]",
+    TH1D *hE_e_15_DIS_pFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, pFDpCD)", "E_{e} around #theta_{e} = 15#circ (DIS Only, pFDpCD);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_15_All_Int_pFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_pFDpCD_Directory"];
     string hE_e_15_QEL_pFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_pFDpCD_Directory"];
@@ -5850,16 +5600,11 @@ void EventAnalyser() {
     string sE_e_nFDpCD_CD_Dir = directories.E_e_Directory_map["E_e_All_Int_nFDpCD_stack_Directory"];
     string sE_e_nFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_nFDpCD_stack_Directory"];
 
-    TH1D *hE_e_All_Int_nFDpCD_FD = new TH1D("E_{e} (All Int., nFDpCD)", "E_{e} Histogram (All Int., nFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                            beamE * 1.1);
-    TH1D *hE_e_QEL_nFDpCD_FD = new TH1D("E_{e} (QEL Only, nFDpCD)", "E_{e} Histogram (QEL Only, nFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
-    TH1D *hE_e_MEC_nFDpCD_FD = new TH1D("E_{e} (MEC Only, nFDpCD)", "E_{e} Histogram (MEC Only, nFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
-    TH1D *hE_e_RES_nFDpCD_FD = new TH1D("E_{e} (RES Only, nFDpCD)", "E_{e} Histogram (RES Only, nFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
-    TH1D *hE_e_DIS_nFDpCD_FD = new TH1D("E_{e} (DIS Only, nFDpCD)", "E_{e} Histogram (DIS Only, nFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0,
-                                        beamE * 1.1);
+    TH1D *hE_e_All_Int_nFDpCD_FD = new TH1D("E_{e} (All Int., nFDpCD)", "E_{e} Histogram (All Int., nFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_QEL_nFDpCD_FD = new TH1D("E_{e} (QEL Only, nFDpCD)", "E_{e} Histogram (QEL Only, nFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_MEC_nFDpCD_FD = new TH1D("E_{e} (MEC Only, nFDpCD)", "E_{e} Histogram (MEC Only, nFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_RES_nFDpCD_FD = new TH1D("E_{e} (RES Only, nFDpCD)", "E_{e} Histogram (RES Only, nFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
+    TH1D *hE_e_DIS_nFDpCD_FD = new TH1D("E_{e} (DIS Only, nFDpCD)", "E_{e} Histogram (DIS Only, nFDpCD);E_{e} [GeV]", numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_All_Int_nFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_nFDpCD_Directory"];
     string hE_e_QEL_nFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_nFDpCD_Directory"];
     string hE_e_MEC_nFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_nFDpCD_Directory"];
@@ -5867,20 +5612,15 @@ void EventAnalyser() {
     string hE_e_DIS_nFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_nFDpCD_Directory"];
 
     /* E_e vs. Theta_e (nFDpCD, CD & FD) */
-    TH2D *hE_e_VS_Theta_e_All_Int_nFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., nFDpCD)",
-                                                       "E_{e} vs. #theta_{e} (All Int., nFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_All_Int_nFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., nFDpCD)", "E_{e} vs. #theta_{e} (All Int., nFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
                                                        numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_QEL_nFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, nFDpCD)",
-                                                   "E_{e} vs. #theta_{e} (QEL Only, nFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_QEL_nFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, nFDpCD)", "E_{e} vs. #theta_{e} (QEL Only, nFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_MEC_nFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, nFDpCD)",
-                                                   "E_{e} vs. #theta_{e} (MEC Only, nFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_MEC_nFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, nFDpCD)", "E_{e} vs. #theta_{e} (MEC Only, nFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_RES_nFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, nFDpCD)",
-                                                   "E_{e} vs. #theta_{e} (RES Only, nFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_RES_nFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, nFDpCD)", "E_{e} vs. #theta_{e} (RES Only, nFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH2D *hE_e_VS_Theta_e_DIS_nFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, nFDpCD)",
-                                                   "E_{e} vs. #theta_{e} (DIS Only, nFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_DIS_nFDpCD_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, nFDpCD)", "E_{e} vs. #theta_{e} (DIS Only, nFDpCD);#theta_{e} [Deg];E_{e} [GeV]",
                                                    numTH2Dbins_E_e_Plots, 0, 50, numTH2Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_VS_Theta_e_All_Int_nFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_nFDpCD_Directory"];
     string hE_e_VS_Theta_e_QEL_nFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_nFDpCD_Directory"];
@@ -5893,20 +5633,15 @@ void EventAnalyser() {
     string sE_e_15_nFDpCD_CD_Dir = directories.E_e_Directory_map["E_e_All_Int_nFDpCD_stack_Directory"];
     string sE_e_15_nFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_nFDpCD_stack_Directory"];
 
-    TH1D *hE_e_15_All_Int_nFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., nFDpCD)",
-                                               "E_{e} around #theta_{e} = 15#circ (All Int., nFDpCD);E_{e} [GeV]",
+    TH1D *hE_e_15_All_Int_nFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., nFDpCD)", "E_{e} around #theta_{e} = 15#circ (All Int., nFDpCD);E_{e} [GeV]",
                                                numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_QEL_nFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (QEL Only, nFDpCD)",
-                                           "E_{e} around #theta_{e} = 15#circ (QEL Only, nFDpCD);E_{e} [GeV]",
+    TH1D *hE_e_15_QEL_nFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (QEL Only, nFDpCD)", "E_{e} around #theta_{e} = 15#circ (QEL Only, nFDpCD);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_MEC_nFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (MEC Only, nFDpCD)",
-                                           "E_{e} around #theta_{e} = 15#circ (MEC Only, nFDpCD);E_{e} [GeV]",
+    TH1D *hE_e_15_MEC_nFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (MEC Only, nFDpCD)", "E_{e} around #theta_{e} = 15#circ (MEC Only, nFDpCD);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_RES_nFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (RES Only, nFDpCD)",
-                                           "E_{e} around #theta_{e} = 15#circ (RES Only, nFDpCD);E_{e} [GeV]",
+    TH1D *hE_e_15_RES_nFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (RES Only, nFDpCD)", "E_{e} around #theta_{e} = 15#circ (RES Only, nFDpCD);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
-    TH1D *hE_e_15_DIS_nFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, nFDpCD)",
-                                           "E_{e} around #theta_{e} = 15#circ (DIS Only, nFDpCD);E_{e} [GeV]",
+    TH1D *hE_e_15_DIS_nFDpCD_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, nFDpCD)", "E_{e} around #theta_{e} = 15#circ (DIS Only, nFDpCD);E_{e} [GeV]",
                                            numTH1Dbins_E_e_Plots, 0, beamE * 1.1);
     string hE_e_15_All_Int_nFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_nFDpCD_Directory"];
     string hE_e_15_QEL_nFDpCD_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_nFDpCD_Directory"];
@@ -5925,25 +5660,19 @@ void EventAnalyser() {
     string tET_All_Ang = "Energy transfer #omega for every #theta_{e}", tET15 = "Energy transfer #omega Around #theta_{e} = 15#circ";
 
     //<editor-fold desc="ET for every theta_e (1p)">
-    THStack *sET_All_Ang_All_Int_1p_FD = new THStack("#omega for all #theta_{e} (1p)",
-                                                     "Energy transfer #omega for all #theta_{e} (1p);#omega = E_{beam}-E_{e} [GeV]");
+    THStack *sET_All_Ang_All_Int_1p_FD = new THStack("#omega for all #theta_{e} (1p)", "Energy transfer #omega for all #theta_{e} (1p);#omega = E_{beam}-E_{e} [GeV]");
     string sET_All_Ang_All_Int_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Ang_stack_1p_Directory"];
 
     TH1D *hET_All_Ang_All_Int_1p_FD = new TH1D("#omega for all #theta_{e} (All Int., 1p)",
-                                               "Energy transfer #omega for all #theta_{e} (All Int., 1p);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (All Int., 1p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_QEL_1p_FD = new TH1D("#omega for all #theta_{e} (QEL Only, 1p, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (QEL Only, 1p);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (QEL Only, 1p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_MEC_1p_FD = new TH1D("#omega for all #theta_{e} (MEC Only, 1p, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (MEC Only, 1p);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (MEC Only, 1p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_RES_1p_FD = new TH1D("#omega for all #theta_{e} (RES Only, 1p, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (RES Only, 1p);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (RES Only, 1p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_DIS_1p_FD = new TH1D("#omega for all #theta_{e} (DIS Only, 1p, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (DIS Only, 1p);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (DIS Only, 1p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     string hET_All_Ang_All_Int_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_All_Ang_1p_Directory"];
     string hET_All_Ang_QEL_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_All_Ang_1p_Directory"];
     string hET_All_Ang_MEC_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_All_Ang_1p_Directory"];
@@ -5952,25 +5681,19 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="ET for every theta_e (1n)">
-    THStack *sET_All_Ang_All_Int_1n_FD = new THStack("#omega for all #theta_{e} (1n)",
-                                                     "Energy transfer #omega for all #theta_{e} (1n);#omega = E_{beam}-E_{e} [GeV]");
+    THStack *sET_All_Ang_All_Int_1n_FD = new THStack("#omega for all #theta_{e} (1n)", "Energy transfer #omega for all #theta_{e} (1n);#omega = E_{beam}-E_{e} [GeV]");
     string sET_All_Ang_All_Int_1n_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Ang_stack_1n_Directory"];
 
     TH1D *hET_All_Ang_All_Int_1n_FD = new TH1D("#omega for all #theta_{e} (All Int., 1n)",
-                                               "Energy transfer #omega for all #theta_{e} (All Int., 1n);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (All Int., 1n);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_QEL_1n_FD = new TH1D("#omega for all #theta_{e} (QEL Only, 1n, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (QEL Only, 1n);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (QEL Only, 1n);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_MEC_1n_FD = new TH1D("#omega for all #theta_{e} (MEC Only, 1n, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (MEC Only, 1n);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (MEC Only, 1n);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_RES_1n_FD = new TH1D("#omega for all #theta_{e} (RES Only, 1n, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (RES Only, 1n);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (RES Only, 1n);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_DIS_1n_FD = new TH1D("#omega for all #theta_{e} (DIS Only, 1n, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (DIS Only, 1n);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (DIS Only, 1n);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     string hET_All_Ang_All_Int_1n_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_All_Ang_1n_Directory"];
     string hET_All_Ang_QEL_1n_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_All_Ang_1n_Directory"];
     string hET_All_Ang_MEC_1n_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_All_Ang_1n_Directory"];
@@ -5979,25 +5702,19 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="ET for every theta_e (2p)">
-    THStack *sET_All_Ang_All_Int_2p_FD = new THStack("#omega for all #theta_{e} (2p)",
-                                                     "Energy transfer #omega for all #theta_{e} (2p);#omega = E_{beam}-E_{e} [GeV]");
+    THStack *sET_All_Ang_All_Int_2p_FD = new THStack("#omega for all #theta_{e} (2p)", "Energy transfer #omega for all #theta_{e} (2p);#omega = E_{beam}-E_{e} [GeV]");
     string sET_All_Ang_All_Int_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Ang_stack_2p_Directory"];
 
     TH1D *hET_All_Ang_All_Int_2p_FD = new TH1D("#omega for all #theta_{e} (All Int., 2p)",
-                                               "Energy transfer #omega for all #theta_{e} (All Int., 2p);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (All Int., 2p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_QEL_2p_FD = new TH1D("#omega for all #theta_{e} (QEL Only, 2p, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (QEL Only, 2p);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (QEL Only, 2p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_MEC_2p_FD = new TH1D("#omega for all #theta_{e} (MEC Only, 2p, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (MEC Only, 2p);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (MEC Only, 2p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_RES_2p_FD = new TH1D("#omega for all #theta_{e} (RES Only, 2p, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (RES Only, 2p);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (RES Only, 2p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET_All_Ang_DIS_2p_FD = new TH1D("#omega for all #theta_{e} (DIS Only, 2p, FD)",
-                                           "Energy transfer #omega for all #theta_{e} (DIS Only, 2p);#omega = E_{beam}-E_{e} [GeV]",
-                                           numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                           "Energy transfer #omega for all #theta_{e} (DIS Only, 2p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     string hET_All_Ang_All_Int_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_All_Ang_2p_Directory"];
     string hET_All_Ang_QEL_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_All_Ang_2p_Directory"];
     string hET_All_Ang_MEC_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_All_Ang_2p_Directory"];
@@ -6011,20 +5728,20 @@ void EventAnalyser() {
     string sET_All_Ang_All_Int_pFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Ang_stack_pFDpCD_Directory"];
 
     TH1D *hET_All_Ang_All_Int_pFDpCD_FD = new TH1D("#omega for all #theta_{e} (All Int., pFDpCD)",
-                                                   "Energy transfer #omega for all #theta_{e} (All Int., pFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                                   numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                                   "Energy transfer #omega for all #theta_{e} (All Int., pFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                                   beamE * 1.1);
     TH1D *hET_All_Ang_QEL_pFDpCD_FD = new TH1D("#omega for all #theta_{e} (QEL Only, pFDpCD, FD)",
-                                               "Energy transfer #omega for all #theta_{e} (QEL Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (QEL Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                               beamE * 1.1);
     TH1D *hET_All_Ang_MEC_pFDpCD_FD = new TH1D("#omega for all #theta_{e} (MEC Only, pFDpCD, FD)",
-                                               "Energy transfer #omega for all #theta_{e} (MEC Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (MEC Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                               beamE * 1.1);
     TH1D *hET_All_Ang_RES_pFDpCD_FD = new TH1D("#omega for all #theta_{e} (RES Only, pFDpCD, FD)",
-                                               "Energy transfer #omega for all #theta_{e} (RES Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (RES Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                               beamE * 1.1);
     TH1D *hET_All_Ang_DIS_pFDpCD_FD = new TH1D("#omega for all #theta_{e} (DIS Only, pFDpCD, FD)",
-                                               "Energy transfer #omega for all #theta_{e} (DIS Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (DIS Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                               beamE * 1.1);
     string hET_All_Ang_All_Int_pFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_All_Ang_pFDpCD_Directory"];
     string hET_All_Ang_QEL_pFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_All_Ang_pFDpCD_Directory"];
     string hET_All_Ang_MEC_pFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_All_Ang_pFDpCD_Directory"];
@@ -6038,20 +5755,20 @@ void EventAnalyser() {
     string sET_All_Ang_All_Int_nFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Ang_stack_nFDpCD_Directory"];
 
     TH1D *hET_All_Ang_All_Int_nFDpCD_FD = new TH1D("#omega for all #theta_{e} (All Int., nFDpCD)",
-                                                   "Energy transfer #omega for all #theta_{e} (All Int., nFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                                   numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                                   "Energy transfer #omega for all #theta_{e} (All Int., nFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                                   beamE * 1.1);
     TH1D *hET_All_Ang_QEL_nFDpCD_FD = new TH1D("#omega for all #theta_{e} (QEL Only, nFDpCD, FD)",
-                                               "Energy transfer #omega for all #theta_{e} (QEL Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (QEL Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                               beamE * 1.1);
     TH1D *hET_All_Ang_MEC_nFDpCD_FD = new TH1D("#omega for all #theta_{e} (MEC Only, nFDpCD, FD)",
-                                               "Energy transfer #omega for all #theta_{e} (MEC Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (MEC Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                               beamE * 1.1);
     TH1D *hET_All_Ang_RES_nFDpCD_FD = new TH1D("#omega for all #theta_{e} (RES Only, nFDpCD, FD)",
-                                               "Energy transfer #omega for all #theta_{e} (RES Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (RES Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                               beamE * 1.1);
     TH1D *hET_All_Ang_DIS_nFDpCD_FD = new TH1D("#omega for all #theta_{e} (DIS Only, nFDpCD, FD)",
-                                               "Energy transfer #omega for all #theta_{e} (DIS Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                               numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                               "Energy transfer #omega for all #theta_{e} (DIS Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                               beamE * 1.1);
     string hET_All_Ang_All_Int_nFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_All_Ang_nFDpCD_Directory"];
     string hET_All_Ang_QEL_nFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_All_Ang_nFDpCD_Directory"];
     string hET_All_Ang_MEC_nFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_All_Ang_nFDpCD_Directory"];
@@ -6061,25 +5778,20 @@ void EventAnalyser() {
 
     //<editor-fold desc="ET around 15 Deg (1p)">
     /* ET around 15 Deg */
-    THStack *sET15_All_Int_1p_FD = new THStack("ET around #theta_{e} = 15#circ (1p)",
-                                               "Energy transfer #omega Around #theta_{e} = 15#circ (1p);#omega = E_{beam}-E_{e} [GeV]");
+    THStack *sET15_All_Int_1p_FD = new THStack("ET around #theta_{e} = 15#circ (1p)", "Energy transfer #omega Around #theta_{e} = 15#circ (1p);#omega = E_{beam}-E_{e} [GeV]");
     string sET15_All_Int_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_15_stack_1p_Directory"];
 
     TH1D *hET15_All_Int_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (All Int., 1p)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (All Int., 1p);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (All Int., 1p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     TH1D *hET15_QEL_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (QEL Only, 1p, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (QEL Only, 1p);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (QEL Only, 1p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET15_MEC_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (MEC Only, 1p, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (MEC Only, 1p);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (MEC Only, 1p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET15_RES_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (RES Only, 1p, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (RES Only, 1p);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (RES Only, 1p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET15_DIS_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (DIS Only, 1p, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (DIS Only, 1p);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (DIS Only, 1p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     string hET15_All_Int_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_15_1p_Directory"];
     string hET15_QEL_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_15_1p_Directory"];
     string hET15_MEC_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_15_1p_Directory"];
@@ -6089,25 +5801,20 @@ void EventAnalyser() {
 
     //<editor-fold desc="ET around 15 Deg (1n)">
     /* ET around 15 Deg */
-    THStack *sET15_All_Int_1n_FD = new THStack("ET around #theta_{e} = 15#circ (1n)",
-                                               "Energy transfer #omega Around #theta_{e} = 15#circ (1n);#omega = E_{beam}-E_{e} [GeV]");
+    THStack *sET15_All_Int_1n_FD = new THStack("ET around #theta_{e} = 15#circ (1n)", "Energy transfer #omega Around #theta_{e} = 15#circ (1n);#omega = E_{beam}-E_{e} [GeV]");
     string sET15_All_Int_1n_FD_Dir = directories.ETrans_Directory_map["ETrans_15_stack_1n_Directory"];
 
     TH1D *hET15_All_Int_1n_FD = new TH1D("ET around #theta_{e} = 15#circ (All Int., 1n)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (All Int., 1n);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (All Int., 1n);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     TH1D *hET15_QEL_1n_FD = new TH1D("ET around #theta_{e} = 15#circ (QEL Only, 1n, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (QEL Only, 1n);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (QEL Only, 1n);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET15_MEC_1n_FD = new TH1D("ET around #theta_{e} = 15#circ (MEC Only, 1n, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (MEC Only, 1n);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (MEC Only, 1n);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET15_RES_1n_FD = new TH1D("ET around #theta_{e} = 15#circ (RES Only, 1n, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (RES Only, 1n);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (RES Only, 1n);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET15_DIS_1n_FD = new TH1D("ET around #theta_{e} = 15#circ (DIS Only, 1n, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (DIS Only, 1n);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (DIS Only, 1n);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     string hET15_All_Int_1n_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_15_1n_Directory"];
     string hET15_QEL_1n_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_15_1n_Directory"];
     string hET15_MEC_1n_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_15_1n_Directory"];
@@ -6122,20 +5829,16 @@ void EventAnalyser() {
     string sET15_All_Int_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_15_stack_2p_Directory"];
 
     TH1D *hET15_All_Int_2p_FD = new TH1D("#omega around #theta_{e} = 15#circ (All Int., 2p)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (All Int., 2p);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (All Int., 2p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     TH1D *hET15_QEL_2p_FD = new TH1D("#omega around #theta_{e} = 15#circ (QEL Only, 2p, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (QEL Only, 2p);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (QEL Only, 2p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET15_MEC_2p_FD = new TH1D("#omega around #theta_{e} = 15#circ (MEC Only, 2p, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (MEC Only, 2p);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (MEC Only, 2p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET15_RES_2p_FD = new TH1D("#omega around #theta_{e} = 15#circ (RES Only, 2p, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (RES Only, 2p);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (RES Only, 2p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     TH1D *hET15_DIS_2p_FD = new TH1D("#omega around #theta_{e} = 15#circ (DIS Only, 2p, FD)",
-                                     "Energy transfer #omega Around #theta_{e} = 15#circ (DIS Only, 2p);#omega = E_{beam}-E_{e} [GeV]",
-                                     numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                     "Energy transfer #omega Around #theta_{e} = 15#circ (DIS Only, 2p);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0, beamE * 1.1);
     string hET15_All_Int_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_15_2p_Directory"];
     string hET15_QEL_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_15_2p_Directory"];
     string hET15_MEC_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_15_2p_Directory"];
@@ -6150,20 +5853,20 @@ void EventAnalyser() {
     string sET15_All_Int_pFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_15_stack_pFDpCD_Directory"];
 
     TH1D *hET15_All_Int_pFDpCD_FD = new TH1D("#omega around #theta_{e} = 15#circ (All Int., pFDpCD)",
-                                             "Energy transfer #omega Around #theta_{e} = 15#circ (All Int., pFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                             numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                             "Energy transfer #omega Around #theta_{e} = 15#circ (All Int., pFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                             beamE * 1.1);
     TH1D *hET15_QEL_pFDpCD_FD = new TH1D("#omega around #theta_{e} = 15#circ (QEL Only, pFDpCD, FD)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (QEL Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (QEL Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     TH1D *hET15_MEC_pFDpCD_FD = new TH1D("#omega around #theta_{e} = 15#circ (MEC Only, pFDpCD, FD)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (MEC Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (MEC Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     TH1D *hET15_RES_pFDpCD_FD = new TH1D("#omega around #theta_{e} = 15#circ (RES Only, pFDpCD, FD)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (RES Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (RES Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     TH1D *hET15_DIS_pFDpCD_FD = new TH1D("#omega around #theta_{e} = 15#circ (DIS Only, pFDpCD, FD)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (DIS Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (DIS Only, pFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     string hET15_All_Int_pFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_15_pFDpCD_Directory"];
     string hET15_QEL_pFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_15_pFDpCD_Directory"];
     string hET15_MEC_pFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_15_pFDpCD_Directory"];
@@ -6178,20 +5881,20 @@ void EventAnalyser() {
     string sET15_All_Int_nFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_15_stack_nFDpCD_Directory"];
 
     TH1D *hET15_All_Int_nFDpCD_FD = new TH1D("#omega around #theta_{e} = 15#circ (All Int., nFDpCD)",
-                                             "Energy transfer #omega Around #theta_{e} = 15#circ (All Int., nFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                             numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                             "Energy transfer #omega Around #theta_{e} = 15#circ (All Int., nFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                             beamE * 1.1);
     TH1D *hET15_QEL_nFDpCD_FD = new TH1D("#omega around #theta_{e} = 15#circ (QEL Only, nFDpCD, FD)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (QEL Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (QEL Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     TH1D *hET15_MEC_nFDpCD_FD = new TH1D("#omega around #theta_{e} = 15#circ (MEC Only, nFDpCD, FD)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (MEC Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (MEC Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     TH1D *hET15_RES_nFDpCD_FD = new TH1D("#omega around #theta_{e} = 15#circ (RES Only, nFDpCD, FD)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (RES Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (RES Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     TH1D *hET15_DIS_nFDpCD_FD = new TH1D("#omega around #theta_{e} = 15#circ (DIS Only, nFDpCD, FD)",
-                                         "Energy transfer #omega Around #theta_{e} = 15#circ (DIS Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]",
-                                         numTH1Dbins_ET_Plots, 0, beamE * 1.1);
+                                         "Energy transfer #omega Around #theta_{e} = 15#circ (DIS Only, nFDpCD);#omega = E_{beam}-E_{e} [GeV]", numTH1Dbins_ET_Plots, 0,
+                                         beamE * 1.1);
     string hET15_All_Int_nFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_15_nFDpCD_Directory"];
     string hET15_QEL_nFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_15_nFDpCD_Directory"];
     string hET15_MEC_nFDpCD_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_15_nFDpCD_Directory"];
@@ -6213,16 +5916,16 @@ void EventAnalyser() {
     THStack *sEcal_1p = new THStack("E_{cal} Reconstruction (1p)", "E_{cal} Reconstruction (1p);E_{cal} = E_{e} + T_{p} [GeV]");
     string sEcal_1p_Dir = directories.Ecal_Directory_map["Ecal_stack_1p_Directory"];
 
-    TH1D *hEcal_All_Int_1p = new TH1D("E_{cal} reco. (All Int., 1p)", "E_{cal} Reconstruction (All Int., 1p);E_{cal} = E_{e} + T_{p} [GeV]",
-                                      numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_1p = new TH1D("E_{cal} reco. (QEL only, 1p)", "E_{cal} Reconstruction (QEL only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
-                                  numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_1p = new TH1D("E_{cal} reco. (MEC only, 1p)", "E_{cal} Reconstruction (MEC only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
-                                  numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_RES_1p = new TH1D("E_{cal} reco. (RES only, 1p)", "E_{cal} Reconstruction (RES only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
-                                  numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_1p = new TH1D("E_{cal} reco. (DIS only, 1p)", "E_{cal} Reconstruction (DIS only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
-                                  numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH1D *hEcal_All_Int_1p = new TH1D("E_{cal} reco. (All Int., 1p)", "E_{cal} Reconstruction (All Int., 1p);E_{cal} = E_{e} + T_{p} [GeV]", numTH1Dbins_E_cal_Plots, 0,
+                                      beamE * 1.35);
+    TH1D *hEcal_QEL_1p = new TH1D("E_{cal} reco. (QEL only, 1p)", "E_{cal} Reconstruction (QEL only, 1p);E_{cal} = E_{e} + T_{p} [GeV]", numTH1Dbins_E_cal_Plots, 0,
+                                  beamE * 1.35);
+    TH1D *hEcal_MEC_1p = new TH1D("E_{cal} reco. (MEC only, 1p)", "E_{cal} Reconstruction (MEC only, 1p);E_{cal} = E_{e} + T_{p} [GeV]", numTH1Dbins_E_cal_Plots, 0,
+                                  beamE * 1.35);
+    TH1D *hEcal_RES_1p = new TH1D("E_{cal} reco. (RES only, 1p)", "E_{cal} Reconstruction (RES only, 1p);E_{cal} = E_{e} + T_{p} [GeV]", numTH1Dbins_E_cal_Plots, 0,
+                                  beamE * 1.35);
+    TH1D *hEcal_DIS_1p = new TH1D("E_{cal} reco. (DIS only, 1p)", "E_{cal} Reconstruction (DIS only, 1p);E_{cal} = E_{e} + T_{p} [GeV]", numTH1Dbins_E_cal_Plots, 0,
+                                  beamE * 1.35);
     string hEcal_All_Int_1p_Dir = directories.Ecal_Directory_map["Ecal_All_Int_1p_Directory"];
     string hEcal_QEL_1p_Dir = directories.Ecal_Directory_map["Ecal_QEL_1p_Directory"];
     string hEcal_MEC_1p_Dir = directories.Ecal_Directory_map["Ecal_MEC_1p_Directory"];
@@ -6231,68 +5934,57 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. momentum (1p)">
-    TH2D *hEcal_vs_P_e_1p = new TH2D("E_{cal} vs. P_{e} (All Int., 1p)", "E_{cal} vs. P_{e} (All Int., 1p);P_{e} [GeV/c];E_{cal} [GeV];",
-                                     numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_P_e_1p = new TH2D("E_{cal} vs. P_{e} (All Int., 1p)", "E_{cal} vs. P_{e} (All Int., 1p);P_{e} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                     Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_e_test_1p = new TH2D("E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., 1p)",
-                                          "E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., 1p);P_{e} [GeV/c];E_{cal} [GeV];",
-                                          numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                          beamE * 1.35);
+                                          "E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., 1p);P_{e} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, Momentum_lboundary,
+                                          Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_e_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_1p_Directory"];
 
-    TH2D *hEcal_vs_P_p_1p = new TH2D("E_{cal} vs. P_{p} (All Int., 1p)", "E_{cal} vs. P_{p} (All Int., 1p);P_{p} [GeV/c];E_{cal} [GeV];",
-                                     numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_P_p_1p = new TH2D("E_{cal} vs. P_{p} (All Int., 1p)", "E_{cal} vs. P_{p} (All Int., 1p);P_{p} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                     P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_p_test_1p = new TH2D("E_{cal} vs. P_{p} for E_{cal}>E_{beam} (All Int., 1p)",
-                                          "E_{cal} vs. P_{p} for E_{cal}>E_{beam} (All Int., 1p);P_{p} [GeV/c];E_{cal} [GeV];",
-                                          numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                          "E_{cal} vs. P_{p} for E_{cal}>E_{beam} (All Int., 1p);P_{p} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, P_nucFD_lboundary,
+                                          P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_p_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_1p_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. angles (1p)">
-    TH2D *hEcal_vs_Theta_e_1p = new TH2D("E_{cal} vs. #theta_{e} (All Int., 1p)",
-                                         "E_{cal} vs. #theta_{e} (All Int., 1p);#theta_{e} [Deg];E_{cal} [GeV];",
-                                         numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                         beamE * 1.35);
-    TH2D *hEcal_vs_Phi_e_1p = new TH2D("E_{cal} vs. #phi_{e} (All Int., 1p)",
-                                       "E_{cal} vs. #phi_{e} (All Int., 1p);#phi_{e} [Deg];E_{cal} [GeV];",
-                                       numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Theta_e_1p = new TH2D("E_{cal} vs. #theta_{e} (All Int., 1p)", "E_{cal} vs. #theta_{e} (All Int., 1p);#theta_{e} [Deg];E_{cal} [GeV];",
+                                         numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_e_1p = new TH2D("E_{cal} vs. #phi_{e} (All Int., 1p)", "E_{cal} vs. #phi_{e} (All Int., 1p);#phi_{e} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                       Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Theta_e_test_1p = new TH2D("E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., 1p)",
-                                              "E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., 1p);#theta_{e} [Deg];E_{cal} [GeV];",
-                                              numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                              beamE * 1.35);
+                                              "E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., 1p);#theta_{e} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Phi_e_test_1p = new TH2D("E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., 1p)",
-                                            "E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., 1p);#phi_{e} [Deg];E_{cal} [GeV];",
-                                            numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                            "E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., 1p);#phi_{e} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, Phi_lboundary,
+                                            Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_Theta_e_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1p_Directory"];
     string hEcal_vs_Phi_e_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1p_Directory"];
 
-    TH2D *hEcal_vs_Theta_p_1p = new TH2D("E_{cal} vs. #theta_{p} (All Int., 1p)",
-                                         "E_{cal} vs. #theta_{p} (All Int., 1p);#theta_{p} [Deg];E_{cal} [GeV];",
-                                         numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                         beamE * 1.35);
-    TH2D *hEcal_vs_Phi_p_1p = new TH2D("E_{cal} vs. #phi_{p} (All Int., 1p)",
-                                       "E_{cal} vs. #phi_{p} (All Int., 1p);#phi_{p} [Deg];E_{cal} [GeV];",
-                                       numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Theta_p_1p = new TH2D("E_{cal} vs. #theta_{p} (All Int., 1p)", "E_{cal} vs. #theta_{p} (All Int., 1p);#theta_{p} [Deg];E_{cal} [GeV];",
+                                         numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_p_1p = new TH2D("E_{cal} vs. #phi_{p} (All Int., 1p)", "E_{cal} vs. #phi_{p} (All Int., 1p);#phi_{p} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                       Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Theta_p_test_1p = new TH2D("E_{cal} vs. #theta_{p} for E_{cal}>E_{beam} (All Int., 1p)",
-                                              "E_{cal} vs. #theta_{p} for E_{cal}>E_{beam} (All Int., 1p);#theta_{p} [Deg];E_{cal} [GeV];",
-                                              numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                              beamE * 1.35);
+                                              "E_{cal} vs. #theta_{p} for E_{cal}>E_{beam} (All Int., 1p);#theta_{p} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Phi_p_test_1p = new TH2D("E_{cal} vs. #phi_{p} for E_{cal}>E_{beam} (All Int., 1p)",
-                                            "E_{cal} vs. #phi_{p} for E_{cal}>E_{beam} (All Int., 1p);#phi_{p} [Deg];E_{cal} [GeV];",
-                                            numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                            "E_{cal} vs. #phi_{p} for E_{cal}>E_{beam} (All Int., 1p);#phi_{p} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, Phi_lboundary,
+                                            Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_Theta_p_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1p_Directory"];
     string hEcal_vs_Phi_p_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. dAlpha_T (1p)">
-    TH2D *hEcal_vs_dAlpha_T_1p = new TH2D("E_{cal} vs. #delta#alpha_{T} (All Int., 1p)",
-                                          "E_{cal} vs. #delta#alpha_{T} (All Int., 1p);#delta#alpha_{T} [Deg];E_{cal} [GeV];",
+    TH2D *hEcal_vs_dAlpha_T_1p = new TH2D("E_{cal} vs. #delta#alpha_{T} (All Int., 1p)", "E_{cal} vs. #delta#alpha_{T} (All Int., 1p);#delta#alpha_{T} [Deg];E_{cal} [GeV];",
                                           numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dAlpha_T_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1p_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. dP_T (1p)">
-    TH2D *hEcal_vs_dP_T_1p = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1p)",
-                                      "E_{cal} vs. #deltaP_{T} (All Int., 1p);#deltaP_{T} [GeV/c];E_{cal} [GeV];",
+    TH2D *hEcal_vs_dP_T_1p = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1p)", "E_{cal} vs. #deltaP_{T} (All Int., 1p);#deltaP_{T} [GeV/c];E_{cal} [GeV];",
                                       numTH2Dbins_E_cal_Plots, 0, dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dP_T_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1p_Directory"];
     //</editor-fold>
@@ -6305,16 +5997,16 @@ void EventAnalyser() {
     THStack *sEcal_1n = new THStack("E_{cal} Reconstruction (1n)", "E_{cal} Reconstruction (1n);E_{cal} = E_{e} + T_{n} [GeV]");
     string sEcal_1n_Dir = directories.Ecal_Directory_map["Ecal_stack_1n_Directory"];
 
-    TH1D *hEcal_All_Int_1n = new TH1D("E_{cal} reco. (All Int., 1n)", "E_{cal} Reconstruction (All Int., 1n);E_{cal} = E_{e} + T_{n} [GeV]",
-                                      numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_1n = new TH1D("E_{cal} reco. (QEL only, 1n)", "E_{cal} Reconstruction (QEL only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
-                                  numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_1n = new TH1D("E_{cal} reco. (MEC only, 1n)", "E_{cal} Reconstruction (MEC only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
-                                  numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_RES_1n = new TH1D("E_{cal} reco. (RES only, 1n)", "E_{cal} Reconstruction (RES only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
-                                  numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_1n = new TH1D("E_{cal} reco. (DIS only, 1n)", "E_{cal} Reconstruction (DIS only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
-                                  numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH1D *hEcal_All_Int_1n = new TH1D("E_{cal} reco. (All Int., 1n)", "E_{cal} Reconstruction (All Int., 1n);E_{cal} = E_{e} + T_{n} [GeV]", numTH1Dbins_E_cal_Plots, 0,
+                                      beamE * 1.35);
+    TH1D *hEcal_QEL_1n = new TH1D("E_{cal} reco. (QEL only, 1n)", "E_{cal} Reconstruction (QEL only, 1n);E_{cal} = E_{e} + T_{n} [GeV]", numTH1Dbins_E_cal_Plots, 0,
+                                  beamE * 1.35);
+    TH1D *hEcal_MEC_1n = new TH1D("E_{cal} reco. (MEC only, 1n)", "E_{cal} Reconstruction (MEC only, 1n);E_{cal} = E_{e} + T_{n} [GeV]", numTH1Dbins_E_cal_Plots, 0,
+                                  beamE * 1.35);
+    TH1D *hEcal_RES_1n = new TH1D("E_{cal} reco. (RES only, 1n)", "E_{cal} Reconstruction (RES only, 1n);E_{cal} = E_{e} + T_{n} [GeV]", numTH1Dbins_E_cal_Plots, 0,
+                                  beamE * 1.35);
+    TH1D *hEcal_DIS_1n = new TH1D("E_{cal} reco. (DIS only, 1n)", "E_{cal} Reconstruction (DIS only, 1n);E_{cal} = E_{e} + T_{n} [GeV]", numTH1Dbins_E_cal_Plots, 0,
+                                  beamE * 1.35);
     string hEcal_All_Int_1n_Dir = directories.Ecal_Directory_map["Ecal_All_Int_1n_Directory"];
     string hEcal_QEL_1n_Dir = directories.Ecal_Directory_map["Ecal_QEL_1n_Directory"];
     string hEcal_MEC_1n_Dir = directories.Ecal_Directory_map["Ecal_MEC_1n_Directory"];
@@ -6323,68 +6015,57 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. momentum (1n)">
-    TH2D *hEcal_vs_P_e_1n = new TH2D("E_{cal} vs. P_{e} (All Int., 1n)", "E_{cal} vs. P_{e} (All Int., 1n);P_{e} [GeV/c];E_{cal} [GeV];",
-                                     numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_P_e_1n = new TH2D("E_{cal} vs. P_{e} (All Int., 1n)", "E_{cal} vs. P_{e} (All Int., 1n);P_{e} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                     Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_e_test_1n = new TH2D("E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., 1n)",
-                                          "E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., 1n);P_{e} [GeV/c];E_{cal} [GeV];",
-                                          numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                          beamE * 1.35);
+                                          "E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., 1n);P_{e} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, Momentum_lboundary,
+                                          Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_e_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_1n_Directory"];
 
-    TH2D *hEcal_vs_P_n_1n = new TH2D("E_{cal} vs. P_{n} (All Int., 1n)", "E_{cal} vs. P_{n} (All Int., 1n);P_{n} [GeV/c];E_{cal} [GeV];",
-                                     numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_P_n_1n = new TH2D("E_{cal} vs. P_{n} (All Int., 1n)", "E_{cal} vs. P_{n} (All Int., 1n);P_{n} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                     P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_n_test_1n = new TH2D("E_{cal} vs. P_{n} for E_{cal}>E_{beam} (All Int., 1n)",
-                                          "E_{cal} vs. P_{n} for E_{cal}>E_{beam} (All Int., 1n);P_{n} [GeV/c];E_{cal} [GeV];",
-                                          numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                          "E_{cal} vs. P_{n} for E_{cal}>E_{beam} (All Int., 1n);P_{n} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, P_nucFD_lboundary,
+                                          P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_n_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_1n_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. angles (1n)">
-    TH2D *hEcal_vs_Theta_e_1n = new TH2D("E_{cal} vs. #theta_{e} (All Int., 1n)",
-                                         "E_{cal} vs. #theta_{e} (All Int., 1n);#theta_{e} [Deg];E_{cal} [GeV];",
-                                         numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                         beamE * 1.35);
-    TH2D *hEcal_vs_Phi_e_1n = new TH2D("E_{cal} vs. #phi_{e} (All Int., 1n)",
-                                       "E_{cal} vs. #phi_{e} (All Int., 1n);#phi_{e} [Deg];E_{cal} [GeV];",
-                                       numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Theta_e_1n = new TH2D("E_{cal} vs. #theta_{e} (All Int., 1n)", "E_{cal} vs. #theta_{e} (All Int., 1n);#theta_{e} [Deg];E_{cal} [GeV];",
+                                         numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_e_1n = new TH2D("E_{cal} vs. #phi_{e} (All Int., 1n)", "E_{cal} vs. #phi_{e} (All Int., 1n);#phi_{e} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                       Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Theta_e_test_1n = new TH2D("E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., 1n)",
-                                              "E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., 1n);#theta_{e} [Deg];E_{cal} [GeV];",
-                                              numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                              beamE * 1.35);
+                                              "E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., 1n);#theta_{e} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Phi_e_test_1n = new TH2D("E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., 1n)",
-                                            "E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., 1n);#phi_{e} [Deg];E_{cal} [GeV];",
-                                            numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                            "E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., 1n);#phi_{e} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, Phi_lboundary,
+                                            Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_Theta_e_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1n_Directory"];
     string hEcal_vs_Phi_e_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1n_Directory"];
 
-    TH2D *hEcal_vs_Theta_n_1n = new TH2D("E_{cal} vs. #theta_{n} (All Int., 1n)",
-                                         "E_{cal} vs. #theta_{n} (All Int., 1n);#theta_{n} [Deg];E_{cal} [GeV];",
-                                         numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                         beamE * 1.35);
-    TH2D *hEcal_vs_Phi_n_1n = new TH2D("E_{cal} vs. #phi_{n} (All Int., 1n)",
-                                       "E_{cal} vs. #phi_{n} (All Int., 1n);#phi_{n} [Deg];E_{cal} [GeV];",
-                                       numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Theta_n_1n = new TH2D("E_{cal} vs. #theta_{n} (All Int., 1n)", "E_{cal} vs. #theta_{n} (All Int., 1n);#theta_{n} [Deg];E_{cal} [GeV];",
+                                         numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_n_1n = new TH2D("E_{cal} vs. #phi_{n} (All Int., 1n)", "E_{cal} vs. #phi_{n} (All Int., 1n);#phi_{n} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                       Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Theta_n_test_1n = new TH2D("E_{cal} vs. #theta_{n} for E_{cal}>E_{beam} (All Int., 1n)",
-                                              "E_{cal} vs. #theta_{n} for E_{cal}>E_{beam} (All Int., 1n);#theta_{n} [Deg];E_{cal} [GeV];",
-                                              numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                              beamE * 1.35);
+                                              "E_{cal} vs. #theta_{n} for E_{cal}>E_{beam} (All Int., 1n);#theta_{n} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Phi_n_test_1n = new TH2D("E_{cal} vs. #phi_{n} for E_{cal}>E_{beam} (All Int., 1n)",
-                                            "E_{cal} vs. #phi_{n} for E_{cal}>E_{beam} (All Int., 1n);#phi_{n} [Deg];E_{cal} [GeV];",
-                                            numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                            "E_{cal} vs. #phi_{n} for E_{cal}>E_{beam} (All Int., 1n);#phi_{n} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, Phi_lboundary,
+                                            Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_Theta_n_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1n_Directory"];
     string hEcal_vs_Phi_n_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_1n_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. dAlpha_T (1n)">
-    TH2D *hEcal_vs_dAlpha_T_1n = new TH2D("E_{cal} vs. #delta#alpha_{T} (All Int., 1n)",
-                                          "E_{cal} vs. #delta#alpha_{T} (All Int., 1n);#delta#alpha_{T} [Deg];E_{cal} [GeV];",
+    TH2D *hEcal_vs_dAlpha_T_1n = new TH2D("E_{cal} vs. #delta#alpha_{T} (All Int., 1n)", "E_{cal} vs. #delta#alpha_{T} (All Int., 1n);#delta#alpha_{T} [Deg];E_{cal} [GeV];",
                                           numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dAlpha_T_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1n_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. dP_T (1n)">
-    TH2D *hEcal_vs_dP_T_1n = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1n)",
-                                      "E_{cal} vs. #deltaP_{T} (All Int., 1n);#deltaP_{T} [GeV/c];E_{cal} [GeV];",
+    TH2D *hEcal_vs_dP_T_1n = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1n)", "E_{cal} vs. #deltaP_{T} (All Int., 1n);#deltaP_{T} [GeV/c];E_{cal} [GeV];",
                                       numTH2Dbins_E_cal_Plots, 0, dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dP_T_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1n_Directory"];
     //</editor-fold>
@@ -6397,20 +6078,15 @@ void EventAnalyser() {
     THStack *sEcal_2p = new THStack("E_{cal} Reconstruction (2p)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]");
     string sEcal_2p_Dir = directories.Ecal_Directory_map["Ecal_stack_2p_Directory"];
 
-    TH1D *hEcal_All_Int_2p = new TH1D("E_{cal} reco. (All Int., 2p)",
-                                      "E_{cal} Reconstruction (All Int., 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_All_Int_2p = new TH1D("E_{cal} reco. (All Int., 2p)", "E_{cal} Reconstruction (All Int., 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                       numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_2p = new TH1D("E_{cal} reco. (QEL only, 2p)",
-                                  "E_{cal} Reconstruction (QEL only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_QEL_2p = new TH1D("E_{cal} reco. (QEL only, 2p)", "E_{cal} Reconstruction (QEL only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                   numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_2p = new TH1D("E_{cal} reco. (MEC only, 2p)",
-                                  "E_{cal} Reconstruction (MEC only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_MEC_2p = new TH1D("E_{cal} reco. (MEC only, 2p)", "E_{cal} Reconstruction (MEC only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                   numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_RES_2p = new TH1D("E_{cal} reco. (RES only, 2p)",
-                                  "E_{cal} Reconstruction (RES only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_RES_2p = new TH1D("E_{cal} reco. (RES only, 2p)", "E_{cal} Reconstruction (RES only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                   numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_2p = new TH1D("E_{cal} reco. (DIS only, 2p)",
-                                  "E_{cal} Reconstruction (DIS only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_DIS_2p = new TH1D("E_{cal} reco. (DIS only, 2p)", "E_{cal} Reconstruction (DIS only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                   numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_All_Int_2p_Dir = directories.Ecal_Directory_map["Ecal_All_Int_2p_Directory"];
     string hEcal_QEL_2p_Dir = directories.Ecal_Directory_map["Ecal_QEL_2p_Directory"];
@@ -6421,21 +6097,19 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal vs. dAlpha_T (2p)">
     TH2D *hEcal_vs_dAlpha_T_L_2p = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p)",
-                                            "E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
-                                            numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                            "E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0, 180,
+                                            numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_dAlpha_T_tot_2p = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p)",
-                                              "E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
-                                              numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                              "E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0, 180,
+                                              numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dAlpha_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
     string hEcal_vs_dAlpha_T_tot_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. dP_T (2p)">
-    TH2D *hEcal_vs_dP_T_L_2p = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., 2p)",
-                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#deltaP_{T,L} [GeV/c];E_{cal} [GeV];",
+    TH2D *hEcal_vs_dP_T_L_2p = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., 2p)", "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#deltaP_{T,L} [GeV/c];E_{cal} [GeV];",
                                         numTH2Dbins_E_cal_Plots, 0, dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH2D *hEcal_vs_dP_T_tot_2p = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., 2p)",
-                                          "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [GeV/c];E_{cal} [GeV];",
+    TH2D *hEcal_vs_dP_T_tot_2p = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., 2p)", "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [GeV/c];E_{cal} [GeV];",
                                           numTH2Dbins_E_cal_Plots, 0, dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dP_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
     string hEcal_vs_dP_T_tot_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
@@ -6446,24 +6120,18 @@ void EventAnalyser() {
     //<editor-fold desc="Ecal reconstruction histograms (pFDpCD)">
 
     //<editor-fold desc="Ecal plots (pFDpCD)">
-    THStack *sEcal_pFDpCD = new THStack("E_{cal} Reconstruction (pFDpCD)",
-                                        "E_{cal} Reconstruction (pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]");
+    THStack *sEcal_pFDpCD = new THStack("E_{cal} Reconstruction (pFDpCD)", "E_{cal} Reconstruction (pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]");
     string sEcal_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_stack_pFDpCD_Directory"];
 
-    TH1D *hEcal_All_Int_pFDpCD = new TH1D("E_{cal} reco. (All Int., pFDpCD)",
-                                          "E_{cal} Reconstruction (All Int., pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_All_Int_pFDpCD = new TH1D("E_{cal} reco. (All Int., pFDpCD)", "E_{cal} Reconstruction (All Int., pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
                                           numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_pFDpCD = new TH1D("E_{cal} reco. (QEL only, pFDpCD)",
-                                      "E_{cal} Reconstruction (QEL only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_QEL_pFDpCD = new TH1D("E_{cal} reco. (QEL only, pFDpCD)", "E_{cal} Reconstruction (QEL only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
                                       numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_pFDpCD = new TH1D("E_{cal} reco. (MEC only, pFDpCD)",
-                                      "E_{cal} Reconstruction (MEC only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_MEC_pFDpCD = new TH1D("E_{cal} reco. (MEC only, pFDpCD)", "E_{cal} Reconstruction (MEC only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
                                       numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_RES_pFDpCD = new TH1D("E_{cal} reco. (RES only, pFDpCD)",
-                                      "E_{cal} Reconstruction (RES only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_RES_pFDpCD = new TH1D("E_{cal} reco. (RES only, pFDpCD)", "E_{cal} Reconstruction (RES only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
                                       numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_pFDpCD = new TH1D("E_{cal} reco. (DIS only, pFDpCD)",
-                                      "E_{cal} Reconstruction (DIS only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_DIS_pFDpCD = new TH1D("E_{cal} reco. (DIS only, pFDpCD)", "E_{cal} Reconstruction (DIS only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
                                       numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_All_Int_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_All_Int_pFDpCD_Directory"];
     string hEcal_QEL_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_QEL_pFDpCD_Directory"];
@@ -6473,107 +6141,85 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. momentum (pFDpCD)">
-    TH2D *hEcal_vs_P_e_pFDpCD = new TH2D("E_{cal} vs. P_{e} (All Int., pFDpCD)",
-                                         "E_{cal} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];E_{cal} [GeV];",
-                                         numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                         beamE * 1.35);
+    TH2D *hEcal_vs_P_e_pFDpCD = new TH2D("E_{cal} vs. P_{e} (All Int., pFDpCD)", "E_{cal} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                         Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_e_test_pFDpCD = new TH2D("E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., pFDpCD)",
-                                              "E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., pFDpCD);P_{e} [GeV/c];E_{cal} [GeV];",
-                                              numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                              beamE * 1.35);
+                                              "E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., pFDpCD);P_{e} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                              Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_e_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_pFDpCD_Directory"];
 
-    TH2D *hEcal_vs_P_pFD_pFDpCD = new TH2D("E_{cal} vs. P_{pFD} (All Int., pFDpCD)",
-                                           "E_{cal} vs. P_{pFD} (All Int., pFDpCD);P_{pFD} [GeV/c];E_{cal} [GeV];",
-                                           numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                           beamE * 1.35);
-    TH2D *hEcal_vs_P_pCD_pFDpCD = new TH2D("E_{cal} vs. P_{pCD} (All Int., pFDpCD)",
-                                           "E_{cal} vs. P_{pCD} (All Int., pFDpCD);P_{pCD} [GeV/c];E_{cal} [GeV];",
-                                           numTH2Dbins_E_cal_Plots, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                           beamE * 1.35);
+    TH2D *hEcal_vs_P_pFD_pFDpCD = new TH2D("E_{cal} vs. P_{pFD} (All Int., pFDpCD)", "E_{cal} vs. P_{pFD} (All Int., pFDpCD);P_{pFD} [GeV/c];E_{cal} [GeV];",
+                                           numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_P_pCD_pFDpCD = new TH2D("E_{cal} vs. P_{pCD} (All Int., pFDpCD)", "E_{cal} vs. P_{pCD} (All Int., pFDpCD);P_{pCD} [GeV/c];E_{cal} [GeV];",
+                                           numTH2Dbins_E_cal_Plots, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_pFD_test_pFDpCD = new TH2D("E_{cal} vs. P_{pFD} for E_{cal}>E_{beam} (All Int., pFDpCD)",
-                                                "E_{cal} vs. P_{pFD} for E_{cal}>E_{beam} (All Int., pFDpCD);P_{pFD} [GeV/c];E_{cal} [GeV];",
-                                                numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                                beamE * 1.35);
+                                                "E_{cal} vs. P_{pFD} for E_{cal}>E_{beam} (All Int., pFDpCD);P_{pFD} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_pCD_test_pFDpCD = new TH2D("E_{cal} vs. P_{pCD} for E_{cal}>E_{beam} (All Int., pFDpCD)",
-                                                "E_{cal} vs. P_{pCD} for E_{cal}>E_{beam} (All Int., pFDpCD);P_{pCD} [GeV/c];E_{cal} [GeV];",
-                                                numTH2Dbins_E_cal_Plots, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                                beamE * 1.35);
+                                                "E_{cal} vs. P_{pCD} for E_{cal}>E_{beam} (All Int., pFDpCD);P_{pCD} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_pFD_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_pFDpCD_Directory"];
     string hEcal_vs_P_pCD_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_pFDpCD_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. angles (pFDpCD)">
-    TH2D *hEcal_vs_Theta_e_pFDpCD = new TH2D("E_{cal} vs. #theta_{e} (All Int., pFDpCD)",
-                                             "E_{cal} vs. #theta_{e} (All Int., pFDpCD);#theta_{e} [Deg];E_{cal} [GeV];",
-                                             numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                             beamE * 1.35);
-    TH2D *hEcal_vs_Phi_e_pFDpCD = new TH2D("E_{cal} vs. #phi_{e} (All Int., pFDpCD)",
-                                           "E_{cal} vs. #phi_{e} (All Int., pFDpCD);#phi_{e} [Deg];E_{cal} [GeV];",
+    TH2D *hEcal_vs_Theta_e_pFDpCD = new TH2D("E_{cal} vs. #theta_{e} (All Int., pFDpCD)", "E_{cal} vs. #theta_{e} (All Int., pFDpCD);#theta_{e} [Deg];E_{cal} [GeV];",
+                                             numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_e_pFDpCD = new TH2D("E_{cal} vs. #phi_{e} (All Int., pFDpCD)", "E_{cal} vs. #phi_{e} (All Int., pFDpCD);#phi_{e} [Deg];E_{cal} [GeV];",
                                            numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Theta_e_test_pFDpCD = new TH2D("E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., pFDpCD)",
-                                                  "E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., pFDpCD);#theta_{e} [Deg];E_{cal} [GeV];",
-                                                  numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                                  beamE * 1.35);
+                                                  "E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., pFDpCD);#theta_{e} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                  Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Phi_e_test_pFDpCD = new TH2D("E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., pFDpCD)",
-                                                "E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., pFDpCD);#phi_{e} [Deg];E_{cal} [GeV];",
-                                                numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                                "E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., pFDpCD);#phi_{e} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_Theta_e_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_pFDpCD_Directory"];
     string hEcal_vs_Phi_e_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_pFDpCD_Directory"];
 
-    TH2D *hEcal_vs_Theta_pFD_pFDpCD = new TH2D("E_{cal} vs. #theta_{pFD} (All Int., pFDpCD)",
-                                               "E_{cal} vs. #theta_{pFD} (All Int., pFDpCD);#theta_{pFD} [Deg];E_{cal} [GeV];",
-                                               numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                               beamE * 1.35);
-    TH2D *hEcal_vs_Phi_pFD_pFDpCD = new TH2D("E_{cal} vs. #phi_{pFD} (All Int., pFDpCD)",
-                                             "E_{cal} vs. #phi_{pFD} (All Int., pFDpCD);#phi_{pFD} [Deg];E_{cal} [GeV];",
+    TH2D *hEcal_vs_Theta_pFD_pFDpCD = new TH2D("E_{cal} vs. #theta_{pFD} (All Int., pFDpCD)", "E_{cal} vs. #theta_{pFD} (All Int., pFDpCD);#theta_{pFD} [Deg];E_{cal} [GeV];",
+                                               numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_pFD_pFDpCD = new TH2D("E_{cal} vs. #phi_{pFD} (All Int., pFDpCD)", "E_{cal} vs. #phi_{pFD} (All Int., pFDpCD);#phi_{pFD} [Deg];E_{cal} [GeV];",
                                              numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Theta_pFD_test_pFDpCD = new TH2D("E_{cal} vs. #theta_{pFD} for E_{cal}>E_{beam} (All Int., pFDpCD)",
                                                     "E_{cal} vs. #theta_{pFD} for E_{cal}>E_{beam} (All Int., pFDpCD);#theta_{pFD} [Deg];E_{cal} [GeV];",
-                                                    numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                                    beamE * 1.35);
+                                                    numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Phi_pFD_test_pFDpCD = new TH2D("E_{cal} vs. #phi_{pFD} for E_{cal}>E_{beam} (All Int., pFDpCD)",
-                                                  "E_{cal} vs. #phi_{pFD} for E_{cal}>E_{beam} (All Int., pFDpCD);#phi_{pFD} [Deg];E_{cal} [GeV];",
-                                                  numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                                  "E_{cal} vs. #phi_{pFD} for E_{cal}>E_{beam} (All Int., pFDpCD);#phi_{pFD} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                  Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_Theta_pFD_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_pFDpCD_Directory"];
     string hEcal_vs_Phi_pFD_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_pFDpCD_Directory"];
 
-    TH2D *hEcal_vs_Theta_pCD_pFDpCD = new TH2D("E_{cal} vs. #theta_{pCD} (All Int., pFDpCD)",
-                                               "E_{cal} vs. #theta_{pCD} (All Int., pFDpCD);#theta_{pCD} [Deg];E_{cal} [GeV];",
-                                               numTH2Dbins_E_cal_Plots, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins_E_cal_Plots, 0,
-                                               beamE * 1.35);
-    TH2D *hEcal_vs_Phi_pCD_pFDpCD = new TH2D("E_{cal} vs. #phi_{pCD} (All Int., pFDpCD)",
-                                             "E_{cal} vs. #phi_{pCD} (All Int., pFDpCD);#phi_{pCD} [Deg];E_{cal} [GeV];",
+    TH2D *hEcal_vs_Theta_pCD_pFDpCD = new TH2D("E_{cal} vs. #theta_{pCD} (All Int., pFDpCD)", "E_{cal} vs. #theta_{pCD} (All Int., pFDpCD);#theta_{pCD} [Deg];E_{cal} [GeV];",
+                                               numTH2Dbins_E_cal_Plots, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_pCD_pFDpCD = new TH2D("E_{cal} vs. #phi_{pCD} (All Int., pFDpCD)", "E_{cal} vs. #phi_{pCD} (All Int., pFDpCD);#phi_{pCD} [Deg];E_{cal} [GeV];",
                                              numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Theta_pCD_test_pFDpCD = new TH2D("E_{cal} vs. #theta_{pCD} for E_{cal}>E_{beam} (All Int., pFDpCD)",
                                                     "E_{cal} vs. #theta_{pCD} for E_{cal}>E_{beam} (All Int., pFDpCD);#theta_{pCD} [Deg];E_{cal} [GeV];",
-                                                    numTH2Dbins_E_cal_Plots, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins_E_cal_Plots, 0,
-                                                    beamE * 1.35);
+                                                    numTH2Dbins_E_cal_Plots, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Phi_pCD_test_pFDpCD = new TH2D("E_{cal} vs. #phi_{pCD} for E_{cal}>E_{beam} (All Int., pFDpCD)",
-                                                  "E_{cal} vs. #phi_{pCD} for E_{cal}>E_{beam} (All Int., pFDpCD);#phi_{pCD} [Deg];E_{cal} [GeV];",
-                                                  numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                                  "E_{cal} vs. #phi_{pCD} for E_{cal}>E_{beam} (All Int., pFDpCD);#phi_{pCD} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                  Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_Theta_pCD_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_pFDpCD_Directory"];
     string hEcal_vs_Phi_pCD_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. dAlpha_T (pFDpCD)">
     TH2D *hEcal_vs_dAlpha_T_L_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., pFDpCD)",
-                                                "E_{cal} vs. #delta#alpha_{T,L} (All Int., pFDpCD);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
-                                                numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                                "E_{cal} vs. #delta#alpha_{T,L} (All Int., pFDpCD);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0, 180,
+                                                numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_dAlpha_T_tot_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
-                                                  "E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
-                                                  numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                                  "E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
+                                                  180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dAlpha_T_L_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
     string hEcal_vs_dAlpha_T_tot_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. dP_T (pFDpCD)">
-    TH2D *hEcal_vs_dP_T_L_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., pFDpCD)",
-                                            "E_{cal} vs. #deltaP_{T,L} (All Int., pFDpCD);#deltaP_{T,L} [GeV];E_{cal} [GeV];",
+    TH2D *hEcal_vs_dP_T_L_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., pFDpCD)", "E_{cal} vs. #deltaP_{T,L} (All Int., pFDpCD);#deltaP_{T,L} [GeV];E_{cal} [GeV];",
                                             numTH2Dbins_E_cal_Plots, 0, dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_dP_T_tot_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD)",
-                                              "E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];",
-                                              numTH2Dbins_E_cal_Plots, 0, dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                              "E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0, dP_T_boundary,
+                                              numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dP_T_L_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
     string hEcal_vs_dP_T_tot_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
     //</editor-fold>
@@ -6590,24 +6236,18 @@ void EventAnalyser() {
     //<editor-fold desc="Ecal reconstruction histograms (nFDpCD)">
 
     //<editor-fold desc="Ecal plots (nFDpCD)">
-    THStack *sEcal_nFDpCD = new THStack("E_{cal} Reconstruction (nFDpCD)",
-                                        "E_{cal} Reconstruction (nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]");
+    THStack *sEcal_nFDpCD = new THStack("E_{cal} Reconstruction (nFDpCD)", "E_{cal} Reconstruction (nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]");
     string sEcal_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_stack_nFDpCD_Directory"];
 
-    TH1D *hEcal_All_Int_nFDpCD = new TH1D("E_{cal} reco. (All Int., nFDpCD)",
-                                          "E_{cal} Reconstruction (All Int., nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_All_Int_nFDpCD = new TH1D("E_{cal} reco. (All Int., nFDpCD)", "E_{cal} Reconstruction (All Int., nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
                                           numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_nFDpCD = new TH1D("E_{cal} reco. (QEL only, nFDpCD)",
-                                      "E_{cal} Reconstruction (QEL only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_QEL_nFDpCD = new TH1D("E_{cal} reco. (QEL only, nFDpCD)", "E_{cal} Reconstruction (QEL only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
                                       numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_nFDpCD = new TH1D("E_{cal} reco. (MEC only, nFDpCD)",
-                                      "E_{cal} Reconstruction (MEC only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_MEC_nFDpCD = new TH1D("E_{cal} reco. (MEC only, nFDpCD)", "E_{cal} Reconstruction (MEC only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
                                       numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_RES_nFDpCD = new TH1D("E_{cal} reco. (RES only, nFDpCD)",
-                                      "E_{cal} Reconstruction (RES only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_RES_nFDpCD = new TH1D("E_{cal} reco. (RES only, nFDpCD)", "E_{cal} Reconstruction (RES only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
                                       numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_nFDpCD = new TH1D("E_{cal} reco. (DIS only, nFDpCD)",
-                                      "E_{cal} Reconstruction (DIS only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_DIS_nFDpCD = new TH1D("E_{cal} reco. (DIS only, nFDpCD)", "E_{cal} Reconstruction (DIS only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
                                       numTH1Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_All_Int_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_All_Int_nFDpCD_Directory"];
     string hEcal_QEL_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_QEL_nFDpCD_Directory"];
@@ -6617,107 +6257,85 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. momentum (nFDpCD)">
-    TH2D *hEcal_vs_P_e_nFDpCD = new TH2D("E_{cal} vs. P_{e} (All Int., nFDpCD)",
-                                         "E_{cal} vs. P_{e} (All Int., nFDpCD);P_{e} [GeV/c];E_{cal} [GeV];",
-                                         numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                         beamE * 1.35);
+    TH2D *hEcal_vs_P_e_nFDpCD = new TH2D("E_{cal} vs. P_{e} (All Int., nFDpCD)", "E_{cal} vs. P_{e} (All Int., nFDpCD);P_{e} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                         Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_e_test_nFDpCD = new TH2D("E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., nFDpCD)",
-                                              "E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., nFDpCD);P_{e} [GeV/c];E_{cal} [GeV];",
-                                              numTH2Dbins_E_cal_Plots, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                              beamE * 1.35);
+                                              "E_{cal} vs. P_{e} for E_{cal}>E_{beam} (All Int., nFDpCD);P_{e} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                              Momentum_lboundary, Momentum_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_e_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_nFDpCD_Directory"];
 
-    TH2D *hEcal_vs_P_nFD_nFDpCD = new TH2D("E_{cal} vs. P_{nFD} (All Int., nFDpCD)",
-                                           "E_{cal} vs. P_{nFD} (All Int., nFDpCD);P_{nFD} [GeV/c];E_{cal} [GeV];",
-                                           numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                           beamE * 1.35);
-    TH2D *hEcal_vs_P_pCD_nFDpCD = new TH2D("E_{cal} vs. P_{pCD} (All Int., nFDpCD)",
-                                           "E_{cal} vs. P_{pCD} (All Int., nFDpCD);P_{pCD} [GeV/c];E_{cal} [GeV];",
-                                           numTH2Dbins_E_cal_Plots, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                           beamE * 1.35);
+    TH2D *hEcal_vs_P_nFD_nFDpCD = new TH2D("E_{cal} vs. P_{nFD} (All Int., nFDpCD)", "E_{cal} vs. P_{nFD} (All Int., nFDpCD);P_{nFD} [GeV/c];E_{cal} [GeV];",
+                                           numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_P_pCD_nFDpCD = new TH2D("E_{cal} vs. P_{pCD} (All Int., nFDpCD)", "E_{cal} vs. P_{pCD} (All Int., nFDpCD);P_{pCD} [GeV/c];E_{cal} [GeV];",
+                                           numTH2Dbins_E_cal_Plots, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_nFD_test_nFDpCD = new TH2D("E_{cal} vs. P_{nFD} for E_{cal}>E_{beam} (All Int., nFDpCD)",
-                                                "E_{cal} vs. P_{nFD} for E_{cal}>E_{beam} (All Int., nFDpCD);P_{nFD} [GeV/c];E_{cal} [GeV];",
-                                                numTH2Dbins_E_cal_Plots, P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                                beamE * 1.35);
+                                                "E_{cal} vs. P_{nFD} for E_{cal}>E_{beam} (All Int., nFDpCD);P_{nFD} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                P_nucFD_lboundary, P_nucFD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_P_pCD_test_nFDpCD = new TH2D("E_{cal} vs. P_{pCD} for E_{cal}>E_{beam} (All Int., nFDpCD)",
-                                                "E_{cal} vs. P_{pCD} for E_{cal}>E_{beam} (All Int., nFDpCD);P_{pCD} [GeV/c];E_{cal} [GeV];",
-                                                numTH2Dbins_E_cal_Plots, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_E_cal_Plots, 0,
-                                                beamE * 1.35);
+                                                "E_{cal} vs. P_{pCD} for E_{cal}>E_{beam} (All Int., nFDpCD);P_{pCD} [GeV/c];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_P_nFD_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_nFDpCD_Directory"];
     string hEcal_vs_P_pCD_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Mom_nFDpCD_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. angles (nFDpCD)">
-    TH2D *hEcal_vs_Theta_e_nFDpCD = new TH2D("E_{cal} vs. #theta_{e} (All Int., nFDpCD)",
-                                             "E_{cal} vs. #theta_{e} (All Int., nFDpCD);#theta_{e} [Deg];E_{cal} [GeV];",
-                                             numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                             beamE * 1.35);
-    TH2D *hEcal_vs_Phi_e_nFDpCD = new TH2D("E_{cal} vs. #phi_{e} (All Int., nFDpCD)",
-                                           "E_{cal} vs. #phi_{e} (All Int., nFDpCD);#phi_{e} [Deg];E_{cal} [GeV];",
+    TH2D *hEcal_vs_Theta_e_nFDpCD = new TH2D("E_{cal} vs. #theta_{e} (All Int., nFDpCD)", "E_{cal} vs. #theta_{e} (All Int., nFDpCD);#theta_{e} [Deg];E_{cal} [GeV];",
+                                             numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_e_nFDpCD = new TH2D("E_{cal} vs. #phi_{e} (All Int., nFDpCD)", "E_{cal} vs. #phi_{e} (All Int., nFDpCD);#phi_{e} [Deg];E_{cal} [GeV];",
                                            numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Theta_e_test_nFDpCD = new TH2D("E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., nFDpCD)",
-                                                  "E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., nFDpCD);#theta_{e} [Deg];E_{cal} [GeV];",
-                                                  numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                                  beamE * 1.35);
+                                                  "E_{cal} vs. #theta_{e} for E_{cal}>E_{beam} (All Int., nFDpCD);#theta_{e} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                  Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Phi_e_test_nFDpCD = new TH2D("E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., nFDpCD)",
-                                                "E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., nFDpCD);#phi_{e} [Deg];E_{cal} [GeV];",
-                                                numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                                "E_{cal} vs. #phi_{e} for E_{cal}>E_{beam} (All Int., nFDpCD);#phi_{e} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_Theta_e_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_nFDpCD_Directory"];
     string hEcal_vs_Phi_e_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_nFDpCD_Directory"];
 
-    TH2D *hEcal_vs_Theta_nFD_nFDpCD = new TH2D("E_{cal} vs. #theta_{nFD} (All Int., nFDpCD)",
-                                               "E_{cal} vs. #theta_{nFD} (All Int., nFDpCD);#theta_{nFD} [Deg];E_{cal} [GeV];",
-                                               numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                               beamE * 1.35);
-    TH2D *hEcal_vs_Phi_nFD_nFDpCD = new TH2D("E_{cal} vs. #phi_{nFD} (All Int., nFDpCD)",
-                                             "E_{cal} vs. #phi_{nFD} (All Int., nFDpCD);#phi_{nFD} [Deg];E_{cal} [GeV];",
+    TH2D *hEcal_vs_Theta_nFD_nFDpCD = new TH2D("E_{cal} vs. #theta_{nFD} (All Int., nFDpCD)", "E_{cal} vs. #theta_{nFD} (All Int., nFDpCD);#theta_{nFD} [Deg];E_{cal} [GeV];",
+                                               numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_nFD_nFDpCD = new TH2D("E_{cal} vs. #phi_{nFD} (All Int., nFDpCD)", "E_{cal} vs. #phi_{nFD} (All Int., nFDpCD);#phi_{nFD} [Deg];E_{cal} [GeV];",
                                              numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Theta_nFD_test_nFDpCD = new TH2D("E_{cal} vs. #theta_{nFD} for E_{cal}>E_{beam} (All Int., nFDpCD)",
                                                     "E_{cal} vs. #theta_{nFD} for E_{cal}>E_{beam} (All Int., nFDpCD);#theta_{nFD} [Deg];E_{cal} [GeV];",
-                                                    numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0,
-                                                    beamE * 1.35);
+                                                    numTH2Dbins_E_cal_Plots, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Phi_nFD_test_nFDpCD = new TH2D("E_{cal} vs. #phi_{nFD} for E_{cal}>E_{beam} (All Int., nFDpCD)",
-                                                  "E_{cal} vs. #phi_{nFD} for E_{cal}>E_{beam} (All Int., nFDpCD);#phi_{nFD} [Deg];E_{cal} [GeV];",
-                                                  numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                                  "E_{cal} vs. #phi_{nFD} for E_{cal}>E_{beam} (All Int., nFDpCD);#phi_{nFD} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                  Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_Theta_nFD_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_nFDpCD_Directory"];
     string hEcal_vs_Phi_nFD_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_nFDpCD_Directory"];
 
-    TH2D *hEcal_vs_Theta_pCD_nFDpCD = new TH2D("E_{cal} vs. #theta_{pCD} (All Int., nFDpCD)",
-                                               "E_{cal} vs. #theta_{pCD} (All Int., nFDpCD);#theta_{pCD} [Deg];E_{cal} [GeV];",
-                                               numTH2Dbins_E_cal_Plots, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins_E_cal_Plots, 0,
-                                               beamE * 1.35);
-    TH2D *hEcal_vs_Phi_pCD_nFDpCD = new TH2D("E_{cal} vs. #phi_{pCD} (All Int., nFDpCD)",
-                                             "E_{cal} vs. #phi_{pCD} (All Int., nFDpCD);#phi_{pCD} [Deg];E_{cal} [GeV];",
+    TH2D *hEcal_vs_Theta_pCD_nFDpCD = new TH2D("E_{cal} vs. #theta_{pCD} (All Int., nFDpCD)", "E_{cal} vs. #theta_{pCD} (All Int., nFDpCD);#theta_{pCD} [Deg];E_{cal} [GeV];",
+                                               numTH2Dbins_E_cal_Plots, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_Phi_pCD_nFDpCD = new TH2D("E_{cal} vs. #phi_{pCD} (All Int., nFDpCD)", "E_{cal} vs. #phi_{pCD} (All Int., nFDpCD);#phi_{pCD} [Deg];E_{cal} [GeV];",
                                              numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Theta_pCD_test_nFDpCD = new TH2D("E_{cal} vs. #theta_{pCD} for E_{cal}>E_{beam} (All Int., nFDpCD)",
                                                     "E_{cal} vs. #theta_{pCD} for E_{cal}>E_{beam} (All Int., nFDpCD);#theta_{pCD} [Deg];E_{cal} [GeV];",
-                                                    numTH2Dbins_E_cal_Plots, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins_E_cal_Plots, 0,
-                                                    beamE * 1.35);
+                                                    numTH2Dbins_E_cal_Plots, Theta_lboundary_CD, Theta_uboundary_CD, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_Phi_pCD_test_nFDpCD = new TH2D("E_{cal} vs. #phi_{pCD} for E_{cal}>E_{beam} (All Int., nFDpCD)",
-                                                  "E_{cal} vs. #phi_{pCD} for E_{cal}>E_{beam} (All Int., nFDpCD);#phi_{pCD} [Deg];E_{cal} [GeV];",
-                                                  numTH2Dbins_E_cal_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                                  "E_{cal} vs. #phi_{pCD} for E_{cal}>E_{beam} (All Int., nFDpCD);#phi_{pCD} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots,
+                                                  Phi_lboundary, Phi_uboundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_Theta_pCD_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_nFDpCD_Directory"];
     string hEcal_vs_Phi_pCD_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_Ang_nFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. dAlpha_T (nFDpCD)">
     TH2D *hEcal_vs_dAlpha_T_L_nFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., nFDpCD)",
-                                                "E_{cal} vs. #delta#alpha_{T,L} (All Int., nFDpCD);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
-                                                numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                                "E_{cal} vs. #delta#alpha_{T,L} (All Int., nFDpCD);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0, 180,
+                                                numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_dAlpha_T_tot_nFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)",
-                                                  "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
-                                                  numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                                  "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
+                                                  180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dAlpha_T_L_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     string hEcal_vs_dAlpha_T_tot_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. dP_T (nFDpCD)">
-    TH2D *hEcal_vs_dP_T_L_nFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., nFDpCD)",
-                                            "E_{cal} vs. #deltaP_{T,L} (All Int., nFDpCD);#deltaP_{T,L} [GeV];E_{cal} [GeV];",
+    TH2D *hEcal_vs_dP_T_L_nFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., nFDpCD)", "E_{cal} vs. #deltaP_{T,L} (All Int., nFDpCD);#deltaP_{T,L} [GeV];E_{cal} [GeV];",
                                             numTH2Dbins_E_cal_Plots, 0, dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_dP_T_tot_nFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)",
-                                              "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];",
-                                              numTH2Dbins_E_cal_Plots, 0, dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+                                              "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0, dP_T_boundary,
+                                              numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dP_T_L_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     string hEcal_vs_dP_T_tot_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     //</editor-fold>
@@ -6741,84 +6359,69 @@ void EventAnalyser() {
 
     //<editor-fold desc="TKI histograms (1p)">
     THStack *sdP_T_1p = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1p);#deltaP_{T} [GeV/c]");
-    TH1D *hdP_T_1p = new TH1D("#deltaP_{T} (1p)", "#deltaP_{T} histogram (1p);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,p}| [GeV/c]",
-                              numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_1p = new TH1D("#deltaP_{T} (1p)", "#deltaP_{T} histogram (1p);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,p}| [GeV/c]", numTH1Dbins_TKI_dP_T_Plots, 0,
+                              dP_T_boundary);
     string hdP_T_1p_Dir = directories.TKI_Directory_map["dP_T_1p_Directory"];
 
-    THStack *sdAlpha_T_1p = new THStack("#delta#alpha_{T} & #delta#alpha_{T,tot} (1p)",
-                                        "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (1p);#delta#alpha_{T} [Deg]");
-    TH1D *hdAlpha_T_1p = new TH1D("#delta#alpha_{T} (1p)", "#delta#alpha_{T} histogram (1p);#delta#alpha_{T} [Deg]",
-                                  numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
+    THStack *sdAlpha_T_1p = new THStack("#delta#alpha_{T} & #delta#alpha_{T,tot} (1p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (1p);#delta#alpha_{T} [Deg]");
+    TH1D *hdAlpha_T_1p = new TH1D("#delta#alpha_{T} (1p)", "#delta#alpha_{T} histogram (1p);#delta#alpha_{T} [Deg]", numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     string hdAlpha_T_1p_Dir = directories.TKI_Directory_map["dAlpha_T_1p_Directory"];
 
-    THStack *sdPhi_T_1p = new THStack("#delta#phi_{T} & #delta#phi_{T,tot} (1p)",
-                                      "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (1p);#delta#phi_{T} [Deg]");
-    TH1D *hdPhi_T_1p = new TH1D("#delta#phi_{T} (1p)", "#delta#phi_{T} histogram (1p);#delta#phi_{T} [Deg]",
-                                numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    THStack *sdPhi_T_1p = new THStack("#delta#phi_{T} & #delta#phi_{T,tot} (1p)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (1p);#delta#phi_{T} [Deg]");
+    TH1D *hdPhi_T_1p = new TH1D("#delta#phi_{T} (1p)", "#delta#phi_{T} histogram (1p);#delta#phi_{T} [Deg]", numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     string hdPhi_T_1p_Dir = directories.TKI_Directory_map["dPhi_T_1p_Directory"];
 
     TH2D *hdP_T_vs_dAlpha_T_1p = new TH2D("#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1p)",
-                                          "#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1p);#delta#alpha_{T} [Deg];#deltaP_{T} [GeV/c];",
-                                          numTH2Dbins_TKI_Plots, 0, 180, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
+                                          "#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1p);#delta#alpha_{T} [Deg];#deltaP_{T} [GeV/c];", numTH2Dbins_TKI_Plots, 0, 180,
+                                          numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
     string hdP_T_vs_dAlpha_T_1p_Dir = directories.TKI_Directory_map["dP_T_vs_dAlpha_T_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="TKI histograms (1n)">
     THStack *sdP_T_1n = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1n)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1n);#deltaP_{T} [GeV/c]");
-    TH1D *hdP_T_1n = new TH1D("#deltaP_{T} (1n)", "#deltaP_{T} histogram (1n);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,n}| [GeV/c]",
-                              numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_1n = new TH1D("#deltaP_{T} (1n)", "#deltaP_{T} histogram (1n);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,n}| [GeV/c]", numTH1Dbins_TKI_dP_T_Plots, 0,
+                              dP_T_boundary);
     string hdP_T_1n_Dir = directories.TKI_Directory_map["dP_T_1n_Directory"];
 
-    THStack *sdAlpha_T_1n = new THStack("#delta#alpha_{T} & #delta#alpha_{T,tot} (1n)",
-                                        "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (1n);#delta#alpha_{T} [Deg]");
-    TH1D *hdAlpha_T_1n = new TH1D("#delta#alpha_{T} (1n)", "#delta#alpha_{T} histogram (1n);#delta#alpha_{T} [Deg]",
-                                  numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
+    THStack *sdAlpha_T_1n = new THStack("#delta#alpha_{T} & #delta#alpha_{T,tot} (1n)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (1n);#delta#alpha_{T} [Deg]");
+    TH1D *hdAlpha_T_1n = new TH1D("#delta#alpha_{T} (1n)", "#delta#alpha_{T} histogram (1n);#delta#alpha_{T} [Deg]", numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     string hdAlpha_T_1n_Dir = directories.TKI_Directory_map["dAlpha_T_1n_Directory"];
 
-    THStack *sdPhi_T_1n = new THStack("#delta#phi_{T} & #delta#phi_{T,tot} (1n)",
-                                      "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (1n);#delta#phi_{T} [Deg]");
-    TH1D *hdPhi_T_1n = new TH1D("#delta#phi_{T} (1n)", "#delta#phi_{T} histogram (1n);#delta#phi_{T} [Deg]",
-                                numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    THStack *sdPhi_T_1n = new THStack("#delta#phi_{T} & #delta#phi_{T,tot} (1n)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (1n);#delta#phi_{T} [Deg]");
+    TH1D *hdPhi_T_1n = new TH1D("#delta#phi_{T} (1n)", "#delta#phi_{T} histogram (1n);#delta#phi_{T} [Deg]", numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     string hdPhi_T_1n_Dir = directories.TKI_Directory_map["dPhi_T_1n_Directory"];
 
     TH2D *hdP_T_vs_dAlpha_T_1n = new TH2D("#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1n)",
-                                          "#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1n);#delta#alpha_{T} [Deg];#deltaP_{T} [GeV/c];",
-                                          numTH2Dbins_TKI_Plots, 0, 180, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
+                                          "#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1n);#delta#alpha_{T} [Deg];#deltaP_{T} [GeV/c];", numTH2Dbins_TKI_Plots, 0, 180,
+                                          numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
     string hdP_T_vs_dAlpha_T_1n_Dir = directories.TKI_Directory_map["dP_T_vs_dAlpha_T_1n_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="TKI histograms (2p)">
     THStack *sdP_T_2p = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (2p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (2p);#deltaP_{T} [GeV/c]");
-    TH1D *hdP_T_L_2p = new TH1D("#deltaP_{T,L} (2p)",
-                                "#deltaP_{T,L} by Leading Proton (2p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV/c]",
+    TH1D *hdP_T_L_2p = new TH1D("#deltaP_{T,L} (2p)", "#deltaP_{T,L} by Leading Proton (2p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV/c]",
                                 numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
-    TH1D *hdP_T_tot_2p = new TH1D("#deltaP_{T,tot} (2p)",
-                                  "#deltaP_{T,tot} by Momentum Sum (2p);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,1} + #vec{p}_{T,2}| [GeV/c]",
+    TH1D *hdP_T_tot_2p = new TH1D("#deltaP_{T,tot} (2p)", "#deltaP_{T,tot} by Momentum Sum (2p);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,1} + #vec{p}_{T,2}| [GeV/c]",
                                   numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     string hdP_T_L_2p_Dir = directories.TKI_Directory_map["dP_T_2p_Directory"];
     string hdP_T_tot_2p_Dir = directories.TKI_Directory_map["dP_T_2p_Directory"];
 
-    THStack *sdAlpha_T_2p = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (2p)",
-                                        "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (2p);#delta#alpha_{T} [Deg]");
-    TH1D *hdAlpha_T_L_2p = new TH1D("#delta#alpha_{T,L} (2p)", "#delta#alpha_{T,L} by Leading Proton (2p);#delta#alpha_{T,L} [Deg]",
-                                    numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
-    TH1D *hdAlpha_T_tot_2p = new TH1D("#delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,tot} by Momentum Sum (2p);#delta#alpha_{T,tot} [Deg]",
-                                      numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
+    THStack *sdAlpha_T_2p = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (2p);#delta#alpha_{T} [Deg]");
+    TH1D *hdAlpha_T_L_2p = new TH1D("#delta#alpha_{T,L} (2p)", "#delta#alpha_{T,L} by Leading Proton (2p);#delta#alpha_{T,L} [Deg]", numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
+    TH1D *hdAlpha_T_tot_2p = new TH1D("#delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,tot} by Momentum Sum (2p);#delta#alpha_{T,tot} [Deg]", numTH1Dbins_TKI_dAlpha_T_Plots, 0,
+                                      180);
     string hdAlpha_T_L_2p_Dir = directories.TKI_Directory_map["dAlpha_T_2p_Directory"];
     string hdAlpha_T_tot_2p_Dir = directories.TKI_Directory_map["dAlpha_T_2p_Directory"];
 
-    THStack *sdPhi_T_2p = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (2p)",
-                                      "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (2p);#delta#phi_{T} [Deg]");
-    TH1D *hdPhi_T_L_2p = new TH1D("#delta#phi_{T,L} (2p)", "#delta#phi_{T,L} by Leading Proton (2p);#delta#phi_{T,L} [Deg]",
-                                  numTH1Dbins_TKI_dP_T_Plots, 0, 180);
-    TH1D *hdPhi_T_tot_2p = new TH1D("#delta#phi_{T,tot} (2p)", "#delta#phi_{T,tot} by Momentum Sum (2p);#delta#phi_{T,tot} [Deg]",
-                                    numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    THStack *sdPhi_T_2p = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (2p)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (2p);#delta#phi_{T} [Deg]");
+    TH1D *hdPhi_T_L_2p = new TH1D("#delta#phi_{T,L} (2p)", "#delta#phi_{T,L} by Leading Proton (2p);#delta#phi_{T,L} [Deg]", numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    TH1D *hdPhi_T_tot_2p = new TH1D("#delta#phi_{T,tot} (2p)", "#delta#phi_{T,tot} by Momentum Sum (2p);#delta#phi_{T,tot} [Deg]", numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     string hdPhi_T_L_2p_Dir = directories.TKI_Directory_map["dPhi_T_2p_Directory"];
     string hdPhi_T_tot_2p_Dir = directories.TKI_Directory_map["dPhi_T_2p_Directory"];
 
     TH2D *hdP_T_L_vs_dAlpha_T_L_2p = new TH2D("#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 2p)",
-                                              "#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];#deltaP_{T,L} [GeV/c];",
-                                              numTH2Dbins_TKI_Plots, 0, 180, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
+                                              "#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];#deltaP_{T,L} [GeV/c];", numTH2Dbins_TKI_Plots, 0,
+                                              180, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
     TH2D *hdP_T_tot_vs_dAlpha_T_tot_2p = new TH2D("#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., 2p)",
                                                   "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];#deltaP_{T,tot} [GeV/c];",
                                                   numTH2Dbins_TKI_Plots, 0, 180, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
@@ -6829,10 +6432,8 @@ void EventAnalyser() {
     //<editor-fold desc="TKI histograms (pFDpCD)">
 
     //<editor-fold desc="TKI plots (pFDpCD)">
-    THStack *sdP_T_pFDpCD = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (pFDpCD)",
-                                        "#deltaP_{T,L} vs. #deltaP_{T,tot} (pFDpCD);#deltaP_{T} [GeV/c]");
-    TH1D *hdP_T_L_pFDpCD = new TH1D("#deltaP_{T,L} (pFDpCD)",
-                                    "#deltaP_{T,L} by leading proton (pFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pL}| [GeV/c]",
+    THStack *sdP_T_pFDpCD = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (pFDpCD)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (pFDpCD);#deltaP_{T} [GeV/c]");
+    TH1D *hdP_T_L_pFDpCD = new TH1D("#deltaP_{T,L} (pFDpCD)", "#deltaP_{T,L} by leading proton (pFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pL}| [GeV/c]",
                                     numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     TH1D *hdP_T_tot_pFDpCD = new TH1D("#deltaP_{T,tot} (pFDpCD)",
                                       "#deltaP_{T,tot} by Momentum Sum (pFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
@@ -6844,18 +6445,15 @@ void EventAnalyser() {
                                             "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (pFDpCD);#delta#alpha_{T} [Deg]");
     TH1D *hdAlpha_T_L_pFDpCD = new TH1D("#delta#alpha_{T,L} (pFDpCD)", "#delta#alpha_{T,L} by leading proton (pFDpCD);#delta#alpha_{T,L} [Deg]",
                                         numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
-    TH1D *hdAlpha_T_tot_pFDpCD = new TH1D("#delta#alpha_{T,tot} (pFDpCD)",
-                                          "#delta#alpha_{T,tot} by Momentum Sum (pFDpCD);#delta#alpha_{T,tot} [Deg]",
+    TH1D *hdAlpha_T_tot_pFDpCD = new TH1D("#delta#alpha_{T,tot} (pFDpCD)", "#delta#alpha_{T,tot} by Momentum Sum (pFDpCD);#delta#alpha_{T,tot} [Deg]",
                                           numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     string hdAlpha_T_L_pFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_pFDpCD_Directory"];
     string hdAlpha_T_tot_pFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_pFDpCD_Directory"];
 
-    THStack *sdPhi_T_pFDpCD = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (pFDpCD)",
-                                          "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (pFDpCD);#delta#phi_{T} [Deg]");
-    TH1D *hdPhi_T_L_pFDpCD = new TH1D("#delta#phi_{T,L} (pFDpCD)", "#delta#phi_{T,L} by leading proton (pFDpCD);#delta#phi_{T,L} [Deg]",
-                                      numTH1Dbins_TKI_dP_T_Plots, 0, 180);
-    TH1D *hdPhi_T_tot_pFDpCD = new TH1D("#delta#phi_{T,tot} (pFDpCD)", "#delta#phi_{T,tot} by Momentum Sum (pFDpCD);#delta#phi_{T,tot} [Deg]",
-                                        numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    THStack *sdPhi_T_pFDpCD = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (pFDpCD)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (pFDpCD);#delta#phi_{T} [Deg]");
+    TH1D *hdPhi_T_L_pFDpCD = new TH1D("#delta#phi_{T,L} (pFDpCD)", "#delta#phi_{T,L} by leading proton (pFDpCD);#delta#phi_{T,L} [Deg]", numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    TH1D *hdPhi_T_tot_pFDpCD = new TH1D("#delta#phi_{T,tot} (pFDpCD)", "#delta#phi_{T,tot} by Momentum Sum (pFDpCD);#delta#phi_{T,tot} [Deg]", numTH1Dbins_TKI_dP_T_Plots, 0,
+                                        180);
     string hdPhi_T_L_pFDpCD_Dir = directories.TKI_Directory_map["dPhi_T_pFDpCD_Directory"];
     string hdPhi_T_tot_pFDpCD_Dir = directories.TKI_Directory_map["dPhi_T_pFDpCD_Directory"];
 
@@ -6872,12 +6470,12 @@ void EventAnalyser() {
     //<editor-fold desc="TKI vs. W (pFDpCD)">
     TH2D *hdP_T_L_vs_W_pFDpCD = new TH2D("#deltaP_{T,L} vs. W (All Int., pFDpCD)",
                                          "#deltaP_{T,L} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                         "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pL}| [GeV/c];",
-                                         numTH2Dbins_TKI_Plots, W_lboundary, W_uboundary, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
+                                         "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pL}| [GeV/c];", numTH2Dbins_TKI_Plots, W_lboundary, W_uboundary, numTH2Dbins_TKI_Plots,
+                                         0, dP_T_boundary);
     TH2D *hdP_T_tot_vs_W_pFDpCD = new TH2D("#deltaP_{T,tot} vs. W (All Int., pFDpCD)",
                                            "#deltaP_{T,tot} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                           "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c];",
-                                           numTH2Dbins_TKI_Plots, W_lboundary, W_uboundary, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
+                                           "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c];", numTH2Dbins_TKI_Plots, W_lboundary, W_uboundary,
+                                           numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
     string hdP_T_L_vs_W_pFDpCD_Dir = directories.TKI_Directory_map["dP_T_pFDpCD_Directory"];
     string hdP_T_tot_vs_W_pFDpCD_Dir = directories.TKI_Directory_map["dP_T_pFDpCD_Directory"];
 
@@ -6896,10 +6494,8 @@ void EventAnalyser() {
     //<editor-fold desc="TKI histograms (nFDpCD)">
 
     //<editor-fold desc="TKI plots (nFDpCD)">
-    THStack *sdP_T_nFDpCD = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (nFDpCD)",
-                                        "#deltaP_{T,L} vs. #deltaP_{T,tot} (nFDpCD);#deltaP_{T} [GeV/c]");
-    TH1D *hdP_T_L_nFDpCD = new TH1D("#deltaP_{T,L} (nFDpCD)",
-                                    "#deltaP_{T,L} by leading nucleon (nFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nL}| [GeV/c]",
+    THStack *sdP_T_nFDpCD = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (nFDpCD)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (nFDpCD);#deltaP_{T} [GeV/c]");
+    TH1D *hdP_T_L_nFDpCD = new TH1D("#deltaP_{T,L} (nFDpCD)", "#deltaP_{T,L} by leading nucleon (nFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nL}| [GeV/c]",
                                     numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     TH1D *hdP_T_tot_nFDpCD = new TH1D("#deltaP_{T,tot} (nFDpCD)",
                                       "#deltaP_{T,tot} by Momentum Sum (nFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}| [GeV/c]",
@@ -6911,18 +6507,15 @@ void EventAnalyser() {
                                             "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (nFDpCD);#delta#alpha_{T} [Deg]");
     TH1D *hdAlpha_T_L_nFDpCD = new TH1D("#delta#alpha_{T,L} (nFDpCD)", "#delta#alpha_{T,L} by leading nucleon (nFDpCD);#delta#alpha_{T,L} [Deg]",
                                         numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
-    TH1D *hdAlpha_T_tot_nFDpCD = new TH1D("#delta#alpha_{T,tot} (nFDpCD)",
-                                          "#delta#alpha_{T,tot} by Momentum Sum (nFDpCD);#delta#alpha_{T,tot} [Deg]",
+    TH1D *hdAlpha_T_tot_nFDpCD = new TH1D("#delta#alpha_{T,tot} (nFDpCD)", "#delta#alpha_{T,tot} by Momentum Sum (nFDpCD);#delta#alpha_{T,tot} [Deg]",
                                           numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     string hdAlpha_T_L_nFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_nFDpCD_Directory"];
     string hdAlpha_T_tot_nFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_nFDpCD_Directory"];
 
-    THStack *sdPhi_T_nFDpCD = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (nFDpCD)",
-                                          "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (nFDpCD);#delta#phi_{T} [Deg]");
-    TH1D *hdPhi_T_L_nFDpCD = new TH1D("#delta#phi_{T,L} (nFDpCD)", "#delta#phi_{T,L} by leading nucleon (nFDpCD);#delta#phi_{T,L} [Deg]",
-                                      numTH1Dbins_TKI_dP_T_Plots, 0, 180);
-    TH1D *hdPhi_T_tot_nFDpCD = new TH1D("#delta#phi_{T,tot} (nFDpCD)", "#delta#phi_{T,tot} by Momentum Sum (nFDpCD);#delta#phi_{T,tot} [Deg]",
-                                        numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    THStack *sdPhi_T_nFDpCD = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (nFDpCD)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (nFDpCD);#delta#phi_{T} [Deg]");
+    TH1D *hdPhi_T_L_nFDpCD = new TH1D("#delta#phi_{T,L} (nFDpCD)", "#delta#phi_{T,L} by leading nucleon (nFDpCD);#delta#phi_{T,L} [Deg]", numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    TH1D *hdPhi_T_tot_nFDpCD = new TH1D("#delta#phi_{T,tot} (nFDpCD)", "#delta#phi_{T,tot} by Momentum Sum (nFDpCD);#delta#phi_{T,tot} [Deg]", numTH1Dbins_TKI_dP_T_Plots, 0,
+                                        180);
     string hdPhi_T_L_nFDpCD_Dir = directories.TKI_Directory_map["dPhi_T_nFDpCD_Directory"];
     string hdPhi_T_tot_nFDpCD_Dir = directories.TKI_Directory_map["dPhi_T_nFDpCD_Directory"];
 
@@ -6939,12 +6532,12 @@ void EventAnalyser() {
     //<editor-fold desc="TKI vs. W (nFDpCD)">
     TH2D *hdP_T_L_vs_W_nFDpCD = new TH2D("#deltaP_{T,L} vs. W (All Int., nFDpCD)",
                                          "#deltaP_{T,L} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                         "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nL}| [GeV/c];",
-                                         numTH2Dbins_TKI_Plots, W_lboundary, W_uboundary, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
+                                         "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nL}| [GeV/c];", numTH2Dbins_TKI_Plots, W_lboundary, W_uboundary, numTH2Dbins_TKI_Plots,
+                                         0, dP_T_boundary);
     TH2D *hdP_T_tot_vs_W_nFDpCD = new TH2D("#deltaP_{T,tot} vs. W (All Int., nFDpCD)",
                                            "#deltaP_{T,tot} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                           "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}| [GeV/c];",
-                                           numTH2Dbins_TKI_Plots, W_lboundary, W_uboundary, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
+                                           "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}| [GeV/c];", numTH2Dbins_TKI_Plots, W_lboundary, W_uboundary,
+                                           numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
     string hdP_T_L_vs_W_nFDpCD_Dir = directories.TKI_Directory_map["dP_T_nFDpCD_Directory"];
     string hdP_T_tot_vs_W_nFDpCD_Dir = directories.TKI_Directory_map["dP_T_nFDpCD_Directory"];
 
@@ -6972,376 +6565,258 @@ void EventAnalyser() {
 
     //<editor-fold desc="Truth level momentum plots (1e cut)">
     hPlot1D hP_e_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL Electron momentum AC", "Electron momentum P^{truth}_{e} AC", "P^{truth}_{e} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "01_P_e_AC_truth_1e_cut",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "01_P_e_AC_truth_1e_cut", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_e_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL Electron momentum BC", "Electron momentum P^{truth}_{e} BC", "P^{truth}_{e} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "01_P_e_BC_truth_1e_cut",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "01_P_e_BC_truth_1e_cut", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_n_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL Neutron momentum AC", "Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "02_P_n_AC_truth_1e_cut",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "02_P_n_AC_truth_1e_cut", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_n_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL Neutron momentum BC", "Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "02_P_n_BC_truth_1e_cut",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "02_P_n_BC_truth_1e_cut", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_p_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL Proton momentum AC", "Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "03_P_p_AC_truth_1e_cut",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "03_P_p_AC_truth_1e_cut", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "03_P_p_BC_truth_1e_cut",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "03_P_p_BC_truth_1e_cut", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pip_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC",
-                                             "P^{truth}_{#pi^{+}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"],
-                                             "04_P_piplus_AC_truth_1e_cut",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC",
-                                             "P^{truth}_{#pi^{+}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"],
-                                             "04_P_piplus_BC_truth_1e_cut",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "04_P_piplus_AC_truth_1e_cut", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "04_P_piplus_BC_truth_1e_cut", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pim_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC",
-                                             "P^{truth}_{#pi^{-}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"],
-                                             "05_P_piminus_AC_truth_1e_cut",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC",
-                                             "P^{truth}_{#pi^{-}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"],
-                                             "05_P_piminus_BC_truth_1e_cut",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "05_P_piminus_AC_truth_1e_cut", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "05_P_piminus_BC_truth_1e_cut", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pi0_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC",
-                                             "P^{truth}_{#pi^{0}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"],
-                                             "06_P_pi0_AC_truth_1e_cut",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pi0_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC",
-                                             "P^{truth}_{#pi^{0}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"],
-                                             "06_P_pi0_BC_truth_1e_cut",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pi0_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC", "P^{truth}_{#pi^{0}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "06_P_pi0_AC_truth_1e_cut", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pi0_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC", "P^{truth}_{#pi^{0}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "06_P_pi0_BC_truth_1e_cut", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_ph_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC",
-                                            "P^{truth}_{#gamma} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"],
-                                            "07_P_ph_AC_truth_1e_cut",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC",
-                                            "P^{truth}_{#gamma} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"],
-                                            "07_P_ph_BC_truth_1e_cut",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "07_P_ph_AC_truth_1e_cut", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "07_P_ph_BC_truth_1e_cut", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_Kp_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL K^{+} momentum AC", "K^{+} momentum P^{truth}_{K^{+}} AC",
-                                            "P^{truth}_{K^{+}} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"],
-                                            "04_P_Kplus_AC_truth_1e_cut",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_Kp_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL K^{+} momentum BC", "K^{+} momentum P^{truth}_{K^{+}} BC",
-                                            "P^{truth}_{K^{+}} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"],
-                                            "04_P_Kplus_BC_truth_1e_cut",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_Kp_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL K^{+} momentum AC", "K^{+} momentum P^{truth}_{K^{+}} AC", "P^{truth}_{K^{+}} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "04_P_Kplus_AC_truth_1e_cut", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_Kp_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL K^{+} momentum BC", "K^{+} momentum P^{truth}_{K^{+}} BC", "P^{truth}_{K^{+}} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"], "04_P_Kplus_BC_truth_1e_cut", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="TL momentum plots for momentum thresholds (1e cut)">
-    hPlot1D hP_e_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD Electron momentum", "FD Electron momentum P^{truth}_{e}",
-                                           "P^{truth}_{e} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "01a_P_e_truth_1e_cut_FD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_e_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD Electron momentum - ZOOMIN",
-                                                  "FD Electron momentum P^{truth}_{e} - ZOOMIN",
-                                                  "P^{truth}_{e} [GeV/c]",
-                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                                  "01a_P_e_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_e_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD Electron momentum", "FD Electron momentum P^{truth}_{e}", "P^{truth}_{e} [GeV/c]",
+                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "01a_P_e_truth_1e_cut_FD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_e_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD Electron momentum - ZOOMIN", "FD Electron momentum P^{truth}_{e} - ZOOMIN", "P^{truth}_{e} [GeV/c]",
+                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "01a_P_e_truth_1e_cut_FD_ZOOMIN", 0, 1,
+                                                  numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_p_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD Proton momentum", "FD Proton momentum P^{truth}_{p}", "P^{truth}_{p} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02a_P_p_truth_1e_cut_FD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02a_P_p_truth_1e_cut_FD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD Proton momentum", "CD Proton momentum P^{truth}_{p}", "P^{truth}_{p} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02b_P_p_truth_1e_cut_CD",
-                                           CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD Proton momentum - ZOOMIN", "FD Proton momentum P^{truth}_{p} - ZOOMIN",
-                                                  "P^{truth}_{p} [GeV/c]",
-                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                                  "02a_P_p_truth_1e_cut_FD_ZOOMIN",
-                                                  0, 1, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD Proton momentum - ZOOMIN", "CD Proton momentum P^{truth}_{p} - ZOOMIN",
-                                                  "P^{truth}_{p} [GeV/c]",
-                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                                  "02b_P_p_truth_1e_cut_CD_ZOOMIN",
-                                                  0, 1, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02b_P_p_truth_1e_cut_CD", CDMomentum_lboundary,
+                                           CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_p_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD Proton momentum - ZOOMIN", "FD Proton momentum P^{truth}_{p} - ZOOMIN", "P^{truth}_{p} [GeV/c]",
+                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02a_P_p_truth_1e_cut_FD_ZOOMIN", 0, 1,
+                                                  numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_p_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD Proton momentum - ZOOMIN", "CD Proton momentum P^{truth}_{p} - ZOOMIN", "P^{truth}_{p} [GeV/c]",
+                                                  directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "02b_P_p_truth_1e_cut_CD_ZOOMIN", 0, 1,
+                                                  numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_LnFD_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL leading FD neutron momentum", "Leading FD neutron momentum P^{truth}_{n}",
-                                              "P^{truth}_{n} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                              "03a_P_LnFD_truth_1e_cut_FD",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots); // leading nFD!
-    hPlot1D hP_LnFD_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL leading FD neutron momentum - ZOOMIN",
-                                                     "Leading FD neutron momentum P^{truth}_{n} - ZOOMIN",
-                                                     "P^{truth}_{n} [GeV/c]",
-                                                     directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+    hPlot1D hP_LnFD_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL leading FD neutron momentum", "Leading FD neutron momentum P^{truth}_{n}", "P^{truth}_{n} [GeV/c]",
+                                              directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "03a_P_LnFD_truth_1e_cut_FD", Momentum_lboundary,
+                                              Momentum_uboundary, numTH1Dbins_Mom_eff_Plots); // leading nFD!
+    hPlot1D hP_LnFD_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL leading FD neutron momentum - ZOOMIN", "Leading FD neutron momentum P^{truth}_{n} - ZOOMIN",
+                                                     "P^{truth}_{n} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                      "03a_P_LnFD_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots); // leading nFD!
-    hPlot1D hP_nFD_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD neutrons momentum", "FD neutrons momentum P^{truth}_{n}",
-                                             "P^{truth}_{n} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                             "03b_P_nFD_truth_1e_cut_FD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots); // all nFD!
-    hPlot1D hP_nFD_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD neutrons momentum - ZOOMIN",
-                                                    "FD neutrons momentum P^{truth}_{n} - ZOOMIN",
-                                                    "P^{truth}_{n} [GeV/c]",
-                                                    directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                                    "03b_P_nFD_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots); // all nFD!
+    hPlot1D hP_nFD_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD neutrons momentum", "FD neutrons momentum P^{truth}_{n}", "P^{truth}_{n} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "03b_P_nFD_truth_1e_cut_FD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots); // all nFD!
+    hPlot1D hP_nFD_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD neutrons momentum - ZOOMIN", "FD neutrons momentum P^{truth}_{n} - ZOOMIN", "P^{truth}_{n} [GeV/c]",
+                                                    directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "03b_P_nFD_truth_1e_cut_FD_ZOOMIN", 0, 1,
+                                                    numTH1Dbins_Mom_eff_Plots); // all nFD!
 
-    hPlot1D hP_piplus_truth_1e_cut = hPlot1D("1e cut", "CD & FD", "TL #pi^{+} momentum", "#pi^{+} momentum P^{truth}_{#pi^{+}}",
-                                             "P^{truth}_{#pi^{+}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                             "04_P_piplus_truth_1e_cut",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_piplus_truth_1e_cut_ZOOMIN = hPlot1D("1e cut", "CD & FD", "TL #pi^{+} momentum - ZOOMIN",
-                                                    "#pi^{+} momentum P^{truth}_{#pi^{+}} - ZOOMIN",
-                                                    "P^{truth}_{#pi^{+}} [GeV/c]",
-                                                    directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+    hPlot1D hP_piplus_truth_1e_cut = hPlot1D("1e cut", "CD & FD", "TL #pi^{+} momentum", "#pi^{+} momentum P^{truth}_{#pi^{+}}", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "04_P_piplus_truth_1e_cut", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_piplus_truth_1e_cut_ZOOMIN = hPlot1D("1e cut", "CD & FD", "TL #pi^{+} momentum - ZOOMIN", "#pi^{+} momentum P^{truth}_{#pi^{+}} - ZOOMIN",
+                                                    "P^{truth}_{#pi^{+}} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                     "04_P_piplus_truth_1e_cut_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_piplus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #pi^{+} momentum", "FD #pi^{+} momentum P^{truth}_{#pi^{+}}",
-                                                "P^{truth}_{#pi^{+}} [GeV/c]",
-                                                directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                                "04a_P_piplus_truth_1e_cut_FD",
-                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_piplus_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD #pi^{+} momentum", "CD #pi^{+} momentum P^{truth}_{#pi^{+}}",
-                                                "P^{truth}_{#pi^{+}} [GeV/c]",
-                                                directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                                "04b_P_piplus_truth_1e_cut_CD",
+    hPlot1D hP_piplus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #pi^{+} momentum", "FD #pi^{+} momentum P^{truth}_{#pi^{+}}", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                                directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "04a_P_piplus_truth_1e_cut_FD", Momentum_lboundary,
+                                                Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_piplus_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD #pi^{+} momentum", "CD #pi^{+} momentum P^{truth}_{#pi^{+}}", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                                directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "04b_P_piplus_truth_1e_cut_CD",
                                                 CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_piplus_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #pi^{+} momentum - ZOOMIN",
-                                                       "FD #pi^{+} momentum P^{truth}_{#pi^{+}} - ZOOMIN",
-                                                       "P^{truth}_{#pi^{+}} [GeV/c]",
-                                                       directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+    hPlot1D hP_piplus_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #pi^{+} momentum - ZOOMIN", "FD #pi^{+} momentum P^{truth}_{#pi^{+}} - ZOOMIN",
+                                                       "P^{truth}_{#pi^{+}} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                        "04a_P_piplus_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_piplus_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD #pi^{+} momentum - ZOOMIN",
-                                                       "CD #pi^{+} momentum P^{truth}_{#pi^{+}} - ZOOMIN",
-                                                       "P^{truth}_{#pi^{+}} [GeV/c]",
-                                                       directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+    hPlot1D hP_piplus_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD #pi^{+} momentum - ZOOMIN", "CD #pi^{+} momentum P^{truth}_{#pi^{+}} - ZOOMIN",
+                                                       "P^{truth}_{#pi^{+}} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                        "04b_P_piplus_truth_1e_cut_CD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_piminus_truth_1e_cut = hPlot1D("1e cut", "CD & FD", "TL #pi^{-} momentum", "#pi^{-} momentum P^{truth}_{#pi^{-}}",
-                                              "P^{truth}_{#pi^{-}} [GeV/c]",
-                                              directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                              "05_P_piminus_truth_1e_cut",
-                                              Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_piminus_truth_1e_cut_ZOOMIN = hPlot1D("1e cut", "CD & FD", "TL #pi^{-} momentum - ZOOMIN",
-                                                     "#pi^{-} momentum P^{truth}_{#pi^{-}} - ZOOMIN",
-                                                     "P^{truth}_{#pi^{-}} [GeV/c]",
-                                                     directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+    hPlot1D hP_piminus_truth_1e_cut = hPlot1D("1e cut", "CD & FD", "TL #pi^{-} momentum", "#pi^{-} momentum P^{truth}_{#pi^{-}}", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                              directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "05_P_piminus_truth_1e_cut", Momentum_lboundary,
+                                              Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_piminus_truth_1e_cut_ZOOMIN = hPlot1D("1e cut", "CD & FD", "TL #pi^{-} momentum - ZOOMIN", "#pi^{-} momentum P^{truth}_{#pi^{-}} - ZOOMIN",
+                                                     "P^{truth}_{#pi^{-}} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                      "05_P_piminus_truth_1e_cut_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_piminus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #pi^{-} momentum", "FD #pi^{-} momentum P^{truth}_{#pi^{-}}",
-                                                 "P^{truth}_{#pi^{-}} [GeV/c]",
-                                                 directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                                 "05a_P_piminus_truth_1e_cut_FD",
+    hPlot1D hP_piminus_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #pi^{-} momentum", "FD #pi^{-} momentum P^{truth}_{#pi^{-}}", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                                 directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "05a_P_piminus_truth_1e_cut_FD",
                                                  Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_piminus_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD #pi^{-} momentum", "CD #pi^{-} momentum P^{truth}_{#pi^{-}}",
-                                                 "P^{truth}_{#pi^{-}} [GeV/c]",
-                                                 directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
-                                                 "05b_P_piminus_truth_1e_cut_CD",
+    hPlot1D hP_piminus_truth_1e_cut_CD = hPlot1D("1e cut", "CD", "TL CD #pi^{-} momentum", "CD #pi^{-} momentum P^{truth}_{#pi^{-}}", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                                 directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "05b_P_piminus_truth_1e_cut_CD",
                                                  CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_piminus_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #pi^{-} momentum - ZOOMIN",
-                                                        "FD #pi^{-} momentum P^{truth}_{#pi^{-}} - ZOOMIN",
-                                                        "P^{truth}_{#pi^{-}} [GeV/c]",
-                                                        directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+    hPlot1D hP_piminus_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #pi^{-} momentum - ZOOMIN", "FD #pi^{-} momentum P^{truth}_{#pi^{-}} - ZOOMIN",
+                                                        "P^{truth}_{#pi^{-}} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                         "05a_P_piminus_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_piminus_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD #pi^{-} momentum - ZOOMIN",
-                                                        "CD #pi^{-} momentum P^{truth}_{#pi^{-}} - ZOOMIN",
-                                                        "P^{truth}_{#pi^{-}} [GeV/c]",
-                                                        directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+    hPlot1D hP_piminus_truth_1e_cut_CD_ZOOMIN = hPlot1D("1e cut", "CD", "TL CD #pi^{-} momentum - ZOOMIN", "CD #pi^{-} momentum P^{truth}_{#pi^{-}} - ZOOMIN",
+                                                        "P^{truth}_{#pi^{-}} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                         "05b_P_piminus_truth_1e_cut_CD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_ph_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #gamma momentum", "FD #gamma momentum P^{truth}_{#gamma}",
-                                            "P^{truth}_{#gamma} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "09a_P_ph_truth_1e_cut_FD",
-                                            CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #gamma momentum - ZOOMIN",
-                                                   "FD #gamma momentum P^{truth}_{#gamma} - ZOOMIN",
-                                                   "P^{truth}_{#gamma} [GeV/c]",
-                                                   directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
+    hPlot1D hP_ph_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #gamma momentum", "FD #gamma momentum P^{truth}_{#gamma}", "P^{truth}_{#gamma} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "09a_P_ph_truth_1e_cut_FD", CDMomentum_lboundary,
+                                            CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #gamma momentum - ZOOMIN", "FD #gamma momentum P^{truth}_{#gamma} - ZOOMIN",
+                                                   "P^{truth}_{#gamma} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                    "09a_P_ph_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (1e cut)">
-    hPlot1D hTheta_e_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC",
-                                               "#theta^{truth}_{e} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                               "01_Theta_e_AC_truth_1e_cut",
+    hPlot1D hTheta_e_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC", "#theta^{truth}_{e} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"], "01_Theta_e_AC_truth_1e_cut",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_e_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC",
-                                               "#theta^{truth}_{e} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                               "01_Theta_e_BC_truth_1e_cut",
+    hPlot1D hTheta_e_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC", "#theta^{truth}_{e} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"], "01_Theta_e_BC_truth_1e_cut",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_n_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC",
-                                               "#theta^{truth}_{n} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                               "02_Theta_n_AC_truth_1e_cut",
+    hPlot1D hTheta_n_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC", "#theta^{truth}_{n} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"], "02_Theta_n_AC_truth_1e_cut",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_n_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC",
-                                               "#theta^{truth}_{n} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                               "02_Theta_n_BC_truth_1e_cut",
+    hPlot1D hTheta_n_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC", "#theta^{truth}_{n} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"], "02_Theta_n_BC_truth_1e_cut",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_p_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC",
-                                               "#theta^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                               "03_Theta_p_AC_truth_1e_cut",
+    hPlot1D hTheta_p_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"], "03_Theta_p_AC_truth_1e_cut",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC",
-                                               "#theta^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                               "03_Theta_p_BC_truth_1e_cut",
+    hPlot1D hTheta_p_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"], "03_Theta_p_BC_truth_1e_cut",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pip_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                                 "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                                 "04_Theta_piplus_AC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
+                                                 "04_Theta_piplus_AC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_pip_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{#pi^{+}} BC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                                 "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                                 "04_Theta_piplus_BC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
+                                                 "04_Theta_piplus_BC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pim_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{#pi^{-}} AC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                                 "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                                 "05_Theta_piminus_AC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
+                                                 "05_Theta_piminus_AC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_pim_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{#pi^{-}} BC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                                 "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                                 "05_Theta_piminus_BC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
+                                                 "05_Theta_piminus_BC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pi0_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{#pi^{0}} AC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
-                                                 "#theta^{truth}_{#pi^{0}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                                 "06_Theta_pi0_AC_truth_1e_cut",
-                                                 Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{0}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
+                                                 "06_Theta_pi0_AC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_pi0_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{#pi^{0}} BC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
-                                                 "#theta^{truth}_{#pi^{0}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
-                                                 "06_Theta_pi0_BC_truth_1e_cut",
-                                                 Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{0}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
+                                                 "06_Theta_pi0_BC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_ph_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC",
-                                                "#theta^{truth}_{#gamma} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
+                                                "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
                                                 "07_Theta_ph_AC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_ph_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC",
-                                                "#theta^{truth}_{#gamma} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
+                                                "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"],
                                                 "07_Theta_ph_BC_truth_1e_cut", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (1e cut)">
-    hPlot1D hPhi_e_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{e} AC", "#phi^{truth}_{e} of Outgoing Electron AC",
-                                             "#phi^{truth}_{e} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                             "01_Phi_e_AC_truth_1e_cut",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_e_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron BC",
-                                             "#phi^{truth}_{e} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                             "01_Phi_e_BC_truth_1e_cut",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_e_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{e} AC", "#phi^{truth}_{e} of Outgoing Electron AC", "#phi^{truth}_{e} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "01_Phi_e_AC_truth_1e_cut", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_e_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron BC", "#phi^{truth}_{e} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "01_Phi_e_BC_truth_1e_cut", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_n_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing Neutron AC",
-                                             "#phi^{truth}_{n} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                             "02_Phi_n_AC_truth_1e_cut",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_n_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC",
-                                             "#phi^{truth}_{n} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                             "02_Phi_n_BC_truth_1e_cut",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_n_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing Neutron AC", "#phi^{truth}_{n} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "02_Phi_n_AC_truth_1e_cut", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_n_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC", "#phi^{truth}_{n} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "02_Phi_n_BC_truth_1e_cut", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_p_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC",
-                                             "#phi^{truth}_{p} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                             "03_Phi_p_AC_truth_1e_cut",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC",
-                                             "#phi^{truth}_{p} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                             "03_Phi_p_BC_truth_1e_cut",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "03_Phi_p_AC_truth_1e_cut", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "03_Phi_p_BC_truth_1e_cut", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pip_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                               "#phi^{truth}_{#pi^{+}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                               "04_Phi_piplus_AC_truth_1e_cut", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pip_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                               "#phi^{truth}_{#pi^{+}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                               "04_Phi_piplus_BC_truth_1e_cut", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pip_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC", "#phi^{truth}_{#pi^{+}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "04_Phi_piplus_AC_truth_1e_cut", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pip_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC", "#phi^{truth}_{#pi^{+}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "04_Phi_piplus_BC_truth_1e_cut", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pim_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                               "#phi^{truth}_{#pi^{-}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                               "05_Phi_piminus_AC_truth_1e_cut", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pim_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                               "#phi^{truth}_{#pi^{-}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                               "05_Phi_piminus_BC_truth_1e_cut", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pim_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC", "#phi^{truth}_{#pi^{-}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "05_Phi_piminus_AC_truth_1e_cut", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pim_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC", "#phi^{truth}_{#pi^{-}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "05_Phi_piminus_BC_truth_1e_cut", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pi0_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
-                                               "#phi^{truth}_{#pi^{0}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                               "06_Phi_pi0_AC_truth_1e_cut", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pi0_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
-                                               "#phi^{truth}_{#pi^{0}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                               "06_Phi_pi0_BC_truth_1e_cut", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pi0_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC", "#phi^{truth}_{#pi^{0}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "06_Phi_pi0_AC_truth_1e_cut", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pi0_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC", "#phi^{truth}_{#pi^{0}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "06_Phi_pi0_BC_truth_1e_cut", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_ph_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC",
-                                              "#phi^{truth}_{#gamma} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                              "07_Phi_ph_AC_truth_1e_cut",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC",
-                                              "#phi^{truth}_{#gamma} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"],
-                                              "07_Phi_ph_BC_truth_1e_cut",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_AC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC", "#phi^{truth}_{#gamma} [Deg]",
+                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "07_Phi_ph_AC_truth_1e_cut", Phi_lboundary,
+                                              Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_BC_truth_1e_cut = hPlot1D("1e cut", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC", "#phi^{truth}_{#gamma} [Deg]",
+                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"], "07_Phi_ph_BC_truth_1e_cut", Phi_lboundary,
+                                              Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta vs. phi plots (1e cut)">
-    hPlot2D hTheta_e_vs_Phi_e_truth_1e_cut = hPlot2D("1e cut", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]",
-                                                     "#theta_{e} [Deg]",
-                                                     directories.Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"],
-                                                     "01_Theta_e_vs_Phi_e_truth_1e_cut",
-                                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                                     numTH2Dbins_Electron_Ang_eff_Plots, numTH2Dbins_Electron_Ang_eff_Plots);
+    hPlot2D hTheta_e_vs_Phi_e_truth_1e_cut = hPlot2D("1e cut", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
+                                                     directories.Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"], "01_Theta_e_vs_Phi_e_truth_1e_cut",
+                                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Electron_Ang_eff_Plots,
+                                                     numTH2Dbins_Electron_Ang_eff_Plots);
 
-    hPlot2D hTheta_nFD_vs_Phi_nFD_truth_1e_cut = hPlot2D("1e cut", "FD", "TL #theta_{nFD} vs. #phi_{nFD}", "TL #theta_{nFD} vs. #phi_{nFD}",
-                                                         "#phi_{nFD} [Deg]",
-                                                         "#theta_{nFD} [Deg]",
-                                                         directories.Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"],
-                                                         "02_Theta_nFD_vs_Phi_nFD_truth_1e_cut", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                         Theta_uboundary_FD,
+    hPlot2D hTheta_nFD_vs_Phi_nFD_truth_1e_cut = hPlot2D("1e cut", "FD", "TL #theta_{nFD} vs. #phi_{nFD}", "TL #theta_{nFD} vs. #phi_{nFD}", "#phi_{nFD} [Deg]",
+                                                         "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"],
+                                                         "02_Theta_nFD_vs_Phi_nFD_truth_1e_cut", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
                                                          numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
 
-    hPlot2D hTheta_pFD_vs_Phi_pFD_truth_1e_cut = hPlot2D("1e cut", "FD", "TL #theta_{pFD} vs. #phi_{pFD}", "TL #theta_{pFD} vs. #phi_{pFD}",
-                                                         "#phi_{pFD} [Deg]",
-                                                         "#theta_{pFD} [Deg]",
-                                                         directories.Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"],
-                                                         "03_Theta_pFD_vs_Phi_pFD_truth_1e_cut", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                         Theta_uboundary_FD,
+    hPlot2D hTheta_pFD_vs_Phi_pFD_truth_1e_cut = hPlot2D("1e cut", "FD", "TL #theta_{pFD} vs. #phi_{pFD}", "TL #theta_{pFD} vs. #phi_{pFD}", "#phi_{pFD} [Deg]",
+                                                         "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"],
+                                                         "03_Theta_pFD_vs_Phi_pFD_truth_1e_cut", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
                                                          numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     //</editor-fold>
 
@@ -7351,273 +6826,221 @@ void EventAnalyser() {
 
     //<editor-fold desc="Truth level momentum plots (1p)">
     hPlot1D hP_e_AC_truth_1p = hPlot1D("1p", "", "TL Electron momentum AC", "Electron momentum P^{truth}_{e} AC", "P^{truth}_{e} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "01_P_e_AC_truth_1p",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "01_P_e_AC_truth_1p", Momentum_lboundary, Momentum_uboundary,
+                                       numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_e_BC_truth_1p = hPlot1D("1p", "", "TL Electron momentum BC", "Electron momentum P^{truth}_{e} BC", "P^{truth}_{e} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "01_P_e_BC_truth_1p",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "01_P_e_BC_truth_1p", Momentum_lboundary, Momentum_uboundary,
+                                       numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_n_AC_truth_1p = hPlot1D("1p", "", "TL Neutron momentum AC", "Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "02_P_n_AC_truth_1p",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "02_P_n_AC_truth_1p", Momentum_lboundary, Momentum_uboundary,
+                                       numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_n_BC_truth_1p = hPlot1D("1p", "", "TL Neutron momentum BC", "Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "02_P_n_BC_truth_1p",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "02_P_n_BC_truth_1p", Momentum_lboundary, Momentum_uboundary,
+                                       numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_p_AC_truth_1p = hPlot1D("1p", "", "TL Proton momentum AC", "Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03a_P_p_AC_truth_1p",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03a_P_p_AC_truth_1p", Momentum_lboundary,
+                                       Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_BC_truth_1p = hPlot1D("1p", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03a_P_p_BC_truth_1p",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03a_P_p_BC_truth_1p", Momentum_lboundary,
+                                       Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_pFD_AC_truth_1p = hPlot1D("1p", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03b_P_pFD_AC_truth_1p",
-                                         FDMomentum_lboundary, FDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03b_P_pFD_AC_truth_1p", FDMomentum_lboundary,
+                                         FDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_pFD_BC_truth_1p = hPlot1D("1p", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03b_P_pFD_BC_truth_1p",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03b_P_pFD_BC_truth_1p", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pip_AC_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC",
-                                         "P^{truth}_{#pi^{+}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "04_P_piplus_AC_truth_1p",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_BC_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC",
-                                         "P^{truth}_{#pi^{+}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "04_P_piplus_BC_truth_1p",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_AC_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "04_P_piplus_AC_truth_1p", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_BC_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "04_P_piplus_BC_truth_1p", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pim_AC_truth_1p = hPlot1D("1p", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC",
-                                         "P^{truth}_{#pi^{-}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "05_P_piminus_AC_truth_1p",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_BC_truth_1p = hPlot1D("1p", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC",
-                                         "P^{truth}_{#pi^{-}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "05_P_piminus_BC_truth_1p",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_AC_truth_1p = hPlot1D("1p", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "05_P_piminus_AC_truth_1p", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_BC_truth_1p = hPlot1D("1p", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "05_P_piminus_BC_truth_1p", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pi0_AC_truth_1p = hPlot1D("1p", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC",
-                                         "P^{truth}_{#pi^{0}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "06_P_pi0_AC_truth_1p",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pi0_BC_truth_1p = hPlot1D("1p", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC",
-                                         "P^{truth}_{#pi^{0}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "06_P_pi0_BC_truth_1p",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pi0_AC_truth_1p = hPlot1D("1p", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC", "P^{truth}_{#pi^{0}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "06_P_pi0_AC_truth_1p", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pi0_BC_truth_1p = hPlot1D("1p", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC", "P^{truth}_{#pi^{0}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "06_P_pi0_BC_truth_1p", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_ph_AC_truth_1p = hPlot1D("1p", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
-                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07a_P_ph_AC_truth_1p",
-                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07a_P_ph_AC_truth_1p", Momentum_lboundary,
+                                        Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_ph_BC_truth_1p = hPlot1D("1p", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
-                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07a_P_ph_BC_truth_1p",
-                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_AC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #gamma momentum AC", "FD #gamma momentum P^{truth}_{#gamma} AC",
-                                           "P^{truth}_{#gamma} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07b_P_ph_AC_truth_1p_FD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_BC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #gamma momentum BC", "FD #gamma momentum P^{truth}_{#gamma} BC",
-                                           "P^{truth}_{#gamma} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07b_P_ph_BC_truth_1p_FD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07a_P_ph_BC_truth_1p", Momentum_lboundary,
+                                        Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_AC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #gamma momentum AC", "FD #gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07b_P_ph_AC_truth_1p_FD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_BC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #gamma momentum BC", "FD #gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07b_P_ph_BC_truth_1p_FD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (1p)">
-    hPlot1D hTheta_e_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC",
-                                           "#theta^{truth}_{e} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "01_Theta_e_AC_truth_1p",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_e_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC",
-                                           "#theta^{truth}_{e} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "01_Theta_e_BC_truth_1p",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_e_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC", "#theta^{truth}_{e} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "01_Theta_e_AC_truth_1p", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_e_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC", "#theta^{truth}_{e} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "01_Theta_e_BC_truth_1p", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_n_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC",
-                                           "#theta^{truth}_{n} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "02_Theta_n_AC_truth_1p",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_n_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC",
-                                           "#theta^{truth}_{n} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "02_Theta_n_BC_truth_1p",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_n_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC", "#theta^{truth}_{n} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "02_Theta_n_AC_truth_1p", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_n_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC", "#theta^{truth}_{n} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "02_Theta_n_BC_truth_1p", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_p_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC",
-                                           "#theta^{truth}_{p} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03a_Theta_p_AC_truth_1p",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC",
-                                           "#theta^{truth}_{p} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03a_Theta_p_BC_truth_1p",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pFD_AC_truth_1p = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC",
-                                             "#theta^{truth}_{p} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
-                                             "03b_Theta_pFD_AC_truth_1p",
-                                             Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pFD_BC_truth_1p = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC",
-                                             "#theta^{truth}_{p} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
-                                             "03b_Theta_pFD_BC_truth_1p",
-                                             Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_p_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03a_Theta_p_AC_truth_1p", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_p_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03a_Theta_p_BC_truth_1p", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_AC_truth_1p = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC", "#theta^{truth}_{p} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03b_Theta_pFD_AC_truth_1p", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_BC_truth_1p = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC", "#theta^{truth}_{p} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03b_Theta_pFD_BC_truth_1p", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_pip_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                             "#theta^{truth}_{#pi^{+}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
-                                             "04_Theta_piplus_AC_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pip_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}} BC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                             "#theta^{truth}_{#pi^{+}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
-                                             "04_Theta_piplus_BC_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pip_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC", "#theta^{truth}_{#pi^{+}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "04_Theta_piplus_AC_truth_1p", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pip_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}} BC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC", "#theta^{truth}_{#pi^{+}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "04_Theta_piplus_BC_truth_1p", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_pim_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{-}} AC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                             "#theta^{truth}_{#pi^{-}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
-                                             "05_Theta_piminus_AC_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pim_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{-}} BC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                             "#theta^{truth}_{#pi^{-}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
-                                             "05_Theta_piminus_BC_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pim_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{-}} AC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC", "#theta^{truth}_{#pi^{-}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "05_Theta_piminus_AC_truth_1p", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pim_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{-}} BC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC", "#theta^{truth}_{#pi^{-}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "05_Theta_piminus_BC_truth_1p", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_pi0_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{0}} AC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
-                                             "#theta^{truth}_{#pi^{0}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
-                                             "06_Theta_pi0_AC_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pi0_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{0}} BC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
-                                             "#theta^{truth}_{#pi^{0}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
-                                             "06_Theta_pi0_BC_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pi0_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{0}} AC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC", "#theta^{truth}_{#pi^{0}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "06_Theta_pi0_AC_truth_1p", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pi0_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{0}} BC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC", "#theta^{truth}_{#pi^{0}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "06_Theta_pi0_BC_truth_1p", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_ph_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC",
-                                            "#theta^{truth}_{#gamma} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
-                                            "07a_Theta_ph_AC_truth_1p",
-                                            Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_ph_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC",
-                                            "#theta^{truth}_{#gamma} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
-                                            "07a_Theta_ph_BC_truth_1p",
-                                            Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_ph_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC", "#theta^{truth}_{#gamma} [Deg]",
+                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "07a_Theta_ph_AC_truth_1p", Theta_lboundary_FD,
+                                            Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_ph_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC", "#theta^{truth}_{#gamma} [Deg]",
+                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "07a_Theta_ph_BC_truth_1p", Theta_lboundary_FD,
+                                            Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_ph_AC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of FD Outgoing #gamma AC",
-                                               "#theta^{truth}_{#gamma} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
+                                               "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
                                                "07b_Theta_ph_AC_truth_1p_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_ph_BC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of FD Outgoing #gamma BC",
-                                               "#theta^{truth}_{#gamma} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
+                                               "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
                                                "07b_Theta_ph_BC_truth_1p_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (1p)">
     hPlot1D hPhi_e_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{e} AC", "#phi^{truth}_{e} of Outgoing Electron AC", "#phi^{truth}_{e} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "01_Phi_e_AC_truth_1p",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "01_Phi_e_AC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_e_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron BC", "#phi^{truth}_{e} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "01_Phi_e_BC_truth_1p",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "01_Phi_e_BC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_n_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing Neutron AC", "#phi^{truth}_{n} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "02_Phi_n_AC_truth_1p",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "02_Phi_n_AC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_n_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC", "#phi^{truth}_{n} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "02_Phi_n_BC_truth_1p",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "02_Phi_n_BC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_p_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03a_Phi_p_AC_truth_1p",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03a_Phi_p_AC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_p_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03a_Phi_p_BC_truth_1p",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pFD_AC_truth_1p = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of FD Outgoing Proton AC",
-                                           "#phi^{truth}_{p} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03b_Phi_pFD_AC_truth_1p",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pFD_BC_truth_1p = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of FD Outgoing Proton BC",
-                                           "#phi^{truth}_{p} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03b_Phi_pFD_BC_truth_1p",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03a_Phi_p_BC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pFD_AC_truth_1p = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of FD Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03b_Phi_pFD_AC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                           numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pFD_BC_truth_1p = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of FD Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03b_Phi_pFD_BC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                           numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pip_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                           "#phi^{truth}_{#pi^{+}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "04_Phi_piplus_AC_truth_1p",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pip_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                           "#phi^{truth}_{#pi^{+}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "04_Phi_piplus_BC_truth_1p",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pip_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC", "#phi^{truth}_{#pi^{+}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "04_Phi_piplus_AC_truth_1p", Phi_lboundary,
+                                           Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pip_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC", "#phi^{truth}_{#pi^{+}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "04_Phi_piplus_BC_truth_1p", Phi_lboundary,
+                                           Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pim_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                           "#phi^{truth}_{#pi^{-}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "05_Phi_piminus_AC_truth_1p",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pim_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                           "#phi^{truth}_{#pi^{-}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "05_Phi_piminus_BC_truth_1p",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pim_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC", "#phi^{truth}_{#pi^{-}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "05_Phi_piminus_AC_truth_1p", Phi_lboundary,
+                                           Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pim_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC", "#phi^{truth}_{#pi^{-}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "05_Phi_piminus_BC_truth_1p", Phi_lboundary,
+                                           Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pi0_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
-                                           "#phi^{truth}_{#pi^{0}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "06_Phi_pi0_AC_truth_1p",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pi0_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
-                                           "#phi^{truth}_{#pi^{0}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "06_Phi_pi0_BC_truth_1p",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pi0_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC", "#phi^{truth}_{#pi^{0}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "06_Phi_pi0_AC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                           numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pi0_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC", "#phi^{truth}_{#pi^{0}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "06_Phi_pi0_BC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                           numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_ph_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC",
-                                          "#phi^{truth}_{#gamma} [Deg]",
-                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "07a_Phi_ph_AC_truth_1p",
-                                          Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC",
-                                          "#phi^{truth}_{#gamma} [Deg]",
-                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "07a_Phi_ph_BC_truth_1p",
-                                          Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_AC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma AC",
-                                             "#phi^{truth}_{#gamma} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"],
-                                             "07b_Phi_ph_AC_truth_1p_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_BC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC",
-                                             "#phi^{truth}_{#gamma} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"],
-                                             "07b_Phi_ph_BC_truth_1p_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_AC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC", "#phi^{truth}_{#gamma} [Deg]",
+                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "07a_Phi_ph_AC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                          numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC", "#phi^{truth}_{#gamma} [Deg]",
+                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "07a_Phi_ph_BC_truth_1p", Phi_lboundary, Phi_uboundary,
+                                          numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_AC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma AC", "#phi^{truth}_{#gamma} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "07b_Phi_ph_AC_truth_1p_FD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_BC_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC", "#phi^{truth}_{#gamma} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "07b_Phi_ph_BC_truth_1p_FD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="TL fiducial cuts (1p)">
     hPlot2D hpFD_Hit_map_1p_BEC = hPlot2D("1p", "FD", "FD proton hit map BEC", "FD proton hit map BEC", "x_{pFD}", "y_{pFD}",
-                                          directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"],
-                                          "01a_Proton_FD_Hit_map_BEC_1p", -1.1, 1.1, -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots,
-                                          numTH2Dbins_Nucleon_Ang_eff_Plots);
+                                          directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"], "01a_Proton_FD_Hit_map_BEC_1p", -1.1, 1.1, -1.1, 1.1,
+                                          numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     hPlot2D hpFD_Hit_map_1p_AEC = hPlot2D("1p", "FD", "FD proton hit map AEC", "FD proton hit map AEC", "x_{pFD}", "y_{pFD}",
-                                          directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"],
-                                          "01b_Proton_FD_Hit_map_AEC_1p", -1.1, 1.1, -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots,
-                                          numTH2Dbins_Nucleon_Ang_eff_Plots);
+                                          directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"], "01b_Proton_FD_Hit_map_AEC_1p", -1.1, 1.1, -1.1, 1.1,
+                                          numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
 
-    hPlot2D hTheta_pFD_vs_Phi_pFD_1p_BEC = hPlot2D("1p", "FD", "#theta_{pFD} vs. #phi_{pFD} BEC", "TL #theta_{pFD} vs. #phi_{pFD} BEC",
-                                                   "#phi_{pFD} [Deg]",
+    hPlot2D hTheta_pFD_vs_Phi_pFD_1p_BEC = hPlot2D("1p", "FD", "#theta_{pFD} vs. #phi_{pFD} BEC", "TL #theta_{pFD} vs. #phi_{pFD} BEC", "#phi_{pFD} [Deg]",
                                                    "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"],
-                                                   "02a_Theta_pFD_vs_Phi_pFD_BEC_1p", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                   Theta_uboundary_FD,
+                                                   "02a_Theta_pFD_vs_Phi_pFD_BEC_1p", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
                                                    numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
-    hPlot2D hTheta_pFD_vs_Phi_pFD_1p_AEC = hPlot2D("1p", "FD", "#theta_{pFD} vs. #phi_{pFD} AEC", "TL #theta_{pFD} vs. #phi_{pFD} AEC",
-                                                   "#phi_{pFD} [Deg]",
+    hPlot2D hTheta_pFD_vs_Phi_pFD_1p_AEC = hPlot2D("1p", "FD", "#theta_{pFD} vs. #phi_{pFD} AEC", "TL #theta_{pFD} vs. #phi_{pFD} AEC", "#phi_{pFD} [Deg]",
                                                    "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"],
-                                                   "02b_Theta_pFD_vs_Phi_pFD_AEC_1p", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                   Theta_uboundary_FD,
+                                                   "02b_Theta_pFD_vs_Phi_pFD_AEC_1p", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
                                                    numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta vs. phi plots (1p)">
-    hPlot2D hTheta_e_vs_Phi_e_truth_1p = hPlot2D("1p", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]",
-                                                 "#theta_{e} [Deg]", directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"],
-                                                 "01_Theta_e_vs_Phi_e_truth_1p", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                 Theta_uboundary_FD,
-                                                 numTH2Dbins_Electron_Ang_eff_Plots, numTH2Dbins_Electron_Ang_eff_Plots);
+    hPlot2D hTheta_e_vs_Phi_e_truth_1p = hPlot2D("1p", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"], "01_Theta_e_vs_Phi_e_truth_1p", Phi_lboundary,
+                                                 Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Electron_Ang_eff_Plots,
+                                                 numTH2Dbins_Electron_Ang_eff_Plots);
 
-    hPlot2D hTheta_pFD_vs_Phi_pFD_truth_1p = hPlot2D("1p", "FD", "TL #theta_{pFD} vs. #phi_{pFD}", "TL #theta_{pFD} vs. #phi_{pFD}",
-                                                     "#phi_{pFD} [Deg]",
-                                                     "#theta_{pFD} [Deg]",
-                                                     directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"],
-                                                     "02_Theta_pFD_vs_Phi_pFD_truth_1p", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                     Theta_uboundary_FD,
-                                                     numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
+    hPlot2D hTheta_pFD_vs_Phi_pFD_truth_1p = hPlot2D("1p", "FD", "TL #theta_{pFD} vs. #phi_{pFD}", "TL #theta_{pFD} vs. #phi_{pFD}", "#phi_{pFD} [Deg]", "#theta_{pFD} [Deg]",
+                                                     directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"], "02_Theta_pFD_vs_Phi_pFD_truth_1p",
+                                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Nucleon_Ang_eff_Plots,
+                                                     numTH2Dbins_Nucleon_Ang_eff_Plots);
     //</editor-fold>
 
     //</editor-fold>
@@ -7626,521 +7049,383 @@ void EventAnalyser() {
 
     //<editor-fold desc="Truth level momentum plots (1n)">
     hPlot1D hP_e_AC_truth_1n = hPlot1D("1n", "", "TL Electron momentum AC", "Electron momentum P^{truth}_{e} AC", "P^{truth}_{e} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "01_P_e_AC_truth_1n",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "01_P_e_AC_truth_1n", Momentum_lboundary, Momentum_uboundary,
+                                       numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_e_BC_truth_1n = hPlot1D("1n", "", "TL Electron momentum BC", "Electron momentum P^{truth}_{e} BC", "P^{truth}_{e} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "01_P_e_BC_truth_1n",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "01_P_e_BC_truth_1n", Momentum_lboundary, Momentum_uboundary,
+                                       numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_n_AC_truth_1n = hPlot1D("1n", "", "TL Neutron momentum AC", "Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02a_P_n_AC_truth_1n",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02a_P_n_AC_truth_1n", Momentum_lboundary,
+                                       Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_n_BC_truth_1n = hPlot1D("1n", "", "TL Neutron momentum BC", "Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02a_P_n_BC_truth_1n",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02a_P_n_BC_truth_1n", Momentum_lboundary,
+                                       Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_nFD_AC_truth_1n = hPlot1D("1n", "FD", "FD TL Neutron momentum AC", "FD Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02b_P_nFD_AC_truth_1n",
-                                         FDMomentum_lboundary, FDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02b_P_nFD_AC_truth_1n", FDMomentum_lboundary,
+                                         FDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_nFD_BC_truth_1n = hPlot1D("1n", "FD", "CD TL Neutron momentum BC", "FD Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02b_P_nFD_BC_truth_1n",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "02b_P_nFD_BC_truth_1n", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_p_AC_truth_1n = hPlot1D("1n", "", "TL Proton momentum AC", "Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03_P_p_AC_truth_1n",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03_P_p_AC_truth_1n", Momentum_lboundary, Momentum_uboundary,
+                                       numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_BC_truth_1n = hPlot1D("1n", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03_P_p_BC_truth_1n",
-                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                       directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03_P_p_BC_truth_1n", Momentum_lboundary, Momentum_uboundary,
+                                       numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03FD_P_p_AC_truth_1n_FD",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03FD_P_p_AC_truth_1n_FD", Momentum_lboundary,
+                                          Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03FD_P_p_BC_truth_1n_FD",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03FD_P_p_BC_truth_1n_FD", Momentum_lboundary,
+                                          Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03CD_P_p_AC_truth_1n_CD",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03CD_P_p_AC_truth_1n_CD", Momentum_lboundary,
+                                          Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03CD_P_p_BC_truth_1n_CD",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet Proton momentum AC", "undet Proton momentum P^{truth}_{p} AC",
-                                             "P^{truth}_{p} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"],
-                                             "03undet_P_p_AC_truth_1n_undet",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_p_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet Proton momentum BC", "undet Proton momentum P^{truth}_{p} BC",
-                                             "P^{truth}_{p} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"],
-                                             "03undet_P_p_BC_truth_1n_undet",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03CD_P_p_BC_truth_1n_CD", Momentum_lboundary,
+                                          Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_p_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet Proton momentum AC", "undet Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03undet_P_p_AC_truth_1n_undet", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_p_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet Proton momentum BC", "undet Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "03undet_P_p_BC_truth_1n_undet", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pip_AC_truth_1n = hPlot1D("1n", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC",
-                                         "P^{truth}_{#pi^{+}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04_P_piplus_AC_truth_1n",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_BC_truth_1n = hPlot1D("1n", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC",
-                                         "P^{truth}_{#pi^{+}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04_P_piplus_BC_truth_1n",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #pi^{+} momentum AC", "FD #pi^{+} momentum P^{truth}_{#pi^{+}} AC",
-                                            "P^{truth}_{#pi^{+}} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04FD_P_pip_AC_truth_1n_FD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #pi^{+} momentum BC", "FD #pi^{+} momentum P^{truth}_{#pi^{+}} BC",
-                                            "P^{truth}_{#pi^{+}} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04FD_P_pip_BC_truth_1n_FD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #pi^{+} momentum AC", "CD #pi^{+} momentum P^{truth}_{#pi^{+}} AC",
-                                            "P^{truth}_{#pi^{+}} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04CD_P_pip_AC_truth_1n_CD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #pi^{+} momentum BC", "CD #pi^{+} momentum P^{truth}_{#pi^{+}} BC",
-                                            "P^{truth}_{#pi^{+}} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04CD_P_pip_BC_truth_1n_CD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #pi^{+} momentum AC", "undet #pi^{+} momentum P^{truth}_{#pi^{+}} AC",
-                                               "P^{truth}_{#pi^{+}} [GeV/c]",
-                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"],
-                                               "04undet_P_pip_AC_truth_1n_undet", Momentum_lboundary, Momentum_uboundary,
-                                               numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #pi^{+} momentum BC", "undet #pi^{+} momentum P^{truth}_{#pi^{+}} BC",
-                                               "P^{truth}_{#pi^{+}} [GeV/c]",
-                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"],
-                                               "04undet_P_pip_BC_truth_1n_undet", Momentum_lboundary, Momentum_uboundary,
-                                               numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_AC_truth_1n = hPlot1D("1n", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04_P_piplus_AC_truth_1n", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_BC_truth_1n = hPlot1D("1n", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04_P_piplus_BC_truth_1n", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #pi^{+} momentum AC", "FD #pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04FD_P_pip_AC_truth_1n_FD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #pi^{+} momentum BC", "FD #pi^{+} momentum P^{truth}_{#pi^{+}} BC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04FD_P_pip_BC_truth_1n_FD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #pi^{+} momentum AC", "CD #pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04CD_P_pip_AC_truth_1n_CD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #pi^{+} momentum BC", "CD #pi^{+} momentum P^{truth}_{#pi^{+}} BC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04CD_P_pip_BC_truth_1n_CD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #pi^{+} momentum AC", "undet #pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04undet_P_pip_AC_truth_1n_undet",
+                                               Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #pi^{+} momentum BC", "undet #pi^{+} momentum P^{truth}_{#pi^{+}} BC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "04undet_P_pip_BC_truth_1n_undet",
+                                               Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pim_AC_truth_1n = hPlot1D("1n", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC",
-                                         "P^{truth}_{#pi^{-}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05_P_piminus_AC_truth_1n",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_BC_truth_1n = hPlot1D("1n", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC",
-                                         "P^{truth}_{#pi^{-}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05_P_piminus_BC_truth_1n",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #pi^{-} momentum AC", "FD #pi^{-} momentum P^{truth}_{#pi^{-}} AC",
-                                            "P^{truth}_{#pi^{-}} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05FD_P_pim_AC_truth_1n_FD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #pi^{-} momentum BC", "FD #pi^{-} momentum P^{truth}_{#pi^{-}} BC",
-                                            "P^{truth}_{#pi^{-}} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05FD_P_pim_BC_truth_1n_FD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #pi^{-} momentum AC", "CD #pi^{-} momentum P^{truth}_{#pi^{-}} AC",
-                                            "P^{truth}_{#pi^{-}} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05CD_P_pim_AC_truth_1n_CD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #pi^{-} momentum BC", "CD #pi^{-} momentum P^{truth}_{#pi^{-}} BC",
-                                            "P^{truth}_{#pi^{-}} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05CD_P_pim_BC_truth_1n_CD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #pi^{-} momentum AC", "undet #pi^{-} momentum P^{truth}_{#pi^{-}} AC",
-                                               "P^{truth}_{#pi^{-}} [GeV/c]",
-                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"],
-                                               "05undet_P_pim_AC_truth_1n_undet", Momentum_lboundary, Momentum_uboundary,
-                                               numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #pi^{-} momentum BC", "undet #pi^{-} momentum P^{truth}_{#pi^{-}} BC",
-                                               "P^{truth}_{#pi^{-}} [GeV/c]",
-                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"],
-                                               "05undet_P_pim_BC_truth_1n_undet", Momentum_lboundary, Momentum_uboundary,
-                                               numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_AC_truth_1n = hPlot1D("1n", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05_P_piminus_AC_truth_1n", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_BC_truth_1n = hPlot1D("1n", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05_P_piminus_BC_truth_1n", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #pi^{-} momentum AC", "FD #pi^{-} momentum P^{truth}_{#pi^{-}} AC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05FD_P_pim_AC_truth_1n_FD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #pi^{-} momentum BC", "FD #pi^{-} momentum P^{truth}_{#pi^{-}} BC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05FD_P_pim_BC_truth_1n_FD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #pi^{-} momentum AC", "CD #pi^{-} momentum P^{truth}_{#pi^{-}} AC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05CD_P_pim_AC_truth_1n_CD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #pi^{-} momentum BC", "CD #pi^{-} momentum P^{truth}_{#pi^{-}} BC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05CD_P_pim_BC_truth_1n_CD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #pi^{-} momentum AC", "undet #pi^{-} momentum P^{truth}_{#pi^{-}} AC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05undet_P_pim_AC_truth_1n_undet",
+                                               Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #pi^{-} momentum BC", "undet #pi^{-} momentum P^{truth}_{#pi^{-}} BC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "05undet_P_pim_BC_truth_1n_undet",
+                                               Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pi0_AC_truth_1n = hPlot1D("1n", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC",
-                                         "P^{truth}_{#pi^{0}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "06_P_pi0_AC_truth_1n",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pi0_BC_truth_1n = hPlot1D("1n", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC",
-                                         "P^{truth}_{#pi^{0}} [GeV/c]",
-                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "06_P_pi0_BC_truth_1n",
-                                         Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pi0_AC_truth_1n = hPlot1D("1n", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC", "P^{truth}_{#pi^{0}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "06_P_pi0_AC_truth_1n", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pi0_BC_truth_1n = hPlot1D("1n", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC", "P^{truth}_{#pi^{0}} [GeV/c]",
+                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "06_P_pi0_BC_truth_1n", Momentum_lboundary,
+                                         Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_ph_AC_truth_1n = hPlot1D("1n", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
-                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "07a_P_ph_AC_truth_1n",
-                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "07a_P_ph_AC_truth_1n", Momentum_lboundary,
+                                        Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_ph_BC_truth_1n = hPlot1D("1n", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
-                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "07a_P_ph_BC_truth_1n",
-                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_AC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #gamma momentum AC", "FD #gamma momentum P^{truth}_{#gamma} AC",
-                                           "P^{truth}_{#gamma} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "07b_P_ph_AC_truth_1n_FD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_BC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #gamma momentum BC", "FD #gamma momentum P^{truth}_{#gamma} BC",
-                                           "P^{truth}_{#gamma} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "07b_P_ph_BC_truth_1n_FD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "07a_P_ph_BC_truth_1n", Momentum_lboundary,
+                                        Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_AC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #gamma momentum AC", "FD #gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "07b_P_ph_AC_truth_1n_FD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_BC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #gamma momentum BC", "FD #gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"], "07b_P_ph_BC_truth_1n_FD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (1n)">
-    hPlot1D hTheta_e_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC",
-                                           "#theta^{truth}_{e} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "01_Theta_e_AC_truth_1n",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_e_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC",
-                                           "#theta^{truth}_{e} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "01_Theta_e_BC_truth_1n",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_e_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC", "#theta^{truth}_{e} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "01_Theta_e_AC_truth_1n", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_e_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC", "#theta^{truth}_{e} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "01_Theta_e_BC_truth_1n", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_n_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC",
-                                           "#theta^{truth}_{n} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02a_Theta_n_AC_truth_1n",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_n_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC",
-                                           "#theta^{truth}_{n} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02a_Theta_n_BC_truth_1n",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_nFD_AC_truth_1n = hPlot1D("1n", "FD", "FD TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing FD Neutron AC",
-                                             "#theta^{truth}_{n} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                             "02b_Theta_nFD_AC_truth_1n",
-                                             Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_nFD_BC_truth_1n = hPlot1D("1n", "FD", "FD TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing FD Neutron BC",
-                                             "#theta^{truth}_{n} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                             "02b_Theta_nFD_BC_truth_1n",
-                                             Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_n_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC", "#theta^{truth}_{n} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02a_Theta_n_AC_truth_1n", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_n_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC", "#theta^{truth}_{n} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02a_Theta_n_BC_truth_1n", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_nFD_AC_truth_1n = hPlot1D("1n", "FD", "FD TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing FD Neutron AC", "#theta^{truth}_{n} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02b_Theta_nFD_AC_truth_1n", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_nFD_BC_truth_1n = hPlot1D("1n", "FD", "FD TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing FD Neutron BC", "#theta^{truth}_{n} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "02b_Theta_nFD_BC_truth_1n", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_p_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC",
-                                           "#theta^{truth}_{p} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03_Theta_p_AC_truth_1n",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC",
-                                           "#theta^{truth}_{p} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03_Theta_p_BC_truth_1n",
-                                           Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{p} AC", "FD #theta^{truth}_{p} of Outgoing Proton AC",
-                                              "#theta^{truth}_{p} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                              "03FD_Theta_p_AC_truth_1n_FD",
-                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{p} BC", "FD #theta^{truth}_{p} of Outgoing Proton BC",
-                                              "#theta^{truth}_{p} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                              "03FD_Theta_p_BC_truth_1n_FD",
-                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{p} AC", "CD #theta^{truth}_{p} of Outgoing Proton AC",
-                                              "#theta^{truth}_{p} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                              "03CD_Theta_p_AC_truth_1n_CD",
-                                              Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{p} BC", "CD #theta^{truth}_{p} of Outgoing Proton BC",
-                                              "#theta^{truth}_{p} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                              "03CD_Theta_p_BC_truth_1n_CD",
-                                              Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{p} AC", "undet #theta^{truth}_{p} of Outgoing Proton AC",
-                                                 "#theta^{truth}_{p} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                                 "03undet_Theta_p_AC_truth_1n_undet", 0., 180., numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{p} BC", "undet #theta^{truth}_{p} of Outgoing Proton BC",
-                                                 "#theta^{truth}_{p} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                                 "03undet_Theta_p_BC_truth_1n_undet", 0., 180., numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_p_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03_Theta_p_AC_truth_1n", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_p_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03_Theta_p_BC_truth_1n", Theta_lboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_p_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{p} AC", "FD #theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03FD_Theta_p_AC_truth_1n_FD", Theta_lboundary_FD,
+                                              Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_p_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{p} BC", "FD #theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03FD_Theta_p_BC_truth_1n_FD", Theta_lboundary_FD,
+                                              Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_p_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{p} AC", "CD #theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03CD_Theta_p_AC_truth_1n_CD", Theta_lboundary_CD,
+                                              Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_p_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{p} BC", "CD #theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+                                              directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03CD_Theta_p_BC_truth_1n_CD", Theta_lboundary_CD,
+                                              Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_p_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{p} AC", "undet #theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03undet_Theta_p_AC_truth_1n_undet", 0., 180.,
+                                                 numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_p_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{p} BC", "undet #theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "03undet_Theta_p_BC_truth_1n_undet", 0., 180.,
+                                                 numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_pip_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                             "#theta^{truth}_{#pi^{+}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                             "04_Theta_piplus_AC_truth_1n", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pip_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{+}} BC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                             "#theta^{truth}_{#pi^{+}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                             "04_Theta_piplus_BC_truth_1n", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pip_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{#pi^{+}} AC",
-                                                "FD #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                                "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                                "04FD_Theta_piplus_AC_truth_1n_FD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pip_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{#pi^{+}} BC",
-                                                "FD #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                                "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                                "04FD_Theta_piplus_BC_truth_1n_FD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pip_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{#pi^{+}} AC",
-                                                "CD #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                                "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                                "04CD_Theta_piplus_AC_truth_1n_CD", Theta_lboundary_CD, Theta_uboundary_CD,
-                                                numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pip_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{#pi^{+}} BC",
-                                                "CD #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                                "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                                "04CD_Theta_piplus_BC_truth_1n_CD", Theta_lboundary_CD, Theta_uboundary_CD,
-                                                numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pip_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{#pi^{+}} AC",
-                                                   "undet #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                                   "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                   directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+    hPlot1D hTheta_pip_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC", "#theta^{truth}_{#pi^{+}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "04_Theta_piplus_AC_truth_1n", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pip_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{+}} BC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC", "#theta^{truth}_{#pi^{+}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "04_Theta_piplus_BC_truth_1n", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pip_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{#pi^{+}} AC", "FD #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
+                                                "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+                                                "04FD_Theta_piplus_AC_truth_1n_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pip_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{#pi^{+}} BC", "FD #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
+                                                "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+                                                "04FD_Theta_piplus_BC_truth_1n_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pip_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{#pi^{+}} AC", "CD #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
+                                                "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+                                                "04CD_Theta_piplus_AC_truth_1n_CD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pip_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{#pi^{+}} BC", "CD #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
+                                                "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+                                                "04CD_Theta_piplus_BC_truth_1n_CD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pip_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{#pi^{+}} AC", "undet #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
+                                                   "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
                                                    "04undet_Theta_piplus_AC_truth_1n_undet", 0., 180., numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pip_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{#pi^{+}} BC",
-                                                   "undet #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                                   "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                   directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+    hPlot1D hTheta_pip_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{#pi^{+}} BC", "undet #theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
+                                                   "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
                                                    "04undet_Theta_piplus_BC_truth_1n_undet", 0., 180., numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_pim_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{-}} AC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                             "#theta^{truth}_{#pi^{-}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                             "05_Theta_piminus_AC_truth_1n", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pim_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{-}} BC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                             "#theta^{truth}_{#pi^{-}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                             "05_Theta_piminus_BC_truth_1n", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pim_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{#pi^{-}} AC",
-                                                "FD #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                                "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                                "05FD_Theta_piminus_AC_truth_1n_FD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pim_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{#pi^{-}} BC",
-                                                "FD #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                                "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                                "05FD_Theta_piminus_BC_truth_1n_FD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pim_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{#pi^{-}} AC",
-                                                "CD #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                                "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                                "05CD_Theta_piminus_AC_truth_1n_CD", Theta_lboundary_CD, Theta_uboundary_CD,
-                                                numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pim_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{#pi^{-}} BC",
-                                                "CD #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                                "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                                "05CD_Theta_piminus_BC_truth_1n_CD", Theta_lboundary_CD, Theta_uboundary_CD,
-                                                numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pim_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{#pi^{-}} AC",
-                                                   "undet #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                                   "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                   directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+    hPlot1D hTheta_pim_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{-}} AC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC", "#theta^{truth}_{#pi^{-}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "05_Theta_piminus_AC_truth_1n", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pim_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{-}} BC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC", "#theta^{truth}_{#pi^{-}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "05_Theta_piminus_BC_truth_1n", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pim_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{#pi^{-}} AC", "FD #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
+                                                "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+                                                "05FD_Theta_piminus_AC_truth_1n_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pim_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #theta^{truth}_{#pi^{-}} BC", "FD #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
+                                                "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+                                                "05FD_Theta_piminus_BC_truth_1n_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pim_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{#pi^{-}} AC", "CD #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
+                                                "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+                                                "05CD_Theta_piminus_AC_truth_1n_CD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pim_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #theta^{truth}_{#pi^{-}} BC", "CD #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
+                                                "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+                                                "05CD_Theta_piminus_BC_truth_1n_CD", Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pim_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{#pi^{-}} AC", "undet #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
+                                                   "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
                                                    "05undet_Theta_piminus_AC_truth_1n_undet", 0., 180., numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pim_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{#pi^{-}} BC",
-                                                   "undet #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                                   "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                   directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+    hPlot1D hTheta_pim_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #theta^{truth}_{#pi^{-}} BC", "undet #theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
+                                                   "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
                                                    "05undet_Theta_piminus_BC_truth_1n_undet", 0., 180., numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_pi0_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{0}} AC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
-                                             "#theta^{truth}_{#pi^{0}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                             "06_Theta_pi0_AC_truth_1n",
-                                             Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pi0_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{0}} BC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
-                                             "#theta^{truth}_{#pi^{0}} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                             "06_Theta_pi0_BC_truth_1n",
-                                             Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pi0_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{0}} AC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC", "#theta^{truth}_{#pi^{0}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "06_Theta_pi0_AC_truth_1n", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pi0_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#pi^{0}} BC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC", "#theta^{truth}_{#pi^{0}} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "06_Theta_pi0_BC_truth_1n", Theta_lboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_ph_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC",
-                                            "#theta^{truth}_{#gamma} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                            "07a_Theta_ph_AC_truth_1n",
-                                            Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_ph_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC",
-                                            "#theta^{truth}_{#gamma} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
-                                            "07a_Theta_ph_BC_truth_1n",
-                                            Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_ph_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC", "#theta^{truth}_{#gamma} [Deg]",
+                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "07a_Theta_ph_AC_truth_1n", Theta_lboundary_FD,
+                                            Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_ph_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC", "#theta^{truth}_{#gamma} [Deg]",
+                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"], "07a_Theta_ph_BC_truth_1n", Theta_lboundary_FD,
+                                            Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_ph_AC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of FD Outgoing #gamma AC",
-                                               "#theta^{truth}_{#gamma} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+                                               "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
                                                "07b_Theta_ph_AC_truth_1n_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_ph_BC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of FD Outgoing #gamma BC",
-                                               "#theta^{truth}_{#gamma} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
+                                               "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"],
                                                "07b_Theta_ph_BC_truth_1n_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (1n)">
     hPlot1D hPhi_e_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{e} AC", "#phi^{truth}_{e} of Outgoing Electron AC", "#phi^{truth}_{e} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "01_Phi_e_AC_truth_1n",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "01_Phi_e_AC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_e_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron BC", "#phi^{truth}_{e} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "01_Phi_e_BC_truth_1n",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "01_Phi_e_BC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_n_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing Neutron AC", "#phi^{truth}_{n} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02a_Phi_n_AC_truth_1n",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02a_Phi_n_AC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_n_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC", "#phi^{truth}_{n} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02a_Phi_n_BC_truth_1n",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_nFD_AC_truth_1n = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing FD Neutron AC",
-                                           "#phi^{truth}_{n} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02b_Phi_nFD_AC_truth_1n",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_nFD_BC_truth_1n = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing FD Neutron BC",
-                                           "#phi^{truth}_{n} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02b_Phi_nFD_BC_truth_1n",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02a_Phi_n_BC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_nFD_AC_truth_1n = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing FD Neutron AC", "#phi^{truth}_{n} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02b_Phi_nFD_AC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                           numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_nFD_BC_truth_1n = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing FD Neutron BC", "#phi^{truth}_{n} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "02b_Phi_nFD_BC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                           numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hPhi_p_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03_Phi_p_AC_truth_1n",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03_Phi_p_AC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_p_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
-                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03_Phi_p_BC_truth_1n",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{p} AC", "FD #phi^{truth}_{p} of Outgoing Proton AC",
-                                            "#phi^{truth}_{p} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03FD_Phi_p_AC_truth_1n_FD",
-                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{p} BC", "FD #phi^{truth}_{p} of Outgoing Proton BC",
-                                            "#phi^{truth}_{p} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03FD_Phi_p_BC_truth_1n_FD",
-                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{p} AC", "CD #phi^{truth}_{p} of Outgoing Proton AC",
-                                            "#phi^{truth}_{p} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03CD_Phi_p_AC_truth_1n_CD",
-                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{p} BC", "CD #phi^{truth}_{p} of Outgoing Proton BC",
-                                            "#phi^{truth}_{p} [Deg]",
-                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03CD_Phi_p_BC_truth_1n_CD",
-                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{p} AC", "undet #phi^{truth}_{p} of Outgoing Proton AC",
-                                               "#phi^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                               "03undet_Phi_p_AC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{p} BC", "undet #phi^{truth}_{p} of Outgoing Proton BC",
-                                               "#phi^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                               "03undet_Phi_p_BC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+                                         directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03_Phi_p_BC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                         numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{p} AC", "FD #phi^{truth}_{p} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03FD_Phi_p_AC_truth_1n_FD", Phi_lboundary,
+                                            Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{p} BC", "FD #phi^{truth}_{p} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03FD_Phi_p_BC_truth_1n_FD", Phi_lboundary,
+                                            Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{p} AC", "CD #phi^{truth}_{p} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03CD_Phi_p_AC_truth_1n_CD", Phi_lboundary,
+                                            Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{p} BC", "CD #phi^{truth}_{p} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03CD_Phi_p_BC_truth_1n_CD", Phi_lboundary,
+                                            Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{p} AC", "undet #phi^{truth}_{p} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03undet_Phi_p_AC_truth_1n_undet", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{p} BC", "undet #phi^{truth}_{p} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "03undet_Phi_p_BC_truth_1n_undet", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pip_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                           "#phi^{truth}_{#pi^{+}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "04_Phi_piplus_AC_truth_1n",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pip_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                           "#phi^{truth}_{#pi^{+}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "04_Phi_piplus_BC_truth_1n",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pip_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC", "#phi^{truth}_{#pi^{+}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "04_Phi_piplus_AC_truth_1n", Phi_lboundary,
+                                           Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pip_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC", "#phi^{truth}_{#pi^{+}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "04_Phi_piplus_BC_truth_1n", Phi_lboundary,
+                                           Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pip_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{#pi^{+}} AC", "FD #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                              "#phi^{truth}_{#pi^{+}} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                               "04FD_Phi_piplus_AC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pip_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{#pi^{+}} BC", "FD #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                              "#phi^{truth}_{#pi^{+}} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                               "04FD_Phi_piplus_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pip_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{#pi^{+}} AC", "CD #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                              "#phi^{truth}_{#pi^{+}} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                               "04CD_Phi_piplus_AC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pip_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{#pi^{+}} BC", "CD #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                              "#phi^{truth}_{#pi^{+}} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                               "04CD_Phi_piplus_BC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pip_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{+}} AC",
-                                                 "undet #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                                 "#phi^{truth}_{#pi^{+}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+    hPlot1D hPhi_pip_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{+}} AC", "undet #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
+                                                 "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                                  "04undet_Phi_piplus_AC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pip_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{+}} BC",
-                                                 "undet #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                                 "#phi^{truth}_{#pi^{+}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+    hPlot1D hPhi_pip_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{+}} BC", "undet #phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
+                                                 "#phi^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                                  "04undet_Phi_piplus_BC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pim_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                           "#phi^{truth}_{#pi^{-}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "05_Phi_piminus_AC_truth_1n",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pim_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                           "#phi^{truth}_{#pi^{-}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "05_Phi_piminus_BC_truth_1n",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pim_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC", "#phi^{truth}_{#pi^{-}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "05_Phi_piminus_AC_truth_1n", Phi_lboundary,
+                                           Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pim_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC", "#phi^{truth}_{#pi^{-}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "05_Phi_piminus_BC_truth_1n", Phi_lboundary,
+                                           Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pim_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{#pi^{-}} AC", "FD #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                              "#phi^{truth}_{#pi^{-}} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                               "05FD_Phi_piminus_AC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pim_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL FD #phi^{truth}_{#pi^{-}} BC", "FD #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                              "#phi^{truth}_{#pi^{-}} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                               "05FD_Phi_piminus_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pim_AC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{#pi^{-}} AC", "CD #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                              "#phi^{truth}_{#pi^{-}} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                               "05CD_Phi_piminus_AC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hPhi_pim_BC_truth_1n_CD = hPlot1D("1n", "CD", "TL CD #phi^{truth}_{#pi^{-}} BC", "CD #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                              "#phi^{truth}_{#pi^{-}} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+                                              "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                               "05CD_Phi_piminus_BC_truth_1n_CD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pim_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{-}} AC",
-                                                 "undet #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                                 "#phi^{truth}_{#pi^{-}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+    hPlot1D hPhi_pim_AC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{-}} AC", "undet #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
+                                                 "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                                  "05undet_Phi_piminus_AC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pim_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{-}} BC",
-                                                 "undet #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                                 "#phi^{truth}_{#pi^{-}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
+    hPlot1D hPhi_pim_BC_truth_1n_undet = hPlot1D("1n", "undet", "TL undet #phi^{truth}_{#pi^{-}} BC", "undet #phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
+                                                 "#phi^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                                  "05undet_Phi_piminus_BC_truth_1n_undet", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pi0_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
-                                           "#phi^{truth}_{#pi^{0}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "06_Phi_pi0_AC_truth_1n",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pi0_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
-                                           "#phi^{truth}_{#pi^{0}} [Deg]",
-                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "06_Phi_pi0_BC_truth_1n",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pi0_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC", "#phi^{truth}_{#pi^{0}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "06_Phi_pi0_AC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                           numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pi0_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC", "#phi^{truth}_{#pi^{0}} [Deg]",
+                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "06_Phi_pi0_BC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                           numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_ph_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC",
-                                          "#phi^{truth}_{#gamma} [Deg]",
-                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "07a_Phi_ph_AC_truth_1n",
-                                          Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC",
-                                          "#phi^{truth}_{#gamma} [Deg]",
-                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "07a_Phi_hp_BC_truth_1n",
-                                          Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_AC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma AC",
-                                             "#phi^{truth}_{#gamma} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                             "07b_Phi_ph_AC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_BC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC",
-                                             "#phi^{truth}_{#gamma} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
-                                             "07b_Phi_hp_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_AC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC", "#phi^{truth}_{#gamma} [Deg]",
+                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "07a_Phi_ph_AC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                          numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_BC_truth_1n = hPlot1D("1n", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC", "#phi^{truth}_{#gamma} [Deg]",
+                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "07a_Phi_hp_BC_truth_1n", Phi_lboundary, Phi_uboundary,
+                                          numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_AC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma AC", "#phi^{truth}_{#gamma} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "07b_Phi_ph_AC_truth_1n_FD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_BC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC", "#phi^{truth}_{#gamma} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"], "07b_Phi_hp_BC_truth_1n_FD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="TL fiducial cuts (1n)">
     hPlot2D hnFD_Hit_map_1n_BEC = hPlot2D("1n", "FD", "FD neutron hit map BEC", "FD neutron hit map BEC", "x_{nFD}", "y_{nFD}",
-                                          directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
-                                          "01a_Neutron_FD_Hit_map_BEC_1n", -1.1, 1.1, -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots,
-                                          numTH2Dbins_Nucleon_Ang_eff_Plots);
+                                          directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"], "01a_Neutron_FD_Hit_map_BEC_1n", -1.1, 1.1, -1.1, 1.1,
+                                          numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     hPlot2D hnFD_Hit_map_1n_AEC = hPlot2D("1n", "FD", "FD neutron hit map AEC", "FD neutron hit map AEC", "x_{nFD}", "y_{nFD}",
-                                          directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
-                                          "01b_Neutron_FD_Hit_map_AEC_1n", -1.1, 1.1, -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots,
-                                          numTH2Dbins_Nucleon_Ang_eff_Plots);
+                                          directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"], "01b_Neutron_FD_Hit_map_AEC_1n", -1.1, 1.1, -1.1, 1.1,
+                                          numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
 
-    hPlot2D hTheta_nFD_vs_Phi_nFD_1n_BEC = hPlot2D("1n", "FD", "#theta_{nFD} vs. #phi_{nFD} BEC", "TL #theta_{nFD} vs. #phi_{nFD} BEC",
-                                                   "#phi_{nFD} [Deg]",
-                                                   "#theta_{nFD} [Deg]",
-                                                   directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
-                                                   "02a_Theta_nFD_vs_Phi_nFD_BEC_1n", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                   Theta_uboundary_FD,
+    hPlot2D hTheta_nFD_vs_Phi_nFD_1n_BEC = hPlot2D("1n", "FD", "#theta_{nFD} vs. #phi_{nFD} BEC", "TL #theta_{nFD} vs. #phi_{nFD} BEC", "#phi_{nFD} [Deg]",
+                                                   "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
+                                                   "02a_Theta_nFD_vs_Phi_nFD_BEC_1n", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
                                                    numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
-    hPlot2D hTheta_nFD_vs_Phi_nFD_1n_AEC = hPlot2D("1n", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC",
-                                                   "#phi_{nFD} [Deg]",
-                                                   "#theta_{nFD} [Deg]",
-                                                   directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
-                                                   "02b_Theta_nFD_vs_Phi_nFD_AEC_1n", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                   Theta_uboundary_FD,
+    hPlot2D hTheta_nFD_vs_Phi_nFD_1n_AEC = hPlot2D("1n", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC", "#phi_{nFD} [Deg]",
+                                                   "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
+                                                   "02b_Theta_nFD_vs_Phi_nFD_AEC_1n", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
                                                    numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta vs. phi plots (1n)">
-    hPlot2D hTheta_e_vs_Phi_e_truth_1n = hPlot2D("1n", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]",
-                                                 "#theta_{e} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
-                                                 "01_Theta_e_vs_Phi_e_truth_1n", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                 Theta_uboundary_FD,
-                                                 numTH2Dbins_Electron_Ang_eff_Plots, numTH2Dbins_Electron_Ang_eff_Plots);
+    hPlot2D hTheta_e_vs_Phi_e_truth_1n = hPlot2D("1n", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"], "01_Theta_e_vs_Phi_e_truth_1n", Phi_lboundary,
+                                                 Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Electron_Ang_eff_Plots,
+                                                 numTH2Dbins_Electron_Ang_eff_Plots);
 
-    hPlot2D hTheta_nFD_vs_Phi_nFD_truth_1n = hPlot2D("1n", "FD", "TL #theta_{nFD} vs. #phi_{nFD}", "TL #theta_{nFD} vs. #phi_{nFD}",
-                                                     "#phi_{nFD} [Deg]",
-                                                     "#theta_{nFD} [Deg]",
-                                                     directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
-                                                     "02_Theta_nFD_vs_Phi_nFD_truth_1n", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                     Theta_uboundary_FD,
-                                                     numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
+    hPlot2D hTheta_nFD_vs_Phi_nFD_truth_1n = hPlot2D("1n", "FD", "TL #theta_{nFD} vs. #phi_{nFD}", "TL #theta_{nFD} vs. #phi_{nFD}", "#phi_{nFD} [Deg]", "#theta_{nFD} [Deg]",
+                                                     directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"], "02_Theta_nFD_vs_Phi_nFD_truth_1n",
+                                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Nucleon_Ang_eff_Plots,
+                                                     numTH2Dbins_Nucleon_Ang_eff_Plots);
     //</editor-fold>
 
     //</editor-fold>
@@ -8149,355 +7434,238 @@ void EventAnalyser() {
 
     //<editor-fold desc="Truth level momentum plots (pFDpCD)">
     hPlot1D hP_e_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL Electron momentum AC", "Electron momentum P^{truth}_{e} AC", "P^{truth}_{e} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "01_P_e_AC_truth_pFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "01_P_e_AC_truth_pFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_e_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL Electron momentum BC", "Electron momentum P^{truth}_{e} BC", "P^{truth}_{e} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "01_P_e_BC_truth_pFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "01_P_e_BC_truth_pFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_n_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL Neutron momentum AC", "Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "02_P_n_AC_truth_pFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "02_P_n_AC_truth_pFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_n_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL Neutron momentum BC", "Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "02_P_n_BC_truth_pFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "02_P_n_BC_truth_pFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_p_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL Proton momentum AC", "Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                           "03a_P_p_AC_truth_pFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03a_P_p_AC_truth_pFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                           "03a_P_p_BC_truth_pFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pFD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC",
-                                             "P^{truth}_{p} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "03b_P_pFD_AC_truth_pFDpCD",
-                                             FDMomentum_lboundary, FDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pFD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC",
-                                             "P^{truth}_{p} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "03b_P_pFD_BC_truth_pFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC",
-                                             "P^{truth}_{p} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "03b_P_pCD_AC_truth_pFDpCD",
-                                             CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC",
-                                             "P^{truth}_{p} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "03b_P_pCD_BC_truth_pFDpCD",
-                                             CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03a_P_p_BC_truth_pFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pFD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pFD_AC_truth_pFDpCD", FDMomentum_lboundary,
+                                             FDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pFD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pFD_BC_truth_pFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pCD_AC_truth_pFDpCD", CDMomentum_lboundary,
+                                             CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "03b_P_pCD_BC_truth_pFDpCD", CDMomentum_lboundary,
+                                             CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pip_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC",
-                                             "P^{truth}_{#pi^{+}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "04_P_piplus_AC_truth_pFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC",
-                                             "P^{truth}_{#pi^{+}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "04_P_piplus_BC_truth_pFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "04_P_piplus_AC_truth_pFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "04_P_piplus_BC_truth_pFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pim_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC",
-                                             "P^{truth}_{#pi^{-}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "05_P_piminus_AC_truth_pFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC",
-                                             "P^{truth}_{#pi^{-}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "05_P_piminus_BC_truth_pFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "05_P_piminus_AC_truth_pFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "05_P_piminus_BC_truth_pFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pi0_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC",
-                                             "P^{truth}_{#pi^{0}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "06_P_pi0_AC_truth_pFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pi0_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC",
-                                             "P^{truth}_{#pi^{0}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "06_P_pi0_BC_truth_pFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pi0_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC", "P^{truth}_{#pi^{0}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "06_P_pi0_AC_truth_pFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pi0_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC", "P^{truth}_{#pi^{0}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "06_P_pi0_BC_truth_pFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_ph_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC",
-                                            "P^{truth}_{#gamma} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                            "07a_P_ph_AC_truth_pFDpCD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC",
-                                            "P^{truth}_{#gamma} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                            "07a_P_ph_BC_truth_pFDpCD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_AC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #gamma momentum AC", "FD #gamma momentum P^{truth}_{#gamma} AC",
-                                               "P^{truth}_{#gamma} [GeV/c]",
-                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "07b_P_ph_AC_truth_pFDpCD_FD",
+    hPlot1D hP_ph_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "07a_P_ph_AC_truth_pFDpCD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "07a_P_ph_BC_truth_pFDpCD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_AC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #gamma momentum AC", "FD #gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
+                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "07b_P_ph_AC_truth_pFDpCD_FD",
                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_BC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #gamma momentum BC", "FD #gamma momentum P^{truth}_{#gamma} BC",
-                                               "P^{truth}_{#gamma} [GeV/c]",
-                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "07b_P_ph_BC_truth_pFDpCD_FD",
+    hPlot1D hP_ph_BC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #gamma momentum BC", "FD #gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
+                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"], "07b_P_ph_BC_truth_pFDpCD_FD",
                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (pFDpCD)">
-    hPlot1D hTheta_e_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC",
-                                               "#theta^{truth}_{e} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "01_Theta_e_AC_truth_pFDpCD",
+    hPlot1D hTheta_e_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC", "#theta^{truth}_{e} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "01_Theta_e_AC_truth_pFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_e_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC",
-                                               "#theta^{truth}_{e} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "01_Theta_e_BC_truth_pFDpCD",
+    hPlot1D hTheta_e_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC", "#theta^{truth}_{e} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "01_Theta_e_BC_truth_pFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_n_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC",
-                                               "#theta^{truth}_{n} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "02_Theta_n_AC_truth_pFDpCD",
+    hPlot1D hTheta_n_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC", "#theta^{truth}_{n} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "02_Theta_n_AC_truth_pFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_n_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC",
-                                               "#theta^{truth}_{n} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "02_Theta_n_BC_truth_pFDpCD",
+    hPlot1D hTheta_n_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC", "#theta^{truth}_{n} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "02_Theta_n_BC_truth_pFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_p_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC",
-                                               "#theta^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "03a_Theta_p_AC_truth_pFDpCD",
+    hPlot1D hTheta_p_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "03a_Theta_p_AC_truth_pFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC",
-                                               "#theta^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "03a_Theta_p_BC_truth_pFDpCD",
+    hPlot1D hTheta_p_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "03a_Theta_p_BC_truth_pFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pFD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC",
-                                                 "#theta^{truth}_{p} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                 "03b_Theta_pFD_AC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pFD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC",
-                                                 "#theta^{truth}_{p} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                 "03b_Theta_pFD_BC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing CD Proton AC",
-                                                 "#theta^{truth}_{p} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                 "03b_Theta_pCD_AC_truth_pFDpCD", Theta_lboundary_CD, Theta_uboundary_CD,
-                                                 numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing CD Proton BC",
-                                                 "#theta^{truth}_{p} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                 "03b_Theta_pCD_BC_truth_pFDpCD", Theta_lboundary_CD, Theta_uboundary_CD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC", "#theta^{truth}_{p} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "03b_Theta_pFD_AC_truth_pFDpCD",
+                                                 Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC", "#theta^{truth}_{p} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "03b_Theta_pFD_BC_truth_pFDpCD",
+                                                 Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing CD Proton AC", "#theta^{truth}_{p} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "03b_Theta_pCD_AC_truth_pFDpCD",
+                                                 Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing CD Proton BC", "#theta^{truth}_{p} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"], "03b_Theta_pCD_BC_truth_pFDpCD",
+                                                 Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pip_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                                 "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                 "04_Theta_piplus_AC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                 "04_Theta_piplus_AC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_pip_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{#pi^{+}} BC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                                 "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                 "04_Theta_piplus_BC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                 "04_Theta_piplus_BC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pim_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{#pi^{-}} AC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                                 "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                 "05_Theta_piminus_AC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                 "05_Theta_piminus_AC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_pim_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{#pi^{-}} BC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                                 "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                 "05_Theta_piminus_BC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                 "05_Theta_piminus_BC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pi0_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{#pi^{0}} AC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
-                                                 "#theta^{truth}_{#pi^{0}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                 "06_Theta_pi0_AC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{0}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                 "06_Theta_pi0_AC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_pi0_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{#pi^{0}} BC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
-                                                 "#theta^{truth}_{#pi^{0}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                 "06_Theta_pi0_BC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{0}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                 "06_Theta_pi0_BC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_ph_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC",
-                                                "#theta^{truth}_{#gamma} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
                                                 "07a_Theta_ph_AC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_ph_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC",
-                                                "#theta^{truth}_{#gamma} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
                                                 "07a_Theta_ph_BC_truth_pFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_ph_AC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{#gamma} AC",
-                                                   "#theta^{truth}_{#gamma} of FD Outgoing #gamma AC",
-                                                   "#theta^{truth}_{#gamma} [Deg]",
-                                                   directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                   "07b_Theta_ph_AC_truth_pFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                   numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_ph_BC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{#gamma} BC",
-                                                   "#theta^{truth}_{#gamma} of FD Outgoing #gamma BC",
-                                                   "#theta^{truth}_{#gamma} [Deg]",
-                                                   directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
-                                                   "07b_Theta_ph_BC_truth_pFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                   numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_ph_AC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of FD Outgoing #gamma AC",
+                                                   "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                   "07b_Theta_ph_AC_truth_pFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_ph_BC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of FD Outgoing #gamma BC",
+                                                   "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"],
+                                                   "07b_Theta_ph_BC_truth_pFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (pFDpCD)">
-    hPlot1D hPhi_e_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{e} AC", "#phi^{truth}_{e} of Outgoing Electron AC",
-                                             "#phi^{truth}_{e} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "01_Phi_e_AC_truth_pFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_e_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron BC",
-                                             "#phi^{truth}_{e} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "01_Phi_e_BC_truth_pFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_e_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{e} AC", "#phi^{truth}_{e} of Outgoing Electron AC", "#phi^{truth}_{e} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "01_Phi_e_AC_truth_pFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_e_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron BC", "#phi^{truth}_{e} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "01_Phi_e_BC_truth_pFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_n_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing Neutron AC",
-                                             "#phi^{truth}_{n} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "02_Phi_n_AC_truth_pFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_n_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC",
-                                             "#phi^{truth}_{n} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "02_Phi_n_BC_truth_pFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_n_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing Neutron AC", "#phi^{truth}_{n} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "02_Phi_n_AC_truth_pFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_n_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC", "#phi^{truth}_{n} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "02_Phi_n_BC_truth_pFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_p_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC",
-                                             "#phi^{truth}_{p} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "03a_Phi_p_AC_truth_pFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC",
-                                             "#phi^{truth}_{p} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                             "03a_Phi_p_BC_truth_pFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pFD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of FD Outgoing Proton AC",
-                                               "#phi^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "03b_Phi_pFD_AC_truth_pFDpCD",
-                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pFD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of FD Outgoing Proton BC",
-                                               "#phi^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "03b_Phi_pFD_BC_truth_pFDpCD",
-                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of CD Outgoing Proton AC",
-                                               "#phi^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "03b_Phi_pCD_AC_truth_pFDpCD",
-                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of CD Outgoing Proton BC",
-                                               "#phi^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "03b_Phi_pCD_BC_truth_pFDpCD",
-                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03a_Phi_p_AC_truth_pFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03a_Phi_p_BC_truth_pFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pFD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of FD Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_pFD_AC_truth_pFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pFD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of FD Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_pFD_BC_truth_pFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pCD_AC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of CD Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_pCD_AC_truth_pFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pCD_BC_truth_pFDpCD = hPlot1D("pFDpCD", "CD", "CD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of CD Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "03b_Phi_pCD_BC_truth_pFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pip_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                               "#phi^{truth}_{#pi^{+}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "04_Phi_piplus_AC_truth_pFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pip_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                               "#phi^{truth}_{#pi^{+}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "04_Phi_piplus_BC_truth_pFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pip_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC", "#phi^{truth}_{#pi^{+}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "04_Phi_piplus_AC_truth_pFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pip_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC", "#phi^{truth}_{#pi^{+}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "04_Phi_piplus_BC_truth_pFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pim_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                               "#phi^{truth}_{#pi^{-}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "05_Phi_piminus_AC_truth_pFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pim_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                               "#phi^{truth}_{#pi^{-}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "05_Phi_piminus_BC_truth_pFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pim_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC", "#phi^{truth}_{#pi^{-}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "05_Phi_piminus_AC_truth_pFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pim_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC", "#phi^{truth}_{#pi^{-}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "05_Phi_piminus_BC_truth_pFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pi0_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
-                                               "#phi^{truth}_{#pi^{0}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "06_Phi_pi0_AC_truth_pFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pi0_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
-                                               "#phi^{truth}_{#pi^{0}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                               "06_Phi_pi0_BC_truth_pFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pi0_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC", "#phi^{truth}_{#pi^{0}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "06_Phi_pi0_AC_truth_pFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pi0_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC", "#phi^{truth}_{#pi^{0}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "06_Phi_pi0_BC_truth_pFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_ph_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC",
-                                              "#phi^{truth}_{#gamma} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                              "07a_Phi_ph_AC_truth_pFDpCD",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC",
-                                              "#phi^{truth}_{#gamma} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
-                                              "07a_Phi_ph_BC_truth_pFDpCD",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_AC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{#gamma} AC",
-                                                 "#phi^{truth}_{#gamma} of FD Outgoing #gamma AC",
-                                                 "#phi^{truth}_{#gamma} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
+    hPlot1D hPhi_ph_AC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC", "#phi^{truth}_{#gamma} [Deg]",
+                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "07a_Phi_ph_AC_truth_pFDpCD", Phi_lboundary,
+                                              Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_BC_truth_pFDpCD = hPlot1D("pFDpCD", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC", "#phi^{truth}_{#gamma} [Deg]",
+                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"], "07a_Phi_ph_BC_truth_pFDpCD", Phi_lboundary,
+                                              Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_AC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma AC",
+                                                 "#phi^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
                                                  "07b_Phi_ph_AC_truth_pFDpCD_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_BC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{#gamma} BC",
-                                                 "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC",
-                                                 "#phi^{truth}_{#gamma} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
+    hPlot1D hPhi_ph_BC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC",
+                                                 "#phi^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
                                                  "07b_Phi_ph_BC_truth_pFDpCD_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="TL fiducial cuts (pFDpCD)">
     hPlot2D hpFD_Hit_map_pFDpCD_BEC = hPlot2D("pFDpCD", "FD", "FD proton hit map BEC", "FD proton hit map BEC", "x_{pFD}", "y_{pFD}",
-                                              directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
-                                              "01a_Proton_FD_Hit_map_BEC_pFDpCD", -1.1, 1.1, -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots,
-                                              numTH2Dbins_Nucleon_Ang_eff_Plots);
+                                              directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"], "01a_Proton_FD_Hit_map_BEC_pFDpCD", -1.1, 1.1,
+                                              -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     hPlot2D hpFD_Hit_map_pFDpCD_AEC = hPlot2D("pFDpCD", "FD", "FD proton hit map AEC", "FD proton hit map AEC", "x_{pFD}", "y_{pFD}",
-                                              directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
-                                              "01b_Proton_FD_Hit_map_AEC_pFDpCD", -1.1, 1.1, -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots,
-                                              numTH2Dbins_Nucleon_Ang_eff_Plots);
+                                              directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"], "01b_Proton_FD_Hit_map_AEC_pFDpCD", -1.1, 1.1,
+                                              -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
 
-    hPlot2D hTheta_pFD_vs_Phi_pFD_pFDpCD_BEC = hPlot2D("pFDpCD", "FD", "#theta_{pFD} vs. #phi_{pFD} BEC", "TL #theta_{pFD} vs. #phi_{pFD} BEC",
-                                                       "#phi_{pFD} [Deg]",
-                                                       "#theta_{pFD} [Deg]",
-                                                       directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
-                                                       "02a_Theta_pFD_vs_Phi_pFD_BEC_pFDpCD", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                       Theta_uboundary_FD,
+    hPlot2D hTheta_pFD_vs_Phi_pFD_pFDpCD_BEC = hPlot2D("pFDpCD", "FD", "#theta_{pFD} vs. #phi_{pFD} BEC", "TL #theta_{pFD} vs. #phi_{pFD} BEC", "#phi_{pFD} [Deg]",
+                                                       "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
+                                                       "02a_Theta_pFD_vs_Phi_pFD_BEC_pFDpCD", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
                                                        numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
-    hPlot2D hTheta_pFD_vs_Phi_pFD_pFDpCD_AEC = hPlot2D("pFDpCD", "FD", "#theta_{pFD} vs. #phi_{pFD} AEC", "TL #theta_{pFD} vs. #phi_{pFD} AEC",
-                                                       "#phi_{pFD} [Deg]",
-                                                       "#theta_{pFD} [Deg]",
-                                                       directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
-                                                       "02b_Theta_pFD_vs_Phi_pFD_AEC_pFDpCD", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                       Theta_uboundary_FD,
+    hPlot2D hTheta_pFD_vs_Phi_pFD_pFDpCD_AEC = hPlot2D("pFDpCD", "FD", "#theta_{pFD} vs. #phi_{pFD} AEC", "TL #theta_{pFD} vs. #phi_{pFD} AEC", "#phi_{pFD} [Deg]",
+                                                       "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
+                                                       "02b_Theta_pFD_vs_Phi_pFD_AEC_pFDpCD", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
                                                        numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta vs. phi plots (pFDpCD)">
-    hPlot2D hTheta_e_vs_Phi_e_truth_pFDpCD = hPlot2D("pFDpCD", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]",
-                                                     "#theta_{e} [Deg]",
-                                                     directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
-                                                     "01_Theta_e_vs_Phi_e_truth_pFDpCD",
-                                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                                     numTH2Dbins_Electron_Ang_eff_Plots, numTH2Dbins_Electron_Ang_eff_Plots);
+    hPlot2D hTheta_e_vs_Phi_e_truth_pFDpCD = hPlot2D("pFDpCD", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
+                                                     directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"], "01_Theta_e_vs_Phi_e_truth_pFDpCD",
+                                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Electron_Ang_eff_Plots,
+                                                     numTH2Dbins_Electron_Ang_eff_Plots);
 
-    hPlot2D hTheta_pFD_vs_Phi_pFD_truth_pFDpCD = hPlot2D("pFDpCD", "FD", "TL #theta_{pFD} vs. #phi_{pFD}", "TL #theta_{pFD} vs. #phi_{pFD}",
-                                                         "#phi_{pFD} [Deg]",
-                                                         "#theta_{pFD} [Deg]",
-                                                         directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
-                                                         "02_Theta_pFD_vs_Phi_pFD_truth_pFDpCD", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                         Theta_uboundary_FD,
+    hPlot2D hTheta_pFD_vs_Phi_pFD_truth_pFDpCD = hPlot2D("pFDpCD", "FD", "TL #theta_{pFD} vs. #phi_{pFD}", "TL #theta_{pFD} vs. #phi_{pFD}", "#phi_{pFD} [Deg]",
+                                                         "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
+                                                         "02_Theta_pFD_vs_Phi_pFD_truth_pFDpCD", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
                                                          numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     //</editor-fold>
 
@@ -8507,385 +7675,256 @@ void EventAnalyser() {
 
     //<editor-fold desc="Truth level momentum plots (nFDpCD)">
     hPlot1D hP_e_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL Electron momentum AC", "Electron momentum P^{truth}_{e} AC", "P^{truth}_{e} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "01_P_e_AC_truth_nFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "01_P_e_AC_truth_nFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_e_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL Electron momentum BC", "Electron momentum P^{truth}_{e} BC", "P^{truth}_{e} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "01_P_e_BC_truth_nFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "01_P_e_BC_truth_nFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_n_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL Neutron momentum AC", "Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                           "02a_P_n_AC_truth_nFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02a_P_n_AC_truth_nFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_n_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL Neutron momentum BC", "Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                           "02a_P_n_BC_truth_nFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_nFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Neutron momentum AC", "FD Neutron momentum P^{truth}_{n} AC",
-                                             "P^{truth}_{n} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "02b_P_nFD_AC_truth_nFDpCD",
-                                             FDMomentum_lboundary, FDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_nFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Neutron momentum BC", "FD Neutron momentum P^{truth}_{n} BC",
-                                             "P^{truth}_{n} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "02b_P_nFD_BC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02a_P_n_BC_truth_nFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_nFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Neutron momentum AC", "FD Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_nFD_AC_truth_nFDpCD", FDMomentum_lboundary,
+                                             FDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_nFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Neutron momentum BC", "FD Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_nFD_BC_truth_nFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_p_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL Proton momentum AC", "Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "03_P_p_AC_truth_nFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "03_P_p_AC_truth_nFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_p_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
-                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "03_P_p_BC_truth_nFDpCD",
-                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC",
-                                             "P^{truth}_{p} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "02b_P_pFD_AC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC",
-                                             "P^{truth}_{p} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "02b_P_pFD_BC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC",
-                                             "P^{truth}_{p} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "02b_P_pCD_AC_truth_nFDpCD",
-                                             CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC",
-                                             "P^{truth}_{p} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "02b_P_pCD_BC_truth_nFDpCD",
-                                             CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "03_P_p_BC_truth_nFDpCD", Momentum_lboundary,
+                                           Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pFD_AC_truth_nFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pFD_BC_truth_nFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum AC", "CD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pCD_AC_truth_nFDpCD", CDMomentum_lboundary,
+                                             CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL Proton momentum BC", "CD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "02b_P_pCD_BC_truth_nFDpCD", CDMomentum_lboundary,
+                                             CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC",
-                                             "P^{truth}_{#pi^{+}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "04_P_piplus_AC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pip_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC",
-                                             "P^{truth}_{#pi^{+}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "04_P_piplus_BC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "04_P_piplus_AC_truth_nFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pip_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "04_P_piplus_BC_truth_nFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pim_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC",
-                                             "P^{truth}_{#pi^{-}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "05_P_piminus_AC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pim_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC",
-                                             "P^{truth}_{#pi^{-}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "05_P_piminus_BC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "05_P_piminus_AC_truth_nFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pim_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "05_P_piminus_BC_truth_nFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_pi0_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC",
-                                             "P^{truth}_{#pi^{0}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "06_P_pi0_AC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_pi0_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC",
-                                             "P^{truth}_{#pi^{0}} [GeV/c]",
-                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "06_P_pi0_BC_truth_nFDpCD",
-                                             Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pi0_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC", "P^{truth}_{#pi^{0}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "06_P_pi0_AC_truth_nFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_pi0_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC", "P^{truth}_{#pi^{0}} [GeV/c]",
+                                             directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "06_P_pi0_BC_truth_nFDpCD", Momentum_lboundary,
+                                             Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
 
-    hPlot1D hP_ph_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC",
-                                            "P^{truth}_{#gamma} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                            "07a_P_ph_AC_truth_nFDpCD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC",
-                                            "P^{truth}_{#gamma} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                            "07a_P_ph_BC_truth_nFDpCD",
-                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #gamma momentum AC", "FD #gamma momentum P^{truth}_{#gamma} AC",
-                                               "P^{truth}_{#gamma} [GeV/c]",
-                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "07b_P_ph_AC_truth_nFDpCD_FD",
+    hPlot1D hP_ph_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "07a_P_ph_AC_truth_nFDpCD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
+                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "07a_P_ph_BC_truth_nFDpCD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+    hPlot1D hP_ph_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #gamma momentum AC", "FD #gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
+                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "07b_P_ph_AC_truth_nFDpCD_FD",
                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
-    hPlot1D hP_ph_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #gamma momentum BC", "FD #gamma momentum P^{truth}_{#gamma} BC",
-                                               "P^{truth}_{#gamma} [GeV/c]",
-                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "07b_P_ph_BC_truth_nFDpCD_FD",
+    hPlot1D hP_ph_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #gamma momentum BC", "FD #gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
+                                               directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"], "07b_P_ph_BC_truth_nFDpCD_FD",
                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (nFDpCD)">
-    hPlot1D hTheta_e_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC",
-                                               "#theta^{truth}_{e} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "01_Theta_e_AC_truth_nFDpCD",
+    hPlot1D hTheta_e_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC", "#theta^{truth}_{e} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "01_Theta_e_AC_truth_nFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_e_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC",
-                                               "#theta^{truth}_{e} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "01_Theta_e_BC_truth_nFDpCD",
+    hPlot1D hTheta_e_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC", "#theta^{truth}_{e} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "01_Theta_e_BC_truth_nFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_n_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC",
-                                               "#theta^{truth}_{n} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "02a_Theta_n_AC_truth_nFDpCD",
+    hPlot1D hTheta_n_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC", "#theta^{truth}_{n} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "02a_Theta_n_AC_truth_nFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_n_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC",
-                                               "#theta^{truth}_{n} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "02a_Theta_n_BC_truth_nFDpCD",
+    hPlot1D hTheta_n_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC", "#theta^{truth}_{n} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "02a_Theta_n_BC_truth_nFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_nFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing FD Neutron AC",
-                                                 "#theta^{truth}_{n} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "02b_Theta_nFD_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_nFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing FD Neutron BC",
-                                                 "#theta^{truth}_{n} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "02b_Theta_nFD_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_nFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing FD Neutron AC", "#theta^{truth}_{n} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "02b_Theta_nFD_AC_truth_nFDpCD",
+                                                 Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_nFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing FD Neutron BC", "#theta^{truth}_{n} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "02b_Theta_nFD_BC_truth_nFDpCD",
+                                                 Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hTheta_p_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC",
-                                               "#theta^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "03_Theta_p_AC_truth_nFDpCD",
+    hPlot1D hTheta_p_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "03_Theta_p_AC_truth_nFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_p_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC",
-                                               "#theta^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "03_Theta_p_BC_truth_nFDpCD",
+    hPlot1D hTheta_p_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "03_Theta_p_BC_truth_nFDpCD",
                                                Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC",
-                                                 "#theta^{truth}_{p} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "02b_Theta_pFD_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC",
-                                                 "#theta^{truth}_{p} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "02b_Theta_pFD_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing CD Proton AC",
-                                                 "#theta^{truth}_{p} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "02b_Theta_pCD_AC_truth_nFDpCD", Theta_lboundary_CD, Theta_uboundary_CD,
-                                                 numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing CD Proton BC",
-                                                 "#theta^{truth}_{p} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "02b_Theta_pCD_BC_truth_nFDpCD", Theta_lboundary_CD, Theta_uboundary_CD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC", "#theta^{truth}_{p} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "02b_Theta_pFD_AC_truth_nFDpCD",
+                                                 Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC", "#theta^{truth}_{p} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "02b_Theta_pFD_BC_truth_nFDpCD",
+                                                 Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing CD Proton AC", "#theta^{truth}_{p} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "02b_Theta_pCD_AC_truth_nFDpCD",
+                                                 Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing CD Proton BC", "#theta^{truth}_{p} [Deg]",
+                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"], "02b_Theta_pCD_BC_truth_nFDpCD",
+                                                 Theta_lboundary_CD, Theta_uboundary_CD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                                 "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "04_Theta_piplus_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "04_Theta_piplus_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_pip_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{#pi^{+}} BC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                                 "#theta^{truth}_{#pi^{+}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "04_Theta_piplus_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "04_Theta_piplus_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pim_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{#pi^{-}} AC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                                 "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "05_Theta_piminus_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "05_Theta_piminus_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_pim_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{#pi^{-}} BC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                                 "#theta^{truth}_{#pi^{-}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "05_Theta_piminus_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "05_Theta_piminus_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_pi0_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{#pi^{0}} AC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
-                                                 "#theta^{truth}_{#pi^{0}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "06_Theta_pi0_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{0}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "06_Theta_pi0_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_pi0_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{#pi^{0}} BC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
-                                                 "#theta^{truth}_{#pi^{0}} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                 "06_Theta_pi0_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                 numTH1Dbins_Ang_eff_Plots);
+                                                 "#theta^{truth}_{#pi^{0}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                 "06_Theta_pi0_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
 
     hPlot1D hTheta_ph_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC",
-                                                "#theta^{truth}_{#gamma} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
                                                 "07a_Theta_ph_AC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     hPlot1D hTheta_ph_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC",
-                                                "#theta^{truth}_{#gamma} [Deg]",
-                                                directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
                                                 "07a_Theta_ph_BC_truth_nFDpCD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_ph_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{#gamma} AC",
-                                                   "#theta^{truth}_{#gamma} of FD Outgoing #gamma AC",
-                                                   "#theta^{truth}_{#gamma} [Deg]",
-                                                   directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                   "07b_Theta_ph_AC_truth_nFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                   numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hTheta_ph_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{#gamma} BC",
-                                                   "#theta^{truth}_{#gamma} of FD Outgoing #gamma BC",
-                                                   "#theta^{truth}_{#gamma} [Deg]",
-                                                   directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                   "07b_Theta_ph_BC_truth_nFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD,
-                                                   numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_ph_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of FD Outgoing #gamma AC",
+                                                   "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                   "07b_Theta_ph_AC_truth_nFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hTheta_ph_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of FD Outgoing #gamma BC",
+                                                   "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
+                                                   "07b_Theta_ph_BC_truth_nFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (nFDpCD)">
-    hPlot1D hPhi_e_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{e} AC", "#phi^{truth}_{e} of Outgoing Electron AC",
-                                             "#phi^{truth}_{e} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "01_Phi_e_AC_truth_nFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_e_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron BC",
-                                             "#phi^{truth}_{e} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "01_Phi_e_BC_truth_nFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_e_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{e} AC", "#phi^{truth}_{e} of Outgoing Electron AC", "#phi^{truth}_{e} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "01_Phi_e_AC_truth_nFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_e_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron BC", "#phi^{truth}_{e} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "01_Phi_e_BC_truth_nFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_n_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing Neutron AC",
-                                             "#phi^{truth}_{n} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "02a_Phi_n_AC_truth_nFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_n_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC",
-                                             "#phi^{truth}_{n} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "02a_Phi_n_BC_truth_nFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_nFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing FD Neutron AC",
-                                               "#phi^{truth}_{n} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "02b_Phi_nFD_AC_truth_nFDpCD",
-                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_nFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing FD Neutron AC",
-                                               "#phi^{truth}_{n} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "02b_Phi_nFD_BC_truth_nFDpCD",
-                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_n_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing Neutron AC", "#phi^{truth}_{n} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02a_Phi_n_AC_truth_nFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_n_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC", "#phi^{truth}_{n} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02a_Phi_n_BC_truth_nFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_nFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing FD Neutron AC", "#phi^{truth}_{n} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_nFD_AC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_nFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing FD Neutron AC", "#phi^{truth}_{n} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_nFD_BC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_p_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC",
-                                             "#phi^{truth}_{p} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "03_Phi_p_AC_truth_nFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_p_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC",
-                                             "#phi^{truth}_{p} [Deg]",
-                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                             "03_Phi_p_BC_truth_nFDpCD",
-                                             Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{p} of Outgoing FD Proton AC",
-                                               "#phi^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "02b_Phi_pFD_AC_truth_nFDpCD",
-                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{p} of Outgoing FD Proton BC",
-                                               "#phi^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "02b_Phi_pFD_BC_truth_nFDpCD",
-                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #phi^{truth}_{p} AC", "#phi^{truth}_{p} of Outgoing CD Proton AC",
-                                               "#phi^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "02b_Phi_pCD_AC_truth_nFDpCD",
-                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #phi^{truth}_{p} BC", "#phi^{truth}_{p} of Outgoing CD Proton BC",
-                                               "#phi^{truth}_{p} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "02b_Phi_pCD_BC_truth_nFDpCD",
-                                               Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "03_Phi_p_AC_truth_nFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_p_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "03_Phi_p_BC_truth_nFDpCD", Phi_lboundary,
+                                             Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pFD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{p} of Outgoing FD Proton AC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pFD_AC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pFD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{p} of Outgoing FD Proton BC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pFD_BC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pCD_AC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #phi^{truth}_{p} AC", "#phi^{truth}_{p} of Outgoing CD Proton AC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pCD_AC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pCD_BC_truth_nFDpCD = hPlot1D("nFDpCD", "CD", "CD TL #phi^{truth}_{p} BC", "#phi^{truth}_{p} of Outgoing CD Proton BC", "#phi^{truth}_{p} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "02b_Phi_pCD_BC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
-                                               "#phi^{truth}_{#pi^{+}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "04_Phi_piplus_AC_truth_nFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pip_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
-                                               "#phi^{truth}_{#pi^{+}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "04_Phi_piplus_BC_truth_nFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pip_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC", "#phi^{truth}_{#pi^{+}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "04_Phi_piplus_AC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pip_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC", "#phi^{truth}_{#pi^{+}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "04_Phi_piplus_BC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pim_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
-                                               "#phi^{truth}_{#pi^{-}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "05_Phi_piminus_AC_truth_nFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pim_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
-                                               "#phi^{truth}_{#pi^{-}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "05_Phi_piminus_BC_truth_nFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pim_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC", "#phi^{truth}_{#pi^{-}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "05_Phi_piminus_AC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pim_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC", "#phi^{truth}_{#pi^{-}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "05_Phi_piminus_BC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_pi0_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
-                                               "#phi^{truth}_{#pi^{0}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "06_Phi_pi0_AC_truth_nFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_pi0_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
-                                               "#phi^{truth}_{#pi^{0}} [Deg]",
-                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                               "06_Phi_pi0_BC_truth_nFDpCD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pi0_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC", "#phi^{truth}_{#pi^{0}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "06_Phi_pi0_AC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_pi0_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC", "#phi^{truth}_{#pi^{0}} [Deg]",
+                                               directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "06_Phi_pi0_BC_truth_nFDpCD", Phi_lboundary,
+                                               Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
 
-    hPlot1D hPhi_ph_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC",
-                                              "#phi^{truth}_{#gamma} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                              "07a_Phi_ph_AC_truth_nFDpCD",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC",
-                                              "#phi^{truth}_{#gamma} [Deg]",
-                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
-                                              "07a_Phi_hp_BC_truth_nFDpCD",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{#gamma} AC",
-                                                 "#phi^{truth}_{#gamma} of FD Outgoing #gamma AC",
-                                                 "#phi^{truth}_{#gamma} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
+    hPlot1D hPhi_ph_AC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC", "#phi^{truth}_{#gamma} [Deg]",
+                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "07a_Phi_ph_AC_truth_nFDpCD", Phi_lboundary,
+                                              Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_BC_truth_nFDpCD = hPlot1D("nFDpCD", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC", "#phi^{truth}_{#gamma} [Deg]",
+                                              directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"], "07a_Phi_hp_BC_truth_nFDpCD", Phi_lboundary,
+                                              Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
+    hPlot1D hPhi_ph_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma AC",
+                                                 "#phi^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
                                                  "07b_Phi_ph_AC_truth_nFDpCD_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
-    hPlot1D hPhi_ph_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{#gamma} BC",
-                                                 "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC",
-                                                 "#phi^{truth}_{#gamma} [Deg]",
-                                                 directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
+    hPlot1D hPhi_ph_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC",
+                                                 "#phi^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"],
                                                  "07b_Phi_hp_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary, numTH1Dbins_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="TL fiducial cuts (nFDpCD)">
     hPlot2D hnFD_Hit_map_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "FD neutron hit map BEC", "FD neutron hit map BEC", "x_{nFD}", "y_{nFD}",
-                                              directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                              "01a_Neutron_FD_Hit_map_BEC_nFDpCD", -1.1, 1.1, -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots,
-                                              numTH2Dbins_Nucleon_Ang_eff_Plots);
+                                              directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"], "01a_Neutron_FD_Hit_map_BEC_nFDpCD", -1.1, 1.1,
+                                              -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     hPlot2D hnFD_Hit_map_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "FD neutron hit map AEC", "FD neutron hit map AEC", "x_{nFD}", "y_{nFD}",
-                                              directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                              "01b_Neutron_FD_Hit_map_AEC_nFDpCD", -1.1, 1.1, -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots,
-                                              numTH2Dbins_Nucleon_Ang_eff_Plots);
+                                              directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"], "01b_Neutron_FD_Hit_map_AEC_nFDpCD", -1.1, 1.1,
+                                              -1.1, 1.1, numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
 
-    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} BEC", "TL #theta_{nFD} vs. #phi_{nFD} BEC",
-                                                       "#phi_{nFD} [Deg]",
-                                                       "#theta_{nFD} [Deg]",
-                                                       directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                                       "02a_Theta_nFD_vs_Phi_nFD_BEC_nFDpCD", Phi_lboundary, Phi_uboundary,
-                                                       Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Nucleon_Ang_eff_Plots,
-                                                       numTH2Dbins_Nucleon_Ang_eff_Plots);
-    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC",
-                                                       "#phi_{nFD} [Deg]",
-                                                       "#theta_{nFD} [Deg]",
-                                                       directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                                       "02b_Theta_nFD_vs_Phi_nFD_AEC_nFDpCD", Phi_lboundary, Phi_uboundary,
-                                                       Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Nucleon_Ang_eff_Plots,
-                                                       numTH2Dbins_Nucleon_Ang_eff_Plots);
+    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} BEC", "TL #theta_{nFD} vs. #phi_{nFD} BEC", "#phi_{nFD} [Deg]",
+                                                       "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                                       "02a_Theta_nFD_vs_Phi_nFD_BEC_nFDpCD", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
+                                                       numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
+    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC", "#phi_{nFD} [Deg]",
+                                                       "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                                       "02b_Theta_nFD_vs_Phi_nFD_AEC_nFDpCD", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
+                                                       numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta vs. phi plots (nFDpCD)">
-    hPlot2D hTheta_e_vs_Phi_e_truth_nFDpCD = hPlot2D("nFDpCD", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]",
-                                                     "#theta_{e} [Deg]",
-                                                     directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                                     "01_Theta_e_vs_Phi_e_truth_nFDpCD",
-                                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                                     numTH2Dbins_Electron_Ang_eff_Plots, numTH2Dbins_Electron_Ang_eff_Plots);
+    hPlot2D hTheta_e_vs_Phi_e_truth_nFDpCD = hPlot2D("nFDpCD", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
+                                                     directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"], "01_Theta_e_vs_Phi_e_truth_nFDpCD",
+                                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Electron_Ang_eff_Plots,
+                                                     numTH2Dbins_Electron_Ang_eff_Plots);
 
-    hPlot2D hTheta_nFD_vs_Phi_nFD_truth_nFDpCD = hPlot2D("nFDpCD", "FD", "TL #theta_{nFD} vs. #phi_{nFD}", "TL #theta_{nFD} vs. #phi_{nFD}",
-                                                         "#phi_{nFD} [Deg]",
-                                                         "#theta_{nFD} [Deg]",
-                                                         directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                                         "02_Theta_nFD_vs_Phi_nFD_truth_nFDpCD", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
-                                                         Theta_uboundary_FD,
+    hPlot2D hTheta_nFD_vs_Phi_nFD_truth_nFDpCD = hPlot2D("nFDpCD", "FD", "TL #theta_{nFD} vs. #phi_{nFD}", "TL #theta_{nFD} vs. #phi_{nFD}", "#phi_{nFD} [Deg]",
+                                                         "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                                         "02_Theta_nFD_vs_Phi_nFD_truth_nFDpCD", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
                                                          numTH2Dbins_Nucleon_Ang_eff_Plots, numTH2Dbins_Nucleon_Ang_eff_Plots);
     //</editor-fold>
 
@@ -8900,76 +7939,68 @@ void EventAnalyser() {
     //<editor-fold desc="Acceptance maps histograms">
     /* Acceptance maps are handled completely by the AMaps class */
     hPlot2D hElectronAMapBC = hPlot2D("", "", "Electron_AMap_BC", "Electron AMap BC", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
-                                      directories.AMaps_Directory_map["AMaps_BC_1e_cut_Directory"], "01_Electron_AMap_BC",
-                                      Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                      numTH2Dbins_Electron_AMaps_Plots, numTH2Dbins_Electron_AMaps_Plots);
+                                      directories.AMaps_Directory_map["AMaps_BC_1e_cut_Directory"], "01_Electron_AMap_BC", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
+                                      Theta_uboundary_FD, numTH2Dbins_Electron_AMaps_Plots, numTH2Dbins_Electron_AMaps_Plots);
     hPlot2D hProtonAMapBC = hPlot2D("", "", "Proton_AMap_BC", "Proton AMap BC", "#phi_{p} [Deg]", "#theta_{p} [Deg]",
-                                    directories.AMaps_Directory_map["AMaps_BC_1e_cut_Directory"], "02_Proton_AMap_BC",
-                                    Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                    numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
+                                    directories.AMaps_Directory_map["AMaps_BC_1e_cut_Directory"], "02_Proton_AMap_BC", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
+                                    Theta_uboundary_FD, numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
     hPlot2D hNeutronAMapBC = hPlot2D("", "", "Neutron_AMap_BC", "Neutron AMap BC", "#phi_{n} [Deg]", "#theta_{n} [Deg]",
-                                     directories.AMaps_Directory_map["AMaps_BC_1e_cut_Directory"], "03_Neutron_AMap_BC",
-                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                     numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
+                                     directories.AMaps_Directory_map["AMaps_BC_1e_cut_Directory"], "03_Neutron_AMap_BC", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
+                                     Theta_uboundary_FD, numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
     hPlot2D hNucleonAMapBC = hPlot2D("", "", "Nucleon_AMap_BC", "Nucleon AMap BC", "#phi_{nuc} [Deg]", "#theta_{nuc} [Deg]",
-                                     directories.AMaps_Directory_map["AMaps_BC_1e_cut_Directory"], "04_Nucleon_AMap_BC",
-                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                     numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
+                                     directories.AMaps_Directory_map["AMaps_BC_1e_cut_Directory"], "04_Nucleon_AMap_BC", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
+                                     Theta_uboundary_FD, numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
 
     hPlot1D hReco_P_e_AMaps = hPlot1D("1e cut", "FD", "Reco P_{e} used in AMaps", "Reco P_{e} used in AMaps", "P_{e} [GeV/c]",
-                                      directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "01a_Reco_P_e_used_in_AMaps",
-                                      Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                      directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "01a_Reco_P_e_used_in_AMaps", Momentum_lboundary, Momentum_uboundary,
+                                      numTH1Dbins);
     hPlot1D hTL_P_e_AMaps = hPlot1D("1e cut", "FD", "TL P_{e} used in AMaps", "TL P_{e} used in AMaps", "P_{e} [GeV/c]",
-                                    directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "01b_TL_P_e_used_in_AMaps",
-                                    Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                    directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "01b_TL_P_e_used_in_AMaps", Momentum_lboundary, Momentum_uboundary,
+                                    numTH1Dbins);
     hPlot1D hReco_P_pFD_AMaps = hPlot1D("1e cut", "FD", "Reco P_{pFD} used in AMaps", "Reco P_{pFD} used in AMaps", "P_{pFD} [GeV/c]",
-                                        directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "02a_Reco_P_pFD_used_in_AMaps",
-                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                        directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "02a_Reco_P_pFD_used_in_AMaps", Momentum_lboundary, Momentum_uboundary,
+                                        numTH1Dbins);
     hPlot1D hTL_P_pFD_AMaps = hPlot1D("1e cut", "FD", "TL P_{pFD} used in AMaps", "TL P_{pFD} used in AMaps", "P_{pFD} [GeV/c]",
-                                      directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "02b_TL_P_pFD_used_in_AMaps",
-                                      Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                      directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "02b_TL_P_pFD_used_in_AMaps", Momentum_lboundary, Momentum_uboundary,
+                                      numTH1Dbins);
     hPlot1D hReco_P_nFD_AMaps = hPlot1D("1e cut", "FD", "Reco P_{nFD} used in AMaps", "Reco P_{nFD} used in AMaps", "P_{nFD} [GeV/c]",
-                                        directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "03a_Reco_P_nFD_used_in_AMaps",
-                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                        directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "03a_Reco_P_nFD_used_in_AMaps", Momentum_lboundary, Momentum_uboundary,
+                                        numTH1Dbins);
     hPlot1D hTL_P_nFD_AMaps = hPlot1D("1e cut", "FD", "TL P_{nFD} used in AMaps", "TL P_{nFD} used in AMaps", "P_{nFD} [GeV/c]",
-                                      directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "03b_TL_P_nFD_used_in_AMaps",
-                                      Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                      directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], "03b_TL_P_nFD_used_in_AMaps", Momentum_lboundary, Momentum_uboundary,
+                                      numTH1Dbins);
 
     hPlot2D hElectronAMapBCwKC = hPlot2D("", "", "Electron_AMap_BCwKC", "Electron AMap BC wKC", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
-                                         directories.AMaps_Directory_map["WMaps_BC_1e_cut_Directory"], "01_Electron_AMap_BCwKC",
-                                         Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                         numTH2Dbins_Electron_AMaps_Plots, numTH2Dbins_Electron_AMaps_Plots);
+                                         directories.AMaps_Directory_map["WMaps_BC_1e_cut_Directory"], "01_Electron_AMap_BCwKC", Phi_lboundary, Phi_uboundary,
+                                         Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Electron_AMaps_Plots, numTH2Dbins_Electron_AMaps_Plots);
     hPlot2D hProtonAMapBCwKC = hPlot2D("", "", "Proton_AMap_BCwKC", "Proton AMap BC wKC", "#phi_{p} [Deg]", "#theta_{p} [Deg]",
-                                       directories.AMaps_Directory_map["WMaps_BC_1e_cut_Directory"], "02_Proton_AMap_BCwKC",
-                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                       numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
+                                       directories.AMaps_Directory_map["WMaps_BC_1e_cut_Directory"], "02_Proton_AMap_BCwKC", Phi_lboundary, Phi_uboundary, Theta_lboundary_FD,
+                                       Theta_uboundary_FD, numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
     hPlot2D hNeutronAMapBCwKC = hPlot2D("", "", "Neutron_AMap_BCwKC", "Neutron AMap BC wKC", "#phi_{n} [Deg]", "#theta_{n} [Deg]",
-                                        directories.AMaps_Directory_map["WMaps_BC_1e_cut_Directory"], "03_Neutron_AMap_BCwKC",
-                                        Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                        numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
+                                        directories.AMaps_Directory_map["WMaps_BC_1e_cut_Directory"], "03_Neutron_AMap_BCwKC", Phi_lboundary, Phi_uboundary,
+                                        Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
     hPlot2D hNucleonAMapBCwKC = hPlot2D("", "", "Nucleon_AMap_BCwKC", "Nucleon AMap BC wKC", "#phi_{nuc} [Deg]", "#theta_{nuc} [Deg]",
-                                        directories.AMaps_Directory_map["WMaps_BC_1e_cut_Directory"], "04_Nucleon_AMap_BCwKC",
-                                        Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
-                                        numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
+                                        directories.AMaps_Directory_map["WMaps_BC_1e_cut_Directory"], "04_Nucleon_AMap_BCwKC", Phi_lboundary, Phi_uboundary,
+                                        Theta_lboundary_FD, Theta_uboundary_FD, numTH2Dbins_Nucleon_AMaps_Plots, numTH2Dbins_Nucleon_AMaps_Plots);
 
     hPlot1D hReco_P_e_WMaps = hPlot1D("1e cut", "FD", "Reco P_{e} used in WMaps", "Reco P_{e} used in WMaps", "P_{e} [GeV/c]",
-                                      directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "01a_Reco_P_e_used_in_WMaps",
-                                      Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                      directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "01a_Reco_P_e_used_in_WMaps", Momentum_lboundary, Momentum_uboundary,
+                                      numTH1Dbins);
     hPlot1D hTL_P_e_WMaps = hPlot1D("1e cut", "FD", "TL P_{e} used in WMaps", "TL P_{e} used in WMaps", "P_{e} [GeV/c]",
-                                    directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "01b_TL_P_e_used_in_WMaps",
-                                    Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                    directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "01b_TL_P_e_used_in_WMaps", Momentum_lboundary, Momentum_uboundary,
+                                    numTH1Dbins);
     hPlot1D hReco_P_pFD_WMaps = hPlot1D("1e cut", "FD", "Reco P_{pFD} used in WMaps", "Reco P_{pFD} used in WMaps", "P_{pFD} [GeV/c]",
-                                        directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "02a_Reco_P_pFD_used_in_WMaps",
-                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                        directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "02a_Reco_P_pFD_used_in_WMaps", Momentum_lboundary, Momentum_uboundary,
+                                        numTH1Dbins);
     hPlot1D hTL_P_pFD_WMaps = hPlot1D("1e cut", "FD", "TL P_{pFD} used in WMaps", "TL P_{pFD} used in WMaps", "P_{pFD} [GeV/c]",
-                                      directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "02b_TL_P_pFD_used_in_WMaps",
-                                      Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                      directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "02b_TL_P_pFD_used_in_WMaps", Momentum_lboundary, Momentum_uboundary,
+                                      numTH1Dbins);
     hPlot1D hReco_P_nFD_WMaps = hPlot1D("1e cut", "FD", "Reco P_{nFD} used in WMaps", "Reco P_{nFD} used in WMaps", "P_{nFD} [GeV/c]",
-                                        directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "03a_Reco_P_nFD_used_in_WMaps",
-                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                        directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "03a_Reco_P_nFD_used_in_WMaps", Momentum_lboundary, Momentum_uboundary,
+                                        numTH1Dbins);
     hPlot1D hTL_P_nFD_WMaps = hPlot1D("1e cut", "FD", "TL P_{nFD} used in WMaps", "TL P_{nFD} used in WMaps", "P_{nFD} [GeV/c]",
-                                      directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "03b_TL_P_nFD_used_in_WMaps",
-                                      Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                      directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], "03b_TL_P_nFD_used_in_WMaps", Momentum_lboundary, Momentum_uboundary,
+                                      numTH1Dbins);
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -8981,280 +8012,228 @@ void EventAnalyser() {
     //<editor-fold desc="Resolution histograms (1p)">
     hPlot1D hdTheta_pFD_TL_BC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} BC", "#Delta#theta_{pFD} of FD proton BC",
                                            "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
-                                           directories.Resolution_Directory_map["Resolution_1p_Directory"], "00a_DeltaTheta_pFD_BC_TL_1p",
-                                           -Theta_uboundary_FD, Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
+                                           directories.Resolution_Directory_map["Resolution_1p_Directory"], "00a_DeltaTheta_pFD_BC_TL_1p", -Theta_uboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
     hPlot1D hdTheta_pFD_TL_ZOOMIN_BC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} - ZOOMIN BC", "#Delta#theta_{pFD} of FD proton - ZOOMIN BC",
                                                   "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
-                                                  directories.Resolution_Directory_map["Resolution_1p_Directory"],
-                                                  "00b_DeltaTheta_pFD_BC_TL_ZOOMIN_1p",
-                                                  -10.0, 10.0, numTH1Dbins_nRes_Plots);
+                                                  directories.Resolution_Directory_map["Resolution_1p_Directory"], "00b_DeltaTheta_pFD_BC_TL_ZOOMIN_1p", -10.0, 10.0,
+                                                  numTH1Dbins_nRes_Plots);
     hPlot1D hdPhi_pFD_TL_BC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} BC", "#Delta#phi_{pFD} of FD proton BC",
-                                         "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
-                                         directories.Resolution_Directory_map["Resolution_1p_Directory"], "00c_DeltaPhi_pFD_BC_TL_1p",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
+                                         "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]", directories.Resolution_Directory_map["Resolution_1p_Directory"],
+                                         "00c_DeltaPhi_pFD_BC_TL_1p", Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
     hPlot1D hdPhi_pFD_TL_ZOOMIN_BC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} - ZOOMIN BC", "#Delta#phi_{pFD} of FD proton - ZOOMIN BC",
                                                 "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
-                                                directories.Resolution_Directory_map["Resolution_1p_Directory"],
-                                                "00d_DeltaPhi_pFD_BC_TL_ZOOMIN_1p",
-                                                -20, 20, numTH1Dbins_nRes_Plots);
+                                                directories.Resolution_Directory_map["Resolution_1p_Directory"], "00d_DeltaPhi_pFD_BC_TL_ZOOMIN_1p", -20, 20,
+                                                numTH1Dbins_nRes_Plots);
 
     hPlot1D hdTheta_pFD_TL_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} AdPC", "#Delta#theta_{pFD} of FD proton AdPC",
                                              "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
-                                             directories.Resolution_Directory_map["Resolution_1p_Directory"], "00e_DeltaTheta_pFD_AdPC_TL_1p",
-                                             -Theta_uboundary_FD, Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
-    hPlot1D hdTheta_pFD_TL_ZOOMIN_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} - ZOOMIN AdPC",
-                                                    "#Delta#theta_{pFD} of FD proton - ZOOMIN AdPC",
+                                             directories.Resolution_Directory_map["Resolution_1p_Directory"], "00e_DeltaTheta_pFD_AdPC_TL_1p", -Theta_uboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
+    hPlot1D hdTheta_pFD_TL_ZOOMIN_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} - ZOOMIN AdPC", "#Delta#theta_{pFD} of FD proton - ZOOMIN AdPC",
                                                     "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
-                                                    directories.Resolution_Directory_map["Resolution_1p_Directory"],
-                                                    "00f_DeltaTheta_pFD_AdPC_TL_ZOOMIN_1p",
-                                                    -10.0, 10.0, numTH1Dbins_nRes_Plots);
+                                                    directories.Resolution_Directory_map["Resolution_1p_Directory"], "00f_DeltaTheta_pFD_AdPC_TL_ZOOMIN_1p", -10.0, 10.0,
+                                                    numTH1Dbins_nRes_Plots);
     hPlot1D hdPhi_pFD_TL_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} AdPC", "#Delta#phi_{pFD} of FD proton AdPC",
-                                           "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
-                                           directories.Resolution_Directory_map["Resolution_1p_Directory"], "00g_DeltaPhi_pFD_AdPC_TL_1p",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
+                                           "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]", directories.Resolution_Directory_map["Resolution_1p_Directory"],
+                                           "00g_DeltaPhi_pFD_AdPC_TL_1p", Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
     hPlot1D hdPhi_pFD_TL_ZOOMIN_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} - ZOOMIN AdPC", "#Delta#phi_{pFD} of FD proton - ZOOMIN AdPC",
                                                   "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
-                                                  directories.Resolution_Directory_map["Resolution_1p_Directory"],
-                                                  "00h_DeltaPhi_pFD_AdPC_TL_ZOOMIN_1p",
-                                                  -20, 20, numTH1Dbins_nRes_Plots);
+                                                  directories.Resolution_Directory_map["Resolution_1p_Directory"], "00h_DeltaPhi_pFD_AdPC_TL_ZOOMIN_1p", -20, 20,
+                                                  numTH1Dbins_nRes_Plots);
 
-    hPlot1D hTheta_pFD_TL_ApResC_1p = hPlot1D("1p", "", "TL #theta^{truth}_{pFD} ApResC", "#theta^{truth}_{pFD} of FD proton ApResC",
-                                              "#theta^{truth}_{pFD} [Deg]",
-                                              directories.Resolution_Directory_map["Resolution_1p_Directory"], "01a_Theta_pFD_ApResC_TL_1p",
-                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
-    hPlot1D hPhi_pFD_TL_ApResC_1p = hPlot1D("1p", "", "TL #phi^{truth}_{pFD} ApResC", "#phi^{truth}_{pFD} of FD proton ApResC",
-                                            "#phi^{truth}_{pFD} [Deg]",
-                                            directories.Resolution_Directory_map["Resolution_1p_Directory"], "02a_Phi_pFD_ApResC_TL_1p",
-                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
+    hPlot1D hTheta_pFD_TL_ApResC_1p = hPlot1D("1p", "", "TL #theta^{truth}_{pFD} ApResC", "#theta^{truth}_{pFD} of FD proton ApResC", "#theta^{truth}_{pFD} [Deg]",
+                                              directories.Resolution_Directory_map["Resolution_1p_Directory"], "01a_Theta_pFD_ApResC_TL_1p", Theta_lboundary_FD,
+                                              Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
+    hPlot1D hPhi_pFD_TL_ApResC_1p = hPlot1D("1p", "", "TL #phi^{truth}_{pFD} ApResC", "#phi^{truth}_{pFD} of FD proton ApResC", "#phi^{truth}_{pFD} [Deg]",
+                                            directories.Resolution_Directory_map["Resolution_1p_Directory"], "02a_Phi_pFD_ApResC_TL_1p", Phi_lboundary, Phi_uboundary,
+                                            numTH1Dbins_nRes_Plots);
     TH2D *hTheta_pFD_TL_VS_Phi_pFD_TL_ApResC_1p = new TH2D("#theta^{truth}_{pFD} vs. #phi^{truth}_{pFD} ApResC (1p, FD)",
                                                            "#theta^{truth}_{pFD} vs. #phi^{truth}_{pFD} ApResC (1p, FD);#phi^{truth}_{pFD} [Deg];#theta^{truth}_{pFD} [Deg]",
-                                                           numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary,
-                                                           numTH2Dbins_nRes_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                           numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_nRes_Plots, Theta_lboundary_FD,
+                                                           Theta_uboundary_FD);
     string hTheta_pFD_TL_VS_Phi_pFD_TL_ApResC_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
 
-    hPlot1D hTheta_pFD_TL_MatchedP_1p = hPlot1D("1p", "", "TL #theta^{truth}_{pFD} of matched TL p",
-                                                "#theta^{truth}_{pFD} of matched TL FD proton",
-                                                "#theta^{truth}_{pFD} [Deg]",
-                                                directories.Resolution_Directory_map["Resolution_1p_Directory"], "01b_Theta_pFD_MatchedN_TL_1p",
+    hPlot1D hTheta_pFD_TL_MatchedP_1p = hPlot1D("1p", "", "TL #theta^{truth}_{pFD} of matched TL p", "#theta^{truth}_{pFD} of matched TL FD proton",
+                                                "#theta^{truth}_{pFD} [Deg]", directories.Resolution_Directory_map["Resolution_1p_Directory"], "01b_Theta_pFD_MatchedN_TL_1p",
                                                 Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
-    hPlot1D hPhi_pFD_TL_MatchedP_1p = hPlot1D("1p", "", "TL #phi^{truth}_{pFD} of matched TL p", "#phi^{truth}_{pFD} of matched TL FD proton",
-                                              "#phi^{truth}_{pFD} [Deg]",
-                                              directories.Resolution_Directory_map["Resolution_1p_Directory"], "02b_Phi_pFD_MatchedN_TL_1p",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
+    hPlot1D hPhi_pFD_TL_MatchedP_1p = hPlot1D("1p", "", "TL #phi^{truth}_{pFD} of matched TL p", "#phi^{truth}_{pFD} of matched TL FD proton", "#phi^{truth}_{pFD} [Deg]",
+                                              directories.Resolution_Directory_map["Resolution_1p_Directory"], "02b_Phi_pFD_MatchedN_TL_1p", Phi_lboundary, Phi_uboundary,
+                                              numTH1Dbins_nRes_Plots);
     TH2D *hTheta_pFD_TL_VS_Phi_pFD_TL_MatchedP_1p = new TH2D("#theta^{truth}_{pFD} vs. #phi^{truth}_{pFD} of matched TL p (1p, FD)",
                                                              "#theta^{truth}_{pFD} vs. #phi^{truth}_{pFD} of matched TL FD proton (1p, FD);#phi^{truth}_{pFD} [Deg];#theta^{truth}_{pFD} [Deg]",
-                                                             numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary,
-                                                             numTH2Dbins_nRes_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                             numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_nRes_Plots, Theta_lboundary_FD,
+                                                             Theta_uboundary_FD);
     string hTheta_pFD_TL_VS_Phi_pFD_TL_MatchedP_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
 
-    hPlot1D hTheta_pFD_TL_1p = hPlot1D("1p", "", "TL #theta^{truth}_{pFD} AC", "#theta^{truth}_{pFD} of FD proton AC",
-                                       "#theta^{truth}_{pFD} [Deg]",
-                                       directories.Resolution_Directory_map["Resolution_1p_Directory"], "01_Theta_pFD_AC_TL_1p",
-                                       Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
+    hPlot1D hTheta_pFD_TL_1p = hPlot1D("1p", "", "TL #theta^{truth}_{pFD} AC", "#theta^{truth}_{pFD} of FD proton AC", "#theta^{truth}_{pFD} [Deg]",
+                                       directories.Resolution_Directory_map["Resolution_1p_Directory"], "01_Theta_pFD_AC_TL_1p", Theta_lboundary_FD, Theta_uboundary_FD,
+                                       numTH1Dbins_nRes_Plots);
     hPlot1D hPhi_pFD_TL_1p = hPlot1D("1p", "", "TL #phi^{truth}_{pFD} AC", "#phi^{truth}_{pFD} of FD proton AC", "#phi^{truth}_{pFD} [Deg]",
-                                     directories.Resolution_Directory_map["Resolution_1p_Directory"], "02_Phi_pFD_AC_TL_1p",
-                                     Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
+                                     directories.Resolution_Directory_map["Resolution_1p_Directory"], "02_Phi_pFD_AC_TL_1p", Phi_lboundary, Phi_uboundary,
+                                     numTH1Dbins_nRes_Plots);
     TH2D *hTheta_pFD_TL_VS_Phi_pFD_TL_1p = new TH2D("#theta^{truth}_{pFD} vs. #phi^{truth}_{pFD} (1p, FD)",
                                                     "#theta^{truth}_{pFD} vs. #phi^{truth}_{pFD} (1p, FD);#phi^{truth}_{pFD} [Deg];#theta^{truth}_{pFD} [Deg]",
-                                                    numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_nRes_Plots,
-                                                    Theta_lboundary_FD,
-                                                    Theta_uboundary_FD);
+                                                    numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_nRes_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_pFD_TL_VS_Phi_pFD_TL_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
 
-    hPlot1D hP_pFD_Res_1p = hPlot1D("1p", "", "P_{pFD} resolution AC", "FD proton P_{pFD} resolution AC",
-                                    "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
-                                    directories.Resolution_Directory_map["Resolution_1p_Directory"], "04_P_pFD_Res_1p",
-                                    -2, 2, numTH1Dbins_nRes_Plots);
+    hPlot1D hP_pFD_Res_1p = hPlot1D("1p", "", "P_{pFD} resolution AC", "FD proton P_{pFD} resolution AC", "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
+                                    directories.Resolution_Directory_map["Resolution_1p_Directory"], "04_P_pFD_Res_1p", -2, 2, numTH1Dbins_nRes_Plots);
     TH2D *hP_pFD_Res_VS_TL_P_pFD_1p = new TH2D("P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD)",
                                                "P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD);P^{truth}_{pFD} [GeV/c];"
-                                               "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
-                                               numTH2Dbins_nRes_Plots, 0, beamE * 1.1, numTH2Dbins_nRes_Plots, -1.1, 1.1);
+                                               "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                               numTH2Dbins_nRes_Plots, -1.1, 1.1);
     TH2D *hP_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p = new TH2D("P_{pFD} resolution AC vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)",
                                                       "P_{pFD} resolution AC vs. P^{truth}_{pFD} - ZOOMIN (1p, FD);P^{truth}_{pFD} [GeV/c];"
-                                                      "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
-                                                      numTH2Dbins_nRes_Plots, FD_nucleon_momentum_cut.GetLowerCut(),
-                                                      FD_nucleon_momentum_cut.GetUpperCut(),
-                                                      numTH2Dbins_nRes_Plots, -0.75, 0.75);
+                                                      "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots,
+                                                      FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(), numTH2Dbins_nRes_Plots, -0.75, 0.75);
     TH2D *hP_pFD_Res_VS_TL_P_pFD_noKC_1p = new TH2D("P_{pFD} resolution AC vs. P^{truth}_{pFD} no mom. KC (1p, FD)",
                                                     "P_{pFD} resolution AC vs. P^{truth}_{pFD} no mom. KC (1p, FD);P^{truth}_{pFD} [GeV/c];"
-                                                    "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
-                                                    numTH2Dbins_nRes_Plots, 0, beamE * 1.1, numTH2Dbins_nRes_Plots, -1.1, 1.1);
+                                                    "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                                    numTH2Dbins_nRes_Plots, -1.1, 1.1);
     string hP_pFD_Res_VS_TL_P_pFD_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
 
     hPlot1D hReco_P_pFD_pRes_1p = hPlot1D("1p", "FD", "Reco P_{pFD} used in pRes", "Reco P_{pFD} used in pRes", "P_{pFD} [GeV/c]",
-                                          directories.Resolution_Directory_map["Resolution_1p_Directory"], "06a_Reco_P_pFD_used_in_pRes_1p",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                          directories.Resolution_Directory_map["Resolution_1p_Directory"], "06a_Reco_P_pFD_used_in_pRes_1p", Momentum_lboundary,
+                                          Momentum_uboundary, numTH1Dbins);
     hPlot1D hTL_P_pFD_pRes_1p = hPlot1D("1p", "FD", "TL P_{pFD} used in pRes", "TL P_{pFD} used in pRes", "P_{pFD} [GeV/c]",
-                                        directories.Resolution_Directory_map["Resolution_1p_Directory"], "06b_TL_P_pFD_used_in_pRes_1p",
-                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                        directories.Resolution_Directory_map["Resolution_1p_Directory"], "06b_TL_P_pFD_used_in_pRes_1p", Momentum_lboundary,
+                                        Momentum_uboundary, numTH1Dbins);
     //</editor-fold>
 
     //<editor-fold desc="Resolution histograms (1n)">
     hPlot1D hdTheta_nFD_TL_BC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} BC", "#Delta#theta_{nFD} of FD neutron BC",
                                            "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
-                                           directories.Resolution_Directory_map["Resolution_1n_Directory"], "00a_DeltaTheta_nFD_BC_TL_1n",
-                                           -Theta_uboundary_FD, Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
+                                           directories.Resolution_Directory_map["Resolution_1n_Directory"], "00a_DeltaTheta_nFD_BC_TL_1n", -Theta_uboundary_FD,
+                                           Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
     hPlot1D hdTheta_nFD_TL_ZOOMIN_BC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} - ZOOMIN BC", "#Delta#theta_{nFD} of FD neutron - ZOOMIN BC",
                                                   "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
-                                                  directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                  "00b_DeltaTheta_nFD_BC_TL_ZOOMIN_1n",
-                                                  -10.0, 10.0, numTH1Dbins_nRes_Plots);
+                                                  directories.Resolution_Directory_map["Resolution_1n_Directory"], "00b_DeltaTheta_nFD_BC_TL_ZOOMIN_1n", -10.0, 10.0,
+                                                  numTH1Dbins_nRes_Plots);
     hPlot1D hdPhi_nFD_TL_BC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} BC", "#Delta#phi_{nFD} of FD neutron BC",
-                                         "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
-                                         directories.Resolution_Directory_map["Resolution_1n_Directory"], "00c_DeltaPhi_nFD_BC_TL_1n",
-                                         Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
+                                         "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                         "00c_DeltaPhi_nFD_BC_TL_1n", Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
     hPlot1D hdPhi_nFD_TL_ZOOMIN_BC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} - ZOOMIN BC", "#Delta#phi_{nFD} of FD neutron - ZOOMIN BC",
                                                 "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
-                                                directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                "00d_DeltaPhi_nFD_BC_TL_ZOOMIN_1n",
-                                                -20, 20, numTH1Dbins_nRes_Plots);
+                                                directories.Resolution_Directory_map["Resolution_1n_Directory"], "00d_DeltaPhi_nFD_BC_TL_ZOOMIN_1n", -20, 20,
+                                                numTH1Dbins_nRes_Plots);
 
     hPlot1D hdTheta_nFD_TL_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} AdPC", "#Delta#theta_{nFD} of FD neutron AdPC",
                                              "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
-                                             directories.Resolution_Directory_map["Resolution_1n_Directory"], "00e_DeltaTheta_nFD_AdPC_TL_1n",
-                                             -Theta_uboundary_FD, Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
-    hPlot1D hdTheta_nFD_TL_ZOOMIN_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} - ZOOMIN AdPC",
-                                                    "#Delta#theta_{nFD} of FD neutron - ZOOMIN AdPC",
+                                             directories.Resolution_Directory_map["Resolution_1n_Directory"], "00e_DeltaTheta_nFD_AdPC_TL_1n", -Theta_uboundary_FD,
+                                             Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
+    hPlot1D hdTheta_nFD_TL_ZOOMIN_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} - ZOOMIN AdPC", "#Delta#theta_{nFD} of FD neutron - ZOOMIN AdPC",
                                                     "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
-                                                    directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                    "00f_DeltaTheta_nFD_AdPC_TL_ZOOMIN_1n",
-                                                    -10.0, 10.0, numTH1Dbins_nRes_Plots);
+                                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "00f_DeltaTheta_nFD_AdPC_TL_ZOOMIN_1n", -10.0, 10.0,
+                                                    numTH1Dbins_nRes_Plots);
     hPlot1D hdPhi_nFD_TL_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} AdPC", "#Delta#phi_{nFD} of FD neutron AdPC",
-                                           "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
-                                           directories.Resolution_Directory_map["Resolution_1n_Directory"], "00g_DeltaPhi_nFD_AdPC_TL_1n",
-                                           Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
+                                           "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                           "00g_DeltaPhi_nFD_AdPC_TL_1n", Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
     hPlot1D hdPhi_nFD_TL_ZOOMIN_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} - ZOOMIN AdPC", "#Delta#phi_{nFD} of FD neutron - ZOOMIN AdPC",
                                                   "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
-                                                  directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                  "00h_DeltaPhi_nFD_AdPC_TL_ZOOMIN_1n",
-                                                  -20, 20, numTH1Dbins_nRes_Plots);
+                                                  directories.Resolution_Directory_map["Resolution_1n_Directory"], "00h_DeltaPhi_nFD_AdPC_TL_ZOOMIN_1n", -20, 20,
+                                                  numTH1Dbins_nRes_Plots);
 
-    hPlot1D hTheta_nFD_TL_AnResC_1n = hPlot1D("1n", "", "TL #theta^{truth}_{nFD} AnResC", "#theta^{truth}_{nFD} of FD neutron AnResC",
-                                              "#theta^{truth}_{nFD} [Deg]",
-                                              directories.Resolution_Directory_map["Resolution_1n_Directory"], "01a_Theta_nFD_AnResC_TL_1n",
-                                              Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
-    hPlot1D hPhi_nFD_TL_AnResC_1n = hPlot1D("1n", "", "TL #phi^{truth}_{nFD} AnResC", "#phi^{truth}_{nFD} of FD neutron AnResC",
-                                            "#phi^{truth}_{nFD} [Deg]",
-                                            directories.Resolution_Directory_map["Resolution_1n_Directory"], "02a_Phi_nFD_AnResC_TL_1n",
-                                            Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
+    hPlot1D hTheta_nFD_TL_AnResC_1n = hPlot1D("1n", "", "TL #theta^{truth}_{nFD} AnResC", "#theta^{truth}_{nFD} of FD neutron AnResC", "#theta^{truth}_{nFD} [Deg]",
+                                              directories.Resolution_Directory_map["Resolution_1n_Directory"], "01a_Theta_nFD_AnResC_TL_1n", Theta_lboundary_FD,
+                                              Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
+    hPlot1D hPhi_nFD_TL_AnResC_1n = hPlot1D("1n", "", "TL #phi^{truth}_{nFD} AnResC", "#phi^{truth}_{nFD} of FD neutron AnResC", "#phi^{truth}_{nFD} [Deg]",
+                                            directories.Resolution_Directory_map["Resolution_1n_Directory"], "02a_Phi_nFD_AnResC_TL_1n", Phi_lboundary, Phi_uboundary,
+                                            numTH1Dbins_nRes_Plots);
     TH2D *hTheta_nFD_TL_VS_Phi_nFD_TL_AnResC_1n = new TH2D("#theta^{truth}_{nFD} vs. #phi^{truth}_{nFD} AnResC (1n, FD)",
                                                            "#theta^{truth}_{nFD} vs. #phi^{truth}_{nFD} AnResC (1n, FD);#phi^{truth}_{nFD} [Deg];#theta^{truth}_{nFD} [Deg]",
-                                                           numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary,
-                                                           numTH2Dbins_nRes_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                           numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_nRes_Plots, Theta_lboundary_FD,
+                                                           Theta_uboundary_FD);
     string hTheta_nFD_TL_VS_Phi_nFD_TL_AnResC_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
-    hPlot1D hTheta_nFD_TL_MatchedN_1n = hPlot1D("1n", "", "TL #theta^{truth}_{nFD} of matched TL n",
-                                                "#theta^{truth}_{nFD} of matched TL FD neutron",
-                                                "#theta^{truth}_{nFD} [Deg]",
-                                                directories.Resolution_Directory_map["Resolution_1n_Directory"], "01b_Theta_nFD_MatchedN_TL_1n",
+    hPlot1D hTheta_nFD_TL_MatchedN_1n = hPlot1D("1n", "", "TL #theta^{truth}_{nFD} of matched TL n", "#theta^{truth}_{nFD} of matched TL FD neutron",
+                                                "#theta^{truth}_{nFD} [Deg]", directories.Resolution_Directory_map["Resolution_1n_Directory"], "01b_Theta_nFD_MatchedN_TL_1n",
                                                 Theta_lboundary_FD, Theta_uboundary_FD, numTH1Dbins_nRes_Plots);
-    hPlot1D hPhi_nFD_TL_MatchedN_1n = hPlot1D("1n", "", "TL #phi^{truth}_{nFD} of matched TL n", "#phi^{truth}_{nFD} of matched TL FD neutron",
-                                              "#phi^{truth}_{nFD} [Deg]",
-                                              directories.Resolution_Directory_map["Resolution_1n_Directory"], "02b_Phi_nFD_MatchedN_TL_1n",
-                                              Phi_lboundary, Phi_uboundary, numTH1Dbins_nRes_Plots);
+    hPlot1D hPhi_nFD_TL_MatchedN_1n = hPlot1D("1n", "", "TL #phi^{truth}_{nFD} of matched TL n", "#phi^{truth}_{nFD} of matched TL FD neutron", "#phi^{truth}_{nFD} [Deg]",
+                                              directories.Resolution_Directory_map["Resolution_1n_Directory"], "02b_Phi_nFD_MatchedN_TL_1n", Phi_lboundary, Phi_uboundary,
+                                              numTH1Dbins_nRes_Plots);
     TH2D *hTheta_nFD_TL_VS_Phi_nFD_TL_MatchedN_1n = new TH2D("#theta^{truth}_{nFD} vs. #phi^{truth}_{nFD} of matched TL n (1n, FD)",
                                                              "#theta^{truth}_{nFD} vs. #phi^{truth}_{nFD} of matched TL FD neutron (1n, FD);#phi^{truth}_{nFD} [Deg];#theta^{truth}_{nFD} [Deg]",
-                                                             numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary,
-                                                             numTH2Dbins_nRes_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                             numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_nRes_Plots, Theta_lboundary_FD,
+                                                             Theta_uboundary_FD);
     string hTheta_nFD_TL_VS_Phi_nFD_TL_MatchedN_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
-    hPlot1D hP_nFD_Res_1n = hPlot1D("1n", "", "P_{nFD} resolution AC", "FD neutron P_{nFD} resolution AC",
-                                    "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
-                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "04_P_nFD_Res_1n",
-                                    -2, 2, numTH1Dbins_nRes_Plots);
+    hPlot1D hP_nFD_Res_1n = hPlot1D("1n", "", "P_{nFD} resolution AC", "FD neutron P_{nFD} resolution AC", "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
+                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "04_P_nFD_Res_1n", -2, 2, numTH1Dbins_nRes_Plots);
     TH2D *hP_nFD_Res_VS_TL_P_nFD_1n = new TH2D("P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD)",
                                                "P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD);P^{truth}_{nFD} [GeV/c];"
-                                               "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
-                                               numTH2Dbins_nRes_Plots, 0, beamE * 1.1, numTH2Dbins_nRes_Plots, -1.1, 1.1);
+                                               "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                               numTH2Dbins_nRes_Plots, -1.1, 1.1);
     TH2D *hP_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n = new TH2D("P_{nFD} resolution AC vs. P^{truth}_{nFD} - ZOOMIN (1n, FD)",
                                                       "P_{nFD} resolution AC vs. P^{truth}_{nFD} - ZOOMIN (1n, FD);P^{truth}_{nFD} [GeV/c];"
-                                                      "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
-                                                      numTH2Dbins_nRes_Plots, FD_nucleon_momentum_cut.GetLowerCut(),
-                                                      FD_nucleon_momentum_cut.GetUpperCut(),
-                                                      numTH2Dbins_nRes_Plots, -0.75, 0.75);
+                                                      "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots,
+                                                      FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(), numTH2Dbins_nRes_Plots, -0.75, 0.75);
     TH2D *hP_nFD_Res_VS_TL_P_nFD_noKC_1n = new TH2D("P_{nFD} resolution AC vs. P^{truth}_{nFD} no mom. KC (1n, FD)",
                                                     "P_{nFD} resolution AC vs. P^{truth}_{nFD} no mom. KC (1n, FD);P^{truth}_{nFD} [GeV/c];"
-                                                    "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
-                                                    numTH2Dbins_nRes_Plots, 0, beamE * 1.1, numTH2Dbins_nRes_Plots, -1.1, 1.1);
+                                                    "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                                    numTH2Dbins_nRes_Plots, -1.1, 1.1);
     TH2D *hP_nFD_Res_VS_Reco_P_nFD_1n = new TH2D("P_{nFD} resolution AC vs. P^{reco}_{nFD} (1n, FD)",
                                                  "P_{nFD} resolution AC vs. P^{reco}_{nFD} (1n, FD);P^{reco}_{nFD} [GeV/c];"
-                                                 "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
-                                                 numTH2Dbins_nRes_Plots, 0, beamE * 1.1, numTH2Dbins_nRes_Plots, -1.1, 1.1);
+                                                 "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                                 numTH2Dbins_nRes_Plots, -1.1, 1.1);
     TH2D *hP_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n = new TH2D("P_{nFD} resolution AC vs. P^{reco}_{nFD} - ZOOMIN (1n, FD)",
                                                         "P_{nFD} resolution AC vs. P^{reco}_{nFD} - ZOOMIN (1n, FD);P^{reco}_{nFD} [GeV/c];"
-                                                        "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
-                                                        numTH2Dbins_nRes_Plots, FD_nucleon_momentum_cut.GetLowerCut(),
-                                                        FD_nucleon_momentum_cut.GetUpperCut(),
-                                                        numTH2Dbins_nRes_Plots, -0.75, 0.75);
+                                                        "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots,
+                                                        FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(), numTH2Dbins_nRes_Plots, -0.75, 0.75);
     TH2D *hP_nFD_Res_VS_Reco_P_nFD_noKC_1n = new TH2D("P_{nFD} resolution AC vs. P^{reco}_{nFD} no mom. KC (1n, FD)",
                                                       "P_{nFD} resolution AC vs. P^{reco}_{nFD} no mom. KC (1n, FD);P^{reco}_{nFD} [GeV/c];"
-                                                      "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
-                                                      numTH2Dbins_nRes_Plots, 0, beamE * 1.1, numTH2Dbins_nRes_Plots, -1.1, 1.1);
+                                                      "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                                      numTH2Dbins_nRes_Plots, -1.1, 1.1);
     string hP_nFD_Res_VS_TL_P_nFD_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
     string hP_nFD_Res_VS_Reco_P_nFD_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     hPlot1D hReco_P_nFD_nRes_1n = hPlot1D("1n", "FD", "Reco P_{nFD} used in nRes", "Reco P_{nFD} used in nRes", "P_{nFD} [GeV/c]",
-                                          directories.Resolution_Directory_map["Resolution_1n_Directory"], "06a_Reco_P_nFD_used_in_nRes_1n",
-                                          Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                          directories.Resolution_Directory_map["Resolution_1n_Directory"], "06a_Reco_P_nFD_used_in_nRes_1n", Momentum_lboundary,
+                                          Momentum_uboundary, numTH1Dbins);
     hPlot1D hTL_P_nFD_nRes_1n = hPlot1D("1n", "FD", "TL P_{nFD} used in nRes", "TL P_{nFD} used in nRes", "P_{nFD} [GeV/c]",
-                                        directories.Resolution_Directory_map["Resolution_1n_Directory"], "06b_TL_P_nFD_used_in_nRes_1n",
-                                        Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                        directories.Resolution_Directory_map["Resolution_1n_Directory"], "06b_TL_P_nFD_used_in_nRes_1n", Momentum_lboundary,
+                                        Momentum_uboundary, numTH1Dbins);
 
-    hPlot1D hEff_dist_TL_1n = hPlot1D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT}",
-                                      "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT}", "#font[12]{l}_{eff}^{TL} [cm]",
-                                      directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_Eff_dist_TL_1n", -6000, 6000,
+    hPlot1D hEff_dist_TL_1n = hPlot1D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT}", "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT}",
+                                      "#font[12]{l}_{eff}^{TL} [cm]", directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_Eff_dist_TL_1n", -6000, 6000,
                                       numTH1Dbins);
     hPlot2D hEff_dist_TL_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT} vs. P^{truth}_{nFD}",
-                                                  "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT} vs. P^{truth}_{nFD}",
-                                                  "#font[12]{l}_{eff}^{TL} [cm]",
+                                                  "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT} vs. P^{truth}_{nFD}", "#font[12]{l}_{eff}^{TL} [cm]",
                                                   "P^{truth}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                  "00XX_Eff_dist_TL_vs_TL_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05,
-                                                  numTH2Dbins, numTH2Dbins);
+                                                  "00XX_Eff_dist_TL_vs_TL_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
     hPlot1D hddist_TL_1n = hPlot1D("1n", "FD", "#Delta#font[12]{l}_{eff}^{TL}", "#Delta#font[12]{l}_{eff}^{TL}",
                                    "#Delta#font[12]{l}_{eff}^{TL} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{TL} [cm]",
                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_TL_1n", -6000, 6000, numTH1Dbins);
-    hPlot2D hddist_TL_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "#Delta#font[12]{l}_{eff}^{TL} vs. P^{truth}_{nFD}",
-                                               "#Delta#font[12]{l}_{eff}^{TL} vs. P^{truth}_{nFD}",
-                                               "#Delta#font[12]{l}_{eff}^{TL} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{TL} [cm]",
-                                               "P^{truth}_{nFD} [GeV/c]",
-                                               directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_TL_vs_TL_P_nFD_1n",
-                                               -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
+    hPlot2D hddist_TL_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "#Delta#font[12]{l}_{eff}^{TL} vs. P^{truth}_{nFD}", "#Delta#font[12]{l}_{eff}^{TL} vs. P^{truth}_{nFD}",
+                                               "#Delta#font[12]{l}_{eff}^{TL} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{TL} [cm]", "P^{truth}_{nFD} [GeV/c]",
+                                               directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_TL_vs_TL_P_nFD_1n", -6000, 6000,
+                                               n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
 
     hPlot1D hEff_dist_Reco_1n = hPlot1D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco}",
                                         "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{LT}", "#font[12]{l}_{eff}^{reco} [cm]",
-                                        directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_Eff_dist_Reco_1n", -6000, 6000,
-                                        numTH1Dbins);
-    hPlot2D hEff_dist_Reco_VS_TL_P_nFD_1n = hPlot2D("1n", "FD",
-                                                    "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco} vs. P^{truth}_{nFD}",
-                                                    "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco} vs. P^{truth}_{nFD}",
-                                                    "#font[12]{l}_{eff}^{reco} [cm]",
+                                        directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_Eff_dist_Reco_1n", -6000, 6000, numTH1Dbins);
+    hPlot2D hEff_dist_Reco_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco} vs. P^{truth}_{nFD}",
+                                                    "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco} vs. P^{truth}_{nFD}", "#font[12]{l}_{eff}^{reco} [cm]",
                                                     "P^{truth}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                    "00XX_Eff_dist_Reco_vs_TL_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05,
-                                                    numTH2Dbins, numTH2Dbins);
+                                                    "00XX_Eff_dist_Reco_vs_TL_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
     hPlot1D hddist_Reco_1n = hPlot1D("1n", "FD", "#Delta#font[12]{l}_{eff}^{reco}", "#Delta#font[12]{l}_{eff}^{reco}",
                                      "#Delta#font[12]{l}_{eff}^{reco} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{reco} [cm]",
-                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_reco_1n", -6000, 6000,
-                                     numTH1Dbins);
-    hPlot2D hddist_Reco_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "#Delta#font[12]{l}_{eff}^{reco} vs. P^{truth}_{nFD}",
-                                                 "#Delta#font[12]{l}_{eff}^{reco} vs. P^{truth}_{nFD}",
-                                                 "#Delta#font[12]{l}_{eff}^{reco} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{reco} [cm]",
-                                                 "P^{truth}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                 "00XX_ddist_reco_vs_reco_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05,
-                                                 numTH2Dbins, numTH2Dbins);
+                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_reco_1n", -6000, 6000, numTH1Dbins);
+    hPlot2D hddist_Reco_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "#Delta#font[12]{l}_{eff}^{reco} vs. P^{truth}_{nFD}", "#Delta#font[12]{l}_{eff}^{reco} vs. P^{truth}_{nFD}",
+                                                 "#Delta#font[12]{l}_{eff}^{reco} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{reco} [cm]", "P^{truth}_{nFD} [GeV/c]",
+                                                 directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_reco_vs_reco_P_nFD_1n", -6000, 6000,
+                                                 n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
 
     hPlot1D hTOF_error_1n = hPlot1D("1n", "FD", "TOF Error #Deltat_{TOF}", "TOF Error #Deltat_{TOF}", "#Deltat_{TOF} [ns]",
                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TOF_error_1n", -10., 10., numTH1Dbins);
-    hPlot2D hTOF_error_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "TOF Error #Deltat_{TOF} vs. P^{truth}_{nFD}",
-                                                "TOF Error #Deltat_{TOF} vs. P^{truth}_{nFD}",
-                                                "#Deltat_{TOF} [ns]", "P^{truth}_{nFD} [GeV/c]",
-                                                directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TOF_error_VS_TL_P_nFD_1n",
+    hPlot2D hTOF_error_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "TOF Error #Deltat_{TOF} vs. P^{truth}_{nFD}", "TOF Error #Deltat_{TOF} vs. P^{truth}_{nFD}", "#Deltat_{TOF} [ns]",
+                                                "P^{truth}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TOF_error_VS_TL_P_nFD_1n",
                                                 -10., 10., n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
 
-    hPlot2D hTL_P_nFD_vs_Reco_P_nFD_1n = hPlot2D("1n", "FD", "P^{truth}_{nFD} vs. P^{reco}_{nFD}", "P^{truth}_{nFD} vs. P^{reco}_{nFD}",
-                                                 "P^{truth}_{nFD} [GeV/c]", "P^{reco}_{nFD} [GeV/c]",
-                                                 directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                 "00XX_TL_P_nFD_vs_Reco_P_nFD_1n", Momentum_lboundary, Momentum_uboundary, Momentum_lboundary,
-                                                 Momentum_uboundary, numTH2Dbins_nRes_Plots, numTH2Dbins_nRes_Plots);
+    hPlot2D hTL_P_nFD_vs_Reco_P_nFD_1n = hPlot2D("1n", "FD", "P^{truth}_{nFD} vs. P^{reco}_{nFD}", "P^{truth}_{nFD} vs. P^{reco}_{nFD}", "P^{truth}_{nFD} [GeV/c]",
+                                                 "P^{reco}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TL_P_nFD_vs_Reco_P_nFD_1n",
+                                                 Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_nRes_Plots,
+                                                 numTH2Dbins_nRes_Plots);
     //</editor-fold>
 
     //</editor-fold>
@@ -9269,136 +8248,96 @@ void EventAnalyser() {
     hPlot1D hNeut_Multi_By_clas12pid_APID_BV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by clas12pid APID&BV",
                                                                  "Multiplicity of FD neutrons by clas12pid APID&BV", "Multiplicity",
                                                                  directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
-                                                                 "01_Multiplicity_Neutrons_By_clas12pid_APID_BV_1e_cut_FD",
-                                                                 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+                                                                 "01_Multiplicity_Neutrons_By_clas12pid_APID_BV_1e_cut_FD", 0, numTH1Dbins_multi_Plots,
+                                                                 numTH1Dbins_multi_Plots);
     hPlot1D hNeut_Multi_By_clas12pid_APID_AV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by clas12pid APID&AV",
                                                                  "Multiplicity of FD neutrons by clas12pid APID&AV", "Multiplicity",
                                                                  directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
-                                                                 "02_Multiplicity_Neutrons_By_clas12pid_APID_AV_1e_cut_FD",
-                                                                 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+                                                                 "02_Multiplicity_Neutrons_By_clas12pid_APID_AV_1e_cut_FD", 0, numTH1Dbins_multi_Plots,
+                                                                 numTH1Dbins_multi_Plots);
     hPlot1D hNeut_Multi_By_clas12pid_BPID_BV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by clas12pid BPID&BV",
                                                                  "Multiplicity of FD neutrons by clas12pid BPID&BV", "Multiplicity",
                                                                  directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
-                                                                 "03_Multiplicity_Neutrons_By_clas12pid_BPID_BV_1e_cut_FD",
-                                                                 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+                                                                 "03_Multiplicity_Neutrons_By_clas12pid_BPID_BV_1e_cut_FD", 0, numTH1Dbins_multi_Plots,
+                                                                 numTH1Dbins_multi_Plots);
     hPlot1D hNeut_Multi_By_clas12pid_BPID_AV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by clas12pid BPID&AV",
                                                                  "Multiplicity of FD neutrons by clas12pid BPID&AV", "Multiplicity",
                                                                  directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
-                                                                 "04_Multiplicity_Neutrons_By_clas12pid_BPID_AV_1e_cut_FD",
-                                                                 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+                                                                 "04_Multiplicity_Neutrons_By_clas12pid_BPID_AV_1e_cut_FD", 0, numTH1Dbins_multi_Plots,
+                                                                 numTH1Dbins_multi_Plots);
 
-    hPlot1D hNeut_Multi_By_Redef_APID_BV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by redef. APID&BV",
-                                                             "Multiplicity of FD neutrons by redef. APID&BV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
-                                                             "01_Multiplicity_Neutrons_By_Redef_APID_BV_1e_cut_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_APID_AV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by redef. APID&AV",
-                                                             "Multiplicity of FD neutrons by redef. APID&AV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
-                                                             "02_Multiplicity_Neutrons_By_Redef_APID_AV_1e_cut_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_BPID_BV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by redef. BPID&BV",
-                                                             "Multiplicity of FD neutrons by redef. BPID&BV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
-                                                             "03_Multiplicity_Neutrons_By_Redef_BPID_BV_1e_cut_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_BPID_AV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by redef. BPID&AV",
-                                                             "Multiplicity of FD neutrons by redef. BPID&AV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
-                                                             "04_Multiplicity_Neutrons_By_Redef_BPID_AV_1e_cut_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_APID_BV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by redef. APID&BV", "Multiplicity of FD neutrons by redef. APID&BV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
+                                                             "01_Multiplicity_Neutrons_By_Redef_APID_BV_1e_cut_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_APID_AV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by redef. APID&AV", "Multiplicity of FD neutrons by redef. APID&AV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
+                                                             "02_Multiplicity_Neutrons_By_Redef_APID_AV_1e_cut_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_BPID_BV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by redef. BPID&BV", "Multiplicity of FD neutrons by redef. BPID&BV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
+                                                             "03_Multiplicity_Neutrons_By_Redef_BPID_BV_1e_cut_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_BPID_AV_1e_cut_FD = hPlot1D("1e cut", "FD", "Multiplicity of FD neutrons by redef. BPID&AV", "Multiplicity of FD neutrons by redef. BPID&AV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1e_cut_Directory"],
+                                                             "04_Multiplicity_Neutrons_By_Redef_BPID_AV_1e_cut_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Resolution histograms (1p)">
-    hPlot1D hNeut_Multi_By_Redef_APID_BV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of FD neutrons by redef. APID&BV",
-                                                         "Multiplicity of FD neutrons by redef. APID&BV", "Multiplicity",
-                                                         directories.Multiplicity_Directory_map["Multiplicity_1p_Directory"],
-                                                         "01_Multiplicity_Neutrons_By_Redef_APID_BV_1p_FD",
-                                                         0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_APID_AV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of FD neutrons by redef. APID&AV",
-                                                         "Multiplicity of FD neutrons by redef. APID&AV", "Multiplicity",
-                                                         directories.Multiplicity_Directory_map["Multiplicity_1p_Directory"],
-                                                         "02_Multiplicity_Neutrons_By_Redef_APID_AV_1p_FD",
-                                                         0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_BPID_BV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of FD neutrons by redef. BPID&BV",
-                                                         "Multiplicity of FD neutrons by redef. BPID&BV", "Multiplicity",
-                                                         directories.Multiplicity_Directory_map["Multiplicity_1p_Directory"],
-                                                         "03_Multiplicity_Neutrons_By_Redef_BPID_BV_1p_FD",
-                                                         0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_BPID_AV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of FD neutrons by redef. BPID&AV",
-                                                         "Multiplicity of FD neutrons by redef. BPID&AV", "Multiplicity",
-                                                         directories.Multiplicity_Directory_map["Multiplicity_1p_Directory"],
-                                                         "04_Multiplicity_Neutrons_By_Redef_BPID_AV_1p_FD",
-                                                         0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_APID_BV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of FD neutrons by redef. APID&BV", "Multiplicity of FD neutrons by redef. APID&BV",
+                                                         "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1p_Directory"],
+                                                         "01_Multiplicity_Neutrons_By_Redef_APID_BV_1p_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_APID_AV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of FD neutrons by redef. APID&AV", "Multiplicity of FD neutrons by redef. APID&AV",
+                                                         "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1p_Directory"],
+                                                         "02_Multiplicity_Neutrons_By_Redef_APID_AV_1p_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_BPID_BV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of FD neutrons by redef. BPID&BV", "Multiplicity of FD neutrons by redef. BPID&BV",
+                                                         "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1p_Directory"],
+                                                         "03_Multiplicity_Neutrons_By_Redef_BPID_BV_1p_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_BPID_AV_1p_FD = hPlot1D("1p", "FD", "Multiplicity of FD neutrons by redef. BPID&AV", "Multiplicity of FD neutrons by redef. BPID&AV",
+                                                         "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1p_Directory"],
+                                                         "04_Multiplicity_Neutrons_By_Redef_BPID_AV_1p_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Resolution histograms (1n)">
-    hPlot1D hNeut_Multi_By_Redef_APID_BV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of FD neutrons by redef. APID&BV",
-                                                         "Multiplicity of FD neutrons by redef. APID&BV", "Multiplicity",
-                                                         directories.Multiplicity_Directory_map["Multiplicity_1n_Directory"],
-                                                         "01_Multiplicity_Neutrons_By_Redef_APID_BV_1n_FD",
-                                                         0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_APID_AV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of FD neutrons by redef. APID&AV",
-                                                         "Multiplicity of FD neutrons by redef. APID&AV", "Multiplicity",
-                                                         directories.Multiplicity_Directory_map["Multiplicity_1n_Directory"],
-                                                         "02_Multiplicity_Neutrons_By_Redef_APID_AV_1n_FD",
-                                                         0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_BPID_BV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of FD neutrons by redef. BPID&BV",
-                                                         "Multiplicity of FD neutrons by redef. BPID&BV", "Multiplicity",
-                                                         directories.Multiplicity_Directory_map["Multiplicity_1n_Directory"],
-                                                         "03_Multiplicity_Neutrons_By_Redef_BPID_BV_1n_FD",
-                                                         0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_BPID_AV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of FD neutrons by redef. BPID&AV",
-                                                         "Multiplicity of FD neutrons by redef. BPID&AV", "Multiplicity",
-                                                         directories.Multiplicity_Directory_map["Multiplicity_1n_Directory"],
-                                                         "04_Multiplicity_Neutrons_By_Redef_BPID_AV_1n_FD",
-                                                         0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_APID_BV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of FD neutrons by redef. APID&BV", "Multiplicity of FD neutrons by redef. APID&BV",
+                                                         "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1n_Directory"],
+                                                         "01_Multiplicity_Neutrons_By_Redef_APID_BV_1n_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_APID_AV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of FD neutrons by redef. APID&AV", "Multiplicity of FD neutrons by redef. APID&AV",
+                                                         "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1n_Directory"],
+                                                         "02_Multiplicity_Neutrons_By_Redef_APID_AV_1n_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_BPID_BV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of FD neutrons by redef. BPID&BV", "Multiplicity of FD neutrons by redef. BPID&BV",
+                                                         "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1n_Directory"],
+                                                         "03_Multiplicity_Neutrons_By_Redef_BPID_BV_1n_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_BPID_AV_1n_FD = hPlot1D("1n", "FD", "Multiplicity of FD neutrons by redef. BPID&AV", "Multiplicity of FD neutrons by redef. BPID&AV",
+                                                         "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_1n_Directory"],
+                                                         "04_Multiplicity_Neutrons_By_Redef_BPID_AV_1n_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Resolution histograms (pFDpCD)">
-    hPlot1D hNeut_Multi_By_Redef_APID_BV_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Multiplicity of FD neutrons by redef. APID&BV",
-                                                             "Multiplicity of FD neutrons by redef. APID&BV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_pFDpCD_Directory"],
-                                                             "01_Multiplicity_Neutrons_By_Redef_APID_BV_pFDpCD_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_APID_AV_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Multiplicity of FD neutrons by redef. APID&AV",
-                                                             "Multiplicity of FD neutrons by redef. APID&AV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_pFDpCD_Directory"],
-                                                             "02_Multiplicity_Neutrons_By_Redef_APID_AV_pFDpCD_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_BPID_BV_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Multiplicity of FD neutrons by redef. BPID&BV",
-                                                             "Multiplicity of FD neutrons by redef. BPID&BV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_pFDpCD_Directory"],
-                                                             "03_Multiplicity_Neutrons_By_Redef_BPID_BV_pFDpCD_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_BPID_AV_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Multiplicity of FD neutrons by redef. BPID&AV",
-                                                             "Multiplicity of FD neutrons by redef. BPID&AV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_pFDpCD_Directory"],
-                                                             "04_Multiplicity_Neutrons_By_Redef_BPID_AV_pFDpCD_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_APID_BV_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Multiplicity of FD neutrons by redef. APID&BV", "Multiplicity of FD neutrons by redef. APID&BV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_pFDpCD_Directory"],
+                                                             "01_Multiplicity_Neutrons_By_Redef_APID_BV_pFDpCD_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_APID_AV_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Multiplicity of FD neutrons by redef. APID&AV", "Multiplicity of FD neutrons by redef. APID&AV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_pFDpCD_Directory"],
+                                                             "02_Multiplicity_Neutrons_By_Redef_APID_AV_pFDpCD_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_BPID_BV_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Multiplicity of FD neutrons by redef. BPID&BV", "Multiplicity of FD neutrons by redef. BPID&BV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_pFDpCD_Directory"],
+                                                             "03_Multiplicity_Neutrons_By_Redef_BPID_BV_pFDpCD_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_BPID_AV_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Multiplicity of FD neutrons by redef. BPID&AV", "Multiplicity of FD neutrons by redef. BPID&AV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_pFDpCD_Directory"],
+                                                             "04_Multiplicity_Neutrons_By_Redef_BPID_AV_pFDpCD_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Resolution histograms (nFDpCD)">
-    hPlot1D hNeut_Multi_By_Redef_APID_BV_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Multiplicity of FD neutrons by redef. APID&BV",
-                                                             "Multiplicity of FD neutrons by redef. APID&BV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_nFDpCD_Directory"],
-                                                             "01_Multiplicity_Neutrons_By_Redef_APID_BV_nFDpCD_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_APID_AV_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Multiplicity of FD neutrons by redef. APID&AV",
-                                                             "Multiplicity of FD neutrons by redef. APID&AV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_nFDpCD_Directory"],
-                                                             "02_Multiplicity_Neutrons_By_Redef_APID_AV_nFDpCD_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_BPID_BV_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Multiplicity of FD neutrons by redef. BPID&BV",
-                                                             "Multiplicity of FD neutrons by redef. BPID&BV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_nFDpCD_Directory"],
-                                                             "03_Multiplicity_Neutrons_By_Redef_BPID_BV_nFDpCD_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
-    hPlot1D hNeut_Multi_By_Redef_BPID_AV_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Multiplicity of FD neutrons by redef. BPID&AV",
-                                                             "Multiplicity of FD neutrons by redef. BPID&AV", "Multiplicity",
-                                                             directories.Multiplicity_Directory_map["Multiplicity_nFDpCD_Directory"],
-                                                             "04_Multiplicity_Neutrons_By_Redef_BPID_AV_nFDpCD_FD",
-                                                             0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_APID_BV_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Multiplicity of FD neutrons by redef. APID&BV", "Multiplicity of FD neutrons by redef. APID&BV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_nFDpCD_Directory"],
+                                                             "01_Multiplicity_Neutrons_By_Redef_APID_BV_nFDpCD_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_APID_AV_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Multiplicity of FD neutrons by redef. APID&AV", "Multiplicity of FD neutrons by redef. APID&AV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_nFDpCD_Directory"],
+                                                             "02_Multiplicity_Neutrons_By_Redef_APID_AV_nFDpCD_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_BPID_BV_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Multiplicity of FD neutrons by redef. BPID&BV", "Multiplicity of FD neutrons by redef. BPID&BV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_nFDpCD_Directory"],
+                                                             "03_Multiplicity_Neutrons_By_Redef_BPID_BV_nFDpCD_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
+    hPlot1D hNeut_Multi_By_Redef_BPID_AV_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Multiplicity of FD neutrons by redef. BPID&AV", "Multiplicity of FD neutrons by redef. BPID&AV",
+                                                             "Multiplicity", directories.Multiplicity_Directory_map["Multiplicity_nFDpCD_Directory"],
+                                                             "04_Multiplicity_Neutrons_By_Redef_BPID_AV_nFDpCD_FD", 0, numTH1Dbins_multi_Plots, numTH1Dbins_multi_Plots);
     //</editor-fold>
 
     //</editor-fold>
@@ -9455,18 +8394,12 @@ void EventAnalyser() {
                                     ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
             /* Overwriting PID cuts according to SampleName */
-            Chi2_Proton_cuts_CD.SetCutPram(clasAna.GetPidCutMean(2212, "CD"), -clasAna.GetPidCutSigma(2212, "CD"),
-                                           clasAna.GetPidCutSigma(2212, "CD"));
-            Chi2_Proton_cuts_FD.SetCutPram(clasAna.GetPidCutMean(2212, "FD"), -clasAna.GetPidCutSigma(2212, "FD"),
-                                           clasAna.GetPidCutSigma(2212, "FD"));
-            Chi2_piplus_cuts_CD.SetCutPram(clasAna.GetPidCutMean(211, "CD"), -clasAna.GetPidCutSigma(211, "CD"),
-                                           clasAna.GetPidCutSigma(211, "CD"));
-            Chi2_piplus_cuts_FD.SetCutPram(clasAna.GetPidCutMean(211, "FD"), -clasAna.GetPidCutSigma(211, "FD"),
-                                           clasAna.GetPidCutSigma(211, "FD"));
-            Chi2_piminus_cuts_CD.SetCutPram(clasAna.GetPidCutMean(-211, "CD"), -clasAna.GetPidCutSigma(-211, "CD"),
-                                            clasAna.GetPidCutSigma(-211, "CD"));
-            Chi2_piminus_cuts_FD.SetCutPram(clasAna.GetPidCutMean(-211, "FD"), -clasAna.GetPidCutSigma(-211, "FD"),
-                                            clasAna.GetPidCutSigma(-211, "FD"));
+            Chi2_Proton_cuts_CD.SetCutPram(clasAna.GetPidCutMean(2212, "CD"), -clasAna.GetPidCutSigma(2212, "CD"), clasAna.GetPidCutSigma(2212, "CD"));
+            Chi2_Proton_cuts_FD.SetCutPram(clasAna.GetPidCutMean(2212, "FD"), -clasAna.GetPidCutSigma(2212, "FD"), clasAna.GetPidCutSigma(2212, "FD"));
+            Chi2_piplus_cuts_CD.SetCutPram(clasAna.GetPidCutMean(211, "CD"), -clasAna.GetPidCutSigma(211, "CD"), clasAna.GetPidCutSigma(211, "CD"));
+            Chi2_piplus_cuts_FD.SetCutPram(clasAna.GetPidCutMean(211, "FD"), -clasAna.GetPidCutSigma(211, "FD"), clasAna.GetPidCutSigma(211, "FD"));
+            Chi2_piminus_cuts_CD.SetCutPram(clasAna.GetPidCutMean(-211, "CD"), -clasAna.GetPidCutSigma(-211, "CD"), clasAna.GetPidCutSigma(-211, "CD"));
+            Chi2_piminus_cuts_FD.SetCutPram(clasAna.GetPidCutMean(-211, "FD"), -clasAna.GetPidCutSigma(-211, "FD"), clasAna.GetPidCutSigma(-211, "FD"));
 
             clasAna.setPidCuts(); // making f_pidCuts = ture
         }
@@ -9494,8 +8427,7 @@ void EventAnalyser() {
         if (!apply_nucleon_cuts) {
             /* Setting neutron momentum cut before beta fit (i.e., no cut!) */
             n_momentum_cuts_ABF_FD_n_from_ph = DSCuts("Momentum_cuts_ECAL", "FD-ECAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
-            n_momentum_cuts_ABF_FD_n_from_ph_apprax = DSCuts("Momentum_cuts_ECAL_apprax", "FD-ECAL_apprax", "Neutron", "", 0,
-                                                             n_mom_th.GetLowerCut(), 9999);
+            n_momentum_cuts_ABF_FD_n_from_ph_apprax = DSCuts("Momentum_cuts_ECAL_apprax", "FD-ECAL_apprax", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
 
             /* Setting variables to log beta fit parameters into (i.e., no cut!) */
             Beta_max_cut_ABF_FD_n_from_ph = DSCuts("Beta_cut_ECAL", "FD-ECAL", "", "nFDpCD", 1, -9999, 9999);
@@ -9739,16 +8671,16 @@ void EventAnalyser() {
         /* Get FD neutrons and photons above momentum threshold: */
         // FD neutrons and photons by definition (after momentum th. only!):
         vector<int> NeutronsFD_ind_noNeutCuts, PhotonsFD_ind_noNeutCuts;
-        pid.FDNeutralParticleID(allParticles, NeutronsFD_ind_noNeutCuts, ReDef_neutrons_FD, n_mom_th, PhotonsFD_ind_noNeutCuts, ReDef_photons_FD,
-                                ph_mom_th, apply_nucleon_cuts);
+        pid.FDNeutralParticleID(allParticles, NeutronsFD_ind_noNeutCuts, ReDef_neutrons_FD, n_mom_th, PhotonsFD_ind_noNeutCuts, ReDef_photons_FD, ph_mom_th,
+                                apply_nucleon_cuts);
         // FD neutron (with momentum th.) with maximal momentum:
         int NeutronsFD_ind_mom_max_noNeutCuts = pid.GetLnFDIndex(allParticles, NeutronsFD_ind_noNeutCuts, apply_nucleon_cuts);
 
         /* Get FD neutrons and photons above momentum threshold and after ECAL veto and after ECAL edge cuts: */
         // FD neutrons and photons by definition - after momentum th. (ECAL & edge cuts):
         vector<int> NeutronsFD_ind, PhotonsFD_ind;
-        pid.FDNeutralParticleID(allParticles, electrons, NeutronsFD_ind, ReDef_neutrons_FD, n_mom_th, PhotonsFD_ind, ReDef_photons_FD, ph_mom_th,
-                                Neutron_veto_cut, beamE, clasAna.getEcalEdgeCuts(), clasAna.getEcalEdgeCuts(), apply_nucleon_cuts);
+        pid.FDNeutralParticleID(allParticles, electrons, NeutronsFD_ind, ReDef_neutrons_FD, n_mom_th, PhotonsFD_ind, ReDef_photons_FD, ph_mom_th, Neutron_veto_cut, beamE,
+                                clasAna.getEcalEdgeCuts(), clasAna.getEcalEdgeCuts(), apply_nucleon_cuts);
 //        pid.FDNeutralParticleID(allParticles, NeutronsFD_ind, ReDef_neutrons_FD, n_mom_th, PhotonsFD_ind, ReDef_photons_FD, ph_mom_th,
 //                                apply_nucleon_cuts);
         // FD neutron (with momentum th.) with maximal momentum:
@@ -9950,8 +8882,7 @@ void EventAnalyser() {
         if (GoodProtonsMonitorPlots && basic_event_selection) {
             if (IDed_Protons_ind.size() == 2) { ++num_of_events_2p_wFakeProtons; }
 
-            pid.GPMonitoring(GoodProtonsMonitorPlots, protons, IDed_Protons_ind, Protons_ind, Theta_p1_cuts_2p, Theta_p2_cuts_2p, dphi_p1_p2_2p,
-                             Weight);
+            pid.GPMonitoring(GoodProtonsMonitorPlots, protons, IDed_Protons_ind, Protons_ind, Theta_p1_cuts_2p, Theta_p2_cuts_2p, dphi_p1_p2_2p, Weight);
         }
         //</editor-fold>
 
@@ -10016,8 +8947,7 @@ void EventAnalyser() {
                 bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
 
                 if (particlePDGtmp == 11) {
-                    bool e_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Electron", Particle_TL_Momentum, Particle_TL_Theta,
-                                                    Particle_TL_Phi);
+                    bool e_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
 
                     if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) &&
                         (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) { TL_Electron_mom_ind.push_back(i); }
@@ -10035,8 +8965,8 @@ void EventAnalyser() {
                         TL_ElectronFD_ind.push_back(i);
                     }
                 } else if (particlePDGtmp == 2112) {
-                    bool n_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Neutron", Particle_TL_Momentum, Particle_TL_Theta,
-                                                    Particle_TL_Phi);
+                    bool n_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi,
+                                                    Calc_eff_overlapping_FC);
 
                     if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
                         (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { TL_Neutrons_mom_ind.push_back(i); }
@@ -10064,8 +8994,7 @@ void EventAnalyser() {
                         }
                     }
                 } else if (particlePDGtmp == 2212) {
-                    bool p_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Proton", Particle_TL_Momentum, Particle_TL_Theta,
-                                                    Particle_TL_Phi);
+                    bool p_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Calc_eff_overlapping_FC);
 
                     if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
                         (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_Protons_mom_ind.push_back(i); }
@@ -10161,8 +9090,8 @@ void EventAnalyser() {
                 Leading_TL_FDNeutron_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
                 Leading_TL_FDNeutron_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
-                Leading_Neutron_inFD_wFC = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Neutron",
-                                                             Leading_TL_FDNeutron_Momentum, Leading_TL_FDNeutron_Theta, Leading_TL_FDNeutron_Phi);
+                Leading_Neutron_inFD_wFC = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Neutron", Leading_TL_FDNeutron_Momentum, Leading_TL_FDNeutron_Theta,
+                                                             Leading_TL_FDNeutron_Phi, Calc_eff_overlapping_FC);
             } else {
                 Leading_Neutron_inFD_wFC = false;
             }
@@ -10215,8 +9144,7 @@ void EventAnalyser() {
 
             //<editor-fold desc="Setting up basic TL event selection">
             bool TL_Event_Selection_1e_cut = (TL_Event_Selection_1e_cut_AMaps &&
-                                              TL_ElectronFD_mom_ind.size() ==
-                                              TL_ElectronFD_wFC_mom_ind.size()); // One id. FD electron above momentum threshold
+                                              TL_ElectronFD_mom_ind.size() == TL_ElectronFD_wFC_mom_ind.size()); // One id. FD electron above momentum threshold
             TL_Event_Selection_inclusive = TL_Event_Selection_1e_cut;
             bool no_TL_pip = (TL_piplusFD_mom_ind.size() == 0 && TL_piplusCD_mom_ind.size() == 0); // No pi+ above momentum threshold (CD & FD)
             bool no_TL_pim = (TL_piminusFD_mom_ind.size() == 0 && TL_piminusCD_mom_ind.size() == 0); // No pi- above momentum threshold (CD & FD)
@@ -10233,8 +9161,7 @@ void EventAnalyser() {
                                      (TL_NeutronsFD_mom_ind.size() == 0)); // no id. FD neutrons for Enable_FD_neutrons = false
             bool no_CDproton_1p = (TL_ProtonsCD_mom_ind.size() == 0);
             bool one_FDproton_1p = ((TL_ProtonsFD_mom_ind.size() == 1) &&
-                                    (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut,
-                                                    FD_nucleon_momentum_cut)));
+                                    (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool FDproton_wFC_1p = (TL_ProtonsFD_mom_ind.size() == TL_ProtonsFD_wFC_mom_ind.size()); // id. FD proton is within fiducial cuts (wFC)
             TL_Event_Selection_1p = (TL_Basic_ES && TL_FDneutrons_1p && no_CDproton_1p && one_FDproton_1p && FDproton_wFC_1p);
             //</editor-fold>
@@ -10242,8 +9169,7 @@ void EventAnalyser() {
             //<editor-fold desc="Setting up 1n TL event selection">
             // 1n = any number of id. FD neutron (we look at the leading nFD) & no id. protons:
             bool one_FDneutron_1n = ((TL_IDed_Leading_nFD_ind != -1) &&// for TL_IDed_Leading_nFD_ind = -1 we don't have any nFD
-                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_IDed_Leading_nFD_ind, FD_nucleon_theta_cut,
-                                                     FD_nucleon_momentum_cut)));
+                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_IDed_Leading_nFD_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool no_protons_1n = ((TL_ProtonsCD_mom_ind.size() == 0) && (TL_ProtonsFD_mom_ind.size() == 0));
             bool FDneutron_wFC_1p = Leading_Neutron_inFD_wFC; // leading nFD is within fiducial cuts (wFC)
             TL_Event_Selection_1n = (TL_Basic_ES && one_FDneutron_1n && no_protons_1n && FDneutron_wFC_1p);
@@ -10253,12 +9179,9 @@ void EventAnalyser() {
             // pFDpCD = One id. FD proton & one id. CD proton:
             bool one_CDproton_pFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
             bool one_FDproton_pFDpCD = ((TL_ProtonsFD_mom_ind.size() == 1) &&
-                                        (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut,
-                                                        FD_nucleon_momentum_cut)));
-            bool TL_FDneutrons_pFDpCD = (Enable_FD_neutrons ||
-                                         (TL_NeutronsFD_mom_ind.size() == 0)); // no id. FD neutrons for Enable_FD_neutrons = false
-            bool FDproton_wFC_pFDpCD = (TL_ProtonsFD_mom_ind.size() ==
-                                        TL_ProtonsFD_wFC_mom_ind.size()); // id. FD proton is within fiducial cuts (wFC)
+                                        (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+            bool TL_FDneutrons_pFDpCD = (Enable_FD_neutrons || (TL_NeutronsFD_mom_ind.size() == 0)); // no id. FD neutrons for Enable_FD_neutrons = false
+            bool FDproton_wFC_pFDpCD = (TL_ProtonsFD_mom_ind.size() == TL_ProtonsFD_wFC_mom_ind.size()); // id. FD proton is within fiducial cuts (wFC)
             TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_CDproton_pFDpCD && one_FDproton_pFDpCD && TL_FDneutrons_pFDpCD && FDproton_wFC_pFDpCD);
             //</editor-fold>
 
@@ -10267,8 +9190,7 @@ void EventAnalyser() {
             bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
             bool no_FDproton_nFDpCD = (TL_ProtonsFD_mom_ind.size() == 0);
             bool one_FDNeutron_nFDpCD = ((TL_IDed_Leading_nFD_ind != -1) && // for TL_IDed_Leading_nFD_ind = -1 we don't have any nFD
-                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_IDed_Leading_nFD_ind, FD_nucleon_theta_cut,
-                                                         FD_nucleon_momentum_cut)));
+                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_IDed_Leading_nFD_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
             bool FDneutron_wFC_nFDpCD = Leading_Neutron_inFD_wFC; // leading nFD is within fiducial cuts (wFC)
             TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && no_FDproton_nFDpCD && one_FDNeutron_nFDpCD && FDneutron_wFC_nFDpCD);
             //</editor-fold>
@@ -10361,8 +9283,8 @@ void EventAnalyser() {
                             hPhi_e_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                         }
                     } else if (particlePDGtmp == 2112) { // is neutron
-                        bool n_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Neutron", Particle_TL_Momentum, Particle_TL_Theta,
-                                                        Particle_TL_Phi);
+                        bool n_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi,
+                                                        Calc_eff_overlapping_FC);
 
                         if (TL_Event_Selection_1e_cut) {
                             if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
@@ -10483,8 +9405,8 @@ void EventAnalyser() {
                             }
                         }
                     } else if (particlePDGtmp == 2212) { // is proton
-                        bool p_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Proton", Particle_TL_Momentum, Particle_TL_Theta,
-                                                        Particle_TL_Phi);
+                        bool p_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi,
+                                                        Calc_eff_overlapping_FC);
 
                         if (TL_Event_Selection_1e_cut) {
                             if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) {
@@ -11238,8 +10160,7 @@ void EventAnalyser() {
             Theta_e_tmp = electrons[i]->getTheta() * 180.0 / pi; // Theta_e_tmp in deg
             Phi_e_tmp = electrons[i]->getPhi() * 180.0 / pi;     // Phi_e_tmp in deg
             P_e_tmp = electrons[i]->par()->getP();               // temp electron momentum
-            e_out.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(),
-                             sqrt(m_e * m_e + P_e_tmp * P_e_tmp));
+            e_out.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + P_e_tmp * P_e_tmp));
             Q = beam - e_out;                                    // definition of 4-momentum transfer
             Q2 = fabs(Q.Mag2());
 
@@ -11458,8 +10379,7 @@ void EventAnalyser() {
         //<editor-fold desc="Fill momentum threshold plots (1e cut, CD & FD)">
         if (!Rec_wTL_ES || TL_Event_Selection_inclusive) {
             for (auto &e: electrons) {
-                bool e_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Electron", e->getP(), e->getTheta() * 180.0 / pi,
-                                                   e->getPhi() * 180.0 / pi);
+                bool e_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Electron", e->getP(), e->getTheta() * 180.0 / pi, e->getPhi() * 180.0 / pi);
 
                 if (!apply_fiducial_cuts || e_Pass_FC) {
                     hP_e_reco_1e_cut_FD.hFill(e->getP(), Weight), hP_e_reco_1e_cut_FD_ZOOMIN.hFill(e->getP(), Weight);
@@ -11471,7 +10391,7 @@ void EventAnalyser() {
             for (auto &i: All_gProtons_ind) {
                 if (protons[i]->getRegion() == FD) {
                     bool p_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi,
-                                                       protons[i]->getPhi() * 180.0 / pi);
+                                                       protons[i]->getPhi() * 180.0 / pi, Calc_eff_overlapping_FC);
 
                     if (!apply_fiducial_cuts || p_Pass_FC) {
                         hP_p_reco_1e_cut_FD.hFill(protons[i]->getP(), Weight), hP_p_reco_1e_cut_FD_ZOOMIN.hFill(protons[i]->getP(), Weight);
@@ -11492,8 +10412,8 @@ void EventAnalyser() {
                 double NeutronTheta_1e_cut = allParticles[NeutronsFD_ind_max]->getTheta() * 180.0 / pi;
                 double NeutronPhi_1e_cut = allParticles[NeutronsFD_ind_max]->getPhi() * 180.0 / pi;
 
-                bool n_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut,
-                                                   NeutronPhi_1e_cut);
+                bool n_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut, NeutronPhi_1e_cut,
+                                                   Calc_eff_overlapping_FC);
                 bool NeutronPassVeto_Test = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_max,
                                                                      Neutron_veto_cut.GetLowerCut());
 
@@ -11510,8 +10430,8 @@ void EventAnalyser() {
                 double NeutronTheta_1e_cut = allParticles[i]->getTheta() * 180.0 / pi;
                 double NeutronPhi_1e_cut = allParticles[i]->getPhi() * 180.0 / pi;
 
-                bool n_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut,
-                                                   NeutronPhi_1e_cut);
+                bool n_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut, NeutronPhi_1e_cut,
+                                                   Calc_eff_overlapping_FC);
                 bool NeutronPassVeto_Test = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
 
                 if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
@@ -11530,8 +10450,8 @@ void EventAnalyser() {
                 double NeutronTheta_1e_cut = allParticles[NeutronsFD_ind_mom_max]->getTheta() * 180.0 / pi;
                 double NeutronPhi_1e_cut = allParticles[NeutronsFD_ind_mom_max]->getPhi() * 180.0 / pi;
 
-                bool n_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut,
-                                                   NeutronPhi_1e_cut);
+                bool n_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut, NeutronPhi_1e_cut,
+                                                   Calc_eff_overlapping_FC);
                 bool NeutronPassVeto_Test = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max,
                                                                      Neutron_veto_cut.GetLowerCut());
 
@@ -11548,8 +10468,8 @@ void EventAnalyser() {
                 double NeutronTheta_1e_cut = allParticles[i]->getTheta() * 180.0 / pi;
                 double NeutronPhi_1e_cut = allParticles[i]->getPhi() * 180.0 / pi;
 
-                bool n_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut,
-                                                   NeutronPhi_1e_cut);
+                bool n_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut, NeutronPhi_1e_cut,
+                                                   Calc_eff_overlapping_FC);
                 bool NeutronPassVeto_Test = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
 
                 if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
@@ -11670,9 +10590,7 @@ void EventAnalyser() {
 
         //<editor-fold desc="Testing cuts">
         /* Testing SF cuts */
-        double EoP_e =
-                (electrons[0]->cal(clas12::PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) /
-                P_e;
+        double EoP_e = (electrons[0]->cal(clas12::PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e;
 
         if (!apply_cuts) {
             /* SF plots before cuts */
@@ -11797,11 +10715,9 @@ void EventAnalyser() {
             /* Leading FD Neutrons after mom. th. */
             hP_LnFD_APID_1e_cut_FD.hFill(pid.GetFDNeutronP(allParticles[NeutronsFD_ind_mom_max], apply_nucleon_cuts), Weight);
             hP_LnFD_APID_1e_cut_ZOOMOUT_FD.hFill(pid.GetFDNeutronP(allParticles[NeutronsFD_ind_mom_max], apply_nucleon_cuts), Weight);
-            hP_LnFD_APIDandNS_1e_cut_FD.hFill(
-                    nRes.NCorr(apply_nucleon_SmearAndCorr, pid.GetFDNeutronP(allParticles[NeutronsFD_ind_mom_max], apply_nucleon_cuts)), Weight);
-            hP_LnFD_APIDandNS_1e_cut_ZOOMOUT_FD.hFill(
-                    nRes.NCorr(apply_nucleon_SmearAndCorr, pid.GetFDNeutronP(allParticles[NeutronsFD_ind_mom_max], apply_nucleon_cuts)),
-                    Weight);
+            hP_LnFD_APIDandNS_1e_cut_FD.hFill(nRes.NCorr(apply_nucleon_SmearAndCorr, pid.GetFDNeutronP(allParticles[NeutronsFD_ind_mom_max], apply_nucleon_cuts)), Weight);
+            hP_LnFD_APIDandNS_1e_cut_ZOOMOUT_FD.hFill(nRes.NCorr(apply_nucleon_SmearAndCorr, pid.GetFDNeutronP(allParticles[NeutronsFD_ind_mom_max], apply_nucleon_cuts)),
+                                                      Weight);
         }
 
         if (NeutronsFD_ind_max != -1) {
@@ -11816,15 +10732,11 @@ void EventAnalyser() {
         for (int &i: NeutronsFD_ind) {
             hP_nFD_APID_1e_cut_FD.hFill(pid.GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight);
             hP_nFD_APID_1e_cut_ZOOMOUT_FD.hFill(pid.GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight);
-            hP_nFD_APIDandNS_1e_cut_FD.hFill(nRes.NCorr(apply_nucleon_SmearAndCorr, pid.GetFDNeutronP(allParticles[i], apply_nucleon_cuts)),
-                                             Weight);
-            hP_nFD_APIDandNS_1e_cut_ZOOMOUT_FD.hFill(
-                    nRes.NCorr(apply_nucleon_SmearAndCorr, pid.GetFDNeutronP(allParticles[i], apply_nucleon_cuts)),
-                    Weight);
+            hP_nFD_APIDandNS_1e_cut_FD.hFill(nRes.NCorr(apply_nucleon_SmearAndCorr, pid.GetFDNeutronP(allParticles[i], apply_nucleon_cuts)), Weight);
+            hP_nFD_APIDandNS_1e_cut_ZOOMOUT_FD.hFill(nRes.NCorr(apply_nucleon_SmearAndCorr, pid.GetFDNeutronP(allParticles[i], apply_nucleon_cuts)), Weight);
 
-            hBeta_vs_P_1e_cut_Neutrons_Only_FD_ByDef.hFill(
-                    nRes.NCorr(apply_nucleon_SmearAndCorr, pid.GetFDNeutronP(allParticles[i], apply_nucleon_cuts)),
-                    allParticles[i]->par()->getBeta(), Weight);
+            hBeta_vs_P_1e_cut_Neutrons_Only_FD_ByDef.hFill(nRes.NCorr(apply_nucleon_SmearAndCorr, pid.GetFDNeutronP(allParticles[i], apply_nucleon_cuts)),
+                                                           allParticles[i]->par()->getBeta(), Weight);
         }
 
         /* All FD Neutrons before mom. th. */
@@ -12318,10 +11230,8 @@ void EventAnalyser() {
                                                    protons[i]->traj(clas12::ECAL, trajlayer)->getZ());
                         }
 
-                        double LnFD_hit_Theta_1e_cut = LnFD_hit_1e_cut_3v.Theta() * 180 / pi, LnFD_hit_Phi_1e_cut =
-                                LnFD_hit_1e_cut_3v.Phi() * 180 / pi;
+                        double LnFD_hit_Theta_1e_cut = LnFD_hit_1e_cut_3v.Theta() * 180 / pi, LnFD_hit_Phi_1e_cut = LnFD_hit_1e_cut_3v.Phi() * 180 / pi;
                         double p_hit_Theta_1e_cut = p_hit_1e_cut_3v.Theta() * 180 / pi, p_hit_Phi_1e_cut = p_hit_1e_cut_3v.Phi() * 180 / pi;
-//                        dist_1e_cut_3v = LnFD_hit_1e_cut_3v - p_hit_1e_cut_3v;
 
                         // subtracting the angles between the neutron (n) hit and proton hit to see if we have fake neutrons:
                         hdTheta_LnFD_p_VS_dPhi_LnFD_p_Protons_BV_1e_cut.hFill(CalcdPhi(LnFD_hit_Phi_1e_cut - p_hit_Phi_1e_cut),
@@ -12379,13 +11289,11 @@ void EventAnalyser() {
                                                    protons[j]->traj(clas12::ECAL, trajlayer)->getZ());
                         }
 
-                        double nFD_hit_Theta_1e_cut = nFD_hit_1e_cut_3v.Theta() * 180 / pi, nFD_hit_Phi_1e_cut =
-                                nFD_hit_1e_cut_3v.Phi() * 180 / pi;
+                        double nFD_hit_Theta_1e_cut = nFD_hit_1e_cut_3v.Theta() * 180 / pi, nFD_hit_Phi_1e_cut = nFD_hit_1e_cut_3v.Phi() * 180 / pi;
                         double p_hit_Theta_1e_cut = p_hit_1e_cut_3v.Theta() * 180 / pi, p_hit_Phi_1e_cut = p_hit_1e_cut_3v.Phi() * 180 / pi;
-//                        dist_1e_cut_3v = nFD_hit_Theta_1e_cut - p_hit_1e_cut_3v;
 
-                        hdTheta_nFD_p_VS_dPhi_nFD_p_Protons_BV_1e_cut.hFill(CalcdPhi(nFD_hit_Phi_1e_cut - p_hit_Phi_1e_cut),
-                                                                            nFD_hit_Theta_1e_cut - p_hit_Theta_1e_cut, Weight);
+                        hdTheta_nFD_p_VS_dPhi_nFD_p_Protons_BV_1e_cut.hFill(CalcdPhi(nFD_hit_Phi_1e_cut - p_hit_Phi_1e_cut), nFD_hit_Theta_1e_cut - p_hit_Theta_1e_cut,
+                                                                            Weight);
 
                         bool NeutronPassVeto_1e_cut = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
 
@@ -12460,20 +11368,16 @@ void EventAnalyser() {
                     bool hitPCAL_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
                     bool hitECIN_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
                     bool hitECOUT_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
-                    auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN
-                                                            : clas12::ECOUT;                                // find first layer of hit
+                    auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
                     //<editor-fold desc="Safety checks that leading nFD is neutron by definition (AMaps & WMaps)">
                     if (allParticles[NeutronsFD_ind_mom_max]->getRegion() != FD) {
                         cout << "\n\nLeading reco nFD check (AMaps & WMaps): Leading nFD is not in the FD! Exiting...\n\n", exit(0);
                     }
 
-                    if (!((allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 2112) ||
-                          (allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 22))) {
-                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 ("
-                             << allParticles[NeutronsFD_ind_mom_max]->par()->getPid()
-                             << ")! Exiting...\n\n", exit(
-                                0);
+                    if (!((allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 2112) || (allParticles[NeutronsFD_ind_mom_max]->par()->getPid() == 22))) {
+                        cout << "\n\nLeading reco nFD check (AMaps & WMaps): A neutron PDG is not 2112 or 22 (" << allParticles[NeutronsFD_ind_mom_max]->par()->getPid()
+                             << ")! Exiting...\n\n", exit(0);
                     }
 
                     if (hitPCAL_1e_cut) { cout << "\n\nLeading reco nFD check (AMaps & WMaps): neutron hit in PCAL! Exiting...\n\n", exit(0); }
@@ -12484,18 +11388,15 @@ void EventAnalyser() {
                     //</editor-fold>
 
                     if (allParticles[NeutronsFD_ind_mom_max]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
-                        allParticles[NeutronsFD_ind_mom_max]->cal(n_detlayer_1e_cut)->getLw() >
-                        clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
+                        allParticles[NeutronsFD_ind_mom_max]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
 
-                        bool NeutronPassVeto_1e_cut = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max,
-                                                                               Neutron_veto_cut.GetLowerCut());
+                        bool NeutronPassVeto_1e_cut = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max, Neutron_veto_cut.GetLowerCut());
 
                         double Mom_neut_1e_cut = pid.GetFDNeutronP(allParticles[NeutronsFD_ind_mom_max], apply_nucleon_cuts);
                         double Theta_neut_1e_cut = allParticles[NeutronsFD_ind_mom_max]->getTheta() * 180.0 / pi;
                         double Phi_neut_1e_cut = allParticles[NeutronsFD_ind_mom_max]->getPhi() * 180.0 / pi;
 
-                        if ((Mom_neut_1e_cut <= n_mom_th.GetUpperCut()) &&
-                            (Mom_neut_1e_cut >= n_mom_th.GetLowerCut())) { // if id. reco leading neutron
+                        if ((Mom_neut_1e_cut <= n_mom_th.GetUpperCut()) && (Mom_neut_1e_cut >= n_mom_th.GetLowerCut())) { // if id. reco leading neutron
                             bool FD_Theta_Cut_Reco_neutrons = (Theta_neut_1e_cut <= FD_nucleon_theta_cut.GetUpperCut());
                             bool FD_Momentum_Cut_Reco_neutrons = ((Mom_neut_1e_cut <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                                                   (Mom_neut_1e_cut >= FD_nucleon_momentum_cut.GetLowerCut()));
@@ -12632,16 +11533,14 @@ void EventAnalyser() {
 
             P_e_1p_3v.SetMagThetaPhi(e_1p->getP(), e_1p->getTheta(), e_1p->getPhi()); // electron 3 momentum
             q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz()); // 3 momentum transfer
-            P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndCorr, ProtonMomBKC_1p),
-                                     p_1p->getTheta(), p_1p->getPhi()); // proton 3 momentum
+            P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndCorr, ProtonMomBKC_1p), p_1p->getTheta(), p_1p->getPhi()); // proton 3 momentum
             P_T_e_1p_3v = TVector3(P_e_1p_3v.Px(), P_e_1p_3v.Py(), 0); // electron transverse momentum
             P_T_p_1p_3v = TVector3(P_p_1p_3v.Px(), P_p_1p_3v.Py(), 0); // proton transverse momentum
 
             double E_e_1p = sqrt(m_e * m_e + P_e_1p_3v.Mag2()), E_p_1p = sqrt(m_p * m_p + P_p_1p_3v.Mag2()), Ecal_1p, dAlpha_T_1p, dPhi_T_1p;
             double omega_1p = beamE - E_e_1p, W_1p = sqrt((omega_1p + m_p) * (omega_1p + m_p) - q_1p_3v.Mag2());
             double Theta_p_e_p_p_1p, Theta_q_p_p_1p;
-            double EoP_e_1p = (e_1p->cal(clas12::PCAL)->getEnergy() + e_1p->cal(ECIN)->getEnergy() + e_1p->cal(ECOUT)->getEnergy())
-                              / P_e_1p_3v.Mag();
+            double EoP_e_1p = (e_1p->cal(clas12::PCAL)->getEnergy() + e_1p->cal(ECIN)->getEnergy() + e_1p->cal(ECOUT)->getEnergy()) / P_e_1p_3v.Mag();
             double Vx_e_1p = e_1p->par()->getVx(), Vy_e_1p = e_1p->par()->getVy(), Vz_e_1p = e_1p->par()->getVz();
 
             /* Setting Q2 (1p) */
@@ -12667,10 +11566,9 @@ void EventAnalyser() {
             bool FD_Theta_Cut_1p = ((P_p_1p_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
             bool FD_Momentum_Cut_1p = ((P_p_1p_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                        (P_p_1p_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut after proton smearing
-            bool e_withinFC_1p = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Electron", P_e_1p_3v.Mag(), P_e_1p_3v.Theta() * 180.0 / pi,
-                                                   P_e_1p_3v.Phi() * 180.0 / pi);
-            bool p_withinFC_1p = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Proton", ProtonMomBKC_1p, P_p_1p_3v.Theta() * 180.0 / pi,
-                                                   P_p_1p_3v.Phi() * 180.0 / pi);
+            bool e_withinFC_1p = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Electron", P_e_1p_3v.Mag(), P_e_1p_3v.Theta() * 180.0 / pi, P_e_1p_3v.Phi() * 180.0 / pi);
+            bool p_withinFC_1p = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Proton", ProtonMomBKC_1p, P_p_1p_3v.Theta() * 180.0 / pi, P_p_1p_3v.Phi() * 180.0 / pi,
+                                                   Calc_eff_overlapping_FC);
 
             bool Pass_Kin_Cuts_1p = ((!apply_kinematical_cuts || (FD_Theta_Cut_1p && FD_Momentum_Cut_1p)) &&
                                      (!apply_fiducial_cuts || (e_withinFC_1p && p_withinFC_1p)));
@@ -12970,8 +11868,7 @@ void EventAnalyser() {
 
                 hTheta_q_p_p_vs_p_p_q_1p->Fill(P_p_1p_3v.Mag() / q_1p_3v.Mag(), Theta_q_p_p_1p, Weight_1p);
 
-                P_N_1p_3v = TVector3(P_e_1p_3v.Px() + P_p_1p_3v.Px() - Pvx, P_e_1p_3v.Py() + P_p_1p_3v.Py() - Pvy,
-                                     P_e_1p_3v.Pz() + P_p_1p_3v.Pz() - Pvz);
+                P_N_1p_3v = TVector3(P_e_1p_3v.Px() + P_p_1p_3v.Px() - Pvx, P_e_1p_3v.Py() + P_p_1p_3v.Py() - Pvy, P_e_1p_3v.Pz() + P_p_1p_3v.Pz() - Pvz);
                 hTheta_q_p_p_vs_p_N_q_1p->Fill(P_N_1p_3v.Mag() / q_1p_3v.Mag(), Theta_q_p_p_1p, Weight_1p);
 
                 //<editor-fold desc="Fill resolution histograms (1p)">
@@ -13128,9 +12025,7 @@ void EventAnalyser() {
                     if (i != NeutronsFD_ind_mom_max) {
                         double P_temp = pid.GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
-                        if (P_max_test < P_temp) {
-                            cout << "\n\n1n: NeutronsFD_ind_mom_max is not leading FD neutron! Exiting...\n\n", exit(0);
-                        }
+                        if (P_max_test < P_temp) { cout << "\n\n1n: NeutronsFD_ind_mom_max is not leading FD neutron! Exiting...\n\n", exit(0); }
                     }
                 }
             }
@@ -13170,14 +12065,10 @@ void EventAnalyser() {
                                                                                     : clas12::ECOUT; // determine the earliest layer of the neutral hit
 
             if (n_1n->getRegion() != FD) { cout << "\n\n1n: neutron is not in FD! Exiting...\n\n", exit(0); }
-            if (!((NeutronPDG == 22) || (NeutronPDG == 2112))) {
-                cout << "\n\n1n: neutral PDG is not 2112 or 22 (" << NeutronPDG << ")! Exiting...\n\n", exit(0);
-            }
+            if (!((NeutronPDG == 22) || (NeutronPDG == 2112))) { cout << "\n\n1n: neutral PDG is not 2112 or 22 (" << NeutronPDG << ")! Exiting...\n\n", exit(0); }
             if (NeutronInPCAL_1n) { cout << "\n\n1n: neutron hit in PCAL! Exiting...\n\n", exit(0); }
             if (!(NeutronInECIN_1n || NeutronInECOUT_1n)) { cout << "\n\n1n: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
-            if (!(!NeutronInPCAL_1n && (NeutronInECIN_1n || NeutronInECOUT_1n))) {
-                cout << "\n\n1n: not neutron by definition! Exiting...\n\n", exit(0);
-            }
+            if (!(!NeutronInPCAL_1n && (NeutronInECIN_1n || NeutronInECOUT_1n))) { cout << "\n\n1n: not neutron by definition! Exiting...\n\n", exit(0); }
             //</editor-fold>
 
             //<editor-fold desc="Setting 1n analysis variables">
@@ -13187,36 +12078,30 @@ void EventAnalyser() {
 
             P_e_1n_3v.SetMagThetaPhi(e_1n->getP(), e_1n->getTheta(), e_1n->getPhi()); // electron 3 momentum
             q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz()); // 3 momentum transfer
-            P_n_1n_3v.SetMagThetaPhi(nRes.NCorr(apply_nucleon_SmearAndCorr, NeutronMomBKC_1n),
-                                     n_1n->getTheta(), n_1n->getPhi()); // neutron 3 momentum
+            P_n_1n_3v.SetMagThetaPhi(nRes.NCorr(apply_nucleon_SmearAndCorr, NeutronMomBKC_1n), n_1n->getTheta(), n_1n->getPhi()); // neutron 3 momentum
             P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0); // electron t. momentum
             P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0); // neutron t. momentum
 
             double E_e_1n = sqrt(m_e * m_e + P_e_1n_3v.Mag2()), E_n_1n = sqrt(m_n * m_n + P_n_1n_3v.Mag2()), Ecal_1n, dAlpha_T_1n, dPhi_T_1n;
             double omega_1n = beamE - E_e_1n, W_1n = sqrt((omega_1n + m_n) * (omega_1n + m_n) - q_1n_3v.Mag2());
             double Theta_p_e_p_n_1n, Theta_q_p_n_1n;
-            double EoP_e_1n =
-                    (e_1n->cal(clas12::PCAL)->getEnergy() + e_1n->cal(ECIN)->getEnergy() + e_1n->cal(ECOUT)->getEnergy()) / P_e_1n_3v.Mag();
+            double EoP_e_1n = (e_1n->cal(clas12::PCAL)->getEnergy() + e_1n->cal(ECIN)->getEnergy() + e_1n->cal(ECOUT)->getEnergy()) / P_e_1n_3v.Mag();
             double Vx_e_1n = e_1n->par()->getVx(), Vy_e_1n = e_1n->par()->getVy(), Vz_e_1n = e_1n->par()->getVz();
 
             /* Setting Q2 (1n) */
             TLorentzVector e_out_1n, Q_1n;
             double Q2_1n;
             e_out_1n.SetPxPyPzE(e_1n->par()->getPx(), e_1n->par()->getPy(), e_1n->par()->getPz(), E_e_1n);
-            Q_1n = beam -
-                   e_out_1n;                                                                                                  // definition of 4-momentum transfer
+            Q_1n = beam - e_out_1n; // definition of 4-momentum transfer
             Q2_1n = fabs(Q_1n.Mag2());
             double xB_1n = Q2_1n / (2 * m_n * omega_1n);
 
             /* Setting particle angles (1n) */
-            double Theta_e_1n = e_1n->getTheta() * 180.0 / pi, Phi_e_1n =
-                    e_1n->getPhi() * 180.0 / pi;                                     // Theta_e_1n, Phi_e_1n in deg
-            double Theta_n_1n = n_1n->getTheta() * 180.0 / pi, Phi_n_1n =
-                    n_1n->getPhi() * 180.0 / pi;                                 // Theta_pFD_1n, Phi_pFD_1n in deg
+            double Theta_e_1n = e_1n->getTheta() * 180.0 / pi, Phi_e_1n = e_1n->getPhi() * 180.0 / pi; // Theta_e_1n, Phi_e_1n in deg
+            double Theta_n_1n = n_1n->getTheta() * 180.0 / pi, Phi_n_1n = n_1n->getPhi() * 180.0 / pi; // Theta_pFD_1n, Phi_pFD_1n in deg
 
             /* Weights -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
-            double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180 / pi,
-                                               P_n_1n_3v.Phi() * 180 / pi);
+            double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
             //</editor-fold>
 
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
@@ -13240,8 +12125,7 @@ void EventAnalyser() {
                     e_hit_Theta_1n = e_hit_1n_3v.Theta() * 180 / pi, e_hit_Phi_1n = e_hit_1n_3v.Phi() * 180 / pi;
                 } else {
                     int trajlayer = (n_detlayer_1n == clas12::ECIN) ? 4 : 7;
-                    e_hit_1n_3v.SetXYZ(e_1n->traj(clas12::ECAL, trajlayer)->getX(), e_1n->traj(clas12::ECAL, trajlayer)->getY(),
-                                       e_1n->traj(clas12::ECAL, trajlayer)->getZ());
+                    e_hit_1n_3v.SetXYZ(e_1n->traj(clas12::ECAL, trajlayer)->getX(), e_1n->traj(clas12::ECAL, trajlayer)->getY(), e_1n->traj(clas12::ECAL, trajlayer)->getZ());
                     e_hit_Theta_1n = e_hit_1n_3v.Theta() * 180 / pi, e_hit_Phi_1n = e_hit_1n_3v.Phi() * 180 / pi;
                 }
 
@@ -13267,12 +12151,10 @@ void EventAnalyser() {
             bool FD_Momentum_Cut_BS_1n = ((NeutronMomBKC_1n <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                           (NeutronMomBKC_1n >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut before neutron shifting
             bool FD_Momentum_Cut_AS_1n = ((P_n_1n_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
-                                          (P_n_1n_3v.Mag() >=
-                                           FD_nucleon_momentum_cut.GetLowerCut())); // Additional momentum kin cut after neutron shifting
-            bool e_withinFC_1n = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Electron", P_e_1n_3v.Mag(), P_e_1n_3v.Theta() * 180.0 / pi,
-                                                   P_e_1n_3v.Phi() * 180.0 / pi);
-            bool n_withinFC_1n = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi,
-                                                   P_n_1n_3v.Phi() * 180.0 / pi);
+                                          (P_n_1n_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Additional momentum kin cut after neutron shifting
+            bool e_withinFC_1n = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Electron", P_e_1n_3v.Mag(), P_e_1n_3v.Theta() * 180.0 / pi, P_e_1n_3v.Phi() * 180.0 / pi);
+            bool n_withinFC_1n = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi,
+                                                   Calc_eff_overlapping_FC);
 
             bool Pass_Kin_Cuts_1n = ((!apply_kinematical_cuts || (FD_Theta_Cut_1n && FD_Momentum_Cut_BS_1n && FD_Momentum_Cut_AS_1n)) &&
                                      (!apply_fiducial_cuts || (e_withinFC_1n && n_withinFC_1n)));
@@ -13853,8 +12735,7 @@ void EventAnalyser() {
 
                 hTheta_q_p_n_vs_p_n_q_1n->Fill(P_n_1n_3v.Mag() / q_1n_3v.Mag(), Theta_q_p_n_1n, Weight_1n);
 
-                P_N_1n_3v = TVector3(P_e_1n_3v.Px() + P_n_1n_3v.Px() - Pvx, P_e_1n_3v.Py() + P_n_1n_3v.Py() - Pvy,
-                                     P_e_1n_3v.Pz() + P_n_1n_3v.Pz() - Pvz);
+                P_N_1n_3v = TVector3(P_e_1n_3v.Px() + P_n_1n_3v.Px() - Pvx, P_e_1n_3v.Py() + P_n_1n_3v.Py() - Pvy, P_e_1n_3v.Pz() + P_n_1n_3v.Pz() - Pvz);
                 hTheta_q_p_n_vs_p_N_q_1n->Fill(P_N_1n_3v.Mag() / q_1n_3v.Mag(), Theta_q_p_n_1n, Weight_1n);
 
                 hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight_1n);
@@ -14067,19 +12948,13 @@ void EventAnalyser() {
             TVector3 P_e_2p_3v, q_2p_3v, P_p_first_2p_3v, P_p_second_2p_3v, P_tot_2p_3v, P_1_2p_3v, P_2_2p_3v;
             TVector3 P_T_e_2p_3v, P_T_L_2p_3v, P_T_tot_2p_3v, dP_T_L_2p_3v, dP_T_tot_2p_3v;
 
-            P_e_2p_3v.SetMagThetaPhi(e_2p->getP(), e_2p->getTheta(),
-                                     e_2p->getPhi());                                                              // electron 3 momentum
-            q_2p_3v = TVector3(Pvx - P_e_2p_3v.Px(), Pvy - P_e_2p_3v.Py(),
-                               Pvz - P_e_2p_3v.Pz());                                                  // 3 momentum transfer
-            P_T_e_2p_3v = TVector3(P_e_2p_3v.Px(), P_e_2p_3v.Py(),
-                                   0);                                                                    // electron transverse momentum
-            P_p_first_2p_3v.SetMagThetaPhi(p_first_2p->getP(), p_first_2p->getTheta(),
-                                           p_first_2p->getPhi());                           // first proton in protons vector
-            P_p_second_2p_3v.SetMagThetaPhi(p_second_2p->getP(), p_second_2p->getTheta(),
-                                            p_second_2p->getPhi());                      // second proton in protons vector
+            P_e_2p_3v.SetMagThetaPhi(e_2p->getP(), e_2p->getTheta(), e_2p->getPhi());                                                              // electron 3 momentum
+            q_2p_3v = TVector3(Pvx - P_e_2p_3v.Px(), Pvy - P_e_2p_3v.Py(), Pvz - P_e_2p_3v.Pz());                                                  // 3 momentum transfer
+            P_T_e_2p_3v = TVector3(P_e_2p_3v.Px(), P_e_2p_3v.Py(), 0);                                                                    // electron transverse momentum
+            P_p_first_2p_3v.SetMagThetaPhi(p_first_2p->getP(), p_first_2p->getTheta(), p_first_2p->getPhi());                           // first proton in protons vector
+            P_p_second_2p_3v.SetMagThetaPhi(p_second_2p->getP(), p_second_2p->getTheta(), p_second_2p->getPhi());                      // second proton in protons vector
 
-            double E_e_2p = sqrt(m_e * m_e + P_e_2p_3v.Mag2()), omega_2p = beamE - E_e_2p, W_2p = sqrt(
-                    (omega_2p + m_p) * (omega_2p + m_p) - q_2p_3v.Mag2());
+            double E_e_2p = sqrt(m_e * m_e + P_e_2p_3v.Mag2()), omega_2p = beamE - E_e_2p, W_2p = sqrt((omega_2p + m_p) * (omega_2p + m_p) - q_2p_3v.Mag2());
             double E_1_2p, E_2_2p, Theta_p_e_p_tot_2p, Theta_q_p_tot_2p, Theta_q_p_L_2p, Theta_q_p_R_2p;
             double dAlpha_T_L_2p, dAlpha_T_tot_2p, dPhi_T_L_2p, dPhi_T_tot_2p, Ecal_2p;
 
@@ -14097,13 +12972,10 @@ void EventAnalyser() {
             }
 
             /* Angles of leading and recoil protons */
-            double Theta_p1 = P_1_2p_3v.Theta() * 180.0 / pi, Theta_p2 =
-                    P_2_2p_3v.Theta() * 180.0 / pi;                                    // Theta_p1, Theta_p2 in deg
-            double Phi_p1 = P_1_2p_3v.Phi() * 180.0 / pi, Phi_p2 =
-                    P_2_2p_3v.Phi() * 180.0 / pi;                                                // Phi_p1, Phi_p2 in deg
+            double Theta_p1 = P_1_2p_3v.Theta() * 180.0 / pi, Theta_p2 = P_2_2p_3v.Theta() * 180.0 / pi; // Theta_p1, Theta_p2 in deg
+            double Phi_p1 = P_1_2p_3v.Phi() * 180.0 / pi, Phi_p2 = P_2_2p_3v.Phi() * 180.0 / pi; // Phi_p1, Phi_p2 in deg
             double Theta_p1_p2_2p = acos((P_1_2p_3v.Px() * P_2_2p_3v.Px() + P_1_2p_3v.Py() * P_2_2p_3v.Py() + P_1_2p_3v.Pz() * P_2_2p_3v.Pz())
-                                         / (P_1_2p_3v.Mag() * P_2_2p_3v.Mag())) * 180.0 /
-                                    pi;                                                   // Theta_p1_p2_2p in deg
+                                         / (P_1_2p_3v.Mag() * P_2_2p_3v.Mag())) * 180.0 / pi; // Theta_p1_p2_2p in deg
             //</editor-fold>
 
             //  Fillings 2p histograms ---------------------------------------------------------------------------------------------------------------------------------
@@ -14115,9 +12987,7 @@ void EventAnalyser() {
             /* Filling Chi2 histograms (2p) */
 
             // Electrton Chi2 (2p):
-            if (e_2p->getRegion() == FD) {
-                hChi2_Electron_2p_FD.hFill(e_2p->par()->getChi2Pid(), Weight);
-            }
+            if (e_2p->getRegion() == FD) { hChi2_Electron_2p_FD.hFill(e_2p->par()->getChi2Pid(), Weight); }
 
             // Proton0 Chi2 (2p):
             if (p_first_2p->getRegion() == CD) {
@@ -14391,12 +13261,9 @@ void EventAnalyser() {
             hP_p_1_vs_P_p_2_2p.hFill(P_1_2p_3v.Mag(), P_2_2p_3v.Mag(), Weight);
 
             P_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(),
-                                   P_p_first_2p_3v.Pz() +
-                                   P_p_second_2p_3v.Pz());                                                    // P_tot = P_1 + P_2
-            P_T_L_2p_3v = TVector3(P_1_2p_3v.Px(), P_1_2p_3v.Py(),
-                                   0);                                                               // transverse part of P_1
-            P_T_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(),
-                                     0); // transverse part of P_tot
+                                   P_p_first_2p_3v.Pz() + P_p_second_2p_3v.Pz()); // P_tot = P_1 + P_2
+            P_T_L_2p_3v = TVector3(P_1_2p_3v.Px(), P_1_2p_3v.Py(), 0); // transverse part of P_1
+            P_T_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(), 0); // transverse part of P_tot
             dP_T_L_2p_3v = TVector3(P_e_2p_3v.Px() + P_T_L_2p_3v.Px(), P_e_2p_3v.Py() + P_T_L_2p_3v.Py(), 0);
             dP_T_tot_2p_3v = TVector3(P_e_2p_3v.Px() + P_1_2p_3v.Px() + P_2_2p_3v.Px(), P_e_2p_3v.Py() + P_1_2p_3v.Py() + P_2_2p_3v.Py(), 0);
 
@@ -14508,9 +13375,8 @@ void EventAnalyser() {
 
             dAlpha_T_L_2p = acos(-(P_e_2p_3v.Px() * dP_T_L_2p_3v.Px() + P_e_2p_3v.Py() * dP_T_L_2p_3v.Py() + P_e_2p_3v.Pz() * dP_T_L_2p_3v.Pz())
                                  / (P_T_e_2p_3v.Mag() * dP_T_L_2p_3v.Mag())) * 180.0 / pi; // dP_T_L_2p_3v.Pz() = 0; dAlpha_T_L_2p in deg
-            dAlpha_T_tot_2p =
-                    acos(-(P_e_2p_3v.Px() * dP_T_tot_2p_3v.Px() + P_e_2p_3v.Py() * dP_T_tot_2p_3v.Py() + P_e_2p_3v.Pz() * dP_T_tot_2p_3v.Pz())
-                         / (P_T_e_2p_3v.Mag() * dP_T_tot_2p_3v.Mag())) * 180.0 / pi; // dP_T_tot_2p_3v.Pz() = 0; dAlpha_T_tot_2p in deg
+            dAlpha_T_tot_2p = acos(-(P_e_2p_3v.Px() * dP_T_tot_2p_3v.Px() + P_e_2p_3v.Py() * dP_T_tot_2p_3v.Py() + P_e_2p_3v.Pz() * dP_T_tot_2p_3v.Pz())
+                                   / (P_T_e_2p_3v.Mag() * dP_T_tot_2p_3v.Mag())) * 180.0 / pi; // dP_T_tot_2p_3v.Pz() = 0; dAlpha_T_tot_2p in deg
             hdAlpha_T_L_2p->Fill(dAlpha_T_L_2p, Weight);
             hdAlpha_T_tot_2p->Fill(dAlpha_T_tot_2p, Weight);
 
@@ -14519,9 +13385,8 @@ void EventAnalyser() {
 
             dPhi_T_L_2p = acos(-(P_T_e_2p_3v.Px() * P_T_L_2p_3v.Px() + P_T_e_2p_3v.Py() * P_T_L_2p_3v.Py() + P_T_e_2p_3v.Pz() * P_T_L_2p_3v.Pz())
                                / (P_T_e_2p_3v.Mag() * P_T_L_2p_3v.Mag())) * 180.0 / pi; // P_T_L_2p_3v.Pz() = 0; dPhi_T_L_2p in deg
-            dPhi_T_tot_2p =
-                    acos(-(P_T_e_2p_3v.Px() * P_T_tot_2p_3v.Px() + P_T_e_2p_3v.Py() * P_T_tot_2p_3v.Py() + P_T_e_2p_3v.Pz() * P_T_tot_2p_3v.Pz())
-                         / (P_T_e_2p_3v.Mag() * P_T_tot_2p_3v.Mag())) * 180.0 / pi; // P_T_tot_2p_3v.Pz() = 0; dPhi_T_tot_2p in deg
+            dPhi_T_tot_2p = acos(-(P_T_e_2p_3v.Px() * P_T_tot_2p_3v.Px() + P_T_e_2p_3v.Py() * P_T_tot_2p_3v.Py() + P_T_e_2p_3v.Pz() * P_T_tot_2p_3v.Pz())
+                                 / (P_T_e_2p_3v.Mag() * P_T_tot_2p_3v.Mag())) * 180.0 / pi; // P_T_tot_2p_3v.Pz() = 0; dPhi_T_tot_2p in deg
             hdPhi_T_L_2p->Fill(dPhi_T_L_2p, Weight);
             hdPhi_T_tot_2p->Fill(dPhi_T_tot_2p, Weight);
 
@@ -14532,10 +13397,8 @@ void EventAnalyser() {
 
             if ((p_first_2p->getRegion() == CD) && (p_second_2p->getRegion() == CD)) { // if both 2p protons are in the CD
                 TVector3 p1_hit_pos, p2_hit_pos, pos_diff;
-                p1_hit_pos.SetXYZ(p_first_2p->sci(clas12::CTOF)->getX(), p_first_2p->sci(clas12::CTOF)->getY(),
-                                  p_first_2p->sci(clas12::CTOF)->getZ());
-                p2_hit_pos.SetXYZ(p_second_2p->sci(clas12::CTOF)->getX(), p_second_2p->sci(clas12::CTOF)->getY(),
-                                  p_second_2p->sci(clas12::CTOF)->getZ());
+                p1_hit_pos.SetXYZ(p_first_2p->sci(clas12::CTOF)->getX(), p_first_2p->sci(clas12::CTOF)->getY(), p_first_2p->sci(clas12::CTOF)->getZ());
+                p2_hit_pos.SetXYZ(p_second_2p->sci(clas12::CTOF)->getX(), p_second_2p->sci(clas12::CTOF)->getY(), p_second_2p->sci(clas12::CTOF)->getZ());
 
                 pos_diff.SetXYZ(p1_hit_pos.Px() - p2_hit_pos.Px(), p1_hit_pos.Py() - p2_hit_pos.Py(), p1_hit_pos.Pz() - p2_hit_pos.Pz());
                 double time_diff = protons[lead_p_2p_ind]->getTime() - protons[recoil_p_2p_ind]->getTime();
@@ -14556,8 +13419,7 @@ void EventAnalyser() {
         /* This event selection is a subgroup of the 2p selectin. Here we figure out if the event is pFDpCD or not. */
         bool is_pFDpCD = false;
 
-        if (calculate_pFDpCD &&
-            event_selection_2p) { // if we have a 2p event with one id. proton in the CD and one in the FD, then is_pFDpCD is true
+        if (calculate_pFDpCD && event_selection_2p) { // if we have a 2p event with one id. proton in the CD and one in the FD, then is_pFDpCD is true
             is_pFDpCD = (((protons[Protons_ind.at(0)]->getRegion() == FD) && (protons[Protons_ind.at(1)]->getRegion() == CD)) ||
                          ((protons[Protons_ind.at(0)]->getRegion() == CD) && (protons[Protons_ind.at(1)]->getRegion() == FD)));
         }
@@ -14629,33 +13491,25 @@ void EventAnalyser() {
             TVector3 P_T_e_pFDpCD_3v, P_T_L_pFDpCD_3v, P_T_tot_pFDpCD_3v, dP_T_L_pFDpCD_3v, dP_T_tot_pFDpCD_3v;
             TLorentzVector P_tot_mu_pFDpCD_4v, P_rel_mu_pFDpCD_4v;
 
-            P_e_pFDpCD_3v.SetMagThetaPhi(e_pFDpCD->getP(), e_pFDpCD->getTheta(),
-                                         e_pFDpCD->getPhi());                                              // electron 3 momentum
-            q_pFDpCD_3v = TVector3(Pvx - P_e_pFDpCD_3v.Px(), Pvy - P_e_pFDpCD_3v.Py(),
-                                   Pvz - P_e_pFDpCD_3v.Pz());                                  // 3 momentum transfer
-            P_T_e_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py(),
-                                       0);                                                        // electron transverse momentum
-            P_pFD_pFDpCD_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndCorr, ProtonMomBKC_pFDpCD),
-                                           pFD_pFDpCD->getTheta(),
-                                           pFD_pFDpCD->getPhi());                                                               // pFD 3 momentum
-            P_pCD_pFDpCD_3v.SetMagThetaPhi(pCD_pFDpCD->getP(), pCD_pFDpCD->getTheta(),
-                                           pCD_pFDpCD->getPhi());                                           // pCD 3 momentum
+            P_e_pFDpCD_3v.SetMagThetaPhi(e_pFDpCD->getP(), e_pFDpCD->getTheta(), e_pFDpCD->getPhi()); // electron 3 momentum
+            q_pFDpCD_3v = TVector3(Pvx - P_e_pFDpCD_3v.Px(), Pvy - P_e_pFDpCD_3v.Py(), Pvz - P_e_pFDpCD_3v.Pz()); // 3 momentum transfer
+            P_T_e_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py(), 0); // electron transverse momentum
+            P_pFD_pFDpCD_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndCorr, ProtonMomBKC_pFDpCD), pFD_pFDpCD->getTheta(), pFD_pFDpCD->getPhi()); // pFD 3 momentum
+            P_pCD_pFDpCD_3v.SetMagThetaPhi(pCD_pFDpCD->getP(), pCD_pFDpCD->getTheta(), pCD_pFDpCD->getPhi()); // pCD 3 momentum
 
             double E_e_pFDpCD = sqrt(m_e * m_e + P_e_pFDpCD_3v.Mag2()), omega_pFDpCD = beamE - E_e_pFDpCD;
             double W_pFDpCD = sqrt((omega_pFDpCD + m_p) * (omega_pFDpCD + m_p) - q_pFDpCD_3v.Mag2());
             double E_pL_pFDpCD, E_pR_pFDpCD;
             double Theta_p_e_p_tot_pFDpCD, Theta_q_p_tot_pFDpCD, Theta_P_pL_minus_q_pR_pFDpCD, Theta_q_p_L_pFDpCD, Theta_q_p_R_pFDpCD, Theta_q_pFD_pFDpCD, Theta_q_pCD_pFDpCD;
             double dAlpha_T_L_pFDpCD, dAlpha_T_tot_pFDpCD, dPhi_T_L_pFDpCD, dPhi_T_tot_pFDpCD, Ecal_pFDpCD;
-            double EoP_e_pFDpCD = (e_pFDpCD->cal(PCAL)->getEnergy() + e_pFDpCD->cal(ECIN)->getEnergy() + e_pFDpCD->cal(ECOUT)->getEnergy()) /
-                                  P_e_pFDpCD_3v.Mag();
+            double EoP_e_pFDpCD = (e_pFDpCD->cal(PCAL)->getEnergy() + e_pFDpCD->cal(ECIN)->getEnergy() + e_pFDpCD->cal(ECOUT)->getEnergy()) / P_e_pFDpCD_3v.Mag();
             double Vx_e_pFDpCD = e_pFDpCD->par()->getVx(), Vy_e_pFDpCD = e_pFDpCD->par()->getVy(), Vz_e_pFDpCD = e_pFDpCD->par()->getVz();
 
             /* Setting Q2 */
             TLorentzVector e_out_pFDpCD, Q_pFDpCD;
             double Q2_pFDpCD;
             e_out_pFDpCD.SetPxPyPzE(e_pFDpCD->par()->getPx(), e_pFDpCD->par()->getPy(), e_pFDpCD->par()->getPz(), E_e_pFDpCD);
-            Q_pFDpCD = beam -
-                       e_out_pFDpCD;                                                                                          // definition of 4-momentum transfer
+            Q_pFDpCD = beam - e_out_pFDpCD; // definition of 4-momentum transfer
             Q2_pFDpCD = fabs(Q_pFDpCD.Mag2());
             double xB_pFDpCD = Q2_pFDpCD / (2 * m_p * omega_pFDpCD); //TODO: ask Adi which mass should I use here
 
@@ -14677,38 +13531,28 @@ void EventAnalyser() {
             }
 
             /* Setting particle angles */
-            double Theta_L_pFDpCD = P_pL_pFDpCD_3v.Theta() * 180.0 / pi, Phi_L_pFDpCD =
-                    P_pL_pFDpCD_3v.Phi() * 180.0 / pi;         // Theta_L_pFDpCD, Phi_L_pFDpCD in deg
-            double Theta_R_pFDpCD = P_pR_pFDpCD_3v.Theta() * 180.0 / pi, Phi_R_pFDpCD =
-                    P_pR_pFDpCD_3v.Phi() * 180.0 / pi;         // Theta_R_pFDpCD, Phi_R_pFDpCD in deg
+            double Theta_L_pFDpCD = P_pL_pFDpCD_3v.Theta() * 180.0 / pi, Phi_L_pFDpCD = P_pL_pFDpCD_3v.Phi() * 180.0 / pi; // Theta_L_pFDpCD, Phi_L_pFDpCD in deg
+            double Theta_R_pFDpCD = P_pR_pFDpCD_3v.Theta() * 180.0 / pi, Phi_R_pFDpCD = P_pR_pFDpCD_3v.Phi() * 180.0 / pi; // Theta_R_pFDpCD, Phi_R_pFDpCD in deg
             double dPhi_hit_pFDpCD = CalcdPhi(Phi_L_pFDpCD - Phi_R_pFDpCD);
             double Theta_pFD_pCD_pFDpCD = acos((P_pL_pFDpCD_3v.Px() * P_pR_pFDpCD_3v.Px() + P_pL_pFDpCD_3v.Py() * P_pR_pFDpCD_3v.Py()
                                                 + P_pL_pFDpCD_3v.Pz() * P_pR_pFDpCD_3v.Pz())
-                                               / (P_pL_pFDpCD_3v.Mag() * P_pR_pFDpCD_3v.Mag())) * 180.0 /
-                                          pi;                              // Theta_pFD_pCD_pFDpCD in deg
+                                               / (P_pL_pFDpCD_3v.Mag() * P_pR_pFDpCD_3v.Mag())) * 180.0 / pi; // Theta_pFD_pCD_pFDpCD in deg
             //</editor-fold>
 
             /* Setting total and relative momenta */
             P_tot_pFDpCD_3v = TVector3(P_pL_pFDpCD_3v.Px() + P_pR_pFDpCD_3v.Px(), P_pL_pFDpCD_3v.Py() + P_pR_pFDpCD_3v.Py(),
-                                       P_pL_pFDpCD_3v.Pz() +
-                                       P_pR_pFDpCD_3v.Pz());                                                                 // P_tot = P_pL + P_pR
+                                       P_pL_pFDpCD_3v.Pz() + P_pR_pFDpCD_3v.Pz()); // P_tot = P_pL + P_pR
             P_rel_pFDpCD_3v = TVector3((P_pL_pFDpCD_3v.Px() - P_pR_pFDpCD_3v.Px()) / 2, (P_pL_pFDpCD_3v.Py() - P_pR_pFDpCD_3v.Py()) / 2,
-                                       (P_pL_pFDpCD_3v.Pz() - P_pR_pFDpCD_3v.Pz()) /
-                                       2);                                                     // P_rel = (P_pL - P_pR) / 2
+                                       (P_pL_pFDpCD_3v.Pz() - P_pR_pFDpCD_3v.Pz()) / 2); // P_rel = (P_pL - P_pR) / 2
             P_pL_minus_q_pFDpCD_v3 = TVector3(P_pL_pFDpCD_3v.Px() - q_pFDpCD_3v.Px(), P_pL_pFDpCD_3v.Py() - q_pFDpCD_3v.Py(),
-                                              P_pL_pFDpCD_3v.Pz() -
-                                              q_pFDpCD_3v.Pz());                                                                        // P_pL - q
+                                              P_pL_pFDpCD_3v.Pz() - q_pFDpCD_3v.Pz());// P_pL - q
             P_tot_minus_q_pFDpCD_v3 = TVector3(P_tot_pFDpCD_3v.Px() - q_pFDpCD_3v.Px(), P_tot_pFDpCD_3v.Py() - q_pFDpCD_3v.Py(),
-                                               P_tot_pFDpCD_3v.Pz() -
-                                               q_pFDpCD_3v.Pz());                                                                     // P_tot - q
+                                               P_tot_pFDpCD_3v.Pz() - q_pFDpCD_3v.Pz()); // P_tot - q
 
             /* Setting particle angles */
-            double Theta_e_pFDpCD = e_pFDpCD->getTheta() * 180.0 / pi, Phi_e_pFDpCD =
-                    e_pFDpCD->getPhi() * 180.0 / pi;             // Theta_e_pFDpCD, Phi_e_pFDpCD in deg
-            double Theta_pFD_pFDpCD = pFD_pFDpCD->getTheta() * 180.0 / pi, Phi_pFD_pFDpCD =
-                    pFD_pFDpCD->getPhi() * 180.0 / pi; // Theta_pFD_pFDpCD, Phi_pFD_pFDpCD in deg
-            double Theta_pCD_pFDpCD = pCD_pFDpCD->getTheta() * 180.0 / pi, Phi_pCD_pFDpCD =
-                    pCD_pFDpCD->getPhi() * 180.0 / pi; // Theta_pCD_pFDpCD, Phi_pCD_pFDpCD in deg
+            double Theta_e_pFDpCD = e_pFDpCD->getTheta() * 180.0 / pi, Phi_e_pFDpCD = e_pFDpCD->getPhi() * 180.0 / pi; // Theta_e_pFDpCD, Phi_e_pFDpCD in deg
+            double Theta_pFD_pFDpCD = pFD_pFDpCD->getTheta() * 180.0 / pi, Phi_pFD_pFDpCD = pFD_pFDpCD->getPhi() * 180.0 / pi; // Theta_pFD_pFDpCD, Phi_pFD_pFDpCD in deg
+            double Theta_pCD_pFDpCD = pCD_pFDpCD->getTheta() * 180.0 / pi, Phi_pCD_pFDpCD = pCD_pFDpCD->getPhi() * 180.0 / pi; // Theta_pCD_pFDpCD, Phi_pCD_pFDpCD in deg
             double Theta_tot_pFDpCD = P_tot_pFDpCD_3v.Theta() * 180.0 / pi, Phi_tot_pFDpCD = P_tot_pFDpCD_3v.Phi() * 180.0 / pi; // in deg
             double Theta_rel_pFDpCD = P_rel_pFDpCD_3v.Theta() * 180.0 / pi, Phi_rel_pFDpCD = P_rel_pFDpCD_3v.Phi() * 180.0 / pi; // in deg
 
@@ -14722,14 +13566,11 @@ void EventAnalyser() {
             /* Protons have lower momentum threshold & we don't lose good protons -> proton smearing before kin cuts */
             bool FD_Theta_Cut_pFDpCD = ((P_pFD_pFDpCD_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
             bool FD_Momentum_Cut_pFDpCD = ((P_pFD_pFDpCD_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
-                                           (P_pFD_pFDpCD_3v.Mag() >=
-                                            FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut after proton smearing
-            bool e_withinFC_pFDpCD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Electron", P_e_pFDpCD_3v.Mag(),
-                                                       P_e_pFDpCD_3v.Theta() * 180.0 / pi,
+                                           (P_pFD_pFDpCD_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut after proton smearing
+            bool e_withinFC_pFDpCD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Electron", P_e_pFDpCD_3v.Mag(), P_e_pFDpCD_3v.Theta() * 180.0 / pi,
                                                        P_e_pFDpCD_3v.Phi() * 180.0 / pi);
-            bool pFD_withinFC_pFDpCD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Proton", ProtonMomBKC_pFDpCD,
-                                                         P_pFD_pFDpCD_3v.Theta() * 180.0 / pi,
-                                                         P_pFD_pFDpCD_3v.Phi() * 180.0 / pi);
+            bool pFD_withinFC_pFDpCD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Proton", ProtonMomBKC_pFDpCD, P_pFD_pFDpCD_3v.Theta() * 180.0 / pi,
+                                                         P_pFD_pFDpCD_3v.Phi() * 180.0 / pi, Calc_eff_overlapping_FC);
 
             bool Pass_Kin_Cuts_pFDpCD = ((!apply_kinematical_cuts || (FD_Theta_Cut_pFDpCD && FD_Momentum_Cut_pFDpCD)) &&
                                          (!apply_fiducial_cuts || (e_withinFC_pFDpCD && pFD_withinFC_pFDpCD)));
@@ -14757,25 +13598,22 @@ void EventAnalyser() {
                     double Vx_p_pFDpCD = p->par()->getVx(), Vy_p_pFDpCD = p->par()->getVy(), Vz_p_pFDpCD = p->par()->getVz();
                     double dVx_pFDpCD = Vx_p_pFDpCD - Vx_e_pFDpCD, dVy_pFDpCD = Vy_p_pFDpCD - Vy_e_pFDpCD, dVz_pFDpCD = Vz_p_pFDpCD - Vz_e_pFDpCD;
 
-                    hdVx_pFDpCD.hFill(dVx_pFDpCD, Weight_pFDpCD), hdVy_pFDpCD.hFill(dVy_pFDpCD, Weight_pFDpCD), hdVz_pFDpCD.hFill(dVz_pFDpCD,
-                                                                                                                                  Weight_pFDpCD);
+                    hdVx_pFDpCD.hFill(dVx_pFDpCD, Weight_pFDpCD), hdVy_pFDpCD.hFill(dVy_pFDpCD, Weight_pFDpCD), hdVz_pFDpCD.hFill(dVz_pFDpCD, Weight_pFDpCD);
                 } // end of loop over protons vector
                 //</editor-fold>
 
                 //<editor-fold desc="ID. pFD and pCD protons (pFDpCD)">
                 double Vx_pFD_pFDpCD = pFD_pFDpCD->par()->getVx(), Vy_pFD_pFDpCD = pFD_pFDpCD->par()->getVy(), Vz_pFD_pFDpCD = pFD_pFDpCD->par()->getVz();
-                double dVx_pFD_pFDpCD = Vx_pFD_pFDpCD - Vx_e_pFDpCD, dVy_pFD_pFDpCD = Vy_pFD_pFDpCD - Vy_e_pFDpCD, dVz_pFD_pFDpCD =
-                        Vz_pFD_pFDpCD - Vz_e_pFDpCD;
+                double dVx_pFD_pFDpCD = Vx_pFD_pFDpCD - Vx_e_pFDpCD, dVy_pFD_pFDpCD = Vy_pFD_pFDpCD - Vy_e_pFDpCD, dVz_pFD_pFDpCD = Vz_pFD_pFDpCD - Vz_e_pFDpCD;
                 double Vx_pCD_pFDpCD = pCD_pFDpCD->par()->getVx(), Vy_pCD_pFDpCD = pCD_pFDpCD->par()->getVy(), Vz_pCD_pFDpCD = pCD_pFDpCD->par()->getVz();
-                double dVx_pCD_pFDpCD = Vx_pCD_pFDpCD - Vx_e_pFDpCD, dVy_pCD_pFDpCD = Vy_pCD_pFDpCD - Vy_e_pFDpCD, dVz_pCD_pFDpCD =
-                        Vz_pCD_pFDpCD - Vz_e_pFDpCD;
+                double dVx_pCD_pFDpCD = Vx_pCD_pFDpCD - Vx_e_pFDpCD, dVy_pCD_pFDpCD = Vy_pCD_pFDpCD - Vy_e_pFDpCD, dVz_pCD_pFDpCD = Vz_pCD_pFDpCD - Vz_e_pFDpCD;
 
-                hdVx_pFD_pFDpCD.hFill(dVx_pFD_pFDpCD, Weight_pFDpCD), hdVy_pFD_pFDpCD.hFill(dVy_pFD_pFDpCD, Weight_pFDpCD), hdVz_pFD_pFDpCD.hFill(
-                        dVz_pFD_pFDpCD,
-                        Weight_pFDpCD);
-                hdVx_pCD_pFDpCD.hFill(dVx_pCD_pFDpCD, Weight_pFDpCD), hdVy_pCD_pFDpCD.hFill(dVy_pCD_pFDpCD, Weight_pFDpCD), hdVz_pCD_pFDpCD.hFill(
-                        dVz_pCD_pFDpCD,
-                        Weight_pFDpCD);
+                hdVx_pFD_pFDpCD.hFill(dVx_pFD_pFDpCD, Weight_pFDpCD);
+                hdVy_pFD_pFDpCD.hFill(dVy_pFD_pFDpCD, Weight_pFDpCD);
+                hdVz_pFD_pFDpCD.hFill(dVz_pFD_pFDpCD, Weight_pFDpCD);
+                hdVx_pCD_pFDpCD.hFill(dVx_pCD_pFDpCD, Weight_pFDpCD);
+                hdVy_pCD_pFDpCD.hFill(dVy_pCD_pFDpCD, Weight_pFDpCD);
+                hdVz_pCD_pFDpCD.hFill(dVz_pCD_pFDpCD, Weight_pFDpCD);
                 //</editor-fold>
 
                 //</editor-fold>
@@ -15037,15 +13875,13 @@ void EventAnalyser() {
                 //<editor-fold desc="Filling angle plots (pFDpCD)">
 
                 //<editor-fold desc="FD proton angle plots (pFDpCD)">
-                FillByInt(hTheta_pFD_All_Int_pFDpCD_FD, hTheta_pFD_QEL_pFDpCD_FD, hTheta_pFD_MEC_pFDpCD_FD, hTheta_pFD_RES_pFDpCD_FD,
-                          hTheta_pFD_DIS_pFDpCD_FD,
-                          qel, mec, res, dis, Theta_pFD_pFDpCD, Weight_pFDpCD);
+                FillByInt(hTheta_pFD_All_Int_pFDpCD_FD, hTheta_pFD_QEL_pFDpCD_FD, hTheta_pFD_MEC_pFDpCD_FD, hTheta_pFD_RES_pFDpCD_FD, hTheta_pFD_DIS_pFDpCD_FD, qel, mec, res,
+                          dis, Theta_pFD_pFDpCD, Weight_pFDpCD);
                 hTheta_pFD_VS_P_pFD_pFDpCD_FD->Fill(P_pFD_pFDpCD_3v.Mag(), Theta_pFD_pFDpCD, Weight_pFDpCD);
                 hTheta_pFD_VS_W_pFDpCD_FD->Fill(W_pFDpCD, Theta_pFD_pFDpCD, Weight_pFDpCD);
 
-                FillByInt(hPhi_pFD_All_Int_pFDpCD_FD, hPhi_pFD_QEL_pFDpCD_FD, hPhi_pFD_MEC_pFDpCD_FD, hPhi_pFD_RES_pFDpCD_FD,
-                          hPhi_pFD_DIS_pFDpCD_FD,
-                          qel, mec, res, dis, Phi_pFD_pFDpCD, Weight_pFDpCD);
+                FillByInt(hPhi_pFD_All_Int_pFDpCD_FD, hPhi_pFD_QEL_pFDpCD_FD, hPhi_pFD_MEC_pFDpCD_FD, hPhi_pFD_RES_pFDpCD_FD, hPhi_pFD_DIS_pFDpCD_FD, qel, mec, res, dis,
+                          Phi_pFD_pFDpCD, Weight_pFDpCD);
                 hPhi_pFD_VS_P_pFD_pFDpCD_FD->Fill(P_pFD_pFDpCD_3v.Mag(), Phi_pFD_pFDpCD, Weight_pFDpCD);
                 hPhi_pFD_VS_W_pFDpCD_FD->Fill(W_pFDpCD, Phi_pFD_pFDpCD, Weight_pFDpCD);
 
@@ -15053,15 +13889,13 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="CD proton angle plots (pFDpCD)">
-                FillByInt(hTheta_pCD_All_Int_pFDpCD_CD, hTheta_pCD_QEL_pFDpCD_CD, hTheta_pCD_MEC_pFDpCD_CD, hTheta_pCD_RES_pFDpCD_CD,
-                          hTheta_pCD_DIS_pFDpCD_CD,
-                          qel, mec, res, dis, Theta_pCD_pFDpCD, Weight_pFDpCD);
+                FillByInt(hTheta_pCD_All_Int_pFDpCD_CD, hTheta_pCD_QEL_pFDpCD_CD, hTheta_pCD_MEC_pFDpCD_CD, hTheta_pCD_RES_pFDpCD_CD, hTheta_pCD_DIS_pFDpCD_CD, qel, mec, res,
+                          dis, Theta_pCD_pFDpCD, Weight_pFDpCD);
                 hTheta_pCD_VS_P_pCD_pFDpCD_CD->Fill(P_pCD_pFDpCD_3v.Mag(), Theta_pCD_pFDpCD, Weight_pFDpCD);
                 hTheta_pCD_VS_W_pFDpCD_CD->Fill(W_pFDpCD, Theta_pCD_pFDpCD, Weight_pFDpCD);
 
-                FillByInt(hPhi_pCD_All_Int_pFDpCD_CD, hPhi_pCD_QEL_pFDpCD_CD, hPhi_pCD_MEC_pFDpCD_CD, hPhi_pCD_RES_pFDpCD_CD,
-                          hPhi_pCD_DIS_pFDpCD_CD,
-                          qel, mec, res, dis, Phi_pCD_pFDpCD, Weight_pFDpCD);
+                FillByInt(hPhi_pCD_All_Int_pFDpCD_CD, hPhi_pCD_QEL_pFDpCD_CD, hPhi_pCD_MEC_pFDpCD_CD, hPhi_pCD_RES_pFDpCD_CD, hPhi_pCD_DIS_pFDpCD_CD, qel, mec, res, dis,
+                          Phi_pCD_pFDpCD, Weight_pFDpCD);
                 hPhi_pCD_VS_P_pCD_pFDpCD_CD->Fill(P_pCD_pFDpCD_3v.Mag(), Phi_pCD_pFDpCD, Weight_pFDpCD);
                 hPhi_pCD_VS_W_pFDpCD_CD->Fill(W_pFDpCD, Phi_pCD_pFDpCD, Weight_pFDpCD);
 
@@ -15069,13 +13903,13 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="Total momentum angle plots (pFDpCD)">
-                FillByInt(hTheta_tot_All_Int_pFDpCD, hTheta_tot_QEL_pFDpCD, hTheta_tot_MEC_pFDpCD, hTheta_tot_RES_pFDpCD, hTheta_tot_DIS_pFDpCD,
-                          qel, mec, res, dis, Theta_tot_pFDpCD, Weight_pFDpCD);
+                FillByInt(hTheta_tot_All_Int_pFDpCD, hTheta_tot_QEL_pFDpCD, hTheta_tot_MEC_pFDpCD, hTheta_tot_RES_pFDpCD, hTheta_tot_DIS_pFDpCD, qel, mec, res, dis,
+                          Theta_tot_pFDpCD, Weight_pFDpCD);
                 hTheta_tot_VS_P_tot_pFDpCD->Fill(P_tot_pFDpCD_3v.Mag(), Theta_tot_pFDpCD, Weight_pFDpCD);
                 hTheta_tot_VS_W_pFDpCD->Fill(W_pFDpCD, Theta_tot_pFDpCD, Weight_pFDpCD);
 
-                FillByInt(hPhi_tot_All_Int_pFDpCD, hPhi_tot_QEL_pFDpCD, hPhi_tot_MEC_pFDpCD, hPhi_tot_RES_pFDpCD, hPhi_tot_DIS_pFDpCD,
-                          qel, mec, res, dis, Phi_tot_pFDpCD, Weight_pFDpCD);
+                FillByInt(hPhi_tot_All_Int_pFDpCD, hPhi_tot_QEL_pFDpCD, hPhi_tot_MEC_pFDpCD, hPhi_tot_RES_pFDpCD, hPhi_tot_DIS_pFDpCD, qel, mec, res, dis, Phi_tot_pFDpCD,
+                          Weight_pFDpCD);
                 hPhi_tot_VS_P_tot_pFDpCD->Fill(P_tot_pFDpCD_3v.Mag(), Phi_tot_pFDpCD, Weight_pFDpCD);
                 hPhi_tot_VS_W_pFDpCD->Fill(W_pFDpCD, Phi_tot_pFDpCD, Weight_pFDpCD);
 
@@ -15083,15 +13917,12 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="Relative momentum angle plots (pFDpCD)">
-                FillByInt(hTheta_rel_All_Int_pFDpCD, hTheta_rel_QEL_pFDpCD, hTheta_rel_MEC_pFDpCD, hTheta_rel_RES_pFDpCD, hTheta_rel_DIS_pFDpCD,
-                          qel, mec, res, dis,
+                FillByInt(hTheta_rel_All_Int_pFDpCD, hTheta_rel_QEL_pFDpCD, hTheta_rel_MEC_pFDpCD, hTheta_rel_RES_pFDpCD, hTheta_rel_DIS_pFDpCD, qel, mec, res, dis,
                           Theta_rel_pFDpCD, Weight_pFDpCD);
                 hTheta_rel_VS_P_rel_pFDpCD->Fill(P_rel_pFDpCD_3v.Mag(), Theta_rel_pFDpCD, Weight_pFDpCD);
                 hTheta_rel_VS_W_pFDpCD->Fill(W_pFDpCD, Theta_rel_pFDpCD, Weight_pFDpCD);
 
-                FillByInt(hPhi_rel_All_Int_pFDpCD, hPhi_rel_QEL_pFDpCD, hPhi_rel_MEC_pFDpCD, hPhi_rel_RES_pFDpCD, hPhi_rel_DIS_pFDpCD, qel, mec,
-                          res, dis,
-                          Phi_rel_pFDpCD,
+                FillByInt(hPhi_rel_All_Int_pFDpCD, hPhi_rel_QEL_pFDpCD, hPhi_rel_MEC_pFDpCD, hPhi_rel_RES_pFDpCD, hPhi_rel_DIS_pFDpCD, qel, mec, res, dis, Phi_rel_pFDpCD,
                           Weight_pFDpCD);
                 hPhi_rel_VS_P_rel_pFDpCD->Fill(P_rel_pFDpCD_3v.Mag(), Phi_rel_pFDpCD, Weight_pFDpCD);
                 hPhi_rel_VS_W_pFDpCD->Fill(W_pFDpCD, Phi_rel_pFDpCD, Weight_pFDpCD);
@@ -15102,13 +13933,12 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="Fill neutron multiplicity plots (pFDpCD)">
-                pid.FillNeutMultiPlots(allParticles, electrons, Weight_pFDpCD, beamE, Neutron_veto_cut.GetLowerCutConst(),
-                                       hNeut_Multi_By_Redef_BPID_BV_pFDpCD_FD, hNeut_Multi_By_Redef_BPID_AV_pFDpCD_FD, ReDef_neutrons_FD,
-                                       hNeut_Multi_By_Redef_APID_BV_pFDpCD_FD, hNeut_Multi_By_Redef_APID_AV_pFDpCD_FD, NeutronsFD_ind);
+                pid.FillNeutMultiPlots(allParticles, electrons, Weight_pFDpCD, beamE, Neutron_veto_cut.GetLowerCutConst(), hNeut_Multi_By_Redef_BPID_BV_pFDpCD_FD,
+                                       hNeut_Multi_By_Redef_BPID_AV_pFDpCD_FD, ReDef_neutrons_FD, hNeut_Multi_By_Redef_APID_BV_pFDpCD_FD,
+                                       hNeut_Multi_By_Redef_APID_AV_pFDpCD_FD, NeutronsFD_ind);
                 //</editor-fold>
 
-                FillByInt(hW_All_Int_pFDpCD, hW_QEL_pFDpCD, hW_MEC_pFDpCD, hW_RES_pFDpCD, hW_DIS_pFDpCD, qel, mec, res, dis, W_pFDpCD,
-                          Weight_pFDpCD);
+                FillByInt(hW_All_Int_pFDpCD, hW_QEL_pFDpCD, hW_MEC_pFDpCD, hW_RES_pFDpCD, hW_DIS_pFDpCD, qel, mec, res, dis, W_pFDpCD, Weight_pFDpCD);
 
                 hP_tot_pFDpCD.hFill(P_tot_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 hP_rel_pFDpCD.hFill(P_rel_pFDpCD_3v.Mag(), Weight_pFDpCD);
@@ -15117,64 +13947,30 @@ void EventAnalyser() {
                 hP_tot_minus_q_vs_P_tot_pFDpCD.hFill(P_tot_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
                 hP_tot_minus_q_vs_q_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
 
-//                if (P_tot_pFDpCD_3v.Mag() >= 0 && P_tot_pFDpCD_3v.Mag() < 0.5) {
-//                    hP_tot_minus_q_vs_q_S1_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 0.5 && P_tot_pFDpCD_3v.Mag() < 1) {
-//                    hP_tot_minus_q_vs_q_S2_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 1 && P_tot_pFDpCD_3v.Mag() < 1.5) {
-//                    hP_tot_minus_q_vs_q_S3_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 1.5 && P_tot_pFDpCD_3v.Mag() < 2) {
-//                    hP_tot_minus_q_vs_q_S4_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 2 && P_tot_pFDpCD_3v.Mag() < 2.5) {
-//                    hP_tot_minus_q_vs_q_S5_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 2.5 && P_tot_pFDpCD_3v.Mag() < 3) {
-//                    hP_tot_minus_q_vs_q_S6_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 3 && P_tot_pFDpCD_3v.Mag() < 3.5) {
-//                    hP_tot_minus_q_vs_q_S7_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 3.5 && P_tot_pFDpCD_3v.Mag() < 4) {
-//                    hP_tot_minus_q_vs_q_S8_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 4 && P_tot_pFDpCD_3v.Mag() < 4.5) {
-//                    hP_tot_minus_q_vs_q_S9_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 4.5 && P_tot_pFDpCD_3v.Mag() < 5) {
-//                    hP_tot_minus_q_vs_q_S10_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 5 && P_tot_pFDpCD_3v.Mag() < 5.5) {
-//                    hP_tot_minus_q_vs_q_S11_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                } else if (P_tot_pFDpCD_3v.Mag() >= 5.5 && P_tot_pFDpCD_3v.Mag() < 6) {
-//                    hP_tot_minus_q_vs_q_S12_pFDpCD.hFill(q_pFDpCD_3v.Mag(), P_tot_minus_q_pFDpCD_v3.Mag(), Weight_pFDpCD);
-//                }
-
-                hP_pFD_pFDpCD.hFill(P_pFD_pFDpCD_3v.Mag(),
-                                    Weight_pFDpCD);                                                                          // FD proton (pFDpCD)
-                hP_pCD_pFDpCD.hFill(P_pCD_pFDpCD_3v.Mag(),
-                                    Weight_pFDpCD);                                                                          // CD proton (pFDpCD)
-                hP_pL_pFDpCD.hFill(P_pL_pFDpCD_3v.Mag(),
-                                   Weight_pFDpCD);                                                                       // Leading proton (pFDpCD)
-                hP_pR_pFDpCD.hFill(P_pR_pFDpCD_3v.Mag(),
-                                   Weight_pFDpCD);                                                                        // Recoil proton (pFDpCD)
+                hP_pFD_pFDpCD.hFill(P_pFD_pFDpCD_3v.Mag(), Weight_pFDpCD); // FD proton (pFDpCD)
+                hP_pCD_pFDpCD.hFill(P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD); // CD proton (pFDpCD)
+                hP_pL_pFDpCD.hFill(P_pL_pFDpCD_3v.Mag(), Weight_pFDpCD); // Leading proton (pFDpCD)
+                hP_pR_pFDpCD.hFill(P_pR_pFDpCD_3v.Mag(), Weight_pFDpCD); // Recoil proton (pFDpCD)
 
                 hP_pL_vs_P_pR_pFDpCD.hFill(P_pL_pFDpCD_3v.Mag(), P_pR_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 hP_pFD_vs_P_pCD_pFDpCD.hFill(P_pFD_pFDpCD_3v.Mag(), P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD);
 
-                P_T_L_pFDpCD_3v = TVector3(P_pL_pFDpCD_3v.Px(), P_pL_pFDpCD_3v.Py(),
-                                           0);                                                      // transverse part of P_pFD
-                P_T_tot_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() + P_pCD_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() + P_pCD_pFDpCD_3v.Py(),
-                                             0);    // transverse part of P_tot
+                P_T_L_pFDpCD_3v = TVector3(P_pL_pFDpCD_3v.Px(), P_pL_pFDpCD_3v.Py(), 0); // transverse part of P_pFD
+                P_T_tot_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() + P_pCD_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() + P_pCD_pFDpCD_3v.Py(), 0); // transverse part of P_tot
                 dP_T_L_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px() + P_T_L_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py() + P_T_L_pFDpCD_3v.Py(), 0);
                 dP_T_tot_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px() + P_tot_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py() + P_tot_pFDpCD_3v.Py(), 0);
 
                 Theta_p_e_p_tot_pFDpCD = acos((P_e_pFDpCD_3v.Px() * P_tot_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * P_tot_pFDpCD_3v.Py()
                                                + P_e_pFDpCD_3v.Pz() * P_tot_pFDpCD_3v.Pz())
-                                              / (P_e_pFDpCD_3v.Mag() * P_tot_pFDpCD_3v.Mag())) * 180.0 /
-                                         pi;                             // Theta_p_e_p_tot_pFDpCD in deg
+                                              / (P_e_pFDpCD_3v.Mag() * P_tot_pFDpCD_3v.Mag())) * 180.0 / pi; // Theta_p_e_p_tot_pFDpCD in deg
                 hTheta_p_e_p_tot_pFDpCD->Fill(Theta_p_e_p_tot_pFDpCD, Weight_pFDpCD);
                 hTheta_p_e_p_tot_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_p_e_p_tot_pFDpCD, Weight_pFDpCD);
 
                 //<editor-fold desc="Filling Theta_pFD_pCD plots (pFDpCD)">
 
                 //<editor-fold desc="General Theta_pFD_pCD plots (pFDpCD)">
-                FillByInt(hTheta_pFD_pCD_All_Int_pFDpCD, hTheta_pFD_pCD_QEL_pFDpCD, hTheta_pFD_pCD_MEC_pFDpCD, hTheta_pFD_pCD_RES_pFDpCD,
-                          hTheta_pFD_pCD_DIS_pFDpCD,
-                          qel, mec, res, dis, Theta_pFD_pCD_pFDpCD, Weight_pFDpCD);
+                FillByInt(hTheta_pFD_pCD_All_Int_pFDpCD, hTheta_pFD_pCD_QEL_pFDpCD, hTheta_pFD_pCD_MEC_pFDpCD, hTheta_pFD_pCD_RES_pFDpCD, hTheta_pFD_pCD_DIS_pFDpCD, qel, mec,
+                          res, dis, Theta_pFD_pCD_pFDpCD, Weight_pFDpCD);
                 hTheta_pFD_pCD_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_pFD_pCD_pFDpCD, Weight_pFDpCD);
                 //</editor-fold>
 
@@ -15198,38 +13994,28 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-                Theta_q_p_tot_pFDpCD =
-                        acos((q_pFDpCD_3v.Px() * P_tot_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_tot_pFDpCD_3v.Py() +
-                              q_pFDpCD_3v.Pz() * P_tot_pFDpCD_3v.Pz())
-                             / (q_pFDpCD_3v.Mag() * P_tot_pFDpCD_3v.Mag())) * 180.0 /
-                        pi;                                   // Theta_q_p_tot_pFDpCD in deg
+                Theta_q_p_tot_pFDpCD = acos((q_pFDpCD_3v.Px() * P_tot_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_tot_pFDpCD_3v.Py() +
+                                             q_pFDpCD_3v.Pz() * P_tot_pFDpCD_3v.Pz())
+                                            / (q_pFDpCD_3v.Mag() * P_tot_pFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_tot_pFDpCD in deg
                 hTheta_q_p_tot_pFDpCD->Fill(Theta_q_p_tot_pFDpCD, Weight_pFDpCD);
                 hTheta_q_p_tot_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_q_p_tot_pFDpCD, Weight_pFDpCD);
                 hTheta_q_p_max_pFDpCD->Fill((P_max_pFDpCD_3v.Angle(q_pFDpCD_3v) * 180.0 / pi), Weight_pFDpCD);
 
-                Theta_P_pL_minus_q_pR_pFDpCD =
-                        acos((P_pL_minus_q_pFDpCD_v3.Px() * P_pR_pFDpCD_3v.Px() + P_pL_minus_q_pFDpCD_v3.Py() * P_pR_pFDpCD_3v.Py() +
-                              P_pL_minus_q_pFDpCD_v3.Pz() * P_pR_pFDpCD_3v.Pz())
-                             / (P_pL_minus_q_pFDpCD_v3.Mag() * P_pR_pFDpCD_3v.Mag())) * 180.0 /
-                        pi;         // Theta_P_pL_minus_q_pR_pFDpCD in deg
+                Theta_P_pL_minus_q_pR_pFDpCD = acos((P_pL_minus_q_pFDpCD_v3.Px() * P_pR_pFDpCD_3v.Px() + P_pL_minus_q_pFDpCD_v3.Py() * P_pR_pFDpCD_3v.Py() +
+                                                     P_pL_minus_q_pFDpCD_v3.Pz() * P_pR_pFDpCD_3v.Pz())
+                                                    / (P_pL_minus_q_pFDpCD_v3.Mag() * P_pR_pFDpCD_3v.Mag())) * 180.0 / pi; // Theta_P_pL_minus_q_pR_pFDpCD in deg
                 Theta_q_p_L_pFDpCD = acos((q_pFDpCD_3v.Px() * P_pL_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_pL_pFDpCD_3v.Py() +
                                            q_pFDpCD_3v.Pz() * P_pL_pFDpCD_3v.Pz())
-                                          / (q_pFDpCD_3v.Mag() * P_pL_pFDpCD_3v.Mag())) * 180.0 /
-                                     pi;                   // Theta_q_p_L_pFDpCD = Theta_q_p_1_pFDpCD in deg
+                                          / (q_pFDpCD_3v.Mag() * P_pL_pFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_L_pFDpCD = Theta_q_p_1_pFDpCD in deg
                 Theta_q_p_R_pFDpCD = acos((q_pFDpCD_3v.Px() * P_pR_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_pR_pFDpCD_3v.Py() +
                                            q_pFDpCD_3v.Pz() * P_pR_pFDpCD_3v.Pz())
-                                          / (q_pFDpCD_3v.Mag() * P_pR_pFDpCD_3v.Mag())) * 180.0 /
-                                     pi;                   // Theta_q_p_R_pFDpCD = Theta_q_p_2_pFDpCD in deg
-                Theta_q_pFD_pFDpCD =
-                        acos((q_pFDpCD_3v.Px() * P_pFD_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_pFD_pFDpCD_3v.Py() +
-                              q_pFDpCD_3v.Pz() * P_pFD_pFDpCD_3v.Pz())
-                             / (q_pFDpCD_3v.Mag() * P_pFD_pFDpCD_3v.Mag())) * 180.0 /
-                        pi;                  // Theta_q_p_L_pFDpCD = Theta_q_p_1_pFDpCD in deg
-                Theta_q_pCD_pFDpCD =
-                        acos((q_pFDpCD_3v.Px() * P_pCD_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_pCD_pFDpCD_3v.Py() +
-                              q_pFDpCD_3v.Pz() * P_pCD_pFDpCD_3v.Pz())
-                             / (q_pFDpCD_3v.Mag() * P_pCD_pFDpCD_3v.Mag())) * 180.0 /
-                        pi;                  // Theta_q_p_R_pFDpCD = Theta_q_p_2_pFDpCD in deg
+                                          / (q_pFDpCD_3v.Mag() * P_pR_pFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_R_pFDpCD = Theta_q_p_2_pFDpCD in deg
+                Theta_q_pFD_pFDpCD = acos((q_pFDpCD_3v.Px() * P_pFD_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_pFD_pFDpCD_3v.Py() +
+                                           q_pFDpCD_3v.Pz() * P_pFD_pFDpCD_3v.Pz())
+                                          / (q_pFDpCD_3v.Mag() * P_pFD_pFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_L_pFDpCD = Theta_q_p_1_pFDpCD in deg
+                Theta_q_pCD_pFDpCD = acos((q_pFDpCD_3v.Px() * P_pCD_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_pCD_pFDpCD_3v.Py() +
+                                           q_pFDpCD_3v.Pz() * P_pCD_pFDpCD_3v.Pz())
+                                          / (q_pFDpCD_3v.Mag() * P_pCD_pFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_R_pFDpCD = Theta_q_p_2_pFDpCD in deg
                 hTheta_P_pL_minus_q_pR_pFDpCD->Fill(Theta_P_pL_minus_q_pR_pFDpCD, Weight_pFDpCD);
                 hTheta_P_pL_minus_q_pR_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_P_pL_minus_q_pR_pFDpCD, Weight_pFDpCD);
                 hTheta_q_p_L_pFDpCD->Fill(Theta_q_p_L_pFDpCD, Weight_pFDpCD);
@@ -15290,12 +14076,10 @@ void EventAnalyser() {
 
                 dAlpha_T_L_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_L_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * dP_T_L_pFDpCD_3v.Py()
                                            + P_e_pFDpCD_3v.Pz() * dP_T_L_pFDpCD_3v.Pz())
-                                         / (P_T_e_pFDpCD_3v.Mag() * dP_T_L_pFDpCD_3v.Mag())) * 180.0 /
-                                    pi;         // dP_T_L_pFDpCD_3v.Pz() = 0; dAlpha_T_L_pFDpCD in deg
+                                         / (P_T_e_pFDpCD_3v.Mag() * dP_T_L_pFDpCD_3v.Mag())) * 180.0 / pi; // dP_T_L_pFDpCD_3v.Pz() = 0; dAlpha_T_L_pFDpCD in deg
                 dAlpha_T_tot_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_tot_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * dP_T_tot_pFDpCD_3v.Py()
                                              + P_e_pFDpCD_3v.Pz() * dP_T_tot_pFDpCD_3v.Pz())
-                                           / (P_T_e_pFDpCD_3v.Mag() * dP_T_tot_pFDpCD_3v.Mag())) * 180.0 /
-                                      pi; // dP_T_tot_pFDpCD_3v.Pz() = 0; dAlpha_T_tot_pFDpCD in deg
+                                           / (P_T_e_pFDpCD_3v.Mag() * dP_T_tot_pFDpCD_3v.Mag())) * 180.0 / pi; // dP_T_tot_pFDpCD_3v.Pz() = 0; dAlpha_T_tot_pFDpCD in deg
                 hdAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, Weight_pFDpCD);
                 hdAlpha_T_L_vs_W_pFDpCD->Fill(W_pFDpCD, dAlpha_T_L_pFDpCD, Weight_pFDpCD);
                 hdAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Weight_pFDpCD);
@@ -15306,12 +14090,10 @@ void EventAnalyser() {
 
                 dPhi_T_L_pFDpCD = acos(-(P_T_e_pFDpCD_3v.Px() * P_T_L_pFDpCD_3v.Px() + P_T_e_pFDpCD_3v.Py() * P_T_L_pFDpCD_3v.Py()
                                          + P_T_e_pFDpCD_3v.Pz() * P_T_L_pFDpCD_3v.Pz())
-                                       / (P_T_e_pFDpCD_3v.Mag() * P_T_L_pFDpCD_3v.Mag())) * 180.0 /
-                                  pi;               // P_T_L_pFDpCD_3v.Pz() = 0; dPhi_T_L_pFDpCD in deg
+                                       / (P_T_e_pFDpCD_3v.Mag() * P_T_L_pFDpCD_3v.Mag())) * 180.0 / pi; // P_T_L_pFDpCD_3v.Pz() = 0; dPhi_T_L_pFDpCD in deg
                 dPhi_T_tot_pFDpCD = acos(-(P_T_e_pFDpCD_3v.Px() * P_T_tot_pFDpCD_3v.Px() + P_T_e_pFDpCD_3v.Py() * P_T_tot_pFDpCD_3v.Py()
                                            + P_T_e_pFDpCD_3v.Pz() * P_T_tot_pFDpCD_3v.Pz())
-                                         / (P_T_e_pFDpCD_3v.Mag() * P_T_tot_pFDpCD_3v.Mag())) * 180.0 /
-                                    pi;       // P_T_tot_pFDpCD_3v.Pz() = 0; dPhi_T_tot_pFDpCD in deg
+                                         / (P_T_e_pFDpCD_3v.Mag() * P_T_tot_pFDpCD_3v.Mag())) * 180.0 / pi; // P_T_tot_pFDpCD_3v.Pz() = 0; dPhi_T_tot_pFDpCD in deg
                 hdPhi_T_L_pFDpCD->Fill(dPhi_T_L_pFDpCD, Weight_pFDpCD);
                 hdPhi_T_tot_pFDpCD->Fill(dPhi_T_tot_pFDpCD, Weight_pFDpCD);
 
@@ -15342,8 +14124,7 @@ void EventAnalyser() {
         //<editor-fold desc="Configure if event is nFDpCD">
         /* nFDpCD event selection: nFDpCD = one id. proton in the CD, any number of id. FD neutrons (we look at the leading nFD) and any number of neutrons, other
                                             neutrals and particles with pdg=0.*/
-        bool one_CDproton_nFDpCD = (Protons_ind.size() == 1 &&
-                                    protons[Protons_ind.at(0)]->getRegion() == CD); // there's only one id. proton + this proton is in the CD
+        bool one_CDproton_nFDpCD = (Protons_ind.size() == 1 && protons[Protons_ind.at(0)]->getRegion() == CD); // there's only one id. proton + this proton is in the CD
         bool at_least_one_FDneutron_nFDpCD = (NeutronsFD_ind_mom_max != -1); // for NeutronsFD_ind_mom_max = -1 we don't have any nFD
         bool event_selection_nFDpCD = (basic_event_selection && one_CDproton_nFDpCD && at_least_one_FDneutron_nFDpCD);
 
@@ -15416,34 +14197,26 @@ void EventAnalyser() {
             TVector3 P_T_e_nFDpCD_3v, P_T_L_nFDpCD_3v, P_T_tot_nFDpCD_3v, dP_T_L_nFDpCD_3v, dP_T_tot_nFDpCD_3v;
             TLorentzVector P_tot_mu_nFDpCD_4v, P_rel_mu_nFDpCD_4v;
 
-            P_e_nFDpCD_3v.SetMagThetaPhi(e_nFDpCD->getP(), e_nFDpCD->getTheta(),
-                                         e_nFDpCD->getPhi());                                              // electron 3 momentum
-            q_nFDpCD_3v = TVector3(Pvx - P_e_nFDpCD_3v.Px(), Pvy - P_e_nFDpCD_3v.Py(),
-                                   Pvz - P_e_nFDpCD_3v.Pz());                                  // 3 momentum transfer
-            P_T_e_nFDpCD_3v = TVector3(P_e_nFDpCD_3v.Px(), P_e_nFDpCD_3v.Py(),
-                                       0);                                                        // electron transverse momentum
-            P_nFD_nFDpCD_3v.SetMagThetaPhi(nRes.NCorr(apply_nucleon_SmearAndCorr, NeutronMomBKC_nFDpCD),
-                                           nFD_nFDpCD->getTheta(),
-                                           nFD_nFDpCD->getPhi());                                                        // FD neutron 3 momentum
-            P_pCD_nFDpCD_3v.SetMagThetaPhi(pCD_nFDpCD->getP(), pCD_nFDpCD->getTheta(),
-                                           pCD_nFDpCD->getPhi());                                     // CD proton 3 momentum
+            P_e_nFDpCD_3v.SetMagThetaPhi(e_nFDpCD->getP(), e_nFDpCD->getTheta(), e_nFDpCD->getPhi()); // electron 3 momentum
+            q_nFDpCD_3v = TVector3(Pvx - P_e_nFDpCD_3v.Px(), Pvy - P_e_nFDpCD_3v.Py(), Pvz - P_e_nFDpCD_3v.Pz()); // 3 momentum transfer
+            P_T_e_nFDpCD_3v = TVector3(P_e_nFDpCD_3v.Px(), P_e_nFDpCD_3v.Py(), 0); // electron transverse momentum
+            P_nFD_nFDpCD_3v.SetMagThetaPhi(nRes.NCorr(apply_nucleon_SmearAndCorr, NeutronMomBKC_nFDpCD), nFD_nFDpCD->getTheta(),
+                                           nFD_nFDpCD->getPhi()); // FD neutron 3 momentum
+            P_pCD_nFDpCD_3v.SetMagThetaPhi(pCD_nFDpCD->getP(), pCD_nFDpCD->getTheta(), pCD_nFDpCD->getPhi()); // CD proton 3 momentum
 
             double E_e_nFDpCD = sqrt(m_e * m_e + P_e_nFDpCD_3v.Mag2()), omega_nFDpCD = beamE - E_e_nFDpCD;
             double W_nFDpCD = sqrt((omega_nFDpCD + m_p) * (omega_nFDpCD + m_p) - q_nFDpCD_3v.Mag2());
             double E_nFD_nFDpCD, E_pCD_nFDpCD, E_nL_nFDpCD, E_nR_nFDpCD;
             double Theta_p_e_p_tot_nFDpCD, Theta_q_p_tot_nFDpCD, Theta_P_nL_minus_q_nR_nFDpCD, Theta_q_p_L_nFDpCD, Theta_q_p_R_nFDpCD, Theta_q_nFD_nFDpCD, Theta_q_pCD_nFDpCD;
             double dAlpha_T_L_nFDpCD, dAlpha_T_tot_nFDpCD, dPhi_T_L_nFDpCD, dPhi_T_tot_nFDpCD, Ecal_nFDpCD;
-            double EoP_e_nFDpCD = (e_nFDpCD->cal(PCAL)->getEnergy() + e_nFDpCD->cal(ECIN)->getEnergy() + e_nFDpCD->cal(ECOUT)->getEnergy()) /
-                                  P_e_nFDpCD_3v.Mag();
+            double EoP_e_nFDpCD = (e_nFDpCD->cal(PCAL)->getEnergy() + e_nFDpCD->cal(ECIN)->getEnergy() + e_nFDpCD->cal(ECOUT)->getEnergy()) / P_e_nFDpCD_3v.Mag();
             double Vx_e_nFDpCD = e_nFDpCD->par()->getVx(), Vy_e_nFDpCD = e_nFDpCD->par()->getVy(), Vz_e_nFDpCD = e_nFDpCD->par()->getVz();
 
             /* Setting Q2 */
             TLorentzVector e_out_nFDpCD, Q_nFDpCD;
             double Q2_nFDpCD;
             e_out_nFDpCD.SetPxPyPzE(e_nFDpCD->par()->getPx(), e_nFDpCD->par()->getPy(), e_nFDpCD->par()->getPz(), E_e_nFDpCD);
-            Q_nFDpCD =
-                    beam -
-                    e_out_nFDpCD;                                                                                         // definition of 4-momentum transfer
+            Q_nFDpCD = beam - e_out_nFDpCD; // definition of 4-momentum transfer
             Q2_nFDpCD = fabs(Q_nFDpCD.Mag2());
             double xB_nFDpCD = Q2_nFDpCD / (2 * m_p * omega_nFDpCD); //TODO: ask Adi which mass should I use here
 
@@ -15464,38 +14237,28 @@ void EventAnalyser() {
             }
 
             /* Setting particle angles */
-            double Theta_L_nFDpCD = P_nL_nFDpCD_3v.Theta() * 180.0 / pi, Phi_L_nFDpCD =
-                    P_nL_nFDpCD_3v.Phi() * 180.0 / pi;         // Theta_L_nFDpCD, Phi_L_nFDpCD in deg
-            double Theta_R_nFDpCD = P_nR_nFDpCD_3v.Theta() * 180.0 / pi, Phi_R_nFDpCD =
-                    P_nR_nFDpCD_3v.Phi() * 180.0 / pi;         // Theta_R_nFDpCD, Phi_R_nFDpCD in deg
+            double Theta_L_nFDpCD = P_nL_nFDpCD_3v.Theta() * 180.0 / pi, Phi_L_nFDpCD = P_nL_nFDpCD_3v.Phi() * 180.0 / pi; // Theta_L_nFDpCD, Phi_L_nFDpCD in deg
+            double Theta_R_nFDpCD = P_nR_nFDpCD_3v.Theta() * 180.0 / pi, Phi_R_nFDpCD = P_nR_nFDpCD_3v.Phi() * 180.0 / pi; // Theta_R_nFDpCD, Phi_R_nFDpCD in deg
             double dPhi_hit_nFDpCD = Phi_L_nFDpCD - Phi_R_nFDpCD;
             double Theta_nFD_pCD_nFDpCD = acos((P_nFD_nFDpCD_3v.Px() * P_pCD_nFDpCD_3v.Px() + P_nFD_nFDpCD_3v.Py() * P_pCD_nFDpCD_3v.Py()
                                                 + P_nFD_nFDpCD_3v.Pz() * P_pCD_nFDpCD_3v.Pz())
-                                               / (P_nFD_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 /
-                                          pi;                            // Theta_nFD_pCD_nFDpCD in deg
+                                               / (P_nFD_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 / pi; // Theta_nFD_pCD_nFDpCD in deg
             //</editor-fold>
 
             /* Setting total and relative momenta */
             P_tot_nFDpCD_3v = TVector3(P_nL_nFDpCD_3v.Px() + P_nR_nFDpCD_3v.Px(), P_nL_nFDpCD_3v.Py() + P_nR_nFDpCD_3v.Py(),
-                                       P_nL_nFDpCD_3v.Pz() +
-                                       P_nR_nFDpCD_3v.Pz());                                                                 // P_tot = P_nL + P_nR
+                                       P_nL_nFDpCD_3v.Pz() + P_nR_nFDpCD_3v.Pz()); // P_tot = P_nL + P_nR
             P_rel_nFDpCD_3v = TVector3((P_nL_nFDpCD_3v.Px() - P_nR_nFDpCD_3v.Px()) / 2, (P_nL_nFDpCD_3v.Py() - P_nR_nFDpCD_3v.Py()) / 2,
-                                       (P_nL_nFDpCD_3v.Pz() - P_nR_nFDpCD_3v.Pz()) /
-                                       2);                                                     // P_rel = (P_nL - P_nR) / 2
+                                       (P_nL_nFDpCD_3v.Pz() - P_nR_nFDpCD_3v.Pz()) / 2); // P_rel = (P_nL - P_nR) / 2
             P_nL_minus_q_nFDpCD_v3 = TVector3(P_nL_nFDpCD_3v.Px() - q_nFDpCD_3v.Px(), P_nL_nFDpCD_3v.Py() - q_nFDpCD_3v.Py(),
-                                              P_nL_nFDpCD_3v.Pz() -
-                                              q_nFDpCD_3v.Pz());                                                                        // P_nL - q
+                                              P_nL_nFDpCD_3v.Pz() - q_nFDpCD_3v.Pz()); // P_nL - q
             P_tot_minus_q_nFDpCD_v3 = TVector3(P_tot_nFDpCD_3v.Px() - q_nFDpCD_3v.Px(), P_tot_nFDpCD_3v.Py() - q_nFDpCD_3v.Py(),
-                                               P_tot_nFDpCD_3v.Pz() -
-                                               q_nFDpCD_3v.Pz());                                                                     // P_tot - q
+                                               P_tot_nFDpCD_3v.Pz() - q_nFDpCD_3v.Pz()); // P_tot - q
 
             /* Setting particle angles */
-            double Theta_e_nFDpCD = e_nFDpCD->getTheta() * 180.0 / pi, Phi_e_nFDpCD =
-                    e_nFDpCD->getPhi() * 180.0 / pi;             // Theta_e_nFDpCD, Phi_e_nFDpCD in deg
-            double Theta_nFD_nFDpCD = nFD_nFDpCD->getTheta() * 180.0 / pi, Phi_nFD_nFDpCD =
-                    nFD_nFDpCD->getPhi() * 180.0 / pi; // Theta_nFD_nFDpCD, Phi_nFD_nFDpCD in deg
-            double Theta_pCD_nFDpCD = pCD_nFDpCD->getTheta() * 180.0 / pi, Phi_pCD_nFDpCD =
-                    pCD_nFDpCD->getPhi() * 180.0 / pi; // Theta_pCD_nFDpCD, Phi_pCD_nFDpCD in deg
+            double Theta_e_nFDpCD = e_nFDpCD->getTheta() * 180.0 / pi, Phi_e_nFDpCD = e_nFDpCD->getPhi() * 180.0 / pi; // Theta_e_nFDpCD, Phi_e_nFDpCD in deg
+            double Theta_nFD_nFDpCD = nFD_nFDpCD->getTheta() * 180.0 / pi, Phi_nFD_nFDpCD = nFD_nFDpCD->getPhi() * 180.0 / pi; // Theta_nFD_nFDpCD, Phi_nFD_nFDpCD in deg
+            double Theta_pCD_nFDpCD = pCD_nFDpCD->getTheta() * 180.0 / pi, Phi_pCD_nFDpCD = pCD_nFDpCD->getPhi() * 180.0 / pi; // Theta_pCD_nFDpCD, Phi_pCD_nFDpCD in deg
             double Theta_tot_nFDpCD = P_tot_nFDpCD_3v.Theta() * 180.0 / pi, Phi_tot_nFDpCD = P_tot_nFDpCD_3v.Phi() * 180.0 / pi; // in deg
             double Theta_rel_nFDpCD = P_rel_nFDpCD_3v.Theta() * 180.0 / pi, Phi_rel_nFDpCD = P_rel_nFDpCD_3v.Phi() * 180.0 / pi; // in deg
 
@@ -15508,12 +14271,9 @@ void EventAnalyser() {
             //<editor-fold desc="Fake FD neutrons handling (neutron veto)">
             int NeutronPDG_nFDpCD = nFD_nFDpCD->par()->getPid();
 
-            bool NeutronInPCAL_nFDpCD = (nFD_nFDpCD->cal(clas12::PCAL)->getDetector() ==
-                                         7);                                                                  // PCAL hit
-            bool NeutronInECIN_nFDpCD = (nFD_nFDpCD->cal(clas12::ECIN)->getDetector() ==
-                                         7);                                                                  // ECIN hit
-            bool NeutronInECOUT_nFDpCD = (nFD_nFDpCD->cal(clas12::ECOUT)->getDetector() ==
-                                          7);                                                               // ECOUT hit
+            bool NeutronInPCAL_nFDpCD = (nFD_nFDpCD->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+            bool NeutronInECIN_nFDpCD = (nFD_nFDpCD->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
+            bool NeutronInECOUT_nFDpCD = (nFD_nFDpCD->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
             //<editor-fold desc="Safety check (nFDpCD)">
             /* Safety check that we are looking at good neutron (BEFORE VETO!!!) */
@@ -15522,9 +14282,7 @@ void EventAnalyser() {
                 cout << "\n\nnFDpCD: neutral PDG is not 2112 or 22 (" << NeutronPDG_nFDpCD << ")! Exiting...\n\n", exit(0);
             }
             if (NeutronInPCAL_nFDpCD) { cout << "\n\nnFDpCD: neutron hit in PCAL! Exiting...\n\n", exit(0); }
-            if (!(NeutronInECIN_nFDpCD || NeutronInECOUT_nFDpCD)) {
-                cout << "\n\nnFDpCD: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0);
-            }
+            if (!(NeutronInECIN_nFDpCD || NeutronInECOUT_nFDpCD)) { cout << "\n\nnFDpCD: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(0); }
             //</editor-fold>
 
             TVector3 n_hit_nFDpCD_3v, e_hit_nFDpCD_3v;
@@ -15532,8 +14290,7 @@ void EventAnalyser() {
             double nFD_hit_Theta_nFDpCD, nFD_hit_Phi_nFDpCD;
             double e_hit_Theta_nFDpCD, e_hit_Phi_nFDpCD, dTheta_hit_e_nFD_nFDpCD, dPhi_hit_e_nFD_nFDpCD;
 
-            if (!NeutronInPCAL_nFDpCD &&
-                (NeutronInECIN_nFDpCD || NeutronInECOUT_nFDpCD)) { // if neutron did not hit PCAL, and hit either ECIN or ECOUT
+            if (!NeutronInPCAL_nFDpCD && (NeutronInECIN_nFDpCD || NeutronInECOUT_nFDpCD)) { // if neutron did not hit PCAL, and hit either ECIN or ECOUT
                 auto nFD_detlayer_nFDpCD = NeutronInECIN_nFDpCD ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
                 // neutron ECIN/ECAL hit vector and angles:
@@ -15542,12 +14299,10 @@ void EventAnalyser() {
                 nFD_hit_Theta_nFDpCD = n_hit_nFDpCD_3v.Theta() * 180 / pi, nFD_hit_Phi_nFDpCD = n_hit_nFDpCD_3v.Phi() * 180 / pi;
 
                 if ((nFD_detlayer_nFDpCD == clas12::ECIN) && (e_nFDpCD->cal(clas12::ECIN)->getZ() != 0)) {
-                    e_hit_nFDpCD_3v.SetXYZ(e_nFDpCD->cal(clas12::ECIN)->getX(), e_nFDpCD->cal(clas12::ECIN)->getY(),
-                                           e_nFDpCD->cal(clas12::ECIN)->getZ());
+                    e_hit_nFDpCD_3v.SetXYZ(e_nFDpCD->cal(clas12::ECIN)->getX(), e_nFDpCD->cal(clas12::ECIN)->getY(), e_nFDpCD->cal(clas12::ECIN)->getZ());
                     e_hit_Theta_nFDpCD = e_hit_nFDpCD_3v.Theta() * 180 / pi, e_hit_Phi_nFDpCD = e_hit_nFDpCD_3v.Phi() * 180 / pi;
                 } else if ((nFD_detlayer_nFDpCD == clas12::ECOUT) && (e_nFDpCD->cal(clas12::ECOUT)->getZ() != 0)) {
-                    e_hit_nFDpCD_3v.SetXYZ(e_nFDpCD->cal(clas12::ECOUT)->getX(), e_nFDpCD->cal(clas12::ECOUT)->getY(),
-                                           e_nFDpCD->cal(clas12::ECOUT)->getZ());
+                    e_hit_nFDpCD_3v.SetXYZ(e_nFDpCD->cal(clas12::ECOUT)->getX(), e_nFDpCD->cal(clas12::ECOUT)->getY(), e_nFDpCD->cal(clas12::ECOUT)->getZ());
                     e_hit_Theta_nFDpCD = e_hit_nFDpCD_3v.Theta() * 180 / pi, e_hit_Phi_nFDpCD = e_hit_nFDpCD_3v.Phi() * 180 / pi;
                 } else {
                     int trajlayer = (nFD_detlayer_nFDpCD == clas12::ECIN) ? 4 : 7;
@@ -15573,9 +14328,7 @@ void EventAnalyser() {
             bool NeutronPassVeto_nFDpCD = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, nFD_ind_nFDpCD, Neutron_veto_cut.GetLowerCut());
 
             /* Log vetoed neutron values (for self-consistency) */
-            if (!NeutronPassVeto_nFDpCD) {
-                hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_Vetoed_Neutrons_nFDpCD.hFill(dPhi_hit_e_nFD_nFDpCD, dTheta_hit_e_nFD_nFDpCD, Weight_nFDpCD);
-            }
+            if (!NeutronPassVeto_nFDpCD) { hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_Vetoed_Neutrons_nFDpCD.hFill(dPhi_hit_e_nFD_nFDpCD, dTheta_hit_e_nFD_nFDpCD, Weight_nFDpCD); }
             //</editor-fold>
 
             // Setting kinematical cuts ---------------------------------------------------------------------------------------------------------------------------------
@@ -15586,21 +14339,16 @@ void EventAnalyser() {
             /* Fiducial cuts -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
             bool FD_Theta_Cut_nFDpCD = ((P_nFD_nFDpCD_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
             bool FD_Momentum_Cut_BS_nFDpCD = ((NeutronMomBKC_nFDpCD <= FD_nucleon_momentum_cut.GetUpperCut()) &&
-                                              (NeutronMomBKC_nFDpCD >=
-                                               FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut before neutron shifting
+                                              (NeutronMomBKC_nFDpCD >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut before neutron shifting
             bool FD_Momentum_Cut_AS_nFDpCD = ((P_nFD_nFDpCD_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
-                                              (P_nFD_nFDpCD_3v.Mag() >=
-                                               FD_nucleon_momentum_cut.GetLowerCut())); // Additional momentum kin cut after neutron shifting
-            bool e_withinFC_nFDpCD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Electron", P_e_nFDpCD_3v.Mag(),
-                                                       P_e_nFDpCD_3v.Theta() * 180.0 / pi,
+                                              (P_nFD_nFDpCD_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Additional momentum kin cut after neutron shifting
+            bool e_withinFC_nFDpCD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Electron", P_e_nFDpCD_3v.Mag(), P_e_nFDpCD_3v.Theta() * 180.0 / pi,
                                                        P_e_nFDpCD_3v.Phi() * 180.0 / pi);
-            bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", P_nFD_nFDpCD_3v.Mag(),
-                                                         P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
-                                                         P_nFD_nFDpCD_3v.Phi() * 180.0 / pi);
+            bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", P_nFD_nFDpCD_3v.Mag(), P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
+                                                         P_nFD_nFDpCD_3v.Phi() * 180.0 / pi, Calc_eff_overlapping_FC);
 
-            bool Pass_Kin_Cuts_nFDpCD = (
-                    (!apply_kinematical_cuts || (FD_Theta_Cut_nFDpCD && FD_Momentum_Cut_BS_nFDpCD && FD_Momentum_Cut_AS_nFDpCD)) &&
-                    (!apply_fiducial_cuts || (e_withinFC_nFDpCD && nFD_withinFC_nFDpCD)));
+            bool Pass_Kin_Cuts_nFDpCD = ((!apply_kinematical_cuts || (FD_Theta_Cut_nFDpCD && FD_Momentum_Cut_BS_nFDpCD && FD_Momentum_Cut_AS_nFDpCD)) &&
+                                         (!apply_fiducial_cuts || (e_withinFC_nFDpCD && nFD_withinFC_nFDpCD)));
             //</editor-fold>
 
             //  Fillings nFDpCD histograms ------------------------------------------------------------------------------------------------------------------------------
@@ -15625,19 +14373,17 @@ void EventAnalyser() {
                     double Vx_p_nFDpCD = p->par()->getVx(), Vy_p_nFDpCD = p->par()->getVy(), Vz_p_nFDpCD = p->par()->getVz();
                     double dVx_nFDpCD = Vx_p_nFDpCD - Vx_e_nFDpCD, dVy_nFDpCD = Vy_p_nFDpCD - Vy_e_nFDpCD, dVz_nFDpCD = Vz_p_nFDpCD - Vz_e_nFDpCD;
 
-                    hdVx_nFDpCD.hFill(dVx_nFDpCD, Weight_nFDpCD), hdVy_nFDpCD.hFill(dVy_nFDpCD, Weight_nFDpCD), hdVz_nFDpCD.hFill(dVz_nFDpCD,
-                                                                                                                                  Weight_nFDpCD);
+                    hdVx_nFDpCD.hFill(dVx_nFDpCD, Weight_nFDpCD), hdVy_nFDpCD.hFill(dVy_nFDpCD, Weight_nFDpCD), hdVz_nFDpCD.hFill(dVz_nFDpCD, Weight_nFDpCD);
                 } // end of loop over protons vector
                 //</editor-fold>
 
                 //<editor-fold desc="Id. pCD protons (nFDpCD)">
                 double Vx_pCD_nFDpCD = pCD_nFDpCD->par()->getVx(), Vy_pCD_nFDpCD = pCD_nFDpCD->par()->getVy(), Vz_pCD_nFDpCD = pCD_nFDpCD->par()->getVz();
-                double dVx_pCD_nFDpCD = Vx_pCD_nFDpCD - Vx_e_nFDpCD, dVy_pCD_nFDpCD = Vy_pCD_nFDpCD - Vy_e_nFDpCD, dVz_pCD_nFDpCD =
-                        Vz_pCD_nFDpCD - Vz_e_nFDpCD;
+                double dVx_pCD_nFDpCD = Vx_pCD_nFDpCD - Vx_e_nFDpCD, dVy_pCD_nFDpCD = Vy_pCD_nFDpCD - Vy_e_nFDpCD, dVz_pCD_nFDpCD = Vz_pCD_nFDpCD - Vz_e_nFDpCD;
 
-                hdVx_pCD_nFDpCD.hFill(dVx_pCD_nFDpCD, Weight_nFDpCD), hdVy_pCD_nFDpCD.hFill(dVy_pCD_nFDpCD, Weight_nFDpCD), hdVz_pCD_nFDpCD.hFill(
-                        dVz_pCD_nFDpCD,
-                        Weight_nFDpCD);
+                hdVx_pCD_nFDpCD.hFill(dVx_pCD_nFDpCD, Weight_nFDpCD);
+                hdVy_pCD_nFDpCD.hFill(dVy_pCD_nFDpCD, Weight_nFDpCD);
+                hdVz_pCD_nFDpCD.hFill(dVz_pCD_nFDpCD, Weight_nFDpCD);
                 //</editor-fold>
 
                 //</editor-fold>
@@ -15950,16 +14696,12 @@ void EventAnalyser() {
                 //<editor-fold desc="Filling angle plots (nFDpCD)">
 
                 //<editor-fold desc="FD neutron angle plots (nFDpCD)">
-                FillByInt(hTheta_nFD_All_Int_nFDpCD_FD, hTheta_nFD_QEL_nFDpCD_FD, hTheta_nFD_MEC_nFDpCD_FD, hTheta_nFD_RES_nFDpCD_FD,
-                          hTheta_nFD_DIS_nFDpCD_FD, qel,
-                          mec,
-                          res, dis, Theta_nFD_nFDpCD, Weight_nFDpCD);
+                FillByInt(hTheta_nFD_All_Int_nFDpCD_FD, hTheta_nFD_QEL_nFDpCD_FD, hTheta_nFD_MEC_nFDpCD_FD, hTheta_nFD_RES_nFDpCD_FD, hTheta_nFD_DIS_nFDpCD_FD, qel, mec, res,
+                          dis, Theta_nFD_nFDpCD, Weight_nFDpCD);
                 hTheta_nFD_VS_P_nFD_nFDpCD_FD->Fill(P_nFD_nFDpCD_3v.Mag(), Theta_nFD_nFDpCD, Weight_nFDpCD);
                 hTheta_nFD_VS_W_nFDpCD_FD->Fill(W_nFDpCD, Theta_nFD_nFDpCD, Weight_nFDpCD);
 
-                FillByInt(hPhi_nFD_All_Int_nFDpCD_FD, hPhi_nFD_QEL_nFDpCD_FD, hPhi_nFD_MEC_nFDpCD_FD, hPhi_nFD_RES_nFDpCD_FD,
-                          hPhi_nFD_DIS_nFDpCD_FD, qel, mec, res,
-                          dis,
+                FillByInt(hPhi_nFD_All_Int_nFDpCD_FD, hPhi_nFD_QEL_nFDpCD_FD, hPhi_nFD_MEC_nFDpCD_FD, hPhi_nFD_RES_nFDpCD_FD, hPhi_nFD_DIS_nFDpCD_FD, qel, mec, res, dis,
                           Phi_nFD_nFDpCD, Weight_nFDpCD);
                 hPhi_nFD_VS_P_nFD_nFDpCD_FD->Fill(P_nFD_nFDpCD_3v.Mag(), Phi_nFD_nFDpCD, Weight_nFDpCD);
                 hPhi_nFD_VS_W_nFDpCD_FD->Fill(W_nFDpCD, Phi_nFD_nFDpCD, Weight_nFDpCD);
@@ -15968,16 +14710,12 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="CD proton angle plots (nFDpCD)">
-                FillByInt(hTheta_pCD_All_Int_nFDpCD_CD, hTheta_pCD_QEL_nFDpCD_CD, hTheta_pCD_MEC_nFDpCD_CD, hTheta_pCD_RES_nFDpCD_CD,
-                          hTheta_pCD_DIS_nFDpCD_CD, qel,
-                          mec,
-                          res, dis, Theta_pCD_nFDpCD, Weight_nFDpCD);
+                FillByInt(hTheta_pCD_All_Int_nFDpCD_CD, hTheta_pCD_QEL_nFDpCD_CD, hTheta_pCD_MEC_nFDpCD_CD, hTheta_pCD_RES_nFDpCD_CD, hTheta_pCD_DIS_nFDpCD_CD, qel, mec, res,
+                          dis, Theta_pCD_nFDpCD, Weight_nFDpCD);
                 hTheta_pCD_VS_P_pCD_nFDpCD_CD->Fill(P_pCD_nFDpCD_3v.Mag(), Theta_pCD_nFDpCD, Weight_nFDpCD);
                 hTheta_pCD_VS_W_nFDpCD_CD->Fill(W_nFDpCD, Theta_pCD_nFDpCD, Weight_nFDpCD);
 
-                FillByInt(hPhi_pCD_All_Int_nFDpCD_CD, hPhi_pCD_QEL_nFDpCD_CD, hPhi_pCD_MEC_nFDpCD_CD, hPhi_pCD_RES_nFDpCD_CD,
-                          hPhi_pCD_DIS_nFDpCD_CD, qel, mec, res,
-                          dis,
+                FillByInt(hPhi_pCD_All_Int_nFDpCD_CD, hPhi_pCD_QEL_nFDpCD_CD, hPhi_pCD_MEC_nFDpCD_CD, hPhi_pCD_RES_nFDpCD_CD, hPhi_pCD_DIS_nFDpCD_CD, qel, mec, res, dis,
                           Phi_pCD_nFDpCD, Weight_nFDpCD);
                 hPhi_pCD_VS_P_pCD_nFDpCD_CD->Fill(P_pCD_nFDpCD_3v.Mag(), Phi_pCD_nFDpCD, Weight_nFDpCD);
                 hPhi_pCD_VS_W_nFDpCD_CD->Fill(W_nFDpCD, Phi_pCD_nFDpCD, Weight_nFDpCD);
@@ -15986,15 +14724,12 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="Total momentum angle plots (nFDpCD)">
-                FillByInt(hTheta_tot_All_Int_nFDpCD, hTheta_tot_QEL_nFDpCD, hTheta_tot_MEC_nFDpCD, hTheta_tot_RES_nFDpCD, hTheta_tot_DIS_nFDpCD,
-                          qel, mec, res, dis,
+                FillByInt(hTheta_tot_All_Int_nFDpCD, hTheta_tot_QEL_nFDpCD, hTheta_tot_MEC_nFDpCD, hTheta_tot_RES_nFDpCD, hTheta_tot_DIS_nFDpCD, qel, mec, res, dis,
                           Theta_tot_nFDpCD, Weight_nFDpCD);
                 hTheta_tot_VS_P_tot_nFDpCD->Fill(P_tot_nFDpCD_3v.Mag(), Theta_tot_nFDpCD, Weight_nFDpCD);
                 hTheta_tot_VS_W_nFDpCD->Fill(W_nFDpCD, Theta_tot_nFDpCD, Weight_nFDpCD);
 
-                FillByInt(hPhi_tot_All_Int_nFDpCD, hPhi_tot_QEL_nFDpCD, hPhi_tot_MEC_nFDpCD, hPhi_tot_RES_nFDpCD, hPhi_tot_DIS_nFDpCD, qel, mec,
-                          res, dis,
-                          Phi_tot_nFDpCD,
+                FillByInt(hPhi_tot_All_Int_nFDpCD, hPhi_tot_QEL_nFDpCD, hPhi_tot_MEC_nFDpCD, hPhi_tot_RES_nFDpCD, hPhi_tot_DIS_nFDpCD, qel, mec, res, dis, Phi_tot_nFDpCD,
                           Weight_nFDpCD);
                 hPhi_tot_VS_P_tot_nFDpCD->Fill(P_tot_nFDpCD_3v.Mag(), Phi_tot_nFDpCD, Weight_nFDpCD);
                 hPhi_tot_VS_W_nFDpCD->Fill(W_nFDpCD, Phi_tot_nFDpCD, Weight_nFDpCD);
@@ -16003,15 +14738,12 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="Relative momentum angle plots (nFDpCD)">
-                FillByInt(hTheta_rel_All_Int_nFDpCD, hTheta_rel_QEL_nFDpCD, hTheta_rel_MEC_nFDpCD, hTheta_rel_RES_nFDpCD, hTheta_rel_DIS_nFDpCD,
-                          qel, mec, res, dis,
+                FillByInt(hTheta_rel_All_Int_nFDpCD, hTheta_rel_QEL_nFDpCD, hTheta_rel_MEC_nFDpCD, hTheta_rel_RES_nFDpCD, hTheta_rel_DIS_nFDpCD, qel, mec, res, dis,
                           Theta_rel_nFDpCD, Weight_nFDpCD);
                 hTheta_rel_VS_P_rel_nFDpCD->Fill(P_rel_nFDpCD_3v.Mag(), Theta_rel_nFDpCD, Weight_nFDpCD);
                 hTheta_rel_VS_W_nFDpCD->Fill(W_nFDpCD, Theta_rel_nFDpCD, Weight_nFDpCD);
 
-                FillByInt(hPhi_rel_All_Int_nFDpCD, hPhi_rel_QEL_nFDpCD, hPhi_rel_MEC_nFDpCD, hPhi_rel_RES_nFDpCD, hPhi_rel_DIS_nFDpCD, qel, mec,
-                          res, dis,
-                          Phi_rel_nFDpCD,
+                FillByInt(hPhi_rel_All_Int_nFDpCD, hPhi_rel_QEL_nFDpCD, hPhi_rel_MEC_nFDpCD, hPhi_rel_RES_nFDpCD, hPhi_rel_DIS_nFDpCD, qel, mec, res, dis, Phi_rel_nFDpCD,
                           Weight_nFDpCD);
                 hPhi_rel_VS_P_rel_nFDpCD->Fill(P_rel_nFDpCD_3v.Mag(), Phi_rel_nFDpCD, Weight_nFDpCD);
                 hPhi_rel_VS_W_nFDpCD->Fill(W_nFDpCD, Phi_rel_nFDpCD, Weight_nFDpCD);
@@ -16022,13 +14754,12 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="Fill neutron multiplicity plots (nFDpCD)">
-                pid.FillNeutMultiPlots(allParticles, electrons, Weight_nFDpCD, beamE, Neutron_veto_cut.GetLowerCutConst(),
-                                       hNeut_Multi_By_Redef_BPID_BV_nFDpCD_FD, hNeut_Multi_By_Redef_BPID_AV_nFDpCD_FD, ReDef_neutrons_FD,
-                                       hNeut_Multi_By_Redef_APID_BV_nFDpCD_FD, hNeut_Multi_By_Redef_APID_AV_nFDpCD_FD, NeutronsFD_ind);
+                pid.FillNeutMultiPlots(allParticles, electrons, Weight_nFDpCD, beamE, Neutron_veto_cut.GetLowerCutConst(), hNeut_Multi_By_Redef_BPID_BV_nFDpCD_FD,
+                                       hNeut_Multi_By_Redef_BPID_AV_nFDpCD_FD, ReDef_neutrons_FD, hNeut_Multi_By_Redef_APID_BV_nFDpCD_FD,
+                                       hNeut_Multi_By_Redef_APID_AV_nFDpCD_FD, NeutronsFD_ind);
                 //</editor-fold>
 
-                FillByInt(hW_All_Int_nFDpCD, hW_QEL_nFDpCD, hW_MEC_nFDpCD, hW_RES_nFDpCD, hW_DIS_nFDpCD, qel, mec, res, dis, W_nFDpCD,
-                          Weight_nFDpCD);
+                FillByInt(hW_All_Int_nFDpCD, hW_QEL_nFDpCD, hW_MEC_nFDpCD, hW_RES_nFDpCD, hW_DIS_nFDpCD, qel, mec, res, dis, W_nFDpCD, Weight_nFDpCD);
 
                 hP_tot_nFDpCD.hFill(P_tot_nFDpCD_3v.Mag(), Weight_nFDpCD);
                 hP_rel_nFDpCD.hFill(P_rel_nFDpCD_3v.Mag(), Weight_nFDpCD);
@@ -16037,64 +14768,30 @@ void EventAnalyser() {
                 hP_tot_minus_q_vs_P_tot_nFDpCD.hFill(P_tot_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
                 hP_tot_minus_q_vs_q_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
 
-//                if (P_tot_nFDpCD_3v.Mag() >= 0 && P_tot_nFDpCD_3v.Mag() < 0.5) {
-//                    hP_tot_minus_q_vs_q_S1_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 0.5 && P_tot_nFDpCD_3v.Mag() < 1) {
-//                    hP_tot_minus_q_vs_q_S2_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 1 && P_tot_nFDpCD_3v.Mag() < 1.5) {
-//                    hP_tot_minus_q_vs_q_S3_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 1.5 && P_tot_nFDpCD_3v.Mag() < 2) {
-//                    hP_tot_minus_q_vs_q_S4_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 2 && P_tot_nFDpCD_3v.Mag() < 2.5) {
-//                    hP_tot_minus_q_vs_q_S5_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 2.5 && P_tot_nFDpCD_3v.Mag() < 3) {
-//                    hP_tot_minus_q_vs_q_S6_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 3 && P_tot_nFDpCD_3v.Mag() < 3.5) {
-//                    hP_tot_minus_q_vs_q_S7_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 3.5 && P_tot_nFDpCD_3v.Mag() < 4) {
-//                    hP_tot_minus_q_vs_q_S8_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 4 && P_tot_nFDpCD_3v.Mag() < 4.5) {
-//                    hP_tot_minus_q_vs_q_S9_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 4.5 && P_tot_nFDpCD_3v.Mag() < 5) {
-//                    hP_tot_minus_q_vs_q_S10_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 5 && P_tot_nFDpCD_3v.Mag() < 5.5) {
-//                    hP_tot_minus_q_vs_q_S11_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                } else if (P_tot_nFDpCD_3v.Mag() >= 5.5 && P_tot_nFDpCD_3v.Mag() < 6) {
-//                    hP_tot_minus_q_vs_q_S12_nFDpCD.hFill(q_nFDpCD_3v.Mag(), P_tot_minus_q_nFDpCD_v3.Mag(), Weight_nFDpCD);
-//                }
-
-                hP_nFD_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(),
-                                    Weight_nFDpCD);                                                                       // nFD momentum (nFDpCD)
-                hP_pCD_nFDpCD.hFill(P_pCD_nFDpCD_3v.Mag(),
-                                    Weight_nFDpCD);                                                                       // pCD momentum (nFDpCD)
-                hP_nL_nFDpCD.hFill(P_nL_nFDpCD_3v.Mag(),
-                                   Weight_nFDpCD);                                                                      // Leading nucleon (nFDpCD)
-                hP_nR_nFDpCD.hFill(P_nR_nFDpCD_3v.Mag(),
-                                   Weight_nFDpCD);                                                                       // Recoil nucleon (nFDpCD)
+                hP_nFD_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), Weight_nFDpCD); // nFD momentum (nFDpCD)
+                hP_pCD_nFDpCD.hFill(P_pCD_nFDpCD_3v.Mag(), Weight_nFDpCD); // pCD momentum (nFDpCD)
+                hP_nL_nFDpCD.hFill(P_nL_nFDpCD_3v.Mag(), Weight_nFDpCD); // Leading nucleon (nFDpCD)
+                hP_nR_nFDpCD.hFill(P_nR_nFDpCD_3v.Mag(), Weight_nFDpCD); // Recoil nucleon (nFDpCD)
 
                 hP_nL_vs_P_nR_nFDpCD.hFill(P_nL_nFDpCD_3v.Mag(), P_nR_nFDpCD_3v.Mag(), Weight_nFDpCD);
                 hP_nFD_vs_P_pCD_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), P_pCD_nFDpCD_3v.Mag(), Weight_nFDpCD);
 
-                P_T_L_nFDpCD_3v = TVector3(P_nL_nFDpCD_3v.Px(), P_nL_nFDpCD_3v.Py(),
-                                           0);                                                        // transverse part of P_1
-                P_T_tot_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px() + P_pCD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py() + P_pCD_nFDpCD_3v.Py(),
-                                             0);    // transverse part of P_tot
+                P_T_L_nFDpCD_3v = TVector3(P_nL_nFDpCD_3v.Px(), P_nL_nFDpCD_3v.Py(), 0); // transverse part of P_1
+                P_T_tot_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px() + P_pCD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py() + P_pCD_nFDpCD_3v.Py(), 0); // transverse part of P_tot
                 dP_T_L_nFDpCD_3v = TVector3(P_e_nFDpCD_3v.Px() + P_T_L_nFDpCD_3v.Px(), P_e_nFDpCD_3v.Py() + P_T_L_nFDpCD_3v.Py(), 0);
                 dP_T_tot_nFDpCD_3v = TVector3(P_e_nFDpCD_3v.Px() + P_tot_nFDpCD_3v.Px(), P_e_nFDpCD_3v.Py() + P_tot_nFDpCD_3v.Py(), 0);
 
                 Theta_p_e_p_tot_nFDpCD = acos((P_e_nFDpCD_3v.Px() * P_tot_nFDpCD_3v.Px() + P_e_nFDpCD_3v.Py() * P_tot_nFDpCD_3v.Py()
                                                + P_e_nFDpCD_3v.Pz() * P_tot_nFDpCD_3v.Pz())
-                                              / (P_e_nFDpCD_3v.Mag() * P_tot_nFDpCD_3v.Mag())) * 180.0 /
-                                         pi;                             // Theta_p_e_p_tot_nFDpCD in deg
+                                              / (P_e_nFDpCD_3v.Mag() * P_tot_nFDpCD_3v.Mag())) * 180.0 / pi; // Theta_p_e_p_tot_nFDpCD in deg
                 hTheta_p_e_p_tot_nFDpCD->Fill(Theta_p_e_p_tot_nFDpCD, Weight_nFDpCD);
                 hTheta_p_e_p_tot_vs_W_nFDpCD->Fill(W_nFDpCD, Theta_p_e_p_tot_nFDpCD, Weight_nFDpCD);
 
                 //<editor-fold desc="Filling Theta_nFD_pCD plots (nFDpCD)">
 
                 //<editor-fold desc="General Theta_nFD_pCD plots (nFDpCD)">
-                FillByInt(hTheta_nFD_pCD_All_Int_nFDpCD, hTheta_nFD_pCD_QEL_nFDpCD, hTheta_nFD_pCD_MEC_nFDpCD, hTheta_nFD_pCD_RES_nFDpCD,
-                          hTheta_nFD_pCD_DIS_nFDpCD,
-                          qel, mec, res, dis, Theta_nFD_pCD_nFDpCD, Weight_nFDpCD);
+                FillByInt(hTheta_nFD_pCD_All_Int_nFDpCD, hTheta_nFD_pCD_QEL_nFDpCD, hTheta_nFD_pCD_MEC_nFDpCD, hTheta_nFD_pCD_RES_nFDpCD, hTheta_nFD_pCD_DIS_nFDpCD, qel, mec,
+                          res, dis, Theta_nFD_pCD_nFDpCD, Weight_nFDpCD);
                 hTheta_nFD_pCD_vs_W_nFDpCD->Fill(W_nFDpCD, Theta_nFD_pCD_nFDpCD, Weight_nFDpCD);
                 //</editor-fold>
 
@@ -16118,37 +14815,27 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-                Theta_q_p_tot_nFDpCD =
-                        acos((q_nFDpCD_3v.Px() * P_tot_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_tot_nFDpCD_3v.Py() +
-                              q_nFDpCD_3v.Pz() * P_tot_nFDpCD_3v.Pz())
-                             / (q_nFDpCD_3v.Mag() * P_tot_nFDpCD_3v.Mag())) * 180.0 /
-                        pi;                                   // Theta_q_p_tot_nFDpCD in deg
+                Theta_q_p_tot_nFDpCD = acos((q_nFDpCD_3v.Px() * P_tot_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_tot_nFDpCD_3v.Py() +
+                                             q_nFDpCD_3v.Pz() * P_tot_nFDpCD_3v.Pz())
+                                            / (q_nFDpCD_3v.Mag() * P_tot_nFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_tot_nFDpCD in deg
                 hTheta_q_p_tot_nFDpCD->Fill(Theta_q_p_tot_nFDpCD, Weight_nFDpCD);
                 hTheta_q_p_tot_vs_W_nFDpCD->Fill(W_nFDpCD, Theta_q_p_tot_nFDpCD, Weight_nFDpCD);
 
-                Theta_P_nL_minus_q_nR_nFDpCD =
-                        acos((P_nL_minus_q_nFDpCD_v3.Px() * P_nR_nFDpCD_3v.Px() + P_nL_minus_q_nFDpCD_v3.Py() * P_nR_nFDpCD_3v.Py() +
-                              P_nL_minus_q_nFDpCD_v3.Pz() * P_nR_nFDpCD_3v.Pz())
-                             / (P_nL_minus_q_nFDpCD_v3.Mag() * P_nR_nFDpCD_3v.Mag())) * 180.0 /
-                        pi;         // Theta_P_nL_minus_q_nR_nFDpCD in deg
+                Theta_P_nL_minus_q_nR_nFDpCD = acos((P_nL_minus_q_nFDpCD_v3.Px() * P_nR_nFDpCD_3v.Px() + P_nL_minus_q_nFDpCD_v3.Py() * P_nR_nFDpCD_3v.Py() +
+                                                     P_nL_minus_q_nFDpCD_v3.Pz() * P_nR_nFDpCD_3v.Pz())
+                                                    / (P_nL_minus_q_nFDpCD_v3.Mag() * P_nR_nFDpCD_3v.Mag())) * 180.0 / pi; // Theta_P_nL_minus_q_nR_nFDpCD in deg
                 Theta_q_p_L_nFDpCD = acos((q_nFDpCD_3v.Px() * P_nL_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_nL_nFDpCD_3v.Py() +
                                            q_nFDpCD_3v.Pz() * P_nL_nFDpCD_3v.Pz())
-                                          / (q_nFDpCD_3v.Mag() * P_nL_nFDpCD_3v.Mag())) * 180.0 /
-                                     pi;                   // Theta_q_p_L_nFDpCD = Theta_q_p_1_nFDpCD in deg
+                                          / (q_nFDpCD_3v.Mag() * P_nL_nFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_L_nFDpCD = Theta_q_p_1_nFDpCD in deg
                 Theta_q_p_R_nFDpCD = acos((q_nFDpCD_3v.Px() * P_nR_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_nR_nFDpCD_3v.Py() +
                                            q_nFDpCD_3v.Pz() * P_nR_nFDpCD_3v.Pz())
-                                          / (q_nFDpCD_3v.Mag() * P_nR_nFDpCD_3v.Mag())) * 180.0 /
-                                     pi;                   // Theta_q_p_R_nFDpCD = Theta_q_p_2_nFDpCD in deg
-                Theta_q_nFD_nFDpCD =
-                        acos((q_nFDpCD_3v.Px() * P_nFD_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_nFD_nFDpCD_3v.Py() +
-                              q_nFDpCD_3v.Pz() * P_nFD_nFDpCD_3v.Pz())
-                             / (q_nFDpCD_3v.Mag() * P_nFD_nFDpCD_3v.Mag())) * 180.0 /
-                        pi;                  // Theta_q_p_L_nFDpCD = Theta_q_p_1_nFDpCD in deg
-                Theta_q_pCD_nFDpCD =
-                        acos((q_nFDpCD_3v.Px() * P_pCD_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_pCD_nFDpCD_3v.Py() +
-                              q_nFDpCD_3v.Pz() * P_pCD_nFDpCD_3v.Pz())
-                             / (q_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 /
-                        pi;                  // Theta_q_p_R_nFDpCD = Theta_q_p_2_nFDpCD in deg
+                                          / (q_nFDpCD_3v.Mag() * P_nR_nFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_R_nFDpCD = Theta_q_p_2_nFDpCD in deg
+                Theta_q_nFD_nFDpCD = acos((q_nFDpCD_3v.Px() * P_nFD_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_nFD_nFDpCD_3v.Py() +
+                                           q_nFDpCD_3v.Pz() * P_nFD_nFDpCD_3v.Pz())
+                                          / (q_nFDpCD_3v.Mag() * P_nFD_nFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_L_nFDpCD = Theta_q_p_1_nFDpCD in deg
+                Theta_q_pCD_nFDpCD = acos((q_nFDpCD_3v.Px() * P_pCD_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_pCD_nFDpCD_3v.Py() +
+                                           q_nFDpCD_3v.Pz() * P_pCD_nFDpCD_3v.Pz())
+                                          / (q_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_R_nFDpCD = Theta_q_p_2_nFDpCD in deg
                 hTheta_P_nL_minus_q_nR_nFDpCD->Fill(Theta_P_nL_minus_q_nR_nFDpCD, Weight_nFDpCD);
                 hTheta_P_nL_minus_q_nR_vs_W_nFDpCD->Fill(W_nFDpCD, Theta_P_nL_minus_q_nR_nFDpCD, Weight_nFDpCD);
                 hTheta_q_p_L_nFDpCD->Fill(Theta_q_p_L_nFDpCD, Weight_nFDpCD);
@@ -16168,8 +14855,8 @@ void EventAnalyser() {
                 E_nL_nFDpCD = sqrt(m_L * m_L + P_nL_nFDpCD_3v.Mag2());
                 E_nR_nFDpCD = sqrt(m_R * m_R + P_nR_nFDpCD_3v.Mag2());
 
-                P_tot_mu_nFDpCD_4v.SetPxPyPzE(P_nL_nFDpCD_3v.Px() + P_nR_nFDpCD_3v.Px(), P_nL_nFDpCD_3v.Py() + P_nR_nFDpCD_3v.Py(),
-                                              P_nL_nFDpCD_3v.Pz() + P_nR_nFDpCD_3v.Pz(), E_nL_nFDpCD + E_nR_nFDpCD);
+                P_tot_mu_nFDpCD_4v.SetPxPyPzE(P_nL_nFDpCD_3v.Px() + P_nR_nFDpCD_3v.Px(), P_nL_nFDpCD_3v.Py() + P_nR_nFDpCD_3v.Py(), P_nL_nFDpCD_3v.Pz() + P_nR_nFDpCD_3v.Pz(),
+                                              E_nL_nFDpCD + E_nR_nFDpCD);
                 P_rel_mu_nFDpCD_4v.SetPxPyPzE((P_nL_nFDpCD_3v.Px() - P_nR_nFDpCD_3v.Px()) / 2, (P_nL_nFDpCD_3v.Py() - P_nR_nFDpCD_3v.Py()) / 2,
                                               (P_nL_nFDpCD_3v.Pz() - P_nR_nFDpCD_3v.Pz()) / 2, (E_nL_nFDpCD - E_nR_nFDpCD) / 2);
                 hP_tot_mu_nFDpCD.hFill(P_tot_mu_nFDpCD_4v.Mag(), Weight_nFDpCD);
@@ -16211,12 +14898,10 @@ void EventAnalyser() {
 
                 dAlpha_T_L_nFDpCD = acos(-(P_e_nFDpCD_3v.Px() * dP_T_L_nFDpCD_3v.Px() + P_e_nFDpCD_3v.Py() * dP_T_L_nFDpCD_3v.Py()
                                            + P_e_nFDpCD_3v.Pz() * dP_T_L_nFDpCD_3v.Pz())
-                                         / (P_T_e_nFDpCD_3v.Mag() * dP_T_L_nFDpCD_3v.Mag())) * 180.0 /
-                                    pi;         // dP_T_L_nFDpCD_3v.Pz() = 0; dAlpha_T_L_nFDpCD in deg
+                                         / (P_T_e_nFDpCD_3v.Mag() * dP_T_L_nFDpCD_3v.Mag())) * 180.0 / pi; // dP_T_L_nFDpCD_3v.Pz() = 0; dAlpha_T_L_nFDpCD in deg
                 dAlpha_T_tot_nFDpCD = acos(-(P_e_nFDpCD_3v.Px() * dP_T_tot_nFDpCD_3v.Px() + P_e_nFDpCD_3v.Py() * dP_T_tot_nFDpCD_3v.Py()
                                              + P_e_nFDpCD_3v.Pz() * dP_T_tot_nFDpCD_3v.Pz())
-                                           / (P_T_e_nFDpCD_3v.Mag() * dP_T_tot_nFDpCD_3v.Mag())) * 180.0 /
-                                      pi; // dP_T_tot_nFDpCD_3v.Pz() = 0; dAlpha_T_tot_nFDpCD in deg
+                                           / (P_T_e_nFDpCD_3v.Mag() * dP_T_tot_nFDpCD_3v.Mag())) * 180.0 / pi; // dP_T_tot_nFDpCD_3v.Pz() = 0; dAlpha_T_tot_nFDpCD in deg
                 hdAlpha_T_L_nFDpCD->Fill(dAlpha_T_L_nFDpCD, Weight_nFDpCD);
                 hdAlpha_T_L_vs_W_nFDpCD->Fill(W_nFDpCD, dAlpha_T_L_nFDpCD, Weight_nFDpCD);
                 hdAlpha_T_tot_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Weight_nFDpCD);
@@ -16227,12 +14912,10 @@ void EventAnalyser() {
 
                 dPhi_T_L_nFDpCD = acos(-(P_T_e_nFDpCD_3v.Px() * P_T_L_nFDpCD_3v.Px() + P_T_e_nFDpCD_3v.Py() * P_T_L_nFDpCD_3v.Py()
                                          + P_T_e_nFDpCD_3v.Pz() * P_T_L_nFDpCD_3v.Pz())
-                                       / (P_T_e_nFDpCD_3v.Mag() * P_T_L_nFDpCD_3v.Mag())) * 180.0 /
-                                  pi;               // P_T_L_nFDpCD_3v.Pz() = 0; dPhi_T_L_nFDpCD in deg
+                                       / (P_T_e_nFDpCD_3v.Mag() * P_T_L_nFDpCD_3v.Mag())) * 180.0 / pi; // P_T_L_nFDpCD_3v.Pz() = 0; dPhi_T_L_nFDpCD in deg
                 dPhi_T_tot_nFDpCD = acos(-(P_T_e_nFDpCD_3v.Px() * P_T_tot_nFDpCD_3v.Px() + P_T_e_nFDpCD_3v.Py() * P_T_tot_nFDpCD_3v.Py() +
                                            P_T_e_nFDpCD_3v.Pz() * P_T_tot_nFDpCD_3v.Pz())
-                                         / (P_T_e_nFDpCD_3v.Mag() * P_T_tot_nFDpCD_3v.Mag())) * 180.0 /
-                                    pi;       // P_T_tot_nFDpCD_3v.Pz() = 0; dPhi_T_tot_nFDpCD in deg
+                                         / (P_T_e_nFDpCD_3v.Mag() * P_T_tot_nFDpCD_3v.Mag())) * 180.0 / pi; // P_T_tot_nFDpCD_3v.Pz() = 0; dPhi_T_tot_nFDpCD in deg
                 hdPhi_T_L_nFDpCD->Fill(dPhi_T_L_nFDpCD, Weight_nFDpCD);
                 hdPhi_T_tot_nFDpCD->Fill(dPhi_T_tot_nFDpCD, Weight_nFDpCD);
 
@@ -19483,8 +18166,6 @@ void EventAnalyser() {
 
         //<editor-fold desc="Energy (E_e) histograms around theta_e = 15 (1p, CD & FD)">
         double E_e_15_1p_All_Int_integral = hE_e_15_All_Int_1p_FD->Integral();
-//        double E_e_15_1p_QEL_Int_integral = hE_e_15_QEL_1p_FD->Integral(), E_e_15_1p_MEC_Int_integral = hE_e_15_MEC_1p_FD->Integral();
-//        double E_e_15_1p_RES_Int_integral = hE_e_15_RES_1p_FD->Integral(), E_e_15_1p_DIS_Int_integral = hE_e_15_DIS_1p_FD->Integral();
 
         histPlotter1D(c1, hE_e_15_All_Int_1p_FD, norm_E_e_plots, true, E_e_15_1p_All_Int_integral, "E_{e} around #theta_{e} = 15#circ", "All Int., 1p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, sE_e_15_1p_FD, "00_E_e_15_All_Int_1p", hE_e_15_All_Int_1p_FD_Dir, "", kBlue, true, true, true);
@@ -19505,8 +18186,6 @@ void EventAnalyser() {
 
         //<editor-fold desc="E_e plots (1n, FD)">
         double E_e_1n_All_Int_integral = hE_e_All_Int_1n_FD->Integral();
-//        double E_e_QEL_Int_integral = hE_e_QEL_1n_FD->Integral(), E_e_MEC_Int_integral = hE_e_MEC_1n_FD->Integral();
-//        double E_e_RES_Int_integral = hE_e_RES_1n_FD->Integral(), E_e_DIS_Int_integral = hE_e_DIS_1n_FD->Integral();
 
         histPlotter1D(c1, hE_e_All_Int_1n_FD, norm_E_e_plots, true, E_e_1n_All_Int_integral, "E_{e} Histogram", "All Int., 1n", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sE_e_1n_FD, "00_E_e_All_Int_1n", hE_e_All_Int_1n_FD_Dir, "", kBlue, true, true, true);
@@ -19524,8 +18203,6 @@ void EventAnalyser() {
 
         //<editor-fold desc="Energy (E_e) histograms around theta_e = 15 (1n, CD & FD)">
         double E_e_15_1n_All_Int_integral = hE_e_15_All_Int_1n_FD->Integral();
-//        double E_e_15_1n_QEL_Int_integral = hE_e_15_QEL_1n_FD->Integral(), E_e_15_1n_MEC_Int_integral = hE_e_15_MEC_1n_FD->Integral();
-//        double E_e_15_1n_RES_Int_integral = hE_e_15_RES_1n_FD->Integral(), E_e_15_1n_DIS_Int_integral = hE_e_15_DIS_1n_FD->Integral();
 
         histPlotter1D(c1, hE_e_15_All_Int_1n_FD, norm_E_e_plots, true, E_e_15_1n_All_Int_integral, "E_{e} around #theta_{e} = 15#circ", "All Int., 1n", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, sE_e_15_1n_FD, "00_E_e_15_All_Int_1n", hE_e_15_All_Int_1n_FD_Dir, "", kBlue, true, true, true);
@@ -21737,6 +20414,7 @@ void EventAnalyser() {
     myLogFile << "Eff_calc_with_one_reco_electron = " << BoolToString(Eff_calc_with_one_reco_electron) << "\n";
     myLogFile << "Calc_inc_p_eff_with_extended_theta = " << BoolToString(Calc_inc_p_eff_with_extended_theta) << "\n";
     myLogFile << "Calc_1n_n_eff_with_smaller_theta = " << BoolToString(Calc_1n_n_eff_with_smaller_theta) << "\n";
+    myLogFile << "Calc_eff_overlapping_FC = " << BoolToString(Calc_eff_overlapping_FC) << "\n";
     myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n\n";
 
     myLogFile << "limless_mom_eff_plots = " << BoolToString(limless_mom_eff_plots) << "\n\n";
@@ -21787,6 +20465,14 @@ void EventAnalyser() {
     myLogFile << "Pvx = " << Pvx << "\n";
     myLogFile << "Pvy = " << Pvy << "\n";
     myLogFile << "Pvz = " << Pvz << "\n\n";
+    //</editor-fold>
+
+    //<editor-fold desc="Directory settings">
+    myLogFile << "\n===========================================================================\n";
+    myLogFile << "Directory settings\n";
+    myLogFile << "===========================================================================\n\n";
+
+    myLogFile << "Clear_Old_Directories = " << BoolToString(Clear_Old_Directories) << "\n";
     //</editor-fold>
 
     //<editor-fold desc="Plot selector">
@@ -22166,6 +20852,11 @@ void EventAnalyser() {
 
     myLogFile << "FD_nucleon_momentum_cut.GetUpperCut() = " << FD_nucleon_momentum_cut.GetUpperCut() << "\n";
     myLogFile << "FD_nucleon_momentum_cut.GetLowerCut() = " << FD_nucleon_momentum_cut.GetLowerCut() << "\n\n";
+
+    myLogFile << "MomRes_mu_cuts.GetUpperCut() = " << MomRes_mu_cuts.GetUpperCut() << "\n";
+    myLogFile << "MomRes_mu_cuts.GetLowerCut() = " << MomRes_mu_cuts.GetLowerCut() << "\n";
+    myLogFile << "MomRes_sigma_cuts.GetUpperCut() = " << MomRes_sigma_cuts.GetUpperCut() << "\n";
+    myLogFile << "MomRes_sigma_cuts.GetLowerCut() = " << MomRes_sigma_cuts.GetLowerCut() << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Neutron veto cut (1n & nFDpCD, FD)">

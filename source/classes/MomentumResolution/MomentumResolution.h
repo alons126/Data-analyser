@@ -73,7 +73,8 @@ private:
     vector<int> FittedTLMomSlices, FittedRecoMomSlices;
 
     double SliceUpperMomLim; // upper lim for momentum slices - loaded from file
-    double SliceUpperMomLimKC, SliceLowerMomLimKC; // lower lim for momentum slices - set by constructor
+    double SliceUpperMomLimKC_mu, SliceLowerMomLimKC_mu; // lower lim for momentum slices - set by constructor
+    double SliceUpperMomLimKC_sigma, SliceLowerMomLimKC_sigma; // lower lim for momentum slices - set by constructor
 
     double hSliceUpperLim = 1.1;
     double hSliceLowerLim = -1.1;
@@ -167,15 +168,16 @@ public:
 // MomResInit function --------------------------------------------------------------------------------------------------------------------------------------------------
 
     void MomResInit(const bool &plot_and_fit_MomRes, const bool &Calculate_momResS2, const bool &Run_with_momResS2, const string &SampleName,
-                    const string &NucleonCutsDirectory, const double &beamE, const DSCuts &FD_nucleon_momentum_cut, const double &ParticleMomTh,
+                    const string &NucleonCutsDirectory, const double &beamE, const DSCuts &MomRes_mu_cuts, const DSCuts &MomRes_sigma_cuts, const double &ParticleMomTh,
                     const string &MomentumResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2, const bool &VaryingDelta = false,
                     const string &SmearM = "pol1", const string &CorrM = "pol1", const bool &momRes_test = false, const bool &ForceSmallpResLimits = false,
                     const bool &FitDebugging = false);
 
-    void SetMomResCalculations(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const DSCuts &FD_nucleon_momentum_cut,
-                               const double &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2, const string &MomentumResolutionDirectory,
-                               const string &SavePath = "./", const double &DeltaSlices = 0.2, const bool &VaryingDelta = false, const string &SmearM = "pol1",
-                               const string &CorrM = "pol1", const bool momRes_test = false, const bool ForceSmallpResLimits = false, const bool &FitDebugging = false);
+    void SetMomResCalculations(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const DSCuts &MomRes_mu_cuts,
+                               const DSCuts &MomRes_sigma_cuts, const double &ParticleMomTh, bool const &Calculate_momResS2, bool const &Run_in_momResS2,
+                               const string &MomentumResolutionDirectory, const string &SavePath = "./", const double &DeltaSlices = 0.2, const bool &VaryingDelta = false,
+                               const string &SmearM = "pol1", const string &CorrM = "pol1", const bool momRes_test = false, const bool ForceSmallpResLimits = false,
+                               const bool &FitDebugging = false);
 
     void SetMomResSlicesByType(const string &SampleName, const string &NucleonCutsDirectory, const double &beamE, const double &ParticleMomTh, const string &MomentumType,
                                const string &SavePath = "./", const bool &VaryingDelta = false, const bool &momRes_test = false, const bool &ForceSmallpResLimits = false,
