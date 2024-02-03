@@ -35,92 +35,92 @@ void MScThesisPlotter() {
     //<editor-fold desc="Runs">
 
     //<editor-fold desc="Initial runs">
-    const char *NO_CUTS_beta_VS_P_no_clas12ana = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/"
+    const char *NO_CUTS_beta_VS_P_no_clas12ana = "/mnt/e/C12x4_sim_G18_Q204_6GeV/01_Initial_runs/v2/"
                                                  "C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_no_clas12ana_v2/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_NO_CUTS = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_v2"
+    const char *plots_NO_CUTS = "/mnt/e/C12x4_sim_G18_Q204_6GeV/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_v2"
                                 "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_NO_CUTS_DC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_v2"
+    const char *plots_NO_CUTS_DC = "/mnt/e/C12x4_sim_G18_Q204_6GeV/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_v2"
                                    "/DebugOutputFile.root";
-    const char *plots_Preselection_only = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/"
+    const char *plots_Preselection_only = "/mnt/e/C12x4_sim_G18_Q204_6GeV/01_Initial_runs/v2/"
                                           "C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_Preselection_Cuts_v2/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_Preselection_only_DC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/"
+    const char *plots_Preselection_only_DC = "/mnt/e/C12x4_sim_G18_Q204_6GeV/01_Initial_runs/v2/"
                                              "C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_Preselection_Cuts_v2/DebugOutputFile.root";
-    const char *plots_eQC_only = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_eQC_v2"
+    const char *plots_eQC_only = "/mnt/e/C12x4_sim_G18_Q204_6GeV/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_eQC_v2"
                                  "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_PreselectionAndeQC_only = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/"
+    const char *plots_PreselectionAndeQC_only = "/mnt/e/C12x4_sim_G18_Q204_6GeV/01_Initial_runs/v2/"
                                                 "C12x4_simulation_G18_Q204_6GeV_S00_NO_CUTS_Preselection_Cuts_eQC_v2/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_woChi2 = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S01ACwoChi2_v2"
+    const char *plots_woChi2 = "/mnt/e/C12x4_sim_G18_Q204_6GeV/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S01ACwoChi2_v2"
                                "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_noNC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S02ACnoNC_v2"
+    const char *plots_noNC = "/mnt/e/C12x4_sim_G18_Q204_6GeV/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S02ACnoNC_v2"
                              "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_NC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_v2"
+    const char *plots_NC = "/mnt/e/C12x4_sim_G18_Q204_6GeV/01_Initial_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_v2"
                            "/C12x4_simulation_G18_Q204_6GeV_plots.root";
     //</editor-fold>
 
     //<editor-fold desc="AMaps runs">
-//    const char *plots_AMaps = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/01_AMaps_testing_and_debugging/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_eTh08_v2"
+//    const char *plots_AMaps = "/mnt/e/C12x4_sim_G18_Q204_6GeV/02_AMaps_runs/v2/01_AMaps_testing_and_debugging/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_eTh08_v2"
 //                              "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-//    const char *plots_AMaps_plotsPath = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/01_AMaps_testing_and_debugging/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_eTh08_v2/";
-//    const char *plots_AMaps_GenMaps = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/01_AMaps_testing_and_debugging/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_eTh08_v2/"
+//    const char *plots_AMaps_plotsPath = "/mnt/e/C12x4_sim_G18_Q204_6GeV/02_AMaps_runs/v2/01_AMaps_testing_and_debugging/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_eTh08_v2/";
+//    const char *plots_AMaps_GenMaps = "/mnt/e/C12x4_sim_G18_Q204_6GeV/02_AMaps_runs/v2/01_AMaps_testing_and_debugging/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_eTh08_v2/"
 //                                      "12_Acceptance_maps_plots/01_AMaps_1e_cut/05_Generated_maps/";
-    const char *plots_AMaps = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_AMaps_v2"
+    const char *plots_AMaps = "/mnt/e/C12x4_sim_G18_Q204_6GeV/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_AMaps_v2"
                               "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_AMaps_plotsPath = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_AMaps_v2/";
-    const char *plots_AMaps_GenMaps = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_AMaps_v2/"
+    const char *plots_AMaps_plotsPath = "/mnt/e/C12x4_sim_G18_Q204_6GeV/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_AMaps_v2/";
+    const char *plots_AMaps_GenMaps = "/mnt/e/C12x4_sim_G18_Q204_6GeV/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_AMaps_v2/"
                                       "12_Acceptance_maps_plots/01_AMaps_1e_cut/05_Generated_maps/";
-//    const char *plots_AMaps = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_v2"
+//    const char *plots_AMaps = "/mnt/e/C12x4_sim_G18_Q204_6GeV/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_v2"
 //                              "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-//    const char *plots_AMaps_plotsPath = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_v2/";
-//    const char *plots_AMaps_GenMaps = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_v2/"
+//    const char *plots_AMaps_plotsPath = "/mnt/e/C12x4_sim_G18_Q204_6GeV/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_v2/";
+//    const char *plots_AMaps_GenMaps = "/mnt/e/C12x4_sim_G18_Q204_6GeV/02_AMaps_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps_Eff1_v2/"
 //                                      "12_Acceptance_maps_plots/01_AMaps_1e_cut/05_Generated_maps/";
 
-//    const char *plots_wNC_AMaps02 = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/02_AMaps_runs/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps02_Eff1"
+//    const char *plots_wNC_AMaps02 = "/mnt/e/C12x4_sim_G18_Q204_6GeV/02_AMaps_runs/C12x4_simulation_G18_Q204_6GeV_S03ACNC_AMaps02_Eff1"
 //                                    "/C12x4_simulation_G18_Q204_6GeV_plots.root";
     //</editor-fold>
 
     //<editor-fold desc="Efficiency runs">
-    const char *plots_Efficiency_reg = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_Eff_v2"
+    const char *plots_Efficiency_reg = "/mnt/e/C12x4_sim_G18_Q204_6GeV/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_Eff_v2"
                                        "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_Efficiency_reg_wMomTh = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_Eff_v2"
+    const char *plots_Efficiency_reg_wMomTh = "/mnt/e/C12x4_sim_G18_Q204_6GeV/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_Eff_v2"
                                               "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_Efficiency_wFC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_Eff_v2"
+    const char *plots_Efficiency_wFC = "/mnt/e/C12x4_sim_G18_Q204_6GeV/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_Eff_v2"
                                        "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_Efficiency_wFC_wMomTh = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/"
-                                              "C12x4_simulation_G18_Q204_6GeV_S03ACNC_EffCalc_wFC_v2_wMomTh/C12x4_simulation_G18_Q204_6GeV_plots.root";
-//    const char *plots_Efficiency_reg = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_Eff2_v2"
+    const char *plots_Efficiency_wFC_wMomTh = "/mnt/e/C12x4_sim_G18_Q204_6GeV/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_Eff_wFC_v2"
+                                              "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+//    const char *plots_Efficiency_reg = "/mnt/e/C12x4_sim_G18_Q204_6GeV/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_Eff2_v2"
 //                                       "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-//    const char *plots_Efficiency_reg_wMomTh = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_EffCalc_v2_wMomTh"
+//    const char *plots_Efficiency_reg_wMomTh = "/mnt/e/C12x4_sim_G18_Q204_6GeV/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_EffCalc_v2_wMomTh"
 //                                              "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-//    const char *plots_Efficiency_wFC = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wFC_Eff2_v2"
+//    const char *plots_Efficiency_wFC = "/mnt/e/C12x4_sim_G18_Q204_6GeV/04_Efficiency_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wFC_Eff2_v2"
 //                                       "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-//    const char *plots_Efficiency_wFC_wMomTh = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/04_Efficiency_runs/v2/"
+//    const char *plots_Efficiency_wFC_wMomTh = "/mnt/e/C12x4_sim_G18_Q204_6GeV/04_Efficiency_runs/v2/"
 //                                              "C12x4_simulation_G18_Q204_6GeV_S03ACNC_EffCalc_wFC_v2_wMomTh/C12x4_simulation_G18_Q204_6GeV_plots.root";
     //</editor-fold>
 
     //<editor-fold desc="momRes runs">
-    const char *plots_momResS1_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v2"
+    const char *plots_momResS1_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v2"
                                      "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_momResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v2"
+    const char *plots_momResS1_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v2"
                                              "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-    const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v2"
+    const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v2"
                                            "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-    const char *plots_momResS2_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v2"
+    const char *plots_momResS2_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v2"
                                      "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_momResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v2"
+    const char *plots_momResS2_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v2"
                                              "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-    const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v2"
+    const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v2"
                                            "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-//    const char *plots_momResS1_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
+//    const char *plots_momResS1_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
 //                                     "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-//    const char *plots_momResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
+//    const char *plots_momResS1_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
 //                                             "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-//    const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
+//    const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1_v2"
 //                                           "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-//    const char *plots_momResS2_Gen = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
+//    const char *plots_momResS2_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
 //                                     "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-//    const char *plots_momResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
+//    const char *plots_momResS2_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
 //                                             "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-//    const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_simulation_G18_Q204_6GeV_afterTrip/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
+//    const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03ACNC_wNSaC_momResS2_Eff1_v2"
 //                                           "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     //</editor-fold>
 
