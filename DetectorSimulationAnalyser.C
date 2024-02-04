@@ -101,12 +101,12 @@ void EventAnalyser() {
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool TL_plots_only_for_NC = false; // TL plots only AFTER beta fit
     bool fill_TL_plots = true;
-    bool ZoomIn_On_mom_th_plots = false; // momentum th. efficiencies with zoomin
-    bool Eff_calc_with_one_reco_electron = true;
-    bool Calc_inc_p_eff_with_extended_theta = false;
+    bool ZoomIn_On_mom_th_plots = true; // momentum th. efficiencies with zoomin
+    bool Eff_calc_with_one_reco_electron = true; // keep as true in normal runs
+    bool Calc_inc_eff_with_varying_theta = false;
     bool Calc_1n_n_eff_with_smaller_theta = false;
-    bool Calc_eff_overlapping_FC = true;
-    bool Rec_wTL_ES = true; // Calculate efficiency - force TL event selection on reco. plots
+    bool Calc_eff_overlapping_FC = true; // keep as true in normal runs
+    bool Rec_wTL_ES = false; // Calculate efficiency - force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -137,7 +137,7 @@ void EventAnalyser() {
     const bool ForceSmallpResLimits = false; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
-    bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
+    bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
     bool momRes_test = false; // false by default
     /*
     MomRes run order guide:
@@ -178,20 +178,20 @@ void EventAnalyser() {
     bool apply_Electron_beta_cut = true; // Electron beta cut
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     // My analysis cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
+    bool apply_nBeta_fit_cuts = false; // apply neutron upper mom. th.
+    bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndCorr = true;
+    bool apply_nucleon_SmearAndCorr = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -457,8 +457,7 @@ void EventAnalyser() {
     DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "Protons and neutrons", 0, 1., 2.5);
 
     DSCuts MomRes_mu_cuts = DSCuts("MomRes_mu_cuts", "FD", "", "Protons and neutrons", 0, FD_nucleon_momentum_cut.GetLowerCut(), 2.2);
-    DSCuts MomRes_sigma_cuts = DSCuts("MomRes_sigma_cuts", "FD", "", "Protons and neutrons", 0, FD_nucleon_momentum_cut.GetLowerCut(), 2.5);
-//    DSCuts MomRes_sigma_cuts = DSCuts("MomRes_sigma_cuts", "FD", "", "Protons and neutrons", 0, FD_nucleon_momentum_cut.GetLowerCut(), 2.2);
+    DSCuts MomRes_sigma_cuts = DSCuts("MomRes_sigma_cuts", "FD", "", "Protons and neutrons", 0, FD_nucleon_momentum_cut.GetLowerCut(), 2.2);
     //</editor-fold>
 
     //</editor-fold>
@@ -672,18 +671,18 @@ void EventAnalyser() {
         ToF_plots = false;
 
         /* Efficiency plots */
-//        Efficiency_plots = true;
-        Efficiency_plots = false;
-//        TL_after_Acceptance_Maps_plots = true;
-        TL_after_Acceptance_Maps_plots = false;
+        Efficiency_plots = true;
+//        Efficiency_plots = false;
+        TL_after_Acceptance_Maps_plots = true;
+//        TL_after_Acceptance_Maps_plots = false;
 
         /* Resolution plots */
 //        AMaps_plots = true;
         AMaps_plots = false;
 
         /* Resolution plots */
-        Resolution_plots = true;
-//        Resolution_plots = false;
+//        Resolution_plots = true;
+        Resolution_plots = false;
 
         /* Multiplicity plots */
 //        Multiplicity_plots = true;
@@ -6694,8 +6693,8 @@ void EventAnalyser() {
                                                         "05b_P_piminus_truth_1e_cut_CD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
 
     hPlot1D hP_ph_truth_1e_cut_FD = hPlot1D("1e cut", "FD", "TL FD #gamma momentum", "FD #gamma momentum P^{truth}_{#gamma}", "P^{truth}_{#gamma} [GeV/c]",
-                                            directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "09a_P_ph_truth_1e_cut_FD", CDMomentum_lboundary,
-                                            CDMomentum_uboundary, numTH1Dbins_Mom_eff_Plots);
+                                            directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"], "09a_P_ph_truth_1e_cut_FD", Momentum_lboundary,
+                                            Momentum_uboundary, numTH1Dbins_Mom_eff_Plots);
     hPlot1D hP_ph_truth_1e_cut_FD_ZOOMIN = hPlot1D("1e cut", "FD", "TL FD #gamma momentum - ZOOMIN", "FD #gamma momentum P^{truth}_{#gamma} - ZOOMIN",
                                                    "P^{truth}_{#gamma} [GeV/c]", directories.Eff_and_ACorr_Directory_map["Momentum_th_TL_1e_cut_Directory"],
                                                    "09a_P_ph_truth_1e_cut_FD_ZOOMIN", 0, 1, numTH1Dbins_Mom_eff_Plots);
@@ -8668,7 +8667,7 @@ void EventAnalyser() {
         // FD neutron with maximal momentum:
         int NeutronsFD_ind_max = pid.GetLnFDIndex(allParticles, ReDef_neutrons_FD, apply_nucleon_cuts);
 
-        /* Get FD neutrons and photons above momentum threshold: */
+        /* Get FD neutrons and photons above momentum threshold (noNeutCuts): */
         // FD neutrons and photons by definition (after momentum th. only!):
         vector<int> NeutronsFD_ind_noNeutCuts, PhotonsFD_ind_noNeutCuts;
         pid.FDNeutralParticleID(allParticles, NeutronsFD_ind_noNeutCuts, ReDef_neutrons_FD, n_mom_th, PhotonsFD_ind_noNeutCuts, ReDef_photons_FD, ph_mom_th,
@@ -8677,7 +8676,7 @@ void EventAnalyser() {
         int NeutronsFD_ind_mom_max_noNeutCuts = pid.GetLnFDIndex(allParticles, NeutronsFD_ind_noNeutCuts, apply_nucleon_cuts);
 
         /* Get FD neutrons and photons above momentum threshold and after ECAL veto and after ECAL edge cuts: */
-        // FD neutrons and photons by definition - after momentum th. (ECAL & edge cuts):
+        // FD neutrons and photons by definition (after momentum th. & ECAL & edge cuts):
         vector<int> NeutronsFD_ind, PhotonsFD_ind;
         pid.FDNeutralParticleID(allParticles, electrons, NeutronsFD_ind, ReDef_neutrons_FD, n_mom_th, PhotonsFD_ind, ReDef_photons_FD, ph_mom_th, Neutron_veto_cut, beamE,
                                 clasAna.getEcalEdgeCuts(), clasAna.getEcalEdgeCuts(), apply_nucleon_cuts);
@@ -8695,6 +8694,34 @@ void EventAnalyser() {
             ++num_of_events_3n_in_FD;
         } else if (NeutronsFD_ind.size() > 3) {
             ++num_of_events_Xn_in_FD;
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Safety checks">
+        for (int &i: ReDef_neutrons_FD) {
+            if (!((allParticles[i]->par()->getPid() == 2112) || (allParticles[i]->par()->getPid() == 22))) {
+                cout << "\n\nReDef_neutrons_FD: A neutron PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(0);
+            }
+
+            bool NeutronInPCAL_test = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+            bool NeutronInECIN_test = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
+            bool NeutronInECOUT_test = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECIN hit
+
+            if (NeutronInPCAL_test) { cout << "\n\nReDef_neutrons_FD test: a neutron have been found with a PCAL hit! Exiting...\n\n", exit(0); }
+
+            if (!(NeutronInECIN_test || NeutronInECOUT_test)) {
+                cout << "\n\nReDef_neutrons_FD test: a neutron have been found without either ECIN or ECOUT hit! Exiting...\n\n", exit(0);
+            }
+        }
+
+        for (int &i: ReDef_photons_FD) {
+            if (allParticles[i]->par()->getPid() != 22) {
+                cout << "\n\nReDef_photons_FD test: A photon PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << ")! Exiting...\n\n", exit(0);
+            }
+
+            bool PhotonInPCAL_test = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+
+            if (!PhotonInPCAL_test) { cout << "\n\n1n: a photon have been found without a PCAL hit! Exiting...\n\n", exit(0); }
         }
         //</editor-fold>
 
@@ -9421,7 +9448,7 @@ void EventAnalyser() {
                             hTheta_p_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_p_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if (!Calc_inc_p_eff_with_extended_theta) { // Inclusive proton efficiency plots WITHOUT FD-CD overlap in theta
+                            if (!Calc_inc_eff_with_varying_theta) { // Inclusive proton efficiency plots WITHOUT FD-CD overlap in theta
                                 if (inFD &&
                                     (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // inclusive efficiency plots (FD protons)
                                     hP_p_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
@@ -9904,14 +9931,14 @@ void EventAnalyser() {
                             hTheta_ph_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_ph_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
 
-                            if (!Calc_inc_p_eff_with_extended_theta) {
-                                if (inFD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // inclusive efficiency plots
+                            if (!Calc_inc_eff_with_varying_theta) {
+                                if (inFD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // inclusive efficiency plots (photons)
                                     hP_ph_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
                                     hP_ph_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
                                 }
                             } else {
                                 if (((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= 35.)) &&
-                                    (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // inclusive efficiency plots
+                                    (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // inclusive efficiency plots (photons)
                                     hP_ph_truth_1e_cut_FD.hFill(Particle_TL_Momentum, Weight);
                                     hP_ph_truth_1e_cut_FD_ZOOMIN.hFill(Particle_TL_Momentum, Weight);
                                 }
@@ -10414,8 +10441,7 @@ void EventAnalyser() {
 
                 bool n_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut, NeutronPhi_1e_cut,
                                                    Calc_eff_overlapping_FC);
-                bool NeutronPassVeto_Test = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_max,
-                                                                     Neutron_veto_cut.GetLowerCut());
+                bool NeutronPassVeto_Test = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_max, Neutron_veto_cut.GetLowerCut());
 
                 if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
                     hP_LnFD_reco_BPID_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
@@ -10452,8 +10478,7 @@ void EventAnalyser() {
 
                 bool n_Pass_FC = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1e_cut, NeutronTheta_1e_cut, NeutronPhi_1e_cut,
                                                    Calc_eff_overlapping_FC);
-                bool NeutronPassVeto_Test = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max,
-                                                                     Neutron_veto_cut.GetLowerCut());
+                bool NeutronPassVeto_Test = pid.NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind_mom_max, Neutron_veto_cut.GetLowerCut());
 
                 if ((!apply_fiducial_cuts || n_Pass_FC) && NeutronPassVeto_Test) {
                     hP_LnFD_reco_APID_1e_cut_FD.hFill(NeutronMomentum_1e_cut, Weight);
@@ -20412,7 +20437,7 @@ void EventAnalyser() {
     myLogFile << "fill_TL_plots = " << BoolToString(fill_TL_plots) << "\n";
     myLogFile << "ZoomIn_On_mom_th_plots = " << BoolToString(ZoomIn_On_mom_th_plots) << "\n";
     myLogFile << "Eff_calc_with_one_reco_electron = " << BoolToString(Eff_calc_with_one_reco_electron) << "\n";
-    myLogFile << "Calc_inc_p_eff_with_extended_theta = " << BoolToString(Calc_inc_p_eff_with_extended_theta) << "\n";
+    myLogFile << "Calc_inc_eff_with_varying_theta = " << BoolToString(Calc_inc_eff_with_varying_theta) << "\n";
     myLogFile << "Calc_1n_n_eff_with_smaller_theta = " << BoolToString(Calc_1n_n_eff_with_smaller_theta) << "\n";
     myLogFile << "Calc_eff_overlapping_FC = " << BoolToString(Calc_eff_overlapping_FC) << "\n";
     myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n\n";

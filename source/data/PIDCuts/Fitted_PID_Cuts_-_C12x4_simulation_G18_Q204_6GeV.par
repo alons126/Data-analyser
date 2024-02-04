@@ -5,7 +5,7 @@
 # Cuts are fitted for - C12x4_simulation_G18_Q204_6GeV
 
 # pid cuts by detector (pid:mean:sigma) - sigma_CD=3;sigma_FD=3:
-pid_cuts		2212:0.531907:5.67878:CD
+pid_cuts		2212:0.531904:5.67876:CD
 pid_cuts		2212:-0.0398929:4.08841:FD
 pid_cuts		211:0.0860467:4.58641:CD
 pid_cuts		211:0.0265985:3.32209:FD
