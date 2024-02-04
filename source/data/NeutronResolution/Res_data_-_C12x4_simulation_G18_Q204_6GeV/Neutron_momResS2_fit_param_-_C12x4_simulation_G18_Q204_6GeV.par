@@ -71,24 +71,24 @@ fit_reco_Slice_#28_from_3.05_to_5.986			28:3.05:5.98636:-0.186953:0.203979
 
 
 #smearing fit variables:
-#smearing KC limits:	1 to 2.5
+#smearing KC limits:	1 to 2.2
 
 #pol1 fit variables (no KC):
 truth_Smear_pol1:					0.0708662:-0.00567206     # A:B
 truth_Smear_pol1_error:				0.00484947:0.00954232     # A_Err:B_Err
 truth_Smear_pol1_FitGoodness:		0.0124496:25     # CHI2:NDF
-reco_Smear_pol1_wKC:					0.0705565:-0.0190429     # A:B
-reco_Smear_pol1_wKC_error:				0.00218344:0.00346995     # A_Err:B_Err
-reco_Smear_pol1_wKC_FitGoodness:		0.000214629:17     # CHI2:NDF
+reco_Smear_pol1:					0.0509131:0.00983274     # A:B
+reco_Smear_pol1_error:				0.00296606:0.00521813     # A_Err:B_Err
+reco_Smear_pol1_FitGoodness:		0.00408396:26     # CHI2:NDF
 
 
 #pol1 fit variables (with KC):
-truth_Smear_pol1_wKC:					0.0963953:-0.0479263     # A:B
-truth_Smear_pol1_wKC_error:				0.00294744:0.00496785     # A_Err:B_Err
-truth_Smear_pol1_wKC_FitGoodness:		0.000501732:17     # CHI2:NDF
-reco_Smear_pol1_wKC:					0.0705565:-0.0190429     # A:B
-reco_Smear_pol1_wKC_error:				0.00218344:0.00346995     # A_Err:B_Err
-reco_Smear_pol1_wKC_FitGoodness:		0.000214629:17     # CHI2:NDF
+truth_Smear_pol1_wKC:					0.0959358:-0.0470645     # A:B
+truth_Smear_pol1_wKC_error:				0.00327314:0.00501797     # A_Err:B_Err
+truth_Smear_pol1_wKC_FitGoodness:		0.000240732:14     # CHI2:NDF
+reco_Smear_pol1_wKC:					0.068709:-0.016519     # A:B
+reco_Smear_pol1_wKC_error:				0.00241026:0.00370709     # A_Err:B_Err
+reco_Smear_pol1_wKC_FitGoodness:		0.000186418:16     # CHI2:NDF
 
 
 #pol2 fit variables (no KC):
@@ -101,12 +101,12 @@ reco_Smear_pol2_FitGoodness:		0.00227537:25     # CHI2:NDF
 
 
 #pol2 fit variables (with KC):
-truth_Smear_pol2_wKC:					0.011205:0.0577708:-0.0167392     # A:B:C
-truth_Smear_pol2_wKC_error:				0.00713674:0.0247629:0.0204277     # A_Err:B_Err:C_Err
-truth_Smear_pol2_wKC_FitGoodness:		0.000434752:16     # CHI2:NDF
-reco_Smear_pol2_wKC:					0.0152751:0.0204609:0.0197599     # A:B:C
-reco_Smear_pol2_wKC_error:				0.00433785:0.0143418:0.0113447     # A_Err:B_Err:C_Err
-reco_Smear_pol2_wKC_FitGoodness:		0.000105421:16     # CHI2:NDF
+truth_Smear_pol2_wKC:					0.017304:0.0421073:-0.00699168     # A:B:C
+truth_Smear_pol2_wKC_error:				0.00979806:0.0306316:0.0231673     # A_Err:B_Err:C_Err
+truth_Smear_pol2_wKC_FitGoodness:		0.000194151:13     # CHI2:NDF
+reco_Smear_pol2_wKC:					0.0154568:0.020077:0.0199283     # A:B:C
+reco_Smear_pol2_wKC_error:				0.00575767:0.0182691:0.0139637     # A_Err:B_Err:C_Err
+reco_Smear_pol2_wKC_FitGoodness:		0.000104921:15     # CHI2:NDF
 
 
 #pol3 fit variables (no KC):
@@ -119,12 +119,12 @@ reco_Smear_pol3_FitGoodness:		0.000631216:24     # CHI2:NDF
 
 
 #pol3 fit variables (with KC):
-truth_Smear_pol3_wKC:					0.00637106:-0.0217791:0.112499:-0.0457865     # A:B:C:D
-truth_Smear_pol3_wKC_error:				0.0174953:0.0908731:0.152428:0.0824847     # A_Err:B_Err:C_Err:D_Err
-truth_Smear_pol3_wKC_FitGoodness:		0.000430942:15     # CHI2:NDF
-reco_Smear_pol3_wKC:					-0.0224853:0.129446:-0.166388:0.118068     # A:B:C:D
-reco_Smear_pol3_wKC_error:				0.0111889:0.055671:0.0896668:0.0467197     # A_Err:B_Err:C_Err:D_Err
-reco_Smear_pol3_wKC_FitGoodness:		8.12104e-05:15     # CHI2:NDF
+truth_Smear_pol3_wKC:					-0.000870504:0.0207975:0.037451:-0.00484947     # A:B:C:D
+truth_Smear_pol3_wKC_error:				0.00191056:0.00505176:0.00835106:0.00776239     # A_Err:B_Err:C_Err:D_Err
+truth_Smear_pol3_wKC_FitGoodness:		0.000193966:12     # CHI2:NDF
+reco_Smear_pol3_wKC:					0.0034851:0.00809641:0.0165695:0.0289606     # A:B:C:D
+reco_Smear_pol3_wKC_error:				0.00118676:0.0032432:0.00542543:0.00502041     # A_Err:B_Err:C_Err:D_Err
+reco_Smear_pol3_wKC_FitGoodness:		0.000109484:14     # CHI2:NDF
 
 
 #correction fit variables:

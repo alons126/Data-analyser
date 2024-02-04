@@ -106,7 +106,7 @@ void EventAnalyser() {
     bool Calc_inc_p_eff_with_extended_theta = false;
     bool Calc_1n_n_eff_with_smaller_theta = false;
     bool Calc_eff_overlapping_FC = true;
-    bool Rec_wTL_ES = false; // Calculate efficiency - force TL event selection on reco. plots
+    bool Rec_wTL_ES = true; // Calculate efficiency - force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -130,14 +130,14 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = true; // Calculate momResS2 variables
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const bool ForceSmallpResLimits = false; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
-    bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
+    bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
     bool momRes_test = false; // false by default
     /*
     MomRes run order guide:
@@ -188,10 +188,10 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
+    bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndCorr = false;
+    bool apply_nucleon_SmearAndCorr = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 

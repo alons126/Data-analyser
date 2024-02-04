@@ -26,7 +26,7 @@ private:
 
     string Added_PreStatuses, Added_Statuses;
 
-    string Global_Run_Status = "v2_smallSigma";
+    string Global_Run_Status = "v2_noOverlap";
 
 public:
 
