@@ -130,15 +130,15 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
-    bool Calculate_momResS2 = false; // Calculate momResS2 variables
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool Calculate_momResS2 = true; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     const bool ForceSmallpResLimits = false; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
     bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
-    bool momRes_test = false; // false by default
+    bool momRes_test = true; // false by default
     /*
     MomRes run order guide:
     1. momResS1 calculation 1:
@@ -182,12 +182,12 @@ void EventAnalyser() {
 
     // My analysis cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = false; // apply neutron upper mom. th.
+    bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -671,18 +671,18 @@ void EventAnalyser() {
         ToF_plots = false;
 
         /* Efficiency plots */
-        Efficiency_plots = true;
-//        Efficiency_plots = false;
-        TL_after_Acceptance_Maps_plots = true;
-//        TL_after_Acceptance_Maps_plots = false;
+//        Efficiency_plots = true;
+        Efficiency_plots = false;
+//        TL_after_Acceptance_Maps_plots = true;
+        TL_after_Acceptance_Maps_plots = false;
 
         /* Resolution plots */
 //        AMaps_plots = true;
         AMaps_plots = false;
 
         /* Resolution plots */
-//        Resolution_plots = true;
-        Resolution_plots = false;
+        Resolution_plots = true;
+//        Resolution_plots = false;
 
         /* Multiplicity plots */
 //        Multiplicity_plots = true;
@@ -8233,6 +8233,20 @@ void EventAnalyser() {
                                                  "P^{reco}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TL_P_nFD_vs_Reco_P_nFD_1n",
                                                  Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_nRes_Plots,
                                                  numTH2Dbins_nRes_Plots);
+
+    hPlot1D hnRes_Match_Multi_1n = hPlot1D("1n", "FD", "Neutron resolution match multiplicity", "Neutron resolution match multiplicity", "Match multiplicity",
+                                           directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_nRes_Match_Multi_1n", 0, 10., 10);
+    hPlot2D hnRes_Match_Multi_vs_Reco_P_nFD_1n = hPlot2D("1n", "FD", "Match multiplicity vs. P^{reco}_{nFD}", "Match multiplicity vs. P^{reco}_{nFD}", "Match multiplicity",
+                                                         "P^{reco}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                         "00XX_nRes_Match_Multi_vs_Reco_P_nFD_1n", 0, 10., Momentum_lboundary, Momentum_uboundary, 10, 50);
+    hPlot2D hnRes_Match_Multi_vs_Reco_Theta_nFD_1n = hPlot2D("1n", "FD", "Match multiplicity vs. #theta^{reco}_{nFD}", "Match multiplicity vs. #theta^{reco}_{nFD}", "Match multiplicity",
+                                                             "#theta^{reco}_{nFD} [Deg]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                             "00XX_nRes_Match_Multi_vs_Reco_Theta_nFD_1n", 0, 10., Theta_lboundary_FD, Theta_uboundary_FD, 10, 50);
+    hPlot2D hnRes_Match_Multi_vs_Reco_Phi_nFD_1n = hPlot2D("1n", "FD", "Match multiplicity vs. #phi^{reco}_{nFD}", "Match multiplicity vs. #phi^{reco}_{nFD}", "Match "
+                                                                                                                                                                 "multiplicity",
+                                                             "#phi^{reco}_{nFD} [Deg]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                             "00XX_nRes_Match_Multi_vs_Reco_Phi_nFD_1n", 0, 10., Phi_lboundary, Phi_uboundary, 10, 50);
+
     //</editor-fold>
 
     //</editor-fold>
@@ -12770,7 +12784,10 @@ void EventAnalyser() {
                     auto mcpbank_nRes = c12->mcparts();
                     const Int_t Ngen_nRes = mcpbank_nRes->getRows();
 
-                    bool nResHasBeenFilled = false;
+                    int Match_counter = 0;
+                    double RecoNeutronP_Debug = P_n_1n_3v.Mag();
+                    double RecoNeutronTheta_Debug = P_n_1n_3v.Theta() * 180.0 / pi;
+                    double RecoNeutronPhi_Debug = P_n_1n_3v.Phi() * 180.0 / pi;
 
                     for (Int_t i = 0; i < Ngen_nRes; i++) {
                         mcpbank_nRes->setEntry(i);
@@ -12781,9 +12798,9 @@ void EventAnalyser() {
                         double TLNeutronPhi = atan2(mcpbank_nRes->getPy(), mcpbank_nRes->getPx()) * 180.0 / pi;
 
                         /* Reco neutron kinematic variables */
-                        double RecoNeutronP = P_n_1n_3v.Mag();
-                        double RecoNeutronTheta = P_n_1n_3v.Theta() * 180.0 / pi;
-                        double RecoNeutronPhi = P_n_1n_3v.Phi() * 180.0 / pi;
+                        double RecoNeutronP = RecoNeutronP_Debug;
+                        double RecoNeutronTheta = RecoNeutronTheta_Debug;
+                        double RecoNeutronPhi = RecoNeutronPhi_Debug;
 
                         /* TL-Reco angle difference */
                         double dNeutronTheta = TLNeutronTheta - RecoNeutronTheta;
@@ -12837,9 +12854,7 @@ void EventAnalyser() {
                             }
 
                             if (nRes_Pass_dThetaCut && nRes_Pass_dPhiCut) {
-//                                if (nResHasBeenFilled) {
-//                                    cout << "\nnRes has already been filled! Exiting...\n\n", exit(0);
-//                                }
+                                ++Match_counter;
 
                                 /* Plots for TL neutrons passing matching cuts */
                                 hTheta_nFD_TL_MatchedN_1n.hFill(TLNeutronTheta, Weight);
@@ -12849,8 +12864,6 @@ void EventAnalyser() {
                                 /* Filling nRes plots */
                                 double nResolution = (TLNeutronP - RecoNeutronP) / TLNeutronP;
                                 nRes.hFillResPlotsByType(TLNeutronP, RecoNeutronP, nResolution, Weight);
-                                nResHasBeenFilled = true;
-//                                break;
 
                                 hP_nFD_Res_1n.hFill(nResolution, Weight);
                                 hP_nFD_Res_VS_TL_P_nFD_1n->Fill(TLNeutronP, nResolution, Weight);
@@ -12861,6 +12874,7 @@ void EventAnalyser() {
                                 hTL_P_nFD_nRes_1n.hFill(TLNeutronP, Weight);
                                 hTL_P_nFD_vs_Reco_P_nFD_1n.hFill(TLNeutronP, RecoNeutronP, Weight);
 
+                                //<editor-fold desc="TO FINISH!">
                                 bool ECIN_HIT = (n_1n->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
                                 bool ECOUT_HIT = (n_1n->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
                                 auto Detlayer_1n = ECIN_HIT ? clas12::ECIN : clas12::ECOUT; // determine the earliest layer of the neutral hit
@@ -12899,6 +12913,8 @@ void EventAnalyser() {
 //                                double TOF_error = -(RecoNeutronTOF * (1 - beta_n * beta_n)) * nResolution;
                                 hTOF_error_1n.hFill(TOF_error, Weight);
                                 hTOF_error_VS_TL_P_nFD_1n.hFill(TOF_error, TLNeutronP, Weight);
+                                //</editor-fold>
+
                             }
                         }
 
@@ -12913,6 +12929,13 @@ void EventAnalyser() {
                                 hP_nFD_Res_VS_Reco_P_nFD_noKC_1n->Fill(RecoNeutronP, nResolution, Weight);
                             }
                         }
+                    } // end of for loop over TL particles
+
+                    if (Match_counter != 0) {
+                        hnRes_Match_Multi_1n.hFill(Match_counter, Weight);
+                        hnRes_Match_Multi_vs_Reco_P_nFD_1n.hFill(Match_counter, RecoNeutronP_Debug, Weight);
+                        hnRes_Match_Multi_vs_Reco_Theta_nFD_1n.hFill(Match_counter, RecoNeutronTheta_Debug, Weight);
+                        hnRes_Match_Multi_vs_Reco_Phi_nFD_1n.hFill(Match_counter, RecoNeutronPhi_Debug, Weight);
                     }
                 } // end of resolution calculation if
                 //</editor-fold>
@@ -20190,6 +20213,11 @@ void EventAnalyser() {
 
         hTOF_error_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
         hTOF_error_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+
+        hnRes_Match_Multi_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
+        hnRes_Match_Multi_vs_Reco_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+        hnRes_Match_Multi_vs_Reco_Theta_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+        hnRes_Match_Multi_vs_Reco_Phi_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
         //</editor-fold>
 
     } else {
