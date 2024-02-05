@@ -113,26 +113,21 @@ public:
 
     void FDNeutralParticle(vector <region_part_ptr> allParticles, vector<int> &ID_Neutrons_FD, vector<int> &ID_Photons_FD);
 
-    void FDNeutralParticle(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons, vector<int> &ID_Neutrons_FD,
-                           vector<int> &ID_Photons_FD, const DSCuts &Neutron_veto_cut, const double &beamE);
-
 // FDNeutralParticleID function ------------------------------------------------------------------------------------------------------------------
 
-    void FDNeutralParticleID(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons, vector<int> &FD_Neutrons_within_PID_cuts,
-                             vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th, vector<int> &FD_Photons_within_th,
-                             vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th, DSCuts &Neutron_veto_cut, const double &beamE,
-                             const double &ECAL_V_edge_cut, const double &ECAL_W_edge_cut, const bool &apply_nucleon_cuts);
+    void FDNeutralParticleID(vector <region_part_ptr> allParticles, vector <region_part_ptr> electrons, vector<int> &FD_Neutrons_within_PID_cuts, vector<int> &ID_Neutrons_FD,
+                             DSCuts &Neutron_momentum_th, vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th, DSCuts &Neutron_veto_cut,
+                             const double &beamE, const double &ECAL_V_edge_cut, const double &ECAL_W_edge_cut, const bool &apply_nucleon_cuts);
 
-    void FDNeutralParticleID(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, vector<int> &ID_Neutrons_FD,
-                             DSCuts &Neutron_momentum_th, vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD,
-                             DSCuts &Photon_momentum_th, const bool &apply_nucleon_cuts);
+    void FDNeutralParticleID(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th,
+                             vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th, const bool &apply_nucleon_cuts);
 
 // GetLnFDIndex function ------------------------------------------------------------------------------------------------------------------------
 
     int GetLnFDIndex(vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, const bool &apply_nucleon_cuts);
 
-    int GetCorrLnFDIndex(MomentumResolution &nRes, vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th,
-                         const bool &apply_nucleon_cuts, const bool &apply_nucleon_SmearAndCorr);
+    int GetCorrLnFDIndex(MomentumResolution &nRes, vector <region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, const bool &apply_nucleon_cuts,
+                         const bool &apply_nucleon_SmearAndCorr);
 
 // GetFDNeutronP function ------------------------------------------------------------------------------------------------------------------------
 
@@ -152,20 +147,18 @@ public:
 
 // GetGoodProtons function -----------------------------------------------------------------------------------------------------------------------
 
-    vector<int> GetGoodProtons(const bool &apply_nucleon_cuts, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind,
-                               const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p);
+    vector<int> GetGoodProtons(const bool &apply_nucleon_cuts, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind, const DSCuts &Theta_p1_cuts_2p,
+                               const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p);
 
-    void SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, string CToF_hits_monitoring_2p_Directory,
-                              string Double_detection_monitoring_2p_Directory);
+    void SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, string CToF_hits_monitoring_2p_Directory, string Double_detection_monitoring_2p_Directory);
 
-    void GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind,
-                      const vector<int> &Protons_ind, const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p,
-                      const double &Weight);
+    void GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind, const vector<int> &Protons_ind,
+                      const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p, const double &Weight);
 
 // nParticleID function --------------------------------------------------------------------------------------------------------------------------
 
-    void nParticleID(vector <region_part_ptr> &allParticles, vector<int> &ID_Neutrons_FD, const DSCuts &Neutron_momentum_th,
-                     vector<int> &ID_Photons_FD, const DSCuts &Photon_momentum_th, const bool &apply_nucleon_cuts);
+    void nParticleID(vector <region_part_ptr> &allParticles, vector<int> &ID_Neutrons_FD, const DSCuts &Neutron_momentum_th, vector<int> &ID_Photons_FD,
+                     const DSCuts &Photon_momentum_th, const bool &apply_nucleon_cuts);
 
 // Fill neutron multiplicity plots functions -----------------------------------------------------------------------------------------------------
 
@@ -173,21 +166,19 @@ public:
 
     // Neutrons by CLAS12 PID
     void FillNeutMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &Weight, const double &beamE,
-                            const double &ECAL_veto_cut, hPlot1D &hNeutronMulti_BPID_BV, hPlot1D &hNeutronMulti_BPID_AV,
-                            vector <region_part_ptr> &Neutrons_BPID, hPlot1D &hNeutronMulti_APID_BV, hPlot1D &hNeutronMulti_APID_AV,
-                            vector <region_part_ptr> &Neutrons_APID);
+                            const double &ECAL_veto_cut, hPlot1D &hNeutronMulti_BPID_BV, hPlot1D &hNeutronMulti_BPID_AV, vector <region_part_ptr> &Neutrons_BPID,
+                            hPlot1D &hNeutronMulti_APID_BV, hPlot1D &hNeutronMulti_APID_AV, vector <region_part_ptr> &Neutrons_APID);
 
-    void FillMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &Weight, const double &beamE,
-                        const double &ECAL_veto_cut, hPlot1D &hNeutronMulti_BV, hPlot1D &hNeutronMulti_AV, vector <region_part_ptr> &Neutrons);
+    void FillMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &Weight, const double &beamE, const double &ECAL_veto_cut,
+                        hPlot1D &hNeutronMulti_BV, hPlot1D &hNeutronMulti_AV, vector <region_part_ptr> &Neutrons);
 
     // Neutrons by redefinition
     void FillNeutMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &Weight, const double &beamE,
-                            const double &ECAL_veto_cut, hPlot1D &hNeutronMulti_BPID_BV, hPlot1D &hNeutronMulti_BPID_AV,
-                            vector<int> &Neutrons_BPID, hPlot1D &hNeutronMulti_APID_BV, hPlot1D &hNeutronMulti_APID_AV,
-                            vector<int> &Neutrons_APID);
+                            const double &ECAL_veto_cut, hPlot1D &hNeutronMulti_BPID_BV, hPlot1D &hNeutronMulti_BPID_AV, vector<int> &Neutrons_BPID,
+                            hPlot1D &hNeutronMulti_APID_BV, hPlot1D &hNeutronMulti_APID_AV, vector<int> &Neutrons_APID);
 
-    void FillMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &Weight, const double &beamE,
-                        const double &ECAL_veto_cut, hPlot1D &hNeutronMulti_BV, hPlot1D &hNeutronMulti_AV, vector<int> &Neutrons_indices);
+    void FillMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &Weight, const double &beamE, const double &ECAL_veto_cut,
+                        hPlot1D &hNeutronMulti_BV, hPlot1D &hNeutronMulti_AV, vector<int> &Neutrons_indices);
 
 };
 

@@ -14,9 +14,9 @@ using namespace std;
 
 class Directories {
 private:
-// Private attributes ---------------------------------------------------------------------------------------------------------------------------------------------------
-
     string Plots_Folder;
+
+    bool ClearOldDirectories = true; // Clear old directories by default
 
     //<editor-fold desc="Cut parameters plots directories">
 
@@ -543,7 +543,7 @@ public:
 
 // Constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    Directories(const string &plots_path = "./plots");
+    Directories(const string &plots_path = "./plots", const bool Clear_Old_Directories = true);
 
 };
 

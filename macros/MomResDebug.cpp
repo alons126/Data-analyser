@@ -17,17 +17,20 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
-#include "source/functions/GeneralFunctions.h"
-#include "source/constants.h"
-#include "source/classes/MomentumResolution/MomentumResolution.cpp"
+#define MomResDebugMacro true
+
+#include "../source/functions/GeneralFunctions.h"
+#include "../source/constants.h"
+#include "../source/classes/MomentumResolution/MomentumResolution.cpp"
 
 using namespace std;
+
+/* clas12root macros/MomResDebug.cpp -q */
 
 vector<TH1D *> SliceLoader(const char *filename, vector<int> &SliceNumbers) {
     bool PrintOut = false;
 
-    TFile *file = new TFile("C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1"
-                            "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root");
+    TFile *file = new TFile(filename);
     if (!file) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
 
     vector < TH1D * > MomResSlices;
@@ -102,22 +105,19 @@ void MomResDebug() {
     system(("mkdir -p " + MomResDebugSaveDir).c_str());
 
     vector<int> SliceNumbers;
-    const char *filename = "C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1"
-                           "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+    const char *filename = "Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    const char *filename = "C12x4_simulation_G18_Q204_6GeV_S03ACNC_momResS1_Eff1"
+//                           "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     vector < TH1D * > MomResSlices = SliceLoader(filename, SliceNumbers);
     //</editor-fold>
 
-    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1.,
-                                            3.); // new upper cut, following Larry meeting (10/08/23)
+    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., 2.5); // new upper cut, following Larry meeting (10/08/23)
+    DSCuts FD_nucleon_momentum_cut_nRes = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., 2.2); // new upper cut, following Larry meeting (10/08/23)
     double beamE = 5.98636;
     MomentumResolution nRes("Neutron");
 
-    nRes.MomResInit(true, false, false, "C12x4_simulation_G18_Q204_6GeV", MomResDebugSaveDir, beamE, FD_nucleon_momentum_cut,
+    nRes.MomResInit(true, false, false, "C12x4_simulation_G18_Q204_6GeV", MomResDebugSaveDir, beamE, FD_nucleon_momentum_cut_nRes,
                     0.4, MomResDebugSaveDir, MomResDebugSaveDir, 0.05, true, "pol1_wKC", "pol3_wKC", false, false, true);
-//    nRes.MomResInit(plot_and_fit_MomRes, Calculate_momResS2, Run_with_momResS2, VaryingSampleName, NucleonCutsDirectory, beamE,
-//                    FD_nucleon_momentum_cut, n_mom_th.GetLowerCut(), MomentumResolutionDirectory,
-//                    directories.Resolution_Directory_map["nRes_plots_1n_Directory"], DeltaSlices, VaryingDelta, SmearMode, CorrMode,
-//                    momRes_test);
 
     string MomentumType = "reco";
     vector <vector<double>> ResRecoMomSlicesLimits = nRes.GetResRecoMomSlicesLimits();
@@ -217,8 +217,8 @@ void MomResDebug() {
                         }
             */
 
-//            hSlice->Fit("fit","W");
-            hSlice->Fit("fit");
+//            hSlice->Fit("fit");
+            hSlice->Fit("fit","W");
             hSlice->SetLineColor(kBlue);
             hSlice->SetLineWidth(2);
 

@@ -198,6 +198,8 @@ void PoliFitter() {
 
     double A = f->GetParameter(0); // get [0]
     double B = f->GetParameter(1); // get [1]
+    double B = f->GetParameter(1); // get [1]
+    double B = f->GetParameter(1); // get [1]
     double C = f->GetParameter(2); // get [2]
 
     double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;

@@ -6,152 +6,13 @@
 
 // ConfigureStatuses function ------------------------------------------------------------------------------------------------------------------------------------
 
-////<editor-fold desc="ConfigureStatuses">
-//void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool &clas12ana_particles, const bool &only_preselection_cuts,
-//                                             const bool &apply_chi2_cuts_1e_cut, const bool &only_electron_quality_cuts,
-//                                             const bool &apply_nucleon_cuts, const bool &Enable_FD_photons, const bool &apply_nucleon_SmearAndCorr,
-//                                             const bool &apply_kinematical_cuts, const bool &apply_kinematical_weights,
-//                                             const bool &apply_fiducial_cuts, const bool &Generate_AMaps, const bool &plot_and_fit_MomRes,
-//                                             const bool &VaryingDelta, const bool &Calculate_momResS2, const bool &Run_in_momResS2,
-//                                             const bool &nRes_test, const bool &Rec_wTL_ES, const bool &ZoomIn_On_mom_th_plots) {
-//    if (Custom_cuts_naming) {
-//
-//        //<editor-fold desc="Status additions">
-//        if (!clas12ana_particles) { Clas12ana_particles_status = "_no_clas12ana"; }
-//
-//        if (only_preselection_cuts) { Preselection_Cuts_Status = "_Preselection_Cuts"; }
-//
-//        if (only_electron_quality_cuts) { Electron_Quality_Cuts_Status = "_eQC"; }
-//
-//        if (apply_nucleon_cuts) {
-//            Nucleon_Cuts_Status = "N1";
-//        } else {
-//            Nucleon_Cuts_Status = "N0";
-//        }
-//
-//        if (Enable_FD_photons) {
-//            FD_photons_Status = "FDph1";
-//        } else {
-//            FD_photons_Status = "";
-//        }
-//
-//        if (!apply_nucleon_cuts) {
-//            Efficiency_Status = "";
-//        } else {
-//            if (Rec_wTL_ES) {
-//                if (ZoomIn_On_mom_th_plots) {
-//                    Efficiency_Status = "Eff_ZoomIn";
-//                } else {
-//                    Efficiency_Status = "_Eff";
-//                }
-//            }
-//        }
-//
-//        if (apply_nucleon_SmearAndCorr) {
-//            PSmearing_Status = "R1";
-//        } else {
-//            PSmearing_Status = "R0";
-//        }
-//
-//        if (apply_kinematical_cuts) {
-//            KinCuts_Status = "K1";
-//        } else {
-//            KinCuts_Status = "k0";
-//        }
-//
-//        if (apply_kinematical_weights) {
-//            KinWei_Status = "W1";
-//        } else {
-//            KinWei_Status = "W0";
-//        }
-//
-//        if (apply_fiducial_cuts) {
-//            FiducialCuts_Status = "F1";
-//        } else {
-//            FiducialCuts_Status = "F0";
-//        }
-//
-//        if (apply_chi2_cuts_1e_cut) {
-//            if (!Generate_AMaps && !plot_and_fit_MomRes) {
-//                Additional_Status = "";
-//            } else if (Generate_AMaps && !plot_and_fit_MomRes) {
-//                Additional_Status = "_AMaps";
-//            } else if (!Generate_AMaps && plot_and_fit_MomRes) {
-//                if (!VaryingDelta) {
-//                    Additional_Status = "_momResSS";
-//                } else {
-//                    if (!Calculate_momResS2) {
-//                        if (!nRes_test) {
-//                            if (!Run_in_momResS2) {
-//                                Additional_Status = "_momResS1";
-//                            } else {
-//                                Additional_Status = "_momResS2R"; // R for Run
-//                            }
-//                        } else {
-//                            if (!Run_in_momResS2) {
-//                                Additional_Status = "_momResS1T";
-//                            } else {
-//                                Additional_Status = "_momResS2RT"; // R for Run; T for Test
-//                            }
-//                        }
-//                    } else {
-//                        if (!nRes_test) {
-//                            Additional_Status = "_momResS2";
-//                        } else {
-//                            Additional_Status = "_momResS2T"; // T for Test
-//                        }
-//                    }
-//                }
-//            } else if (Generate_AMaps && plot_and_fit_MomRes) {
-//                if (!VaryingDelta) {
-//                    Additional_Status = "_momResSS_AMaps";
-//                } else {
-//                    if (!Calculate_momResS2) {
-//                        if (!nRes_test) {
-//                            if (!Run_in_momResS2) {
-//                                Additional_Status = "_momResS1";
-//                            } else {
-//                                Additional_Status = "_momResS2R";
-//                            }
-//                        } else {
-//                            if (!Run_in_momResS2) {
-//                                Additional_Status = "_momResS1T";
-//                            } else {
-//                                Additional_Status = "_momResS2RT";
-//                            }
-//                        }
-//                    } else {
-//                        if (!nRes_test) {
-//                            Additional_Status = "_momResS2";
-//                        } else {
-//                            Additional_Status = "_momResS2T";
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            Additional_Status = "";
-//        }
-//        //</editor-fold>
-//
-//    }
-//
-//    Added_PreStatuses = Clas12ana_particles_status + Preselection_Cuts_Status + Electron_Quality_Cuts_Status;
-//
-//    Added_Statuses = Preselection_Cuts_Status + Electron_Quality_Cuts_Status +
-//                     Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status + PSmearing_Status + FiducialCuts_Status + KinCuts_Status +
-//                     KinWei_Status + Additional_Status;
-//}
-////</editor-fold>
-
-//<editor-fold desc="ConfigureStatuses (original)">
-void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool &clas12ana_particles, const bool &only_preselection_cuts,
-                                             const bool &apply_chi2_cuts_1e_cut, const bool &only_electron_quality_cuts,
-                                             const bool &apply_nucleon_cuts, const bool &Enable_FD_photons, const bool &apply_nucleon_SmearAndCorr,
-                                             const bool &apply_kinematical_cuts, const bool &apply_kinematical_weights,
-                                             const bool &apply_fiducial_cuts, const bool &Generate_AMaps, const bool &plot_and_fit_MomRes,
-                                             const bool &VaryingDelta, const bool &Calculate_momResS2, const bool &Run_in_momResS2,
-                                             const bool &nRes_test, const bool &Rec_wTL_ES, const bool &ZoomIn_On_mom_th_plots) {
+//<editor-fold desc="ConfigureStatuses">
+void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool &clas12ana_particles, const bool &only_preselection_cuts, const bool &apply_chi2_cuts_1e_cut,
+                                             const bool &only_electron_quality_cuts, const bool &apply_nucleon_cuts, const bool &Enable_FD_photons,
+                                             const bool &apply_nucleon_SmearAndCorr, const bool &apply_kinematical_cuts, const bool &apply_kinematical_weights,
+                                             const bool &apply_fiducial_cuts, const bool &Generate_AMaps, const bool &plot_and_fit_MomRes, const bool &VaryingDelta,
+                                             const bool &Calculate_momResS2, const bool &Run_in_momResS2, const bool &nRes_test, const bool &Rec_wTL_ES,
+                                             const bool &ZoomIn_On_mom_th_plots) {
     if (Custom_cuts_naming) {
 
         //<editor-fold desc="Status additions">
@@ -186,7 +47,7 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
         } else {
             if (Rec_wTL_ES) {
                 if (ZoomIn_On_mom_th_plots) {
-                    Efficiency_Status = "EffCalc_ZoomIn";
+                    Efficiency_Status = "_EffwZoomIn";
                 } else {
                     Efficiency_Status = "_Eff";
                 }
@@ -294,8 +155,8 @@ void CustomPlotsDirectory::ConfigureStatuses(const bool &apply_cuts, const bool 
 // SetPaths function -----------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SetPaths function">
-void CustomPlotsDirectory::SetPaths(const string &WorkingDirectory, const string &SampleName, const string &plots_path,
-                                    const bool &apply_cuts, const bool &apply_chi2_cuts_1e_cut, const bool &apply_nucleon_cuts) {
+void CustomPlotsDirectory::SetPaths(const string &WorkingDirectory, const string &SampleName, const string &plots_path, const bool &apply_cuts,
+                                    const bool &apply_chi2_cuts_1e_cut, const bool &apply_nucleon_cuts) {
     string run, Global_Run_Status_Local;
 
     if (Global_Run_Status == "") {
