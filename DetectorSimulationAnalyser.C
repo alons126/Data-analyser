@@ -130,15 +130,15 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
-    const bool ForceSmallpResLimits = false; // 1st momResS1 w/ VaryingDelta = false
+    bool ForceSmallpResLimits = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
-    bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
-    bool momRes_test = true; // false by default
+    bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
+    bool momRes_test = false; // false by default
     /*
     MomRes run order guide:
     1. momResS1 calculation 1:
@@ -147,6 +147,11 @@ void EventAnalyser() {
     3. momResS2 calculation:    VaryingDelta = true , plot_and_fit_MomRes = true  , Calculate_momResS2 = true  , Run_with_momResS2 = false
     4. momResS2 run:            VaryingDelta = true , plot_and_fit_MomRes = false , Calculate_momResS2 = false , Run_with_momResS2 = true
     */
+
+    //<editor-fold desc="Auto-disable variables">
+    if (plot_and_fit_MomRes && (Calculate_momResS2 || Run_with_momResS2)) { ForceSmallpResLimits = false; }
+    //</editor-fold>
+
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -188,10 +193,10 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndCorr = true;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
+    bool apply_nucleon_SmearAndCorr = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -8076,21 +8081,47 @@ void EventAnalyser() {
                                                     numTH2Dbins_nRes_Plots, Phi_lboundary, Phi_uboundary, numTH2Dbins_nRes_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_pFD_TL_VS_Phi_pFD_TL_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
 
-    hPlot1D hP_pFD_Res_1p = hPlot1D("1p", "", "P_{pFD} resolution AC", "FD proton P_{pFD} resolution AC", "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
+    hPlot1D hP_pFD_Res_1p = hPlot1D("1p", "", "R_{pFD}", "FD neutron R_{pFD}", "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}",
                                     directories.Resolution_Directory_map["Resolution_1p_Directory"], "04_P_pFD_Res_1p", -2, 2, numTH1Dbins_nRes_Plots);
-    TH2D *hP_pFD_Res_VS_TL_P_pFD_1p = new TH2D("P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD)",
-                                               "P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD);P^{truth}_{pFD} [GeV/c];"
-                                               "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+    TH2D *hP_pFD_Res_VS_TL_P_pFD_1p = new TH2D("R_{pFD} vs. P^{truth}_{pFD} (1p, FD)",
+                                               "R_{pFD} vs. P^{truth}_{pFD} (1p, FD);P^{truth}_{pFD} [GeV/c];"
+                                               "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
                                                numTH2Dbins_nRes_Plots, -1.1, 1.1);
-    TH2D *hP_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p = new TH2D("P_{pFD} resolution AC vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)",
-                                                      "P_{pFD} resolution AC vs. P^{truth}_{pFD} - ZOOMIN (1p, FD);P^{truth}_{pFD} [GeV/c];"
-                                                      "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots,
+    TH2D *hP_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p = new TH2D("R_{pFD} vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)",
+                                                      "R_{pFD} vs. P^{truth}_{pFD} - ZOOMIN (1p, FD);P^{truth}_{pFD} [GeV/c];"
+                                                      "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots,
                                                       FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(), numTH2Dbins_nRes_Plots, -0.75, 0.75);
-    TH2D *hP_pFD_Res_VS_TL_P_pFD_noKC_1p = new TH2D("P_{pFD} resolution AC vs. P^{truth}_{pFD} no mom. KC (1p, FD)",
-                                                    "P_{pFD} resolution AC vs. P^{truth}_{pFD} no mom. KC (1p, FD);P^{truth}_{pFD} [GeV/c];"
-                                                    "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+    TH2D *hP_pFD_Res_VS_TL_P_pFD_noKC_1p = new TH2D("R_{pFD} vs. P^{truth}_{pFD} no mom. KC (1p, FD)",
+                                                    "R_{pFD} vs. P^{truth}_{pFD} no mom. KC (1p, FD);P^{truth}_{pFD} [GeV/c];"
+                                                    "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
                                                     numTH2Dbins_nRes_Plots, -1.1, 1.1);
+    TH2D *hP_pFD_Res_VS_Reco_P_pFD_1p = new TH2D("R_{pFD} vs. P^{reco}_{pFD} (1p, FD)",
+                                                 "R_{pFD} vs. P^{reco}_{pFD} (1p, FD);P^{reco}_{pFD} [GeV/c];"
+                                                 "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                                 numTH2Dbins_nRes_Plots, -1.1, 1.1);
+    TH2D *hP_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p = new TH2D("R_{pFD} vs. P^{reco}_{pFD} - ZOOMIN (1p, FD)",
+                                                        "R_{pFD} vs. P^{reco}_{pFD} - ZOOMIN (1p, FD);P^{reco}_{pFD} [GeV/c];"
+                                                        "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots,
+                                                        FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(), numTH2Dbins_nRes_Plots, -0.75, 0.75);
+    TH2D *hP_pFD_Res_VS_Reco_P_pFD_noKC_1p = new TH2D("R_{pFD} vs. P^{reco}_{pFD} no mom. KC (1p, FD)",
+                                                      "R_{pFD} vs. P^{reco}_{pFD} no mom. KC (1p, FD);P^{reco}_{pFD} [GeV/c];"
+                                                      "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                                      numTH2Dbins_nRes_Plots, -1.1, 1.1);
+    TH2D *hP_pFD_Res_VS_Smear_Reco_P_pFD_1p = new TH2D("R_{pFD} vs. smeared P^{reco}_{pFD} (1p, FD)",
+                                                       "R_{pFD} vs. smeared P^{reco}_{pFD} (1p, FD);Smeared P^{reco}_{pFD} [GeV/c];"
+                                                       "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                                       numTH2Dbins_nRes_Plots, -1.1, 1.1);
+    TH2D *hP_pFD_Res_VS_Smear_Reco_P_pFD_ZOOMIN_1p = new TH2D("R_{pFD} vs. smeared P^{reco}_{pFD} - ZOOMIN (1p, FD)",
+                                                              "R_{pFD} vs. smeared P^{reco}_{pFD} - ZOOMIN (1p, FD);Smeared P^{reco}_{pFD} [GeV/c];"
+                                                              "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots,
+                                                              FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(), numTH2Dbins_nRes_Plots, -0.75,
+                                                              0.75);
+    TH2D *hP_pFD_Res_VS_Smear_Reco_P_pFD_noKC_1p = new TH2D("R_{pFD} vs. smeared P^{reco}_{pFD} no mom. KC (1p, FD)",
+                                                            "R_{pFD} vs. smeared P^{reco}_{pFD} no mom. KC (1p, FD);Smeared P^{reco}_{pFD} [GeV/c];"
+                                                            "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                                            numTH2Dbins_nRes_Plots, -1.1, 1.1);
     string hP_pFD_Res_VS_TL_P_pFD_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
+    string hP_pFD_Res_VS_Reco_P_pFD_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
 
     hPlot1D hReco_P_pFD_pRes_1p = hPlot1D("1p", "FD", "Reco P_{pFD} used in pRes", "Reco P_{pFD} used in pRes", "P_{pFD} [GeV/c]",
                                           directories.Resolution_Directory_map["Resolution_1p_Directory"], "06a_Reco_P_pFD_used_in_pRes_1p", Momentum_lboundary,
@@ -8098,6 +8129,15 @@ void EventAnalyser() {
     hPlot1D hTL_P_pFD_pRes_1p = hPlot1D("1p", "FD", "TL P_{pFD} used in pRes", "TL P_{pFD} used in pRes", "P_{pFD} [GeV/c]",
                                         directories.Resolution_Directory_map["Resolution_1p_Directory"], "06b_TL_P_pFD_used_in_pRes_1p", Momentum_lboundary,
                                         Momentum_uboundary, numTH1Dbins);
+
+    hPlot2D hTL_P_pFD_vs_Reco_P_pFD_1p = hPlot2D("1p", "FD", "P^{truth}_{pFD} vs. P^{reco}_{pFD}", "P^{truth}_{pFD} vs. P^{reco}_{pFD}", "P^{truth}_{pFD} [GeV/c]",
+                                                 "P^{reco}_{pFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1p_Directory"], "00XX_TL_P_pFD_vs_Reco_P_pFD_1p",
+                                                 Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_nRes_Plots,
+                                                 numTH2Dbins_nRes_Plots);
+    hPlot2D hTL_P_pFD_vs_Smear_Reco_P_pFD_1p = hPlot2D("1p", "FD", "P^{truth}_{pFD} vs. smeared P^{reco}_{pFD}", "P^{truth}_{pFD} vs. smeared P^{reco}_{pFD}",
+                                                      "P^{truth}_{pFD} [GeV/c]", "Smeared P^{reco}_{pFD} [GeV/c]",
+                                                      directories.Resolution_Directory_map["Resolution_1p_Directory"], "00XX_TL_P_pFD_vs_Reco_P_pFD_1p", Momentum_lboundary,
+                                                      Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_nRes_Plots, numTH2Dbins_nRes_Plots);
     //</editor-fold>
 
     //<editor-fold desc="Resolution histograms (1n)">
@@ -8157,32 +8197,45 @@ void EventAnalyser() {
                                                              Theta_uboundary_FD);
     string hTheta_nFD_TL_VS_Phi_nFD_TL_MatchedN_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
-    hPlot1D hP_nFD_Res_1n = hPlot1D("1n", "", "P_{nFD} resolution AC", "FD neutron P_{nFD} resolution AC", "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
+    hPlot1D hP_nFD_Res_1n = hPlot1D("1n", "", "R_{nFD}", "FD neutron R_{nFD}", "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}",
                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "04_P_nFD_Res_1n", -2, 2, numTH1Dbins_nRes_Plots);
-    TH2D *hP_nFD_Res_VS_TL_P_nFD_1n = new TH2D("P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD)",
-                                               "P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD);P^{truth}_{nFD} [GeV/c];"
-                                               "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+    TH2D *hP_nFD_Res_VS_TL_P_nFD_1n = new TH2D("R_{nFD} vs. P^{truth}_{nFD} (1n, FD)",
+                                               "R_{nFD} vs. P^{truth}_{nFD} (1n, FD);P^{truth}_{nFD} [GeV/c];"
+                                               "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
                                                numTH2Dbins_nRes_Plots, -1.1, 1.1);
-    TH2D *hP_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n = new TH2D("P_{nFD} resolution AC vs. P^{truth}_{nFD} - ZOOMIN (1n, FD)",
-                                                      "P_{nFD} resolution AC vs. P^{truth}_{nFD} - ZOOMIN (1n, FD);P^{truth}_{nFD} [GeV/c];"
-                                                      "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots,
+    TH2D *hP_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n = new TH2D("R_{nFD} vs. P^{truth}_{nFD} - ZOOMIN (1n, FD)",
+                                                      "R_{nFD} vs. P^{truth}_{nFD} - ZOOMIN (1n, FD);P^{truth}_{nFD} [GeV/c];"
+                                                      "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots,
                                                       FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(), numTH2Dbins_nRes_Plots, -0.75, 0.75);
-    TH2D *hP_nFD_Res_VS_TL_P_nFD_noKC_1n = new TH2D("P_{nFD} resolution AC vs. P^{truth}_{nFD} no mom. KC (1n, FD)",
-                                                    "P_{nFD} resolution AC vs. P^{truth}_{nFD} no mom. KC (1n, FD);P^{truth}_{nFD} [GeV/c];"
-                                                    "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+    TH2D *hP_nFD_Res_VS_TL_P_nFD_noKC_1n = new TH2D("R_{nFD} vs. P^{truth}_{nFD} no mom. KC (1n, FD)",
+                                                    "R_{nFD} vs. P^{truth}_{nFD} no mom. KC (1n, FD);P^{truth}_{nFD} [GeV/c];"
+                                                    "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
                                                     numTH2Dbins_nRes_Plots, -1.1, 1.1);
-    TH2D *hP_nFD_Res_VS_Reco_P_nFD_1n = new TH2D("P_{nFD} resolution AC vs. P^{reco}_{nFD} (1n, FD)",
-                                                 "P_{nFD} resolution AC vs. P^{reco}_{nFD} (1n, FD);P^{reco}_{nFD} [GeV/c];"
-                                                 "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+    TH2D *hP_nFD_Res_VS_Reco_P_nFD_1n = new TH2D("R_{nFD} vs. P^{reco}_{nFD} (1n, FD)",
+                                                 "R_{nFD} vs. P^{reco}_{nFD} (1n, FD);P^{reco}_{nFD} [GeV/c];"
+                                                 "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
                                                  numTH2Dbins_nRes_Plots, -1.1, 1.1);
-    TH2D *hP_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n = new TH2D("P_{nFD} resolution AC vs. P^{reco}_{nFD} - ZOOMIN (1n, FD)",
-                                                        "P_{nFD} resolution AC vs. P^{reco}_{nFD} - ZOOMIN (1n, FD);P^{reco}_{nFD} [GeV/c];"
-                                                        "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots,
+    TH2D *hP_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n = new TH2D("R_{nFD} vs. P^{reco}_{nFD} - ZOOMIN (1n, FD)",
+                                                        "R_{nFD} vs. P^{reco}_{nFD} - ZOOMIN (1n, FD);P^{reco}_{nFD} [GeV/c];"
+                                                        "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots,
                                                         FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(), numTH2Dbins_nRes_Plots, -0.75, 0.75);
-    TH2D *hP_nFD_Res_VS_Reco_P_nFD_noKC_1n = new TH2D("P_{nFD} resolution AC vs. P^{reco}_{nFD} no mom. KC (1n, FD)",
-                                                      "P_{nFD} resolution AC vs. P^{reco}_{nFD} no mom. KC (1n, FD);P^{reco}_{nFD} [GeV/c];"
-                                                      "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+    TH2D *hP_nFD_Res_VS_Reco_P_nFD_noKC_1n = new TH2D("R_{nFD} vs. P^{reco}_{nFD} no mom. KC (1n, FD)",
+                                                      "R_{nFD} vs. P^{reco}_{nFD} no mom. KC (1n, FD);P^{reco}_{nFD} [GeV/c];"
+                                                      "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
                                                       numTH2Dbins_nRes_Plots, -1.1, 1.1);
+    TH2D *hP_nFD_Res_VS_Corr_Reco_P_nFD_1n = new TH2D("R_{nFD} vs. corrected P^{reco}_{nFD} (1n, FD)",
+                                                      "R_{nFD} vs. corrected P^{reco}_{nFD} (1n, FD);Corrected P^{reco}_{nFD} [GeV/c];"
+                                                      "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                                      numTH2Dbins_nRes_Plots, -1.1, 1.1);
+    TH2D *hP_nFD_Res_VS_Corr_Reco_P_nFD_ZOOMIN_1n = new TH2D("R_{nFD} vs. corrected P^{reco}_{nFD} - ZOOMIN (1n, FD)",
+                                                             "R_{nFD} vs. corrected P^{reco}_{nFD} - ZOOMIN (1n, FD);Corrected P^{reco}_{nFD} [GeV/c];"
+                                                             "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots,
+                                                             FD_nucleon_momentum_cut.GetLowerCut(), FD_nucleon_momentum_cut.GetUpperCut(), numTH2Dbins_nRes_Plots, -0.75,
+                                                             0.75);
+    TH2D *hP_nFD_Res_VS_Corr_Reco_P_nFD_noKC_1n = new TH2D("R_{nFD} vs. corrected P^{reco}_{nFD} no mom. KC (1n, FD)",
+                                                           "R_{nFD} vs. corrected P^{reco}_{nFD} no mom. KC (1n, FD);Corrected P^{reco}_{nFD} [GeV/c];"
+                                                           "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}", numTH2Dbins_nRes_Plots, 0, beamE * 1.1,
+                                                           numTH2Dbins_nRes_Plots, -1.1, 1.1);
     string hP_nFD_Res_VS_TL_P_nFD_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
     string hP_nFD_Res_VS_Reco_P_nFD_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
@@ -8233,19 +8286,24 @@ void EventAnalyser() {
                                                  "P^{reco}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TL_P_nFD_vs_Reco_P_nFD_1n",
                                                  Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_nRes_Plots,
                                                  numTH2Dbins_nRes_Plots);
+    hPlot2D hTL_P_nFD_vs_Corr_Reco_P_nFD_1n = hPlot2D("1n", "FD", "P^{truth}_{nFD} vs. corrected P^{reco}_{nFD}", "P^{truth}_{nFD} vs. corrected P^{reco}_{nFD}",
+                                                      "P^{truth}_{nFD} [GeV/c]", "Corrected P^{reco}_{nFD} [GeV/c]",
+                                                      directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TL_P_nFD_vs_Reco_P_nFD_1n", Momentum_lboundary,
+                                                      Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_nRes_Plots, numTH2Dbins_nRes_Plots);
 
     hPlot1D hnRes_Match_Multi_1n = hPlot1D("1n", "FD", "Neutron resolution match multiplicity", "Neutron resolution match multiplicity", "Match multiplicity",
                                            directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_nRes_Match_Multi_1n", 0, 10., 10);
     hPlot2D hnRes_Match_Multi_vs_Reco_P_nFD_1n = hPlot2D("1n", "FD", "Match multiplicity vs. P^{reco}_{nFD}", "Match multiplicity vs. P^{reco}_{nFD}", "Match multiplicity",
                                                          "P^{reco}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
                                                          "00XX_nRes_Match_Multi_vs_Reco_P_nFD_1n", 0, 10., Momentum_lboundary, Momentum_uboundary, 10, 50);
-    hPlot2D hnRes_Match_Multi_vs_Reco_Theta_nFD_1n = hPlot2D("1n", "FD", "Match multiplicity vs. #theta^{reco}_{nFD}", "Match multiplicity vs. #theta^{reco}_{nFD}", "Match multiplicity",
+    hPlot2D hnRes_Match_Multi_vs_Reco_Theta_nFD_1n = hPlot2D("1n", "FD", "Match multiplicity vs. #theta^{reco}_{nFD}", "Match multiplicity vs. #theta^{reco}_{nFD}",
+                                                             "Match multiplicity",
                                                              "#theta^{reco}_{nFD} [Deg]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
                                                              "00XX_nRes_Match_Multi_vs_Reco_Theta_nFD_1n", 0, 10., Theta_lboundary_FD, Theta_uboundary_FD, 10, 50);
     hPlot2D hnRes_Match_Multi_vs_Reco_Phi_nFD_1n = hPlot2D("1n", "FD", "Match multiplicity vs. #phi^{reco}_{nFD}", "Match multiplicity vs. #phi^{reco}_{nFD}", "Match "
-                                                                                                                                                                 "multiplicity",
-                                                             "#phi^{reco}_{nFD} [Deg]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                             "00XX_nRes_Match_Multi_vs_Reco_Phi_nFD_1n", 0, 10., Phi_lboundary, Phi_uboundary, 10, 50);
+                                                                                                                                                               "multiplicity",
+                                                           "#phi^{reco}_{nFD} [Deg]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                           "00XX_nRes_Match_Multi_vs_Reco_Phi_nFD_1n", 0, 10., Phi_lboundary, Phi_uboundary, 10, 50);
 
     //</editor-fold>
 
@@ -11992,8 +12050,14 @@ void EventAnalyser() {
                                 hP_pFD_Res_1p.hFill(pResolution, Weight);
                                 hP_pFD_Res_VS_TL_P_pFD_1p->Fill(TLProtonP, pResolution, Weight);
                                 hP_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p->Fill(TLProtonP, pResolution, Weight);
+                                hP_pFD_Res_VS_Reco_P_pFD_1p->Fill(ProtonMomBKC_1p, pResolution, Weight);
+                                hP_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p->Fill(ProtonMomBKC_1p, pResolution, Weight);
+                                hP_pFD_Res_VS_Smear_Reco_P_pFD_1p->Fill(RecoProtonP, pResolution, Weight);
+                                hP_pFD_Res_VS_Smear_Reco_P_pFD_ZOOMIN_1p->Fill(RecoProtonP, pResolution, Weight);
                                 hReco_P_pFD_pRes_1p.hFill(RecoProtonP, Weight);
                                 hTL_P_pFD_pRes_1p.hFill(TLProtonP, Weight);
+                                hTL_P_pFD_vs_Reco_P_pFD_1p.hFill(ProtonMomBKC_1p, Weight);
+                                hTL_P_pFD_vs_Smear_Reco_P_pFD_1p.hFill(RecoProtonP, Weight);
                             }
                         }
 
@@ -12005,6 +12069,7 @@ void EventAnalyser() {
                             if (pRes_Pass_dThetaCut && pRes_Pass_dPhiCut) {
                                 double pResolution = (TLProtonP - RecoProtonP) / TLProtonP;
                                 hP_pFD_Res_VS_TL_P_pFD_noKC_1p->Fill(TLProtonP, pResolution, Weight);
+                                hP_pFD_Res_VS_Smear_Reco_P_pFD_noKC_1p->Fill(RecoProtonP, pResolution, Weight);
                             }
                         }
                     }
@@ -12868,11 +12933,14 @@ void EventAnalyser() {
                                 hP_nFD_Res_1n.hFill(nResolution, Weight);
                                 hP_nFD_Res_VS_TL_P_nFD_1n->Fill(TLNeutronP, nResolution, Weight);
                                 hP_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n->Fill(TLNeutronP, nResolution, Weight);
-                                hP_nFD_Res_VS_Reco_P_nFD_1n->Fill(RecoNeutronP, nResolution, Weight);
-                                hP_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n->Fill(RecoNeutronP, nResolution, Weight);
+                                hP_nFD_Res_VS_Reco_P_nFD_1n->Fill(NeutronMomBKC_1n, nResolution, Weight);
+                                hP_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n->Fill(NeutronMomBKC_1n, nResolution, Weight);
+                                hP_nFD_Res_VS_Corr_Reco_P_nFD_1n->Fill(RecoNeutronP, nResolution, Weight);
+                                hP_nFD_Res_VS_Corr_Reco_P_nFD_ZOOMIN_1n->Fill(RecoNeutronP, nResolution, Weight);
                                 hReco_P_nFD_nRes_1n.hFill(RecoNeutronP, Weight);
                                 hTL_P_nFD_nRes_1n.hFill(TLNeutronP, Weight);
-                                hTL_P_nFD_vs_Reco_P_nFD_1n.hFill(TLNeutronP, RecoNeutronP, Weight);
+                                hTL_P_nFD_vs_Reco_P_nFD_1n.hFill(NeutronMomBKC_1n, RecoNeutronP, Weight);
+                                hTL_P_nFD_vs_Corr_Reco_P_nFD_1n.hFill(TLNeutronP, RecoNeutronP, Weight);
 
                                 //<editor-fold desc="TO FINISH!">
                                 bool ECIN_HIT = (n_1n->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
@@ -12926,7 +12994,8 @@ void EventAnalyser() {
                             if (nRes_Pass_dThetaCut && nRes_Pass_dPhiCut) {
                                 double nResolution = (TLNeutronP - RecoNeutronP) / TLNeutronP;
                                 hP_nFD_Res_VS_TL_P_nFD_noKC_1n->Fill(TLNeutronP, nResolution, Weight);
-                                hP_nFD_Res_VS_Reco_P_nFD_noKC_1n->Fill(RecoNeutronP, nResolution, Weight);
+                                hP_nFD_Res_VS_Reco_P_nFD_noKC_1n->Fill(NeutronMomBKC_1n, nResolution, Weight);
+                                hP_nFD_Res_VS_Corr_Reco_P_nFD_noKC_1n->Fill(RecoNeutronP, nResolution, Weight);
                             }
                         }
                     } // end of for loop over TL particles
@@ -20130,13 +20199,27 @@ void EventAnalyser() {
 
         hTheta_pFD_TL_1p.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
         hPhi_pFD_TL_1p.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
-        histPlotter2D(c1, hTheta_pFD_TL_VS_Phi_pFD_TL_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pFD_TL_VS_Phi_pFD_TL_1p_Dir, "s03_Theta_pFD_VS_Phi_pFD_1p");
+        histPlotter2D(c1, hTheta_pFD_TL_VS_Phi_pFD_TL_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pFD_TL_VS_Phi_pFD_TL_1p_Dir,
+                      "s03_Theta_pFD_VS_Phi_pFD_1p");
         hP_pFD_Res_1p.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
-        histPlotter2D(c1, hP_pFD_Res_VS_TL_P_pFD_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_TL_P_pFD_1p_Dir, "s05a_P_pFD_Res_VS_TL_P_pFD_1p");
+        histPlotter2D(c1, hP_pFD_Res_VS_TL_P_pFD_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_TL_P_pFD_1p_Dir,
+                      "s05a_P_pFD_Res_VS_TL_P_pFD_1p");
         histPlotter2D(c1, hP_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_TL_P_pFD_1p_Dir,
                       "s05b_P_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p");
         histPlotter2D(c1, hP_pFD_Res_VS_TL_P_pFD_noKC_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_TL_P_pFD_1p_Dir,
                       "s05c_P_pFD_Res_VS_TL_P_pFD_noKC_1p");
+        histPlotter2D(c1, hP_pFD_Res_VS_Reco_P_pFD_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_Reco_P_pFD_1p_Dir,
+                      "s05d_P_pFD_Res_VS_Reco_P_pFD_1p");
+        histPlotter2D(c1, hP_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_Reco_P_pFD_1p_Dir,
+                      "s05e_P_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p");
+        histPlotter2D(c1, hP_pFD_Res_VS_Reco_P_pFD_noKC_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_Reco_P_pFD_1p_Dir,
+                      "s05f_P_pFD_Res_VS_Reco_P_pFD_noKC_1p");
+        histPlotter2D(c1, hP_pFD_Res_VS_Smear_Reco_P_pFD_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_Reco_P_pFD_1p_Dir,
+                      "s05g_P_pFD_Res_VS_Smear_Reco_P_pFD_1p");
+        histPlotter2D(c1, hP_pFD_Res_VS_Smear_Reco_P_pFD_ZOOMIN_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_Reco_P_pFD_1p_Dir,
+                      "s05h_P_pFD_Res_VS_Smear_Reco_P_pFD_ZOOMIN_1p");
+        histPlotter2D(c1, hP_pFD_Res_VS_Smear_Reco_P_pFD_noKC_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_Reco_P_pFD_1p_Dir,
+                      "s05i_P_pFD_Res_VS_Smear_Reco_P_pFD_noKC_1p");
 
         hTheta_pFD_TL_ApResC_1p.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
         hPhi_pFD_TL_ApResC_1p.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
@@ -20151,6 +20234,8 @@ void EventAnalyser() {
 
         hReco_P_pFD_pRes_1p.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
         hTL_P_pFD_pRes_1p.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
+        hTL_P_pFD_vs_Reco_P_pFD_1p.hDrawAndSave(SampleName, c1, plots, true);
+        hTL_P_pFD_vs_Smear_Reco_P_pFD_1p.hDrawAndSave(SampleName, c1, plots, true);
 
         if (plot_and_fit_MomRes) {
             pRes.SliceFitDrawAndSaveByType(SampleName, beamE);
@@ -20175,16 +20260,24 @@ void EventAnalyser() {
         histPlotter2D(c1, hTheta_nFD_TL_VS_Phi_nFD_TL_AnResC_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_nFD_TL_VS_Phi_nFD_TL_AnResC_1n_Dir,
                       "s03a_Theta_nFD_VS_Phi_nFD_AnResC_1n");
         hP_nFD_Res_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
-        histPlotter2D(c1, hP_nFD_Res_VS_TL_P_nFD_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_TL_P_nFD_1n_Dir, "s05a_P_nFD_Res_VS_TL_P_nFD_1n");
+        histPlotter2D(c1, hP_nFD_Res_VS_TL_P_nFD_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_TL_P_nFD_1n_Dir,
+                      "s05a_P_nFD_Res_VS_TL_P_nFD_1n");
         histPlotter2D(c1, hP_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_TL_P_nFD_1n_Dir,
                       "s05b_P_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n");
         histPlotter2D(c1, hP_nFD_Res_VS_TL_P_nFD_noKC_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_TL_P_nFD_1n_Dir,
                       "s05c_P_nFD_Res_VS_TL_P_nFD_noKC_1n");
-        histPlotter2D(c1, hP_nFD_Res_VS_Reco_P_nFD_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_Reco_P_nFD_1n_Dir, "s05a_P_nFD_Res_VS_Reco_P_nFD_1n");
+        histPlotter2D(c1, hP_nFD_Res_VS_Reco_P_nFD_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_Reco_P_nFD_1n_Dir,
+                      "s05d_P_nFD_Res_VS_Reco_P_nFD_1n");
         histPlotter2D(c1, hP_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_Reco_P_nFD_1n_Dir,
-                      "s05b_P_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n");
+                      "s05e_P_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n");
         histPlotter2D(c1, hP_nFD_Res_VS_Reco_P_nFD_noKC_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_Reco_P_nFD_1n_Dir,
-                      "s05c_P_nFD_Res_VS_Reco_P_nFD_noKC_1n");
+                      "s05f_P_nFD_Res_VS_Reco_P_nFD_noKC_1n");
+        histPlotter2D(c1, hP_nFD_Res_VS_Corr_Reco_P_nFD_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_Reco_P_nFD_1n_Dir,
+                      "s05g_P_nFD_Res_VS_Corr_Reco_P_nFD_1n");
+        histPlotter2D(c1, hP_nFD_Res_VS_Corr_Reco_P_nFD_ZOOMIN_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_Reco_P_nFD_1n_Dir,
+                      "s05h_P_nFD_Res_VS_Corr_Reco_P_nFD_ZOOMIN_1n");
+        histPlotter2D(c1, hP_nFD_Res_VS_Corr_Reco_P_nFD_noKC_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_Reco_P_nFD_1n_Dir,
+                      "s05i_P_nFD_Res_VS_Corr_Reco_P_nFD_noKC_1n");
 
         hTheta_nFD_TL_MatchedN_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
         hPhi_nFD_TL_MatchedN_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
@@ -20194,6 +20287,7 @@ void EventAnalyser() {
         hReco_P_nFD_nRes_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
         hTL_P_nFD_nRes_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
         hTL_P_nFD_vs_Reco_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, true);
+        hTL_P_nFD_vs_Corr_Reco_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, true);
 
         if (plot_and_fit_MomRes) {
             nRes.SliceFitDrawAndSaveByType(SampleName, beamE);
