@@ -311,7 +311,7 @@ int ParticleID::GetCorrLnFDIndex(MomentumResolution &nRes, vector <region_part_p
 
     //<editor-fold desc="Safety check">
     if (FD_Neutrons_within_th.size() != FD_Neutrons_within_th_ACorr.size()) {
-        cout << "\n\nParticleID::GetCorrLnFDIndex: FD_Neutrons_within_th_ACorr have been filled incorrectly! Exiting...", exit(0);
+        cout << "\n\nParticleID::GetCorrLnFDIndex: FD_Neutrons_within_th_ACorr have been filled incorrectly! Exiting...\n", exit(0);
     }
     //</editor-fold>
 

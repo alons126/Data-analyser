@@ -63,7 +63,6 @@ private:
     string SmearMode = "NONE", CorrMode = "NONE";
 
     string RecoSliceFitAlgorithm = "", TLSliceFitAlgorithm = "";
-
     vector <hPlot1D> ResTLMomSlices, ResRecoMomSlices;
     vector <vector<double>> ResTLMomSlicesLimits, ResRecoMomSlicesLimits;
     vector <DSCuts> ResTLMomSlicesFitVar, ResRecoMomSlicesFitVar;
@@ -92,13 +91,15 @@ private:
     TFolder *FittedRecoNeutronResSlicesWidth = new TFolder("Fitted reco neutron resolution slice width", "Fitted reco neutron resolution slice width");
     TFolder *FittedRecoProtonResSlices = new TFolder("Fitted reco proton resolution slices", "Fitted reco proton resolution slices");
     TFolder *FittedRecoProtonResSlicesMean = new TFolder("Fitted reco proton resolution slice mean", "Fitted reco proton resolution slice mean");
-    TFolder *FittedRecoProtonResSlicesWidth = new TFolder("Fitted reco proton resolution slice width",
-                                                          "Fitted reco proton resolution slice width");
+    TFolder *FittedRecoProtonResSlicesWidth = new TFolder("Fitted reco proton resolution slice width", "Fitted reco proton resolution slice width");
 
-    TRandom3 *Rand = new TRandom3();
+    //<editor-fold desc="Random number generators">
+    string RandomNumGenerator = "TRandom3";
 
-    string SlicesSavePath;
-    string SlicesSaveNamePrefix;
+    TRandom1 *Rand1 = new TRandom1();
+    TRandom2 *Rand2 = new TRandom2();
+    TRandom3 *Rand3 = new TRandom3();
+    //</editor-fold>
 
     double delta, deltaFactor = 1.;
     int TL_NumberOfSlices = 0, Reco_NumberOfSlices = 0;
@@ -154,6 +155,9 @@ private:
 
     double Neutron_Momentum_cut = 9999.; // from clas12ana
     string SName;
+
+    string SlicesSavePath;
+    string SlicesSaveNamePrefix;
 
 public:
 
@@ -303,6 +307,8 @@ public:
     vector <DSCuts> GetResRecoMomSlicesHistVar() { return ResRecoMomSlicesHistVar; };
 
     vector<int> GetFittedRecoMomSlices() { return FittedRecoMomSlices; };
+
+    string GetRandNumGenerator() { return RandomNumGenerator; };
 
 };
 

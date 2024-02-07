@@ -222,10 +222,10 @@ void ExperimentParameters::ConfigureVaryingSampleName(const string &sn) {
         if (findSubstring(sn, "C12") && BeamAt6GeV) {
             VaryingSampleName = "C12x4_simulation_G18_Q204_6GeV";
         } else {
-            cout << "\n\n\nExperimentParameters::GetVaryingSampleName: no corresponding simulation sample! Exiting...", exit(0);
+            cout << "\n\n\nExperimentParameters::GetVaryingSampleName: no corresponding simulation sample! Exiting...\n", exit(0);
         }
     } else {
-        cout << "\n\n\nExperimentParameters::ConfigureVaryingSampleName: sample can't be configured! Exiting...", exit(0);
+        cout << "\n\n\nExperimentParameters::ConfigureVaryingSampleName: sample can't be configured! Exiting...\n", exit(0);
     }
 }
 //</editor-fold>
