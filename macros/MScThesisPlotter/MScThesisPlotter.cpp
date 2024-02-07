@@ -129,174 +129,174 @@ void MScThesisPlotter() {
     //<editor-fold desc="Make directories">
 
     //<editor-fold desc="Preselection_Sim">
-    const string PreselectionSimFolder = "MScThesisPlotter/Preselection_Sim";
+    const string PreselectionSimFolder = "00_MScThesisPlotter/Preselection_Sim";
     system(("rm -r " + PreselectionSimFolder).c_str());
     system(("mkdir -p " + PreselectionSimFolder).c_str());
 
     //<editor-fold desc="Vertex cuts">
-    const string VertexCutsFolderSim = "MScThesisPlotter/Preselection_Sim/01_Vertex_Cuts_Sim";
+    const string VertexCutsFolderSim = "00_MScThesisPlotter/Preselection_Sim/01_Vertex_Cuts_Sim";
     system(("mkdir -p " + VertexCutsFolderSim).c_str());
 
-    const string VertexCutsFolderSimBC = "MScThesisPlotter/Preselection_Sim/01_Vertex_Cuts_Sim/Before_Cuts_Sim";
+    const string VertexCutsFolderSimBC = "00_MScThesisPlotter/Preselection_Sim/01_Vertex_Cuts_Sim/Before_Cuts_Sim";
     system(("mkdir -p " + VertexCutsFolderSimBC).c_str());
 
-    const string VertexCutsFolderSimAC = "MScThesisPlotter/Preselection_Sim/01_Vertex_Cuts_Sim/After_Cuts_Sim";
+    const string VertexCutsFolderSimAC = "00_MScThesisPlotter/Preselection_Sim/01_Vertex_Cuts_Sim/After_Cuts_Sim";
     system(("mkdir -p " + VertexCutsFolderSimAC).c_str());
     //</editor-fold>
 
     //<editor-fold desc="Vertex correlation cuts">
-    const string VertexCorrCutsFolderSim = "MScThesisPlotter/Preselection_Sim/02_Vertex_Corr_Cuts_Sim";
+    const string VertexCorrCutsFolderSim = "00_MScThesisPlotter/Preselection_Sim/02_Vertex_Corr_Cuts_Sim";
     system(("mkdir -p " + VertexCutsFolderSim).c_str());
 
-    const string VertexCorrCutsFolderSimBC = "MScThesisPlotter/Preselection_Sim/02_Vertex_Corr_Cuts_Sim/Before_Cuts_Sim";
+    const string VertexCorrCutsFolderSimBC = "00_MScThesisPlotter/Preselection_Sim/02_Vertex_Corr_Cuts_Sim/Before_Cuts_Sim";
     system(("mkdir -p " + VertexCorrCutsFolderSimBC).c_str());
 
-    const string VertexCorrCutsFolderSimAC = "MScThesisPlotter/Preselection_Sim/02_Vertex_Corr_Cuts_Sim/After_Cuts_Sim";
+    const string VertexCorrCutsFolderSimAC = "00_MScThesisPlotter/Preselection_Sim/02_Vertex_Corr_Cuts_Sim/After_Cuts_Sim";
     system(("mkdir -p " + VertexCorrCutsFolderSimAC).c_str());
     //</editor-fold>
 
     //<editor-fold desc="DC fiducial cuts">
-    const string DCFiducialCutsFolderSim = "MScThesisPlotter/Preselection_Sim/03_DC_fiducial_Cuts_Sim";
+    const string DCFiducialCutsFolderSim = "00_MScThesisPlotter/Preselection_Sim/03_DC_fiducial_Cuts_Sim";
     system(("mkdir -p " + DCFiducialCutsFolderSim).c_str());
 
-    const string DCFiducialCutsFolderSimBC = "MScThesisPlotter/Preselection_Sim/03_DC_fiducial_Cuts_Sim/Before_Cuts_Sim";
+    const string DCFiducialCutsFolderSimBC = "00_MScThesisPlotter/Preselection_Sim/03_DC_fiducial_Cuts_Sim/Before_Cuts_Sim";
     system(("mkdir -p " + DCFiducialCutsFolderSimBC).c_str());
 
-    const string DCFiducialCutsFolderSimAC = "MScThesisPlotter/Preselection_Sim/03_DC_fiducial_Cuts_Sim/After_Cuts_Sim";
+    const string DCFiducialCutsFolderSimAC = "00_MScThesisPlotter/Preselection_Sim/03_DC_fiducial_Cuts_Sim/After_Cuts_Sim";
     system(("mkdir -p " + DCFiducialCutsFolderSimAC).c_str());
     //</editor-fold>
 
     //</editor-fold>
 
     //<editor-fold desc="Event_Selection_Sim">
-    const string EventSelectionSimFolder = "MScThesisPlotter/Event_Selection_Sim";
+    const string EventSelectionSimFolder = "00_MScThesisPlotter/Event_Selection_Sim";
     system(("rm -r " + EventSelectionSimFolder).c_str());
     system(("mkdir -p " + EventSelectionSimFolder).c_str());
 
-    const string ElectronIDFolderSim = "MScThesisPlotter/Event_Selection_Sim/01_Electron_ID_Sim";
+    const string ElectronIDFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/01_Electron_ID_Sim";
     system(("mkdir -p " + ElectronIDFolderSim).c_str());
 
-    const string ElectronIDFolderSimBC = "MScThesisPlotter/Event_Selection_Sim/01_Electron_ID_Sim/Before_Cuts_Sim";
+    const string ElectronIDFolderSimBC = "00_MScThesisPlotter/Event_Selection_Sim/01_Electron_ID_Sim/Before_Cuts_Sim";
     system(("mkdir -p " + ElectronIDFolderSimBC).c_str());
 
-    const string ElectronIDFolderSimAC = "MScThesisPlotter/Event_Selection_Sim/01_Electron_ID_Sim/After_Cuts_Sim";
+    const string ElectronIDFolderSimAC = "00_MScThesisPlotter/Event_Selection_Sim/01_Electron_ID_Sim/After_Cuts_Sim";
     system(("mkdir -p " + ElectronIDFolderSimAC).c_str());
 
-    const string ProtonIDFolderSim = "MScThesisPlotter/Event_Selection_Sim/02_Proton_ID_Sim";
+    const string ProtonIDFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/02_Proton_ID_Sim";
     system(("mkdir -p " + ProtonIDFolderSim).c_str());
 
-    const string ProtonIDFolderSimBC = "MScThesisPlotter/Event_Selection_Sim/02_Proton_ID_Sim/Before_Cuts_Sim";
+    const string ProtonIDFolderSimBC = "00_MScThesisPlotter/Event_Selection_Sim/02_Proton_ID_Sim/Before_Cuts_Sim";
     system(("mkdir -p " + ProtonIDFolderSimBC).c_str());
 
-    const string ProtonIDFolderSimAC = "MScThesisPlotter/Event_Selection_Sim/02_Proton_ID_Sim/After_Cuts_Sim";
+    const string ProtonIDFolderSimAC = "00_MScThesisPlotter/Event_Selection_Sim/02_Proton_ID_Sim/After_Cuts_Sim";
     system(("mkdir -p " + ProtonIDFolderSimAC).c_str());
 
-    const string NeutralsFDIDFolderSim = "MScThesisPlotter/Event_Selection_Sim/03_Neutrals_FD_ID_Sim";
+    const string NeutralsFDIDFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/03_Neutrals_FD_ID_Sim";
     system(("mkdir -p " + NeutralsFDIDFolderSim).c_str());
 
-    const string NeutralsFDIDFolderSimBC = "MScThesisPlotter/Event_Selection_Sim/03_Neutrals_FD_ID_Sim/Before_Cuts_Sim";
+    const string NeutralsFDIDFolderSimBC = "00_MScThesisPlotter/Event_Selection_Sim/03_Neutrals_FD_ID_Sim/Before_Cuts_Sim";
     system(("mkdir -p " + NeutralsFDIDFolderSimBC).c_str());
 
-    const string NeutralsFDIDFolderSimAC = "MScThesisPlotter/Event_Selection_Sim/03_Neutrals_FD_ID_Sim/After_Cuts_Sim";
+    const string NeutralsFDIDFolderSimAC = "00_MScThesisPlotter/Event_Selection_Sim/03_Neutrals_FD_ID_Sim/After_Cuts_Sim";
     system(("mkdir -p " + NeutralsFDIDFolderSimAC).c_str());
 
-    const string PionsIDFolderSim = "MScThesisPlotter/Event_Selection_Sim/04_Pions_ID_Sim";
+    const string PionsIDFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/04_Pions_ID_Sim";
     system(("mkdir -p " + PionsIDFolderSim).c_str());
 
-    const string PionsIDFolderSimBC = "MScThesisPlotter/Event_Selection_Sim/04_Pions_ID_Sim/Before_Cuts_Sim";
+    const string PionsIDFolderSimBC = "00_MScThesisPlotter/Event_Selection_Sim/04_Pions_ID_Sim/Before_Cuts_Sim";
     system(("mkdir -p " + PionsIDFolderSimBC).c_str());
 
-    const string PionsIDFolderSimAC = "MScThesisPlotter/Event_Selection_Sim/04_Pions_ID_Sim/After_Cuts_Sim";
+    const string PionsIDFolderSimAC = "00_MScThesisPlotter/Event_Selection_Sim/04_Pions_ID_Sim/After_Cuts_Sim";
     system(("mkdir -p " + PionsIDFolderSimAC).c_str());
 
-    const string OtherPartIDFolderSim = "MScThesisPlotter/Event_Selection_Sim/05_Other_part_ID_Sim";
+    const string OtherPartIDFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/05_Other_part_ID_Sim";
     system(("mkdir -p " + OtherPartIDFolderSim).c_str());
 
-    const string OtherPartIDFolderSimBC = "MScThesisPlotter/Event_Selection_Sim/05_Other_part_ID_Sim/Before_Cuts_Sim";
+    const string OtherPartIDFolderSimBC = "00_MScThesisPlotter/Event_Selection_Sim/05_Other_part_ID_Sim/Before_Cuts_Sim";
     system(("mkdir -p " + OtherPartIDFolderSimBC).c_str());
 
-    const string OtherPartIDFolderSimAC = "MScThesisPlotter/Event_Selection_Sim/05_Other_part_ID_Sim/After_Cuts_Sim";
+    const string OtherPartIDFolderSimAC = "00_MScThesisPlotter/Event_Selection_Sim/05_Other_part_ID_Sim/After_Cuts_Sim";
     system(("mkdir -p " + OtherPartIDFolderSimAC).c_str());
 
-    const string AMapsFolderSim = "MScThesisPlotter/Event_Selection_Sim/06_AMaps";
+    const string AMapsFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/06_AMaps";
     system(("mkdir -p " + AMapsFolderSim).c_str());
 
-    const string AMapsFolderMapsSim = "MScThesisPlotter/Event_Selection_Sim/06_AMaps/01_Maps";
+    const string AMapsFolderMapsSim = "00_MScThesisPlotter/Event_Selection_Sim/06_AMaps/01_Maps";
     system(("mkdir -p " + AMapsFolderMapsSim).c_str());
 
-    const string AMapsFolderMomentumPlotsSim = "MScThesisPlotter/Event_Selection_Sim/06_AMaps/02_Momentum_Plots";
+    const string AMapsFolderMomentumPlotsSim = "00_MScThesisPlotter/Event_Selection_Sim/06_AMaps/02_Momentum_Plots";
     system(("mkdir -p " + AMapsFolderMomentumPlotsSim).c_str());
 
-    const string EfficiencyFolderSim = "MScThesisPlotter/Event_Selection_Sim/07_Efficiency";
+    const string EfficiencyFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/07_Efficiency";
     system(("mkdir -p " + EfficiencyFolderSim).c_str());
 
-    const string EfficiencyRegFolderSim = "MScThesisPlotter/Event_Selection_Sim/07_Efficiency/01_No_FC";
+    const string EfficiencyRegFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/07_Efficiency/01_No_FC";
     system(("mkdir -p " + EfficiencyRegFolderSim).c_str());
 
-    const string EfficiencyWithFCFolderSim = "MScThesisPlotter/Event_Selection_Sim/07_Efficiency/02_wFC";
+    const string EfficiencyWithFCFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/07_Efficiency/02_wFC";
     system(("mkdir -p " + EfficiencyWithFCFolderSim).c_str());
 
-    const string MomResFolderSim = "MScThesisPlotter/Event_Selection_Sim/08_MomRes";
+    const string MomResFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/08_MomRes";
     system(("mkdir -p " + MomResFolderSim).c_str());
 
-    const string MomResS1FolderSim = "MScThesisPlotter/Event_Selection_Sim/08_MomRes/01_momResS1_Calc";
+    const string MomResS1FolderSim = "00_MScThesisPlotter/Event_Selection_Sim/08_MomRes/01_momResS1_Calc";
     system(("mkdir -p " + MomResS1FolderSim).c_str());
 
-    const string MomResS2FolderSim = "MScThesisPlotter/Event_Selection_Sim/08_MomRes/02_momResS2_Calc";
+    const string MomResS2FolderSim = "00_MScThesisPlotter/Event_Selection_Sim/08_MomRes/02_momResS2_Calc";
     system(("mkdir -p " + MomResS2FolderSim).c_str());
 
-    const string MomResS2RTFolderSim = "MScThesisPlotter/Event_Selection_Sim/08_MomRes/03_momResS2RT_Calc";
+    const string MomResS2RTFolderSim = "00_MScThesisPlotter/Event_Selection_Sim/08_MomRes/03_momResS2RT_Calc";
     system(("mkdir -p " + MomResS2RTFolderSim).c_str());
     //</editor-fold>
 
     //<editor-fold desc="Results">
-    const string ResultsFolder = "MScThesisPlotter/Results";
+    const string ResultsFolder = "00_MScThesisPlotter/Results";
     system(("rm -r " + ResultsFolder).c_str());
     system(("mkdir -p " + ResultsFolder).c_str());
 
-    const string ElectronIDFolderData = "MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data";
+    const string ElectronIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data";
     system(("mkdir -p " + ElectronIDFolderData).c_str());
 
-    const string ElectronIDFolderDataBC = "MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data/Before_Cuts_Data";
+    const string ElectronIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data/Before_Cuts_Data";
     system(("mkdir -p " + ElectronIDFolderDataBC).c_str());
 
-    const string ElectronIDFolderDataAC = "MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data/After_Cuts_Data";
+    const string ElectronIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data/After_Cuts_Data";
     system(("mkdir -p " + ElectronIDFolderDataAC).c_str());
 
-    const string ProtonIDFolderData = "MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data";
+    const string ProtonIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data";
     system(("mkdir -p " + ProtonIDFolderData).c_str());
 
-    const string ProtonIDFolderDataBC = "MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data/Before_Cuts_Data";
+    const string ProtonIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data/Before_Cuts_Data";
     system(("mkdir -p " + ProtonIDFolderDataBC).c_str());
 
-    const string ProtonIDFolderDataAC = "MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data/After_Cuts_Data";
+    const string ProtonIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data/After_Cuts_Data";
     system(("mkdir -p " + ProtonIDFolderDataAC).c_str());
 
-    const string NeutralsFDIDFolderData = "MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data";
+    const string NeutralsFDIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data";
     system(("mkdir -p " + NeutralsFDIDFolderData).c_str());
 
-    const string NeutralsFDIDFolderDataBC = "MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data/Before_Cuts_Data";
+    const string NeutralsFDIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data/Before_Cuts_Data";
     system(("mkdir -p " + NeutralsFDIDFolderDataBC).c_str());
 
-    const string NeutralsFDIDFolderDataAC = "MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data/After_Cuts_Data";
+    const string NeutralsFDIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data/After_Cuts_Data";
     system(("mkdir -p " + NeutralsFDIDFolderDataAC).c_str());
 
-    const string PionsIDFolderData = "MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data";
+    const string PionsIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data";
     system(("mkdir -p " + PionsIDFolderData).c_str());
 
-    const string PionsIDFolderDataBC = "MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data/Before_Cuts_Data";
+    const string PionsIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data/Before_Cuts_Data";
     system(("mkdir -p " + PionsIDFolderDataBC).c_str());
 
-    const string PionsIDFolderDataAC = "MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data/After_Cuts_Data";
+    const string PionsIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data/After_Cuts_Data";
     system(("mkdir -p " + PionsIDFolderDataAC).c_str());
 
-    const string OtherPartIDFolderData = "MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data";
+    const string OtherPartIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data";
     system(("mkdir -p " + OtherPartIDFolderData).c_str());
 
-    const string OtherPartIDFolderDataBC = "MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data/Before_Cuts_Data";
+    const string OtherPartIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data/Before_Cuts_Data";
     system(("mkdir -p " + OtherPartIDFolderDataBC).c_str());
 
-    const string OtherPartIDFolderDataAC = "MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data/After_Cuts_Data";
+    const string OtherPartIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data/After_Cuts_Data";
     system(("mkdir -p " + OtherPartIDFolderDataAC).c_str());
     //</editor-fold>
 

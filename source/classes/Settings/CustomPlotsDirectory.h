@@ -26,8 +26,7 @@ private:
 
     string Added_PreStatuses, Added_Statuses;
 
-    string Global_Run_Status = "v2_test";
-//    string Global_Run_Status = "v2_nd_test_redo";
+    string Global_Run_Status = "v2";
 
 public:
 

@@ -148,7 +148,7 @@ public:
 // GetGoodProtons function -----------------------------------------------------------------------------------------------------------------------
 
     vector<int> GetGoodProtons(const bool &apply_nucleon_cuts, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind, const DSCuts &Theta_p1_cuts_2p,
-                               const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p);
+                               const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_pFD_pCD_2p);
 
     void SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, string CToF_hits_monitoring_2p_Directory, string Double_detection_monitoring_2p_Directory);
 
@@ -162,7 +162,7 @@ public:
 
 // Fill neutron multiplicity plots functions -----------------------------------------------------------------------------------------------------
 
-    //TODO: move from this class
+    //TODO: move out of this class
 
     // Neutrons by CLAS12 PID
     void FillNeutMultiPlots(vector <region_part_ptr> &allParticles, vector <region_part_ptr> &electrons, const double &Weight, const double &beamE,

@@ -130,7 +130,7 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
@@ -138,7 +138,7 @@ void EventAnalyser() {
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
     bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
-    bool momRes_test = true; // false by default
+    bool momRes_test = false; // false by default
     /*
     MomRes run order guide:
     1. momResS1 calculation 1:
@@ -187,12 +187,12 @@ void EventAnalyser() {
 
     // My analysis cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
-    bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
+    bool apply_nBeta_fit_cuts = false; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -257,10 +257,9 @@ void EventAnalyser() {
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
     const bool custom_cuts_naming = true;
     settings.SetCustomCutsNaming(custom_cuts_naming);
-    settings.ConfigureStatuses(apply_cuts, clas12ana_particles, only_preselection_cuts, apply_chi2_cuts_1e_cut, only_electron_quality_cuts,
-                               apply_nucleon_cuts, Enable_FD_photons, apply_nucleon_SmearAndCorr, apply_kinematical_cuts,
-                               apply_kinematical_weights, apply_fiducial_cuts, Generate_AMaps, plot_and_fit_MomRes, VaryingDelta,
-                               Calculate_momResS2, Run_with_momResS2, momRes_test, Rec_wTL_ES, ZoomIn_On_mom_th_plots);
+    settings.ConfigureStatuses(apply_cuts, clas12ana_particles, only_preselection_cuts, apply_chi2_cuts_1e_cut, only_electron_quality_cuts, apply_nucleon_cuts,
+                               Enable_FD_photons, apply_nucleon_SmearAndCorr, apply_kinematical_cuts, apply_kinematical_weights, apply_fiducial_cuts, Generate_AMaps,
+                               plot_and_fit_MomRes, VaryingDelta, Calculate_momResS2, Run_with_momResS2, momRes_test, Rec_wTL_ES, ZoomIn_On_mom_th_plots);
     settings.SetPaths(WorkingDirectory, SampleName, plots_path, apply_cuts, apply_chi2_cuts_1e_cut, apply_nucleon_cuts);
     settings.GetPlotsPath(plots_path);
     settings.GetPlotsLogSaveDirectory(plots_log_save_Directory);
@@ -444,8 +443,8 @@ void EventAnalyser() {
     DSCuts Theta_pCD_cuts_2p = DSCuts("Theta_p2 recoil", "", "Proton", "2p", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_2p = DSCuts("dPhi_pFD_pCD", "", "Proton", "2p", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
 
-    DSCuts Theta_L_cuts_pFDpCD = DSCuts("Theta_L", "", "Proton", "pFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
-    DSCuts Theta_R_cuts_pFDpCD = DSCuts("Theta_R", "", "Proton", "pFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
+    DSCuts Theta_pFD_cuts_pFDpCD = DSCuts("Theta_pFD", "", "Proton", "pFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
+    DSCuts Theta_pCD_cuts_pFDpCD = DSCuts("Theta_pCD", "", "Proton", "pFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_pFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "pFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
 
     DSCuts Theta_L_cuts_nFDpCD = DSCuts("Theta_L", "", "", "nFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
@@ -558,8 +557,9 @@ void EventAnalyser() {
     bool FSR_1D_plots, FSR_2D_plots; // FSR_2D_plots is disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-    bool TestRun = true; // set as false for a full run
+    bool TestRun = false; // set as false for a full run
 
+    //<editor-fold desc="Set enabled plots">
     if (!TestRun) {
 
         //<editor-fold desc="Plot everything (full run)">
@@ -699,6 +699,7 @@ void EventAnalyser() {
         //</editor-fold>/
 
     }
+    //</editor-fold>
 
     /* Other setup variables */
     bool wider_margin = true;
@@ -13412,7 +13413,7 @@ void EventAnalyser() {
             //<editor-fold desc="Filling double-detection plots (2p)">
 
             //<editor-fold desc="Filling double-detection plots for 2p">
-            double dPhi_hit_2p = Phi_p1 - Phi_p2;
+            double dPhi_hit_2p = CalcdPhi(Phi_p1 - Phi_p2);
 
             if (Theta_p1_p2_2p < 20.) {
                 hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p->Fill(Theta_p2, Theta_p1, Weight);
@@ -14100,17 +14101,17 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Plots for small Theta_pFD_pCD (pFDpCD)">
                 if (Theta_pFD_pCD_pFDpCD < 20.) {
-                    hTheta_pFD_vs_theta_pCD_for_Theta_pFD_pCD_20_pFDpCD->Fill(Theta_R_pFDpCD, Theta_L_pFDpCD, Weight_pFDpCD);
+                    hTheta_pFD_vs_theta_pCD_for_Theta_pFD_pCD_20_pFDpCD->Fill(Theta_pCD_pFDpCD, Theta_pFD_pFDpCD, Weight_pFDpCD);
                     hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight_pFDpCD);
                     hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight_pFDpCD);
                 }
 
-                hTheta_pFD_vs_theta_pCD_forall_Theta_pFD_pCD_pFDpCD->Fill(Theta_R_pFDpCD, Theta_L_pFDpCD, Weight_pFDpCD);
+                hTheta_pFD_vs_theta_pCD_forall_Theta_pFD_pCD_pFDpCD->Fill(Theta_pCD_pFDpCD, Theta_pFD_pFDpCD, Weight_pFDpCD);
                 hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight_pFDpCD);
                 hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight_pFDpCD);
 
-                if ((fabs(Theta_L_pFDpCD - Theta_L_cuts_pFDpCD.GetMean()) < Theta_L_cuts_pFDpCD.GetUpperCut()) &&
-                    (fabs(Theta_R_pFDpCD - Theta_R_cuts_pFDpCD.GetMean()) < Theta_R_cuts_pFDpCD.GetUpperCut())) {
+                if ((fabs(Theta_pFD_pFDpCD - Theta_pFD_cuts_pFDpCD.GetMean()) < Theta_pFD_cuts_pFDpCD.GetUpperCut()) &&
+                    (fabs(Theta_pCD_pFDpCD - Theta_pCD_cuts_pFDpCD.GetMean()) < Theta_pCD_cuts_pFDpCD.GetUpperCut())) {
                     hdPhi_pFD_pCD_for_small_dTheta_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight_pFDpCD);
                     hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight_pFDpCD);
                 }
@@ -17056,8 +17057,8 @@ void EventAnalyser() {
                       "#Delta#phi for small #Delta#theta_{1/2} = #theta_{1/2}-40#circ - ZOOMIN", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
                       "03b_dPhi_p1_p2_for_small_dTheta_ZOOMIN_2p", hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p_Dir, "", kBlue, true, true, true, false);
 
-        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_2p->GetMaximumBin()));
-//        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetMaximumBin()));
+//        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_2p->GetMaximumBin()));
+        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetMaximumBin()));
         //</editor-fold>
 
 // dPhi_pFD_pCD for every Theta_pFD_pCD (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -20422,7 +20423,7 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Saving nucleon cuts to .par file">
-    if (!apply_nucleon_cuts && apply_chi2_cuts_1e_cut && (!only_preselection_cuts && only_electron_quality_cuts)) { // log nucleon cuts
+    if (!apply_nucleon_cuts && apply_chi2_cuts_1e_cut && (!only_preselection_cuts && !only_electron_quality_cuts)) { // log nucleon cuts
         ofstream Nucleon_Cuts;
         std::string Nucleon_CutsFilePath = NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par";
 
@@ -20461,7 +20462,7 @@ void EventAnalyser() {
 
         Nucleon_Cuts << dphi_p1_p2_2p.GetCutVariable() << "\t\t\t" << dphi_p1_p2_2p.GetPartPDG() << ":" << dphi_p1_p2_2p.GetMean() << ":"
                      << dphi_p1_p2_2p.GetUpperCut() << ":" << dphi_p1_p2_2p.GetRegion() << "\n";
-        Nucleon_Cuts << dphi_pFD_pCD_2p.GetCutVariable() << "\t\t\t" << dphi_pFD_pCD_2p.GetPartPDG() << ":" << dphi_pFD_pCD_2p.GetMean() << ":"
+        Nucleon_Cuts << dphi_pFD_pCD_2p.GetCutVariable() << "\t\t" << dphi_pFD_pCD_2p.GetPartPDG() << ":" << dphi_pFD_pCD_2p.GetMean() << ":"
                      << dphi_pFD_pCD_2p.GetUpperCut() << ":" << dphi_pFD_pCD_2p.GetRegion() << "\n";
 
         Nucleon_Cuts << "\n";

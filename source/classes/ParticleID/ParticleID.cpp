@@ -550,15 +550,12 @@ vector<int> ParticleID::GetGoodProtons(const bool &apply_nucleon_cuts, vector <r
 
         if (apply_nucleon_cuts) {
             for (int j = i + 1; j < IDProtons_ind.size(); j++) {
-                if ((protons[IDProtons_ind.at(i)]->getRegion() == CD) &&
-                    (protons[IDProtons_ind.at(j)]->getRegion() == CD)) { // if proton pair is in the CD only
+                if ((protons[IDProtons_ind.at(i)]->getRegion() == CD) && (protons[IDProtons_ind.at(j)]->getRegion() == CD)) { // if proton pair is in the CD only
                     /* Set hit positions in the CTOF, and position difference: */
                     TVector3 p1_hit_pos, p2_hit_pos, pos_diff;
-                    p1_hit_pos.SetXYZ(protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getX(),
-                                      protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getY(),
+                    p1_hit_pos.SetXYZ(protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getX(), protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getY(),
                                       protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getZ());
-                    p2_hit_pos.SetXYZ(protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getX(),
-                                      protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getY(),
+                    p2_hit_pos.SetXYZ(protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getX(), protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getY(),
                                       protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getZ());
                     pos_diff.SetXYZ(p1_hit_pos.Px() - p2_hit_pos.Px(), p1_hit_pos.Py() - p2_hit_pos.Py(), p1_hit_pos.Pz() - p2_hit_pos.Pz());
 
@@ -568,8 +565,7 @@ vector<int> ParticleID::GetGoodProtons(const bool &apply_nucleon_cuts, vector <r
                         Cut_sCTOFhp = true; // monitor sCTOFhp
                     }
                 } else if (((protons[IDProtons_ind.at(i)]->getRegion() == FD) && (protons[IDProtons_ind.at(j)]->getRegion() == CD)) ||
-                           ((protons[IDProtons_ind.at(i)]->getRegion() == CD) &&
-                            (protons[IDProtons_ind.at(j)]->getRegion() == FD))) { // if proton pair CD and FD
+                           ((protons[IDProtons_ind.at(i)]->getRegion() == CD) && (protons[IDProtons_ind.at(j)]->getRegion() == FD))) { // if proton pair CD and FD
                     double Theta_p_i = protons[IDProtons_ind.at(i)]->getTheta() * 180.0 / pi, Theta_p_j =
                             protons[IDProtons_ind.at(j)]->getTheta() * 180.0 / pi;
                     double dPhi = CalcdPhi(protons[IDProtons_ind.at(i)], protons[IDProtons_ind.at(j)]);
@@ -614,8 +610,7 @@ vector<int> ParticleID::GetGoodProtons(const bool &apply_nucleon_cuts, vector <r
 //</editor-fold>
 
 //<editor-fold desc="SetGPMonitoringPlots function">
-void ParticleID::SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, string CToF_hits_monitoring_2p_Directory,
-                                      string Double_detection_monitoring_2p_Directory) {
+void ParticleID::SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, string CToF_hits_monitoring_2p_Directory, string Double_detection_monitoring_2p_Directory) {
     if (GoodProtonsMonitorPlots) {
 // Monitoring histograms definitions ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -625,46 +620,28 @@ void ParticleID::SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, strin
 
         //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (2p, CD only)">
         hdTheta_pi_pj_VS_ToFi_ToFj_BC_2idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 2 id. p. BC",
-                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 2 id. protons BC",
-                                                        "#theta_{p_{i},p_{j}} [Deg]",
-                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory,
-                                                        "01a_Theta_pi_pj_VS_ToFi-ToFj_2idp_BC_2p", 0, 180, -3,
-                                                        3,
+                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 2 id. protons BC", "#theta_{p_{i},p_{j}} [Deg]",
+                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory, "01a_Theta_pi_pj_VS_ToFi-ToFj_2idp_BC_2p", 0, 180, -3, 3,
                                                         150, 150);
         hdTheta_pi_pj_VS_ToFi_ToFj_RE_2idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 2 id. p. RE",
-                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 2 id. protons RE",
-                                                        "#theta_{p_{i},p_{j}} [Deg]",
-                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory,
-                                                        "01b_Theta_pi_pj_VS_ToFi-ToFj_2idp_RE_2p", 0, 180, -3,
-                                                        3,
+                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 2 id. protons RE", "#theta_{p_{i},p_{j}} [Deg]",
+                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory, "01b_Theta_pi_pj_VS_ToFi-ToFj_2idp_RE_2p", 0, 180, -3, 3,
                                                         150, 150);
         hdTheta_pi_pj_VS_ToFi_ToFj_BC_3idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 3 id. p. BC",
-                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 3 id. protons BC",
-                                                        "#theta_{p_{i},p_{j}} [Deg]",
-                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory,
-                                                        "02a_Theta_pi_pj_VS_ToFi-ToFj_3idp_BC_2p", 0, 180, -3,
-                                                        3,
+                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 3 id. protons BC", "#theta_{p_{i},p_{j}} [Deg]",
+                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory, "02a_Theta_pi_pj_VS_ToFi-ToFj_3idp_BC_2p", 0, 180, -3, 3,
                                                         150, 150);
         hdTheta_pi_pj_VS_ToFi_ToFj_AE_3idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 3 id. p. AE",
-                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 3 id. protons AE",
-                                                        "#theta_{p_{i},p_{j}} [Deg]",
-                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory,
-                                                        "02b_Theta_pi_pj_VS_ToFi-ToFj_3idp_RE_2p", 0, 180, -3,
-                                                        3,
+                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 3 id. protons AE", "#theta_{p_{i},p_{j}} [Deg]",
+                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory, "02b_Theta_pi_pj_VS_ToFi-ToFj_3idp_RE_2p", 0, 180, -3, 3,
                                                         150, 150);
         hdTheta_pi_pj_VS_ToFi_ToFj_BC_4idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 4 id. p. BC",
-                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 4 id. protons BC",
-                                                        "#theta_{p_{i},p_{j}} [Deg]",
-                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory,
-                                                        "03a_Theta_pi_pj_VS_ToFi-ToFj_4idp_BC_2p", 0, 180, -3,
-                                                        3,
+                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 4 id. protons BC", "#theta_{p_{i},p_{j}} [Deg]",
+                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory, "03a_Theta_pi_pj_VS_ToFi-ToFj_4idp_BC_2p", 0, 180, -3, 3,
                                                         150, 150);
         hdTheta_pi_pj_VS_ToFi_ToFj_AE_4idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 4 id. p. AE",
-                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 4 id. protons AE",
-                                                        "#theta_{p_{i},p_{j}} [Deg]",
-                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory,
-                                                        "03b_Theta_pi_pj_VS_ToFi-ToFj_4idp_RE_2p", 0, 180, -3,
-                                                        3,
+                                                        "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 4 id. protons AE", "#theta_{p_{i},p_{j}} [Deg]",
+                                                        "ToF_{i}-ToF_{j} [ns]", CToF_hits_monitoring_2p_Directory, "03b_Theta_pi_pj_VS_ToFi-ToFj_4idp_RE_2p", 0, 180, -3, 3,
                                                         150, 150);
         //</editor-fold>
 
@@ -673,33 +650,27 @@ void ParticleID::SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, strin
         //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (2p, CD only)">
         hTheta_pi_pj_VS_Posi_Posj_BC_2idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 2 id. p. BC",
                                                        "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 2 id. protons BC",
-                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                       CToF_hits_monitoring_2p_Directory,
+                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]", CToF_hits_monitoring_2p_Directory,
                                                        "04a_Theta_pi_pj_VS_Posi-Posj_2idp_BC_2p", 0, 180, 0, 100, 150, 150);
         hTheta_pi_pj_VS_Posi_Posj_RE_2idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 2 id. p. RE",
                                                        "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 2 id. protons RE",
-                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                       CToF_hits_monitoring_2p_Directory,
+                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]", CToF_hits_monitoring_2p_Directory,
                                                        "04b_Theta_pi_pj_VS_Posi-Posj_2idp_RE_2p", 0, 180, 0, 100, 150, 150);
         hTheta_pi_pj_VS_Posi_Posj_BC_3idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 3 id. p. BC",
                                                        "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 3 id. protons BC",
-                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                       CToF_hits_monitoring_2p_Directory,
+                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]", CToF_hits_monitoring_2p_Directory,
                                                        "05a_Theta_pi_pj_VS_Posi-Posj_3idp_BC_2p", 0, 180, 0, 100, 150, 150);
         hTheta_pi_pj_VS_Posi_Posj_AE_3idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 3 id. p. AE",
                                                        "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 3 id. protons AE",
-                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                       CToF_hits_monitoring_2p_Directory,
+                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]", CToF_hits_monitoring_2p_Directory,
                                                        "05b_Theta_pi_pj_VS_Posi-Posj_3idp_RE_2p", 0, 180, 0, 100, 150, 150);
         hTheta_pi_pj_VS_Posi_Posj_BC_4idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 4 id. p. BC",
                                                        "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 4 id. protons BC",
-                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                       CToF_hits_monitoring_2p_Directory,
+                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]", CToF_hits_monitoring_2p_Directory,
                                                        "06a_Theta_pi_pj_VS_Posi-Posj_4idp_BC_2p", 0, 180, 0, 100, 150, 150);
         hTheta_pi_pj_VS_Posi_Posj_AE_4idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 4 id. p. AE",
                                                        "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 4 id. protons AE",
-                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                       CToF_hits_monitoring_2p_Directory,
+                                                       "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]", CToF_hits_monitoring_2p_Directory,
                                                        "06b_Theta_pi_pj_VS_Posi-Posj_4idp_RE_2p", 0, 180, 0, 100, 150, 150);
         //</editor-fold>
 
@@ -790,10 +761,8 @@ void ParticleID::SetGPMonitoringPlots(const bool &GoodProtonsMonitorPlots, strin
 //</editor-fold>
 
 //<editor-fold desc="GPMonitoring function">
-void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind,
-                              const vector<int> &Protons_ind, const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p,
-                              const DSCuts &dphi_p1_p2_2p,
-                              const double &Weight) {
+void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <region_part_ptr> &protons, const vector<int> &IDProtons_ind, const vector<int> &Protons_ind,
+                              const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p, const double &Weight) {
     if (GoodProtonsMonitorPlots) {
         for (int i = 0; i < IDProtons_ind.size(); i++) {
             auto proton_i_2p = protons[IDProtons_ind.at(i)];

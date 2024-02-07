@@ -94,7 +94,7 @@ private:
     TFolder *FittedRecoProtonResSlicesWidth = new TFolder("Fitted reco proton resolution slice width", "Fitted reco proton resolution slice width");
 
     //<editor-fold desc="Random number generators">
-    string RandomNumGenerator = "TRandom3";
+    string RandomNumGenerator = "TRandom3"; // TRandom3 by default
 
     TRandom1 *Rand1 = new TRandom1();
     TRandom2 *Rand2 = new TRandom2();
