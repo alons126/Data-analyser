@@ -196,7 +196,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndCorr = true;
+    bool apply_nucleon_SmearAndCorr = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
