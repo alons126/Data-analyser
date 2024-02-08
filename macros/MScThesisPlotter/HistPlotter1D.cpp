@@ -48,11 +48,6 @@ double SetxOffset1D(const bool &ShowStats) {
     } else {
         xOffset = 0;
     }
-//    if (!ShowStats) {
-//        xOffset = -0.11;
-//    } else {
-//        xOffset = 0;
-//    }
 
     return xOffset;
 }
@@ -65,17 +60,12 @@ double SetyOffset1D(const bool &ShowStats) {
     } else {
         yOffset = 0;
     }
-//    if (!ShowStats) {
-//        yOffset = 0.15;
-//    } else {
-//        yOffset = 0;
-//    }
 
     return yOffset;
 }
 
 void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *filename, const char *Histogram1DName,
-                   const string &SampleName, const string &SavePath, const string &SaveName) {
+                   const string &SampleName, const string &SavePath, const string &SaveName, const bool TLmom = false) {
     cout << "\n\n";
 
     hData particles;
@@ -85,10 +75,19 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     TFile *file = new TFile(filename);
     TH1D *Histogram1D;
 
-    if (file->Get(Histogram1DName) == nullptr) {
-        Histogram1D = Histofinder1D(filename, Histogram1DName);
+    if (!findSubstring(Histogram1DName, "FSRatio")) {
+        if (findSubstring(Histogram1DName, "W distribution") ||
+            findSubstring(Histogram1DName, "#theta_{pFD,pCD}") || findSubstring(Histogram1DName, "#theta_{nFD,pCD}")) {
+            Histogram1D = Histofinder1D(filename, Histogram1DName);
+        } else {
+            if (file->Get(Histogram1DName) == nullptr) {
+                Histogram1D = Histofinder1D(filename, Histogram1DName, TLmom);
+            } else {
+                Histogram1D = (TH1D *) file->Get(Histogram1DName);
+            }
+        }
     } else {
-        Histogram1D = (TH1D *) file->Get(Histogram1DName);
+        Histogram1D = Histofinder1D(filename, Histogram1DName, TLmom);
     }
 
     double Legend_x1_BaseLine = gStyle->GetStatX(), Legend_y1_BaseLine = gStyle->GetStatY(); // Top right
@@ -148,6 +147,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Histogram1D->GetYaxis()->CenterTitle(true);
     Histogram1D->SetLineWidth(LineWidth);
+    Histogram1D->SetLineStyle(0);
     MScThesisPlotsList->Add(Histogram1D);
 
     if (Histogram1D->Integral() == 0.) {

@@ -16057,7 +16057,6 @@ void EventAnalyser() {
                 DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hP_pCD_pFDpCD, hP_pCD_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hP_tot_pFDpCD, hP_tot_nFDpCD, plots);
-                DrawAndSaveFSRatio(SampleName, hP_tot_pFDpCD, hP_tot_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hP_rel_pFDpCD, hP_rel_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hP_tot_mu_pFDpCD, hP_tot_mu_nFDpCD, plots);
                 DrawAndSaveFSRatio(SampleName, hP_rel_mu_pFDpCD, hP_rel_mu_nFDpCD, plots);

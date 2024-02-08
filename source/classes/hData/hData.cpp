@@ -66,6 +66,57 @@ string hData::GetParticleName(const string &Source, const bool &PluralParticles)
 }
 //</editor-fold>
 
+//<editor-fold desc="GetParticleName1 function">
+string hData::GetParticleName1(const string &Source, const bool &PluralParticles) {
+    string ParticleName, FS = GetFS(Source);
+
+    if (findSubstring(Source, "neutrals") || findSubstring(Source, "Neutrals")
+        || findSubstring(Source, "neut.") || findSubstring(Source, "Neut.")) {
+        if (PluralParticles) {
+            ParticleName = "Neut";
+        } else {
+            ParticleName = "Neut";
+        }
+    } else if (findSubstring(Source, "Electron") || findSubstring(Source, "electron")) {
+        if (PluralParticles) {
+            ParticleName = "Electrons";
+        } else {
+            ParticleName = "Electron";
+        }
+    } else if (findSubstring(Source, "Proton") || findSubstring(Source, "proton")) {
+        if (PluralParticles) {
+            ParticleName = "Protons";
+        } else {
+            ParticleName = "Proton";
+        }
+    } else if (findSubstring(Source, "Neutron") || findSubstring(Source, "neutron")) {
+        if (PluralParticles) {
+            ParticleName = "Neutrons";
+        } else {
+            ParticleName = "Neutron";
+        }
+    } else if (findSubstring(Source, "#pi^{+}")) {
+        ParticleName = "Piplus";
+    } else if (findSubstring(Source, "#pi^{-}")) {
+        ParticleName = "Piminus";
+    } else if (findSubstring(Source, "K^{+}")) {
+        ParticleName = "Kplus";
+    } else if (findSubstring(Source, "K^{-}")) {
+        ParticleName = "Kminus";
+    } else if (findSubstring(Source, "D")) {
+        if (PluralParticles) {
+            ParticleName = "Deuterons";
+        } else {
+            ParticleName = "Deuteron";
+        }
+    } else {
+        ParticleName = "Deuteron";
+    }
+
+    return ParticleName;
+}
+//</editor-fold>
+
 // GetParticleNameFromSubscript function --------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetParticleNameFromSubscript function">

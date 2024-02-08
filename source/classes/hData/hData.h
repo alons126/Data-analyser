@@ -50,6 +50,8 @@ public:
 
     string GetParticleName(const string &Source, const bool &PluralParticles = false);
 
+    string GetParticleName1(const string &Source, const bool &PluralParticles = false);
+
 // GetParticleNameFromSubscript function --------------------------------------------------------------------------------------------------------------------------------
 
     string GetParticleNameFromSubscript(const string &Source, const bool &PluralParticles = false);

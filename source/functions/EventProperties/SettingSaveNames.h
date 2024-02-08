@@ -34,7 +34,7 @@ void SettingSaveNames(const string &SampleName, const string &Type, const string
         FinalState1 = "_nFDpCD_", FinalState2 = "_pFDpCD_";
     }
 
-    if (findSubstring(PlotsT, "FSRatio")) { // for SFRation plots
+    if (findSubstring(PlotsT, "FSRatio")) { // for FSRation plots
         if (!findSubstring(Type, "vs") && !findSubstring(Type, "vs.") && !findSubstring(Type, "VS") && !findSubstring(Type, "VS.")) {
             if (Type == "W" || Type == "Q2" || Type == "E_e" || Type == "omega" || Type == "Ecal" || Type == "deltaP_T_tot" || Type == "deltaP_T_L" ||
                 Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L" ||
