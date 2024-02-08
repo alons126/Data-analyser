@@ -27,16 +27,13 @@
 
 using namespace std;
 
-void FSRPlotter(TCanvas *HistCanvas, TList *MScThesisPlotsList, const char *filename, const string &SampleName,
-                const string &FSTopology, const string &HistogramClass, const string &DetRegion,
-                const string &HistName_Denominator, const string &HistName_Numerator, const string &FSRHistName,
-                const string &SavePath, const string &SaveName_Denominator, const string &SaveName_Numerator, const string &SaveName_FSR, const int &Num) {
-    bool PrintOut = true;
+void FSRPlotter(TCanvas *HistCanvas, TList *MScThesisPlotsList, const char *filename, const string &SampleName, const string &FSTopology, const string &HistogramClass,
+                const string &DetRegion, const string &HistName_Denominator, const string &HistName_Numerator, const string &FSRHistName, const string &SavePath,
+                const string &SaveName_Denominator, const string &SaveName_Numerator, const string &SaveName_FSR, const int &Num) {
+    bool PrintOut = false;
 
     hData Propeties;
-
-    string Numerator_FS,Denominator_FS;
-
+    string Numerator_FS, Denominator_FS;
     bool TLmom = false;
 
     if (FSTopology == "1N") {
@@ -53,40 +50,33 @@ void FSRPlotter(TCanvas *HistCanvas, TList *MScThesisPlotsList, const char *file
         if (findSubstring(HistName_Numerator, "TL")) {
             HistNameFeed_Numerator = HistName_Numerator + " (" + Numerator_FS + ", " + DetRegion + ")";
             HistNameFeed_Denominator = HistName_Denominator + " (" + Denominator_FS + ", " + DetRegion + ")";
-        } else if (findSubstring(HistName_Numerator, "W distribution") || findSubstring(HistName_Numerator, "Q^{2}") ||
-                   findSubstring(HistName_Numerator, "#theta_{e}") || findSubstring(HistName_Numerator, "#theta_{nFD}") ||
-                   findSubstring(HistName_Numerator, "#theta_{pFD}") || findSubstring(HistName_Numerator, "#theta_{pCD}") ||
-                   findSubstring(HistName_Numerator, "#theta_{tot}") || findSubstring(HistName_Numerator, "#theta_{rel}") ||
-                   findSubstring(HistName_Numerator, "#theta_{#vec{P}_{e},#vec{P}_{tot}}") ||
-                   findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{tot}}") ||
-                   findSubstring(HistName_Numerator, "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}}") ||
-                   findSubstring(HistName_Numerator, "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}}") ||
-                   findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{pL}}") || findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{nL}}") ||
-                   findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{pR}}") || findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{nR}}") ||
-                   findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{nFD}}") || findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{pFD}}") ||
-                   findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{pCD}}") || findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{pCD}}") ||
-                   findSubstring(HistName_Numerator, "#theta_{pFD,pCD}") || findSubstring(HistName_Numerator, "#theta_{nFD,pCD}") ||
-                   findSubstring(HistName_Numerator, "E_{e}") || findSubstring(HistName_Numerator, "#omega around #theta_{e} = 15#circ") ||
-                   findSubstring(HistName_Numerator, "E_{cal}") ||
+        } else if (findSubstring(HistName_Numerator, "W distribution") || findSubstring(HistName_Numerator, "Q^{2}") || findSubstring(HistName_Numerator, "#theta_{e}") ||
+                   findSubstring(HistName_Numerator, "#theta_{nFD}") || findSubstring(HistName_Numerator, "#theta_{pFD}") ||
+                   findSubstring(HistName_Numerator, "#theta_{pCD}") || findSubstring(HistName_Numerator, "#theta_{tot}") ||
+                   findSubstring(HistName_Numerator, "#theta_{rel}") || findSubstring(HistName_Numerator, "#theta_{#vec{P}_{e},#vec{P}_{tot}}") ||
+                   findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{tot}}") || findSubstring(HistName_Numerator, "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}}") ||
+                   findSubstring(HistName_Numerator, "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}}") || findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{pL}}") ||
+                   findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{nL}}") || findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{pR}}") ||
+                   findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{nR}}") || findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{nFD}}") ||
+                   findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{pFD}}") || findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{pCD}}") ||
+                   findSubstring(HistName_Numerator, "#theta_{#vec{q},#vec{P}_{pCD}}") || findSubstring(HistName_Numerator, "#theta_{pFD,pCD}") ||
+                   findSubstring(HistName_Numerator, "#theta_{nFD,pCD}") || findSubstring(HistName_Numerator, "E_{e}") ||
+                   findSubstring(HistName_Numerator, "#omega around #theta_{e} = 15#circ") || findSubstring(HistName_Numerator, "E_{cal}") ||
                    findSubstring(HistName_Numerator, "#deltaP_{T,tot}") || findSubstring(HistName_Numerator, "#delta#alpha_{T,tot}") ||
                    findSubstring(HistName_Numerator, "#deltaP_{T,tot}") || findSubstring(HistName_Numerator, "#delta#alpha_{T,tot}") ||
-                   findSubstring(HistName_Numerator, "#theta_{e} vs.") || findSubstring(HistName_Numerator, "#phi_{e} vs.") ||
-                   findSubstring(HistName_Numerator, "vs. W") ||
+                   findSubstring(HistName_Numerator, "#theta_{e} vs.") || findSubstring(HistName_Numerator, "#phi_{e} vs.") || findSubstring(HistName_Numerator, "vs. W") ||
                    findSubstring(HistName_Numerator, "#theta_{nFD} vs.") || findSubstring(HistName_Numerator, "#theta_{pFD} vs.") ||
-                   findSubstring(HistName_Numerator, "#theta_{pCD} vs.") ||
-                   findSubstring(HistName_Numerator, "#phi_{nFD} vs.") || findSubstring(HistName_Numerator, "#phi_{pFD} vs.") ||
-                   findSubstring(HistName_Numerator, "#phi_{pCD} vs.")
+                   findSubstring(HistName_Numerator, "#theta_{pCD} vs.") || findSubstring(HistName_Numerator, "#phi_{nFD} vs.") ||
+                   findSubstring(HistName_Numerator, "#phi_{pFD} vs.") || findSubstring(HistName_Numerator, "#phi_{pCD} vs.")
                 ) {
-            HistNameFeed_Numerator = HistName_Numerator;
-            HistNameFeed_Denominator = HistName_Denominator;
+            HistNameFeed_Numerator = HistName_Numerator, HistNameFeed_Denominator = HistName_Denominator;
 
             if (PrintOut) {
                 cout << "\nHistNameFeed_Numerator = " << HistNameFeed_Numerator << "\n";
                 cout << "HistNameFeed_Denominator = " << HistNameFeed_Denominator << "\n";
             }
         } else {
-            HistNameFeed_Numerator = HistName_Numerator + " (" + Numerator_FS + ")";
-            HistNameFeed_Denominator = HistName_Denominator + " (" + Denominator_FS + ")";
+            HistNameFeed_Numerator = HistName_Numerator + " (" + Numerator_FS + ")", HistNameFeed_Denominator = HistName_Denominator + " (" + Denominator_FS + ")";
 
             if (PrintOut) {
                 cout << "\nHistNameFeed_Numerator = " << HistNameFeed_Numerator << "\n";
@@ -103,11 +93,7 @@ void FSRPlotter(TCanvas *HistCanvas, TList *MScThesisPlotsList, const char *file
         }
     }
 
-    string FSRatioParticle = Propeties.GetParticleName1(FSRHistName);
-    string FSRatioType = Propeties.GetType(FSRHistName);
-    string FSTopo = Propeties.GetTopology(FSRHistName);
-
-    string FSRationTemp;
+    string FSRatioParticle = Propeties.GetParticleName1(FSRHistName), FSRatioType = Propeties.GetType(FSRHistName), FSTopo = Propeties.GetTopology(FSRHistName), FSRationTemp;
 
     if (PrintOut) {
         cout << "FSRatioParticle = " << FSRatioParticle << "\n";
