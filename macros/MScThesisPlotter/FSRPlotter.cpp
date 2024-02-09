@@ -27,12 +27,11 @@
 
 using namespace std;
 
-void FSRPlotter(TCanvas *HistCanvas, TList *MScThesisPlotsList, const char *filename, const string &SampleName, const string &FSTopology, const string &HistogramClass,
-                const string &DetRegion, const string &HistName_Denominator, const string &HistName_Numerator, const string &FSRHistName, const string &SavePath,
-                const string &SaveName_Denominator, const string &SaveName_Numerator, const string &SaveName_FSR, const int &Num) {
+void FSRPlotter(hData &utilities, TCanvas *HistCanvas, TList *MScThesisPlotsList, const char *filename, const string &SampleName, const string &FSTopology,
+                const string &HistogramClass, const string &DetRegion, const string &HistName_Denominator, const string &HistName_Numerator, const string &FSRHistName,
+                const string &SavePath, const string &SaveName_Denominator, const string &SaveName_Numerator, const string &SaveName_FSR, const int &Num) {
     bool PrintOut = false;
 
-    hData Propeties;
     string Numerator_FS, Denominator_FS;
     bool TLmom = false;
 
@@ -93,7 +92,7 @@ void FSRPlotter(TCanvas *HistCanvas, TList *MScThesisPlotsList, const char *file
         }
     }
 
-    string FSRatioParticle = Propeties.GetParticleName1(FSRHistName), FSRatioType = Propeties.GetType(FSRHistName), FSTopo = Propeties.GetTopology(FSRHistName), FSRationTemp;
+    string FSRatioParticle = utilities.GetParticleName1(FSRHistName), FSRatioType = utilities.GetType(FSRHistName), FSTopo = utilities.GetTopology(FSRHistName), FSRationTemp;
 
     if (PrintOut) {
         cout << "FSRatioParticle = " << FSRatioParticle << "\n";

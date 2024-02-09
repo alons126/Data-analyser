@@ -64,6 +64,39 @@ double SetyOffset1D(const bool &ShowStats) {
     return yOffset;
 }
 
+void DrawPlot(TCanvas *HistogramCanvas, TH1D *Histogram1D, const bool LogScalePlot, const bool LinearScalePlot, const string &SavePath, const string &SaveName,
+              const string &DrawRange) {
+    if (DrawRange == "") {
+        if (LogScalePlot) {
+            HistogramCanvas->SetLogy(1);
+            string SaveNameDir = SavePath + "/" + SaveName + "_log_scale.png";
+            const char *SaveDir = SaveNameDir.c_str();
+            HistogramCanvas->SaveAs(SaveDir);
+        }
+
+        if (LinearScalePlot) {
+            HistogramCanvas->SetLogy(0);
+            string SaveNameDir = SavePath + "/" + SaveName + "_linear_scale.png";
+            const char *SaveDir = SaveNameDir.c_str();
+            HistogramCanvas->SaveAs(SaveDir);
+        }
+    } else {
+        if (LogScalePlot) {
+            HistogramCanvas->SetLogy(1);
+            string SaveNameDir = SavePath + "/" + SaveName + "_" + DrawRange + "_log_scale.png";
+            const char *SaveDir = SaveNameDir.c_str();
+            HistogramCanvas->SaveAs(SaveDir);
+        }
+
+        if (LinearScalePlot) {
+            HistogramCanvas->SetLogy(0);
+            string SaveNameDir = SavePath + "/" + SaveName + "_" + DrawRange + "_linear_scale.png";
+            const char *SaveDir = SaveNameDir.c_str();
+            HistogramCanvas->SaveAs(SaveDir);
+        }
+    }
+}
+
 void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *filename, const char *Histogram1DName,
                    const string &SampleName, const string &SavePath, const string &SaveName, const bool TLmom = false) {
     cout << "\n\n";
@@ -587,6 +620,27 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
     if (!ShowStats) { Histogram1D->SetStats(0); }
 
+//    string Histogram1DNameTemp = Histogram1D->GetName();
+
+    if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
+        Histogram1D->GetYaxis()->SetRangeUser(0., 1.2);
+        DrawPlot(HistogramCanvas, Histogram1D, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range1");
+
+        Histogram1D->GetYaxis()->SetRangeUser(0., 2);
+        DrawPlot(HistogramCanvas, Histogram1D, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range2");
+
+        Histogram1D->GetYaxis()->SetRangeUser(0., 3);
+        DrawPlot(HistogramCanvas, Histogram1D, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range3");
+
+        Histogram1D->GetYaxis()->SetRangeUser(0., 4);
+        DrawPlot(HistogramCanvas, Histogram1D, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range4");
+
+        Histogram1D->GetYaxis()->SetRangeUser(0., 5);
+        DrawPlot(HistogramCanvas, Histogram1D, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range5");
+    } else {
+        DrawPlot(HistogramCanvas, Histogram1D, LogScalePlot, LinearScalePlot, SavePath, SaveName, "");
+    }
+/*
     if (LogScalePlot) {
         HistogramCanvas->SetLogy(1);
         string SaveNameDir = SavePath + "/" + SaveName + "_log_scale.png";
@@ -600,4 +654,5 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         const char *SaveDir = SaveNameDir.c_str();
         HistogramCanvas->SaveAs(SaveDir);
     }
+*/
 }
