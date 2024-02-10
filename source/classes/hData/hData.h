@@ -126,6 +126,10 @@ public:
 
     string SetSaveDir(const string &Source, const string &BaseSaveDir, const string &Mod = "");
 
+// ReplaceSubStr function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ReplaceSubStr(string &str, const string &subStr, const string &replacement);
+
 };
 
 #endif //HDATA_H

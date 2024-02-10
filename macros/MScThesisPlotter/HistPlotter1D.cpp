@@ -22,6 +22,10 @@
 #include "../../source/constants.h"
 #include "Histofinder1D.cpp"
 
+#if Independent1Ddraw
+#include "TitleAligner.cpp"
+#endif
+
 using namespace std;
 
 const string ConfigRegion1D(const string &Histogram2DNameCopy) {
@@ -181,6 +185,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     Histogram1D->GetYaxis()->CenterTitle(true);
     Histogram1D->SetLineWidth(LineWidth);
     Histogram1D->SetLineStyle(0);
+    Histogram1D->SetLineColor(kBlue);
     MScThesisPlotsList->Add(Histogram1D);
 
     if (Histogram1D->Integral() == 0.) {
@@ -474,16 +479,13 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset,
-                                      Legend_y2_OneLine + yOffset);
+            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset, Legend_y2_OneLine + yOffset);
 
             if (Histogram1DNameCopy == "CD & FD Piplus momentum #epsilon_{eff} (1e cut)") {
-                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = "
-                                                                              + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(),
+                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(),
                                                                  "l");
             } else {
-                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = "
-                                                                              + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(),
+                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(),
                                                                  "l");
             }
 
@@ -508,9 +510,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
                 auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine + xOffset - 0.15,
                                           Legend_y2_OneLine + yOffset);
-                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh,
-                                                                 ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(),
-                                                                 "l");
+                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
                 Legend->SetTextSize(0.03);
                 Legend->SetTextAlign(12);
                 Legend->Draw("same");
@@ -534,12 +534,8 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
                 auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines + xOffset - 0.15,
                                           Legend_y2_TwoLines + yOffset);
-                TLegendEntry *UpperMomThEntry = Legend->AddEntry(UpperMomTh,
-                                                                 ("Upper cut = " + to_string_with_precision(UpperCut, 3) + " [GeV/c]").c_str(),
-                                                                 "l");
-                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh,
-                                                                 ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(),
-                                                                 "l");
+                TLegendEntry *UpperMomThEntry = Legend->AddEntry(UpperMomTh, ("Upper cut = " + to_string_with_precision(UpperCut, 3) + " [GeV/c]").c_str(), "l");
+                TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
                 Legend->SetTextSize(0.03);
                 Legend->SetTextAlign(12);
                 Legend->Draw("same");
@@ -575,10 +571,8 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
                 auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.1 + xOffset,
                                           Legend_y2_TwoLines + yOffset);
-                TLegendEntry *LowerMomKCutEntry = Legend->AddEntry(LowerMomKCut, ("Lower cut = " + to_string_with_precision(LowerMomentumKCut, 1) +
-                                                                                  " [GeV/c]").c_str(), "l");
-                TLegendEntry *UpperMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("Upper cut = " + to_string_with_precision(UpperMomentumKCut, 1) +
-                                                                                  " [GeV/c]").c_str(), "l");
+                TLegendEntry *LowerMomKCutEntry = Legend->AddEntry(LowerMomKCut, ("Lower cut = " + to_string_with_precision(LowerMomentumKCut, 1) + " [GeV/c]").c_str(), "l");
+                TLegendEntry *UpperMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("Upper cut = " + to_string_with_precision(UpperMomentumKCut, 1) + " [GeV/c]").c_str(), "l");
                 Legend->SetTextSize(0.03);
                 Legend->SetTextAlign(12);
                 Legend->Draw("same");
@@ -614,6 +608,36 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
             }
         } else {
+            string Histogram1D_Title = Histogram1D->GetTitle();
+            string Histogram1D_xLabel = Histogram1D->GetXaxis()->GetTitle();
+            string Histogram1D_yLabel = Histogram1D->GetYaxis()->GetTitle();
+
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "|#vec{P}_{tot}| = |#vec{P}_{pL} + #vec{P}_{pR}|", "P_{tot}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "|#vec{P}_{rel}| = |#vec{P}_{nL} - #vec{P}_{nR}|/2", "P_{rel}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "|#vec{P}_{rel}| = |#vec{P}_{pL} - #vec{P}_{pR}|/2", "P_{rel}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "E_{cal} = E_{e} + T_{nFD} + T_{pCD}", "E_{cal}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "E_{cal} = E_{e} + T_{pFD} + T_{pCD}", "E_{cal}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "E_{cal} = E_{e} + T_{nucFD} + T_{nucCD}", "E_{cal}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "E_{cal} = E_{e} + T_{nuc,FD} + T_{nuc,CD}", "E_{cal}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nucFD} + #vec{p}_{T,nucCD}|", "#deltaP_{T,tot}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}|", "P_{miss}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{pL} + #vec{P}_{pR}- #vec{q}|", "P_{miss}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nucL} + #vec{P}_{nucR}- #vec{q}|", "P_{miss}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "#vec{P}_{tot}-#vec{q}", "P_{miss}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}} ", "W");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}} ", "W");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "#vec{P}", "#font[62]{P}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "#vec{q}", "#font[62]{q}");
+
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
         }
     }

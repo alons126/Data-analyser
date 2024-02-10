@@ -20,6 +20,10 @@
 #include "../../source/functions/GeneralFunctions.h"
 #include "../../source/constants.h"
 
+#if Independent2Ddraw
+#include "TitleAligner.cpp"
+#endif
+
 using namespace std;
 
 const string ConfigRegion2D(const string &Histogram2DNameCopy) {
@@ -268,7 +272,6 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
             double LowerMomentumTh = 0.4;
 
-
             if (findSubstring(Histogram2DNameCopy, "FD")) {
                 Histogram2D->SetTitle("Forward-going proton momentum vs. scattering angle in ^{12}C(e,e')");
             } else if (findSubstring(Histogram2DNameCopy, "CD")) {
@@ -282,13 +285,11 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset,
-                                      Legend_y2_OneLine + yOffset);
+            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset, Legend_y2_OneLine + yOffset);
 
             TLegendEntry *LowerMomThEntry;
 
-            LowerMomThEntry = Legend->AddEntry(LowerMomTh,
-                                               ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+            LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
             Histogram2D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
 
             Legend->SetTextSize(0.03);
@@ -322,20 +323,15 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset,
-                                      Legend_y2_OneLine + yOffset);
+            auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset, Legend_y2_OneLine + yOffset);
 
             TLegendEntry *LowerMomThEntry;
 
             if (findSubstring(Histogram2DNameCopy, "#pi^{+}")) {
-                LowerMomThEntry = Legend->AddEntry(LowerMomTh,
-                                                   ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) +
-                                                    " [GeV/c]").c_str(), "l");
+                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
                 Histogram2D->GetXaxis()->SetTitle("P_{#pi^{+}} [GeV/c]");
             } else if (findSubstring(Histogram2DNameCopy, "#pi^{-}")) {
-                LowerMomThEntry = Legend->AddEntry(LowerMomTh,
-                                                   ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]")
-                                                           .c_str(), "l");
+                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
                 Histogram2D->GetXaxis()->SetTitle("P_{#pi^{-}} [GeV/c]");
             }
 
@@ -343,8 +339,43 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Legend->SetTextAlign(12);
             Legend->Draw("same");
         } else {
-            Histogram2D->Draw("colz"), gPad->Update();
+            string Histogram2D_Title = Histogram2D->GetTitle();
+            string Histogram2D_xLabel = Histogram2D->GetXaxis()->GetTitle();
+            string Histogram2D_yLabel = Histogram2D->GetYaxis()->GetTitle();
 
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "|#vec{P}_{tot}| = |#vec{P}_{pL} + #vec{P}_{pR}|", "P_{tot}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "|#vec{P}_{rel}| = |#vec{P}_{nL} - #vec{P}_{nR}|/2", "P_{rel}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "|#vec{P}_{rel}| = |#vec{P}_{pL} - #vec{P}_{pR}|/2", "P_{rel}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "E_{cal} = E_{e} + T_{nFD} + T_{pCD}", "E_{cal}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "E_{cal} = E_{e} + T_{pFD} + T_{pCD}", "E_{cal}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "E_{cal} = E_{e} + T_{nucFD} + T_{nucCD}", "E_{cal}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "E_{cal} = E_{e} + T_{nuc,FD} + T_{nuc,CD}", "E_{cal}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nucFD} + #vec{p}_{T,nucCD}|", "#deltaP_{T,tot}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nucFD} + #vec{p}_{T,nucCD}|", "#deltaP_{T,tot}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}} ", "W");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}} ", "W");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}|", "P_{miss}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{pL} + #vec{P}_{pR}- #vec{q}|", "P_{miss}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nucL} + #vec{P}_{nucR}- #vec{q}|", "P_{miss}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "#vec{P}_{tot}-#vec{q}", "P_{miss}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "#vec{P}", "#font[62]{P}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "#vec{q}", "#font[62]{q}");
+
+            Histogram2D->Draw("colz"), gPad->Update();
         }
     }
 

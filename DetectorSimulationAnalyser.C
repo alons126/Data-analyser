@@ -195,7 +195,7 @@ void EventAnalyser() {
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = false;
+    bool apply_kinematical_weights = true;
     bool apply_nucleon_SmearAndCorr = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
@@ -966,14 +966,10 @@ void EventAnalyser() {
     //TODO: UPDATE AMaps loading constructor electron histogram's number of bins
 
     if (Generate_AMaps) {
-        aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"],
-                      NumberNucOfMomSlices,
-                      NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins,
-                      HistElectronSliceNumOfXBins);
+        aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], NumberNucOfMomSlices,
+                      NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
         wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"],
-                      NumberNucOfMomSlices,
-                      NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins,
-                      HistElectronSliceNumOfXBins);
+                      NumberNucOfMomSlices, NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
     } else {
         aMaps = AMaps(AcceptanceMapsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
         wMaps = AMaps(AcceptanceWeightsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
@@ -10123,8 +10119,7 @@ void EventAnalyser() {
 
                         //<editor-fold desc="Safety checks for TL electrons (AMaps & WMaps)">
                         if (particlePDGtmp != 11) {
-                            cout << "\n\nTL electrons check (AMaps & WMaps): TL electron PGD is invalid (" << particlePDGtmp
-                                 << ")! Exiting...\n\n", exit(0);
+                            cout << "\n\nTL electrons check (AMaps & WMaps): TL electron PGD is invalid (" << particlePDGtmp                                 << ")! Exiting...\n\n", exit(0);
                         }
 
                         if (!inFD) { cout << "\n\nTL electrons check (AMaps & WMaps): TL electron is not in FD! Exiting...\n\n", exit(0); }

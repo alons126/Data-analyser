@@ -987,3 +987,30 @@ string hData::SetSaveDir(const string &Source, const string &BaseSaveDir, const 
     }
 }
 //</editor-fold>
+
+// ReplaceSubStr function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ReplaceSubStr function">
+void hData::ReplaceSubStr(string &str, const string &subStr, const string &replacement) {
+    bool PrintOut = false;
+
+    if (PrintOut) { cout << "\nstr0 = " << str << "\n"; }
+
+    string TempSource = str;
+
+    size_t pos = TempSource.find(subStr);
+
+    // Iterate till index position of substring is valid:
+    while (pos != std::string::npos) {
+        // Replace the first occurrence of substring in string from position pos onwards:
+        TempSource.replace(pos, subStr.length(), replacement);
+
+        // Get the index position of next occurrence of substring in string:
+        pos = TempSource.find(subStr, pos + replacement.length());
+    }
+
+    str = TempSource;
+
+    if (PrintOut) { cout << "str1 = " << str << "\n"; }
+}
+//</editor-fold>
