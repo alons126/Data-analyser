@@ -1,0 +1,17 @@
+to see the file content:
+.ls
+
+to see the branches in the tree:
+tree_name->Print()
+
+to draw a variable (branch):
+tree_name->Draw("branch_name")
+
+to add selections:
+tree_name->Draw("branch_name", "cuts")
+
+for example:
+tree_name->Draw("branch_name", "pyi>100e3 && Ef>100e3")
+
+add weights:
+tree_name->Draw("branch_name", "weight*(pyi>100e3 && Ef>100e3)")

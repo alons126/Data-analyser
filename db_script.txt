@@ -1,0 +1,41 @@
+root plots_T5tot_ALL_CUTS/debugOutputFile.root
+
+TCanvas *c = new TCanvas("c", "c", 1600, 1200);
+c->SetBottomMargin(0.1275);
+c->SetLeftMargin(0.1275);
+c->SetGrid();
+
+pid_proton_fd_debug->Draw("colz")
+c->SaveAs("./plots_T5tot_ALL_CUTS/pid_proton_fd_debug.png");
+
+pid_fd_debug->Draw("colz")
+c->SaveAs("./plots_T5tot_ALL_CUTS/pid_fd_debug.png");
+
+pid_proton_cd_debug->Draw("colz")
+c->SaveAs("./plots_T5tot_ALL_CUTS/pid_proton_cd_debug.png");
+
+pid_cd_debug->Draw("colz")
+c->SaveAs("./plots_T5tot_ALL_CUTS/pid_cd_debug.png");
+
+
+
+
+
+root plots_T5tot_ALL_CUTS_woChi2/debugOutputFile.root
+
+TCanvas *c = new TCanvas("c", "c", 1600, 1200);
+c->SetBottomMargin(0.1275);
+c->SetLeftMargin(0.1275);
+c->SetGrid();
+
+pid_proton_fd_debug->Draw("colz")
+c->SaveAs("./plots_T5tot_ALL_CUTS_woChi2/pid_proton_fd_debug.png");
+
+pid_fd_debug->Draw("colz")
+c->SaveAs("./plots_T5tot_ALL_CUTS_woChi2/pid_fd_debug.png");
+
+pid_proton_cd_debug->Draw("colz")
+c->SaveAs("./plots_T5tot_ALL_CUTS_woChi2/pid_proton_cd_debug.png");
+
+pid_cd_debug->Draw("colz")
+c->SaveAs("./plots_T5tot_ALL_CUTS_woChi2/pid_cd_debug.png");

@@ -19,6 +19,7 @@
 
 #include "../../source/functions/GeneralFunctions.h"
 #include "../../source/constants.h"
+#include "Histofinder2D.cpp"
 
 #if Independent2Ddraw
 #include "TitleAligner.cpp"
@@ -75,7 +76,20 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     HistogramCanvas->Clear(); // Clear previous plot
 
     TFile *file = new TFile(filename);
+    if (!file) { cout << "\n\nHistPlotter2D: could not load root file! Exiting...\n", exit(0); }
+
+    TH2D *Histogram2D;
+
+    if (file->Get(Histogram2DName) == nullptr ||
+        (findSubstring(Histogram2DName, "vs") || findSubstring(Histogram2DName, "VS"))) {
+        Histogram2D = Histofinder2D(filename, Histogram2DName, false);
+    } else {
+        Histogram2D = (TH2D *) file->Get(Histogram2DName);
+    }
+
+    /*
     TH2D *Histogram2D = (TH2D *) file->Get(Histogram2DName);
+*/
 
     double Legend_x1_BaseLine = gStyle->GetStatX(), Legend_y1_BaseLine = gStyle->GetStatY(); // Top right
     double Legend_x2_BaseLine = gStyle->GetStatX(), Legend_y2_BaseLine = gStyle->GetStatY(); // Bottom left
@@ -397,4 +411,6 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
     gStyle->SetStatX(DefStatX);
     gStyle->SetStatY(DefStatY);
+
+    HistogramCanvas->Clear();
 }

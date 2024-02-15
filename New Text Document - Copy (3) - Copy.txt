@@ -1,0 +1,22 @@
+TCanvas *c1 = new TCanvas("c1", "c1", 1600, 1200);
+
+
+gst->Draw("El","qel");
+c1->SaveAs("qel.png");
+c1->Clear();
+
+gst->Draw("El","mec");
+c1->SaveAs("mec.png");
+c1->Clear();
+
+gst->Draw("El","res");
+c1->SaveAs("res.png");
+c1->Clear();
+
+gst->Draw("El","dis");
+c1->SaveAs("dis.png");
+c1->Clear();
+
+
+.q
+

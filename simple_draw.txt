@@ -1,0 +1,72 @@
+TCanvas *c = new TCanvas("c1", "c2", 1000 * 1.25, 750 * 1.25); // normal res
+
+c->cd()->SetGrid();
+c->cd()->SetBottomMargin(0.14), c->cd()->SetLeftMargin(0.16), c->cd()->SetRightMargin(0.16), c->cd()->SetTopMargin(0.12);
+c->cd();
+
+TH1D *h = (TH1D *) _file0->Get("Neutron momentum APID&NC (1n, FD)");
+//TH1D *h = (TH1D *) _file0->Get("Reco P_{nFD} used in nRes (1n, FD)");
+
+h->Draw();
+
+TH1D *hUpper = (TH1D *) h->Clone("hUpper");
+hUpper->GetXaxis()->SetRangeUser(2.5,6.);
+TH1D *hUpperClone = (TH1D *) hUpper->Clone("hUpperClone");
+
+TH1D *hLower = (TH1D *) h->Clone("hLower");
+hLower->GetXaxis()->SetRangeUser(0,2.5);
+TH1D *hLowerClone = (TH1D *) hLower->Clone("hLowerClone");
+
+double p = ((hUpper->Integral())/(h->Integral()))*100;
+
+std::cout << "\nTotal number of events:\t" << h->Integral() << "\n";
+std::cout << "Total number of events (upper):\t" << hUpper->Integral() << "\n";
+std::cout << "Total number of events (lower):\t" << hLower->Integral() << "\n";
+std::cout << "Upper percentage:\t" << p << "\n\n";
+
+h->Draw();
+TLine *KCupperCut = new TLine(2.5, gPad->GetUymin(), 2.5, gPad->GetUymax());
+KCupperCut->SetLineWidth(3);
+KCupperCut->SetLineColor(kBlue);
+KCupperCut->Draw("same");
+TLine *KClowerCut = new TLine(0.4, gPad->GetUymin(), 0.4, gPad->GetUymax());
+KClowerCut->SetLineWidth(3);
+KClowerCut->SetLineColor(kRed);
+KClowerCut->Draw("same");
+c->SaveAs("01_reg.png");
+c->Clear();
+
+hUpperClone->Draw();
+KCupperCut->Draw("same");
+c->SaveAs("02_hUpper.png");
+c->Clear();
+
+hLowerClone->Draw();
+KClowerCut->Draw("same");
+c->SaveAs("03_hLower.png");
+c->Clear();
+
+
+
+***Neutron momentum APID&NC (1n, FD)***
+
+Total number of events: 140163
+root [198] std::cout << "Total number of events (upper):\t" << hUpper->Integral() << "\n";
+Total number of events (upper): 15206
+root [199] std::cout << "Total number of events (lower):\t" << hLower->Integral() << "\n";
+Total number of events (lower): 127403
+root [200] std::cout << "Upper percentage:\t" << p << "\n\n";
+Upper percentage:       10.8488
+
+
+
+
+***Reco P_{nFD} used in nRes (1n, FD)***
+
+Total number of events: 36262
+root [161] std::cout << "Total number of events (upper):\t" << hUpper->Integral() << "\n";
+Total number of events (upper): 3463
+root [162] std::cout << "Total number of events (lower):\t" << hLower->Integral() << "\n";
+Total number of events (lower): 33568
+root [163] std::cout << "Upper percentage:\t" << p << "\n\n";
+Upper percentage:       9.54994

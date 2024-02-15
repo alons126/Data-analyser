@@ -3,6 +3,7 @@
 #define ANALYSER_CODESETUP_H
 
 #define MomResDebugMacro false
+#define FullAnalyser true
 
 #include "../source/constants.h"
 #include "../source/classes/Directories/Directories.cpp"

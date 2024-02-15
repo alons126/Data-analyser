@@ -4,7 +4,10 @@
 #include <TCanvas.h>
 
 #include "../../source/functions/GeneralFunctions.h"
+
+#if Independent2Ddraw
 #include "Histofinder2D.cpp"
+#endif
 
 using namespace std;
 

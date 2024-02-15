@@ -1,33 +1,4 @@
-/* root BetaFitAndSave.cpp -q -b */
-
-#include <iostream>
-#include <fstream>
-#include <string>
-
-#include <TFile.h>
-#include <TTree.h>
-#include <TLorentzVector.h>
-#include <TH1.h>
-#include <TH2.h>
-#include <TLatex.h>
-#include <TChain.h>
-#include <TCanvas.h>
-#include <TStyle.h>
-#include <TDatabasePDG.h>
-#include <TApplication.h>
-#include <TROOT.h>
-
-#include "../../source/functions/GeneralFunctions.h"
-#include "../../source/constants.h"
-
-using namespace std;
-
-TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, const bool TLmom = false) {
-    bool PrintOut = false;
-    bool PrintOut1 = false;
-
-    TFile *file = new TFile(filename);
-    if (!file) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
+std::string	Histogram1DTempName = "#theta_{nFD,pCD} (All Int., nFDpCD)";
 
     TH1D *Histogram1D;
 
@@ -66,12 +37,6 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
                 HistogramFound = true;
 
                 Histogram1D = (TH1D *) Key->ReadObj();
-
-//                if (findSubstring(Histogram1DNameSubstring, "#theta_{nFD,pCD}")) {
-//                    cout << Histogram1D->GetBinCenter(Histogram1D->GetMaximumBin());
-//                    exit(0);
-//                }
-
                 FoundHistName = Key->GetClassName();
                 break;
             }
@@ -88,7 +53,4 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
             cout << "\n\nHistofinder1D: histogram found!\n";
             cout << "FoundHistName = " << FoundHistName << "\n";
         }
-
-        return Histogram1D;
     }
-}

@@ -37,9 +37,12 @@
 #include "clas12reader.h"
 */
 
+#if FullAnalyser
 #include "clas12reader.h"
 
 using namespace clas12;
+#endif
+
 using namespace std;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +105,8 @@ double rCalc(double x, double y, double z) {
 
 // LogEventCuts functions -----------------------------------------------------------------------------------------------------------------------------------------------
 
+#if FullAnalyser
+
 //<editor-fold desc="LogEventCuts function (original/MicroBooNE)">
 /* Usage: in cut parameter testings, log to an AC histogram given the cuts. May be applied to other cuts in the future. */
 
@@ -141,6 +146,8 @@ void LogEventCuts(TH1D *Histogram1D, clas12::region_part_ptr Particle, double Lo
     }
 }
 //</editor-fold>
+
+#endif
 
 // BoolToString function ------------------------------------------------------------------------------------------------------------------------------------------------
 

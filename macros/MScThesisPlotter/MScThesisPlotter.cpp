@@ -18,6 +18,7 @@
 #include <TROOT.h>
 
 #define noFSRatio false
+#define FullAnalyser false
 #define Independent1Ddraw true
 #define Independent2Ddraw false
 
@@ -130,21 +131,20 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="Final runs">
-    const char *Final_noSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wFCwKC_wKW_v2"
-                                  "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+    const char *Final_noSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v2/"
+                                  "C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wFCwKC_wKW_v2/"
+                                  "C12x4_simulation_G18_Q204_6GeV_plots.root";
 
-    const char *Final_wSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v2"
-                                 "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+    const char *Final_wSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v2/"
+                                 "C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v2/"
+                                 "C12x4_simulation_G18_Q204_6GeV_plots.root";
 
-//    const char *Final_noSaC_Data = "/mnt/e/C12x4_data_6GeV/01_Initial_runs/v2/C12x4_data_6GeV_S02ACnoNC_v2"
-//                                   "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *Final_noSaC_Data = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wFCwKC_wKW_v2"
-                                   "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-
-//    const char *Final_wSaC_Data = "/mnt/e/C12x4_data_6GeV/01_Initial_runs/v2/C12x4_data_6GeV_S02ACnoNC_v2"
-//                                  "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *Final_wSaC_Data = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v2"
-                                  "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+    const char *Final_noSaC_Data = "/mnt/e/C12x4_data_6GeV/05_Final_runs/v2/"
+                                   "C12x4_data_6GeV_S03AC_NC_wFCwKC_wKW_v2/"
+                                   "C12x4_data_6GeV_plots.root";
+    const char *Final_wSaC_Data = "/mnt/e/C12x4_data_6GeV/05_Final_runs/v2/"
+                                  "C12x4_data_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v2/"
+                                  "C12x4_data_6GeV_plots.root";
     //</editor-fold>
 
     //</editor-fold>
@@ -1375,4 +1375,6 @@ void MScThesisPlotter() {
 
     cout << "\n\nExcecution finished!\n";
 //    cout << "\n\nREPLACE DATA DIR!!!!!\n";
+
+    Canv->Clear();
 }

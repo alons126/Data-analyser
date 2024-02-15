@@ -95,6 +95,7 @@ void FSRPlotter(hData &utilities, TCanvas *HistCanvas, TList *MScThesisPlotsList
     string FSRatioParticle = utilities.GetParticleName1(FSRHistName), FSRatioType = utilities.GetType(FSRHistName), FSTopo = utilities.GetTopology(FSRHistName), FSRationTemp;
 
     if (PrintOut) {
+        cout << "HistogramClass = " << HistogramClass << "\n";
         cout << "FSRatioParticle = " << FSRatioParticle << "\n";
         cout << "FSRatioType = " << FSRatioType << "\n";
         cout << "FSTopo = " << FSTopo << "\n";
@@ -135,22 +136,22 @@ void FSRPlotter(hData &utilities, TCanvas *HistCanvas, TList *MScThesisPlotsList
     }
 
     if (HistogramClass == "TH1D") {
+        if (PrintOut) { cout << "\nHistNameFeed_Numerator = " << HistNameFeed_Numerator << "\n\n"; }
         HistPlotter1D(HistCanvas, MScThesisPlotsList, filename, HistNameFeed_Numerator.c_str(), SampleName, SavePath, (to_string(Num) + "a_" + SaveName_Numerator));
-        if (PrintOut) { cout << "\n\nHistNameFeed_Numerator = " << HistNameFeed_Numerator << "\n"; }
 
+        if (PrintOut) { cout << "\nHistNameFeed_Denominator = " << HistNameFeed_Denominator << "\n\n"; }
         HistPlotter1D(HistCanvas, MScThesisPlotsList, filename, HistNameFeed_Denominator.c_str(), SampleName, SavePath, (to_string(Num) + "b_" + SaveName_Denominator));
-        if (PrintOut) { cout << "\n\nHistNameFeed_Denominator = " << HistNameFeed_Denominator << "\n"; }
 
+        if (PrintOut) { cout << "\nFSRationTemp = " << FSRationTemp << "\n\n"; }
         HistPlotter1D(HistCanvas, MScThesisPlotsList, filename, FSRationTemp.c_str(), SampleName, SavePath, (to_string(Num) + "c_" + SaveName_FSR), TLmom);
-        if (PrintOut) { cout << "\n\nFSRationTemp = " << FSRationTemp << "\n"; }
     } else if (HistogramClass == "TH2D") {
+        if (PrintOut) { cout << "\nHistNameFeed_Numerator = " << HistNameFeed_Numerator << "\n\n"; }
         HistPlotter2D(HistCanvas, MScThesisPlotsList, filename, HistNameFeed_Numerator.c_str(), SampleName, SavePath, (to_string(Num) + "a_" + SaveName_Numerator));
-        if (PrintOut) { cout << "\n\nHistNameFeed_Numerator = " << HistNameFeed_Numerator << "\n"; }
 
+        if (PrintOut) { cout << "\nHistNameFeed_Denominator = " << HistNameFeed_Denominator << "\n\n"; }
         HistPlotter2D(HistCanvas, MScThesisPlotsList, filename, HistNameFeed_Denominator.c_str(), SampleName, SavePath, (to_string(Num) + "b_" + SaveName_Denominator));
-        if (PrintOut) { cout << "\n\nHistNameFeed_Denominator = " << HistNameFeed_Denominator << "\n"; }
 
+        if (PrintOut) { cout << "\nFSRationTemp = " << FSRationTemp << "\n\n"; }
         HistPlotter2D(HistCanvas, MScThesisPlotsList, filename, FSRationTemp.c_str(), SampleName, SavePath, (to_string(Num) + "c_" + SaveName_FSR));
-        if (PrintOut) { cout << "\n\nFSRationTemp = " << FSRationTemp << "\n"; }
     }
 }

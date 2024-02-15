@@ -1,0 +1,12 @@
+TCanvas *c1 = new TCanvas("c1", "c1", 1600, 1200);
+
+
+gst->Draw("tgt");
+
+
+c1->SaveAs("tgt.png");
+c1->Clear();
+
+
+.q
+
