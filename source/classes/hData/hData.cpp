@@ -422,7 +422,7 @@ string hData::GetFS(const string &Source) {
 }
 //</editor-fold>
 
-// GetTopology function -------------------------------------------------------------------------------------------------------------------------------------------------------
+// GetTopology function -------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GetTopology function">
 string hData::GetTopology(const string &Source) {

@@ -183,7 +183,7 @@ void EventAnalyser() {
     bool apply_Electron_beta_cut = true; // Electron beta cut
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_1e_cut = true;
 
     // My analysis cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
     /* Nucleon cuts */
