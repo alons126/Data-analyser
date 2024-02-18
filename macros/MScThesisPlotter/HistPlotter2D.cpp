@@ -141,6 +141,15 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         Histogram2D->Draw();
         displayText->Draw();
     } else if (Histogram2D->Integral() != 0.) {
+        string Histogram2D_Title = Histogram2D->GetTitle();
+        string Histogram2D_xLabel = Histogram2D->GetXaxis()->GetTitle();
+        string Histogram2D_yLabel = Histogram2D->GetYaxis()->GetTitle();
+
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1p", "1pFD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1n", "1nFD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "pFDpCD", "1pFD1pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "nFDpCD", "1nFD1pCD");
+
         if (findSubstring(Histogram2DNameCopy, "dc_hitmap")) {
 
             ShowStats = false;
@@ -240,46 +249,36 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             UpperBetaElectronCut->Draw("same");
         } else if (Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC (2p, CD-CTOF)" ||
                    Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC (2p, CD-CTOF)") {
-
-//            if (Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC (2p, CD-CTOF)") {
-//                Histogram2D->SetTitle("#theta_{p_{1},p_{2}} vs. CTOF time-of-flight difference");
-//                Histogram2D->SetTitle("#theta_{p_{1},p_{2}} vs. CTOF time-of-flight difference");
-//            } else if (Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC (2p, CD-CTOF)") {
-//                Histogram2D->SetTitle("#theta_{p_{1},p_{2}} vs. CTOF hit position difference");
-//            }
+            if (Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC (2p, CD-CTOF)") {
+                Histogram2D->SetTitle("#theta_{p_{1},p_{2}} vs. CTOF time-of-flight difference in #font[12]{2p}");
+                Histogram2D->GetYaxis()->SetTitle("Time-of-flight difference [ns]");
+            } else if (Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC (2p, CD-CTOF)") {
+                Histogram2D->SetTitle("#theta_{p_{1},p_{2}} vs. CTOF hit position difference in #font[12]{2p}");
+                Histogram2D->GetYaxis()->SetTitle("Hit position difference [cm]");
+            }
 
             Histogram2D->Draw("colz"), gPad->Update();
         } else if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)" ||
                    Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)") {
-            Histogram2D->Draw("colz"), gPad->Update();
-//            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
+            if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)") {
+                Histogram2D->SetTitle("#theta_{pFD} vs. #theta_{pCD} for every #theta_{pFD,pCD} in 1pFD1pCD");
+            } else if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)") {
+                Histogram2D->SetTitle("#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD} < 20#circ in 1pFD1pCD");
+            }
 
-//            TGraph *ClusterCenter = new TGraph();
-//            ClusterCenter->AddPoint(40., 40.);
-//            ClusterCenter->Draw("p");
-//            ClusterCenter->SetMarkerStyle(22);
-//            ClusterCenter->SetMarkerColor(kMagenta);
-//            ClusterCenter->SetMarkerSize(3);
+            Histogram2D->Draw("colz"), gPad->Update();
 
             TLine *UpperThetapFDcut = new TLine(gPad->GetUxmin(), 45., gPad->GetUxmax(), 45.);
-            UpperThetapFDcut->SetLineWidth(3);
-            UpperThetapFDcut->SetLineColor(kGreen);
-            UpperThetapFDcut->Draw("same");
+            UpperThetapFDcut->SetLineWidth(3), UpperThetapFDcut->SetLineColor(kGreen), UpperThetapFDcut->Draw("same");
 
             TLine *LowerThetapFDcut = new TLine(gPad->GetUxmin(), 35., gPad->GetUxmax(), 35.);
-            LowerThetapFDcut->SetLineWidth(3);
-            LowerThetapFDcut->SetLineColor(kGreen);
-            LowerThetapFDcut->Draw("same");
+            LowerThetapFDcut->SetLineWidth(3), LowerThetapFDcut->SetLineColor(kGreen), LowerThetapFDcut->Draw("same");
 
             TLine *UpperThetapCDcut = new TLine(45., gPad->GetUymin(), 45., gPad->GetUymax());
-            UpperThetapCDcut->SetLineWidth(3);
-            UpperThetapCDcut->SetLineColor(kRed);
-            UpperThetapCDcut->Draw("same");
+            UpperThetapCDcut->SetLineWidth(3), UpperThetapCDcut->SetLineColor(kRed), UpperThetapCDcut->Draw("same");
 
             TLine *LowerThetapCDcut = new TLine(35., gPad->GetUymin(), 35., gPad->GetUymax());
-            LowerThetapCDcut->SetLineWidth(3);
-            LowerThetapCDcut->SetLineColor(kRed);
-            LowerThetapCDcut->Draw("same");
+            LowerThetapCDcut->SetLineWidth(3), LowerThetapCDcut->SetLineColor(kRed), LowerThetapCDcut->Draw("same");
         } else if (findSubstring(Histogram2DNameCopy, "P_{p} vs. #theta_{p}")) {
             ShowStats = false;
 
@@ -306,9 +305,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
             Histogram2D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
 
-            Legend->SetTextSize(0.03);
-            Legend->SetTextAlign(12);
-            Legend->Draw("same");
+            Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else if (findSubstring(Histogram2DNameCopy, "P_{#pi^{+}} vs. #theta_{#pi^{+}}") ||
                    findSubstring(Histogram2DNameCopy, "P_{#pi^{-}} vs. #theta_{#pi^{-}}")) {
             ShowStats = false;
@@ -333,9 +330,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram2D->Draw("colz"), gPad->Update();
 
             TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, gPad->GetUymax());
-            LowerMomTh->SetLineWidth(3);
-            LowerMomTh->SetLineColor(kRed);
-            LowerMomTh->Draw("same");
+            LowerMomTh->SetLineWidth(3), LowerMomTh->SetLineColor(kRed), LowerMomTh->Draw("same");
 
             auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset, Legend_y2_OneLine + yOffset);
 
@@ -349,13 +344,11 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram2D->GetXaxis()->SetTitle("P_{#pi^{-}} [GeV/c]");
             }
 
-            Legend->SetTextSize(0.03);
-            Legend->SetTextAlign(12);
-            Legend->Draw("same");
+            Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else {
-            string Histogram2D_Title = Histogram2D->GetTitle();
-            string Histogram2D_xLabel = Histogram2D->GetXaxis()->GetTitle();
-            string Histogram2D_yLabel = Histogram2D->GetYaxis()->GetTitle();
+//            string Histogram2D_Title = Histogram2D->GetTitle();
+//            string Histogram2D_xLabel = Histogram2D->GetXaxis()->GetTitle();
+//            string Histogram2D_yLabel = Histogram2D->GetYaxis()->GetTitle();
 
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "|#vec{P}_{tot}| = |#vec{P}_{pL} + #vec{P}_{pR}|", "P_{tot}");
@@ -388,6 +381,11 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "#vec{P}_{tot}-#vec{q}", "P_{miss}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "#vec{P}", "#font[62]{P}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "#vec{q}", "#font[62]{q}");
+
+//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1p", "1pFD");
+//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1n", "1nFD");
+//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "pFDpCD", "1pFD1pCD");
+//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "nFDpCD", "1nFD1pCD");
 
             Histogram2D->Draw("colz"), gPad->Update();
         }

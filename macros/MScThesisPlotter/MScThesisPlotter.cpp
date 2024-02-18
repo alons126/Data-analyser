@@ -1373,8 +1373,7 @@ void MScThesisPlotter() {
 
     //</editor-fold>
 
-    cout << "\n\nExcecution finished!\n";
-//    cout << "\n\nREPLACE DATA DIR!!!!!\n";
+    cout << "\n\nExcecution finished!\n", exit(0);
 
     Canv->Clear();
 }
