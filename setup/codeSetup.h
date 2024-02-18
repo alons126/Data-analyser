@@ -80,15 +80,24 @@ std::string file_name = "general_file";
 ////std::string AnalyseFile = AnalyseFileDir + "recon_C12x4_G18_02a_00_000_Q204_598636MeV_2*.hipo";          // 512 files
 ////</editor-fold>
 
-//<editor-fold desc="C12x4 5.98636GeV - FULL (ifarm DATA files - C12x4 DATA files)">
+//<editor-fold desc="C12x4 5.98636GeV - run 015188 (ifarm DATA files - C12x4 DATA files)">
 /* C12x4 5.98636GeV DATA file on ifarm */
 std::string AnalyseFilePath = "cache/clas12/rg-m/production/pass1/6gev/Cx4/dst/recon";
-std::string AnalyseFileSample = "";
+std::string AnalyseFileSample = "015188";
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015188.evio.01685-01689.hipo";
 std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //</editor-fold>
 
 //<editor-fold desc="Other">
+
+////<editor-fold desc="C12x4 5.98636GeV - FULL (ifarm DATA files - C12x4 DATA files)">
+///* C12x4 5.98636GeV DATA file on ifarm */
+//std::string AnalyseFilePath = "cache/clas12/rg-m/production/pass1/6gev/Cx4/dst/recon";
+//std::string AnalyseFileSample = "";
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+////</editor-fold>
 
 ////<editor-fold desc="Local hipo files - C12 @ 6GeV Q204 (24M, 1-foil)">
 ////std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";                                            // Storage (D:)
@@ -116,15 +125,6 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 ////</editor-fold>
 
 //<editor-fold desc="Other C12x4 5.98636GeV runs">
-
-////<editor-fold desc="C12x4 5.98636GeV - run 015188 (ifarm DATA files - C12x4 DATA files)">
-///* C12x4 5.98636GeV DATA file on ifarm */
-//std::string AnalyseFilePath = "cache/clas12/rg-m/production/pass1/6gev/Cx4/dst/recon";
-//std::string AnalyseFileSample = "015188";
-//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015188.evio.01685-01689.hipo";
-//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
-////</editor-fold>
 
 ////<editor-fold desc="C12x4 5.98636GeV - run 015186 (ifarm DATA files - C12x4 DATA files)">
 ///* C12x4 5.98636GeV DATA file on ifarm */

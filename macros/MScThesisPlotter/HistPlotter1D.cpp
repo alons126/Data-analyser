@@ -221,7 +221,14 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, true);
             }
 
-            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats), UpperCut = 3., LowerCut = -8.;
+            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats), UpperCut, LowerCut;
+//            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats), UpperCut = 3., LowerCut = -8.;
+
+            if (findSubstring(Histogram1DNameCopy, "FD")) {
+                UpperCut = 3., LowerCut = -8.;
+            } else if (findSubstring(Histogram1DNameCopy, "CD")) {
+                UpperCut = 2., LowerCut = -7.;
+            }
 
             if (ParticleShort == "e") {
                 Histogram1D->SetTitle(("V_{z}^{" + ParticleShort + "} of " + ParticlesLC + " in ^{12}C(e,e')").c_str());
@@ -232,17 +239,14 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperVzCut = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
-            UpperVzCut->SetLineWidth(3), UpperVzCut->SetLineColor(kBlue), UpperVzCut->Draw("same");
+            UpperVzCut->SetLineWidth(3), UpperVzCut->SetLineColor(kGreen), UpperVzCut->Draw("same");
 
             TLine *LowerVzCut = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
             LowerVzCut->SetLineWidth(3), LowerVzCut->SetLineColor(kRed), LowerVzCut->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.05 + xOffset,
-                                      Legend_y2_TwoLines + yOffset);
-            TLegendEntry *UpperVzCutEntry = Legend->AddEntry(UpperVzCut,
-                                                             ("Upper cut = " + to_string_with_precision(UpperCut, 0) + " [cm]").c_str(), "l");
-            TLegendEntry *LowerVzCutEntry = Legend->AddEntry(LowerVzCut,
-                                                             ("Lower cut = " + to_string_with_precision(LowerCut, 0) + " [cm]").c_str(), "l");
+            auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.05 + xOffset, Legend_y2_TwoLines + yOffset);
+            TLegendEntry *UpperVzCutEntry = Legend->AddEntry(UpperVzCut, ("Upper cut = " + to_string_with_precision(UpperCut, 0) + " [cm]").c_str(), "l");
+            TLegendEntry *LowerVzCutEntry = Legend->AddEntry(LowerVzCut, ("Lower cut = " + to_string_with_precision(LowerCut, 0) + " [cm]").c_str(), "l");
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else if (findSubstring(Histogram1DNameCopy, "Vertex corr. dV^{")) {
             LogScalePlot = true, ShowStats = false;
@@ -269,7 +273,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperVzCut = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
-            UpperVzCut->SetLineWidth(3), UpperVzCut->SetLineColor(kBlue), UpperVzCut->Draw("same");
+            UpperVzCut->SetLineWidth(3), UpperVzCut->SetLineColor(kGreen), UpperVzCut->Draw("same");
 
             TLine *LowerVzCut = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
             LowerVzCut->SetLineWidth(3), LowerVzCut->SetLineColor(kRed), LowerVzCut->Draw("same");
@@ -374,7 +378,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->SetTitle("Opening angle between #font[12]{2p} protons");
             Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
             Histogram1D->SetLineWidth(LineWidth);
-            Histogram1D->SetLineColor(kBlue);
+            Histogram1D->SetLineColor(kBlack);
             Histogram1D->SetLineStyle(1);
         } else if (findSubstring(Histogram1DNameCopy, "#Delta#phi for small #Delta#theta_{pFD/pCD} - ZOOMIN")) {
             ShowStats = false;
@@ -420,7 +424,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             TLine *UpperMomTh = new TLine(UpperCut, gPad->GetUymin(), UpperCut, 1.);
             UpperMomTh->SetLineWidth(3);
-            UpperMomTh->SetLineColor(kBlue);
+            UpperMomTh->SetLineColor(kGreen);
             UpperMomTh->Draw("same");
 
             TLine *LowerMomTh = new TLine(LowerCut, gPad->GetUymin(), LowerCut, 1.);
@@ -511,7 +515,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
                 TLine *UpperMomTh = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
-                UpperMomTh->SetLineWidth(3), UpperMomTh->SetLineColor(kBlue), UpperMomTh->Draw("same");
+                UpperMomTh->SetLineWidth(3), UpperMomTh->SetLineColor(kGreen), UpperMomTh->Draw("same");
 
                 TLine *LowerMomTh = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
                 LowerMomTh->SetLineWidth(3), LowerMomTh->SetLineColor(kRed), LowerMomTh->Draw("same");
