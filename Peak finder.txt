@@ -1,0 +1,37 @@
+TCanvas *c_pFDpCD = new TCanvas("c_pFDpCD1", "c_pFDpCD2", 1000 * 1.25, 750 * 1.25); // normal res
+
+c_pFDpCD->cd()->SetGrid();
+c_pFDpCD->cd()->SetBottomMargin(0.14), c_pFDpCD->cd()->SetLeftMargin(0.16), c_pFDpCD->cd()->SetRightMargin(0.16), c_pFDpCD->cd()->SetTopMargin(0.12);
+c_pFDpCD->cd();
+
+TH1D *h_pFDpCD = (TH1D *) _file0->Get("#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)");
+h_pFDpCD->Draw();
+
+double PeakLocation_pFDpCD = h_pFDpCD->GetBinCenter(h_pFDpCD->GetMaximumBin());
+
+TLine *PeakLine_pFDpCD = new TLine(PeakLocation_pFDpCD, gPad->GetUymin(), PeakLocation_pFDpCD, gPad->GetUymax());
+PeakLine_pFDpCD->SetLineWidth(3);
+PeakLine_pFDpCD->SetLineColor(kGreen);
+PeakLine_pFDpCD->Draw("same");
+
+std::cout << "\nPeakLocation_pFDpCD:\t" << PeakLocation_pFDpCD << "\n";
+
+
+
+TCanvas *c_nFDpCD = new TCanvas("c_nFDpCD1", "c_nFDpCD2", 1000 * 1.25, 750 * 1.25); // normal res
+
+c_nFDpCD->cd()->SetGrid();
+c_nFDpCD->cd()->SetBottomMargin(0.14), c_nFDpCD->cd()->SetLeftMargin(0.16), c_nFDpCD->cd()->SetRightMargin(0.16), c_nFDpCD->cd()->SetTopMargin(0.12);
+c_nFDpCD->cd();
+
+TH1D *h_nFDpCD = (TH1D *) _file0->Get("#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)");
+h_nFDpCD->Draw();
+
+double PeakLocation_nFDpCD = h_nFDpCD->GetBinCenter(h_nFDpCD->GetMaximumBin());
+
+TLine *PeakLine_nFDpCD = new TLine(PeakLocation_nFDpCD, gPad->GetUymin(), PeakLocation_nFDpCD, gPad->GetUymax());
+PeakLine_nFDpCD->SetLineWidth(3);
+PeakLine_nFDpCD->SetLineColor(kGreen);
+PeakLine_nFDpCD->Draw("same");
+
+std::cout << "\nPeakLocation_nFDpCD:\t" << PeakLocation_nFDpCD << "\n";

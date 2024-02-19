@@ -68,7 +68,8 @@ double SetyOffset2D(const bool &ShowStats) {
 }
 
 void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *filename, const char *Histogram2DName,
-                   const string &SampleName, const string &SavePath, const string &SaveName) {
+                   const string &SampleName, const string &SavePath, const string &SaveName,
+                   const string &HistName_Denominator = "", const string &HistName_Numerator = "") {
     cout << "\n\n";
 
     system(("mkdir -p " + SavePath).c_str());
@@ -169,35 +170,6 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 EquiLine->SetLineWidth(3);
                 EquiLine->SetLineColor(kBlack);
                 EquiLine->Draw("same");
-
-//            auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n * m_n) + ")").c_str(), 0, beamE);
-//            beta_neutron->Draw("same");
-//            beta_neutron->SetLineColor(2);
-//
-//            auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p * m_p) + ")").c_str(), 0, beamE);
-//            beta_proton->Draw("same");
-//            beta_proton->SetLineColor(3);
-//
-//            auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus * m_Kplus) + ")").c_str(), 0, beamE);
-//            beta_Kplus->Draw("same");
-//            beta_Kplus->SetLineColor(4);
-//
-//            auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus * m_Kminus) + ")").c_str(), 0, beamE);
-//            beta_Kminus->Draw("same");
-//            beta_Kminus->SetLineColor(5);
-//
-//            auto *beta_piplus = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_piplus * m_piplus) + ")").c_str(), 0, beamE);
-//            beta_piplus->Draw("same");
-//            beta_piplus->SetLineColor(6);
-//
-//            auto *beta_piminus = new TF1("beta_piminus", ("x/sqrt(x*x + " + to_string(m_piminus * m_piminus) + ")").c_str(), 0, beamE);
-//            beta_piminus->Draw("same");
-//            beta_piminus->SetLineColor(7);
-//
-//            auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e * m_e) + ")").c_str(), 0, beamE);
-//            beta_electron->Draw("same");
-//            beta_electron->SetLineColor(8);
-
             }
         } else if ((Histogram2DNameCopy == "SF vs. P_{e} BC (1e cut, FD)") || (Histogram2DNameCopy == "SF vs. P_{e} (1e cut, FD)")) {
             Histogram2D->SetTitle("Electron sampling fraction vs. momentum in ^{12}C(e,e')");
@@ -225,7 +197,6 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             Histogram2D->GetYaxis()->SetTitle("f_{e}");
             Histogram2D->Draw("colz"), gPad->Update();
-//            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
             TLine *LowerECALcoorCut = new TLine(14., gPad->GetUymin(), 14., gPad->GetUymax());
             LowerECALcoorCut->SetLineWidth(3);
@@ -236,7 +207,6 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram2D->GetXaxis()->SetTitle("P_{e} [GeV/c]");
             Histogram2D->GetYaxis()->SetTitle("#beta_{e}");
             Histogram2D->Draw("colz"), gPad->Update();
-//            Histogram2D->SetTitle(("#beta vs. P of all particles in the " + Region).c_str());
 
             TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
             EquiLine->SetLineWidth(3);
@@ -346,18 +316,44 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else {
-//            string Histogram2D_Title = Histogram2D->GetTitle();
-//            string Histogram2D_xLabel = Histogram2D->GetXaxis()->GetTitle();
-//            string Histogram2D_yLabel = Histogram2D->GetYaxis()->GetTitle();
+            Histogram2D->SetStats(0);
 
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "|#vec{P}_{tot}| = |#vec{P}_{pL} + #vec{P}_{pR}|", "P_{tot}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "|#vec{P}_{rel}| = |#vec{P}_{nL} - #vec{P}_{nR}|/2", "P_{rel}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "|#vec{P}_{rel}| = |#vec{P}_{pL} - #vec{P}_{pR}|/2", "P_{rel}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "E_{cal} = E_{e} + T_{nFD} + T_{pCD}", "E_{cal}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "E_{cal} = E_{e} + T_{pFD} + T_{pCD}", "E_{cal}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "E_{cal} = E_{e} + T_{nucFD} + T_{nucCD}", "E_{cal}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "E_{cal} = E_{e} + T_{nuc,FD} + T_{nuc,CD}", "E_{cal}");
+            bool Equi_z_2D = true;
+
+            //<editor-fold desc="Align Z axis of denominators and numerator">
+            if (!findSubstring(Histogram2DName, "FSRatio")) {
+                TH2D *Histogram2D_Denominator = Histofinder2D(filename, HistName_Denominator.c_str(), false);
+                TH2D *Histogram2D_Numerator = Histofinder2D(filename, HistName_Numerator.c_str(), false);
+
+                double Zmax = 1.1 * max(Histogram2D_Denominator->GetMaximum(), Histogram2D_Numerator->GetMaximum());
+
+                if (Equi_z_2D) { Histogram2D->SetMaximum(Zmax); }
+            } else {
+                Histogram2D->SetMaximum(5.);
+//                Histogram2D->SetMaximum(10);
+                Histogram2D->SetMinimum(0.1);
+
+                auto FuncList = Histogram2D->GetListOfFunctions();
+                FuncList->Clear();
+            }
+            //</editor-fold>
+
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "|#vec{P}_{tot}| = |#vec{P}_{pL} + #vec{P}_{pR}|", "P_{tot}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "|#vec{P}_{rel}| = |#vec{P}_{nL} - #vec{P}_{nR}|/2", "P_{rel}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "|#vec{P}_{rel}| = |#vec{P}_{pL} - #vec{P}_{pR}|/2", "P_{rel}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "E_{cal} = E_{e} + T_{nFD} + T_{pCD}", "E_{cal}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "E_{cal} = E_{e} + T_{pFD} + T_{pCD}", "E_{cal}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "E_{cal} = E_{e} + T_{nucFD} + T_{nucCD}", "E_{cal}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "E_{cal} = E_{e} + T_{nuc,FD} + T_{nuc,CD}", "E_{cal}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
@@ -370,24 +366,44 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                          "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nucFD} + #vec{p}_{T,nucCD}|", "#deltaP_{T,tot}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}} ", "W");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}} ", "W");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}} ", "W");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}} ", "W");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}|", "P_{miss}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{pL} + #vec{P}_{pR}- #vec{q}|", "P_{miss}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nucL} + #vec{P}_{nucR}- #vec{q}|", "P_{miss}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "#vec{P}_{tot}-#vec{q}", "P_{miss}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "#vec{P}", "#font[62]{P}");
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "#vec{q}", "#font[62]{q}");
-
-//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1p", "1pFD");
-//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1n", "1nFD");
-//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "pFDpCD", "1pFD1pCD");
-//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "nFDpCD", "1nFD1pCD");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "#vec{P}_{tot}-#vec{q}", "P_{miss}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "#vec{P}", "#font[62]{P}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "#vec{q}", "#font[62]{q}");
 
             Histogram2D->Draw("colz"), gPad->Update();
+
+            //<editor-fold desc="EquiLine2D for momentum 2D plots">
+            if (findSubstring(Histogram2D_Title, "P_{pFD} vs. P_{pCD}") || findSubstring(Histogram2D_Title, "P_{nFD} vs. P_{pCD}") ||
+                findSubstring(Histogram2D_Title, "P_{pL} vs. P_{pR}") || findSubstring(Histogram2D_Title, "P_{nL} vs. P_{nR}") ||
+                findSubstring(Histogram2D_Title, "P_{nucFD} vs. P_{nucCD}") || findSubstring(Histogram2D_Title, "P_{nucL} vs. P_{nucR}")) {
+                ShowStats = false;
+
+                double Lowerlim_FSRatio = max(Histogram2D->GetXaxis()->GetXmin(), Histogram2D->GetYaxis()->GetXmin());
+                double Upperlim_FSRatio = min(Histogram2D->GetXaxis()->GetXmax(), Histogram2D->GetYaxis()->GetXmax());
+                double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
+
+                TLine *EquiLine2D = new TLine(Lowerlim_FSRatio, Lowerlim_FSRatio, Upperlim_FSRatio, Upperlim_FSRatio);
+                EquiLine2D->SetLineWidth(2), EquiLine2D->SetLineColor(kRed), EquiLine2D->Draw("same");
+
+                auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine + xOffset + 0.08, Legend_y2_OneLine + yOffset);
+                TLegendEntry *EquiLine2D_entry = Legend->AddEntry(EquiLine2D, "y(x) = x", "l");
+                Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
+            }
+            //</editor-fold>
+
         }
     }
 

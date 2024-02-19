@@ -146,10 +146,12 @@ void FSRPlotter(hData &utilities, TCanvas *HistCanvas, TList *MScThesisPlotsList
         HistPlotter1D(HistCanvas, MScThesisPlotsList, filename, FSRationTemp.c_str(), SampleName, SavePath, (to_string(Num) + "c_" + SaveName_FSR), TLmom);
     } else if (HistogramClass == "TH2D") {
         if (PrintOut) { cout << "\nHistNameFeed_Numerator = " << HistNameFeed_Numerator << "\n\n"; }
-        HistPlotter2D(HistCanvas, MScThesisPlotsList, filename, HistNameFeed_Numerator.c_str(), SampleName, SavePath, (to_string(Num) + "a_" + SaveName_Numerator));
+        HistPlotter2D(HistCanvas, MScThesisPlotsList, filename, HistNameFeed_Numerator.c_str(), SampleName, SavePath, (to_string(Num) + "a_" + SaveName_Numerator),
+                      HistNameFeed_Denominator, HistNameFeed_Numerator);
 
         if (PrintOut) { cout << "\nHistNameFeed_Denominator = " << HistNameFeed_Denominator << "\n\n"; }
-        HistPlotter2D(HistCanvas, MScThesisPlotsList, filename, HistNameFeed_Denominator.c_str(), SampleName, SavePath, (to_string(Num) + "b_" + SaveName_Denominator));
+        HistPlotter2D(HistCanvas, MScThesisPlotsList, filename, HistNameFeed_Denominator.c_str(), SampleName, SavePath, (to_string(Num) + "b_" + SaveName_Denominator),
+                      HistNameFeed_Denominator, HistNameFeed_Numerator);
 
         if (PrintOut) { cout << "\nFSRationTemp = " << FSRationTemp << "\n\n"; }
         HistPlotter2D(HistCanvas, MScThesisPlotsList, filename, FSRationTemp.c_str(), SampleName, SavePath, (to_string(Num) + "c_" + SaveName_FSR));

@@ -124,7 +124,7 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring, 
                 FoundHistClass = Key->GetClassName();
                 break;
             }
-*/
+            */
         }
     }
 
@@ -132,6 +132,7 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring, 
         cout << "\n\nHistofinder2D: could not find histogram!\n";
         cout << "Histogram2DNameSubstring = " << Histogram2DNameSubstring << "\n";
         exit(0);
+
         return Histogram2D;
     } else {
         if (PrintOut) {

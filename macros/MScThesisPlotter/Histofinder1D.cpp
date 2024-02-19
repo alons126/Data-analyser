@@ -67,11 +67,6 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
 
                 Histogram1D = (TH1D *) Key->ReadObj();
 
-//                if (findSubstring(Histogram1DNameSubstring, "#theta_{nFD,pCD}")) {
-//                    cout << Histogram1D->GetBinCenter(Histogram1D->GetMaximumBin());
-//                    exit(0);
-//                }
-
                 FoundHistName = Key->GetClassName();
                 break;
             }

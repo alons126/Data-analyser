@@ -131,20 +131,23 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="Final runs">
-    const char *Final_noSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v2/"
-                                  "C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wFCwKC_wKW_v2/"
+    const char *Final_noSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wFCwKC_wKW_v2/"
                                   "C12x4_simulation_G18_Q204_6GeV_plots.root";
 
-    const char *Final_wSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v2/"
-                                 "C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v2/"
+    const char *Final_wSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v2/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v2/"
                                  "C12x4_simulation_G18_Q204_6GeV_plots.root";
 
-    const char *Final_noSaC_Data = "/mnt/e/C12x4_data_6GeV/05_Final_runs/v2/"
-                                   "C12x4_data_6GeV_S03AC_NC_wFCwKC_wKW_v2/"
-                                   "C12x4_data_6GeV_plots.root";
-    const char *Final_wSaC_Data = "/mnt/e/C12x4_data_6GeV/05_Final_runs/v2/"
-                                  "C12x4_data_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v2/"
-                                  "C12x4_data_6GeV_plots.root";
+    /* C12x4 data - run 015188 */
+    const char *Final_noSaC_Data = "/mnt/e/C12x4_data_6GeV_run_015188_for_Thesis/05_Final_runs/v2/C12x4_data_6GeV_run_015188_S03AC_NC_wFCwKC_wKW_v2/"
+                                   "C12x4_data_6GeV_run_015188_plots.root";
+    const char *Final_wSaC_Data = "/mnt/e/C12x4_data_6GeV_run_015188_for_Thesis/05_Final_runs/v2/C12x4_data_6GeV_run_015188_S03AC_NC_wNSaC_wFCwKC_wKW_v2/"
+                                  "C12x4_data_6GeV_run_015188_plots.root";
+
+//    /* C12x4 data - all runs */
+//    const char *Final_noSaC_Data = "/mnt/e/C12x4_data_6GeV/05_Final_runs/v2/C12x4_data_6GeV_S03AC_NC_wFCwKC_wKW_v2/"
+//                                   "C12x4_data_6GeV_plots.root";
+//    const char *Final_wSaC_Data = "/mnt/e/C12x4_data_6GeV/05_Final_runs/v2/C12x4_data_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v2/"
+//                                  "C12x4_data_6GeV_plots.root";
     //</editor-fold>
 
     //</editor-fold>
