@@ -207,6 +207,8 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
         }
 
         delete canvas;
+        file->Close();
+        delete file;
     } else {
         SaveName = "nFD_maps.png";
 
@@ -511,6 +513,14 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
         canvas->SaveAs((OutputPath + SaveName).c_str());
 
         delete canvas;
+        TL_root_file->Close();
+        delete TL_root_file;
+        Reco_root_file->Close();
+        delete Reco_root_file;
+        Ratio_root_file->Close();
+        delete Ratio_root_file;
+        Finalized_AMaps_root_file->Close();
+        delete Finalized_AMaps_root_file;
     }
 }
 

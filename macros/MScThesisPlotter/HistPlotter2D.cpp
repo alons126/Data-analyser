@@ -318,9 +318,9 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         } else {
             Histogram2D->SetStats(0);
 
+            //<editor-fold desc="Align Z axis of denominators and numerator">
             bool Equi_z_2D = true;
 
-            //<editor-fold desc="Align Z axis of denominators and numerator">
             if (!findSubstring(Histogram2DName, "FSRatio")) {
                 TH2D *Histogram2D_Denominator = Histofinder2D(filename, HistName_Denominator.c_str(), false);
                 TH2D *Histogram2D_Numerator = Histofinder2D(filename, HistName_Numerator.c_str(), false);
@@ -427,4 +427,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     gStyle->SetStatY(DefStatY);
 
     HistogramCanvas->Clear();
+    file->Close();
+    delete file;
+//    delete Histogram2D;
 }
