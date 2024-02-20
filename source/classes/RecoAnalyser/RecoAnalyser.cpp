@@ -714,7 +714,7 @@ void RecoAnalyser::InitSettings(){
 
     if (!Generate_AMaps) { AMaps_plots = false; }
 
-    if (reformat_e_bins) { equi_P_e_bins = false; }
+    if (reformat_e_bins) { varying_P_e_bins = false; }
 
     /* Set Bins by case */
     int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = numTH2Dbins_Electron_Ang_Plots, HistNucSliceNumOfXBins = numTH2Dbins_Nucleon_Ang_Plots;
@@ -732,11 +732,11 @@ void RecoAnalyser::InitSettings(){
     //TODO: UPDATE AMaps loading constructor electron histogram's number of bins
 
     if (Generate_AMaps) {
-        aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"],
+        aMaps = AMaps(SampleName, reformat_e_bins, varying_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"],
                       NumberNucOfMomSlices,
                       NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins,
                       HistElectronSliceNumOfXBins);
-        wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"],
+        wMaps = AMaps(SampleName, reformat_e_bins, varying_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"],
                       NumberNucOfMomSlices,
                       NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins,
                       HistElectronSliceNumOfXBins);

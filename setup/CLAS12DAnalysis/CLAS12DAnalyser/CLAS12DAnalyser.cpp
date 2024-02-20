@@ -571,13 +571,13 @@
 //
 //    if (!calculate_truth_level) { Generate_AMaps = false; }
 //    if (!Generate_AMaps) { Hit_maps_plots = false; }
-//    if (reformat_e_bins) { equi_P_e_bins = false; }
+//    if (reformat_e_bins) { varying_P_e_bins = false; }
 //
 //    /* Set Bins by case */
 //    if (Generate_AMaps) {
-//        aMaps = AMaps(reformat_e_bins, equi_P_e_bins, beamE, directories.AMaps_Directory_map["AMaps_1e_cut_Directory"],
+//        aMaps = AMaps(reformat_e_bins, varying_P_e_bins, beamE, directories.AMaps_Directory_map["AMaps_1e_cut_Directory"],
 //                      NumberNucOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
-//        wMaps = AMaps(reformat_e_bins, equi_P_e_bins, beamE, directories.AMaps_Directory_map["WMaps_1e_cut_Directory"],
+//        wMaps = AMaps(reformat_e_bins, varying_P_e_bins, beamE, directories.AMaps_Directory_map["WMaps_1e_cut_Directory"],
 //                      NumberNucOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
 //    } else {
 //        aMaps = AMaps(AcceptanceMapsDirectory, SampleName);

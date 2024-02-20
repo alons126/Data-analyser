@@ -149,7 +149,7 @@ void EventAnalyser() {
     //TODO: UPDATE AMaps loading constructor electron histogram's number of bins
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
-    bool equi_P_e_bins = false;
+    bool varying_P_e_bins = false;
     bool Electron_single_slice_test = false; // keep as false for normal runs!
     bool Nucleon_single_slice_test = false;  // keep as false for normal runs!
     vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
@@ -1077,7 +1077,7 @@ void EventAnalyser() {
 
     if (!calculate_truth_level) { Generate_AMaps = false; }
     if (!Generate_AMaps) { AMaps_plots = false; }
-    if (reformat_e_bins) { equi_P_e_bins = false; }
+    if (reformat_e_bins) { varying_P_e_bins = false; }
 
     /* Set Bins by case */
 //    int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = 150, HistNucSliceNumOfXBins = 75;
@@ -1095,9 +1095,9 @@ void EventAnalyser() {
     //TODO: UPDATE AMaps loading constructor electron histogram's number of bins
 
     if (Generate_AMaps) {
-        aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], NumberNucOfMomSlices,
+        aMaps = AMaps(SampleName, reformat_e_bins, varying_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                       NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
-        wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,
+        wMaps = AMaps(SampleName, reformat_e_bins, varying_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                       NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
     } else {
         aMaps = AMaps(AcceptanceMapsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
@@ -20346,7 +20346,7 @@ void EventAnalyser() {
     myLogFile << "Generate_AMaps = " << BoolToString(Generate_AMaps) << "\n";
     myLogFile << "TL_with_one_reco_electron = " << BoolToString(TL_with_one_reco_electron) << "\n";
     myLogFile << "reformat_e_bins = " << BoolToString(reformat_e_bins) << "\n";
-    myLogFile << "equi_P_e_bins = " << BoolToString(equi_P_e_bins) << "\n";
+    myLogFile << "varying_P_e_bins = " << BoolToString(varying_P_e_bins) << "\n";
     myLogFile << "Electron_single_slice_test = " << BoolToString(Electron_single_slice_test) << "\n";
     myLogFile << "Nucleon_single_slice_test = " << BoolToString(Nucleon_single_slice_test) << "\n";
     myLogFile << "TestSlices = {" << TestSlices.at(0) << ", " << TestSlices.at(1) << ", " << TestSlices.at(2) << "}\n\n";

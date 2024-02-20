@@ -319,22 +319,24 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram2D->SetStats(0);
 
             //<editor-fold desc="Align Z axis of denominators and numerator">
-            bool Equi_z_2D = true;
+            if (!findSubstring(Histogram2D_Title, "Veto")) {
+                bool Equi_z_2D = true;
 
-            if (!findSubstring(Histogram2DName, "FSRatio")) {
-                TH2D *Histogram2D_Denominator = Histofinder2D(filename, HistName_Denominator.c_str(), false);
-                TH2D *Histogram2D_Numerator = Histofinder2D(filename, HistName_Numerator.c_str(), false);
+                if (!findSubstring(Histogram2DName, "FSRatio")) {
+                    TH2D *Histogram2D_Denominator = Histofinder2D(filename, HistName_Denominator.c_str(), false);
+                    TH2D *Histogram2D_Numerator = Histofinder2D(filename, HistName_Numerator.c_str(), false);
 
-                double Zmax = 1.1 * max(Histogram2D_Denominator->GetMaximum(), Histogram2D_Numerator->GetMaximum());
+                    double Zmax = 1.1 * max(Histogram2D_Denominator->GetMaximum(), Histogram2D_Numerator->GetMaximum());
 
-                if (Equi_z_2D) { Histogram2D->SetMaximum(Zmax); }
-            } else {
-                Histogram2D->SetMaximum(5.);
+                    if (Equi_z_2D) { Histogram2D->SetMaximum(Zmax); }
+                } else {
+                    Histogram2D->SetMaximum(5.);
 //                Histogram2D->SetMaximum(10);
-                Histogram2D->SetMinimum(0.1);
+                    Histogram2D->SetMinimum(0.1);
 
-                auto FuncList = Histogram2D->GetListOfFunctions();
-                FuncList->Clear();
+                    auto FuncList = Histogram2D->GetListOfFunctions();
+                    FuncList->Clear();
+                }
             }
             //</editor-fold>
 

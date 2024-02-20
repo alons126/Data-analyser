@@ -76,7 +76,7 @@ private:
     bool Generate_AMaps = true;             // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
-    bool equi_P_e_bins = false;
+    bool varying_P_e_bins = false;
     bool Electron_single_slice_test = false; // keep as false for normal runs!
     bool Nucleon_single_slice_test = false;  // keep as false for normal runs!
     vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
@@ -1001,7 +1001,7 @@ private:
 
     if (!calculate_truth_level) { Generate_AMaps = false; }
     if (!Generate_AMaps) { AMaps_plots = false; }
-    if (reformat_e_bins) { equi_P_e_bins = false; }
+    if (reformat_e_bins) { varying_P_e_bins = false; }
 
     /* Set Bins by case */
     int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = 150, HistNucSliceNumOfXBins = 75;
@@ -1018,9 +1018,9 @@ private:
     AMaps aMaps, wMaps;
 
     if (Generate_AMaps) {
-        aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], NumberNucOfMomSlices,
+        aMaps = AMaps(SampleName, reformat_e_bins, varying_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                       NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
-        wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,
+        wMaps = AMaps(SampleName, reformat_e_bins, varying_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                       NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
     } else {
         aMaps = AMaps(AcceptanceMapsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);
@@ -1252,7 +1252,7 @@ public:
         bool Generate_AMaps = true;             // Generate acceptance maps
         bool TL_with_one_reco_electron = true;
         bool reformat_e_bins = false;
-        bool equi_P_e_bins = false;
+        bool varying_P_e_bins = false;
         bool Electron_single_slice_test = false; // keep as false for normal runs!
         bool Nucleon_single_slice_test = false;  // keep as false for normal runs!
         vector<int> TestSlices = {1, 1, 1};      // {ElectronTestSlice, ProtonTestSlice, NeutronTestSlice}
@@ -2177,7 +2177,7 @@ public:
 
         if (!calculate_truth_level) { Generate_AMaps = false; }
         if (!Generate_AMaps) { AMaps_plots = false; }
-        if (reformat_e_bins) { equi_P_e_bins = false; }
+        if (reformat_e_bins) { varying_P_e_bins = false; }
 
         /* Set Bins by case */
         int NumberNucOfMomSlices, NumberElecOfMomSlices, HistElectronSliceNumOfXBins = 150, HistNucSliceNumOfXBins = 75;
@@ -2194,9 +2194,9 @@ public:
         AMaps aMaps, wMaps;
 
         if (Generate_AMaps) {
-            aMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], NumberNucOfMomSlices,
+            aMaps = AMaps(SampleName, reformat_e_bins, varying_P_e_bins, beamE, "AMaps", directories.AMaps_Directory_map["AMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                           NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
-            wMaps = AMaps(SampleName, reformat_e_bins, equi_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,
+            wMaps = AMaps(SampleName, reformat_e_bins, varying_P_e_bins, beamE, "WMaps", directories.AMaps_Directory_map["WMaps_1e_cut_Directory"], NumberNucOfMomSlices,
                           NumberElecOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfXBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfXBins);
         } else {
             aMaps = AMaps(AcceptanceMapsDirectory, VaryingSampleName, Electron_single_slice_test, Nucleon_single_slice_test, TestSlices);

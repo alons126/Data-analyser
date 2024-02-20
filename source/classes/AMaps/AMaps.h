@@ -47,8 +47,8 @@ private:
     /* Acceptance maps from class and before cuts (to be compared with one generated with the file) */
     hPlot2D ElectronAMapBC, ProtonAMapBC, NeutronAMapBC, NucleonAMapBC;
 
-    vector<vector<double>> InvertedElectronMomSliceLimits, ElectronMomSliceLimits;
-    vector<vector<double>> InvertedNucleonMomSliceLimits, NucleonMomSliceLimits;
+    vector <vector<double>> InvertedElectronMomSliceLimits, ElectronMomSliceLimits;
+    vector <vector<double>> InvertedNucleonMomSliceLimits, NucleonMomSliceLimits;
 
     double hBinLowerXLim = -180, hBinUpperXLim = 180;
     double hBinLowerYLim = 0, hBinUpperYLim = 50;
@@ -64,19 +64,19 @@ private:
     double Electron_Momentum_Slice_Th = 0.8; // Not th! but distance from beamE of last mom bin!
 
     /* TL Acceptance maps */
-    vector<hPlot2D> ElectronTLAMapsBySlice, ProtonTLAMapsBySlice, NeutronTLAMapsBySlice;
+    vector <hPlot2D> ElectronTLAMapsBySlice, ProtonTLAMapsBySlice, NeutronTLAMapsBySlice;
     hPlot2D NeutronTLAMap;
 
     /* Reco. Acceptance maps */
-    vector<hPlot2D> ElectronRecoAMapsBySlice, ProtonRecoAMapsBySlice, NeutronRecoAMapsBySlice;
+    vector <hPlot2D> ElectronRecoAMapsBySlice, ProtonRecoAMapsBySlice, NeutronRecoAMapsBySlice;
     hPlot2D NeutronRecoAMap;
 
     /* Reco./TL ratio maps */
-    vector<hPlot2D> ElectronRecoToTLRatioBySlice, ProtonRecoToTLRatioBySlice, NeutronRecoToTLRatioBySlice;
+    vector <hPlot2D> ElectronRecoToTLRatioBySlice, ProtonRecoToTLRatioBySlice, NeutronRecoToTLRatioBySlice;
     hPlot2D NeutronRecoToTLRatio;
 
     /* Separated acceptance & weight maps (= reco. above ratio th.) */
-    vector<hPlot2D> ElectronAMapsBySlice, ProtonAMapsBySlice, NeutronAMapsBySlice; // separated AMaps for each slice
+    vector <hPlot2D> ElectronAMapsBySlice, ProtonAMapsBySlice, NeutronAMapsBySlice; // separated AMaps for each slice
 
     /* Acceptance maps (= reco. above ratio th.) */
     hPlot2D ElectronAMap; // combined electron AMap
@@ -85,21 +85,29 @@ private:
     hPlot2D NucleonAMap;
 
     /* Acceptance maps */
-    vector<vector<int>> e_AMap;
-    vector<vector<vector<int>>> e_AMap_Slices;
-    vector<vector<int>> p_AMap;
-    vector<vector<vector<int>>> p_AMap_Slices;
-    vector<vector<int>> n_AMap;
-    vector<vector<vector<int>>> n_AMap_Slices;
-    vector<vector<int>> nuc_AMap;
-    vector<vector<vector<int>>> nuc_AMap_Slices;
-    vector<vector<vector<int>>> nuc_WMap_Slices; //TODO: fiure out if really need these!
+    vector <vector<int>> e_AMap;
+    vector <vector<vector < int>>>
+    e_AMap_Slices;
+    vector <vector<int>> p_AMap;
+    vector <vector<vector < int>>>
+    p_AMap_Slices;
+    vector <vector<int>> n_AMap;
+    vector <vector<vector < int>>>
+    n_AMap_Slices;
+    vector <vector<int>> nuc_AMap;
+    vector <vector<vector < int>>>
+    nuc_AMap_Slices;
+    vector <vector<vector < int>>>
+    nuc_WMap_Slices; //TODO: fiure out if really need these!
 
     /* Weight maps */
-    vector<vector<vector<double>>> e_WMap_Slices;
-    vector<vector<vector<double>>> p_WMap_Slices;
-    vector<vector<double>> n_WMap;
-    vector<vector<vector<double>>> n_WMap_Slices;
+    vector <vector<vector < double>>>
+    e_WMap_Slices;
+    vector <vector<vector < double>>>
+    p_WMap_Slices;
+    vector <vector<double>> n_WMap;
+    vector <vector<vector < double>>>
+    n_WMap_Slices;
 
     bool calc_Electron_RecoToTL_Ratio = true, calc_Proton_RecoToTL_Ratio = true, calc_Neutron_RecoToTL_Ratio = true;
 
@@ -122,24 +130,31 @@ private:
     string cPart_Sep_AMaps_prefix = "04_cPart_Sep_AMaps_-_";
     string AMaps_prefix = "05_AMaps_-_";
 
-    vector<vector<double>> Loaded_ElectronMomSliceLimits;
-    vector<vector<double>> Loaded_NucleonMomSliceLimits;
+    vector <vector<double>> Loaded_ElectronMomSliceLimits;
+    vector <vector<double>> Loaded_NucleonMomSliceLimits;
 
     /* Loaded acceptance maps */
-    vector<vector<int>> Loaded_e_AMap;
-    vector<vector<vector<int>>> Loaded_e_AMap_Slices;
-    vector<vector<int>> Loaded_p_AMap;
-    vector<vector<vector<int>>> Loaded_p_AMap_Slices;
-    vector<vector<int>> Loaded_n_AMap;
-    vector<vector<vector<int>>> Loaded_n_AMap_Slices;
-    vector<vector<int>> Loaded_nuc_AMap;
-    vector<vector<vector<int>>> Loaded_nuc_AMap_Slices;
+    vector <vector<int>> Loaded_e_AMap;
+    vector <vector<vector < int>>>
+    Loaded_e_AMap_Slices;
+    vector <vector<int>> Loaded_p_AMap;
+    vector <vector<vector < int>>>
+    Loaded_p_AMap_Slices;
+    vector <vector<int>> Loaded_n_AMap;
+    vector <vector<vector < int>>>
+    Loaded_n_AMap_Slices;
+    vector <vector<int>> Loaded_nuc_AMap;
+    vector <vector<vector < int>>>
+    Loaded_nuc_AMap_Slices;
 
     /* Loaded weight maps */
-    vector<vector<vector<double>>> Loaded_e_WMap_Slices;
-    vector<vector<vector<double>>> Loaded_p_WMap_Slices;
-    vector<vector<int>> Loaded_n_WMap;
-    vector<vector<vector<double>>> Loaded_n_WMap_Slices;
+    vector <vector<vector < double>>>
+    Loaded_e_WMap_Slices;
+    vector <vector<vector < double>>>
+    Loaded_p_WMap_Slices;
+    vector <vector<int>> Loaded_n_WMap;
+    vector <vector<vector < double>>>
+    Loaded_n_WMap_Slices;
 
     /* Loaded Acceptance maps */
     //TODO: delete these histograms if the .par loading works
@@ -164,8 +179,9 @@ public:
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // AMaps generation constructor:
-    AMaps(const string &SampleName, bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &AMapsMode = "", const string &SavePath = "./",
-          int nOfNucMomBins = 4,int nOfElecMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75, int hesNumOfXBins = 100, int hesNumOfYBins = 100);
+    AMaps(const string &SampleName, bool reformat_e_bins, bool varying_P_e_bins, bool varying_P_nuc_bins, double beamE, const string &AMapsMode = "",
+          const string &SavePath = "./", int nOfNucMomBins = 4, int nOfElecMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75, int hesNumOfXBins = 100,
+          int hesNumOfYBins = 100);
 
     // AMaps loading constructor:
     AMaps(const string &AcceptanceMapsDirectory, const string &SampleName,
@@ -173,9 +189,9 @@ public:
 
 // SetBins functions ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void SetBins(double beamE);
+    void SetBins(bool varying_P_nuc_bins, double beamE);
 
-    void SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double beamE);
+    void SetElectronBins(bool reformat_e_bins, bool varying_P_e_bins, double beamE);
 
     void SetBins(double beamE, double NumberNucOfMomSlices); // old
 
@@ -243,7 +259,7 @@ public:
 
     void SetSlicesFromHistTitle(TH2D *Histogram2D, const string &Particle);
 
-    void SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> MomBinsLimits);
+    void SetSlicesFromHistTitle(TH2D *Histogram2D, vector <vector<double>> MomBinsLimits);
 
 // ReadHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -251,25 +267,29 @@ public:
 
 // ReadAMapLimits function ----------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadAMapLimits(const char *filename, vector<vector<double>> &Loaded_particle_limits);
+    void ReadAMapLimits(const char *filename, vector <vector<double>> &Loaded_particle_limits);
 
 // ReadAMapSlices function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadAMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
-                        const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<int>>> &Loaded_Particle_AMap_Slices);
+                        const vector <vector<double>> &Loaded_particle_limits, vector <vector<vector < int>>
+
+    > &Loaded_Particle_AMap_Slices);
 
 // ReadAMapSlices function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadWMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
-                        const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<double>>> &Loaded_Particle_WMap_Slices);
+                        const vector <vector<double>> &Loaded_particle_limits, vector <vector<vector < double>>
+
+    > &Loaded_Particle_WMap_Slices);
 
 // ReadAMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_AMap);
+    void ReadAMap(const char *filename, vector <vector<int>> &Loaded_particle_AMap);
 
 // ReadWMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadWMap(const char *filename, vector<vector<double>> &Loaded_particle_WMap);
+    void ReadWMap(const char *filename, vector <vector<double>> &Loaded_particle_WMap);
 
 // MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
 
