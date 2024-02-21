@@ -106,7 +106,7 @@ void EventAnalyser() {
     bool Calc_inc_eff_with_varying_theta = false;
     bool Calc_1n_n_eff_with_smaller_theta = false;
     bool Calc_eff_overlapping_FC = true; // keep as true in normal runs
-    bool Rec_wTL_ES = true; // Calculate efficiency - force TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Calculate efficiency - force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
