@@ -1,5 +1,3 @@
-/* root BetaFitAndSave.cpp -q -b */
-
 #include <iostream>
 #include <fstream>
 #include <string>

@@ -106,7 +106,7 @@ void EventAnalyser() {
     bool Calc_inc_eff_with_varying_theta = false;
     bool Calc_1n_n_eff_with_smaller_theta = false;
     bool Calc_eff_overlapping_FC = true; // keep as true in normal runs
-    bool Rec_wTL_ES = false; // Calculate efficiency - force TL event selection on reco. plots
+    bool Rec_wTL_ES = true; // Calculate efficiency - force TL event selection on reco. plots
 
     const bool limless_mom_eff_plots = false;
 
@@ -131,14 +131,14 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
-    bool Calculate_momResS2 = true; // Calculate momResS2 variables
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     bool ForceSmallpResLimits = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
-    bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
+    bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
     bool momRes_test = false; // false by default
     /*
     MomRes run order guide:
@@ -194,7 +194,7 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
+    bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
     bool apply_nucleon_SmearAndCorr = false;
@@ -794,10 +794,12 @@ void EventAnalyser() {
 
     //<editor-fold desc="Number of histogram bins">
     /* Default */
-    int numTH1Dbins = 40;
-    int numTH2Dbins = 65;
+    int numTH1Dbins = 30;
+    int numTH2Dbins = 50;
 //    int numTH1Dbins = 50;
 //    int numTH2Dbins = 65;
+
+    if (isData) { numTH2Dbins = numTH2Dbins * 2; }
 
     /* Momentum plots */
     int numTH2Dbins_Mom_Plots = numTH2Dbins; // To be changed if apply_kinematical_cuts = true
@@ -3469,7 +3471,8 @@ void EventAnalyser() {
 
     TH2D *hPhi_e_VS_P_e_1p_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., 1p)", "#phi_{e} vs. P_{e} (All Int., 1p);P_{e} [GeV/c];#phi_{e} [Deg]", numTH2Dbins_Ang_Plots, 0,
                                          beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH2D *hPhi_e_VS_W_1p_FD = new TH2D("#phi_{e} vs. W (All Int., 1p)", "#phi_{e} vs. W (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#phi_{e} [Deg]",
+    TH2D *hPhi_e_VS_W_1p_FD = new TH2D("#phi_{e} vs. W (All Int., 1p)",
+                                       "#phi_{e} vs. W (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#phi_{e} [Deg]",
                                        numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     string hPhi_e_VS_P_e_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_VS_W_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
@@ -3494,7 +3497,8 @@ void EventAnalyser() {
 
     TH2D *hPhi_e_VS_P_e_1n_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., 1n)", "#phi_{e} vs. P_{e} (All Int., 1n);P_{e} [GeV/c];#phi_{e} [Deg]", numTH2Dbins_Ang_Plots, 0,
                                          beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
-    TH2D *hPhi_e_VS_W_1n_FD = new TH2D("#phi_{e} vs. W (All Int., 1n)", "#phi_{e} vs. W (All Int., 1n);W = #sqrt{(#omega + m_{n})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#phi_{e} [Deg]",
+    TH2D *hPhi_e_VS_W_1n_FD = new TH2D("#phi_{e} vs. W (All Int., 1n)",
+                                       "#phi_{e} vs. W (All Int., 1n);W = #sqrt{(#omega + m_{n})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#phi_{e} [Deg]",
                                        numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     string hPhi_e_VS_P_e_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     string hPhi_e_VS_W_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
@@ -3538,7 +3542,8 @@ void EventAnalyser() {
     TH2D *hPhi_e_VS_P_e_pFDpCD_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., pFDpCD)", "#phi_{e} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];#phi_{e} [Deg]",
                                              numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_e_VS_W_pFDpCD_FD = new TH2D("#phi_{e} vs. W (All Int., pFDpCD)",
-                                           "#phi_{e} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#phi_{e} [Deg]", numTH2Dbins_Ang_Plots,
+                                           "#phi_{e} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#phi_{e} [Deg]",
+                                           numTH2Dbins_Ang_Plots,
                                            W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     string hPhi_e_VS_P_e_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     string hPhi_e_VS_W_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
@@ -3564,7 +3569,8 @@ void EventAnalyser() {
     TH2D *hPhi_e_VS_P_e_nFDpCD_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., nFDpCD)", "#phi_{e} vs. P_{e} (All Int., nFDpCD);P_{e} [GeV/c];#phi_{e} [Deg]",
                                              numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     TH2D *hPhi_e_VS_W_nFDpCD_FD = new TH2D("#phi_{e} vs. W (All Int., nFDpCD)",
-                                           "#phi_{e} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#phi_{e} [Deg]", numTH2Dbins_Ang_Plots,
+                                           "#phi_{e} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#phi_{e} [Deg]",
+                                           numTH2Dbins_Ang_Plots,
                                            W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Phi_lboundary, Phi_uboundary);
     string hPhi_e_VS_P_e_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
     string hPhi_e_VS_W_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
@@ -3749,7 +3755,8 @@ void EventAnalyser() {
     TH2D *hTheta_p_VS_P_p_1p_FD = new TH2D("#theta_{p} vs. P_{p} (All Int., 1p, FD)", "#theta_{p} vs. P_{p} (All Int., 1p, FD);P_{p} [GeV/c];#theta_{p} [Deg]",
                                            numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     TH2D *hTheta_p_VS_W_1p_FD = new TH2D("#theta_{p} vs. W (All Int., 1p, FD)",
-                                         "#theta_{p} vs. W (All Int., 1p, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#theta_{p} [Deg]", numTH2Dbins_Ang_Plots,
+                                         "#theta_{p} vs. W (All Int., 1p, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#theta_{p} [Deg]",
+                                         numTH2Dbins_Ang_Plots,
                                          W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_p_VS_P_p_1p_FD_Dir = directories.Angle_Directory_map["Theta_p_1p_Directory"];
     string hTheta_p_VS_W_1p_FD_Dir = directories.Angle_Directory_map["Theta_p_1p_Directory"];
@@ -3828,7 +3835,8 @@ void EventAnalyser() {
     TH2D *hTheta_n_VS_P_n_1n_FD = new TH2D("#theta_{n} vs. P_{n} (All Int., 1n, FD)", "#theta_{n} vs. P_{n} (All Int., 1n, FD);P_{n} [GeV/c];#theta_{n} [Deg]",
                                            numTH2Dbins_Ang_Plots, 0, beamE * 1.1, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     TH2D *hTheta_n_VS_W_1n_FD = new TH2D("#theta_{n} vs. W (All Int., 1n, FD)",
-                                         "#theta_{n} vs. W (All Int., 1n, FD);W = #sqrt{(#omega + m_{n})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#theta_{n} [Deg]", numTH2Dbins_Ang_Plots,
+                                         "#theta_{n} vs. W (All Int., 1n, FD);W = #sqrt{(#omega + m_{n})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#theta_{n} [Deg]",
+                                         numTH2Dbins_Ang_Plots,
                                          W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_n_VS_P_n_1n_FD_Dir = directories.Angle_Directory_map["Theta_n_1n_Directory"];
     string hTheta_n_VS_W_1n_FD_Dir = directories.Angle_Directory_map["Theta_n_1n_Directory"];

@@ -1,5 +1,3 @@
-/* root BetaFitAndSave.cpp -q -b */
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -31,6 +29,18 @@ void TitleAligner(hData &Utilities, TH1D *Histogram1D, string &Histogram1D_Title
     if (findSubstring(Histogram1D_xLabel, OriginToreplace)) {
         Utilities.ReplaceSubStr(Histogram1D_xLabel, OriginToreplace, Replacement);
         Histogram1D->GetXaxis()->SetTitle(Histogram1D_xLabel.c_str());
+    }
+}
+
+void TitleAligner(hData &Utilities, THStack *Stack1D, string &Histogram1D_Title, string &Histogram1D_xLabel, const string &OriginToreplace, const string &Replacement) {
+    if (findSubstring(Histogram1D_Title, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Histogram1D_Title, OriginToreplace, Replacement);
+        Stack1D->SetTitle(Histogram1D_Title.c_str());
+    }
+
+    if (findSubstring(Histogram1D_xLabel, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Histogram1D_xLabel, OriginToreplace, Replacement);
+        Stack1D->GetXaxis()->SetTitle(Histogram1D_xLabel.c_str());
     }
 }
 
