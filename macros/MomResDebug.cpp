@@ -41,7 +41,8 @@ vector<TH1D *> SliceLoader(const char *filename, vector<int> &SliceNumbers) {
     TKey *Key;
     TIter Next((TList *) file->GetListOfKeys());
 
-    while (Key = (TKey *) Next()) {
+    while ((Key = (TKey *) Next())) {
+//    while (Key = (TKey *) Next()) {
 
         if (PrintOut) { cout << "Key name: " << Key->GetName() << "|\t Type: " << Key->GetClassName() << "\n\n"; }
 

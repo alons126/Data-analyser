@@ -38,7 +38,8 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring) 
     TKey *Key;
     TIter Next((TList *) file->GetListOfKeys());
 
-    while (Key = (TKey *) Next()) {
+    while ((Key = (TKey *) Next())) {
+//    while (Key = (TKey *) Next()) {
         TH2D *Histogram2DTemp = (TH2D *) Key->ReadObj();
 
         string Histogram2DTempName = Histogram2DTemp->GetName();
@@ -89,7 +90,8 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring, 
     TKey *Key;
     TIter Next((TList *) file->GetListOfKeys());
 
-    while (Key = (TKey *) Next()) {
+    while ((Key = (TKey *) Next())) {
+//    while (Key = (TKey *) Next()) {
         TH2D *Histogram2DTemp = (TH2D *) Key->ReadObj();
 
         string Histogram2DTempName = Histogram2DTemp->GetName();

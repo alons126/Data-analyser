@@ -315,6 +315,12 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             }
 
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
+        } else if (findSubstring(Histogram2DNameCopy, "R_{nFD} vs. P^{reco}_{nFD}") ||
+                   findSubstring(Histogram2DNameCopy, "R_{nFD} vs. P^{truth}_{nFD}") ||
+                   findSubstring(Histogram2DNameCopy, "R_{pFD} vs. P^{reco}_{pFD}") ||
+                   findSubstring(Histogram2DNameCopy, "R_{pFD} vs. P^{truth}_{pFD}")) {
+            ShowStats = false;
+            Histogram2D->Draw("colz"), gPad->Update();
         } else {
             Histogram2D->SetStats(0);
 

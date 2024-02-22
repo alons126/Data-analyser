@@ -39,7 +39,8 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
     TKey *Key;
     TIter Next((TList *) file->GetListOfKeys());
 
-    while (Key = (TKey *) Next()) {
+    while ((Key = (TKey *) Next())) {
+//    while (Key = (TKey *) Next()) {
         TH1D *Histogram1DTemp = (TH1D *) Key->ReadObj();
 
         string Histogram1DTempName = Histogram1DTemp->GetName();

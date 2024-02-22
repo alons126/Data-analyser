@@ -237,7 +237,7 @@ void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const
     Sim_Histogram1D->SetLineColor(kBlue);
     Sim_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D);
-    Sim_Histogram1D->Scale(Data_Histogram1D->Integral() / Sim_Histogram1D->Integral());
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D->Scale(Data_Histogram1D->Integral() / Sim_Histogram1D->Integral()); }
 
     Data_Histogram1D->GetXaxis()->SetTitleSize(0.06);
     Data_Histogram1D->GetXaxis()->SetLabelSize(0.0425);
@@ -378,8 +378,15 @@ void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const
         double xOffset = SetxOffset1D(false), yOffset = SetyOffset1D(false);
 
         auto Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.05 + xOffset, Legend_y2_TwoLines + yOffset);
-        TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation (scaled)", "l");
-        TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l");
+
+        if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+            TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation (scaled)", "l");
+            TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l");
+        } else {
+            TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation", "l");
+            TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l");
+        }
+
         Comparison_legend->SetTextSize(0.03), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
     }
 
