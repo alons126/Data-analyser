@@ -38,10 +38,11 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
 
     TKey *Key;
     TIter Next((TList *) file->GetListOfKeys());
+    TH1D *Histogram1DTemp;
 
-    while ((Key = (TKey *) Next())) {
-//    while (Key = (TKey *) Next()) {
-        TH1D *Histogram1DTemp = (TH1D *) Key->ReadObj();
+    while (Key = (TKey *) Next()) {
+//    while ((Key = (TKey *) Next())) {
+        Histogram1DTemp = (TH1D *) Key->ReadObj();
 
         string Histogram1DTempName = Histogram1DTemp->GetName();
 
@@ -63,20 +64,16 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
 
             if ((TLmom || !findSubstring(Histogram1DxLable, "Momentum"))) {
                 HistogramFound = true;
-
                 Histogram1D = (TH1D *) Key->ReadObj();
-
                 FoundHistName = Key->GetClassName();
-                delete Histogram1DTemp;
                 break;
             }
         }
 
-        delete Histogram1DTemp;
+//        delete Histogram1DTemp;
     }
     /*
         while ((Key = (TKey *) Next())) {
-    //    while (Key = (TKey *) Next()) {
             TH1D *Histogram1DTemp = (TH1D *) Key->ReadObj();
 
             string Histogram1DTempName = Histogram1DTemp->GetName();
@@ -103,9 +100,12 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
                     Histogram1D = (TH1D *) Key->ReadObj();
 
                     FoundHistName = Key->GetClassName();
+                    delete Histogram1DTemp;
                     break;
                 }
             }
+
+            delete Histogram1DTemp;
         }
     */
 
@@ -113,6 +113,7 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
         cout << "\n\nHistofinder1D: could not find histogram!\n";
         cout << "Histogram1DNameSubstring = " << Histogram1DNameSubstring << "\n";
         exit(0);
+
         return Histogram1D;
     } else {
         if (PrintOut) {
@@ -120,6 +121,7 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
             cout << "FoundHistName = " << FoundHistName << "\n";
         }
 
+        delete Histogram1DTemp;
         return Histogram1D;
     }
 }
