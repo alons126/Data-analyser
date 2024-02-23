@@ -333,6 +333,8 @@ void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const
                      "#vec{P}", "#font[62]{P}");
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "#vec{q}", "#font[62]{q}");
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "W [GeV]", "W [GeV/c^{2}]");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
@@ -371,13 +373,28 @@ void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const
                      "#vec{P}", "#font[62]{P}");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "#vec{q}", "#font[62]{q}");
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "W [GeV]", "W [GeV/c^{2}]");
 
         Sim_Histogram1D->Draw(), gPad->Update();
         Data_Histogram1D->Draw("same"), gPad->Update();
 
         double xOffset = SetxOffset1D(false), yOffset = SetyOffset1D(false);
 
-        auto Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.05 + xOffset, Legend_y2_TwoLines + yOffset);
+        TLegend *Comparison_legend;
+
+        if (!findSubstring(Histogram1D_Title, "W ")) {
+            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.05 + xOffset, Legend_y2_TwoLines + yOffset);
+        } else {
+            double Custom_xOffset = -0.41, Custom_x1Offset = 0;
+
+            if (findSubstring(Histogram1DNameCopy, "FSRatio")) { Custom_x1Offset = -0.085; }
+
+            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset,
+                                            Legend_y1_TwoLines + yOffset,
+                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset,
+                                            Legend_y2_TwoLines + yOffset);
+        }
 
         if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
             TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation (scaled)", "l");

@@ -578,6 +578,8 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             if (findSubstring(Histogram1DNameCopy, "FSRatio")) { Histogram1D->GetYaxis()->SetTitle(FSRyLabel.c_str()); }
 
+//            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+//                         "W [GeV]", "W [GeV/c^{2}]");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                          "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,

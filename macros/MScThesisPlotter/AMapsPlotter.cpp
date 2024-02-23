@@ -19,6 +19,27 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
     bool PrintOut = false;
     bool ShowStats = false;
 
+    const string Sep_TL_e_OutputPath = OutputPath + "Sep_e_maps/Sep_TL_e_maps";
+    system(("mkdir -p " + Sep_TL_e_OutputPath).c_str());
+    const string Sep_Reco_e_OutputPath = OutputPath + "Sep_e_maps/Sep_Reco_e_maps";
+    system(("mkdir -p " + Sep_Reco_e_OutputPath).c_str());
+    const string Sep_Ratio_e_OutputPath = OutputPath + "Sep_e_maps/Sep_Ratio_e_maps";
+    system(("mkdir -p " + Sep_Ratio_e_OutputPath).c_str());
+    const string Sep_AMaps_e_OutputPath = OutputPath + "Sep_e_maps/Sep_AMaps_e_maps";
+    system(("mkdir -p " + Sep_AMaps_e_OutputPath).c_str());
+
+    const string Sep_TL_p_OutputPath = OutputPath + "Sep_p_maps/Sep_TL_p_maps";
+    system(("mkdir -p " + Sep_TL_p_OutputPath).c_str());
+    const string Sep_Reco_p_OutputPath = OutputPath + "Sep_p_maps/Sep_Reco_p_maps";
+    system(("mkdir -p " + Sep_Reco_p_OutputPath).c_str());
+    const string Sep_Ratio_p_OutputPath = OutputPath + "Sep_p_maps/Sep_Ratio_p_maps";
+    system(("mkdir -p " + Sep_Ratio_p_OutputPath).c_str());
+    const string Sep_AMaps_p_OutputPath = OutputPath + "Sep_p_maps/Sep_AMaps_p_maps";
+    system(("mkdir -p " + Sep_AMaps_p_OutputPath).c_str());
+
+    const string Sep_n_OutputPath = OutputPath + "Sep_n_maps";
+    system(("mkdir -p " + Sep_n_OutputPath).c_str());
+
     double x_1 = 0.2, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
@@ -41,6 +62,10 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
     string cPart_Sep_AMaps_root_file_prefix = "04_cPart_Sep_AMaps_-_C12x4_simulation_G18_Q204_6GeV.root";
     string Finalized_AMaps_root_file_prefix = "05_AMaps_-_C12x4_simulation_G18_Q204_6GeV.root";
 
+    TCanvas *Sep_canv = new TCanvas("Sep_canv", "Sep_canv", 1000 * 1.5, 750 * 1.5);
+    Sep_canv->cd()->SetGrid();
+    Sep_canv->cd()->SetBottomMargin(0.14), Sep_canv->cd()->SetLeftMargin(0.18), Sep_canv->cd()->SetRightMargin(0.12);
+
     if (ParticleNameShort1 == "e") {
         // Open the ROOT file containing histograms
         TFile *file = new TFile(filename);
@@ -51,7 +76,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
         }
 
 //    // Create a canvas to plot histograms in a 3x3 grid
-        TCanvas *canvas = new TCanvas("c", "c", 1000 * 6 * 1.5, 750 * 11 * 1.5);
+        TCanvas *canvas = new TCanvas("c", "c", 1000 * 6 * 1.5 / 4, 750 * 11 * 1.5 / 4);
 
         canvas->Divide(6, 11); // Divide the canvas into a 4x16 grid
 
@@ -92,6 +117,33 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                 ++HistogramCounter;
 
                 if (PrintOut) { cout << "\nKey name: " << Histogram2DTemp->GetName() << "; Type: " << Key->GetClassName() << "\n"; }
+
+                if (findSubstring(Histogram2DTempName, "TL ") && !findSubstring(Histogram2DTempName, "/TL")) {
+                    Sep_canv->cd();
+                    Histogram2DTemp->Draw("colz");
+                    Histogram2DTemp->SetStats(0);
+                    Sep_canv->SaveAs((Sep_TL_e_OutputPath + "/" + to_string(canvasIndex) + "_TL_e_Slice_" + to_string(canvasIndex) + ".png").c_str());
+                    Sep_canv->Clear();
+                } else if (findSubstring(Histogram2DTempName, "Reco ")) {
+                    Sep_canv->cd();
+                    Histogram2DTemp->Draw("colz");
+                    Histogram2DTemp->SetStats(0);
+                    Sep_canv->SaveAs((Sep_Reco_e_OutputPath + "/" + to_string(canvasIndex) + "_Reco_e_Slice_" + to_string(canvasIndex) + ".png").c_str());
+                    Sep_canv->Clear();
+                } else if (findSubstring(Histogram2DTempName, "Reco/TL ratio") &&
+                           !findSubstring(Histogram2DTempName, " AMaps ")) {
+                    Sep_canv->cd();
+                    Histogram2DTemp->Draw("colz");
+                    Histogram2DTemp->SetStats(0);
+                    Sep_canv->SaveAs((Sep_Ratio_e_OutputPath + "/" + to_string(canvasIndex) + "_Ratio_e_Slice_" + to_string(canvasIndex) + ".png").c_str());
+                    Sep_canv->Clear();
+                } else if (findSubstring(Histogram2DTempName, " AMap ")) {
+                    Sep_canv->cd();
+                    Histogram2DTemp->Draw("colz");
+                    Histogram2DTemp->SetStats(0);
+                    Sep_canv->SaveAs((Sep_AMaps_e_OutputPath + "/" + to_string(canvasIndex) + "_AMaps_e_Slice_" + to_string(canvasIndex) + ".png").c_str());
+                    Sep_canv->Clear();
+                }
 
                 canvas->cd(canvasIndex), canvas->cd(canvasIndex)->SetGrid();
                 canvas->cd(canvasIndex)->SetBottomMargin(0.14), canvas->cd(canvasIndex)->SetLeftMargin(0.18), canvas->cd(canvasIndex)->SetRightMargin(0.12);
@@ -149,7 +201,11 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     Histogram2DTemp->Draw("colz");
                 }
 
-                if (!ShowStats) { Histogram2DTemp->SetStats(0); }
+                if (!ShowStats) {
+                    Histogram2DTemp->SetStats(0);
+                } else {
+                    Histogram2DTemp->SetStats(1);
+                }
 
                 ++canvasIndex;
 
@@ -237,6 +293,33 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
 
                 if (PrintOut) { cout << "\nKey name: " << Histogram2DTemp->GetName() << "; Type: " << Key->GetClassName() << "\n"; }
 
+                if (findSubstring(Histogram2DTempName, "TL ") && !findSubstring(Histogram2DTempName, "/TL")) {
+                    Sep_canv->cd();
+                    Histogram2DTemp->Draw("colz");
+                    Histogram2DTemp->SetStats(0);
+                    Sep_canv->SaveAs((Sep_TL_p_OutputPath + "/" + to_string(canvasIndex) + "_TL_p_Slice_" + to_string(canvasIndex) + ".png").c_str());
+                    Sep_canv->Clear();
+                } else if (findSubstring(Histogram2DTempName, "Reco ")) {
+                    Sep_canv->cd();
+                    Histogram2DTemp->Draw("colz");
+                    Histogram2DTemp->SetStats(0);
+                    Sep_canv->SaveAs((Sep_Reco_p_OutputPath + "/" + to_string(canvasIndex) + "_Reco_p_Slice_" + to_string(canvasIndex) + ".png").c_str());
+                    Sep_canv->Clear();
+                } else if (findSubstring(Histogram2DTempName, "Reco/TL ratio") &&
+                           !findSubstring(Histogram2DTempName, " AMaps ")) {
+                    Sep_canv->cd();
+                    Histogram2DTemp->Draw("colz");
+                    Histogram2DTemp->SetStats(0);
+                    Sep_canv->SaveAs((Sep_Ratio_p_OutputPath + "/" + to_string(canvasIndex) + "_Ratio_p_Slice_" + to_string(canvasIndex) + ".png").c_str());
+                    Sep_canv->Clear();
+                } else if (findSubstring(Histogram2DTempName, " AMap ")) {
+                    Sep_canv->cd();
+                    Histogram2DTemp->Draw("colz");
+                    Histogram2DTemp->SetStats(0);
+                    Sep_canv->SaveAs((Sep_AMaps_p_OutputPath + "/" + to_string(canvasIndex) + "_AMaps_p_Slice_" + to_string(canvasIndex) + ".png").c_str());
+                    Sep_canv->Clear();
+                }
+
                 canvas->cd(canvasIndex), canvas->cd(canvasIndex)->SetGrid();
                 canvas->cd(canvasIndex)->SetBottomMargin(0.14), canvas->cd(canvasIndex)->SetLeftMargin(0.18), canvas->cd(canvasIndex)->SetRightMargin(0.12);
 
@@ -293,7 +376,11 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     Histogram2DTemp->Draw("colz");
                 }
 
-                if (!ShowStats) { Histogram2DTemp->SetStats(0); }
+                if (!ShowStats) {
+                    Histogram2DTemp->SetStats(0);
+                } else {
+                    Histogram2DTemp->SetStats(1);
+                }
 
                 ++canvasIndex;
 
@@ -437,10 +524,21 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel,
                          "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
+            Sep_canv->cd();
+            TL_Histogram2D->Draw("colz");
+            TL_Histogram2D->SetStats(0);
+            Sep_canv->SaveAs((Sep_n_OutputPath + "/" + to_string(1) + "_TL_n_Slice_" + to_string(1) + ".png").c_str());
+            Sep_canv->Clear();
+            canvas->cd(1);
+
             TL_Histogram2D->Draw("colz");
         }
 
-        if (!ShowStats) { TL_Histogram2D->SetStats(0); }
+        if (!ShowStats) {
+            TL_Histogram2D->SetStats(0);
+        } else {
+            TL_Histogram2D->SetStats(1);
+        }
 
         canvas->cd(2), canvas->cd(2)->SetGrid();
         canvas->cd(2)->SetBottomMargin(0.14), canvas->cd(2)->SetLeftMargin(0.18), canvas->cd(2)->SetRightMargin(0.12);
@@ -497,10 +595,21 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel,
                          "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
+            Sep_canv->cd();
+            Reco_Histogram2D->Draw("colz");
+            Reco_Histogram2D->SetStats(0);
+            Sep_canv->SaveAs((Sep_n_OutputPath + "/" + to_string(2) + "_Reco_n_Slice_" + to_string(2) + ".png").c_str());
+            Sep_canv->Clear();
+            canvas->cd(2);
+
             Reco_Histogram2D->Draw("colz");
         }
 
-        if (!ShowStats) { Reco_Histogram2D->SetStats(0); }
+        if (!ShowStats) {
+            Reco_Histogram2D->SetStats(0);
+        } else {
+            Reco_Histogram2D->SetStats(1);
+        }
 
         canvas->cd(3), canvas->cd(3)->SetGrid();
         canvas->cd(3)->SetBottomMargin(0.14), canvas->cd(3)->SetLeftMargin(0.18), canvas->cd(3)->SetRightMargin(0.12);
@@ -555,10 +664,21 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel,
                          "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
+            Sep_canv->cd();
+            Ratio_Histogram2D->Draw("colz");
+            Ratio_Histogram2D->SetStats(0);
+            Sep_canv->SaveAs((Sep_n_OutputPath + "/" + to_string(3) + "_Ratio_n_Slice_" + to_string(3) + ".png").c_str());
+            Sep_canv->Clear();
+            canvas->cd(3);
+
             Ratio_Histogram2D->Draw("colz");
         }
 
-        if (!ShowStats) { Ratio_Histogram2D->SetStats(0); }
+        if (!ShowStats) {
+            Ratio_Histogram2D->SetStats(0);
+        } else {
+            Ratio_Histogram2D->SetStats(1);
+        }
 
         canvas->cd(4), canvas->cd(4)->SetGrid();
         canvas->cd(4)->SetBottomMargin(0.14), canvas->cd(4)->SetLeftMargin(0.18), canvas->cd(4)->SetRightMargin(0.12);
@@ -621,10 +741,21 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             TitleAligner(Finalized_AMaps_Histogram2D, Finalized_AMaps_Histogram2D_Title, Finalized_AMaps_Histogram2D_xLabel, Finalized_AMaps_Histogram2D_yLabel,
                          "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
+            Sep_canv->cd();
+            Finalized_AMaps_Histogram2D->Draw("colz");
+            Finalized_AMaps_Histogram2D->SetStats(0);
+            Sep_canv->SaveAs((Sep_n_OutputPath + "/" + to_string(4) + "_AMaps_n_Slice_" + to_string(4) + ".png").c_str());
+            Sep_canv->Clear();
+            canvas->cd(4);
+
             Finalized_AMaps_Histogram2D->Draw("colz");
         }
 
-        if (!ShowStats) { Finalized_AMaps_Histogram2D->SetStats(0); }
+        if (!ShowStats) {
+            Finalized_AMaps_Histogram2D->SetStats(0);
+        } else {
+            Finalized_AMaps_Histogram2D->SetStats(1);
+        }
 
         cout << "\nOutputPath + SaveName = " << OutputPath + SaveName << "\n";
 
@@ -640,6 +771,8 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
         Finalized_AMaps_root_file->Close();
         delete Finalized_AMaps_root_file;
     }
+
+    delete Sep_canv;
 
 //    //<editor-fold desc="original">
 //    if (ParticleNameShort1 != "n") {

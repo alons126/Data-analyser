@@ -56,10 +56,36 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring) 
             }
 
             Histogram2D = (TH2D *) Key->ReadObj();
-
+            delete Histogram2DTemp;
             break;
         }
+
+        delete Histogram2DTemp;
     }
+    /*
+        while ((Key = (TKey *) Next())) {
+    //    while (Key = (TKey *) Next()) {
+            TH2D *Histogram2DTemp = (TH2D *) Key->ReadObj();
+
+            string Histogram2DTempName = Histogram2DTemp->GetName();
+
+            if (PrintOut) { cout << Histogram2DTempName << "\n\n"; }
+
+            if (findSubstring(Histogram2DTempName, Histogram2DNameSubstring)) {
+                HistogramFound = true;
+
+                if (PrintOutResult) {
+                    cout << "\n\nKey name: " << Histogram2DTemp->GetName() << "; Type: " << Key->GetClassName() << "\n";
+                    cout << "filename: " << filename << "\n\n";
+                    cout << "Histogram2DNameSubstring: " << Histogram2DNameSubstring << "\n\n";
+                }
+
+                Histogram2D = (TH2D *) Key->ReadObj();
+
+                break;
+            }
+        }
+    */
 
     if (!HistogramFound) {
         cout << "\n\nHistofinder2D: could not find histogram!\n";
