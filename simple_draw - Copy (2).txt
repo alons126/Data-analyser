@@ -1,0 +1,8 @@
+TCanvas *Canv = new TCanvas("c1", "c2", 1000 * 2, 750 * 2); // normal res
+Canv->cd()->SetGrid(), Canv->cd()->SetBottomMargin(0.14), Canv->cd()->SetLeftMargin(0.16), Canv->cd()->SetRightMargin(0.16), Canv->cd()->SetTopMargin(0.12), Canv->cd();
+TH1D *h = new TH1D("h","h;P_{n} [GeV/c]",10,0,10);
+h->Draw();
+h->GetXaxis()->SetTitleSize(0.06);
+h->GetXaxis()->CenterTitle(true);
+Canv->SaveAs("test.png");
+.q

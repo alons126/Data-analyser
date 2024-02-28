@@ -138,43 +138,39 @@ void DrawPlot(TCanvas *HistogramCanvas, const bool LogScalePlot, const bool Line
 
 #endif
 
-void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *Sim_filename, const char *Data_filename, const char *Histogram1DName,
+void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *Sim_filename, const char *Data_filename, const char *Histogram1DName,
                       const string &SampleName, const string &SavePath, const string &SaveName, const bool TLmom = false) {
     cout << "\n\n";
 
-    hData particles;
-
     HistogramCanvas->Clear();
 
-    TFile *Sim_file = new TFile(Sim_filename);
+    TFile *Sim_file = TFile::Open(Sim_filename);
     TH1D *Sim_Histogram1D;
 
-    TFile *Data_file = new TFile(Data_filename);
+    TFile *Data_file = TFile::Open(Data_filename);
     TH1D *Data_Histogram1D;
-
-    THStack *Stack1D;
 
     if (!findSubstring(Histogram1DName, "FSRatio")) {
         if (findSubstring(Histogram1DName, "W distribution") ||
             findSubstring(Histogram1DName, "#theta_{pFD,pCD}") || findSubstring(Histogram1DName, "#theta_{nFD,pCD}")) {
-            Sim_Histogram1D = Histofinder1D(Sim_filename, Histogram1DName);
-            Data_Histogram1D = Histofinder1D(Data_filename, Histogram1DName);
+            Sim_Histogram1D = Histofinder1D(Sim_file, Histogram1DName);
+            Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName);
         } else {
             if (Sim_file->Get(Histogram1DName) == nullptr) {
-                Sim_Histogram1D = Histofinder1D(Sim_filename, Histogram1DName, TLmom);
+                Sim_Histogram1D = Histofinder1D(Sim_file, Histogram1DName, TLmom);
             } else {
                 Sim_Histogram1D = (TH1D *) Sim_file->Get(Histogram1DName);
             }
 
             if (Data_file->Get(Histogram1DName) == nullptr) {
-                Data_Histogram1D = Histofinder1D(Data_filename, Histogram1DName, TLmom);
+                Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName, TLmom);
             } else {
                 Data_Histogram1D = (TH1D *) Data_file->Get(Histogram1DName);
             }
         }
     } else {
-        Sim_Histogram1D = Histofinder1D(Sim_filename, Histogram1DName, TLmom);
-        Data_Histogram1D = Histofinder1D(Data_filename, Histogram1DName, TLmom);
+        Sim_Histogram1D = Histofinder1D(Sim_file, Histogram1DName, TLmom);
+        Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName, TLmom);
     }
 
     double Legend_x1_BaseLine = gStyle->GetStatX(), Legend_y1_BaseLine = gStyle->GetStatY(); // Top right
@@ -258,7 +254,7 @@ void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const
         displayText->SetFillColor(0);
         displayText->AddText("Empty histogram");
         displayText->SetTextAlign(22);
-        Stack1D->Draw();
+        Sim_Histogram1D->Draw();
         displayText->Draw();
     } else if (Sim_Histogram1D->Integral() != 0. && Data_Histogram1D->Integral() != 0.) {
         string Histogram1D_Title = Sim_Histogram1D->GetTitle();
@@ -286,9 +282,6 @@ void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "nFDpCD", "1nFD1pCD");
-
-//            Stack1D->SetLineColor(kBlue);
-//        Stack1D->SetStats(0);
 
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
             Sim_Histogram1D->GetYaxis()->SetTitle(FSRyLabel.c_str());
@@ -335,6 +328,16 @@ void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const
                      "#vec{q}", "#font[62]{q}");
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "W [GeV]", "W [GeV/c^{2}]");
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "P_{nucCD} [GeV/c]", "P_{pCD} [GeV/c]");
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#theta_{nucFD,nucCD} [Deg]", "#theta_{nucFD,pCD} [Deg]");
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#theta_{#font[62]{q},#font[62]{P}_{nuc,FD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{nucFD}} [Deg]");
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#theta_{#font[62]{q},#font[62]{P}_{nuc,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
@@ -375,6 +378,16 @@ void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const
                      "#vec{q}", "#font[62]{q}");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "W [GeV]", "W [GeV/c^{2}]");
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "P_{nucCD} [GeV/c]", "P_{pCD} [GeV/c]");
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#theta_{nucFD,nucCD} [Deg]", "#theta_{nucFD,pCD} [Deg]");
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#theta_{#font[62]{q},#font[62]{P}_{nuc,FD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{nucFD}} [Deg]");
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#theta_{#font[62]{q},#font[62]{P}_{nuc,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
 
         Sim_Histogram1D->Draw(), gPad->Update();
         Data_Histogram1D->Draw("same"), gPad->Update();
@@ -383,18 +396,33 @@ void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const
 
         TLegend *Comparison_legend;
 
-        if (!findSubstring(Histogram1D_Title, "W ")) {
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.05 + xOffset, Legend_y2_TwoLines + yOffset);
+        double Custom_x1Offset = 0;
+
+        if (findSubstring(Histogram1DNameCopy, "FSRatio")) { Custom_x1Offset = -0.085; }
+
+        if (findSubstring(Histogram1D_Title, "W ") ||
+            findSubstring(Histogram1D_Title, "#theta_{nFD}") || findSubstring(Histogram1D_Title, "#theta_{pFD}") ||
+            findSubstring(Histogram1D_Title, "#theta_{nFD,pCD}")) {
+            double Custom_xOffset = -0.41;
+
+            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
         } else {
-            double Custom_xOffset = -0.41, Custom_x1Offset = 0;
-
-            if (findSubstring(Histogram1DNameCopy, "FSRatio")) { Custom_x1Offset = -0.085; }
-
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset,
-                                            Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset,
-                                            Legend_y2_TwoLines + yOffset);
+            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                            Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
         }
+
+        /*
+        if (!findSubstring(Histogram1D_Title, "W ")) {
+            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                            Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
+        } else {
+            double Custom_xOffset = -0.41;
+
+            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset, Legend_y1_TwoLines + yOffset,
+                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
+        }
+*/
 
         if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
             TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation (scaled)", "l");
@@ -432,8 +460,6 @@ void HistPlotterStack(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const
     }
 
     HistogramCanvas->Clear();
-    Sim_file->Close();
-    Data_file->Close();
     delete Sim_file;
     delete Data_file;
 }

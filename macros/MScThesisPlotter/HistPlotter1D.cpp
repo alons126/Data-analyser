@@ -115,16 +115,16 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     if (!findSubstring(Histogram1DName, "FSRatio")) {
         if (findSubstring(Histogram1DName, "W distribution") ||
             findSubstring(Histogram1DName, "#theta_{pFD,pCD}") || findSubstring(Histogram1DName, "#theta_{nFD,pCD}")) {
-            Histogram1D = Histofinder1D(filename, Histogram1DName);
+            Histogram1D = Histofinder1D(file, Histogram1DName);
         } else {
             if (file->Get(Histogram1DName) == nullptr) {
-                Histogram1D = Histofinder1D(filename, Histogram1DName, TLmom);
+                Histogram1D = Histofinder1D(file, Histogram1DName, TLmom);
             } else {
                 Histogram1D = (TH1D *) file->Get(Histogram1DName);
             }
         }
     } else {
-        Histogram1D = Histofinder1D(filename, Histogram1DName, TLmom);
+        Histogram1D = Histofinder1D(file, Histogram1DName, TLmom);
     }
 
     double Legend_x1_BaseLine = gStyle->GetStatX(), Legend_y1_BaseLine = gStyle->GetStatY(); // Top right
@@ -646,7 +646,5 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     }
 
     HistogramCanvas->Clear();
-    file->Close();
     delete file;
-//    delete Histogram1D;
 }

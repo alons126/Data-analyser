@@ -20,41 +20,37 @@
 
 using namespace std;
 
-TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, const bool TLmom = false) {
+TH1D *Histofinder1D(TFile *file, const char *Histogram1DNameSubstring, const bool TLmom = false) {
     bool PrintOut = false;
     bool PrintOut1 = false;
-
-    TFile *file = new TFile(filename);
-    if (!file) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
 
     TH1D *Histogram1D;
 
     bool HistogramFound = false;
     int Counter = 0, HistogramCounter = 0;
-    static TString classname("TH1D");
-    static TString classnameTFolder("TFolder");
-    static TString classnameTHStack("THStack");
+    TString classname("TH1D");
+    TString classnameTFolder("TFolder");
+    TString classnameTHStack("THStack");
+//    static TString classname("TH1D");
+//    static TString classnameTFolder("TFolder");
+//    static TString classnameTHStack("THStack");
     string FoundHistName;
 
     TKey *Key;
     TIter Next((TList *) file->GetListOfKeys());
-    TH1D *Histogram1DTemp;
 
-    while (Key = (TKey *) Next()) {
-//    while ((Key = (TKey *) Next())) {
-        Histogram1DTemp = (TH1D *) Key->ReadObj();
-
-        string Histogram1DTempName = Histogram1DTemp->GetName();
+    while ((Key = (TKey *) Next())) {
+        string Histogram1DTempName = ((TH1D *) Key->ReadObj())->GetName();
 
         if (PrintOut1) { cout << Histogram1DTempName << "\n\n"; }
 
         if (findSubstring(Histogram1DTempName, Histogram1DNameSubstring) &&
             (Key->GetClassName() != classnameTFolder("TFolder")) && (Key->GetClassName() != classnameTHStack("THStack"))) {
 
-            if (PrintOut) { cout << "\n\nKey name: " << Histogram1DTemp->GetName() << "; Type: " << Key->GetClassName() << "\n\n"; }
+            if (PrintOut) { cout << "\n\nKey name: " << ((TH1D *) Key->ReadObj())->GetName() << "; Type: " << Key->GetClassName() << "\n\n"; }
 
-            string Histogram1DxLable = Histogram1DTemp->GetXaxis()->GetTitle();
-            string Histogram1DTitle = Histogram1DTemp->GetTitle();
+            string Histogram1DxLable = ((TH1D *) Key->ReadObj())->GetXaxis()->GetTitle();
+            string Histogram1DTitle = ((TH1D *) Key->ReadObj())->GetTitle();
 
             if (PrintOut) {
                 cout << "\nHistogram1DxLable = " << Histogram1DxLable << "\n";
@@ -64,7 +60,8 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
 
             if ((TLmom || !findSubstring(Histogram1DxLable, "Momentum"))) {
                 HistogramFound = true;
-                Histogram1D = (TH1D *) Key->ReadObj();
+
+                Histogram1D = ((TH1D *) Key->ReadObj());
                 FoundHistName = Key->GetClassName();
                 break;
             }
@@ -121,7 +118,6 @@ TH1D *Histofinder1D(const char *filename, const char *Histogram1DNameSubstring, 
             cout << "FoundHistName = " << FoundHistName << "\n";
         }
 
-        delete Histogram1DTemp;
         return Histogram1D;
     }
 }

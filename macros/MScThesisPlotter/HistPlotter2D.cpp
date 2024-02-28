@@ -83,7 +83,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
     if (file->Get(Histogram2DName) == nullptr ||
         (findSubstring(Histogram2DName, "vs") || findSubstring(Histogram2DName, "VS"))) {
-        Histogram2D = Histofinder2D(filename, Histogram2DName, false);
+        Histogram2D = Histofinder2D(file, Histogram2DName, false);
     } else {
         Histogram2D = (TH2D *) file->Get(Histogram2DName);
     }
@@ -329,15 +329,14 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 bool Equi_z_2D = true;
 
                 if (!findSubstring(Histogram2DName, "FSRatio")) {
-                    TH2D *Histogram2D_Denominator = Histofinder2D(filename, HistName_Denominator.c_str(), false);
-                    TH2D *Histogram2D_Numerator = Histofinder2D(filename, HistName_Numerator.c_str(), false);
+                    TH2D *Histogram2D_Denominator = Histofinder2D(file, HistName_Denominator.c_str(), false);
+                    TH2D *Histogram2D_Numerator = Histofinder2D(file, HistName_Numerator.c_str(), false);
 
                     double Zmax = 1.1 * max(Histogram2D_Denominator->GetMaximum(), Histogram2D_Numerator->GetMaximum());
 
                     if (Equi_z_2D) { Histogram2D->SetMaximum(Zmax); }
                 } else {
                     Histogram2D->SetMaximum(5.);
-//                Histogram2D->SetMaximum(10);
                     Histogram2D->SetMinimum(0.1);
 
                     auto FuncList = Histogram2D->GetListOfFunctions();
@@ -439,5 +438,4 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     HistogramCanvas->Clear();
     file->Close();
     delete file;
-//    delete Histogram2D;
 }

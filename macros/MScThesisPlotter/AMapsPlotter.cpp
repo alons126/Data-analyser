@@ -239,9 +239,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             if (HistogramCounter > numHistograms) { break; }
         }
 
-        delete Histogram2DTemp;
         delete canvas;
-        file->Close();
         delete file;
     } else if (ParticleNameShort1 == "p") {
 //        cout << "\n\nYES!\n\n",exit(0);
@@ -417,9 +415,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             if (HistogramCounter > numHistograms) { break; }
         }
 
-        delete Histogram2DTemp;
         delete canvas;
-        file->Close();
         delete file;
     } else if (ParticleNameShort1 == "n") {
         SaveName = "nFD_maps.png";
@@ -451,7 +447,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
 
         cout << "\n\nLoading 'Neutron Reco/TL ratio (AMaps)' from:\n" << FileName + TL_root_file_prefix << "\n";
         TFile *Ratio_root_file = new TFile((FileName + Ratio_root_file_prefix).c_str());
-        TH2D *Ratio_Histogram2D = Histofinder2D((FileName + Ratio_root_file_prefix).c_str(), "Neutron Reco/TL ratio (");
+        TH2D *Ratio_Histogram2D = Histofinder2D(Ratio_root_file, "Neutron Reco/TL ratio (");
         if (!Ratio_root_file || Ratio_root_file->IsZombie()) { std::cerr << "Error: Could not open file: " << FileName << std::endl, exit(0); }
         if (!Ratio_Histogram2D) {
             std::cerr << "Error: Could not open histogram: Neutron Reco/TL ratio (AMaps)" << std::endl;
@@ -777,13 +773,9 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
         canvas->SaveAs((OutputPath + SaveName).c_str());
 
         delete canvas;
-        TL_root_file->Close();
         delete TL_root_file;
-        Reco_root_file->Close();
         delete Reco_root_file;
-        Ratio_root_file->Close();
         delete Ratio_root_file;
-        Finalized_AMaps_root_file->Close();
         delete Finalized_AMaps_root_file;
     }
 

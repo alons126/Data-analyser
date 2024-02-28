@@ -133,15 +133,15 @@ void FSRPlotter(hData &utilities, TCanvas *HistCanvas, TList *MScThesisPlotsList
     }
 
     if (PrintOut) { cout << "\nHistNameFeed_Numerator = " << HistNameFeed_Numerator << "\n\n"; }
-    HistPlotterStack(HistCanvas, MScThesisPlotsList, Sim_filename, Data_filename, HistNameFeed_Numerator.c_str(), SampleName, SavePath,
+    HistPlotterStack(utilities, HistCanvas, MScThesisPlotsList, Sim_filename, Data_filename, HistNameFeed_Numerator.c_str(), SampleName, SavePath,
                      (to_string(Num) + "a_" + SaveName_Numerator));
 
     if (PrintOut) { cout << "\nHistNameFeed_Denominator = " << HistNameFeed_Denominator << "\n\n"; }
-    HistPlotterStack(HistCanvas, MScThesisPlotsList, Sim_filename, Data_filename, HistNameFeed_Denominator.c_str(), SampleName, SavePath,
+    HistPlotterStack(utilities, HistCanvas, MScThesisPlotsList, Sim_filename, Data_filename, HistNameFeed_Denominator.c_str(), SampleName, SavePath,
                      (to_string(Num) + "b_" + SaveName_Denominator));
 
     if (PrintOut) { cout << "\nFSRationTemp = " << FSRationTemp << "\n\n"; }
-    HistPlotterStack(HistCanvas, MScThesisPlotsList, Sim_filename, Data_filename, FSRationTemp.c_str(), SampleName, SavePath,
+    HistPlotterStack(utilities, HistCanvas, MScThesisPlotsList, Sim_filename, Data_filename, FSRationTemp.c_str(), SampleName, SavePath,
                      (to_string(Num) + "c_" + SaveName_FSR), TLmom);
 }
 

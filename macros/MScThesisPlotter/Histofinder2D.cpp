@@ -22,18 +22,16 @@
 
 using namespace std;
 
-TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring) {
+TH2D *Histofinder2D(TFile *file, const char *Histogram2DNameSubstring) {
     bool PrintOut = false;
     bool PrintOutResult = false;
-
-    TFile *file = new TFile(filename);
-    if (!file) { cout << "\n\nHistofinder2D: could not load root file! Exiting...\n", exit(0); }
 
     TH2D *Histogram2D;
 
     bool HistogramFound = false;
     int Counter = 0, HistogramCounter = 0;
-    static TString classname("TH2D");
+    TString classname("TH2D");
+//    static TString classname("TH2D");
 
     TKey *Key;
     TIter Next((TList *) file->GetListOfKeys());
@@ -51,7 +49,6 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring) 
 
             if (PrintOutResult) {
                 cout << "\n\nKey name: " << Histogram2DTemp->GetName() << "; Type: " << Key->GetClassName() << "\n";
-                cout << "filename: " << filename << "\n\n";
                 cout << "Histogram2DNameSubstring: " << Histogram2DNameSubstring << "\n\n";
             }
 
@@ -59,31 +56,6 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring) 
             break;
         }
     }
-    /*
-        while ((Key = (TKey *) Next())) {
-            TH2D *Histogram2DTemp = (TH2D *) Key->ReadObj();
-
-            string Histogram2DTempName = Histogram2DTemp->GetName();
-
-            if (PrintOut) { cout << Histogram2DTempName << "\n\n"; }
-
-            if (findSubstring(Histogram2DTempName, Histogram2DNameSubstring)) {
-                HistogramFound = true;
-
-                if (PrintOutResult) {
-                    cout << "\n\nKey name: " << Histogram2DTemp->GetName() << "; Type: " << Key->GetClassName() << "\n";
-                    cout << "filename: " << filename << "\n\n";
-                    cout << "Histogram2DNameSubstring: " << Histogram2DNameSubstring << "\n\n";
-                }
-
-                Histogram2D = (TH2D *) Key->ReadObj();
-                delete Histogram2DTemp;
-                break;
-            }
-
-            delete Histogram2DTemp;
-        }
-    */
 
     if (!HistogramFound) {
         cout << "\n\nHistofinder2D: could not find histogram!\n";
@@ -91,25 +63,24 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring) 
 
         return Histogram2D;
     } else {
-        delete Histogram2DTemp;
         return Histogram2D;
     }
 }
 
-TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring, const bool TLmom) {
+TH2D *Histofinder2D(TFile *file, const char *Histogram2DNameSubstring, const bool TLmom) {
     bool PrintOut = false;
     bool PrintOut1 = false;
-
-    TFile *file = new TFile(filename);
-    if (!file) { cout << "\n\nHistofinder2D: could not load root file! Exiting...\n", exit(0); }
 
     TH2D *Histogram2D;
 
     bool HistogramFound = false;
     int Counter = 0, HistogramCounter = 0;
-    static TString classname("TH2D");
-    static TString classnameTFolder("TFolder");
-    static TString classnameTHStack("THStack");
+    TString classname("TH2D");
+    TString classnameTFolder("TFolder");
+    TString classnameTHStack("THStack");
+//    static TString classname("TH2D");
+//    static TString classnameTFolder("TFolder");
+//    static TString classnameTHStack("THStack");
     string FoundHistClass;
     string FoundHistName;
 
@@ -118,9 +89,8 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring, 
     TH2D *Histogram2DTemp;
 
     while ((Key = (TKey *) Next())) {
-        Histogram2DTemp = (TH2D *) Key->ReadObj();
 
-        string Histogram2DTempName = Histogram2DTemp->GetName();
+        string Histogram2DTempName = ((TH2D *) Key->ReadObj())->GetName();
 
         if (PrintOut1) { cout << Histogram2DTempName << "\n\n"; }
 
@@ -128,7 +98,7 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring, 
             (Key->GetClassName() != classnameTFolder("TFolder")) && (Key->GetClassName() != classnameTHStack("THStack"))) {
             HistogramFound = true;
 
-            if (PrintOut) { cout << "\n\nKey name: " << Histogram2DTemp->GetName() << "; Type: " << Key->GetClassName() << "\n\n"; }
+            if (PrintOut) { cout << "\n\nKey name: " << ((TH2D *) Key->ReadObj())->GetName() << "; Type: " << Key->GetClassName() << "\n\n"; }
 
             Histogram2D = (TH2D *) Key->ReadObj();
             FoundHistClass = Key->GetClassName();
@@ -171,7 +141,6 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring, 
             cout << "FoundHistName = " << FoundHistName << "\n";
         }
 
-        delete Histogram2DTemp;
         return Histogram2D;
     }
 }
