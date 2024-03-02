@@ -32,6 +32,46 @@ void TitleAligner(hData &Utilities, TH1D *Histogram1D, string &Histogram1D_Title
     }
 }
 
+void TitleAligner(hData &Utilities, TH1D *Sim_Histogram1D, TH1D *Data_Histogram1D, const string &OriginToreplace, const string &Replacement) {
+    string Sim_Histogram1D_Title = Sim_Histogram1D->GetTitle();
+    string Sim_Histogram1D_xLabel = Sim_Histogram1D->GetXaxis()->GetTitle();
+    string Sim_Histogram1D_yLabel = Sim_Histogram1D->GetYaxis()->GetTitle();
+
+    if (findSubstring(Sim_Histogram1D_Title, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Sim_Histogram1D_Title, OriginToreplace, Replacement);
+        Sim_Histogram1D->SetTitle(Sim_Histogram1D_Title.c_str());
+    }
+
+    if (findSubstring(Sim_Histogram1D_xLabel, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Sim_Histogram1D_xLabel, OriginToreplace, Replacement);
+        Sim_Histogram1D->GetXaxis()->SetTitle(Sim_Histogram1D_xLabel.c_str());
+    }
+
+    if (findSubstring(Sim_Histogram1D_yLabel, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Sim_Histogram1D_yLabel, OriginToreplace, Replacement);
+        Sim_Histogram1D->GetYaxis()->SetTitle(Sim_Histogram1D_yLabel.c_str());
+    }
+
+    string Data_Histogram1D_Title = Data_Histogram1D->GetTitle();
+    string Data_Histogram1D_xLabel = Data_Histogram1D->GetXaxis()->GetTitle();
+    string Data_Histogram1D_yLabel = Data_Histogram1D->GetYaxis()->GetTitle();
+
+    if (findSubstring(Data_Histogram1D_Title, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Data_Histogram1D_Title, OriginToreplace, Replacement);
+        Data_Histogram1D->SetTitle(Data_Histogram1D_Title.c_str());
+    }
+
+    if (findSubstring(Data_Histogram1D_xLabel, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Data_Histogram1D_xLabel, OriginToreplace, Replacement);
+        Data_Histogram1D->GetXaxis()->SetTitle(Data_Histogram1D_xLabel.c_str());
+    }
+
+    if (findSubstring(Data_Histogram1D_yLabel, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Data_Histogram1D_yLabel, OriginToreplace, Replacement);
+        Data_Histogram1D->GetYaxis()->SetTitle(Data_Histogram1D_yLabel.c_str());
+    }
+}
+
 void TitleAligner(hData &Utilities, THStack *Stack1D, string &Histogram1D_Title, string &Histogram1D_xLabel, const string &OriginToreplace, const string &Replacement) {
     if (findSubstring(Histogram1D_Title, OriginToreplace)) {
         Utilities.ReplaceSubStr(Histogram1D_Title, OriginToreplace, Replacement);

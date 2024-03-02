@@ -1,6 +1,6 @@
 TCanvas *Canv = new TCanvas("c1", "c2", 1000 * 2, 750 * 2); // normal res
 Canv->cd()->SetGrid(), Canv->cd()->SetBottomMargin(0.14), Canv->cd()->SetLeftMargin(0.16), Canv->cd()->SetRightMargin(0.16), Canv->cd()->SetTopMargin(0.12), Canv->cd();
-TH1D *h = new TH1D("h","h;P_{n} [GeV/c]",10,0,10);
+TH1D *h = new TH1D("h","Reconstructed energy in #font[12]{1n1p} and #font[12]{2p} (MEC only);P_{n} [GeV/c]",10,0,10);
 h->Draw();
 h->GetXaxis()->SetTitleSize(0.06);
 h->GetXaxis()->CenterTitle(true);

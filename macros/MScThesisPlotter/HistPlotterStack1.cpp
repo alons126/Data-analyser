@@ -20,7 +20,7 @@
 #include "../../source/functions/GeneralFunctions.h"
 #include "../../source/constants.h"
 
-#if IndependentStackdraw
+#if IndependentStack1draw
 #include "../../source/classes/hData/hData.cpp"
 #include "Histofinder1D.cpp"
 #include "TitleAligner.cpp"
@@ -103,8 +103,8 @@ void DrawPlot(TCanvas *HistogramCanvas, TH1D *Histogram1D, const bool LogScalePl
 }
 #else
 
-void DrawPlot(TCanvas *HistogramCanvas, const bool LogScalePlot, const bool LinearScalePlot, const string &SavePath, const string &SaveName,
-              const string &DrawRange) {
+void DrawPlot1(TCanvas *HistogramCanvas, const bool LogScalePlot, const bool LinearScalePlot, const string &SavePath, const string &SaveName,
+               const string &DrawRange) {
     if (DrawRange == "") {
         if (LogScalePlot) {
             HistogramCanvas->SetLogy(1);
@@ -138,38 +138,103 @@ void DrawPlot(TCanvas *HistogramCanvas, const bool LogScalePlot, const bool Line
 
 #endif
 
-void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *Sim_filename, const char *Data_filename, const char *Histogram1DName,
-                      const string &SampleName, const string &SavePath, const string &SaveName, const bool TLmom = false) {
+void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *Sim_filename, const char *Data_filename, const char *Histogram1DName,
+                       const string &SampleName, const string &SavePath, const string &SaveName, const bool TLmom = false) {
     cout << "\n\n";
 
     HistogramCanvas->Clear();
 
+    THStack *Stack1D;
+
     TFile *Sim_file = TFile::Open(Sim_filename);
-    TH1D *Sim_Histogram1D;
+    TH1D *Sim_Histogram1D, *Sim_Histogram1D_QE, *Sim_Histogram1D_MEC, *Sim_Histogram1D_RES, *Sim_Histogram1D_DIS;
 
     TFile *Data_file = TFile::Open(Data_filename);
     TH1D *Data_Histogram1D;
 
     if (!findSubstring(Histogram1DName, "FSRatio")) {
         if (findSubstring(Histogram1DName, "W distribution") ||
-            findSubstring(Histogram1DName, "#theta_{pFD,pCD}") || findSubstring(Histogram1DName, "#theta_{nFD,pCD}")) {
-            Sim_Histogram1D = Histofinder1D(Sim_file, Histogram1DName);
-            Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName);
-        } else {
-            if (Sim_file->Get(Histogram1DName) == nullptr) {
-                Sim_Histogram1D = Histofinder1D(Sim_file, Histogram1DName, TLmom);
-            } else {
-                Sim_Histogram1D = (TH1D *) Sim_file->Get(Histogram1DName);
+            findSubstring(Histogram1DName, "E_{cal} reco.") ||
+            findSubstring(Histogram1DName, "E_{e}") ||
+            findSubstring(Histogram1DName, "#omega around #theta_{e} = 15#circ")) {
+            if (findSubstring(Histogram1DName, "pFDpCD")) {
+                string Histogram1DName0 = Histogram1DName;
+                string Histogram1DName1 = Histogram1DName0.substr(0, Histogram1DName0.find_last_of('(') - 1);
+
+                if (findSubstring(Histogram1DName, "W distribution")) {
+                    Stack1D = new THStack("W distribution in 1pFD1pCD", "W distribution in 1pFD1pCD;W [GeV/c^{2}];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (All Int., pFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QEL only, pFDpCD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC only, pFDpCD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES only, pFDpCD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS only, pFDpCD)").c_str());
+                } else if (findSubstring(Histogram1DName, "E_{cal} reco.")) {
+                    Stack1D = new THStack("E_{cal} distribution in 1pFD1pCD", "E_{cal} distribution in 1pFD1pCD;E_{cal} [GeV];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (All Int., pFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QEL only, pFDpCD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC only, pFDpCD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES only, pFDpCD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS only, pFDpCD)").c_str());
+                } else if (findSubstring(Histogram1DName, "E_{e}")) {
+                    Stack1D = new THStack("E_{e} distribution in 1pFD1pCD", "E_{e} distribution in 1pFD1pCD;E_{e} [GeV];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (All Int., pFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QEL Only, pFDpCD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC Only, pFDpCD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES Only, pFDpCD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS Only, pFDpCD)").c_str());
+                } else if (findSubstring(Histogram1DName, "#omega around #theta_{e} = 15#circ")) {
+                    Stack1D = new THStack("#omega around #theta_{e} = 15#circ distribution in 1pFD1pCD",
+                                          "#omega around #theta_{e} = 15#circ distribution in 1pFD1pCD;#omega [GeV];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (All Int., pFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QEL Only, pFDpCD, FD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC Only, pFDpCD, FD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES Only, pFDpCD, FD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS Only, pFDpCD, FD)").c_str());
+                }
+
+            } else if (findSubstring(Histogram1DName, "nFDpCD")) {
+                string Histogram1DName0 = Histogram1DName;
+                string Histogram1DName1 = Histogram1DName0.substr(0, Histogram1DName0.find_last_of('(') - 1);
+
+                if (findSubstring(Histogram1DName, "W distribution")) {
+                    Stack1D = new THStack("W distribution in 1nFD1pCD", "W distribution in 1nFD1pCD;W [GeV/c^{2}];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (All Int., nFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QEL only, nFDpCD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC only, nFDpCD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES only, nFDpCD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS only, nFDpCD)").c_str());
+                } else if (findSubstring(Histogram1DName, "E_{cal} reco.")) {
+                    Stack1D = new THStack("E_{cal} distribution in 1nFD1pCD", "E_{cal} distribution in 1nFD1pCD;E_{cal} [GeV];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (All Int., nFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QEL only, nFDpCD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC only, nFDpCD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES only, nFDpCD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS only, nFDpCD)").c_str());
+                } else if (findSubstring(Histogram1DName, "E_{e}")) {
+                    Stack1D = new THStack("E_{e} distribution in 1nFD1pCD", "E_{e} distribution in 1nFD1pCD;E_{e} [GeV];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (All Int., nFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QEL Only, nFDpCD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC Only, nFDpCD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES Only, nFDpCD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS Only, nFDpCD)").c_str());
+                } else if (findSubstring(Histogram1DName, "#omega around #theta_{e} = 15#circ")) {
+                    Stack1D = new THStack("#omega around #theta_{e} = 15#circ distribution in 1nFD1pCD",
+                                          "#omega around #theta_{e} = 15#circ distribution in 1nFD1pCD;#omega [GeV];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (All Int., nFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QEL Only, nFDpCD, FD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC Only, nFDpCD, FD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES Only, nFDpCD, FD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS Only, nFDpCD, FD)").c_str());
+                }
+
             }
 
-            if (Data_file->Get(Histogram1DName) == nullptr) {
-                Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName, TLmom);
-            } else {
-                Data_Histogram1D = (TH1D *) Data_file->Get(Histogram1DName);
-            }
+            Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName);
         }
     } else {
-        Sim_Histogram1D = Histofinder1D(Sim_file, Histogram1DName, TLmom);
+        string Histogram1DName1 = Histogram1DName;
+
+        Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (All Int., ").c_str(), TLmom);
         Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName, TLmom);
     }
 
@@ -221,6 +286,15 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
+//    Stack1D->GetXaxis()->SetTitleSize(0.06);
+//    Stack1D->GetXaxis()->SetLabelSize(0.0425);
+//    Stack1D->GetXaxis()->CenterTitle(true);
+//    Stack1D->GetYaxis()->SetTitle("Number of events");
+//    Stack1D->GetYaxis()->SetTitleSize(0.06);
+//    Stack1D->GetYaxis()->SetLabelSize(0.0425);
+//    Stack1D->GetYaxis()->CenterTitle(true);
+    MScThesisPlotsList->Add(Stack1D);
+
     Sim_Histogram1D->GetXaxis()->SetTitleSize(0.06);
     Sim_Histogram1D->GetXaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D->GetXaxis()->CenterTitle(true);
@@ -233,7 +307,69 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
     Sim_Histogram1D->SetLineColor(kBlue);
     Sim_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D);
-    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D->Scale(Data_Histogram1D->Integral() / Sim_Histogram1D->Integral()); }
+    double Sim_Scale = Sim_Histogram1D->Integral();
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
+    Stack1D->Add(Sim_Histogram1D);
+
+    Sim_Histogram1D_QE->GetXaxis()->SetTitleSize(0.06);
+    Sim_Histogram1D_QE->GetXaxis()->SetLabelSize(0.0425);
+    Sim_Histogram1D_QE->GetXaxis()->CenterTitle(true);
+    Sim_Histogram1D_QE->GetYaxis()->SetTitle("Number of events");
+    Sim_Histogram1D_QE->GetYaxis()->SetTitleSize(0.06);
+    Sim_Histogram1D_QE->GetYaxis()->SetLabelSize(0.0425);
+    Sim_Histogram1D_QE->GetYaxis()->CenterTitle(true);
+    Sim_Histogram1D_QE->SetLineWidth(LineWidth);
+    Sim_Histogram1D_QE->SetLineStyle(7);
+    Sim_Histogram1D_QE->SetLineColor(kAzure + 10);
+    Sim_Histogram1D_QE->SetStats(0);
+    MScThesisPlotsList->Add(Sim_Histogram1D_QE);
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_QE->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
+    Stack1D->Add(Sim_Histogram1D_QE);
+
+    Sim_Histogram1D_MEC->GetXaxis()->SetTitleSize(0.06);
+    Sim_Histogram1D_MEC->GetXaxis()->SetLabelSize(0.0425);
+    Sim_Histogram1D_MEC->GetXaxis()->CenterTitle(true);
+    Sim_Histogram1D_MEC->GetYaxis()->SetTitle("Number of events");
+    Sim_Histogram1D_MEC->GetYaxis()->SetTitleSize(0.06);
+    Sim_Histogram1D_MEC->GetYaxis()->SetLabelSize(0.0425);
+    Sim_Histogram1D_MEC->GetYaxis()->CenterTitle(true);
+    Sim_Histogram1D_MEC->SetLineWidth(LineWidth);
+    Sim_Histogram1D_MEC->SetLineStyle(7);
+    Sim_Histogram1D_MEC->SetLineColor(kViolet);
+    Sim_Histogram1D_MEC->SetStats(0);
+    MScThesisPlotsList->Add(Sim_Histogram1D_MEC);
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_MEC->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
+    Stack1D->Add(Sim_Histogram1D_MEC);
+
+    Sim_Histogram1D_RES->GetXaxis()->SetTitleSize(0.06);
+    Sim_Histogram1D_RES->GetXaxis()->SetLabelSize(0.0425);
+    Sim_Histogram1D_RES->GetXaxis()->CenterTitle(true);
+    Sim_Histogram1D_RES->GetYaxis()->SetTitle("Number of events");
+    Sim_Histogram1D_RES->GetYaxis()->SetTitleSize(0.06);
+    Sim_Histogram1D_RES->GetYaxis()->SetLabelSize(0.0425);
+    Sim_Histogram1D_RES->GetYaxis()->CenterTitle(true);
+    Sim_Histogram1D_RES->SetLineWidth(LineWidth);
+    Sim_Histogram1D_RES->SetLineStyle(7);
+    Sim_Histogram1D_RES->SetLineColor(kGreen + 1);
+    Sim_Histogram1D_RES->SetStats(0);
+    MScThesisPlotsList->Add(Sim_Histogram1D_RES);
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_RES->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
+    Stack1D->Add(Sim_Histogram1D_RES);
+
+    Sim_Histogram1D_DIS->GetXaxis()->SetTitleSize(0.06);
+    Sim_Histogram1D_DIS->GetXaxis()->SetLabelSize(0.0425);
+    Sim_Histogram1D_DIS->GetXaxis()->CenterTitle(true);
+    Sim_Histogram1D_DIS->GetYaxis()->SetTitle("Number of events");
+    Sim_Histogram1D_DIS->GetYaxis()->SetTitleSize(0.06);
+    Sim_Histogram1D_DIS->GetYaxis()->SetLabelSize(0.0425);
+    Sim_Histogram1D_DIS->GetYaxis()->CenterTitle(true);
+    Sim_Histogram1D_DIS->SetLineWidth(LineWidth);
+    Sim_Histogram1D_DIS->SetLineStyle(7);
+    Sim_Histogram1D_DIS->SetLineColor(kOrange + 7);
+    Sim_Histogram1D_DIS->SetStats(0);
+    MScThesisPlotsList->Add(Sim_Histogram1D_DIS);
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_DIS->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
+    Stack1D->Add(Sim_Histogram1D_DIS);
 
     Data_Histogram1D->GetXaxis()->SetTitleSize(0.06);
     Data_Histogram1D->GetXaxis()->SetLabelSize(0.0425);
@@ -247,6 +383,7 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
     Data_Histogram1D->SetLineColor(kRed);
     Data_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Data_Histogram1D);
+    Stack1D->Add(Data_Histogram1D);
 
     if (Sim_Histogram1D->Integral() == 0. || Data_Histogram1D->Integral() == 0.) {
         TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
@@ -280,14 +417,17 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
             FSRyLabel = "r^{" + RatioVar + "}_{" + RatioTopology + "}";
         }
 
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "nFDpCD", "1nFD1pCD");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "nFDpCD", "1nFD1pCD");
+//        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
+//        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "nFDpCD", "1nFD1pCD");
+//        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD");
+//        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD");
+//        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
+//        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "nFDpCD", "1nFD1pCD");
+//        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD");
+//        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD");
+
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (All Int., nFDpCD)", " in 1nFD1pCD");
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (All Int., pFDpCD)", " in 1pFD1pCD");
 
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
             Sim_Histogram1D->GetYaxis()->SetTitle(FSRyLabel.c_str());
@@ -344,17 +484,8 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
                      "#theta_{#font[62]{q},#font[62]{P}_{nuc,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
-
-
-        cout << "Sim_Histogram1D->GetXaxis()->GetTitle() = " << Sim_Histogram1D->GetXaxis()->GetTitle() << "\n";
-        cout << "Data_Histogram1D->GetXaxis()->GetTitle() = " << Data_Histogram1D->GetXaxis()->GetTitle() << "\n";
-//        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-//                     "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
-        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
-        cout << "Sim_Histogram1D->GetXaxis()->GetTitle() = " << Sim_Histogram1D->GetXaxis()->GetTitle() << "\n";
-        cout << "Data_Histogram1D->GetXaxis()->GetTitle() = " << Data_Histogram1D->GetXaxis()->GetTitle() << "\n";
-        exit(0);
-
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "|#vec{P}_{tot}| = |#vec{P}_{pL} + #vec{P}_{pR}|", "P_{tot}");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
@@ -404,10 +535,13 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
 
-//        Sim_Histogram1D->Draw(), gPad->Update();
+////        Stack1D->Draw("nostack");
+//        Sim_Histogram1D->Draw();
+//        Sim_Histogram1D_QE->Draw("same"), Sim_Histogram1D_MEC->Draw("same"), Sim_Histogram1D_RES->Draw("same"), Sim_Histogram1D_DIS->Draw("same");
 //        Data_Histogram1D->Draw("same"), gPad->Update();
-        Data_Histogram1D->Draw(), gPad->Update();
-        Sim_Histogram1D->Draw("same"), gPad->Update();
+        Sim_Histogram1D->Draw(), Data_Histogram1D->Draw("same"), Sim_Histogram1D->Draw("same");
+        Sim_Histogram1D_QE->Draw("same"), Sim_Histogram1D_MEC->Draw("same"), Sim_Histogram1D_RES->Draw("same"), Sim_Histogram1D_DIS->Draw("same");
+        gPad->Update();
 
         double xOffset = SetxOffset1D(false), yOffset = SetyOffset1D(false);
 
@@ -417,13 +551,11 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
 
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) { Custom_x1Offset = -0.085; }
 
-        if (findSubstring(Histogram1D_Title, "W ") ||
-            findSubstring(Histogram1D_Title, "#theta_{nFD}") || findSubstring(Histogram1D_Title, "#theta_{pFD}") ||
-            findSubstring(Histogram1D_Title, "#theta_{nFD,pCD}")) {
+        if (findSubstring(Histogram1D_Title, "W ") || findSubstring(Histogram1D_Title, "E_{cal} reco.")) {
             double Custom_xOffset = -0.41;
 
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
+            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025, Legend_y1_TwoLines + yOffset,
+                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset - 0.15);
         } else {
             Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
                                             Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
@@ -442,39 +574,22 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
 */
 
         if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
-            TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation (scaled)", "l");
+            TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "All int. (simulation; scaled)", "l");
+            TLegendEntry *Sim_Entry_QE = Comparison_legend->AddEntry(Sim_Histogram1D_QE, "QE (simulation; scaled)", "l");
+            TLegendEntry *Sim_Entry_MEC = Comparison_legend->AddEntry(Sim_Histogram1D_MEC, "MEC (simulation; scaled)", "l");
+            TLegendEntry *Sim_Entry_RES = Comparison_legend->AddEntry(Sim_Histogram1D_RES, "RES (simulation; scaled)", "l");
+            TLegendEntry *Sim_Entry_DIS = Comparison_legend->AddEntry(Sim_Histogram1D_DIS, "DIS (simulation; scaled)", "l");
             TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l");
         } else {
             TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation", "l");
             TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l");
         }
 
-        Comparison_legend->SetTextSize(0.03), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
+        Comparison_legend->SetTextSize(0.02), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
+//        Comparison_legend->SetTextSize(0.03), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
     }
 
-    if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
-        Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 1.2);
-        Data_Histogram1D->GetYaxis()->SetRangeUser(0., 1.2);
-        DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range1");
-
-        Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 2);
-        Data_Histogram1D->GetYaxis()->SetRangeUser(0., 2);
-        DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range2");
-
-        Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 3);
-        Data_Histogram1D->GetYaxis()->SetRangeUser(0., 3);
-        DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range3");
-
-        Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 4);
-        Data_Histogram1D->GetYaxis()->SetRangeUser(0., 4);
-        DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range4");
-
-        Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 5);
-        Data_Histogram1D->GetYaxis()->SetRangeUser(0., 5);
-        DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range5");
-    } else {
-        DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "");
-    }
+    DrawPlot1(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "");
 
     HistogramCanvas->Clear();
     delete Sim_file;

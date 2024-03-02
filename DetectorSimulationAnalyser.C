@@ -9639,7 +9639,7 @@ void EventAnalyser() {
                                     hTheta_pFD_vs_Phi_pFD_truth_pFDpCD.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
                                 }
 
-                                if (inCD) {
+                                if (inCD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // 1pFD1pCD efficiency plots (pCD)
                                     hP_pCD_AC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
                                     hTheta_pCD_AC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
                                     hPhi_pCD_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
@@ -9675,7 +9675,7 @@ void EventAnalyser() {
                                     hPhi_pFD_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                                 }
 
-                                if (inCD) {
+                                if (inCD && (!Eff_calc_with_one_reco_electron || (electrons.size() == 1))) { // 1nFD1pCD efficiency plots (pCD)
                                     hP_pCD_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
                                     hTheta_pCD_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
                                     hPhi_pCD_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
