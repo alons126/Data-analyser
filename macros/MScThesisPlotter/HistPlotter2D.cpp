@@ -41,6 +41,8 @@ const string ConfigSName2D(const string &SampleName) {
     } else if (findSubstring(SampleName, "data")) {
         return "d";
     }
+
+    return "";
 }
 
 double SetxOffset2D(const bool &ShowStats) {
@@ -90,7 +92,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
     /*
     TH2D *Histogram2D = (TH2D *) file->Get(Histogram2DName);
-*/
+    */
 
     double Legend_x1_BaseLine = gStyle->GetStatX(), Legend_y1_BaseLine = gStyle->GetStatY(); // Top right
     double Legend_x2_BaseLine = gStyle->GetStatX(), Legend_y2_BaseLine = gStyle->GetStatY(); // Bottom left
@@ -146,10 +148,17 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         string Histogram2D_xLabel = Histogram2D->GetXaxis()->GetTitle();
         string Histogram2D_yLabel = Histogram2D->GetYaxis()->GetTitle();
 
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1nFD, FD)", " in 1nFD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1p", "1pFD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1n", "1nFD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "pFDpCD", "1pFD1pCD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "nFDpCD", "1nFD1pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (All Int., 1pFD1pCD)", " in 1pFD1pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (All Int., 1nFD1pCD)", " in 1nFD1pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (All Int., 1pFD1pCD, FD)", " in 1pFD1pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (All Int., 1nFD1pCD, FD)", " in 1nFD1pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1pFD, FD)", " in 1pFD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1nFD, FD)", " in 1nFD");
 
         if (findSubstring(Histogram2DNameCopy, "dc_hitmap")) {
 
@@ -321,6 +330,16 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                    findSubstring(Histogram2DNameCopy, "R_{pFD} vs. P^{truth}_{pFD}")) {
             ShowStats = false;
             Histogram2D->Draw("colz"), gPad->Update();
+        } else if (findSubstring(Histogram2DNameCopy, "E_{cal} vs. #theta_{pCD} (All Int., nFDpCD)")) {
+            ShowStats = false;
+            Histogram2D->SetTitle("E_{cal} vs. #theta_{pCD} in 1nFD1pCD");
+            Histogram2D->Draw("colz"), gPad->Update();
+
+            TLine *BeamELine = new TLine(gPad->GetUxmin(), beamE, gPad->GetUxmax(), beamE);
+            BeamELine->SetLineWidth(5), BeamELine->SetLineColor(kGreen), BeamELine->Draw("same");
+
+            TLine *LowerThetaLim = new TLine(35., gPad->GetUymin(), 35., gPad->GetUymax());
+            LowerThetaLim->SetLineWidth(5), LowerThetaLim->SetLineColor(kRed), LowerThetaLim->Draw("same");
         } else {
             Histogram2D->SetStats(0);
 

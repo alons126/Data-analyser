@@ -262,151 +262,137 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
         string FSRyLabel;
 
         if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
-            cout << "Title = " << Histogram1D_Title << "\n";
+            cout << "\n\n\nTitle = " << Histogram1D_Title << "\n";
             cout << "Sim peak = " << Sim_Histogram1D->GetBinCenter(Sim_Histogram1D->GetMaximumBin()) << "\n";
             cout << "Data peak = " << Data_Histogram1D->GetBinCenter(Data_Histogram1D->GetMaximumBin()) << "\n";
+            cout << "========================================================================================\n\n";
         }
 
-        if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
-            string RatioVar = Histogram1D_xLabel.substr(0, Histogram1D_xLabel.find_last_of('[') - 1);
-            string RatioTopology;
+        string RatioVar = Histogram1D_xLabel.substr(0, Histogram1D_xLabel.find_last_of('[') - 1);
+        string RatioTopology;
 
-            if (findSubstring(Histogram1D_Title, "1n/1p")) {
+        if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
+//            cout << "Histogram1D_Title1 = " << Histogram1D_Title << "\n";
+
+            if (findSubstring(Histogram1D_Title, "1n/1p") || findSubstring(Histogram1D_Title, "1nFD/1pFD")) {
                 RatioTopology = "1N";
-            } else if (findSubstring(Histogram1D_Title, "nFDpCD/pFDpCD")) {
+            } else if (findSubstring(Histogram1D_Title, "nFDpCD/pFDpCD") || findSubstring(Histogram1D_Title, "1nFD1pCD/1pFD1pCD")) {
                 RatioTopology = "2N";
             }
 
-            FSRyLabel = "r^{" + RatioVar + "}_{" + RatioTopology + "}";
+            if (RatioTopology == "1N") {
+                FSRyLabel = "r^{" + RatioVar + "}_{" + RatioTopology + "} = #frac{1nFD}{1pFD}";
+            } else if (RatioTopology == "2N") {
+                FSRyLabel = "r_{" + RatioVar + "} = #frac{1nFD1pCD}{1pFD1pCD}";
+            }
+        } else {
+            if (findSubstring(Histogram1D_Title, "1n") || findSubstring(Histogram1D_Title, "1p") ||
+                findSubstring(Histogram1D_Title, "1nFD") || findSubstring(Histogram1D_Title, "1pFD")) {
+                RatioTopology = "1N";
+            } else if (findSubstring(Histogram1D_Title, "nFDpCD/pFDpCD") || findSubstring(Histogram1D_Title, "1nFD1pCD/1pFD1pCD")) {
+                RatioTopology = "2N";
+            }
         }
 
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "nFDpCD", "1nFD1pCD");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "nFDpCD", "1nFD1pCD");
+//        cout << "Histogram1D_Title = " << Histogram1D_Title << "\n";
+//        cout << "RatioTopology = " << RatioTopology << "\n";
+//        cout << "FSRyLabel = " << FSRyLabel << "\n";
+
+        if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
+            string StringTemp0 = Sim_Histogram1D->GetTitle();
+            string StringTemp = StringTemp0.substr(StringTemp0.find_last_of('ratio') + 1);
+            TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, StringTemp, "");
+
+            if (RatioTopology == "1N") { TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "Leading", "Forward-going"); }
+        }
+
+//        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "ratio- 1nFD/1pFD", "ratio");
+//        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "ratio - 1n/1p", "ratio");
+//        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "ratio - 1nFD/1pFD", "ratio");
+//        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "ratio- 1nFD1pCD/1pFD1pCD", "ratio");
+//        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "ratio - 1nFD1pCD/1pFD1pCD", "ratio");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " (1nFD, FD)", " in 1nFD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "1p", "1pFD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "1n", "1nFD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "pFDpCD", "1pFD1pCD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "nFDpCD", "1nFD1pCD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " (All Int., 1pFD1pCD)", " in 1pFD1pCD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " (All Int., 1nFD1pCD)", " in 1nFD1pCD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " (All Int., 1pFD1pCD, FD)", " in 1pFD1pCD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " (All Int., 1nFD1pCD, FD)", " in 1nFD1pCD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " (1pFD, FD)", " in 1pFD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " (1nFD, FD)", " in 1nFD");
+
+        if (RatioTopology == "1N") {
+            TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "FD proton", "Proton");
+            TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "Leading FD neutron", "Neutron");
+            TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{p} [GeV/c]", "P_{pFD} [GeV/c]");
+            TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{n} [GeV/c]", "P_{nFD} [GeV/c]");
+        }
 
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
             Sim_Histogram1D->GetYaxis()->SetTitle(FSRyLabel.c_str());
             Data_Histogram1D->GetYaxis()->SetTitle(FSRyLabel.c_str());
         }
 
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{tot}| = |#vec{P}_{pL} + #vec{P}_{pR}|", "P_{tot}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{rel}| = |#vec{P}_{nL} - #vec{P}_{nR}|/2", "P_{rel}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{rel}| = |#vec{P}_{pL} - #vec{P}_{pR}|/2", "P_{rel}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "E_{cal} = E_{e} + T_{nFD} + T_{pCD}", "E_{cal}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "E_{cal} = E_{e} + T_{pFD} + T_{pCD}", "E_{cal}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "E_{cal} = E_{e} + T_{nucFD} + T_{nucCD}", "E_{cal}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "E_{cal} = E_{e} + T_{nuc,FD} + T_{nuc,CD}", "E_{cal}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nucFD} + #vec{p}_{T,nucCD}|", "#deltaP_{T,tot}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}|", "P_{miss}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{pL} + #vec{P}_{pR}- #vec{q}|", "P_{miss}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nucL} + #vec{P}_{nucR}- #vec{q}|", "P_{miss}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#vec{P}_{tot}-#vec{q}", "P_{miss}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}} ", "W");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}} ", "W");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#vec{P}", "#font[62]{P}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#vec{q}", "#font[62]{q}");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "W [GeV]", "W [GeV/c^{2}]");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "P_{nucCD} [GeV/c]", "P_{pCD} [GeV/c]");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#theta_{nucFD,nucCD} [Deg]", "#theta_{nucFD,pCD} [Deg]");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#theta_{#font[62]{q},#font[62]{P}_{nuc,FD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{nucFD}} [Deg]");
-        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#theta_{#font[62]{q},#font[62]{P}_{nuc,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
-
-
-        cout << "Sim_Histogram1D->GetXaxis()->GetTitle() = " << Sim_Histogram1D->GetXaxis()->GetTitle() << "\n";
-        cout << "Data_Histogram1D->GetXaxis()->GetTitle() = " << Data_Histogram1D->GetXaxis()->GetTitle() << "\n";
-//        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-//                     "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "FD Neutron", "Forward-going neutron");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "FD Proton", "Forward-going proton");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "FD nucleon", "Forward-going nucleon");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " P^{truth}_{n}", "");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " P^{truth}_{p}", "");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " P_{nFD}", "");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " P_{pFD}", "");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " P_{pCD}", "");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " APID&NC", "");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " APID&PS", "");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{pL} [GeV/c]", "P_{L} [GeV/c]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{nL} [GeV/c]", "P_{L} [GeV/c]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{nucL}", "P_{L}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{pR} [GeV/c]", "P_{R} [GeV/c]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{nR} [GeV/c]", "P_{R} [GeV/c]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{nucR}", "P_{R}");
         TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
-        cout << "Sim_Histogram1D->GetXaxis()->GetTitle() = " << Sim_Histogram1D->GetXaxis()->GetTitle() << "\n";
-        cout << "Data_Histogram1D->GetXaxis()->GetTitle() = " << Data_Histogram1D->GetXaxis()->GetTitle() << "\n";
-        exit(0);
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#vec{P}_{tot}| = |#vec{P}_{pL} + #vec{P}_{pR}|", "P_{tot}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#vec{P}_{rel}| = |#vec{P}_{nL} - #vec{P}_{nR}|/2", "P_{rel}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#vec{P}_{rel}| = |#vec{P}_{pL} - #vec{P}_{pR}|/2", "P_{rel}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "3-momentum", "momentum");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " Histogram", "");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, " distribution", "");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "E_{cal} = E_{e} + T_{nFD} + T_{pCD}", "E_{cal}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "E_{cal} = E_{e} + T_{pFD} + T_{pCD}", "E_{cal}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "E_{cal} = E_{e} + T_{nucFD} + T_{nucCD}", "E_{cal}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "E_{cal} = E_{e} + T_{nuc,FD} + T_{nuc,CD}", "E_{cal}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "E_{cal} Reconstruction", "Reconstructed energy");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nucFD} + #vec{p}_{T,nucCD}|", "#deltaP_{T,tot}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}|", "P_{miss}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}|", "P_{miss}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{pL} + #vec{P}_{pR}- #vec{q}|", "P_{miss}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nucL} + #vec{P}_{nucR}- #vec{q}|", "P_{miss}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#vec{P}_{tot}-#vec{q}", "P_{miss}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}} ", "W");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}} ", "W");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#vec{P}", "#font[62]{P}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#vec{q}", "#font[62]{q}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#vec{q}", "#font[62]{q}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "W [GeV]", "W [GeV/c^{2}]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{nucCD} [GeV/c]", "P_{pCD} [GeV/c]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta_{nucFD,nucCD} [Deg]", "#theta_{nucFD,pCD} [Deg]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta_{#font[62]{q},#font[62]{P}_{nuc,FD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{nucFD}} [Deg]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta_{#font[62]{q},#font[62]{P}_{nuc,FD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{nucFD}} [Deg]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta_{#font[62]{q},#font[62]{P}_{nuc,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#font[62]{P}_{tot}| = |#font[62]{P}_{nucL} + #font[62]{P}_{nucR}|", "P_{tot}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "|#font[62]{P}_{rel}| = |#font[62]{P}_{nucL} - #font[62]{P}_{nucR}|/2", "P_{rel}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta_{e} of Outgoing Electron", "Electron scattering angle");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta_{nFD} of FD neutron", "Scattering angle of forward-going neutron");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta_{pFD} of FD proton", "Scattering angle of forward-going proton");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta_{pCD} of CD proton", "Scattering angle of central-going proton");
 
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{tot}| = |#vec{P}_{pL} + #vec{P}_{pR}|", "P_{tot}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{rel}| = |#vec{P}_{nL} - #vec{P}_{nR}|/2", "P_{rel}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{rel}| = |#vec{P}_{pL} - #vec{P}_{pR}|/2", "P_{rel}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "E_{cal} = E_{e} + T_{nFD} + T_{pCD}", "E_{cal}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "E_{cal} = E_{e} + T_{pFD} + T_{pCD}", "E_{cal}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "E_{cal} = E_{e} + T_{nucFD} + T_{nucCD}", "E_{cal}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "E_{cal} = E_{e} + T_{nuc,FD} + T_{nuc,CD}", "E_{cal}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}|", "#deltaP_{T,tot}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nucFD} + #vec{p}_{T,nucCD}|", "#deltaP_{T,tot}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nL} + #vec{P}_{nR}- #vec{q}|", "P_{miss}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{pL} + #vec{P}_{pR}- #vec{q}|", "P_{miss}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{nucL} + #vec{P}_{nucR}- #vec{q}|", "P_{miss}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#vec{P}_{tot}-#vec{q}", "P_{miss}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}} ", "W");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}} ", "W");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#vec{P}", "#font[62]{P}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#vec{q}", "#font[62]{q}");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "W [GeV]", "W [GeV/c^{2}]");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "P_{nucCD} [GeV/c]", "P_{pCD} [GeV/c]");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#theta_{nucFD,nucCD} [Deg]", "#theta_{nucFD,pCD} [Deg]");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#theta_{#font[62]{q},#font[62]{P}_{nuc,FD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{nucFD}} [Deg]");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#theta_{#font[62]{q},#font[62]{P}_{nuc,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
-        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                     "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
-
-//        Sim_Histogram1D->Draw(), gPad->Update();
-//        Data_Histogram1D->Draw("same"), gPad->Update();
-        Data_Histogram1D->Draw(), gPad->Update();
+        Sim_Histogram1D->Draw(), gPad->Update();
+        Data_Histogram1D->Draw("same"), gPad->Update();
         Sim_Histogram1D->Draw("same"), gPad->Update();
 
         double xOffset = SetxOffset1D(false), yOffset = SetyOffset1D(false);
@@ -418,8 +404,9 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) { Custom_x1Offset = -0.085; }
 
         if (findSubstring(Histogram1D_Title, "W ") ||
-            findSubstring(Histogram1D_Title, "#theta_{nFD}") || findSubstring(Histogram1D_Title, "#theta_{pFD}") ||
-            findSubstring(Histogram1D_Title, "#theta_{nFD,pCD}")) {
+            findSubstring(Histogram1D_Title, "#theta_{nFD}") ||
+            findSubstring(Histogram1D_Title, "#theta_{pFD}") ||
+            findSubstring(Histogram1D_Title, "E_{cal}")) {
             double Custom_xOffset = -0.41;
 
             Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,
@@ -428,18 +415,6 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
             Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
                                             Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
         }
-
-        /*
-        if (!findSubstring(Histogram1D_Title, "W ")) {
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
-        } else {
-            double Custom_xOffset = -0.41;
-
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
-        }
-*/
 
         if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
             TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation (scaled)", "l");

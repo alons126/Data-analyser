@@ -37,6 +37,8 @@ const string ConfigSName1D_(const string &SampleName) {
     } else if (findSubstring(SampleName, "data")) {
         return "d";
     }
+
+    return "";
 }
 
 double SetxOffset1D_(const bool &ShowStats) {

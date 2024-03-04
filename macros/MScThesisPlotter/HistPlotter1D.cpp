@@ -42,6 +42,8 @@ const string ConfigSName1D(const string &SampleName) {
     } else if (findSubstring(SampleName, "data")) {
         return "d";
     }
+
+    return "";
 }
 
 double SetxOffset1D(const bool &ShowStats) {
@@ -202,23 +204,66 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         string Histogram1D_xLabel = Histogram1D->GetXaxis()->GetTitle(), Histogram1D_yLabel = Histogram1D->GetYaxis()->GetTitle();
         string FSRyLabel;
 
-        if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
-            string RatioVar = Histogram1D_xLabel.substr(0, Histogram1D_xLabel.find_last_of('[') - 1);
-            string RatioTopology;
+        string RatioVar = Histogram1D_xLabel.substr(0, Histogram1D_xLabel.find_last_of('[') - 1);
+        string RatioTopology;
 
-            if (findSubstring(Histogram1D_Title, "1n/1p")) {
+        if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
+            if (findSubstring(Histogram1D_Title, "1n/1p") || findSubstring(Histogram1D_Title, "1nFD/1pFD")) {
                 RatioTopology = "1N";
-            } else if (findSubstring(Histogram1D_Title, "nFDpCD/pFDpCD")) {
+            } else if (findSubstring(Histogram1D_Title, "nFDpCD/pFDpCD") || findSubstring(Histogram1D_Title, "1nFD1pCD/1pFD1pCD")) {
                 RatioTopology = "2N";
             }
 
-            FSRyLabel = "r^{" + RatioVar + "}_{" + RatioTopology + "}";
+            if (findSubstring(Histogram1D_xLabel, "Momentum [GeV/c]")) { RatioVar = "P^{truth}_{nucFD}"; }
+
+            if (RatioTopology == "1N") {
+                FSRyLabel = "r^{" + RatioVar + "}_{" + RatioTopology + "} = #frac{1nFD}{1pFD}";
+            } else if (RatioTopology == "2N") {
+                FSRyLabel = "r_{" + RatioVar + "} = #frac{1nFD1pCD}{1pFD1pCD}";
+            }
+        } else {
+            if (findSubstring(Histogram1D_Title, "1n") || findSubstring(Histogram1D_Title, "1p") ||
+                findSubstring(Histogram1D_Title, "1nFD") || findSubstring(Histogram1D_Title, "1pFD")) {
+                RatioTopology = "1N";
+            } else if (findSubstring(Histogram1D_Title, "nFDpCD/pFDpCD") || findSubstring(Histogram1D_Title, "1nFD1pCD/1pFD1pCD")) {
+                RatioTopology = "2N";
+            }
         }
 
+//        cout << "Histogram1D_Title = " << Histogram1D_Title << "\n";
+//        cout << "RatioTopology = " << RatioTopology << "\n";
+//        cout << "FSRyLabel = " << FSRyLabel << "\n";
+
+        if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
+            string StringTemp0 = Histogram1D->GetTitle();
+            string StringTemp = StringTemp0.substr(StringTemp0.find_last_of('ratio') + 1);
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, StringTemp, "");
+
+            if (RatioTopology == "1N") { TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "Leading", "Forward-going"); }
+        }
+
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1nFD, FD)", " in 1nFD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "nFDpCD", "1nFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (All Int., 1pFD1pCD)", " in 1pFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (All Int., 1nFD1pCD)", " in 1nFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (All Int., 1pFD1pCD, FD)", " in 1pFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (All Int., 1nFD1pCD, FD)", " in 1nFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1pFD, FD)", " in 1pFD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1nFD, FD)", " in 1nFD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1pFD1pCD, FD)", " in 1pFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1nFD1pCD, FD)", " in 1nFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1pFD1pCD)", " in 1pFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1nFD1pCD)", " in 1nFD1pCD");
+
+        if (RatioTopology == "1N" && findSubstring(Histogram1D_Title, "truth")) {
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "FD proton", "Proton");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "FD neutron", "Neutron");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{p} [GeV/c]", "P^{truth}_{pFD} [GeV/c]");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{n} [GeV/c]", "P^{truth}_{nFD} [GeV/c]");
+        }
 
         if (findSubstring(Histogram1DNameCopy, "V_{z}^{")) {
             LogScalePlot = true, ShowStats = false;
@@ -580,6 +625,26 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
 //            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
 //                         "W [GeV]", "W [GeV/c^{2}]");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "FD Neutron", "Forward-going neutron");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "FD Proton", "Forward-going proton");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "FD nucleon", "Forward-going nucleon");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         " P^{truth}_{n}", "");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         " P^{truth}_{p}", "");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         " P_{nFD}", "");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         " P_{pFD}", "");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         " P_{pCD}", "");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "Momentum [GeV/c]", "P^{truth}_{nucFD} [GeV/c]");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         " AC", "");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                          "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,

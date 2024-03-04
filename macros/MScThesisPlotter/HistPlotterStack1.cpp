@@ -399,9 +399,22 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
         string FSRyLabel;
 
         if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
-            cout << "Title = " << Histogram1D_Title << "\n";
+            cout << "Title = " << Sim_Histogram1D->GetTitle() << "\n";
             cout << "Sim peak = " << Sim_Histogram1D->GetBinCenter(Sim_Histogram1D->GetMaximumBin()) << "\n";
-            cout << "Data peak = " << Data_Histogram1D->GetBinCenter(Data_Histogram1D->GetMaximumBin()) << "\n";
+            cout << "Data peak = " << Data_Histogram1D->GetBinCenter(Data_Histogram1D->GetMaximumBin()) << "\n\n";
+
+            cout << "Title QE = " << Sim_Histogram1D_QE->GetTitle() << "\n";
+            cout << "Sim peak QE = " << Sim_Histogram1D_QE->GetBinCenter(Sim_Histogram1D_QE->GetMaximumBin()) << "\n\n";
+
+            cout << "Title MEC = " << Sim_Histogram1D_MEC->GetTitle() << "\n";
+            cout << "Sim peak MEC = " << Sim_Histogram1D_MEC->GetBinCenter(Sim_Histogram1D_MEC->GetMaximumBin()) << "\n\n";
+
+            cout << "Title RES = " << Sim_Histogram1D_RES->GetTitle() << "\n";
+            cout << "Sim peak RES = " << Sim_Histogram1D_RES->GetBinCenter(Sim_Histogram1D_RES->GetMaximumBin()) << "\n\n";
+
+            cout << "Title DIS = " << Sim_Histogram1D_DIS->GetTitle() << "\n";
+            cout << "Sim peak DIS = " << Sim_Histogram1D_DIS->GetBinCenter(Sim_Histogram1D_DIS->GetMaximumBin()) << "\n";
+            cout << "========================================================================================\n\n";
         }
 
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
@@ -414,7 +427,11 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
                 RatioTopology = "2N";
             }
 
-            FSRyLabel = "r^{" + RatioVar + "}_{" + RatioTopology + "}";
+            if (RatioTopology == "1N") {
+                FSRyLabel = "r^{" + RatioVar + "}_{" + RatioTopology + "}";
+            } else if (RatioTopology == "2N") {
+                FSRyLabel = "r_{" + RatioVar + "}";
+            }
         }
 
 //        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
@@ -433,6 +450,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
             Sim_Histogram1D->GetYaxis()->SetTitle(FSRyLabel.c_str());
             Data_Histogram1D->GetYaxis()->SetTitle(FSRyLabel.c_str());
         }
+
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "E_{cal} Reconstruction", "Reconstructed energy");
 
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
@@ -551,7 +570,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
 
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) { Custom_x1Offset = -0.085; }
 
-        if (findSubstring(Histogram1D_Title, "W ") || findSubstring(Histogram1D_Title, "E_{cal} reco.")) {
+        if (findSubstring(Histogram1D_Title, "W ") ||
+            findSubstring(Histogram1D_Title, "E_{cal}")) {
             double Custom_xOffset = -0.41;
 
             Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025, Legend_y1_TwoLines + yOffset,
