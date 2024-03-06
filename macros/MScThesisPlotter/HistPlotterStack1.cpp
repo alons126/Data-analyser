@@ -378,7 +378,7 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Data_Histogram1D->GetYaxis()->SetTitleSize(0.06);
     Data_Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Data_Histogram1D->GetYaxis()->CenterTitle(true);
-    Data_Histogram1D->SetLineWidth(LineWidth + 1);
+    Data_Histogram1D->SetLineWidth(LineWidth + 2);
     Data_Histogram1D->SetLineStyle(0);
     Data_Histogram1D->SetLineColor(kRed);
     Data_Histogram1D->SetStats(0);
@@ -452,6 +452,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
         }
 
         TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "E_{cal} Reconstruction", "Reconstructed energy");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "W distribution", "Hadronic mass");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "W ratio", "Hadronic mass ratio");
 
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
@@ -553,6 +555,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
                      "#theta_{#font[62]{q},#font[62]{P}_{nuc,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
+
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[Deg]", "[#circ]");
 
 ////        Stack1D->Draw("nostack");
 //        Sim_Histogram1D->Draw();

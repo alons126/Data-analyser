@@ -149,7 +149,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     /* Histogram appearance setup */
     const string Histogram1DNameCopy = Histogram1DName;
     int LineColor = 1;
-    int LineWidth = 2;
+    int LineWidth = 3;
     vector<double> Histogram1DTitleSizes = {0.06, 0.0425, 0.0425}; // {TitleSize, LabelSizex, LabelSizey}
     bool CenterTitle = true;
     bool ShowStats = true;
@@ -201,6 +201,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         displayText->Draw();
     } else if (Histogram1D->Integral() != 0.) {
         string Histogram1D_Title = Histogram1D->GetTitle();
+        string Histogram1D_Title1 = Histogram1D_Title;
         string Histogram1D_xLabel = Histogram1D->GetXaxis()->GetTitle(), Histogram1D_yLabel = Histogram1D->GetYaxis()->GetTitle();
         string FSRyLabel;
 
@@ -239,7 +240,14 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             string StringTemp = StringTemp0.substr(StringTemp0.find_last_of('ratio') + 1);
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, StringTemp, "");
 
-            if (RatioTopology == "1N") { TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "Leading", "Forward-going"); }
+            cout << "Histogram1D_Title = " << Histogram1D_Title << "\n";
+            cout << "RatioTopology = " << RatioTopology << "\n";
+            cout << "FSRyLabel = " << FSRyLabel << "\n";
+
+            if (RatioTopology == "1N") { TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "Leading nucleon", "Nucleon"); }
+//            if (RatioTopology == "1N") {
+//                TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "Leading", "Forward-going");
+//            }
         }
 
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1nFD, FD)", " in 1nFD");
@@ -255,8 +263,13 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1nFD, FD)", " in 1nFD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1pFD1pCD, FD)", " in 1pFD1pCD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1nFD1pCD, FD)", " in 1nFD1pCD");
-        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1pFD1pCD)", " in 1pFD1pCD");
-        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1nFD1pCD)", " in 1nFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e_cut, FD)", " in ^{12}C(e,e')");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e cut, FD)", " in ^{12}C(e,e')");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e_cut)", " in ^{12}C(e,e')");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e cut)", " in ^{12}C(e,e')");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "(1pFD1pCD)", "in 1pFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "(1nFD1pCD)", "in 1nFD1pCD");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[Deg]", "[#circ]");
 
         if (RatioTopology == "1N" && findSubstring(Histogram1D_Title, "truth")) {
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "FD proton", "Proton");
@@ -268,7 +281,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         if (findSubstring(Histogram1DNameCopy, "V_{z}^{")) {
             LogScalePlot = true, ShowStats = false;
 
-            string HistTitle = Histogram1D->GetTitle();
+            string HistTitle = Histogram1D_Title1;
             string ParticleShort = particles.GetParticleNameShortFromSubscript(HistTitle);
             string ParticlesLC;
             string Region = particles.GetDRegionExplicit(HistTitle, true);
@@ -281,7 +294,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats), UpperCut, LowerCut;
 
-            if (findSubstring(Histogram1DNameCopy, "FD")) {
+            if (findSubstring(Histogram1DNameCopy, "FD") || (ParticleShort == "e")) {
                 UpperCut = 3., LowerCut = -8.;
             } else if (findSubstring(Histogram1DNameCopy, "CD")) {
                 UpperCut = 2., LowerCut = -7.;
@@ -294,7 +307,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             }
 
             Histogram1D->Draw(), gPad->Update();
-//            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperVzCut = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
             UpperVzCut->SetLineWidth(3), UpperVzCut->SetLineColor(kBlue), UpperVzCut->Draw("same");
@@ -309,7 +321,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         } else if (findSubstring(Histogram1DNameCopy, "Vertex corr. dV^{")) {
             LogScalePlot = true, ShowStats = false;
 
-            string HistTitle = Histogram1D->GetTitle();
+            string HistTitle = Histogram1D_Title1;
             string ParticleShort = particles.GetParticleNameShortFromSubscript(HistTitle.substr(0, HistTitle.find_last_of('=') + 1));
             string ParticlesLC;
             string Region = particles.GetDRegionExplicit(HistTitle, true);
@@ -329,7 +341,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             }
 
             Histogram1D->Draw(), gPad->Update();
-//            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperVzCut = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
             UpperVzCut->SetLineWidth(3), UpperVzCut->SetLineColor(kBlue), UpperVzCut->Draw("same");
@@ -347,9 +358,8 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
             double LowerCut = 2.;
 
-            Histogram1D->SetTitle("N_{phe} in the HTCC for ^{12}C(e,e')");
+            Histogram1D->SetTitle("Number of photo-electrons in the HTCC for ^{12}C(e,e')");
             Histogram1D->Draw(), gPad->Update();
-//            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *LowerNpheCut = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
             LowerNpheCut->SetLineWidth(3);
@@ -360,7 +370,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TLegendEntry *LowerNpheCutEntry = Legend->AddEntry(LowerNpheCut, ("Lower cut = " + to_string_with_precision(LowerCut, 0)).c_str(), "l");
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else if (findSubstring(Histogram1DNameCopy, "#chi^{2}")) {
-            string HistTitle = Histogram1D->GetTitle();
+            string HistTitle = Histogram1D_Title1;
             string ParticleShort = particles.GetParticleNameShortFromSubscript(HistTitle);
             string ParticlesLC;
             string Region = particles.GetDRegionExplicit(HistTitle, true);
@@ -385,13 +395,11 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             }
 
             Histogram1D->Draw(), gPad->Update();
-//            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
         } else if ((Histogram1DNameCopy == "FD Proton momentum #epsilon_{eff} (1e cut)") ||
                    (Histogram1DNameCopy == "CD Proton momentum #epsilon_{eff} (1e cut)")) {
             ShowStats = false;
 
-            string HistTitle = Histogram1D->GetTitle();
-//            string ParticleShort = particles.GetParticleNameShortFromSubscript(HistTitle);
+            string HistTitle = Histogram1D_Title1;
             string ParticlesLC = particles.GetParticleNameLC(HistTitle, true);
             string Region = particles.GetDRegionExplicit(HistTitle, true);
 
@@ -402,7 +410,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->SetTitle(("Momentum efficiency of " + Region + " " + ParticlesLC + " in ^{12}C(e,e')").c_str());
             Histogram1D->GetYaxis()->SetTitle("#epsilon_{eff}");
             Histogram1D->Draw(), gPad->Update();
-//            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, 1.);
             LowerMomTh->SetLineWidth(3);
@@ -416,19 +423,10 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
             Histogram1D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
 
-//            if (Histogram1DNameCopy == "FD Proton momentum #epsilon_{eff} (1e cut)") {
-//                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
-//                Histogram1D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
-//            } else {
-//                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
-//                Histogram1D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
-//            }
-
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else if (Histogram1DNameCopy == "#theta_{p_{1},p_{2}} (All Int., 2p)") {
             Histogram1D->SetTitle("Opening angle between #font[12]{2p} protons");
             Histogram1D->Draw(), gPad->Update();
-//            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
             Histogram1D->SetLineWidth(LineWidth);
             Histogram1D->SetLineColor(kBlack);
             Histogram1D->SetLineStyle(1);
@@ -440,9 +438,8 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             double UpperCut = Cut + PeakLocation, LowerCut = -Cut + PeakLocation;
 
             Histogram1D->SetTitle("#Delta#phi for small #Delta#theta_{pFD/pCD} in 1pFD1pCD");
-            Histogram1D->GetXaxis()->SetTitle("#Delta#phi = #phi_{pFD} - #phi_{pCD} [Deg]");
+            Histogram1D->GetXaxis()->SetTitle("#Delta#phi [#circ]");
             Histogram1D->Draw(), gPad->Update();
-//            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *PeakLoc = new TLine(PeakLocation, gPad->GetUymin(), PeakLocation, gPad->GetUymax());
             PeakLoc->SetLineWidth(3), PeakLoc->SetLineColor(kGreen), PeakLoc->Draw("same");
@@ -465,7 +462,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->GetYaxis()->SetRangeUser(0., 1.);
             Histogram1D->GetYaxis()->SetTitle("#epsilon_{eff}");
             Histogram1D->Draw(), gPad->Update();
-//            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperMomTh = new TLine(UpperCut, gPad->GetUymin(), UpperCut, 1.);
             UpperMomTh->SetLineWidth(3), UpperMomTh->SetLineColor(kBlue), UpperMomTh->Draw("same");
@@ -477,19 +473,22 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TLegendEntry *UpperMomThEntry = Legend->AddEntry(UpperMomTh, "Upper P_{n} th. = E_{beam}/c", "l");
             TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
-        } else if (((Histogram1DNameCopy == "Reco FD neutrons momentum (1e cut, FD)") ||
-                    (Histogram1DNameCopy == "Reco FD neutron momentum - ZOOMOUT (1e cut, FD)")) ||
-                   ((Histogram1DNameCopy == "FD neutron momentum BPID (1e_cut, FD)") ||
-                    (Histogram1DNameCopy == "FD neutron momentum BPID - ZOOMOUT (1e_cut, FD)")) ||
-                   ((Histogram1DNameCopy == "FD neutron momentum APID (1e_cut, FD)") ||
-                    (Histogram1DNameCopy == "FD neutron momentum APID - ZOOMOUT (1e_cut, FD)"))) {
+        } else if (((Histogram1DNameCopy == "Reco FD neutrons momentum (1e cut, FD)") || (Histogram1DNameCopy == "Reco FD neutron momentum - ZOOMOUT (1e cut, FD)")) ||
+                   ((Histogram1DNameCopy == "FD neutron momentum BPID (1e_cut, FD)") || (Histogram1DNameCopy == "FD neutron momentum BPID - ZOOMOUT (1e_cut, FD)")) ||
+                   ((Histogram1DNameCopy == "FD neutron momentum APID (1e_cut, FD)") || (Histogram1DNameCopy == "FD neutron momentum APID - ZOOMOUT (1e_cut, FD)"))) {
             ShowStats = false;
             double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
 
             double UpperCut = beamE, LowerCut = 0.4;
 
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "FD Neutron momentum", "Momentum of forward-going neutrons");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "FD neutron momentum", "Momentum of forward-going neutrons");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P_{n} BPID", "");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "ZOOMOUT", "zoomout");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "  ", " ");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "   ", " ");
+
             Histogram1D->Draw(), gPad->Update();
-//            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *UpperMomTh = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
             UpperMomTh->SetLineWidth(3), UpperMomTh->SetLineColor(kBlue), UpperMomTh->Draw("same");
@@ -498,12 +497,10 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerMomTh->SetLineWidth(3), LowerMomTh->SetLineColor(kRed), LowerMomTh->Draw("same");
 
             auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines + xOffset - 0.135, Legend_y2_TwoLines + yOffset);
-//                                      Legend_x2_TwoLines + xOffset - 0.15, Legend_y2_TwoLines + yOffset);
             TLegendEntry *UpperMomThEntry = Legend->AddEntry(UpperMomTh, "Upper P_{n} th. = E_{beam}/c", "l");
             TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
-        } else if ((Histogram1DNameCopy == "CD & FD Piplus momentum #epsilon_{eff} (1e cut)") ||
-                   (Histogram1DNameCopy == "CD & FD Piminus momentum #epsilon_{eff} (1e cut)")) {
+        } else if ((Histogram1DNameCopy == "CD & FD Piplus momentum #epsilon_{eff} (1e cut)") || (Histogram1DNameCopy == "CD & FD Piminus momentum #epsilon_{eff} (1e cut)")) {
             ShowStats = false;
             double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
 
@@ -512,7 +509,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram1D->GetYaxis()->SetRangeUser(0., 1.);
             Histogram1D->GetYaxis()->SetTitle("#epsilon_{eff}");
             Histogram1D->Draw(), gPad->Update();
-//            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
             TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, 1.);
             LowerMomTh->SetLineWidth(3), LowerMomTh->SetLineColor(kRed), LowerMomTh->Draw("same");
@@ -531,7 +527,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         } else if (findSubstring(Histogram1DNameCopy, "used in AMaps")) {
             if (findSubstring(Histogram1DNameCopy, " P_{e} ")) {
                 Histogram1D->Draw(), gPad->Update();
-//                Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
             } else if (findSubstring(Histogram1DNameCopy, " P_{pFD} ")) {
                 ShowStats = false;
 
@@ -539,7 +534,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 double LowerCut = 0.4;
 
                 Histogram1D->Draw(), gPad->Update();
-//                Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
                 TLine *LowerMomTh = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
                 LowerMomTh->SetLineWidth(3), LowerMomTh->SetLineColor(kRed), LowerMomTh->Draw("same");
@@ -554,7 +548,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 double UpperCut = beamE, LowerCut = 0.4;
 
                 Histogram1D->Draw(), gPad->Update();
-//                Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
                 TLine *UpperMomTh = new TLine(UpperCut, gPad->GetUymin(), UpperCut, gPad->GetUymax());
                 UpperMomTh->SetLineWidth(3), UpperMomTh->SetLineColor(kBlue), UpperMomTh->Draw("same");
@@ -579,7 +572,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram1D->GetYaxis()->SetTitle("#epsilon_{eff}");
                 Histogram1D->SetLineColor(kBlack);
                 Histogram1D->Draw(), gPad->Update();
-//                Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
                 TLine *UpperMomKCut = new TLine(UpperMomentumKCut, gPad->GetUymin(), UpperMomentumKCut, upperLim);
                 UpperMomKCut->SetLineWidth(3), UpperMomKCut->SetLineColor(kBlue), UpperMomKCut->Draw("same");
@@ -600,7 +592,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram1D->GetYaxis()->SetTitle("#epsilon_{eff}");
                 Histogram1D->SetLineColor(kBlack);
                 Histogram1D->Draw(), gPad->Update();
-//                Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
 
                 TLine *upperThetaKCut = new TLine(UpperThetaKCut, gPad->GetUymin(), UpperThetaKCut, upperLim);
                 upperThetaKCut->SetLineWidth(3), upperThetaKCut->SetLineColor(kRed), upperThetaKCut->Draw("same");
@@ -615,7 +606,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram1D->GetYaxis()->SetTitle("#epsilon_{eff}");
                 Histogram1D->SetLineColor(kBlack);
                 Histogram1D->Draw(), gPad->Update();
-//                Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
             }
         } else {
             Histogram1D->SetLineColor(kBlue);
@@ -683,6 +673,8 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                          "#vec{P}", "#font[62]{P}");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                          "#vec{q}", "#font[62]{q}");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                         "[Deg]", "[#circ]");
 
             Histogram1D->Draw(), gPad->Update();
 //            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();
@@ -711,5 +703,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     }
 
     HistogramCanvas->Clear();
+    delete Histogram1D;
     delete file;
 }

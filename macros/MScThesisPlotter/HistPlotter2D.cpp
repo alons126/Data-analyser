@@ -159,6 +159,11 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (All Int., 1nFD1pCD, FD)", " in 1nFD1pCD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1pFD, FD)", " in 1pFD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1nFD, FD)", " in 1nFD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e_cut, FD)", " in ^{12}C(e,e')");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e cut, FD)", " in ^{12}C(e,e')");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e_cut)", " in ^{12}C(e,e')");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e cut)", " in ^{12}C(e,e')");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "[Deg]", "[#circ]");
 
         if (findSubstring(Histogram2DNameCopy, "dc_hitmap")) {
 
@@ -340,6 +345,46 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             TLine *LowerThetaLim = new TLine(35., gPad->GetUymin(), 35., gPad->GetUymax());
             LowerThetaLim->SetLineWidth(5), LowerThetaLim->SetLineColor(kRed), LowerThetaLim->Draw("same");
+        } else if (findSubstring(Histogram2DNameCopy, "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e}}") ||
+                   findSubstring(Histogram2DNameCopy, "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD}") ||
+                   findSubstring(Histogram2DNameCopy, "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e}") ||
+                   findSubstring(Histogram2DNameCopy, "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD}")) {
+            ShowStats = false;
+
+            string TitleTemp = Histogram2D->GetTitle(), xLabelTemp = Histogram2D->GetXaxis()->GetTitle(), yLabelTemp = Histogram2D->GetYaxis()->GetTitle();
+            string dTheta2Replace = yLabelTemp.substr(0, yLabelTemp.find_last_of("}") + 1);
+            string dPhi2Replace = xLabelTemp.substr(0, xLabelTemp.find_last_of("}") + 1);
+            string dTheta = yLabelTemp.substr(0, yLabelTemp.find("}") + 1);
+            string dPhi = xLabelTemp.substr(0, xLabelTemp.find("}") + 1);
+
+            string Title2Replace = TitleTemp.substr(0, TitleTemp.find("Veto") + 4), Title2Replacement = dTheta + " vs. " + dPhi;
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, Title2Replace, Title2Replacement);
+
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, dTheta2Replace, dTheta);
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, dPhi2Replace, dPhi);
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "pFD", "p");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "  ", " ");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "   ", " ");
+
+            if (!findSubstring(Histogram2DNameCopy, "LnFD")) {
+                TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "nFD", "n");
+            }
+
+            if (findSubstring(Histogram2DNameCopy, "BV")) {
+                string Title2Replacement = dTheta + " vs. " + dPhi;
+                TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, Title2Replace, Title2Replacement);
+
+                string TitleTemp1 = Histogram2D->GetTitle(), TitleTemp2 = TitleTemp1 + " before ECAL veto";
+                Histogram2D->SetTitle(TitleTemp2.c_str()), gPad->Update();
+            } else if (findSubstring(Histogram2DNameCopy, "AV")) {
+                string Title2Replacement = dTheta + " vs. " + dPhi;
+                TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, Title2Replace, Title2Replacement);
+
+                string TitleTemp1 = Histogram2D->GetTitle(), TitleTemp2 = TitleTemp1 + " after ECAL veto";
+                Histogram2D->SetTitle(TitleTemp2.c_str()), gPad->Update();
+            }
+
+            Histogram2D->Draw("colz"), gPad->Update();
         } else {
             Histogram2D->SetStats(0);
 
@@ -355,6 +400,10 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
                     if (Equi_z_2D) { Histogram2D->SetMaximum(Zmax); }
                 } else {
+                    string StringTemp0 = Histogram2D->GetTitle();
+                    string StringTemp = StringTemp0.substr(StringTemp0.find_last_of('ratio') + 1);
+                    TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, StringTemp, "");
+
                     Histogram2D->SetMaximum(5.);
                     Histogram2D->SetMinimum(0.1);
 
@@ -364,8 +413,6 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             }
             //</editor-fold>
 
-            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
-                         "W [GeV]", "W [GeV/c^{2}]");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}|", "P_{tot}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
@@ -410,6 +457,17 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                          "#vec{P}", "#font[62]{P}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "#vec{q}", "#font[62]{q}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "[Deg]", "[#circ]");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "W [GeV]", "W [GeV/c^{2}]");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "W  [GeV]", "W  [GeV/c^{2}]");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "vs. W", "vs. hadronic mass");
+
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "ratio", "- histogram ratio");
 
             Histogram2D->Draw("colz"), gPad->Update();
 

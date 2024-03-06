@@ -77,7 +77,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
         }
 
 //    // Create a canvas to plot histograms in a 3x3 grid
-        TCanvas *canvas = new TCanvas("c", "c", 1000 * 6 * 1.5 / 4, 750 * 11 * 1.5 / 4);
+        TCanvas *canvas = new TCanvas("c", "c", 1000 * 6 * 1.5, 750 * 11 * 1.5);
 
         canvas->Divide(6, 11); // Divide the canvas into a 4x16 grid
 
@@ -120,6 +120,15 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                 if (PrintOut) { cout << "\nKey name: " << Histogram2DTemp->GetName() << "; Type: " << Key->GetClassName() << "\n"; }
 
                 if (Sep_plots) {
+                    string Histogram2DTemp_Title = Histogram2DTemp->GetTitle();
+                    string Histogram2DTemp_xLabel = Histogram2DTemp->GetXaxis()->GetTitle();
+                    string Histogram2DTemp_yLabel = Histogram2DTemp->GetYaxis()->GetTitle();
+
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[Deg]", "[#circ]");
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (100x100) (AMaps)", "");
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (75x75) (AMaps)", "");
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (AMaps)", "");
+
                     if (findSubstring(Histogram2DTempName, "TL ") && !findSubstring(Histogram2DTempName, "/TL")) {
                         Sep_canv->cd();
                         Histogram2DTemp->Draw("colz");
@@ -160,6 +169,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     string Histogram2DTemp_xLabel = Histogram2DTemp->GetXaxis()->GetTitle();
                     string Histogram2DTemp_yLabel = Histogram2DTemp->GetYaxis()->GetTitle();
 
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[Deg]", "[#circ]");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (100x100) (AMaps)", "");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (75x75) (AMaps)", "");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (AMaps)", "");
@@ -242,8 +252,6 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
         delete canvas;
         delete file;
     } else if (ParticleNameShort1 == "p") {
-//        cout << "\n\nYES!\n\n",exit(0);
-
         // Open the ROOT file containing histograms
         TFile *file = new TFile(filename);
 
@@ -296,6 +304,15 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                 if (PrintOut) { cout << "\nKey name: " << Histogram2DTemp->GetName() << "; Type: " << Key->GetClassName() << "\n"; }
 
                 if (Sep_plots) {
+                    string Histogram2DTemp_Title = Histogram2DTemp->GetTitle();
+                    string Histogram2DTemp_xLabel = Histogram2DTemp->GetXaxis()->GetTitle();
+                    string Histogram2DTemp_yLabel = Histogram2DTemp->GetYaxis()->GetTitle();
+
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[Deg]", "[#circ]");
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (100x100) (AMaps)", "");
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (75x75) (AMaps)", "");
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (AMaps)", "");
+
                     if (findSubstring(Histogram2DTempName, "TL ") && !findSubstring(Histogram2DTempName, "/TL")) {
                         Sep_canv->cd();
                         Histogram2DTemp->Draw("colz");
@@ -336,6 +353,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     string Histogram2DTemp_xLabel = Histogram2DTemp->GetXaxis()->GetTitle();
                     string Histogram2DTemp_yLabel = Histogram2DTemp->GetYaxis()->GetTitle();
 
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[Deg]", "[#circ]");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (100x100) (AMaps)", "");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (75x75) (AMaps)", "");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (AMaps)", "");
@@ -484,6 +502,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             string TL_Histogram2D_xLabel = TL_Histogram2D->GetXaxis()->GetTitle();
             string TL_Histogram2D_yLabel = TL_Histogram2D->GetYaxis()->GetTitle();
 
+            TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel, "[Deg]", "[#circ]");
             TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel, " (100x100) (AMaps)", "");
             TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel, " (75x75) (AMaps)", "");
             TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel, " (AMaps)", "");
@@ -557,6 +576,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             string Reco_Histogram2D_xLabel = Reco_Histogram2D->GetXaxis()->GetTitle();
             string Reco_Histogram2D_yLabel = Reco_Histogram2D->GetYaxis()->GetTitle();
 
+            TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel, "[Deg]", "[#circ]");
             TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel, " (100x100) (AMaps)", "");
             TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel, " (75x75) (AMaps)", "");
             TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel, " (AMaps)", "");
@@ -630,6 +650,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             string Ratio_Histogram2D_xLabel = Ratio_Histogram2D->GetXaxis()->GetTitle();
             string Ratio_Histogram2D_yLabel = Ratio_Histogram2D->GetYaxis()->GetTitle();
 
+            TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel, "[Deg]", "[#circ]");
             TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel, " (100x100) (AMaps)", "");
             TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel, " (75x75) (AMaps)", "");
             TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel, " (AMaps)", "");
@@ -701,6 +722,8 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             string Finalized_AMaps_Histogram2D_xLabel = Finalized_AMaps_Histogram2D->GetXaxis()->GetTitle();
             string Finalized_AMaps_Histogram2D_yLabel = Finalized_AMaps_Histogram2D->GetYaxis()->GetTitle();
 
+            TitleAligner(Finalized_AMaps_Histogram2D, Finalized_AMaps_Histogram2D_Title, Finalized_AMaps_Histogram2D_xLabel, Finalized_AMaps_Histogram2D_yLabel,
+                         "[Deg]", "[#circ]");
             TitleAligner(Finalized_AMaps_Histogram2D, Finalized_AMaps_Histogram2D_Title, Finalized_AMaps_Histogram2D_xLabel, Finalized_AMaps_Histogram2D_yLabel,
                          " (100x100) (AMaps)", "");
             TitleAligner(Finalized_AMaps_Histogram2D, Finalized_AMaps_Histogram2D_Title, Finalized_AMaps_Histogram2D_xLabel, Finalized_AMaps_Histogram2D_yLabel,
