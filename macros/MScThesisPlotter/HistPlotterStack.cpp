@@ -192,7 +192,8 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
 
     /* Histogram appearance setup */
     const string Histogram1DNameCopy = Histogram1DName;
-    int LineWidth = 3;
+    int LineWidth = 6;
+//    int LineWidth = 3; // Original
     vector<double> Histogram1DTitleSizes = {0.06, 0.0425, 0.0425}; // {TitleSize, LabelSizex, LabelSizey}
     bool CenterTitle = true;
     bool ShowStats = true;
@@ -229,8 +230,9 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
     Sim_Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D->SetLineWidth(LineWidth);
-    Sim_Histogram1D->SetLineStyle(0);
-    Sim_Histogram1D->SetLineColor(kBlue);
+    Sim_Histogram1D->SetLineStyle(0); // Original
+//    Sim_Histogram1D->SetLineColor(kBlue); // Original
+    Sim_Histogram1D->SetLineColor(kBlue + 1);
     Sim_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D->Scale(Data_Histogram1D->Integral() / Sim_Histogram1D->Integral()); }
@@ -243,8 +245,9 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
     Data_Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Data_Histogram1D->GetYaxis()->CenterTitle(true);
     Data_Histogram1D->SetLineWidth(LineWidth + 2);
-    Data_Histogram1D->SetLineStyle(0);
-    Data_Histogram1D->SetLineColor(kRed);
+    Data_Histogram1D->SetLineStyle(0); // Original
+//    Data_Histogram1D->SetLineColor(kRed); // Original
+    Data_Histogram1D->SetLineColor(kRed + 1);
     Data_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Data_Histogram1D);
 

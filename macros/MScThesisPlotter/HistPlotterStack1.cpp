@@ -257,7 +257,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
 
     /* Histogram appearance setup */
     const string Histogram1DNameCopy = Histogram1DName;
-    int LineWidth = 3;
+    int LineWidth = 6;
+//    int LineWidth = 3; // Original
     vector<double> Histogram1DTitleSizes = {0.06, 0.0425, 0.0425}; // {TitleSize, LabelSizex, LabelSizey}
     bool CenterTitle = true;
     bool ShowStats = true;
@@ -303,8 +304,9 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D->SetLineWidth(LineWidth);
-    Sim_Histogram1D->SetLineStyle(0);
-    Sim_Histogram1D->SetLineColor(kBlue);
+    Sim_Histogram1D->SetLineStyle(0); // Original
+    Sim_Histogram1D->SetLineColor(kBlue + 1);
+//    Sim_Histogram1D->SetLineColor(kBlue); // Original
     Sim_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D);
     double Sim_Scale = Sim_Histogram1D->Integral();
@@ -319,8 +321,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_QE->GetYaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D_QE->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D_QE->SetLineWidth(LineWidth);
-    Sim_Histogram1D_QE->SetLineStyle(7);
-    Sim_Histogram1D_QE->SetLineColor(kAzure + 10);
+//    Sim_Histogram1D_QE->SetLineStyle(7); // Original
+    Sim_Histogram1D_QE->SetLineColor(kAzure + 10); // Original
     Sim_Histogram1D_QE->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_QE);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_QE->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
@@ -334,8 +336,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_MEC->GetYaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D_MEC->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D_MEC->SetLineWidth(LineWidth);
-    Sim_Histogram1D_MEC->SetLineStyle(7);
-    Sim_Histogram1D_MEC->SetLineColor(kViolet);
+//    Sim_Histogram1D_MEC->SetLineStyle(7); // Original
+    Sim_Histogram1D_MEC->SetLineColor(kViolet); // Original
     Sim_Histogram1D_MEC->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_MEC);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_MEC->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
@@ -349,8 +351,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_RES->GetYaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D_RES->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D_RES->SetLineWidth(LineWidth);
-    Sim_Histogram1D_RES->SetLineStyle(7);
-    Sim_Histogram1D_RES->SetLineColor(kGreen + 1);
+//    Sim_Histogram1D_RES->SetLineStyle(7); // Original
+    Sim_Histogram1D_RES->SetLineColor(kGreen + 1); // Original
     Sim_Histogram1D_RES->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_RES);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_RES->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
@@ -364,8 +366,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_DIS->GetYaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D_DIS->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D_DIS->SetLineWidth(LineWidth);
-    Sim_Histogram1D_DIS->SetLineStyle(7);
-    Sim_Histogram1D_DIS->SetLineColor(kOrange + 7);
+//    Sim_Histogram1D_DIS->SetLineStyle(7); // Original
+    Sim_Histogram1D_DIS->SetLineColor(kOrange + 7); // Original
     Sim_Histogram1D_DIS->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_DIS);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_DIS->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
@@ -379,8 +381,9 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Data_Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Data_Histogram1D->GetYaxis()->CenterTitle(true);
     Data_Histogram1D->SetLineWidth(LineWidth + 2);
-    Data_Histogram1D->SetLineStyle(0);
-    Data_Histogram1D->SetLineColor(kRed);
+    Data_Histogram1D->SetLineStyle(0); // Original
+//    Data_Histogram1D->SetLineColor(kRed); // Original
+    Data_Histogram1D->SetLineColor(kRed + 1);
     Data_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Data_Histogram1D);
     Stack1D->Add(Data_Histogram1D);
