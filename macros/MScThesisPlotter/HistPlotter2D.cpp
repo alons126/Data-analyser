@@ -333,6 +333,8 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                    findSubstring(Histogram2DNameCopy, "R_{nFD} vs. P^{truth}_{nFD}") ||
                    findSubstring(Histogram2DNameCopy, "R_{pFD} vs. P^{reco}_{pFD}") ||
                    findSubstring(Histogram2DNameCopy, "R_{pFD} vs. P^{truth}_{pFD}")) {
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "Resolution = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}", "R_{nFD}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "Resolution = (P^{truth}_{pFD} - P^{reco}_{pFD})/P^{truth}_{pFD}", "R_{pFD}");
             ShowStats = false;
             Histogram2D->Draw("colz"), gPad->Update();
         } else if (findSubstring(Histogram2DNameCopy, "E_{cal} vs. #theta_{pCD} (All Int., nFDpCD)")) {

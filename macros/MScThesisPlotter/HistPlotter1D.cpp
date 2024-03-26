@@ -22,7 +22,7 @@
 #include "../../source/constants.h"
 #include "Histofinder1D.cpp"
 
-#if Independent1Ddraw
+#if Independent1DHistDraw
 #include "TitleAligner.cpp"
 #endif
 

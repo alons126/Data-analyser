@@ -21,6 +21,10 @@
 #include "../../source/functions/GeneralFunctions.h"
 #include "../../source/constants.h"
 
+#if Independent1DGraphDraw
+#include "TitleAligner.cpp"
+#endif
+
 using namespace std;
 
 const string ConfigRegion1D_(const string &Histogram2DNameCopy) {
@@ -65,15 +69,15 @@ double SetyOffset1D_(const bool &ShowStats) {
     return yOffset;
 }
 
-void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char *filenameDir, const char *Graph1DName,
-                    const string &SampleName, const string &SavePath, const string &SaveName) {
+void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char *filenameDir, const char *Graph1DName, const string &SampleName, const string &SavePath,
+                    const string &SaveName) {
     cout << "\n\n";
     hData utilities;
 
     const string Graph1DNameCopy = Graph1DName;
 
 //    HistogramCanvas->Clear();
-    TCanvas *c1 = new TCanvas("can1", "can2", utilities.GetStandardCanvasWidth(), utilities.GetStandardCanvasHeight()); // normal res
+    TCanvas *c1 = new TCanvas("can1", "can2", utilities.GetStandardCanvasWidth() * 2, utilities.GetStandardCanvasHeight() * 2); // normal res
     c1->cd()->SetGrid(), c1->cd()->SetBottomMargin(0.14), c1->cd()->SetLeftMargin(0.18), c1->cd()->SetRightMargin(0.12), c1->cd()->SetTopMargin(0.12), c1->cd();
 
     TFile *file = new TFile(filename);
@@ -97,7 +101,7 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
 
     auto *FitParam = (TPaveText *) funcList->At(2);
     double FitParam_x1 = 0., FitParam_y1 = 0.; // Top right
-    double FitParam_x2 =  0.275, FitParam_y2 = 0.125; // Bottom left
+    double FitParam_x2 = 0.275, FitParam_y2 = 0.125; // Bottom left
     double FitParam_xOffset = 0.2, FitParam_yOffset = 0.675;
     FitParam->SetX1(FitParam_x1 + FitParam_xOffset), FitParam->SetY1(FitParam_y1 + FitParam_yOffset);
     FitParam->SetX2(FitParam_x2 + FitParam_xOffset), FitParam->SetY2(FitParam_y2 + FitParam_yOffset);
@@ -137,6 +141,8 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
+    Graph1D->SetMarkerSize(2);
+
 //    Graph1D->GetXaxis()->SetTitleSize(0.06);
 //    Graph1D->GetXaxis()->SetLabelSize(0.0425);
 //    Graph1D->GetXaxis()->CenterTitle(true);
@@ -146,6 +152,24 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
 //    Graph1D->GetYaxis()->CenterTitle(true);
 //    Graph1D->SetLineWidth(LineWidth);
 //    MScThesisPlotsList->Add(Graph1D);
+
+    string Graph1D_Title = Graph1D->GetTitle();
+    string Graph1D_Title1 = Graph1D_Title;
+    string Graph1D_xLabel = Graph1D->GetXaxis()->GetTitle(), Graph1D_yLabel = Graph1D->GetYaxis()->GetTitle();
+
+    if (Graph1DNameCopy == "reco_f_Corr_pol1") {
+        auto FuncList = Graph1D->GetListOfFunctions();
+        FuncList->Clear();
+    } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") && findSubstring(Graph1D_Title1,"Proton")) {
+//        auto FuncList = Graph1D->GetListOfFunctions();
+//        FuncList->Clear();
+        Graph1D->GetYaxis()->SetRangeUser(0., 0.15);
+    }
+
+    TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{reco}_{nFD}", "#LTP^{reco}_{nFD}#GT");
+    TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{truth}_{nFD}", "#LTP^{truth}_{nFD}#GT");
+    TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{reco}_{pFD}", "#LTP^{reco}_{pFD}#GT");
+    TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{truth}_{pFD}", "#LTP^{truth}_{pFD}#GT");
 
     Graph1D->Draw("ap");
 
