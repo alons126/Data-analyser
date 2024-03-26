@@ -305,8 +305,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D->SetLineWidth(LineWidth);
     Sim_Histogram1D->SetLineStyle(0); // Original
-    Sim_Histogram1D->SetLineColor(kBlue + 1);
-//    Sim_Histogram1D->SetLineColor(kBlue); // Original
+    Sim_Histogram1D->SetLineColor(kBlue); // Original
+//    Sim_Histogram1D->SetLineColor(kBlue + 1);
     Sim_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D);
     double Sim_Scale = Sim_Histogram1D->Integral();
@@ -383,7 +383,11 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Data_Histogram1D->SetLineWidth(LineWidth + 2);
     Data_Histogram1D->SetLineStyle(0); // Original
 //    Data_Histogram1D->SetLineColor(kRed); // Original
+//    Data_Histogram1D->SetLineColor(kBlack);
     Data_Histogram1D->SetLineColor(kRed + 1);
+    Data_Histogram1D->SetMarkerStyle(8);
+    Data_Histogram1D->SetMarkerSize(2.5);
+    Data_Histogram1D->SetMarkerColor(kRed + 1);
     Data_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Data_Histogram1D);
     Stack1D->Add(Data_Histogram1D);
@@ -606,7 +610,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
             TLegendEntry *Sim_Entry_MEC = Comparison_legend->AddEntry(Sim_Histogram1D_MEC, "MEC (simulation; scaled)", "l");
             TLegendEntry *Sim_Entry_RES = Comparison_legend->AddEntry(Sim_Histogram1D_RES, "RES (simulation; scaled)", "l");
             TLegendEntry *Sim_Entry_DIS = Comparison_legend->AddEntry(Sim_Histogram1D_DIS, "DIS (simulation; scaled)", "l");
-            TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l");
+//            TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l"); // original
+            TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data");
         } else {
             TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation", "l");
             TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l");
