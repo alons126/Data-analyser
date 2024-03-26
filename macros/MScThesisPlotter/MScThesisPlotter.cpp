@@ -876,6 +876,24 @@ void MScThesisPlotter() {
     HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{pFD} vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS1FolderSim,
                   "04b_P_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p");
 
+    /* Resolution match multiplicity (neutron) */
+    HistPlotter1D(Canv, MScThesisPlots, plots_momResS1_Gen, "Neutron resolution match multiplicity (1n, FD)", SampleName, MomResS1FolderSim,
+                  "05a_Neut_nRes_match_multi_1n");
+    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "Match multiplicity vs. P^{reco}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
+                  "05b_Neut_nRes_match_multi_vs_P_nFD_1n");
+    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "Match multiplicity vs. #phi^{reco}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
+                  "05c_Neut_nRes_match_multi_vs_phi_nFD_1n");
+
+    /* Width fit after correction (neutron) */
+    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
+                   "01_Neutron_reco_f_Smear_pol1_wKC");
+    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
+                   "01_Neutron_truth_f_Smear_pol1_wKC_Important"); // Important! (smearing!)
+    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
+                   "02_Neutron_reco_f_Corr_pol1_wKC");
+    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
+                   "02_Neutron_truth_f_Corr_pol1_wKC");
+
     /* Width fit after correction (neutron) */
     GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
                    "01_Neutron_reco_f_Smear_pol1_wKC");

@@ -11994,12 +11994,13 @@ void EventAnalyser() {
                         double dProtonTheta = TLProtonTheta - RecoProtonTheta;
                         double dProtonPhi = CalcdPhi(TLProtonPhi - RecoProtonPhi);
 
-                        auto pid = mcpbank_pRes->getPid();
+                        int pid_pRes = mcpbank_pRes->getPid();
+//                        auto pid = mcpbank_pRes->getPid();
 
                         //<editor-fold desc="pRes cuts">
 
                         //<editor-fold desc="pRes good Proton cuts">
-                        bool pRes_TL_Pass_PIDCut = (pid == 2212);
+                        bool pRes_TL_Pass_PIDCut = (pid_pRes == 2212);
 
                         bool Reco_InFD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Proton", RecoProtonP, RecoProtonTheta, RecoProtonPhi, false);
                         bool TL_InFD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Proton", TLProtonP, TLProtonTheta, TLProtonPhi, false);
@@ -12885,12 +12886,13 @@ void EventAnalyser() {
                         double dNeutronTheta = TLNeutronTheta - RecoNeutronTheta;
                         double dNeutronPhi = CalcdPhi(TLNeutronPhi - RecoNeutronPhi);
 
-                        auto pid = mcpbank_nRes->getPid();
+                        int pid_nRes = mcpbank_nRes->getPid();
+//                        auto pid = mcpbank_nRes->getPid();
 
                         //<editor-fold desc="nRes cuts">
 
                         //<editor-fold desc="nRes good neutron cuts">
-                        bool nRes_TL_Pass_PIDCut = (pid == 2112);
+                        bool nRes_TL_Pass_PIDCut = (pid_nRes == 2112);
 
                         bool Reco_InFD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", RecoNeutronP, RecoNeutronTheta, RecoNeutronPhi, false);
                         bool TL_InFD = aMaps.IsInFDQuery(Generate_AMaps, ThetaFD, "Neutron", TLNeutronP, TLNeutronTheta, TLNeutronPhi, false);
