@@ -237,7 +237,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
             string StringTemp0 = Histogram1D->GetTitle();
-            string StringTemp = StringTemp0.substr(StringTemp0.find_last_of('ratio') + 1);
+            string StringTemp = StringTemp0.substr(StringTemp0.find_last_of("ratio") + 1);
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, StringTemp, "");
 
             cout << "Histogram1D_Title = " << Histogram1D_Title << "\n";
@@ -607,6 +607,12 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram1D->SetLineColor(kBlack);
                 Histogram1D->Draw(), gPad->Update();
             }
+        } else if (findSubstring(Histogram1DNameCopy, "Neutron resolution match multiplicity (1n, FD)")) {
+            LogScalePlot = true;
+            ShowStats = false;
+            Histogram1D->GetXaxis()->SetRangeUser(1., 4.);
+            Histogram1D->GetXaxis()->SetNdivisions(3);
+            Histogram1D->Draw(), gPad->Update();
         } else {
             Histogram1D->SetLineColor(kBlue);
             Histogram1D->SetStats(0);

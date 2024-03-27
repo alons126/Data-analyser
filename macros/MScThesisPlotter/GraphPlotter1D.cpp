@@ -89,6 +89,18 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
     TGraph *Graph1D = (TGraph *) momResDir->FindObject(Graph1DNameCopy.c_str());
     if (!Graph1D) { cout << "\nInvalid graph! Exiting...\n", exit(0); }
 
+    double Legend_x1_BaseLine = gStyle->GetStatX(), Legend_y1_BaseLine = gStyle->GetStatY(); // Top right
+    double Legend_x2_BaseLine = gStyle->GetStatX(), Legend_y2_BaseLine = gStyle->GetStatY(); // Bottom left
+
+    double Legend_x1_OneLine = Legend_x1_BaseLine, Legend_y1_OneLine = Legend_y1_BaseLine - 0.2; // Top right
+    double Legend_x2_OneLine = Legend_x2_BaseLine - 0.2, Legend_y2_OneLine = Legend_y2_BaseLine - 0.25; // Bottom left
+
+    double Legend_x1_TwoLines = Legend_x1_BaseLine, Legend_y1_TwoLines = Legend_y1_BaseLine - 0.2; // Top right
+    double Legend_x2_TwoLines = Legend_x2_BaseLine - 0.2, Legend_y2_TwoLines = Legend_y2_BaseLine - 0.3; // Bottom left
+
+    double Legend_x1_ThreeLines = Legend_x1_BaseLine, Legend_y1_ThreeLines = Legend_y1_BaseLine - 0.2; // Top right
+    double Legend_x2_ThreeLines = Legend_x2_BaseLine - 0.2, Legend_y2_ThreeLines = Legend_y2_BaseLine - 0.35; // Bottom left
+
     auto *funcList = Graph1D->GetListOfFunctions();
 
     auto *Legend = (TLegend *) funcList->At(1);
@@ -157,21 +169,30 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
     string Graph1D_Title1 = Graph1D_Title;
     string Graph1D_xLabel = Graph1D->GetXaxis()->GetTitle(), Graph1D_yLabel = Graph1D->GetYaxis()->GetTitle();
 
-    if (Graph1DNameCopy == "reco_f_Corr_pol1") {
-        auto FuncList = Graph1D->GetListOfFunctions();
-        FuncList->Clear();
-    } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") && findSubstring(Graph1D_Title1,"Proton")) {
-//        auto FuncList = Graph1D->GetListOfFunctions();
-//        FuncList->Clear();
-        Graph1D->GetYaxis()->SetRangeUser(0., 0.15);
-    }
-
     TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{reco}_{nFD}", "#LTP^{reco}_{nFD}#GT");
     TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{truth}_{nFD}", "#LTP^{truth}_{nFD}#GT");
     TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{reco}_{pFD}", "#LTP^{reco}_{pFD}#GT");
     TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{truth}_{pFD}", "#LTP^{truth}_{pFD}#GT");
 
-    Graph1D->Draw("ap");
+    if (Graph1DNameCopy == "reco_f_Corr_pol1") {
+        auto FuncList = Graph1D->GetListOfFunctions();
+        FuncList->Clear();
+        Graph1D->Draw("ap"), gPad->Update();
+
+        TLine *UpperMomKCut = new TLine(2.2, gPad->GetUymin(), 2.2, gPad->GetUymax());
+        UpperMomKCut->SetLineWidth(3), UpperMomKCut->SetLineColor(kBlue), UpperMomKCut->Draw("same");
+
+        double xOffset = SetxOffset1D(false), yOffset = SetyOffset1D(false);
+        auto Legend = new TLegend(Legend_x1_OneLine + xOffset + 0.04, Legend_y1_OneLine + yOffset,
+                                  Legend_x2_OneLine - 0.05 + xOffset + 0.04, Legend_y2_OneLine + yOffset - 0.01);
+        TLegendEntry *LowerMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("#LTP^{reco}_{pFD}#GT = " + to_string_with_precision(2.2, 1) + " [GeV/c]").c_str(), "l");
+        Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
+    } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") && findSubstring(Graph1D_Title1, "Proton")) {
+        Graph1D->GetYaxis()->SetRangeUser(0., 0.15);
+        Graph1D->Draw("ap"), gPad->Update();
+    } else {
+        Graph1D->Draw("ap"), gPad->Update();
+    }
 
     string SaveNameDir = SavePath + "/" + SaveName + ".png";
     const char *SaveDir = SaveNameDir.c_str();

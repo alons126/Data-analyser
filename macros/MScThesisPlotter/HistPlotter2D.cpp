@@ -403,7 +403,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                     if (Equi_z_2D) { Histogram2D->SetMaximum(Zmax); }
                 } else {
                     string StringTemp0 = Histogram2D->GetTitle();
-                    string StringTemp = StringTemp0.substr(StringTemp0.find_last_of('ratio') + 1);
+                    string StringTemp = StringTemp0.substr(StringTemp0.find_last_of("ratio") + 1);
                     TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, StringTemp, "");
 
                     Histogram2D->SetMaximum(5.);

@@ -307,7 +307,7 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
 
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
             string StringTemp0 = Sim_Histogram1D->GetTitle();
-            string StringTemp = StringTemp0.substr(StringTemp0.find_last_of('ratio') + 1);
+            string StringTemp = StringTemp0.substr(StringTemp0.find_last_of("ratio") + 1);
             TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, StringTemp, "");
 
             if (RatioTopology == "1N") { TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "Leading nucleon", "Nucleon"); }
