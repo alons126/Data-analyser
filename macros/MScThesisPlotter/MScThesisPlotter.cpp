@@ -856,6 +856,7 @@ void MScThesisPlotter() {
     //<editor-fold desc="momRes">
     cout << "\n\n\nPlotting Momentum Resolution plots\n";
 
+    //<editor-fold desc="MomResS1">
     /* Mean fit before correction */
     GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted reco neutron resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
                    "01a_Neutron_reco_f_Smear_pol1_wKC");
@@ -892,6 +893,8 @@ void MScThesisPlotter() {
                   "05b_Neut_nRes_match_multi_vs_P_nFD_1n");
     HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "Match multiplicity vs. #phi^{reco}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
                   "05c_Neut_nRes_match_multi_vs_phi_nFD_1n");
+    HistPlotter1D(Canv, MScThesisPlots, plots_momResS1_Gen, "TL P_{nFD} used in nRes (1n, FD)", SampleName, MomResS1FolderSim, "05d_matched_truth_P_nFD_1n");
+    HistPlotter1D(Canv, MScThesisPlots, plots_momResS1_Gen, "Reco P_{nFD} used in nRes (1n, FD)", SampleName, MomResS1FolderSim, "05e_matched_reco_P_nFD_1n");
 
     GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted reco proton resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
                    "06a_Proton_reco_f_Smear_pol1_wKC");
@@ -903,12 +906,14 @@ void MScThesisPlotter() {
                    "07b_Proton_truth_f_Corr_pol1_wKC");
     GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
                    "07c_Proton_truth_f_Smear_pol1_wKC_sigma_pFD_test"); // For sigma_pFD before smearing!
+    //</editor-fold>
 
+    //<editor-fold desc="MomResS2">
     /* Width fit after correction (neutron) */
     GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
-                   "01a_Neutron_reco_f_Smear_pol1_wKC");
+                   "01a_Neutron_reco_f_Smear_pol1_wKC_Important"); // Important! (smearing!)
     GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
-                   "01b_Neutron_truth_f_Smear_pol1_wKC_Important"); // Important! (smearing!)
+                   "01b_Neutron_truth_f_Smear_pol1_wKC");
     GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
                    "02a_Neutron_reco_f_Corr_pol1_wKC");
     GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
@@ -940,7 +945,9 @@ void MScThesisPlotter() {
                   "04b_P_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p");
     HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{pFD} vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS2FolderSim,
                   "04b_P_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p");
+    //</editor-fold>
 
+    //<editor-fold desc="MomResS2RT">
     /* momRes test */
     HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{nFD} vs. P^{reco}_{nFD} (1n, FD)", SampleName, MomResS2RTFolderSim,
                   "03a_P_nFD_Res_VS_Reco_P_nFD_1n");
@@ -969,6 +976,8 @@ void MScThesisPlotter() {
                    "07b_Proton_truth_f_Corr_pol1_wKC");
     GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2RTFolderSim,
                    "07c_Proton_truth_f_Smear_pol1_sigma_pFD_test_wKC"); // For sigma_pFD after smearing!
+    //</editor-fold>
+
     //</editor-fold>
 
 //    //<editor-fold desc="Results">
