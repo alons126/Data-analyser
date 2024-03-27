@@ -187,8 +187,12 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
                                   Legend_x2_OneLine - 0.05 + xOffset + 0.04, Legend_y2_OneLine + yOffset - 0.01);
         TLegendEntry *LowerMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("#LTP^{reco}_{pFD}#GT = " + to_string_with_precision(2.2, 1) + " [GeV/c]").c_str(), "l");
         Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
-    } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") && findSubstring(Graph1D_Title1, "Proton")) {
-        Graph1D->GetYaxis()->SetRangeUser(0., 0.15);
+    } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") && findSubstring(Graph1D_Title1, "Proton") &&
+               findSubstring(filename, "momResS1_v3")) {
+        auto FuncList = Graph1D->GetListOfFunctions();
+        FuncList->Clear();
+        Graph1D->GetYaxis()->SetRangeUser(0., 0.02);
+//        Graph1D->GetYaxis()->SetRangeUser(0., 0.15);
         Graph1D->Draw("ap"), gPad->Update();
     } else {
         Graph1D->Draw("ap"), gPad->Update();
