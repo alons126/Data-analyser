@@ -27,7 +27,7 @@ TH2D *Histofinder2D(const char *filename, const char *Histogram2DNameSubstring) 
     bool PrintOutResult = false;
 
     TFile *file = new TFile(filename);
-    if (!file) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
+    if (!file) { cout << "\n\nHistofinder2D: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
 
     TH2D *Histogram2D;
 

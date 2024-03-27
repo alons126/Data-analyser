@@ -31,7 +31,7 @@ vector<TH1D *> SliceLoader(const char *filename, vector<int> &SliceNumbers) {
     bool PrintOut = false;
 
     TFile *file = new TFile(filename);
-    if (!file) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
+    if (!file) { cout << "\n\nMomResDebug::SliceLoader: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
 
     vector < TH1D * > MomResSlices;
     vector<int> SliceNumbers0;

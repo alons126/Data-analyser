@@ -273,13 +273,25 @@ public:
         for (int i = 0; i < ResRecoMomSlices.size(); i++) { ResRecoMomSlices.at(i).SetHistogram1D(ResSlices0.at(i)); }
     }
 
+    void OverwriteResTLMomSlices(vector<TH1D *> ResSlices0) {
+        for (int i = 0; i < ResTLMomSlices.size(); i++) { ResTLMomSlices.at(i).SetHistogram1D(ResSlices0.at(i)); }
+    }
+
     void SetResRecoMomSlicesLimits(vector <vector<double>> ResSlicesLimits0) { ResRecoMomSlicesLimits = ResSlicesLimits0; };
+
+    void SetResTLMomSlicesLimits(vector <vector<double>> ResSlicesLimits0) { ResTLMomSlicesLimits = ResSlicesLimits0; };
 
     void SetResRecoMomSlicesFitVar(vector <DSCuts> ResSlicesFitVar0) { ResRecoMomSlicesFitVar = ResSlicesFitVar0; };
 
+    void SetResTLMomSlicesFitVar(vector <DSCuts> ResSlicesFitVar0) { ResTLMomSlicesFitVar = ResSlicesFitVar0; };
+
     void SetResRecoMomSlicesHistVar(vector <DSCuts> ResSlicesHistVar0) { ResRecoMomSlicesHistVar = ResSlicesHistVar0; };
 
+    void SetResTLMomSlicesHistVar(vector <DSCuts> ResSlicesHistVar0) { ResTLMomSlicesHistVar = ResSlicesHistVar0; };
+
     void SetFittedRecoMomSlices(vector<int> FittedSlices0) { FittedRecoMomSlices = FittedSlices0; };
+
+    void SetFittedTLMomSlices(vector<int> FittedSlices0) { FittedTLMomSlices = FittedSlices0; };
 
     // Get functions
     double GetSliceUpperMomLim() { return SliceUpperMomLim; };
@@ -302,11 +314,19 @@ public:
 
     vector <vector<double>> GetResRecoMomSlicesLimits() { return ResRecoMomSlicesLimits; };
 
+    vector <vector<double>> GetResTLMomSlicesLimits() { return ResTLMomSlicesLimits; };
+
     vector <DSCuts> GetResRecoMomSlicesFitVar() { return ResRecoMomSlicesFitVar; };
+
+    vector <DSCuts> GetResTLMomSlicesFitVar() { return ResTLMomSlicesFitVar; };
 
     vector <DSCuts> GetResRecoMomSlicesHistVar() { return ResRecoMomSlicesHistVar; };
 
+    vector <DSCuts> GetResTLMomSlicesHistVar() { return ResTLMomSlicesHistVar; };
+
     vector<int> GetFittedRecoMomSlices() { return FittedRecoMomSlices; };
+
+    vector<int> GetFittedTLMomSlices() { return FittedTLMomSlices; };
 
     string GetRandNumGenerator() { return RandomNumGenerator; };
 
