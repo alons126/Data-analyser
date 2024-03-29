@@ -149,7 +149,9 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     /* Histogram appearance setup */
     const string Histogram1DNameCopy = Histogram1DName;
     int LineColor = 1;
-    int LineWidth = 3;
+//    int LineWidth = 3; // original
+//    int LineWidth = 6; // size used in results part
+    int LineWidth = 4;
     vector<double> Histogram1DTitleSizes = {0.06, 0.0425, 0.0425}; // {TitleSize, LabelSizex, LabelSizey}
     bool CenterTitle = true;
     bool ShowStats = true;
@@ -500,6 +502,18 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TLegendEntry *UpperMomThEntry = Legend->AddEntry(UpperMomTh, "Upper P_{n} th. = E_{beam}/c", "l");
             TLegendEntry *LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
+        } else if (findSubstring(Histogram1DNameCopy, "Multiplicity of FD neutrons by redef.")) {
+            ShowStats = false, LogScalePlot = true;
+
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " APID&AV", "");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " by redef.", "");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "FD neutrons", "forward-going neutrons");
+
+//            if (findSubstring(Histogram1D_Title1, "1n") || findSubstring(Histogram1D_Title1, "nFDpCD")) {
+//                Histogram1D->GetXaxis()->SetRangeUser(1., 10.);
+//            }
+
+            Histogram1D->Draw(), gPad->Update();
         } else if ((Histogram1DNameCopy == "CD & FD Piplus momentum #epsilon_{eff} (1e cut)") || (Histogram1DNameCopy == "CD & FD Piminus momentum #epsilon_{eff} (1e cut)")) {
             ShowStats = false;
             double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);

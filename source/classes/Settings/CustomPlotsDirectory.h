@@ -27,7 +27,7 @@ private:
     string Added_PreStatuses, Added_Statuses;
 
 //    string Global_Run_Status = "v3_GetFDNeutronP_Test";
-    string Global_Run_Status = "v3_var_Test";
+    string Global_Run_Status = "v3_BelowEcal";
 
 public:
 
