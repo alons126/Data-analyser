@@ -120,8 +120,10 @@ void MScThesisPlotter() {
     const char *Final_noSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wFCwKC_wKW_v3/"
                                   "C12x4_simulation_G18_Q204_6GeV_plots.root";
 
-    const char *Final_wSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v3_ReRun/"
+    const char *Final_wSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v3_ReRun2/"
                                  "C12x4_simulation_G18_Q204_6GeV_plots.root";
+//    const char *Final_wSaC_Sim = "/mnt/e/C12x4_sim_G18_Q204_6GeV/05_Final_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_wFCwKC_wKW_v3_ReRun/"
+//                                 "C12x4_simulation_G18_Q204_6GeV_plots.root";
 
     /* C12x4 data - run 015188 */
     const char *Final_noSaC_Data = "/mnt/e/C12x4_data_6GeV_run_015188_for_Thesis/05_Final_runs/v3/C12x4_data_6GeV_run_015188_S03AC_NC_wFCwKC_wKW_v3/"
@@ -996,498 +998,498 @@ void MScThesisPlotter() {
 
     //</editor-fold>
 
-//    //<editor-fold desc="Results">
-//    cout << "\n\n\nPlotting results plots\n";
+    //<editor-fold desc="Results">
+    cout << "\n\n\nPlotting results plots\n";
+
+//    //<editor-fold desc="Event_Selection_Data">
+//    const string ElectronIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data";
+//    system(("mkdir -p " + ElectronIDFolderData).c_str());
 //
-////    //<editor-fold desc="Event_Selection_Data">
-////    const string ElectronIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data";
-////    system(("mkdir -p " + ElectronIDFolderData).c_str());
-////
-////    const string ElectronIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data/Before_Cuts_Data";
-////    system(("mkdir -p " + ElectronIDFolderDataBC).c_str());
-////
-////    const string ElectronIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data/After_Cuts_Data";
-////    system(("mkdir -p " + ElectronIDFolderDataAC).c_str());
-////
-////    const string ProtonIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data";
-////    system(("mkdir -p " + ProtonIDFolderData).c_str());
-////
-////    const string ProtonIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data/Before_Cuts_Data";
-////    system(("mkdir -p " + ProtonIDFolderDataBC).c_str());
-////
-////    const string ProtonIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data/After_Cuts_Data";
-////    system(("mkdir -p " + ProtonIDFolderDataAC).c_str());
-////
-////    const string NeutralsFDIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data";
-////    system(("mkdir -p " + NeutralsFDIDFolderData).c_str());
-////
-////    const string NeutralsFDIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data/Before_Cuts_Data";
-////    system(("mkdir -p " + NeutralsFDIDFolderDataBC).c_str());
-////
-////    const string NeutralsFDIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data/After_Cuts_Data";
-////    system(("mkdir -p " + NeutralsFDIDFolderDataAC).c_str());
-////
-////    const string PionsIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data";
-////    system(("mkdir -p " + PionsIDFolderData).c_str());
-////
-////    const string PionsIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data/Before_Cuts_Data";
-////    system(("mkdir -p " + PionsIDFolderDataBC).c_str());
-////
-////    const string PionsIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data/After_Cuts_Data";
-////    system(("mkdir -p " + PionsIDFolderDataAC).c_str());
-////
-////    const string OtherPartIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data";
-////    system(("mkdir -p " + OtherPartIDFolderData).c_str());
-////
-////    const string OtherPartIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data/Before_Cuts_Data";
-////    system(("mkdir -p " + OtherPartIDFolderDataBC).c_str());
-////
-////    const string OtherPartIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data/After_Cuts_Data";
-////    system(("mkdir -p " + OtherPartIDFolderDataAC).c_str());
-////    //</editor-fold>
+//    const string ElectronIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data/Before_Cuts_Data";
+//    system(("mkdir -p " + ElectronIDFolderDataBC).c_str());
 //
-//    //<editor-fold desc="Final_State_Comparison">
+//    const string ElectronIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/01_Electron_ID_Data/After_Cuts_Data";
+//    system(("mkdir -p " + ElectronIDFolderDataAC).c_str());
 //
-//    //<editor-fold desc="01_Momentum_comp_Sim">
-//    HistPlotter1D(Canv, MScThesisPlots, Final_noSaC_Sim, "FD proton momentum APID (1p, FD)", SampleName, MomComp_BSaC_1N_Sim_FolderData, "01_P_pFD_APID_1p_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, Final_noSaC_Sim, "Leading FD neutron momentum APID (1n, FD)", SampleName, MomComp_BSaC_1N_Sim_FolderData, "01_P_nFD_APID_1n_FD");
+//    const string ProtonIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data";
+//    system(("mkdir -p " + ProtonIDFolderData).c_str());
 //
-//    HistPlotter1D(Canv, MScThesisPlots, Final_wSaC_Sim, "FD proton momentum APID&PS (1p, FD)", SampleName, MomComp_ASaC_1N_Sim_FolderData, "01_P_pFD_APIDandPS_1p_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, Final_wSaC_Sim, "Leading FD neutron momentum APID&NC (1n, FD)", SampleName, MomComp_ASaC_1N_Sim_FolderData,
-//                  "01_P_nFD_APIDandNC_1n_FD");
+//    const string ProtonIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data/Before_Cuts_Data";
+//    system(("mkdir -p " + ProtonIDFolderDataBC).c_str());
 //
-////    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "1N", "TH1D", "FD", "Electron momentum APID", "Electron momentum APID", "Electron momentum",
-////               MomComp_ElecMom_2N_Reco_Sim_FolderData, "P_e_1p_FD_1N", "P_e_1n_FD_1N", "P_e_FSR_1N", 1);
-////    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH1D", "FD", "Electron momentum APID", "Electron momentum APID", "Electron momentum",
-////               MomComp_ElecMom_2N_Reco_Sim_FolderData, "P_e_pFDpCD_FD_2N", "P_e_nFDpCD_FD_2N", "P_e_FSR_2N", 2);
+//    const string ProtonIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/02_Proton_ID_Data/After_Cuts_Data";
+//    system(("mkdir -p " + ProtonIDFolderDataAC).c_str());
 //
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "1N", "FD", "FD proton momentum APID&PS", "Leading FD neutron momentum APID&NC",
-//               "Leading FD neutron momentum", MomComp_NucMom_1N_Reco_Sim_FolderData, "P_pFD_APIDandPS_1p_FD", "P_nFD_APIDandNS_1n_FD", "P_nucFD_FSR", 1);
+//    const string NeutralsFDIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data";
+//    system(("mkdir -p " + NeutralsFDIDFolderData).c_str());
 //
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "FD proton momentum", "FD neutron momentum", "FD neutron momentum",
-//               MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pFD_pFDpCD_FD", "P_nFD_nFDpCD_FD", "P_nucFD_FSR_2N", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "CD proton momentum", "CD proton momentum", "CD proton momentum",
-//               MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pCD_pFDpCD_CD", "P_pCD_nFDpCD_CD", "P_pCD_FSR_2N", 2);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "P_{pFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD} (nFDpCD)",
-//               MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pFD_vs_P_pCD_pFDpCD", "P_nFD_vs_P_pCD_nFDpCD", "P_nucFD_vs_P_nucCD_FSR_2N", 3);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Leading proton momentum", "Leading nucleon momentum",
-//               "Leading nucleon momentum", MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pL_pFDpCD_FD", "P_nL_nFDpCD_FD", "P_nucL_FSR_2N", 4);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Recoil proton momentum", "Recoil nucleon momentum",
-//               "Recoil nucleon momentum", MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pR_pFDpCD_FD", "P_nR_nFDpCD_FD", "P_nucR_FSR_2N", 5);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "P_{pL} vs. P_{pR}", "P_{nL} vs. P_{nR}", "P_{nL} vs. P_{nR} (nFDpCD)",
-//               MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pL_vs_P_pR_pFDpCD", "P_nL_vs_P_nR_nFDpCD", "P_nucL_vs_P_nucR_FSR_2N", 6);
+//    const string NeutralsFDIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data/Before_Cuts_Data";
+//    system(("mkdir -p " + NeutralsFDIDFolderDataBC).c_str());
 //
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#vec{P}_{tot}-#vec{q} distribution",
-//               "#vec{P}_{tot}-#vec{q} distribution", "#vec{P}_{tot}-#vec{q} distribution", MomComp_P_miss_Sim_FolderData, "P_miss_pFDpCD", "P_miss_nFDpCD", "P_miss_FSR_2N",
-//               1);
+//    const string NeutralsFDIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/03_Neutrals_FD_ID_Data/After_Cuts_Data";
+//    system(("mkdir -p " + NeutralsFDIDFolderDataAC).c_str());
 //
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Total nucleon momentum (3-vector)",
-//               "Total nucleon momentum (3-vector)", "Total nucleon 3-momentum", MomComp_TotAndRel_Mom_Sim_FolderData, "P_3tot_pFDpCD", "P_3tot_nFDpCD", "P_tot_FSR_2N", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Relative nucleon momentum (3-vector)",
-//               "Relative nucleon momentum (3-vector)", "Relative nucleon 3-momentum", MomComp_TotAndRel_Mom_Sim_FolderData, "P_3rel_pFDpCD", "P_3rel_nFDpCD", "P_rel_FSR_2N",
-//               2);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|",
-//               "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", MomComp_TotAndRel_Mom_Sim_FolderData, "P_tot_vs_P_rel_pFDpCD", "P_tot_vs_P_rel_nFDpCD", "P_tot_vs_P_rel_FSR_2N", 3);
+//    const string PionsIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data";
+//    system(("mkdir -p " + PionsIDFolderData).c_str());
 //
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "1N", "TH1D", "FD", "FD TL Proton momentum AC", "FD TL Neutron momentum AC",
-//               "FD TL Neutron momentum AC", MomComp_NucMom_1N_TL_Sim_FolderData, "P_pFD_TL_1p", "P_nFD_TL_1n", "P_nucFD_TL_FSR_1N", 1);
+//    const string PionsIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data/Before_Cuts_Data";
+//    system(("mkdir -p " + PionsIDFolderDataBC).c_str());
 //
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH1D", "FD", "FD TL Proton momentum AC", "FD TL Neutron momentum AC",
-//               "FD TL Neutron momentum AC", MomComp_NucMom_2N_TL_Sim_FolderData, "P_pFD_TL_pFDpCD", "P_nFD_TL_pFDpCD", "P_nucFD_TL_FSR_2N", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH1D", "CD", "CD TL Proton momentum AC", "CD TL Proton momentum AC",
-//               "CD TL Proton momentum AC", MomComp_NucMom_2N_TL_Sim_FolderData, "P_pCD_TL_pFDpCD", "P_pCD_TL_pFDpCD", "P_nucCD_TL_FSR_2N", 2);
+//    const string PionsIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/04_Pions_ID_Data/After_Cuts_Data";
+//    system(("mkdir -p " + PionsIDFolderDataAC).c_str());
+//
+//    const string OtherPartIDFolderData = "00_MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data";
+//    system(("mkdir -p " + OtherPartIDFolderData).c_str());
+//
+//    const string OtherPartIDFolderDataBC = "00_MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data/Before_Cuts_Data";
+//    system(("mkdir -p " + OtherPartIDFolderDataBC).c_str());
+//
+//    const string OtherPartIDFolderDataAC = "00_MScThesisPlotter/Results/Event_Selection_Data/05_Other_part_ID_Data/After_Cuts_Data";
+//    system(("mkdir -p " + OtherPartIDFolderDataAC).c_str());
 //    //</editor-fold>
-//
-//    //<editor-fold desc="01_Momentum_comp_Data">
-//    HistPlotter1D(Canv, MScThesisPlots, Final_noSaC_Data, "FD proton momentum APID (1p, FD)", SampleName, MomComp_BSaC_1N_Data_FolderData, "01_P_pFD_APID_1p_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, Final_noSaC_Data, "Leading FD neutron momentum APID (1n, FD)", SampleName, MomComp_BSaC_1N_Data_FolderData, "01_P_nFD_APID_1n_FD");
-//
-//    HistPlotter1D(Canv, MScThesisPlots, Final_wSaC_Data, "FD proton momentum APID&PS (1p, FD)", SampleName, MomComp_ASaC_1N_Data_FolderData, "01_P_pFD_APIDandPS_1p_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, Final_wSaC_Data, "Leading FD neutron momentum APID&NC (1n, FD)", SampleName, MomComp_ASaC_1N_Data_FolderData,
-//                  "01_P_nFD_APIDandNC_1n_FD");
-//
-////    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "1N", "TH1D", "FD", "Electron momentum APID", "Electron momentum APID", "Electron momentum",
-////               MomComp_ElecMom_2N_Reco_Data_FolderData, "P_e_1p_FD_1N", "P_e_1n_FD_1N", "P_e_FSR_1N", 1);
-////    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Electron momentum APID", "Electron momentum APID", "Electron momentum",
-////               MomComp_ElecMom_2N_Reco_Data_FolderData, "P_e_pFDpCD_FD_2N", "P_e_nFDpCD_FD_2N", "P_e_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "1N", "TH1D", "FD", "FD proton momentum APID&PS", "Leading FD neutron momentum APID&NC",
-//               "Leading FD neutron momentum", MomComp_NucMom_1N_Reco_Data_FolderData, "P_pFD_APIDandPS_1p_FD", "P_nFD_APIDandNS_1n_FD", "P_nucFD_FSR", 1);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "FD proton momentum", "FD neutron momentum", "FD neutron momentum",
-//               MomComp_NucMom_2N_Reco_Data_FolderData, "P_pFD_pFDpCD_FD", "P_nFD_nFDpCD_FD", "P_nucFD_FSR_2N", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "CD proton momentum", "CD proton momentum", "CD proton momentum",
-//               MomComp_NucMom_2N_Reco_Data_FolderData, "P_pCD_pFDpCD_CD", "P_pCD_nFDpCD_CD", "P_pCD_FSR_2N", 2);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "P_{pFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD} (nFDpCD)",
-//               MomComp_NucMom_2N_Reco_Data_FolderData, "P_pFD_vs_P_pCD_pFDpCD", "P_nFD_vs_P_pCD_nFDpCD", "P_nucFD_vs_P_nucCD_FSR_2N", 3);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Leading proton momentum", "Leading nucleon momentum",
-//               "Leading nucleon momentum", MomComp_NucMom_2N_Reco_Data_FolderData, "P_pL_pFDpCD_FD", "P_nL_nFDpCD_FD", "P_nucL_FSR_2N", 4);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Recoil proton momentum", "Recoil nucleon momentum",
-//               "Recoil nucleon momentum", MomComp_NucMom_2N_Reco_Data_FolderData, "P_pR_pFDpCD_FD", "P_nR_nFDpCD_FD", "P_nucR_FSR_2N", 5);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "P_{pL} vs. P_{pR}", "P_{nL} vs. P_{nR}", "P_{nL} vs. P_{nR} (nFDpCD)",
-//               MomComp_NucMom_2N_Reco_Data_FolderData, "P_pL_vs_P_pR_pFDpCD", "P_nL_vs_P_nR_nFDpCD", "P_nucL_vs_P_nucR_FSR_2N", 6);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#vec{P}_{tot}-#vec{q} distribution", "#vec{P}_{tot}-#vec{q} distribution",
-//               "#vec{P}_{tot}-#vec{q} distribution", MomComp_P_miss_Data_FolderData, "P_miss_pFDpCD", "P_miss_nFDpCD", "P_miss_FSR_2N", 1);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Total nucleon momentum (3-vector)", "Total nucleon momentum (3-vector)",
-//               "Total nucleon 3-momentum", MomComp_TotAndRel_Mom_Data_FolderData, "P_3rel_pFDpCD", "P_3rel_nFDpCD", "P_rel_FSR_2N", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Relative nucleon momentum (3-vector)",
-//               "Relative nucleon momentum (3-vector)", "Relative nucleon 3-momentum", MomComp_TotAndRel_Mom_Data_FolderData, "P_3rel_pFDpCD", "P_3rel_nFDpCD", "P_rel_FSR_2N",
-//               2);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|",
-//               "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", MomComp_TotAndRel_Mom_Data_FolderData, "P_tot_vs_P_rel_pFDpCD", "P_tot_vs_P_rel_nFDpCD", "P_tot_vs_P_rel_FSR_2N", 3);
-//    //</editor-fold>
-//
-//    //<editor-fold desc="02_Inv_mass_comp_Sim">
-//    FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "W distribution (All Int., pFDpCD)",
-//                    "W distribution (All Int., nFDpCD)", "W distribution (All Int., nFDpCD)", InvMassComp_Sim_FolderData, "W_All_Int_pFDpCD", "W_All_Int_nFDpCD", "W_FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Q^{2} (pFDpCD, FD)", "Q^{2} (nFDpCD, FD)",
-//               "Q^{2} (nFDpCD, FD)", InvMassComp_Sim_FolderData, "Q2_pFDpCD", "Q2_nFDpCD", "Q2_FSR", 2);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "Q^{2} vs. W (All Int., pFDpCD)", "Q^{2} vs. W (All Int., nFDpCD)",
-//               "Q^{2} vs. W (All Int., nFDpCD)", InvMassComp_Sim_FolderData, "Q2_VS_W_pFDpCD", "Q2_VS_W_nFDpCD", "Q2_VS_W_FSR_2N", 3);
-//    //</editor-fold>
-//
-//    //<editor-fold desc="02_Inv_mass_comp_Data">
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "W distribution (All Int., pFDpCD)", "W distribution (All Int., nFDpCD)",
-//               "W distribution (All Int., nFDpCD)", InvMassComp_Data_FolderData, "W_All_Int_pFDpCD", "W_All_Int_nFDpCD", "W_FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Q^{2} (pFDpCD, FD)", "Q^{2} (nFDpCD, FD)", "Q^{2} (nFDpCD, FD)",
-//               InvMassComp_Data_FolderData, "Q2_pFDpCD", "Q2_nFDpCD", "Q2_FSR", 2);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "Q^{2} vs. W (All Int., pFDpCD)", "Q^{2} vs. W (All Int., nFDpCD)",
-//               "Q^{2} vs. W (All Int., nFDpCD)", InvMassComp_Data_FolderData, "Q2_VS_W_pFDpCD", "Q2_VS_W_nFDpCD", "Q2_VS_W_FSR_2N", 3);
-//    //</editor-fold>
-//
-//    //<editor-fold desc="03_Angular_dist_comp_Sim">
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#theta_{e} (All Int., pFDpCD, FD)",
-//               "#theta_{e} (All Int., nFDpCD, FD)",
-//               "#theta_{e} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_e_All_Int_pFDpCD_FD", "Theta_e_All_Int_nFDpCD_FD",
-//               "Theta_e_FSR_pFDpCD_FD", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. P_{e} (All Int., pFDpCD)",
-//               "#theta_{e} vs. P_{e} (All Int., nFDpCD)", "#theta_{e} vs. P_{e} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_e_VS_P_e_pFDpCD",
-//               "Theta_e_VS_P_e_nFDpCD", "Theta_e_VS_P_e_FSR_2N", 2);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. W (All Int., pFDpCD)", "#theta_{e} vs. W (All Int., nFDpCD)",
-//               "#theta_{e} vs. W (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_e_VS_W_pFDpCD", "Theta_e_VS_W_nFDpCD", "Theta_e_VS_W_FSR_2N", 3);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{e} vs. P_{e} (All Int., pFDpCD)",
-//               "#phi_{e} vs. P_{e} (All Int., nFDpCD)", "#phi_{e} vs. P_{e} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Phi_e_VS_P_e_pFDpCD",
-//               "Phi_e_VS_P_e_nFDpCD", "Phi_e_VS_P_e_FSR_2N", 4);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{e} vs. W (All Int., pFDpCD)", "#phi_{e} vs. W (All Int., nFDpCD)",
-//               "#phi_{e} vs. W (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Phi_e_VS_W_pFDpCD", "Phi_e_VS_W_nFDpCD", "Phi_e_VS_W_FSR_2N", 5);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#theta_{pFD} (All Int., pFDpCD)", "#theta_{nFD} (All Int., nFDpCD)",
-//               "#theta_{nFD} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_pFD_All_Int_pFDpCD_FD", "Theta_nFD_All_Int_nFDpCD_FD",
-//               "Theta_nucFD_FSR_pFDpCD_FD", 6);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
-//               "#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", "#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData,
-//               "Theta_pFD_VS_P_pFD_pFDpCD", "Theta_nFD_VS_P_nFD_nFDpCD", "Theta_nucFD_VS_P_pFD_FSR_2N", 7);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{pFD} vs. W (All Int., pFDpCD, FD)",
-//               "#theta_{nFD} vs. W (All Int., nFDpCD, FD)", "#theta_{nFD} vs. W (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_pFD_VS_W_pFDpCD",
-//               "Theta_nFD_VS_W_nFDpCD", "Theta_nucFD_VS_W_FSR_2N", 8);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
-//               "#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", "#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData,
-//               "phi_pFD_VS_P_pFD_pFDpCD", "phi_nFD_VS_P_nFD_nFDpCD", "phi_nucFD_VS_P_pFD_FSR_2N", 9);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pFD} vs. W (All Int., pFDpCD, FD)",
-//               "#phi_{nFD} vs. W (All Int., nFDpCD, FD)", "#phi_{nFD} vs. W (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData, "phi_pFD_VS_W_pFDpCD",
-//               "phi_nFD_VS_W_nFDpCD", "phi_nucFD_VS_W_FSR_2N", 10);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{pCD} (All Int., pFDpCD)", "#theta_{pCD} (All Int., nFDpCD)",
-//               "#theta_{pCD} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_pCD_All_Int_pFDpCD_CD", "Theta_pCD_All_Int_nFDpCD_CD",
-//               "Theta_nucCD_FSR_pFDpCD_CD", 11);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
-//               "#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData,
-//               "Theta_pCD_VS_P_pCD_pFDpCD", "Theta_pCD_VS_P_pCD_nFDpCD", "Theta_pCD_VS_P_pCD_FSR_2N", 12);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{pCD} vs. W (All Int., pFDpCD, CD)",
-//               "#theta_{pCD} vs. W (All Int., nFDpCD, CD)", "#theta_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_pCD_VS_W_pFDpCD",
-//               "Theta_pCD_VS_W_nFDpCD", "Theta_pCD_VS_W_FSR_2N", 13);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
-//               "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData,
-//               "phi_pCD_VS_P_pCD_pFDpCD", "phi_pCD_VS_P_pCD_nFDpCD", "phi_pCD_VS_P_pCD_FSR_2N", 14);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. W (All Int., pFDpCD, CD)",
-//               "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData, "phi_pCD_VS_W_pFDpCD",
-//               "phi_pCD_VS_W_nFDpCD", "phi_pCD_VS_W_FSR_2N", 15);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. #phi_{e} (All Int., pFDpCD, FD)",
-//               "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD)", "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData,
-//               "Theta_e_VS_Phi_e_pFDpCD", "Theta_e_VS_Phi_e_nFDpCD", "Theta_e_VS_Phi_e_FSR_2N", 16);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
-//               "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData,
-//               "phi_pCD_VS_P_pCD_pFDpCD", "phi_pCD_VS_P_pCD_nFDpCD", "phi_pCD_VS_P_pCD_FSR_2N", 17);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. W (All Int., pFDpCD, CD)",
-//               "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData, "phi_pCD_VS_W_pFDpCD",
-//               "phi_pCD_VS_W_nFDpCD", "phi_pCD_VS_W_FSR_2N", 18);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{tot} (All Int., pFDpCD)", "#theta_{tot} (All Int., nFDpCD)",
-//               "theta_tot FSRatio ()", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_tot_All_Int_pFDpCD", "Theta_tot_All_Int_nFDpCD", "Theta_tot_FSR_pFDpCD", 19);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{rel} (All Int., pFDpCD)", "#theta_{rel} (All Int., nFDpCD)",
-//               "theta_rel FSRatio ()", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_rel_All_Int_pFDpCD", "Theta_rel_All_Int_nFDpCD", "Theta_rel_FSR_pFDpCD", 20);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., pFDpCD)",
-//               "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)", "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_P_e_and_P_tot_Sim_FolderData, "Theta__P_e_and_P_tot__All_Int_pFDpCD", "Theta__P_e_and_P_tot__All_Int_nFDpCD",
-//               "Theta__P_e_and_P_tot__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)", "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_P_e_and_P_tot_Sim_FolderData, "Theta_p_e_p_tot_vs_W_pFDpCD", "Theta_p_e_p_tot_vs_W_nFDpCD", "Theta_p_e_p_tot_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{q},#vec{P}_{tot}} (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_tot_Sim_FolderData,
-//               "Theta__q_and_P_tot__All_Int_pFDpCD", "Theta__q_and_P_tot__All_Int_nFDpCD", "Theta__q_and_P_tot__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_q_and_P_tot_Sim_FolderData, "Theta_q_p_tot_vs_W_pFDpCD", "Theta_q_p_tot_vs_W_nFDpCD", "Theta_q_p_tot_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
-//               "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_P_L_minus_q_and_P_R_Sim_FolderData, "Theta__P_L_minus_q_and_P_R__All_Int_pFDpCD", "Theta__P_L_minus_q_and_P_R__All_Int_nFDpCD",
-//               "Theta__P_L_minus_q_and_P_R__FSR", 1);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{q},#vec{P}_{pL}} (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nL}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nL}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_L_Sim_FolderData,
-//               "Theta__q_and_P_L__All_Int_pFDpCD", "Theta__q_and_P_L__All_Int_nFDpCD", "Theta__q_and_P_L__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pL}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_q_and_P_L_Sim_FolderData, "Theta_q_pL_vs_W_pFDpCD", "Theta_q_nL_vs_W_nFDpCD", "Theta_q_nucL_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_R_Sim_FolderData,
-//               "Theta__q_and_P_R__All_Int_pFDpCD", "Theta__q_and_P_R__All_Int_nFDpCD", "Theta__q_and_P_R__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pR}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_q_and_P_R_Sim_FolderData, "Theta_q_pR_vs_W_pFDpCD", "Theta_q_nR_vs_W_nFDpCD", "Theta_q_nucR_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#theta_{#vec{q},#vec{P}_{pFD}} (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nFD}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pFD}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_nucFD_Sim_FolderData,
-//               "Theta__q_and_P_pFD__All_Int_pFDpCD", "Theta__q_and_P_nFD__All_Int_nFDpCD", "Theta__q_and_P_nucFD__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pFD}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nFD}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nFD}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_q_and_P_nucFD_Sim_FolderData, "Theta_q_pFD_vs_W_pFDpCD", "Theta_q_nFD_vs_W_nFDpCD", "Theta_q_nucFD_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_nucCD_Sim_FolderData,
-//               "Theta__q_and_P_pCD__All_Int_pFDpCD", "Theta__q_and_P_pCD__All_Int_nFDpCD", "Theta__q_and_P_nucCD__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_q_and_P_nucCD_Sim_FolderData, "Theta_q_pCD_vs_W_pFDpCD", "Theta_q_pCD_vs_W_nFDpCD", "Theta_q_nucCD_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{pFD,pCD} (All Int., pFDpCD)",
-//               "#theta_{nFD,pCD} (All Int., nFDpCD)",
-//               "#theta_{nFD,pCD} (All Int., nFDpCD)", AngDistComp_Opening_Ang_P_FD_and_P_CD_Sim_FolderData, "Theta__Theta_pFD_pCD__All_Int_pFDpCD",
-//               "Theta__Theta_nFD_pCD__All_Int_nFDpCD", "Theta__Theta_nucFD_nucCD__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{pFD,pCD} vs. W (All Int., pFDpCD)",
-//               "#theta_{nFD,pCD} vs. W (All Int., nFDpCD)", "#theta_{nFD,pCD} vs. W (All Int., nFDpCD)", AngDistComp_Opening_Ang_P_FD_and_P_CD_Sim_FolderData,
-//               "Theta_pFD_pCD_vs_W_pFDpCD", "Theta_nFD_pCD_vs_W_nFDpCD", "Theta_nucFD_nucCD_vs_W_FSR_2N", 2);
-//    //</editor-fold>
-//
-//    //<editor-fold desc="03_Angular_dist_comp_Data">
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#theta_{e} (All Int., pFDpCD, FD)", "#theta_{e} (All Int., nFDpCD, FD)",
-//               "#theta_{e} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_e_All_Int_pFDpCD_FD", "Theta_e_All_Int_nFDpCD_FD",
-//               "Theta_e_FSR_pFDpCD_FD", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. P_{e} (All Int., pFDpCD)",
-//               "#theta_{e} vs. P_{e} (All Int., nFDpCD)", "#theta_{e} vs. P_{e} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_e_VS_P_e_pFDpCD",
-//               "Theta_e_VS_P_e_nFDpCD", "Theta_e_VS_P_e_FSR_2N", 2);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. W (All Int., pFDpCD)", "#theta_{e} vs. W (All Int., nFDpCD)",
-//               "#theta_{e} vs. W (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_e_VS_W_pFDpCD", "Theta_e_VS_W_nFDpCD", "Theta_e_VS_W_FSR_2N", 3);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{e} vs. P_{e} (All Int., pFDpCD)",
-//               "#phi_{e} vs. P_{e} (All Int., nFDpCD)", "#phi_{e} vs. P_{e} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Phi_e_VS_P_e_pFDpCD",
-//               "Phi_e_VS_P_e_nFDpCD", "Phi_e_VS_P_e_FSR_2N", 4);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{e} vs. W (All Int., pFDpCD)", "#phi_{e} vs. W (All Int., nFDpCD)",
-//               "#phi_{e} vs. W (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Phi_e_VS_W_pFDpCD", "Phi_e_VS_W_nFDpCD", "Phi_e_VS_W_FSR_2N", 5);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#theta_{pFD} (All Int., pFDpCD)", "#theta_{nFD} (All Int., nFDpCD)",
-//               "#theta_{nFD} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_pFD_All_Int_pFDpCD_FD", "Theta_nFD_All_Int_nFDpCD_FD",
-//               "Theta_nucFD_FSR_pFDpCD_FD", 6);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
-//               "#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", "#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData,
-//               "Theta_pFD_VS_P_pFD_pFDpCD", "Theta_nFD_VS_P_nFD_nFDpCD", "Theta_nucFD_VS_P_pFD_FSR_2N", 7);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{pFD} vs. W (All Int., pFDpCD, FD)",
-//               "#theta_{nFD} vs. W (All Int., nFDpCD, FD)", "#theta_{nFD} vs. W (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_pFD_VS_W_pFDpCD",
-//               "Theta_nFD_VS_W_nFDpCD", "Theta_nucFD_VS_W_FSR_2N", 8);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
-//               "#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", "#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData,
-//               "phi_pFD_VS_P_pFD_pFDpCD", "phi_nFD_VS_P_nFD_nFDpCD", "phi_nucFD_VS_P_pFD_FSR_2N", 9);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pFD} vs. W (All Int., pFDpCD, FD)",
-//               "#phi_{nFD} vs. W (All Int., nFDpCD, FD)", "#phi_{nFD} vs. W (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData, "phi_pFD_VS_W_pFDpCD",
-//               "phi_nFD_VS_W_nFDpCD", "phi_nucFD_VS_W_FSR_2N", 10);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{pCD} (All Int., pFDpCD)", "#theta_{pCD} (All Int., nFDpCD)",
-//               "#theta_{pCD} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_pCD_All_Int_pFDpCD_CD", "Theta_pCD_All_Int_nFDpCD_CD",
-//               "Theta_nucCD_FSR_pFDpCD_CD", 11);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
-//               "#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData,
-//               "Theta_pCD_VS_P_pCD_pFDpCD", "Theta_pCD_VS_P_pCD_nFDpCD", "Theta_pCD_VS_P_pCD_FSR_2N", 12);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{pCD} vs. W (All Int., pFDpCD, CD)",
-//               "#theta_{pCD} vs. W (All Int., nFDpCD, CD)", "#theta_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_pCD_VS_W_pFDpCD",
-//               "Theta_pCD_VS_W_nFDpCD", "Theta_pCD_VS_W_FSR_2N", 13);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
-//               "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData,
-//               "phi_pCD_VS_P_pCD_pFDpCD", "phi_pCD_VS_P_pCD_nFDpCD", "phi_pCD_VS_P_pCD_FSR_2N", 14);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. W (All Int., pFDpCD, CD)",
-//               "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData, "phi_pCD_VS_W_pFDpCD",
-//               "phi_pCD_VS_W_nFDpCD", "phi_pCD_VS_W_FSR_2N", 15);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. #phi_{e} (All Int., pFDpCD, FD)",
-//               "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD)", "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData,
-//               "Theta_e_VS_Phi_e_pFDpCD", "Theta_e_VS_Phi_e_nFDpCD", "Theta_e_VS_Phi_e_FSR_2N", 16);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
-//               "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData,
-//               "phi_pCD_VS_P_pCD_pFDpCD", "phi_pCD_VS_P_pCD_nFDpCD", "phi_pCD_VS_P_pCD_FSR_2N", 17);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. W (All Int., pFDpCD, CD)",
-//               "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData, "phi_pCD_VS_W_pFDpCD",
-//               "phi_pCD_VS_W_nFDpCD", "phi_pCD_VS_W_FSR_2N", 18);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{tot} (All Int., pFDpCD)", "#theta_{tot} (All Int., nFDpCD)",
-//               "theta_tot FSRatio ()", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_tot_All_Int_pFDpCD", "Theta_tot_All_Int_nFDpCD", "Theta_tot_FSR_pFDpCD", 19);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{rel} (All Int., pFDpCD)", "#theta_{rel} (All Int., nFDpCD)",
-//               "theta_rel FSRatio ()", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_rel_All_Int_pFDpCD", "Theta_rel_All_Int_nFDpCD", "Theta_rel_FSR_pFDpCD", 20);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., pFDpCD)",
-//               "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)", "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_P_e_and_P_tot_Data_FolderData, "Theta__P_e_and_P_tot__All_Int_pFDpCD", "Theta__P_e_and_P_tot__All_Int_nFDpCD",
-//               "Theta__P_e_and_P_tot__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)", "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_P_e_and_P_tot_Data_FolderData, "Theta_p_e_p_tot_vs_W_pFDpCD", "Theta_p_e_p_tot_vs_W_nFDpCD", "Theta_p_e_p_tot_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{q},#vec{P}_{tot}} (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_tot_Data_FolderData,
-//               "Theta__q_and_P_tot__All_Int_pFDpCD", "Theta__q_and_P_tot__All_Int_nFDpCD", "Theta__q_and_P_tot__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_q_and_P_tot_Data_FolderData, "Theta_q_p_tot_vs_W_pFDpCD", "Theta_q_p_tot_vs_W_nFDpCD", "Theta_q_p_tot_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
-//               "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_P_L_minus_q_and_P_R_Data_FolderData, "Theta__P_L_minus_q_and_P_R__All_Int_pFDpCD", "Theta__P_L_minus_q_and_P_R__All_Int_nFDpCD",
-//               "Theta__P_L_minus_q_and_P_R__FSR", 1);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{q},#vec{P}_{pL}} (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nL}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nL}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_L_Data_FolderData,
-//               "Theta__q_and_P_L__All_Int_pFDpCD", "Theta__q_and_P_L__All_Int_nFDpCD", "Theta__q_and_P_L__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pL}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_q_and_P_L_Data_FolderData, "Theta_q_pL_vs_W_pFDpCD", "Theta_q_nL_vs_W_nFDpCD", "Theta_q_nucL_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_R_Data_FolderData,
-//               "Theta__q_and_P_R__All_Int_pFDpCD", "Theta__q_and_P_R__All_Int_nFDpCD", "Theta__q_and_P_R__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pR}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_q_and_P_R_Data_FolderData, "Theta_q_pR_vs_W_pFDpCD", "Theta_q_nR_vs_W_nFDpCD", "Theta_q_nucR_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#theta_{#vec{q},#vec{P}_{pFD}} (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nFD}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pFD}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_nucFD_Data_FolderData,
-//               "Theta__q_and_P_pFD__All_Int_pFDpCD", "Theta__q_and_P_nFD__All_Int_nFDpCD", "Theta__q_and_P_nucFD__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pFD}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{nFD}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nFD}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_q_and_P_nucFD_Data_FolderData, "Theta_q_pFD_vs_W_pFDpCD", "Theta_q_nFD_vs_W_nFDpCD", "Theta_q_nucFD_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_nucCD_Data_FolderData,
-//               "Theta__q_and_P_pCD__All_Int_pFDpCD", "Theta__q_and_P_pCD__All_Int_nFDpCD", "Theta__q_and_P_nucCD__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., pFDpCD)",
-//               "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., nFDpCD)",
-//               AngDistComp_Opening_Ang_q_and_P_nucCD_Data_FolderData, "Theta_q_pCD_vs_W_pFDpCD", "Theta_q_pCD_vs_W_nFDpCD", "Theta_q_nucCD_vs_W_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{pFD,pCD} (All Int., pFDpCD)", "#theta_{nFD,pCD} (All Int., nFDpCD)",
-//               "#theta_{nFD,pCD} (All Int., nFDpCD)", AngDistComp_Opening_Ang_P_FD_and_P_CD_Data_FolderData, "Theta__Theta_pFD_pCD__All_Int_pFDpCD",
-//               "Theta__Theta_nFD_pCD__All_Int_nFDpCD", "Theta__Theta_nucFD_nucCD__FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{pFD,pCD} vs. W (All Int., pFDpCD)",
-//               "#theta_{nFD,pCD} vs. W (All Int., nFDpCD)", "#theta_{nFD,pCD} vs. W (All Int., nFDpCD)", AngDistComp_Opening_Ang_P_FD_and_P_CD_Data_FolderData,
-//               "Theta_pFD_pCD_vs_W_pFDpCD", "Theta_nFD_pCD_vs_W_nFDpCD", "Theta_nucFD_nucCD_vs_W_FSR_2N", 2);
-//    //</editor-fold>
-//
-//    //<editor-fold desc="04_Energy_dist_comp_Sim">
-//    FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "E_{e} (All Int., pFDpCD)", "E_{e} (All Int., nFDpCD)",
-//                    "E_{e} (All Int., nFDpCD)", EnergyComp_E_e_Sim_FolderData, "E_e_All_Int_pFDpCD", "E_e_All_Int_nFDpCD", "E_e_FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "E_{e} vs. #theta_{e} (All Int., pFDpCD)",
-//               "E_{e} vs. #theta_{e} (All Int., nFDpCD)", "E_{e} vs. #theta_{e} (All Int., nFDpCD)", EnergyComp_E_e_Sim_FolderData, "E_e_VS_Theta_e_All_Int_pFDpCD",
-//               "E_e_VS_Theta_e_All_Int_nFDpCD", "E_e_VS_Theta_e_All_Int_FSR_2N", 2);
-//
-//    FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#omega around #theta_{e} = 15#circ (All Int., pFDpCD)",
-//                    "#omega around #theta_{e} = 15#circ (All Int., nFDpCD)", "#omega around #theta_{e} = 15#circ (All Int., nFDpCD)", EnergyComp_Omega_Sim_FolderData,
-//                    "Omega_15_All_Int_pFDpCD", "Omega_15_All_Int_nFDpCD", "Omega_15_FSR", 1);
-//
-//    FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "E_{cal} reco. (All Int., pFDpCD)",
-//                    "E_{cal} reco. (All Int., nFDpCD)",
-//                    "E_{cal} reco. (All Int., nFDpCD)", EnergyComp_E_cal_Sim_FolderData, "E_cal_All_Int_pFDpCD", "E_cal_All_Int_nFDpCD", "E_cal_FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD)",
-//               "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)", "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)", EnergyComp_E_cal_Sim_FolderData, "Ecal_vs_dP_T_tot_pFDpCD",
-//               "Ecal_vs_dP_T_tot_nFDpCD", "Ecal_vs_dP_T_tot_FSR_2N", 2);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
-//               "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", EnergyComp_E_cal_Sim_FolderData,
-//               "Ecal_vs_dAlpha_T_tot_pFDpCD", "Ecal_vs_dAlpha_T_tot_nFDpCD", "Ecal_vs_dAlpha_T_tot_FSR_2N", 3);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. W (All Int., pFDpCD)", "E_{cal} vs. W (All Int., nFDpCD)",
-//               "E_{cal} vs. W (All Int., nFDpCD)", EnergyComp_E_cal_Sim_FolderData, "Ecal_vs_W_pFDpCD", "Ecal_vs_W_nFDpCD", "Ecal_vs_W_FSR_2N", 4);
-//    //</editor-fold>
-//
-//    //<editor-fold desc="04_Energy_dist_comp_Data">
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "E_{e} (All Int., pFDpCD)", "E_{e} (All Int., nFDpCD)",
-//               "E_{e} (All Int., nFDpCD)", EnergyComp_E_e_Data_FolderData, "E_e_All_Int_pFDpCD", "E_e_All_Int_nFDpCD", "E_e_FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "E_{e} vs. #theta_{e} (All Int., pFDpCD)",
-//               "E_{e} vs. #theta_{e} (All Int., nFDpCD)", "E_{e} vs. #theta_{e} (All Int., nFDpCD)", EnergyComp_E_e_Data_FolderData, "E_e_VS_Theta_e_All_Int_pFDpCD",
-//               "E_e_VS_Theta_e_All_Int_nFDpCD", "E_e_VS_Theta_e_All_Int_FSR_2N", 2);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#omega around #theta_{e} = 15#circ (All Int., pFDpCD)",
-//               "#omega around #theta_{e} = 15#circ (All Int., nFDpCD)", "#omega around #theta_{e} = 15#circ (All Int., nFDpCD)", EnergyComp_Omega_Data_FolderData,
-//               "Omega_15_All_Int_pFDpCD", "Omega_15_All_Int_nFDpCD", "Omega_15_FSR", 1);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "E_{cal} reco. (All Int., pFDpCD)", "E_{cal} reco. (All Int., nFDpCD)",
-//               "E_{cal} reco. (All Int., nFDpCD)", EnergyComp_E_cal_Data_FolderData, "E_cal_All_Int_pFDpCD", "E_cal_All_Int_nFDpCD", "E_cal_FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD)",
-//               "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)", "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)", EnergyComp_E_cal_Data_FolderData, "Ecal_vs_dP_T_tot_pFDpCD",
-//               "Ecal_vs_dP_T_tot_nFDpCD", "Ecal_vs_dP_T_tot_FSR_2N", 2);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
-//               "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", EnergyComp_E_cal_Data_FolderData,
-//               "Ecal_vs_dAlpha_T_tot_pFDpCD", "Ecal_vs_dAlpha_T_tot_nFDpCD", "Ecal_vs_dAlpha_T_tot_FSR_2N", 3);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. W (All Int., pFDpCD)", "E_{cal} vs. W (All Int., nFDpCD)",
-//               "E_{cal} vs. W (All Int., nFDpCD)", EnergyComp_E_cal_Data_FolderData, "Ecal_vs_W_pFDpCD", "Ecal_vs_W_nFDpCD", "Ecal_vs_W_FSR_2N", 4);
-//
-//    HistPlotter2D(Canv, MScThesisPlots, Final_wSaC_Data, "E_{cal} vs. #theta_{pCD} (All Int., nFDpCD)", SampleName,
-//                  EnergyComp_E_cal_Data_FolderData, "05_Ecal_vs_pCD_nFDpCD");
-//    //</editor-fold>
-//
-//    //<editor-fold desc="05_TKI_comp_Sim">
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#deltaP_{T,tot} (pFDpCD)", "#deltaP_{T,tot} (nFDpCD)",
-//               "#deltaP_{T,tot} (nFDpCD)", TKIComp_dP_T_Sim_FolderData, "dP_T_pFDpCD", "dP_T_nFDpCD", "dP_T_FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#deltaP_{T,tot} vs. W (All Int., pFDpCD)",
-//               "#deltaP_{T,tot} vs. W (All Int., nFDpCD)", "#deltaP_{T,tot} vs. W (All Int., nFDpCD)", TKIComp_dP_T_Sim_FolderData, "dP_T_tot_vs_W_pFDpCD",
-//               "dP_T_tot_vs_W_nFDpCD", "dP_T_tot_vs_W_FSR_2N", 3);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#delta#alpha_{T,tot} (pFDpCD)", "#delta#alpha_{T,tot} (nFDpCD)",
-//               "#delta#alpha_{T,tot} (nFDpCD)", TKIComp_dAlpha_T_Sim_FolderData, "dAlpha_T_pFDpCD", "dAlpha_T_nFDpCD", "dAlpha_T_FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#delta#alpha_{T,tot} vs. W (All Int., pFDpCD)",
-//               "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)", "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)", TKIComp_dAlpha_T_Sim_FolderData, "dAlpha_T_tot_vs_W_pFDpCD",
-//               "dAlpha_T_tot_vs_W_nFDpCD", "dAlpha_T_tot_vs_W_FSR_2N", 3);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
-//               "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)",
-//               TKIComp_dP_T_vs_dAlpha_T_Sim_FolderData, "dP_T_tot_vs_dAlpha_T_tot_pFDpCD", "dP_T_tot_vs_dAlpha_T_tot_nFDpCD", "dP_T_tot_vs_dAlpha_T_tot_FSR_2N", 1);
-//    //</editor-fold>
-//
-//    //<editor-fold desc="05_TKI_comp_Data">
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#deltaP_{T,tot} (pFDpCD)", "#deltaP_{T,tot} (nFDpCD)",
-//               "#deltaP_{T,tot} (nFDpCD)", TKIComp_dP_T_Data_FolderData, "dP_T_pFDpCD", "dP_T_nFDpCD", "dP_T_FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#deltaP_{T,tot} vs. W (All Int., pFDpCD)",
-//               "#deltaP_{T,tot} vs. W (All Int., nFDpCD)", "#deltaP_{T,tot} vs. W (All Int., nFDpCD)", TKIComp_dP_T_Data_FolderData, "dP_T_tot_vs_W_pFDpCD",
-//               "dP_T_tot_vs_W_nFDpCD", "dP_T_tot_vs_W_FSR_2N", 3);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#delta#alpha_{T,tot} (pFDpCD)", "#delta#alpha_{T,tot} (nFDpCD)",
-//               "#delta#alpha_{T,tot} (nFDpCD)", TKIComp_dAlpha_T_Data_FolderData, "dAlpha_T_pFDpCD", "dAlpha_T_nFDpCD", "dAlpha_T_FSR", 1);
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#delta#alpha_{T,tot} vs. W (All Int., pFDpCD)",
-//               "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)", "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)", TKIComp_dAlpha_T_Data_FolderData, "dAlpha_T_tot_vs_W_pFDpCD",
-//               "dAlpha_T_tot_vs_W_nFDpCD", "dAlpha_T_tot_vs_W_FSR_2N", 3);
-//
-//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
-//               "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)",
-//               TKIComp_dP_T_vs_dAlpha_T_Data_FolderData, "dP_T_tot_vs_dAlpha_T_tot_pFDpCD", "dP_T_tot_vs_dAlpha_T_tot_nFDpCD", "dP_T_tot_vs_dAlpha_T_tot_FSR_2N", 1);
-//    //</editor-fold>
-//
-//    //</editor-fold>
-//
-//    //</editor-fold>
+
+    //<editor-fold desc="Final_State_Comparison">
+
+    //<editor-fold desc="01_Momentum_comp_Sim">
+    HistPlotter1D(Canv, MScThesisPlots, Final_noSaC_Sim, "FD proton momentum APID (1p, FD)", SampleName, MomComp_BSaC_1N_Sim_FolderData, "01_P_pFD_APID_1p_FD");
+    HistPlotter1D(Canv, MScThesisPlots, Final_noSaC_Sim, "Leading FD neutron momentum APID (1n, FD)", SampleName, MomComp_BSaC_1N_Sim_FolderData, "01_P_nFD_APID_1n_FD");
+
+    HistPlotter1D(Canv, MScThesisPlots, Final_wSaC_Sim, "FD proton momentum APID&PS (1p, FD)", SampleName, MomComp_ASaC_1N_Sim_FolderData, "01_P_pFD_APIDandPS_1p_FD");
+    HistPlotter1D(Canv, MScThesisPlots, Final_wSaC_Sim, "Leading FD neutron momentum APID&NC (1n, FD)", SampleName, MomComp_ASaC_1N_Sim_FolderData,
+                  "01_P_nFD_APIDandNC_1n_FD");
+
+//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "1N", "TH1D", "FD", "Electron momentum APID", "Electron momentum APID", "Electron momentum",
+//               MomComp_ElecMom_2N_Reco_Sim_FolderData, "P_e_1p_FD_1N", "P_e_1n_FD_1N", "P_e_FSR_1N", 1);
+//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH1D", "FD", "Electron momentum APID", "Electron momentum APID", "Electron momentum",
+//               MomComp_ElecMom_2N_Reco_Sim_FolderData, "P_e_pFDpCD_FD_2N", "P_e_nFDpCD_FD_2N", "P_e_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "1N", "FD", "FD proton momentum APID&PS", "Leading FD neutron momentum APID&NC",
+               "Leading FD neutron momentum", MomComp_NucMom_1N_Reco_Sim_FolderData, "P_pFD_APIDandPS_1p_FD", "P_nFD_APIDandNS_1n_FD", "P_nucFD_FSR", 1);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "FD proton momentum", "FD neutron momentum", "FD neutron momentum",
+               MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pFD_pFDpCD_FD", "P_nFD_nFDpCD_FD", "P_nucFD_FSR_2N", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "CD proton momentum", "CD proton momentum", "CD proton momentum",
+               MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pCD_pFDpCD_CD", "P_pCD_nFDpCD_CD", "P_pCD_FSR_2N", 2);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "P_{pFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD} (nFDpCD)",
+               MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pFD_vs_P_pCD_pFDpCD", "P_nFD_vs_P_pCD_nFDpCD", "P_nucFD_vs_P_nucCD_FSR_2N", 3);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Leading proton momentum", "Leading nucleon momentum",
+               "Leading nucleon momentum", MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pL_pFDpCD_FD", "P_nL_nFDpCD_FD", "P_nucL_FSR_2N", 4);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Recoil proton momentum", "Recoil nucleon momentum",
+               "Recoil nucleon momentum", MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pR_pFDpCD_FD", "P_nR_nFDpCD_FD", "P_nucR_FSR_2N", 5);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "P_{pL} vs. P_{pR}", "P_{nL} vs. P_{nR}", "P_{nL} vs. P_{nR} (nFDpCD)",
+               MomComp_NucMom_2N_Reco_Sim_FolderData, "P_pL_vs_P_pR_pFDpCD", "P_nL_vs_P_nR_nFDpCD", "P_nucL_vs_P_nucR_FSR_2N", 6);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#vec{P}_{tot}-#vec{q} distribution",
+               "#vec{P}_{tot}-#vec{q} distribution", "#vec{P}_{tot}-#vec{q} distribution", MomComp_P_miss_Sim_FolderData, "P_miss_pFDpCD", "P_miss_nFDpCD", "P_miss_FSR_2N",
+               1);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Total nucleon momentum (3-vector)",
+               "Total nucleon momentum (3-vector)", "Total nucleon 3-momentum", MomComp_TotAndRel_Mom_Sim_FolderData, "P_3tot_pFDpCD", "P_3tot_nFDpCD", "P_tot_FSR_2N", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Relative nucleon momentum (3-vector)",
+               "Relative nucleon momentum (3-vector)", "Relative nucleon 3-momentum", MomComp_TotAndRel_Mom_Sim_FolderData, "P_3rel_pFDpCD", "P_3rel_nFDpCD", "P_rel_FSR_2N",
+               2);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|",
+               "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", MomComp_TotAndRel_Mom_Sim_FolderData, "P_tot_vs_P_rel_pFDpCD", "P_tot_vs_P_rel_nFDpCD", "P_tot_vs_P_rel_FSR_2N", 3);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "1N", "TH1D", "FD", "FD TL Proton momentum AC", "FD TL Neutron momentum AC",
+               "FD TL Neutron momentum AC", MomComp_NucMom_1N_TL_Sim_FolderData, "P_pFD_TL_1p", "P_nFD_TL_1n", "P_nucFD_TL_FSR_1N", 1);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH1D", "FD", "FD TL Proton momentum AC", "FD TL Neutron momentum AC",
+               "FD TL Neutron momentum AC", MomComp_NucMom_2N_TL_Sim_FolderData, "P_pFD_TL_pFDpCD", "P_nFD_TL_pFDpCD", "P_nucFD_TL_FSR_2N", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH1D", "CD", "CD TL Proton momentum AC", "CD TL Proton momentum AC",
+               "CD TL Proton momentum AC", MomComp_NucMom_2N_TL_Sim_FolderData, "P_pCD_TL_pFDpCD", "P_pCD_TL_pFDpCD", "P_nucCD_TL_FSR_2N", 2);
+    //</editor-fold>
+
+    //<editor-fold desc="01_Momentum_comp_Data">
+    HistPlotter1D(Canv, MScThesisPlots, Final_noSaC_Data, "FD proton momentum APID (1p, FD)", SampleName, MomComp_BSaC_1N_Data_FolderData, "01_P_pFD_APID_1p_FD");
+    HistPlotter1D(Canv, MScThesisPlots, Final_noSaC_Data, "Leading FD neutron momentum APID (1n, FD)", SampleName, MomComp_BSaC_1N_Data_FolderData, "01_P_nFD_APID_1n_FD");
+
+    HistPlotter1D(Canv, MScThesisPlots, Final_wSaC_Data, "FD proton momentum APID&PS (1p, FD)", SampleName, MomComp_ASaC_1N_Data_FolderData, "01_P_pFD_APIDandPS_1p_FD");
+    HistPlotter1D(Canv, MScThesisPlots, Final_wSaC_Data, "Leading FD neutron momentum APID&NC (1n, FD)", SampleName, MomComp_ASaC_1N_Data_FolderData,
+                  "01_P_nFD_APIDandNC_1n_FD");
+
+//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "1N", "TH1D", "FD", "Electron momentum APID", "Electron momentum APID", "Electron momentum",
+//               MomComp_ElecMom_2N_Reco_Data_FolderData, "P_e_1p_FD_1N", "P_e_1n_FD_1N", "P_e_FSR_1N", 1);
+//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Electron momentum APID", "Electron momentum APID", "Electron momentum",
+//               MomComp_ElecMom_2N_Reco_Data_FolderData, "P_e_pFDpCD_FD_2N", "P_e_nFDpCD_FD_2N", "P_e_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "1N", "TH1D", "FD", "FD proton momentum APID&PS", "Leading FD neutron momentum APID&NC",
+               "Leading FD neutron momentum", MomComp_NucMom_1N_Reco_Data_FolderData, "P_pFD_APIDandPS_1p_FD", "P_nFD_APIDandNS_1n_FD", "P_nucFD_FSR", 1);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "FD proton momentum", "FD neutron momentum", "FD neutron momentum",
+               MomComp_NucMom_2N_Reco_Data_FolderData, "P_pFD_pFDpCD_FD", "P_nFD_nFDpCD_FD", "P_nucFD_FSR_2N", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "CD proton momentum", "CD proton momentum", "CD proton momentum",
+               MomComp_NucMom_2N_Reco_Data_FolderData, "P_pCD_pFDpCD_CD", "P_pCD_nFDpCD_CD", "P_pCD_FSR_2N", 2);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "P_{pFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD} (nFDpCD)",
+               MomComp_NucMom_2N_Reco_Data_FolderData, "P_pFD_vs_P_pCD_pFDpCD", "P_nFD_vs_P_pCD_nFDpCD", "P_nucFD_vs_P_nucCD_FSR_2N", 3);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Leading proton momentum", "Leading nucleon momentum",
+               "Leading nucleon momentum", MomComp_NucMom_2N_Reco_Data_FolderData, "P_pL_pFDpCD_FD", "P_nL_nFDpCD_FD", "P_nucL_FSR_2N", 4);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Recoil proton momentum", "Recoil nucleon momentum",
+               "Recoil nucleon momentum", MomComp_NucMom_2N_Reco_Data_FolderData, "P_pR_pFDpCD_FD", "P_nR_nFDpCD_FD", "P_nucR_FSR_2N", 5);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "P_{pL} vs. P_{pR}", "P_{nL} vs. P_{nR}", "P_{nL} vs. P_{nR} (nFDpCD)",
+               MomComp_NucMom_2N_Reco_Data_FolderData, "P_pL_vs_P_pR_pFDpCD", "P_nL_vs_P_nR_nFDpCD", "P_nucL_vs_P_nucR_FSR_2N", 6);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#vec{P}_{tot}-#vec{q} distribution", "#vec{P}_{tot}-#vec{q} distribution",
+               "#vec{P}_{tot}-#vec{q} distribution", MomComp_P_miss_Data_FolderData, "P_miss_pFDpCD", "P_miss_nFDpCD", "P_miss_FSR_2N", 1);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Total nucleon momentum (3-vector)", "Total nucleon momentum (3-vector)",
+               "Total nucleon 3-momentum", MomComp_TotAndRel_Mom_Data_FolderData, "P_3rel_pFDpCD", "P_3rel_nFDpCD", "P_rel_FSR_2N", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Relative nucleon momentum (3-vector)",
+               "Relative nucleon momentum (3-vector)", "Relative nucleon 3-momentum", MomComp_TotAndRel_Mom_Data_FolderData, "P_3rel_pFDpCD", "P_3rel_nFDpCD", "P_rel_FSR_2N",
+               2);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|",
+               "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", MomComp_TotAndRel_Mom_Data_FolderData, "P_tot_vs_P_rel_pFDpCD", "P_tot_vs_P_rel_nFDpCD", "P_tot_vs_P_rel_FSR_2N", 3);
+    //</editor-fold>
+
+    //<editor-fold desc="02_Inv_mass_comp_Sim">
+    FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "W distribution (All Int., pFDpCD)",
+                    "W distribution (All Int., nFDpCD)", "W distribution (All Int., nFDpCD)", InvMassComp_Sim_FolderData, "W_All_Int_pFDpCD", "W_All_Int_nFDpCD", "W_FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Q^{2} (pFDpCD, FD)", "Q^{2} (nFDpCD, FD)",
+               "Q^{2} (nFDpCD, FD)", InvMassComp_Sim_FolderData, "Q2_pFDpCD", "Q2_nFDpCD", "Q2_FSR", 2);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "Q^{2} vs. W (All Int., pFDpCD)", "Q^{2} vs. W (All Int., nFDpCD)",
+               "Q^{2} vs. W (All Int., nFDpCD)", InvMassComp_Sim_FolderData, "Q2_VS_W_pFDpCD", "Q2_VS_W_nFDpCD", "Q2_VS_W_FSR_2N", 3);
+    //</editor-fold>
+
+    //<editor-fold desc="02_Inv_mass_comp_Data">
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "W distribution (All Int., pFDpCD)", "W distribution (All Int., nFDpCD)",
+               "W distribution (All Int., nFDpCD)", InvMassComp_Data_FolderData, "W_All_Int_pFDpCD", "W_All_Int_nFDpCD", "W_FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "Q^{2} (pFDpCD, FD)", "Q^{2} (nFDpCD, FD)", "Q^{2} (nFDpCD, FD)",
+               InvMassComp_Data_FolderData, "Q2_pFDpCD", "Q2_nFDpCD", "Q2_FSR", 2);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "Q^{2} vs. W (All Int., pFDpCD)", "Q^{2} vs. W (All Int., nFDpCD)",
+               "Q^{2} vs. W (All Int., nFDpCD)", InvMassComp_Data_FolderData, "Q2_VS_W_pFDpCD", "Q2_VS_W_nFDpCD", "Q2_VS_W_FSR_2N", 3);
+    //</editor-fold>
+
+    //<editor-fold desc="03_Angular_dist_comp_Sim">
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#theta_{e} (All Int., pFDpCD, FD)",
+               "#theta_{e} (All Int., nFDpCD, FD)",
+               "#theta_{e} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_e_All_Int_pFDpCD_FD", "Theta_e_All_Int_nFDpCD_FD",
+               "Theta_e_FSR_pFDpCD_FD", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. P_{e} (All Int., pFDpCD)",
+               "#theta_{e} vs. P_{e} (All Int., nFDpCD)", "#theta_{e} vs. P_{e} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_e_VS_P_e_pFDpCD",
+               "Theta_e_VS_P_e_nFDpCD", "Theta_e_VS_P_e_FSR_2N", 2);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. W (All Int., pFDpCD)", "#theta_{e} vs. W (All Int., nFDpCD)",
+               "#theta_{e} vs. W (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_e_VS_W_pFDpCD", "Theta_e_VS_W_nFDpCD", "Theta_e_VS_W_FSR_2N", 3);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{e} vs. P_{e} (All Int., pFDpCD)",
+               "#phi_{e} vs. P_{e} (All Int., nFDpCD)", "#phi_{e} vs. P_{e} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Phi_e_VS_P_e_pFDpCD",
+               "Phi_e_VS_P_e_nFDpCD", "Phi_e_VS_P_e_FSR_2N", 4);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{e} vs. W (All Int., pFDpCD)", "#phi_{e} vs. W (All Int., nFDpCD)",
+               "#phi_{e} vs. W (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Phi_e_VS_W_pFDpCD", "Phi_e_VS_W_nFDpCD", "Phi_e_VS_W_FSR_2N", 5);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#theta_{pFD} (All Int., pFDpCD)", "#theta_{nFD} (All Int., nFDpCD)",
+               "#theta_{nFD} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_pFD_All_Int_pFDpCD_FD", "Theta_nFD_All_Int_nFDpCD_FD",
+               "Theta_nucFD_FSR_pFDpCD_FD", 6);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
+               "#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", "#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData,
+               "Theta_pFD_VS_P_pFD_pFDpCD", "Theta_nFD_VS_P_nFD_nFDpCD", "Theta_nucFD_VS_P_pFD_FSR_2N", 7);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{pFD} vs. W (All Int., pFDpCD, FD)",
+               "#theta_{nFD} vs. W (All Int., nFDpCD, FD)", "#theta_{nFD} vs. W (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_pFD_VS_W_pFDpCD",
+               "Theta_nFD_VS_W_nFDpCD", "Theta_nucFD_VS_W_FSR_2N", 8);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
+               "#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", "#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData,
+               "phi_pFD_VS_P_pFD_pFDpCD", "phi_nFD_VS_P_nFD_nFDpCD", "phi_nucFD_VS_P_pFD_FSR_2N", 9);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pFD} vs. W (All Int., pFDpCD, FD)",
+               "#phi_{nFD} vs. W (All Int., nFDpCD, FD)", "#phi_{nFD} vs. W (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData, "phi_pFD_VS_W_pFDpCD",
+               "phi_nFD_VS_W_nFDpCD", "phi_nucFD_VS_W_FSR_2N", 10);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{pCD} (All Int., pFDpCD)", "#theta_{pCD} (All Int., nFDpCD)",
+               "#theta_{pCD} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_pCD_All_Int_pFDpCD_CD", "Theta_pCD_All_Int_nFDpCD_CD",
+               "Theta_nucCD_FSR_pFDpCD_CD", 11);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
+               "#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData,
+               "Theta_pCD_VS_P_pCD_pFDpCD", "Theta_pCD_VS_P_pCD_nFDpCD", "Theta_pCD_VS_P_pCD_FSR_2N", 12);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{pCD} vs. W (All Int., pFDpCD, CD)",
+               "#theta_{pCD} vs. W (All Int., nFDpCD, CD)", "#theta_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_pCD_VS_W_pFDpCD",
+               "Theta_pCD_VS_W_nFDpCD", "Theta_pCD_VS_W_FSR_2N", 13);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
+               "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData,
+               "phi_pCD_VS_P_pCD_pFDpCD", "phi_pCD_VS_P_pCD_nFDpCD", "phi_pCD_VS_P_pCD_FSR_2N", 14);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. W (All Int., pFDpCD, CD)",
+               "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData, "phi_pCD_VS_W_pFDpCD",
+               "phi_pCD_VS_W_nFDpCD", "phi_pCD_VS_W_FSR_2N", 15);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. #phi_{e} (All Int., pFDpCD, FD)",
+               "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD)", "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Sim_FolderData,
+               "Theta_e_VS_Phi_e_pFDpCD", "Theta_e_VS_Phi_e_nFDpCD", "Theta_e_VS_Phi_e_FSR_2N", 16);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
+               "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData,
+               "phi_pCD_VS_P_pCD_pFDpCD", "phi_pCD_VS_P_pCD_nFDpCD", "phi_pCD_VS_P_pCD_FSR_2N", 17);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. W (All Int., pFDpCD, CD)",
+               "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Sim_FolderData, "phi_pCD_VS_W_pFDpCD",
+               "phi_pCD_VS_W_nFDpCD", "phi_pCD_VS_W_FSR_2N", 18);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{tot} (All Int., pFDpCD)", "#theta_{tot} (All Int., nFDpCD)",
+               "theta_tot FSRatio ()", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_tot_All_Int_pFDpCD", "Theta_tot_All_Int_nFDpCD", "Theta_tot_FSR_pFDpCD", 19);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{rel} (All Int., pFDpCD)", "#theta_{rel} (All Int., nFDpCD)",
+               "theta_rel FSRatio ()", AngDistComp_Scattring_Ang_Sim_FolderData, "Theta_rel_All_Int_pFDpCD", "Theta_rel_All_Int_nFDpCD", "Theta_rel_FSR_pFDpCD", 20);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., pFDpCD)",
+               "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)", "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_P_e_and_P_tot_Sim_FolderData, "Theta__P_e_and_P_tot__All_Int_pFDpCD", "Theta__P_e_and_P_tot__All_Int_nFDpCD",
+               "Theta__P_e_and_P_tot__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)", "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_P_e_and_P_tot_Sim_FolderData, "Theta_p_e_p_tot_vs_W_pFDpCD", "Theta_p_e_p_tot_vs_W_nFDpCD", "Theta_p_e_p_tot_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{q},#vec{P}_{tot}} (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_tot_Sim_FolderData,
+               "Theta__q_and_P_tot__All_Int_pFDpCD", "Theta__q_and_P_tot__All_Int_nFDpCD", "Theta__q_and_P_tot__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_q_and_P_tot_Sim_FolderData, "Theta_q_p_tot_vs_W_pFDpCD", "Theta_q_p_tot_vs_W_nFDpCD", "Theta_q_p_tot_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
+               "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_P_L_minus_q_and_P_R_Sim_FolderData, "Theta__P_L_minus_q_and_P_R__All_Int_pFDpCD", "Theta__P_L_minus_q_and_P_R__All_Int_nFDpCD",
+               "Theta__P_L_minus_q_and_P_R__FSR", 1);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{q},#vec{P}_{pL}} (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nL}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nL}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_L_Sim_FolderData,
+               "Theta__q_and_P_L__All_Int_pFDpCD", "Theta__q_and_P_L__All_Int_nFDpCD", "Theta__q_and_P_L__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pL}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_q_and_P_L_Sim_FolderData, "Theta_q_pL_vs_W_pFDpCD", "Theta_q_nL_vs_W_nFDpCD", "Theta_q_nucL_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_R_Sim_FolderData,
+               "Theta__q_and_P_R__All_Int_pFDpCD", "Theta__q_and_P_R__All_Int_nFDpCD", "Theta__q_and_P_R__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pR}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_q_and_P_R_Sim_FolderData, "Theta_q_pR_vs_W_pFDpCD", "Theta_q_nR_vs_W_nFDpCD", "Theta_q_nucR_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#theta_{#vec{q},#vec{P}_{pFD}} (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nFD}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pFD}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_nucFD_Sim_FolderData,
+               "Theta__q_and_P_pFD__All_Int_pFDpCD", "Theta__q_and_P_nFD__All_Int_nFDpCD", "Theta__q_and_P_nucFD__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pFD}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nFD}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nFD}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_q_and_P_nucFD_Sim_FolderData, "Theta_q_pFD_vs_W_pFDpCD", "Theta_q_nFD_vs_W_nFDpCD", "Theta_q_nucFD_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_nucCD_Sim_FolderData,
+               "Theta__q_and_P_pCD__All_Int_pFDpCD", "Theta__q_and_P_pCD__All_Int_nFDpCD", "Theta__q_and_P_nucCD__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_q_and_P_nucCD_Sim_FolderData, "Theta_q_pCD_vs_W_pFDpCD", "Theta_q_pCD_vs_W_nFDpCD", "Theta_q_nucCD_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "CD", "#theta_{pFD,pCD} (All Int., pFDpCD)",
+               "#theta_{nFD,pCD} (All Int., nFDpCD)",
+               "#theta_{nFD,pCD} (All Int., nFDpCD)", AngDistComp_Opening_Ang_P_FD_and_P_CD_Sim_FolderData, "Theta__Theta_pFD_pCD__All_Int_pFDpCD",
+               "Theta__Theta_nFD_pCD__All_Int_nFDpCD", "Theta__Theta_nucFD_nucCD__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#theta_{pFD,pCD} vs. W (All Int., pFDpCD)",
+               "#theta_{nFD,pCD} vs. W (All Int., nFDpCD)", "#theta_{nFD,pCD} vs. W (All Int., nFDpCD)", AngDistComp_Opening_Ang_P_FD_and_P_CD_Sim_FolderData,
+               "Theta_pFD_pCD_vs_W_pFDpCD", "Theta_nFD_pCD_vs_W_nFDpCD", "Theta_nucFD_nucCD_vs_W_FSR_2N", 2);
+    //</editor-fold>
+
+    //<editor-fold desc="03_Angular_dist_comp_Data">
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#theta_{e} (All Int., pFDpCD, FD)", "#theta_{e} (All Int., nFDpCD, FD)",
+               "#theta_{e} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_e_All_Int_pFDpCD_FD", "Theta_e_All_Int_nFDpCD_FD",
+               "Theta_e_FSR_pFDpCD_FD", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. P_{e} (All Int., pFDpCD)",
+               "#theta_{e} vs. P_{e} (All Int., nFDpCD)", "#theta_{e} vs. P_{e} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_e_VS_P_e_pFDpCD",
+               "Theta_e_VS_P_e_nFDpCD", "Theta_e_VS_P_e_FSR_2N", 2);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. W (All Int., pFDpCD)", "#theta_{e} vs. W (All Int., nFDpCD)",
+               "#theta_{e} vs. W (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_e_VS_W_pFDpCD", "Theta_e_VS_W_nFDpCD", "Theta_e_VS_W_FSR_2N", 3);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{e} vs. P_{e} (All Int., pFDpCD)",
+               "#phi_{e} vs. P_{e} (All Int., nFDpCD)", "#phi_{e} vs. P_{e} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Phi_e_VS_P_e_pFDpCD",
+               "Phi_e_VS_P_e_nFDpCD", "Phi_e_VS_P_e_FSR_2N", 4);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{e} vs. W (All Int., pFDpCD)", "#phi_{e} vs. W (All Int., nFDpCD)",
+               "#phi_{e} vs. W (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Phi_e_VS_W_pFDpCD", "Phi_e_VS_W_nFDpCD", "Phi_e_VS_W_FSR_2N", 5);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#theta_{pFD} (All Int., pFDpCD)", "#theta_{nFD} (All Int., nFDpCD)",
+               "#theta_{nFD} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_pFD_All_Int_pFDpCD_FD", "Theta_nFD_All_Int_nFDpCD_FD",
+               "Theta_nucFD_FSR_pFDpCD_FD", 6);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
+               "#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", "#theta_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData,
+               "Theta_pFD_VS_P_pFD_pFDpCD", "Theta_nFD_VS_P_nFD_nFDpCD", "Theta_nucFD_VS_P_pFD_FSR_2N", 7);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{pFD} vs. W (All Int., pFDpCD, FD)",
+               "#theta_{nFD} vs. W (All Int., nFDpCD, FD)", "#theta_{nFD} vs. W (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_pFD_VS_W_pFDpCD",
+               "Theta_nFD_VS_W_nFDpCD", "Theta_nucFD_VS_W_FSR_2N", 8);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
+               "#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", "#phi_{nFD} vs. P_{nFD} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData,
+               "phi_pFD_VS_P_pFD_pFDpCD", "phi_nFD_VS_P_nFD_nFDpCD", "phi_nucFD_VS_P_pFD_FSR_2N", 9);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pFD} vs. W (All Int., pFDpCD, FD)",
+               "#phi_{nFD} vs. W (All Int., nFDpCD, FD)", "#phi_{nFD} vs. W (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData, "phi_pFD_VS_W_pFDpCD",
+               "phi_nFD_VS_W_nFDpCD", "phi_nucFD_VS_W_FSR_2N", 10);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{pCD} (All Int., pFDpCD)", "#theta_{pCD} (All Int., nFDpCD)",
+               "#theta_{pCD} (All Int., nFDpCD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_pCD_All_Int_pFDpCD_CD", "Theta_pCD_All_Int_nFDpCD_CD",
+               "Theta_nucCD_FSR_pFDpCD_CD", 11);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
+               "#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#theta_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData,
+               "Theta_pCD_VS_P_pCD_pFDpCD", "Theta_pCD_VS_P_pCD_nFDpCD", "Theta_pCD_VS_P_pCD_FSR_2N", 12);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{pCD} vs. W (All Int., pFDpCD, CD)",
+               "#theta_{pCD} vs. W (All Int., nFDpCD, CD)", "#theta_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_pCD_VS_W_pFDpCD",
+               "Theta_pCD_VS_W_nFDpCD", "Theta_pCD_VS_W_FSR_2N", 13);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
+               "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData,
+               "phi_pCD_VS_P_pCD_pFDpCD", "phi_pCD_VS_P_pCD_nFDpCD", "phi_pCD_VS_P_pCD_FSR_2N", 14);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. W (All Int., pFDpCD, CD)",
+               "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData, "phi_pCD_VS_W_pFDpCD",
+               "phi_pCD_VS_W_nFDpCD", "phi_pCD_VS_W_FSR_2N", 15);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{e} vs. #phi_{e} (All Int., pFDpCD, FD)",
+               "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD)", "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD)", AngDistComp_Scattring_Ang_Data_FolderData,
+               "Theta_e_VS_Phi_e_pFDpCD", "Theta_e_VS_Phi_e_nFDpCD", "Theta_e_VS_Phi_e_FSR_2N", 16);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. P_{pCD} (All Int., pFDpCD, CD)",
+               "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", "#phi_{pCD} vs. P_{pCD} (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData,
+               "phi_pCD_VS_P_pCD_pFDpCD", "phi_pCD_VS_P_pCD_nFDpCD", "phi_pCD_VS_P_pCD_FSR_2N", 17);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#phi_{pCD} vs. W (All Int., pFDpCD, CD)",
+               "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", "#phi_{pCD} vs. W (All Int., nFDpCD, CD)", AngDistComp_Scattring_Ang_Data_FolderData, "phi_pCD_VS_W_pFDpCD",
+               "phi_pCD_VS_W_nFDpCD", "phi_pCD_VS_W_FSR_2N", 18);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{tot} (All Int., pFDpCD)", "#theta_{tot} (All Int., nFDpCD)",
+               "theta_tot FSRatio ()", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_tot_All_Int_pFDpCD", "Theta_tot_All_Int_nFDpCD", "Theta_tot_FSR_pFDpCD", 19);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{rel} (All Int., pFDpCD)", "#theta_{rel} (All Int., nFDpCD)",
+               "theta_rel FSRatio ()", AngDistComp_Scattring_Ang_Data_FolderData, "Theta_rel_All_Int_pFDpCD", "Theta_rel_All_Int_nFDpCD", "Theta_rel_FSR_pFDpCD", 20);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., pFDpCD)",
+               "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)", "#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_P_e_and_P_tot_Data_FolderData, "Theta__P_e_and_P_tot__All_Int_pFDpCD", "Theta__P_e_and_P_tot__All_Int_nFDpCD",
+               "Theta__P_e_and_P_tot__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)", "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_P_e_and_P_tot_Data_FolderData, "Theta_p_e_p_tot_vs_W_pFDpCD", "Theta_p_e_p_tot_vs_W_nFDpCD", "Theta_p_e_p_tot_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{q},#vec{P}_{tot}} (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_tot_Data_FolderData,
+               "Theta__q_and_P_tot__All_Int_pFDpCD", "Theta__q_and_P_tot__All_Int_nFDpCD", "Theta__q_and_P_tot__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_q_and_P_tot_Data_FolderData, "Theta_q_p_tot_vs_W_pFDpCD", "Theta_q_p_tot_vs_W_nFDpCD", "Theta_q_p_tot_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
+               "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_P_L_minus_q_and_P_R_Data_FolderData, "Theta__P_L_minus_q_and_P_R__All_Int_pFDpCD", "Theta__P_L_minus_q_and_P_R__All_Int_nFDpCD",
+               "Theta__P_L_minus_q_and_P_R__FSR", 1);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{q},#vec{P}_{pL}} (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nL}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nL}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_L_Data_FolderData,
+               "Theta__q_and_P_L__All_Int_pFDpCD", "Theta__q_and_P_L__All_Int_nFDpCD", "Theta__q_and_P_L__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pL}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_q_and_P_L_Data_FolderData, "Theta_q_pL_vs_W_pFDpCD", "Theta_q_nL_vs_W_nFDpCD", "Theta_q_nucL_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{q},#vec{P}_{pR}} (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nR}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_R_Data_FolderData,
+               "Theta__q_and_P_R__All_Int_pFDpCD", "Theta__q_and_P_R__All_Int_nFDpCD", "Theta__q_and_P_R__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pR}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nR}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_q_and_P_R_Data_FolderData, "Theta_q_pR_vs_W_pFDpCD", "Theta_q_nR_vs_W_nFDpCD", "Theta_q_nucR_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#theta_{#vec{q},#vec{P}_{pFD}} (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nFD}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pFD}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_nucFD_Data_FolderData,
+               "Theta__q_and_P_pFD__All_Int_pFDpCD", "Theta__q_and_P_nFD__All_Int_nFDpCD", "Theta__q_and_P_nucFD__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pFD}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{nFD}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{nFD}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_q_and_P_nucFD_Data_FolderData, "Theta_q_pFD_vs_W_pFDpCD", "Theta_q_nFD_vs_W_nFDpCD", "Theta_q_nucFD_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)", AngDistComp_Opening_Ang_q_and_P_nucCD_Data_FolderData,
+               "Theta__q_and_P_pCD__All_Int_pFDpCD", "Theta__q_and_P_pCD__All_Int_nFDpCD", "Theta__q_and_P_nucCD__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., pFDpCD)",
+               "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., nFDpCD)", "#theta_{#vec{q},#vec{P}_{pCD}} vs. W (All Int., nFDpCD)",
+               AngDistComp_Opening_Ang_q_and_P_nucCD_Data_FolderData, "Theta_q_pCD_vs_W_pFDpCD", "Theta_q_pCD_vs_W_nFDpCD", "Theta_q_nucCD_vs_W_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "CD", "#theta_{pFD,pCD} (All Int., pFDpCD)", "#theta_{nFD,pCD} (All Int., nFDpCD)",
+               "#theta_{nFD,pCD} (All Int., nFDpCD)", AngDistComp_Opening_Ang_P_FD_and_P_CD_Data_FolderData, "Theta__Theta_pFD_pCD__All_Int_pFDpCD",
+               "Theta__Theta_nFD_pCD__All_Int_nFDpCD", "Theta__Theta_nucFD_nucCD__FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#theta_{pFD,pCD} vs. W (All Int., pFDpCD)",
+               "#theta_{nFD,pCD} vs. W (All Int., nFDpCD)", "#theta_{nFD,pCD} vs. W (All Int., nFDpCD)", AngDistComp_Opening_Ang_P_FD_and_P_CD_Data_FolderData,
+               "Theta_pFD_pCD_vs_W_pFDpCD", "Theta_nFD_pCD_vs_W_nFDpCD", "Theta_nucFD_nucCD_vs_W_FSR_2N", 2);
+    //</editor-fold>
+
+    //<editor-fold desc="04_Energy_dist_comp_Sim">
+    FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "E_{e} (All Int., pFDpCD)", "E_{e} (All Int., nFDpCD)",
+                    "E_{e} (All Int., nFDpCD)", EnergyComp_E_e_Sim_FolderData, "E_e_All_Int_pFDpCD", "E_e_All_Int_nFDpCD", "E_e_FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "E_{e} vs. #theta_{e} (All Int., pFDpCD)",
+               "E_{e} vs. #theta_{e} (All Int., nFDpCD)", "E_{e} vs. #theta_{e} (All Int., nFDpCD)", EnergyComp_E_e_Sim_FolderData, "E_e_VS_Theta_e_All_Int_pFDpCD",
+               "E_e_VS_Theta_e_All_Int_nFDpCD", "E_e_VS_Theta_e_All_Int_FSR_2N", 2);
+
+    FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#omega around #theta_{e} = 15#circ (All Int., pFDpCD)",
+                    "#omega around #theta_{e} = 15#circ (All Int., nFDpCD)", "#omega around #theta_{e} = 15#circ (All Int., nFDpCD)", EnergyComp_Omega_Sim_FolderData,
+                    "Omega_15_All_Int_pFDpCD", "Omega_15_All_Int_nFDpCD", "Omega_15_FSR", 1);
+
+    FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "E_{cal} reco. (All Int., pFDpCD)",
+                    "E_{cal} reco. (All Int., nFDpCD)",
+                    "E_{cal} reco. (All Int., nFDpCD)", EnergyComp_E_cal_Sim_FolderData, "E_cal_All_Int_pFDpCD", "E_cal_All_Int_nFDpCD", "E_cal_FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD)",
+               "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)", "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)", EnergyComp_E_cal_Sim_FolderData, "Ecal_vs_dP_T_tot_pFDpCD",
+               "Ecal_vs_dP_T_tot_nFDpCD", "Ecal_vs_dP_T_tot_FSR_2N", 2);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
+               "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", EnergyComp_E_cal_Sim_FolderData,
+               "Ecal_vs_dAlpha_T_tot_pFDpCD", "Ecal_vs_dAlpha_T_tot_nFDpCD", "Ecal_vs_dAlpha_T_tot_FSR_2N", 3);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. W (All Int., pFDpCD)", "E_{cal} vs. W (All Int., nFDpCD)",
+               "E_{cal} vs. W (All Int., nFDpCD)", EnergyComp_E_cal_Sim_FolderData, "Ecal_vs_W_pFDpCD", "Ecal_vs_W_nFDpCD", "Ecal_vs_W_FSR_2N", 4);
+    //</editor-fold>
+
+    //<editor-fold desc="04_Energy_dist_comp_Data">
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "E_{e} (All Int., pFDpCD)", "E_{e} (All Int., nFDpCD)",
+               "E_{e} (All Int., nFDpCD)", EnergyComp_E_e_Data_FolderData, "E_e_All_Int_pFDpCD", "E_e_All_Int_nFDpCD", "E_e_FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "E_{e} vs. #theta_{e} (All Int., pFDpCD)",
+               "E_{e} vs. #theta_{e} (All Int., nFDpCD)", "E_{e} vs. #theta_{e} (All Int., nFDpCD)", EnergyComp_E_e_Data_FolderData, "E_e_VS_Theta_e_All_Int_pFDpCD",
+               "E_e_VS_Theta_e_All_Int_nFDpCD", "E_e_VS_Theta_e_All_Int_FSR_2N", 2);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#omega around #theta_{e} = 15#circ (All Int., pFDpCD)",
+               "#omega around #theta_{e} = 15#circ (All Int., nFDpCD)", "#omega around #theta_{e} = 15#circ (All Int., nFDpCD)", EnergyComp_Omega_Data_FolderData,
+               "Omega_15_All_Int_pFDpCD", "Omega_15_All_Int_nFDpCD", "Omega_15_FSR", 1);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "E_{cal} reco. (All Int., pFDpCD)", "E_{cal} reco. (All Int., nFDpCD)",
+               "E_{cal} reco. (All Int., nFDpCD)", EnergyComp_E_cal_Data_FolderData, "E_cal_All_Int_pFDpCD", "E_cal_All_Int_nFDpCD", "E_cal_FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD)",
+               "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)", "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)", EnergyComp_E_cal_Data_FolderData, "Ecal_vs_dP_T_tot_pFDpCD",
+               "Ecal_vs_dP_T_tot_nFDpCD", "Ecal_vs_dP_T_tot_FSR_2N", 2);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
+               "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", EnergyComp_E_cal_Data_FolderData,
+               "Ecal_vs_dAlpha_T_tot_pFDpCD", "Ecal_vs_dAlpha_T_tot_nFDpCD", "Ecal_vs_dAlpha_T_tot_FSR_2N", 3);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "E_{cal} vs. W (All Int., pFDpCD)", "E_{cal} vs. W (All Int., nFDpCD)",
+               "E_{cal} vs. W (All Int., nFDpCD)", EnergyComp_E_cal_Data_FolderData, "Ecal_vs_W_pFDpCD", "Ecal_vs_W_nFDpCD", "Ecal_vs_W_FSR_2N", 4);
+
+    HistPlotter2D(Canv, MScThesisPlots, Final_wSaC_Data, "E_{cal} vs. #theta_{pCD} (All Int., nFDpCD)", SampleName,
+                  EnergyComp_E_cal_Data_FolderData, "05_Ecal_vs_pCD_nFDpCD");
+    //</editor-fold>
+
+    //<editor-fold desc="05_TKI_comp_Sim">
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#deltaP_{T,tot} (pFDpCD)", "#deltaP_{T,tot} (nFDpCD)",
+               "#deltaP_{T,tot} (nFDpCD)", TKIComp_dP_T_Sim_FolderData, "dP_T_pFDpCD", "dP_T_nFDpCD", "dP_T_FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#deltaP_{T,tot} vs. W (All Int., pFDpCD)",
+               "#deltaP_{T,tot} vs. W (All Int., nFDpCD)", "#deltaP_{T,tot} vs. W (All Int., nFDpCD)", TKIComp_dP_T_Sim_FolderData, "dP_T_tot_vs_W_pFDpCD",
+               "dP_T_tot_vs_W_nFDpCD", "dP_T_tot_vs_W_FSR_2N", 3);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#delta#alpha_{T,tot} (pFDpCD)", "#delta#alpha_{T,tot} (nFDpCD)",
+               "#delta#alpha_{T,tot} (nFDpCD)", TKIComp_dAlpha_T_Sim_FolderData, "dAlpha_T_pFDpCD", "dAlpha_T_nFDpCD", "dAlpha_T_FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#delta#alpha_{T,tot} vs. W (All Int., pFDpCD)",
+               "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)", "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)", TKIComp_dAlpha_T_Sim_FolderData, "dAlpha_T_tot_vs_W_pFDpCD",
+               "dAlpha_T_tot_vs_W_nFDpCD", "dAlpha_T_tot_vs_W_FSR_2N", 3);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
+               "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)",
+               TKIComp_dP_T_vs_dAlpha_T_Sim_FolderData, "dP_T_tot_vs_dAlpha_T_tot_pFDpCD", "dP_T_tot_vs_dAlpha_T_tot_nFDpCD", "dP_T_tot_vs_dAlpha_T_tot_FSR_2N", 1);
+    //</editor-fold>
+
+    //<editor-fold desc="05_TKI_comp_Data">
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#deltaP_{T,tot} (pFDpCD)", "#deltaP_{T,tot} (nFDpCD)",
+               "#deltaP_{T,tot} (nFDpCD)", TKIComp_dP_T_Data_FolderData, "dP_T_pFDpCD", "dP_T_nFDpCD", "dP_T_FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#deltaP_{T,tot} vs. W (All Int., pFDpCD)",
+               "#deltaP_{T,tot} vs. W (All Int., nFDpCD)", "#deltaP_{T,tot} vs. W (All Int., nFDpCD)", TKIComp_dP_T_Data_FolderData, "dP_T_tot_vs_W_pFDpCD",
+               "dP_T_tot_vs_W_nFDpCD", "dP_T_tot_vs_W_FSR_2N", 3);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH1D", "FD", "#delta#alpha_{T,tot} (pFDpCD)", "#delta#alpha_{T,tot} (nFDpCD)",
+               "#delta#alpha_{T,tot} (nFDpCD)", TKIComp_dAlpha_T_Data_FolderData, "dAlpha_T_pFDpCD", "dAlpha_T_nFDpCD", "dAlpha_T_FSR", 1);
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#delta#alpha_{T,tot} vs. W (All Int., pFDpCD)",
+               "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)", "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)", TKIComp_dAlpha_T_Data_FolderData, "dAlpha_T_tot_vs_W_pFDpCD",
+               "dAlpha_T_tot_vs_W_nFDpCD", "dAlpha_T_tot_vs_W_FSR_2N", 3);
+
+    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Data, SampleName, "2N", "TH2D", "FD", "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
+               "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)", "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)",
+               TKIComp_dP_T_vs_dAlpha_T_Data_FolderData, "dP_T_tot_vs_dAlpha_T_tot_pFDpCD", "dP_T_tot_vs_dAlpha_T_tot_nFDpCD", "dP_T_tot_vs_dAlpha_T_tot_FSR_2N", 1);
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //</editor-fold>
 
     cout << "\n\nExcecution finished!\n", exit(0);
 

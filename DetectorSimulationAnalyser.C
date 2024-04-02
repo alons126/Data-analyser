@@ -194,10 +194,10 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndCorr = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
+    bool apply_nucleon_SmearAndCorr = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -795,7 +795,7 @@ void EventAnalyser() {
     //<editor-fold desc="Number of histogram bins">
     /* Default */
     int numTH1Dbins = 30;
-    int numTH2Dbins = 50;
+    int numTH2Dbins = 25;
 //    int numTH1Dbins = 50;
 //    int numTH2Dbins = 65;
 
@@ -6220,6 +6220,18 @@ void EventAnalyser() {
     TH2D *hEcal_vs_dAlpha_T_tot_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
                                                   "E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
                                                   180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_tot_QEL_Only_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (QE Only, pFDpCD)",
+                                                           "E_{cal} vs. #delta#alpha_{T,tot} (QE Only, pFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                                           numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_tot_MEC_Only_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (MEC Only, pFDpCD)",
+                                                           "E_{cal} vs. #delta#alpha_{T,tot} (MEC Only, pFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                                           numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_tot_RES_Only_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (RES Only, pFDpCD)",
+                                                           "E_{cal} vs. #delta#alpha_{T,tot} (RES Only, pFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                                           numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_tot_DIS_Only_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (DIS Only, pFDpCD)",
+                                                           "E_{cal} vs. #delta#alpha_{T,tot} (DIS Only, pFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                                           numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dAlpha_T_L_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
     string hEcal_vs_dAlpha_T_tot_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
     //</editor-fold>`
@@ -6230,6 +6242,18 @@ void EventAnalyser() {
     TH2D *hEcal_vs_dP_T_tot_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD)",
                                               "E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0, dP_T_boundary,
                                               numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_tot_QEL_Only_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (QE Only, pFDpCD)",
+                                                       "E_{cal} vs. #deltaP_{T,tot} (QE Only, pFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
+                                                       dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_tot_MEC_Only_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (MEC Only, pFDpCD)",
+                                                       "E_{cal} vs. #deltaP_{T,tot} (MEC Only, pFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
+                                                       dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_tot_RES_Only_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (RES Only, pFDpCD)",
+                                                       "E_{cal} vs. #deltaP_{T,tot} (RES Only, pFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
+                                                       dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_tot_DIS_Only_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (DIS Only, pFDpCD)",
+                                                       "E_{cal} vs. #deltaP_{T,tot} (DIS Only, pFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
+                                                       dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dP_T_L_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
     string hEcal_vs_dP_T_tot_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
     //</editor-fold>
@@ -6336,6 +6360,18 @@ void EventAnalyser() {
     TH2D *hEcal_vs_dAlpha_T_tot_nFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD)",
                                                   "E_{cal} vs. #delta#alpha_{T,tot} (All Int., nFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
                                                   180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_tot_QEL_Only_nFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (QE Only, nFDpCD)",
+                                                           "E_{cal} vs. #delta#alpha_{T,tot} (QE Only, nFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                                           numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_tot_MEC_Only_nFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (MEC Only, nFDpCD)",
+                                                           "E_{cal} vs. #delta#alpha_{T,tot} (MEC Only, nFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                                           numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_tot_RES_Only_nFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (RES Only, nFDpCD)",
+                                                           "E_{cal} vs. #delta#alpha_{T,tot} (RES Only, nFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                                           numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_tot_DIS_Only_nFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (DIS Only, nFDpCD)",
+                                                           "E_{cal} vs. #delta#alpha_{T,tot} (DIS Only, nFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                                           numTH2Dbins_E_cal_Plots, 0, 180, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dAlpha_T_L_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     string hEcal_vs_dAlpha_T_tot_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     //</editor-fold>`
@@ -6346,6 +6382,18 @@ void EventAnalyser() {
     TH2D *hEcal_vs_dP_T_tot_nFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)",
                                               "E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0, dP_T_boundary,
                                               numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_tot_QEL_Only_nFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (QE Only, nFDpCD)",
+                                                       "E_{cal} vs. #deltaP_{T,tot} (QE Only, nFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
+                                                       dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_tot_MEC_Only_nFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (MEC Only, nFDpCD)",
+                                                       "E_{cal} vs. #deltaP_{T,tot} (MEC Only, nFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
+                                                       dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_tot_RES_Only_nFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (RES Only, nFDpCD)",
+                                                       "E_{cal} vs. #deltaP_{T,tot} (RES Only, nFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
+                                                       dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_tot_DIS_Only_nFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (DIS Only, nFDpCD)",
+                                                       "E_{cal} vs. #deltaP_{T,tot} (DIS Only, nFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", numTH2Dbins_E_cal_Plots, 0,
+                                                       dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dP_T_L_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     string hEcal_vs_dP_T_tot_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     //</editor-fold>
@@ -6443,20 +6491,47 @@ void EventAnalyser() {
 
     //<editor-fold desc="TKI plots (pFDpCD)">
     THStack *sdP_T_pFDpCD = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (pFDpCD)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (pFDpCD);#deltaP_{T} [GeV/c]");
+    THStack *sdP_T_tot_pFDpCD = new THStack("#deltaP_{T,tot} stack (pFDpCD)", "#deltaP_{T,tot} stack (pFDpCD);#deltaP_{T,tot} [GeV/c]");
     TH1D *hdP_T_L_pFDpCD = new TH1D("#deltaP_{T,L} (pFDpCD)", "#deltaP_{T,L} by leading proton (pFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pL}| [GeV/c]",
                                     numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     TH1D *hdP_T_tot_pFDpCD = new TH1D("#deltaP_{T,tot} (pFDpCD)",
                                       "#deltaP_{T,tot} by Momentum Sum (pFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
                                       numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_tot_QEL_Only_pFDpCD = new TH1D("#deltaP_{T,tot} (QE Only, pFDpCD)",
+                                               "#deltaP_{T,tot} by Momentum Sum (QE Only, pFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
+                                               numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_tot_MEC_Only_pFDpCD = new TH1D("#deltaP_{T,tot} (MEC Only, pFDpCD)",
+                                               "#deltaP_{T,tot} by Momentum Sum (MEC Only, pFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
+                                               numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_tot_RES_Only_pFDpCD = new TH1D("#deltaP_{T,tot} (RES Only, pFDpCD)",
+                                               "#deltaP_{T,tot} by Momentum Sum (RES Only, pFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
+                                               numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_tot_DIS_Only_pFDpCD = new TH1D("#deltaP_{T,tot} (DIS Only, pFDpCD)",
+                                               "#deltaP_{T,tot} by Momentum Sum (DIS Only, pFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
+                                               numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     string hdP_T_L_pFDpCD_Dir = directories.TKI_Directory_map["dP_T_pFDpCD_Directory"];
     string hdP_T_tot_pFDpCD_Dir = directories.TKI_Directory_map["dP_T_pFDpCD_Directory"];
 
     THStack *sdAlpha_T_pFDpCD = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (pFDpCD)",
                                             "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (pFDpCD);#delta#alpha_{T} [Deg]");
+    THStack *sdAlpha_T_tot_pFDpCD = new THStack("#delta#alpha_{T,tot} stack (pFDpCD)",
+                                                "#delta#alpha_{T,tot} stack (pFDpCD);#delta#alpha_{T,tot} [Deg]");
     TH1D *hdAlpha_T_L_pFDpCD = new TH1D("#delta#alpha_{T,L} (pFDpCD)", "#delta#alpha_{T,L} by leading proton (pFDpCD);#delta#alpha_{T,L} [Deg]",
                                         numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     TH1D *hdAlpha_T_tot_pFDpCD = new TH1D("#delta#alpha_{T,tot} (pFDpCD)", "#delta#alpha_{T,tot} by Momentum Sum (pFDpCD);#delta#alpha_{T,tot} [Deg]",
                                           numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
+    TH1D *hdAlpha_T_tot_QEL_Only_pFDpCD = new TH1D("#delta#alpha_{T,tot} (QE Only, pFDpCD)",
+                                                   "#delta#alpha_{T,tot} by Momentum Sum (QE Only, pFDpCD);#delta#alpha_{T,tot} [Deg]",
+                                                   numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    TH1D *hdAlpha_T_tot_MEC_Only_pFDpCD = new TH1D("#delta#alpha_{T,tot} (MEC Only, pFDpCD)",
+                                                   "#delta#alpha_{T,tot} by Momentum Sum (MEC Only, pFDpCD);#delta#alpha_{T,tot} [Deg]",
+                                                   numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    TH1D *hdAlpha_T_tot_RES_Only_pFDpCD = new TH1D("#delta#alpha_{T,tot} (RES Only, pFDpCD)",
+                                                   "#delta#alpha_{T,tot} by Momentum Sum (RES Only, pFDpCD);#delta#alpha_{T,tot} [Deg]",
+                                                   numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    TH1D *hdAlpha_T_tot_DIS_Only_pFDpCD = new TH1D("#delta#alpha_{T,tot} (DIS Only, pFDpCD)",
+                                                   "#delta#alpha_{T,tot} by Momentum Sum (DIS Only, pFDpCD);#delta#alpha_{T,tot} [Deg]",
+                                                   numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     string hdAlpha_T_L_pFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_pFDpCD_Directory"];
     string hdAlpha_T_tot_pFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_pFDpCD_Directory"];
 
@@ -6505,20 +6580,47 @@ void EventAnalyser() {
 
     //<editor-fold desc="TKI plots (nFDpCD)">
     THStack *sdP_T_nFDpCD = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (nFDpCD)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (nFDpCD);#deltaP_{T} [GeV/c]");
+    THStack *sdP_T_tot_nFDpCD = new THStack("#deltaP_{T,tot} stack (nFDpCD)", "#deltaP_{T,tot} stack (nFDpCD);#deltaP_{T,tot} [GeV/c]");
     TH1D *hdP_T_L_nFDpCD = new TH1D("#deltaP_{T,L} (nFDpCD)", "#deltaP_{T,L} by leading nucleon (nFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nL}| [GeV/c]",
                                     numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     TH1D *hdP_T_tot_nFDpCD = new TH1D("#deltaP_{T,tot} (nFDpCD)",
                                       "#deltaP_{T,tot} by Momentum Sum (nFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}| [GeV/c]",
                                       numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_tot_QEL_Only_nFDpCD = new TH1D("#deltaP_{T,tot} (QE Only, nFDpCD)",
+                                               "#deltaP_{T,tot} by Momentum Sum (QE Only, nFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
+                                               numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_tot_MEC_Only_nFDpCD = new TH1D("#deltaP_{T,tot} (MEC Only, nFDpCD)",
+                                               "#deltaP_{T,tot} by Momentum Sum (MEC Only, nFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
+                                               numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_tot_RES_Only_nFDpCD = new TH1D("#deltaP_{T,tot} (RES Only, nFDpCD)",
+                                               "#deltaP_{T,tot} by Momentum Sum (RES Only, nFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
+                                               numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_tot_DIS_Only_nFDpCD = new TH1D("#deltaP_{T,tot} (DIS Only, nFDpCD)",
+                                               "#deltaP_{T,tot} by Momentum Sum (DIS Only, nFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
+                                               numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     string hdP_T_L_nFDpCD_Dir = directories.TKI_Directory_map["dP_T_nFDpCD_Directory"];
     string hdP_T_tot_nFDpCD_Dir = directories.TKI_Directory_map["dP_T_nFDpCD_Directory"];
 
     THStack *sdAlpha_T_nFDpCD = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (nFDpCD)",
                                             "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (nFDpCD);#delta#alpha_{T} [Deg]");
+    THStack *sdAlpha_T_tot_nFDpCD = new THStack("#delta#alpha_{T,tot} stack (nFDpCD)",
+                                                "#delta#alpha_{T,tot} stack (nFDpCD);#delta#alpha_{T,tot} [Deg]");
     TH1D *hdAlpha_T_L_nFDpCD = new TH1D("#delta#alpha_{T,L} (nFDpCD)", "#delta#alpha_{T,L} by leading nucleon (nFDpCD);#delta#alpha_{T,L} [Deg]",
                                         numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     TH1D *hdAlpha_T_tot_nFDpCD = new TH1D("#delta#alpha_{T,tot} (nFDpCD)", "#delta#alpha_{T,tot} by Momentum Sum (nFDpCD);#delta#alpha_{T,tot} [Deg]",
                                           numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
+    TH1D *hdAlpha_T_tot_QEL_Only_nFDpCD = new TH1D("#delta#alpha_{T,tot} (QE Only, nFDpCD)",
+                                                   "#delta#alpha_{T,tot} by Momentum Sum (QE Only, nFDpCD);#delta#alpha_{T,tot} [Deg]",
+                                                   numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    TH1D *hdAlpha_T_tot_MEC_Only_nFDpCD = new TH1D("#delta#alpha_{T,tot} (MEC Only, nFDpCD)",
+                                                   "#delta#alpha_{T,tot} by Momentum Sum (MEC Only, nFDpCD);#delta#alpha_{T,tot} [Deg]",
+                                                   numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    TH1D *hdAlpha_T_tot_RES_Only_nFDpCD = new TH1D("#delta#alpha_{T,tot} (RES Only, nFDpCD)",
+                                                   "#delta#alpha_{T,tot} by Momentum Sum (RES Only, nFDpCD);#delta#alpha_{T,tot} [Deg]",
+                                                   numTH1Dbins_TKI_dP_T_Plots, 0, 180);
+    TH1D *hdAlpha_T_tot_DIS_Only_nFDpCD = new TH1D("#delta#alpha_{T,tot} (DIS Only, nFDpCD)",
+                                                   "#delta#alpha_{T,tot} by Momentum Sum (DIS Only, nFDpCD);#delta#alpha_{T,tot} [Deg]",
+                                                   numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     string hdAlpha_T_L_nFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_nFDpCD_Directory"];
     string hdAlpha_T_tot_nFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_nFDpCD_Directory"];
 
@@ -14218,6 +14320,20 @@ void EventAnalyser() {
                 hdAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Weight_pFDpCD);
                 hdAlpha_T_tot_vs_W_pFDpCD->Fill(W_pFDpCD, dAlpha_T_tot_pFDpCD, Weight_pFDpCD);
 
+                if (qel) {
+                    hdP_T_tot_QEL_Only_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hdAlpha_T_tot_QEL_Only_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Weight_pFDpCD);
+                } else if (mec) {
+                    hdP_T_tot_MEC_Only_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hdAlpha_T_tot_MEC_Only_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Weight_pFDpCD);
+                } else if (res) {
+                    hdP_T_tot_RES_Only_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hdAlpha_T_tot_RES_Only_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Weight_pFDpCD);
+                } else if (dis) {
+                    hdP_T_tot_DIS_Only_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hdAlpha_T_tot_DIS_Only_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Weight_pFDpCD);
+                }
+
                 hdP_T_L_vs_dAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, dP_T_L_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 hdP_T_tot_vs_dAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, dP_T_tot_pFDpCD_3v.Mag(), Weight_pFDpCD);
 
@@ -14244,6 +14360,20 @@ void EventAnalyser() {
                 hEcal_vs_dP_T_L_pFDpCD->Fill(dP_T_L_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
                 hEcal_vs_dP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
                 hEcal_vs_W_pFDpCD->Fill(W_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+
+                if (qel) {
+                    hEcal_vs_dAlpha_T_tot_QEL_Only_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_dP_T_tot_QEL_Only_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
+                } else if (mec) {
+                    hEcal_vs_dAlpha_T_tot_MEC_Only_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_dP_T_tot_MEC_Only_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
+                } else if (res) {
+                    hEcal_vs_dAlpha_T_tot_RES_Only_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_dP_T_tot_RES_Only_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
+                } else if (dis) {
+                    hEcal_vs_dAlpha_T_tot_DIS_Only_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Ecal_pFDpCD, Weight_pFDpCD);
+                    hEcal_vs_dP_T_tot_DIS_Only_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight_pFDpCD);
+                }
             }
             //</editor-fold>
 
@@ -15040,6 +15170,20 @@ void EventAnalyser() {
                 hdAlpha_T_tot_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Weight_nFDpCD);
                 hdAlpha_T_tot_vs_W_nFDpCD->Fill(W_nFDpCD, dAlpha_T_tot_nFDpCD, Weight_nFDpCD);
 
+                if (qel) {
+                    hdP_T_tot_QEL_Only_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hdAlpha_T_tot_QEL_Only_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Weight_nFDpCD);
+                } else if (mec) {
+                    hdP_T_tot_MEC_Only_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hdAlpha_T_tot_MEC_Only_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Weight_nFDpCD);
+                } else if (res) {
+                    hdP_T_tot_RES_Only_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hdAlpha_T_tot_RES_Only_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Weight_nFDpCD);
+                } else if (dis) {
+                    hdP_T_tot_DIS_Only_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hdAlpha_T_tot_DIS_Only_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Weight_nFDpCD);
+                }
+
                 hdP_T_L_vs_dAlpha_T_L_nFDpCD->Fill(dAlpha_T_L_nFDpCD, dP_T_L_nFDpCD_3v.Mag(), Weight_nFDpCD);
                 hdP_T_tot_vs_dAlpha_T_tot_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, dP_T_tot_nFDpCD_3v.Mag(), Weight_nFDpCD);
 
@@ -15066,6 +15210,20 @@ void EventAnalyser() {
                 hEcal_vs_dP_T_L_nFDpCD->Fill(dP_T_L_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
                 hEcal_vs_dP_T_tot_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
                 hEcal_vs_W_nFDpCD->Fill(W_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+
+                if (qel) {
+                    hEcal_vs_dAlpha_T_tot_QEL_Only_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_dP_T_tot_QEL_Only_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
+                } else if (mec) {
+                    hEcal_vs_dAlpha_T_tot_MEC_Only_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_dP_T_tot_MEC_Only_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
+                } else if (res) {
+                    hEcal_vs_dAlpha_T_tot_RES_Only_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_dP_T_tot_RES_Only_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
+                } else if (dis) {
+                    hEcal_vs_dAlpha_T_tot_DIS_Only_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Ecal_nFDpCD, Weight_nFDpCD);
+                    hEcal_vs_dP_T_tot_DIS_Only_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight_nFDpCD);
+                }
 
                 hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_AV_nFDpCD.hFill(dPhi_hit_e_nFD_nFDpCD, dTheta_hit_e_nFD_nFDpCD, Weight_nFDpCD);
             }
@@ -19096,11 +19254,27 @@ void EventAnalyser() {
         //<editor-fold desc="Ecal vs. dP_T plots (pFDpCD)">
         histPlotter2D(c1, hEcal_vs_dP_T_L_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_L_pFDpCD_Dir, "02_Ecal_vs_dP_T_L_pFDpCD", false);
         histPlotter2D(c1, hEcal_vs_dP_T_tot_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_tot_pFDpCD_Dir, "03_Ecal_vs_dP_T_tot_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_tot_QEL_Only_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_tot_pFDpCD_Dir,
+                      "03a_Ecal_vs_dP_T_tot_QEL_Only_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_tot_MEC_Only_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_tot_pFDpCD_Dir,
+                      "03b_Ecal_vs_dP_T_tot_MEC_Only_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_tot_RES_Only_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_tot_pFDpCD_Dir,
+                      "03c_Ecal_vs_dP_T_tot_RES_Only_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_tot_DIS_Only_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_tot_pFDpCD_Dir,
+                      "03d_Ecal_vs_dP_T_tot_DIS_Only_pFDpCD", false);
         //</editor-fold>
 
         //<editor-fold desc="Ecal vs. dP_T plots (nFDpCD)">
         histPlotter2D(c1, hEcal_vs_dP_T_L_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_L_nFDpCD_Dir, "02_Ecal_vs_dP_T_L_nFDpCD", false);
         histPlotter2D(c1, hEcal_vs_dP_T_tot_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_tot_nFDpCD_Dir, "03_Ecal_vs_dP_T_tot_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_tot_QEL_Only_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_tot_nFDpCD_Dir,
+                      "03a_Ecal_vs_dP_T_tot_QEL_Only_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_tot_MEC_Only_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_tot_nFDpCD_Dir,
+                      "03b_Ecal_vs_dP_T_tot_MEC_Only_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_tot_RES_Only_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_tot_nFDpCD_Dir,
+                      "03c_Ecal_vs_dP_T_tot_RES_Only_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_tot_DIS_Only_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dP_T_tot_nFDpCD_Dir,
+                      "03d_Ecal_vs_dP_T_tot_DIS_Only_nFDpCD", false);
         //</editor-fold>
 
 //  Ecal vs. dAlpha_T plots (CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
@@ -19122,12 +19296,28 @@ void EventAnalyser() {
         histPlotter2D(c1, hEcal_vs_dAlpha_T_L_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_L_pFDpCD_Dir, "02_Ecal_vs_dAlpha_T_L_pFDpCD", false);
         histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_tot_pFDpCD_Dir, "03_Ecal_vs_dAlpha_T_tot_pFDpCD",
                       false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_QEL_Only_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_tot_pFDpCD_Dir,
+                      "03a_Ecal_vs_dAlpha_T_tot_QEL_Only_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_MEC_Only_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_tot_pFDpCD_Dir,
+                      "03b_Ecal_vs_dAlpha_T_tot_MEC_Only_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_RES_Only_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_tot_pFDpCD_Dir,
+                      "03c_Ecal_vs_dAlpha_T_tot_RES_Only_pFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_DIS_Only_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_tot_pFDpCD_Dir,
+                      "03d_Ecal_vs_dAlpha_T_tot_DIS_Only_pFDpCD", false);
         //</editor-fold>
 
         //<editor-fold desc="Ecal vs. dAlpha_T plots (nFDpCD)">
         histPlotter2D(c1, hEcal_vs_dAlpha_T_L_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_L_nFDpCD_Dir, "02_Ecal_vs_dAlpha_T_L_nFDpCD", false);
         histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_tot_nFDpCD_Dir, "03_Ecal_vs_dAlpha_T_tot_nFDpCD",
                       false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_QEL_Only_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_tot_nFDpCD_Dir,
+                      "03a_Ecal_vs_dAlpha_T_tot_QEL_Only_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_MEC_Only_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_tot_nFDpCD_Dir,
+                      "03b_Ecal_vs_dAlpha_T_tot_MEC_Only_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_RES_Only_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_tot_nFDpCD_Dir,
+                      "03c_Ecal_vs_dAlpha_T_tot_RES_Only_nFDpCD", false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_DIS_Only_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hEcal_vs_dAlpha_T_tot_nFDpCD_Dir,
+                      "03d_Ecal_vs_dAlpha_T_tot_DIS_Only_nFDpCD", false);
         //</editor-fold>
 
 //  Ecal vs. W (pFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
@@ -19196,15 +19386,37 @@ void EventAnalyser() {
         //<editor-fold desc="dP_T plots (pFDpCD)">
         histPlotter1D(c1, hdP_T_L_pFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,L} by Leading FD Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sdP_T_pFDpCD, "01a_dP_T_L_pFDpCD", hdP_T_L_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
-        histPlotter1D(c1, hdP_T_tot_pFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true, sdP_T_pFDpCD,
-                      "02a_dP_T_tot_pFDpCD", hdP_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_tot_pFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sdP_T_tot_pFDpCD, "03a_dP_T_tot_pFDpCD", hdP_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_tot_QEL_Only_pFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "QE Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdP_T_tot_pFDpCD, "03b_dP_T_tot_QEL_Only_pFDpCD", hdP_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_tot_MEC_Only_pFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "MEC Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdP_T_tot_pFDpCD, "03c_dP_T_tot_MEC_Only_pFDpCD", hdP_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_tot_RES_Only_pFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "RES Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdP_T_tot_pFDpCD, "03d_dP_T_tot_RES_Only_pFDpCD", hdP_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_tot_DIS_Only_pFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "DIS Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdP_T_tot_pFDpCD, "03e_dP_T_tot_DIS_Only_pFDpCD", hdP_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sdP_T_tot_pFDpCD, norm_TKI_plots, "#deltaP_{T,tot} stack", "pFDpCD", plots, hdP_T_tot_pFDpCD, hdP_T_tot_QEL_Only_pFDpCD,
+                       hdP_T_tot_MEC_Only_pFDpCD, hdP_T_tot_RES_Only_pFDpCD, hdP_T_tot_DIS_Only_pFDpCD, "03f_dP_T_tot_stack_pFDpCD", hdP_T_tot_pFDpCD_Dir, "");
         //</editor-fold>
 
         //<editor-fold desc="dP_T plots (nFDpCD)">
         histPlotter1D(c1, hdP_T_L_nFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,L} by Leading FD Neutron", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sdP_T_nFDpCD, "01a_dP_T_L_nFDpCD", hdP_T_L_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
-        histPlotter1D(c1, hdP_T_tot_nFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true, sdP_T_nFDpCD,
-                      "02a_dP_T_tot_nFDpCD", hdP_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_tot_nFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sdP_T_tot_nFDpCD, "03a_dP_T_tot_nFDpCD", hdP_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_tot_QEL_Only_nFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "QE Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdP_T_tot_nFDpCD, "03b_dP_T_tot_QEL_Only_nFDpCD", hdP_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_tot_MEC_Only_nFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "MEC Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdP_T_tot_nFDpCD, "03c_dP_T_tot_MEC_Only_nFDpCD", hdP_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_tot_RES_Only_nFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "RES Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdP_T_tot_nFDpCD, "03d_dP_T_tot_RES_Only_nFDpCD", hdP_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_tot_DIS_Only_nFDpCD, norm_TKI_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "DIS Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdP_T_tot_nFDpCD, "03e_dP_T_tot_DIS_Only_nFDpCD", hdP_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sdP_T_tot_nFDpCD, norm_TKI_plots, "#deltaP_{T,tot} stack", "nFDpCD", plots, hdP_T_tot_nFDpCD, hdP_T_tot_QEL_Only_nFDpCD,
+                       hdP_T_tot_MEC_Only_nFDpCD, hdP_T_tot_RES_Only_nFDpCD, hdP_T_tot_DIS_Only_nFDpCD, "03f_dP_T_tot_stack_nFDpCD", hdP_T_tot_nFDpCD_Dir, "");
         //</editor-fold>
 
 //  dAlpha_T plots (CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
@@ -19230,14 +19442,38 @@ void EventAnalyser() {
         histPlotter1D(c1, hdAlpha_T_L_pFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,L} by Leading FD Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sdAlpha_T_pFDpCD, "01a_dAlpha_T_L_pFDpCD", hdAlpha_T_L_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
         histPlotter1D(c1, hdAlpha_T_tot_pFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdAlpha_T_pFDpCD, "02a_dAlpha_T_tot_pFDpCD", hdAlpha_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+                      sdAlpha_T_tot_pFDpCD, "03a_dAlpha_T_tot_pFDpCD", hdAlpha_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdAlpha_T_tot_QEL_Only_pFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "QE Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdAlpha_T_tot_pFDpCD, "03b_dAlpha_T_tot_QEL_Only_pFDpCD", hdAlpha_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdAlpha_T_tot_MEC_Only_pFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "MEC Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdAlpha_T_tot_pFDpCD, "03c_dAlpha_T_tot_MEC_Only_pFDpCD", hdAlpha_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdAlpha_T_tot_RES_Only_pFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "RES Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdAlpha_T_tot_pFDpCD, "03d_dAlpha_T_tot_RES_Only_pFDpCD", hdAlpha_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdAlpha_T_tot_DIS_Only_pFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "DIS Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdAlpha_T_tot_pFDpCD, "03e_dAlpha_T_tot_DIS_Only_pFDpCD", hdAlpha_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sdAlpha_T_tot_pFDpCD, norm_TKI_plots, "#delta#alpha_{T,tot} stack", "pFDpCD", plots, hdAlpha_T_tot_pFDpCD, hdAlpha_T_tot_QEL_Only_pFDpCD,
+                       hdAlpha_T_tot_MEC_Only_pFDpCD, hdAlpha_T_tot_RES_Only_pFDpCD, hdAlpha_T_tot_DIS_Only_pFDpCD, "03f_dAlpha_T_tot_stack_pFDpCD", hdAlpha_T_tot_pFDpCD_Dir,
+                       "");
         //</editor-fold>
 
         //<editor-fold desc="dAlpha_T plots (nFDpCD)">
         histPlotter1D(c1, hdAlpha_T_L_nFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,L} by Leading FD Neutron", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sdAlpha_T_nFDpCD, "01a_dAlpha_T_L_nFDpCD", hdAlpha_T_L_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
         histPlotter1D(c1, hdAlpha_T_tot_nFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdAlpha_T_nFDpCD, "02a_dAlpha_T_tot_nFDpCD", hdAlpha_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+                      sdAlpha_T_tot_nFDpCD, "03a_dAlpha_T_tot_nFDpCD", hdAlpha_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdAlpha_T_tot_QEL_Only_nFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "QE Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdAlpha_T_tot_nFDpCD, "03b_dAlpha_T_tot_QEL_Only_nFDpCD", hdAlpha_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdAlpha_T_tot_MEC_Only_nFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "MEC Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdAlpha_T_tot_nFDpCD, "03c_dAlpha_T_tot_MEC_Only_nFDpCD", hdAlpha_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdAlpha_T_tot_RES_Only_nFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "RES Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdAlpha_T_tot_nFDpCD, "03d_dAlpha_T_tot_RES_Only_nFDpCD", hdAlpha_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+        histPlotter1D(c1, hdAlpha_T_tot_DIS_Only_nFDpCD, norm_TKI_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "DIS Only", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdAlpha_T_tot_nFDpCD, "03e_dAlpha_T_tot_DIS_Only_nFDpCD", hdAlpha_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sdAlpha_T_tot_nFDpCD, norm_TKI_plots, "#delta#alpha_{T,tot} stack", "nFDpCD", plots, hdAlpha_T_tot_nFDpCD, hdAlpha_T_tot_QEL_Only_nFDpCD,
+                       hdAlpha_T_tot_MEC_Only_nFDpCD, hdAlpha_T_tot_RES_Only_nFDpCD, hdAlpha_T_tot_DIS_Only_nFDpCD, "03f_dAlpha_T_tot_stack_nFDpCD", hdAlpha_T_tot_nFDpCD_Dir,
+                       "");
         //</editor-fold>
 
 //  dPhi_T plots (CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------

@@ -339,14 +339,21 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram2D->Draw("colz"), gPad->Update();
         } else if (findSubstring(Histogram2DNameCopy, "E_{cal} vs. #theta_{pCD} (All Int., nFDpCD)")) {
             ShowStats = false;
+
+            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
             Histogram2D->SetTitle("E_{cal} vs. #theta_{pCD} in 1nFD1pCD");
             Histogram2D->Draw("colz"), gPad->Update();
 
             TLine *BeamELine = new TLine(gPad->GetUxmin(), beamE, gPad->GetUxmax(), beamE);
-            BeamELine->SetLineWidth(5), BeamELine->SetLineColor(kGreen), BeamELine->Draw("same");
+            BeamELine->SetLineWidth(5), BeamELine->SetLineColor(kBlack), BeamELine->Draw("same");
 
             TLine *LowerThetaLim = new TLine(35., gPad->GetUymin(), 35., gPad->GetUymax());
             LowerThetaLim->SetLineWidth(5), LowerThetaLim->SetLineColor(kRed), LowerThetaLim->Draw("same");
+
+            auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.15 + xOffset, Legend_y2_TwoLines + yOffset);
+            TLegendEntry *BeamELineEntry = Legend->AddEntry(BeamELine, ("E_{beam} = " + to_string_with_precision(beamE, 3) + " [GeV]").c_str(), "l");
+            TLegendEntry *LowerThetaLimEntry = Legend->AddEntry(LowerThetaLim, ("#theta_{pCD} = " + to_string(35.) + " [#circ]").c_str(), "l");
+            Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else if (findSubstring(Histogram2DNameCopy, "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e}}") ||
                    findSubstring(Histogram2DNameCopy, "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD}") ||
                    findSubstring(Histogram2DNameCopy, "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e}") ||
@@ -467,6 +474,12 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                          "W  [GeV]", "W  [GeV/c^{2}]");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "vs. W", "vs. hadronic mass");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "E_{cal} vs. #delta#alpha_{T,tot}", "#delta#alpha_{T,tot} vs. E_{cal}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "E_{cal} vs. #deltaP_{T,tot}", "#deltaP_{T,tot} vs. E_{cal}");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "#deltaP_{T,tot} [GeV]", "#deltaP_{T,tot} [GeV/c]");
 
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "ratio", "- histogram ratio");

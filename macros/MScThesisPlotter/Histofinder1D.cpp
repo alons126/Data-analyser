@@ -31,9 +31,6 @@ TH1D *Histofinder1D(TFile *file, const char *Histogram1DNameSubstring, const boo
     TString classname("TH1D");
     TString classnameTFolder("TFolder");
     TString classnameTHStack("THStack");
-//    static TString classname("TH1D");
-//    static TString classnameTFolder("TFolder");
-//    static TString classnameTHStack("THStack");
     string FoundHistName;
 
     TKey *Key;
@@ -66,48 +63,11 @@ TH1D *Histofinder1D(TFile *file, const char *Histogram1DNameSubstring, const boo
                 break;
             }
         }
-
-//        delete Histogram1DTemp;
     }
-    /*
-        while ((Key = (TKey *) Next())) {
-            TH1D *Histogram1DTemp = (TH1D *) Key->ReadObj();
-
-            string Histogram1DTempName = Histogram1DTemp->GetName();
-
-            if (PrintOut1) { cout << Histogram1DTempName << "\n\n"; }
-
-            if (findSubstring(Histogram1DTempName, Histogram1DNameSubstring) &&
-                (Key->GetClassName() != classnameTFolder("TFolder")) && (Key->GetClassName() != classnameTHStack("THStack"))) {
-
-                if (PrintOut) { cout << "\n\nKey name: " << Histogram1DTemp->GetName() << "; Type: " << Key->GetClassName() << "\n\n"; }
-
-                string Histogram1DxLable = Histogram1DTemp->GetXaxis()->GetTitle();
-                string Histogram1DTitle = Histogram1DTemp->GetTitle();
-
-                if (PrintOut) {
-                    cout << "\nHistogram1DxLable = " << Histogram1DxLable << "\n";
-                    cout << "Histogram1DTitle = " << Histogram1DTitle << "\n";
-                    cout << "TLmom = " << TLmom << "\n";
-                }
-
-                if ((TLmom || !findSubstring(Histogram1DxLable, "Momentum"))) {
-                    HistogramFound = true;
-
-                    Histogram1D = (TH1D *) Key->ReadObj();
-
-                    FoundHistName = Key->GetClassName();
-                    delete Histogram1DTemp;
-                    break;
-                }
-            }
-
-            delete Histogram1DTemp;
-        }
-    */
 
     if (!HistogramFound) {
         cout << "\n\nHistofinder1D: could not find histogram!\n";
+        cout << "TLmom = " << TLmom << "\n";
         cout << "Histogram1DNameSubstring = " << Histogram1DNameSubstring << "\n";
         exit(0);
 

@@ -168,6 +168,10 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
                 Data_Histogram1D = (TH1D *) Data_file->Get(Histogram1DName);
             }
         }
+    } else if (findSubstring(Histogram1DName, "deltaAlpha_T_tot FSRatio")) {
+        string Histogram1DNameTemp0 = Histogram1DName, Histogram1DNameTemp = Histogram1DNameTemp0.substr(0, Histogram1DNameTemp0.find_last_of("(") + 1) + ")";
+        Sim_Histogram1D = Histofinder1D(Sim_file, Histogram1DNameTemp.c_str(), TLmom);
+        Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName, TLmom);
     } else {
         Sim_Histogram1D = Histofinder1D(Sim_file, Histogram1DName, TLmom);
         Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName, TLmom);
