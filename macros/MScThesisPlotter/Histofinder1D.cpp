@@ -29,6 +29,7 @@ TH1D *Histofinder1D(TFile *file, const char *Histogram1DNameSubstring, const boo
     bool HistogramFound = false;
     int Counter = 0, HistogramCounter = 0;
     TString classname("TH1D");
+    TString classnameTH2D("TH2D");
     TString classnameTFolder("TFolder");
     TString classnameTHStack("THStack");
     string FoundHistName;
@@ -42,7 +43,9 @@ TH1D *Histofinder1D(TFile *file, const char *Histogram1DNameSubstring, const boo
         if (PrintOut1) { cout << Histogram1DTempName << "\n\n"; }
 
         if (findSubstring(Histogram1DTempName, Histogram1DNameSubstring) &&
-            (Key->GetClassName() != classnameTFolder("TFolder")) && (Key->GetClassName() != classnameTHStack("THStack"))) {
+            (Key->GetClassName() != classnameTH2D("TH2D")) &&
+            (Key->GetClassName() != classnameTFolder("TFolder")) &&
+            (Key->GetClassName() != classnameTHStack("THStack"))) {
 
             if (PrintOut) { cout << "\n\nKey name: " << ((TH1D *) Key->ReadObj())->GetName() << "; Type: " << Key->GetClassName() << "\n\n"; }
 

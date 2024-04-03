@@ -1452,14 +1452,18 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="05_TKI_comp_Sim">
-    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#deltaP_{T,tot} (pFDpCD)", "#deltaP_{T,tot} (nFDpCD)",
-               "#deltaP_{T,tot} (nFDpCD)", TKIComp_dP_T_Sim_FolderData, "dP_T_pFDpCD", "dP_T_nFDpCD", "dP_T_FSR", 1);
+    FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#deltaP_{T,tot} (pFDpCD)",
+                    "#deltaP_{T,tot} (nFDpCD)", "#deltaP_{T,tot} (nFDpCD)", TKIComp_dP_T_Sim_FolderData, "dP_T_pFDpCD", "dP_T_nFDpCD", "dP_T_FSR", 1);
+//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#deltaP_{T,tot} (pFDpCD)", "#deltaP_{T,tot} (nFDpCD)",
+//               "#deltaP_{T,tot} (nFDpCD)", TKIComp_dP_T_Sim_FolderData, "dP_T_pFDpCD", "dP_T_nFDpCD", "dP_T_FSR", 1);
     FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#deltaP_{T,tot} vs. W (All Int., pFDpCD)",
                "#deltaP_{T,tot} vs. W (All Int., nFDpCD)", "#deltaP_{T,tot} vs. W (All Int., nFDpCD)", TKIComp_dP_T_Sim_FolderData, "dP_T_tot_vs_W_pFDpCD",
                "dP_T_tot_vs_W_nFDpCD", "dP_T_tot_vs_W_FSR_2N", 3);
 
-    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#delta#alpha_{T,tot} (pFDpCD)", "#delta#alpha_{T,tot} (nFDpCD)",
-               "#delta#alpha_{T,tot} (nFDpCD)", TKIComp_dAlpha_T_Sim_FolderData, "dAlpha_T_pFDpCD", "dAlpha_T_nFDpCD", "dAlpha_T_FSR", 1);
+    FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#delta#alpha_{T,tot} (pFDpCD)",
+                    "#delta#alpha_{T,tot} (nFDpCD)", "#delta#alpha_{T,tot} (nFDpCD)", TKIComp_dAlpha_T_Sim_FolderData, "dAlpha_T_pFDpCD", "dAlpha_T_nFDpCD", "dAlpha_T_FSR", 1);
+//    FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "#delta#alpha_{T,tot} (pFDpCD)", "#delta#alpha_{T,tot} (nFDpCD)",
+//               "#delta#alpha_{T,tot} (nFDpCD)", TKIComp_dAlpha_T_Sim_FolderData, "dAlpha_T_pFDpCD", "dAlpha_T_nFDpCD", "dAlpha_T_FSR", 1);
     FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "#delta#alpha_{T,tot} vs. W (All Int., pFDpCD)",
                "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)", "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)", TKIComp_dAlpha_T_Sim_FolderData, "dAlpha_T_tot_vs_W_pFDpCD",
                "dAlpha_T_tot_vs_W_nFDpCD", "dAlpha_T_tot_vs_W_FSR_2N", 3);

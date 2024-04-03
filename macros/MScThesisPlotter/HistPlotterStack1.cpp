@@ -230,6 +230,49 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
             }
 
             Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName);
+        } else if (findSubstring(Histogram1DName, "#deltaP_{T,tot}") ||
+                   findSubstring(Histogram1DName, "#delta#alpha_{T,tot}")) {
+            if (findSubstring(Histogram1DName, "pFDpCD")) {
+                string Histogram1DName0 = Histogram1DName;
+                string Histogram1DName1 = Histogram1DName0.substr(0, Histogram1DName0.find_last_of('(') - 1);
+
+                if (findSubstring(Histogram1DName, "#deltaP_{T,tot}")) {
+                    Stack1D = new THStack("#deltaP_{T,tot} in 1pFD1pCD", "#deltaP_{T,tot} in 1pFD1pCD;#deltaP_{T,tot} [GeV/c];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (pFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QE Only, pFDpCD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC Only, pFDpCD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES Only, pFDpCD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS Only, pFDpCD)").c_str());
+                } else if (findSubstring(Histogram1DName, "#delta#alpha_{T,tot}")) {
+                    Stack1D = new THStack("#delta#alpha_{T,tot} in 1pFD1pCD", "#delta#alpha_{T,tot} in 1pFD1pCD;#delta#alpha_{T,tot} [#circ];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (pFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QE Only, pFDpCD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC Only, pFDpCD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES Only, pFDpCD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS Only, pFDpCD)").c_str());
+                }
+            } else if (findSubstring(Histogram1DName, "nFDpCD")) {
+                string Histogram1DName0 = Histogram1DName;
+                string Histogram1DName1 = Histogram1DName0.substr(0, Histogram1DName0.find_last_of('(') - 1);
+
+                if (findSubstring(Histogram1DName, "#deltaP_{T,tot}")) {
+                    Stack1D = new THStack("#deltaP_{T,tot} in 1pFD1pCD", "#deltaP_{T,tot} in 1pFD1pCD;#deltaP_{T,tot} [GeV/c];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (nFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QE Only, nFDpCD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC Only, nFDpCD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES Only, nFDpCD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS Only, nFDpCD)").c_str());
+                } else if (findSubstring(Histogram1DName, "#delta#alpha_{T,tot}")) {
+                    Stack1D = new THStack("#delta#alpha_{T,tot} in 1pFD1pCD", "#delta#alpha_{T,tot} in 1pFD1pCD;#delta#alpha_{T,tot} [#circ];");
+                    Sim_Histogram1D = Histofinder1D(Sim_file, (Histogram1DName1 + " (nFDpCD)").c_str());
+                    Sim_Histogram1D_QE = Histofinder1D(Sim_file, (Histogram1DName1 + " (QE Only, nFDpCD)").c_str());
+                    Sim_Histogram1D_MEC = Histofinder1D(Sim_file, (Histogram1DName1 + " (MEC Only, nFDpCD)").c_str());
+                    Sim_Histogram1D_RES = Histofinder1D(Sim_file, (Histogram1DName1 + " (RES Only, nFDpCD)").c_str());
+                    Sim_Histogram1D_DIS = Histofinder1D(Sim_file, (Histogram1DName1 + " (DIS Only, nFDpCD)").c_str());
+                }
+            }
+
+            Data_Histogram1D = Histofinder1D(Data_file, Histogram1DName);
         }
     } else {
         string Histogram1DName1 = Histogram1DName;
@@ -309,8 +352,11 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
 //    Sim_Histogram1D->SetLineColor(kBlue + 1);
     Sim_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D);
-    double Sim_Scale = Sim_Histogram1D->Integral();
-    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
+    const double Sim_Scale = Sim_Histogram1D->Integral();
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+        Sim_Histogram1D->Scale(Data_Histogram1D->Integral() / Sim_Scale);
+        Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum()));
+    }
     Stack1D->Add(Sim_Histogram1D);
 
     Sim_Histogram1D_QE->GetXaxis()->SetTitleSize(0.06);
@@ -325,7 +371,10 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_QE->SetLineColor(kAzure + 10); // Original
     Sim_Histogram1D_QE->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_QE);
-    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_QE->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+        Sim_Histogram1D_QE->Scale(Data_Histogram1D->Integral() / Sim_Scale);
+        Sim_Histogram1D_QE->GetYaxis()->SetRangeUser(0., 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum()));
+    }
     Stack1D->Add(Sim_Histogram1D_QE);
 
     Sim_Histogram1D_MEC->GetXaxis()->SetTitleSize(0.06);
@@ -340,7 +389,10 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_MEC->SetLineColor(kViolet); // Original
     Sim_Histogram1D_MEC->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_MEC);
-    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_MEC->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+        Sim_Histogram1D_MEC->Scale(Data_Histogram1D->Integral() / Sim_Scale);
+        Sim_Histogram1D_MEC->GetYaxis()->SetRangeUser(0., 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum()));
+    }
     Stack1D->Add(Sim_Histogram1D_MEC);
 
     Sim_Histogram1D_RES->GetXaxis()->SetTitleSize(0.06);
@@ -355,7 +407,10 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_RES->SetLineColor(kGreen + 1); // Original
     Sim_Histogram1D_RES->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_RES);
-    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_RES->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+        Sim_Histogram1D_RES->Scale(Data_Histogram1D->Integral() / Sim_Scale);
+        Sim_Histogram1D_RES->GetYaxis()->SetRangeUser(0., 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum()));
+    }
     Stack1D->Add(Sim_Histogram1D_RES);
 
     Sim_Histogram1D_DIS->GetXaxis()->SetTitleSize(0.06);
@@ -370,7 +425,10 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_DIS->SetLineColor(kOrange + 7); // Original
     Sim_Histogram1D_DIS->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_DIS);
-    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D_DIS->Scale(Data_Histogram1D->Integral() / Sim_Scale); }
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+        Sim_Histogram1D_DIS->Scale(Data_Histogram1D->Integral() / Sim_Scale);
+        Sim_Histogram1D_DIS->GetYaxis()->SetRangeUser(0., 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum()));
+    }
     Stack1D->Add(Sim_Histogram1D_DIS);
 
     Data_Histogram1D->GetXaxis()->SetTitleSize(0.06);
@@ -390,6 +448,9 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Data_Histogram1D->SetMarkerColor(kRed + 1);
     Data_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Data_Histogram1D);
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+        Data_Histogram1D->GetYaxis()->SetRangeUser(0., 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum()));
+    }
     Stack1D->Add(Data_Histogram1D);
 
     if (Sim_Histogram1D->Integral() == 0. || Data_Histogram1D->Integral() == 0.) {
@@ -582,8 +643,14 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) { Custom_x1Offset = -0.085; }
 
         if (findSubstring(Histogram1D_Title, "W ") ||
-            findSubstring(Histogram1D_Title, "E_{cal}")) {
+            findSubstring(Histogram1D_Title, "E_{cal}") ||
+            findSubstring(Histogram1D_Title, "#delta#alpha_{T,tot}")) {
             double Custom_xOffset = -0.41;
+
+            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025, Legend_y1_TwoLines + yOffset,
+                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset - 0.15);
+        } else if (findSubstring(Histogram1D_Title, "#deltaP_{T,tot}")) {
+            double Custom_xOffset = 0;
 
             Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025, Legend_y1_TwoLines + yOffset,
                                             Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset - 0.15);

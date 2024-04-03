@@ -239,7 +239,10 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
 //    Sim_Histogram1D->SetLineColor(kBlue + 1);
     Sim_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D);
-    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) { Sim_Histogram1D->Scale(Data_Histogram1D->Integral() / Sim_Histogram1D->Integral()); }
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+        Sim_Histogram1D->Scale(Data_Histogram1D->Integral() / Sim_Histogram1D->Integral());
+        Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum()));
+    }
 
     Data_Histogram1D->GetXaxis()->SetTitleSize(0.06);
     Data_Histogram1D->GetXaxis()->SetLabelSize(0.0425);
@@ -257,6 +260,9 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
     Data_Histogram1D->SetMarkerSize(2.5);
     Data_Histogram1D->SetMarkerColor(kRed + 1);
     Data_Histogram1D->SetStats(0);
+    if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+        Data_Histogram1D->GetYaxis()->SetRangeUser(0., 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum()));
+    }
     MScThesisPlotsList->Add(Data_Histogram1D);
 
     if (Sim_Histogram1D->Integral() == 0. || Data_Histogram1D->Integral() == 0.) {

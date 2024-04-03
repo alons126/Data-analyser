@@ -799,7 +799,7 @@ void EventAnalyser() {
 //    int numTH1Dbins = 50;
 //    int numTH2Dbins = 65;
 
-    if (isData) { numTH2Dbins = numTH2Dbins * 2; }
+    if (isData) { numTH2Dbins = numTH2Dbins * 4; }
 
     /* Momentum plots */
     int numTH2Dbins_Mom_Plots = numTH2Dbins; // To be changed if apply_kinematical_cuts = true
