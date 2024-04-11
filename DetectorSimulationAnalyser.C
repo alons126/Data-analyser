@@ -913,7 +913,7 @@ void EventAnalyser() {
     }
 
     /* W boundries */
-    const double W_lboundary = 0.5, W_uboundary = (beamE * 1.1) / 2; // Default
+    const double W_lboundary = 0.35, W_uboundary = (beamE * 1.1) / 2; // Default
 
     /* Beta boundries */
     const double dBeta_sigma_boundary = 0.1;
@@ -2105,7 +2105,7 @@ void EventAnalyser() {
     TH2D *hP_pFD_APIDandPS_VS_W_DIS_1p = new TH2D("FD proton momentum APID vs. W (DIS Only, 1p)",
                                                   "FD proton momentum APID vs. W (DIS Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{p} [GeV/c]",
                                                   numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hP_pFD_APIDandPS_VS_W_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+    string hP_pFD_APIDandPS_VS_W_1p_Dir = directories.Momentum_transfer_Directory_map["Analysis_plots_momentum_1p_Directory"];
 
     hPlot1D hP_piplus_APID_1p_CD = hPlot1D("1p", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1p_Directory"], "03a_P_piplus_APID_1p_CD", Momentum_lboundary, Momentum_uboundary,
@@ -2195,7 +2195,7 @@ void EventAnalyser() {
     TH2D *hP_nFD_APIDandNS_VS_W_DIS_1n = new TH2D("Leading FD neutron momentum APID&NC vs. W (DIS Only, 1n)",
                                                   "Leading FD neutron momentum APID&NC vs. W (DIS Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{n} [GeV/c]",
                                                   numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hP_nFD_APIDandNS_VS_W_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
+    string hP_nFD_APIDandNS_VS_W_1n_Dir = directories.Momentum_transfer_Directory_map["Analysis_plots_momentum_1n_Directory"];
 
     hPlot1D hP_p_APID_1n_CD = hPlot1D("1n", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "03a_P_p_APID_1n_CD", Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
@@ -2489,7 +2489,7 @@ void EventAnalyser() {
     TH2D *hP_pFD_VS_W_DIS_pFDpCD = new TH2D("FD proton momentum vs. W (DIS Only, pFDpCD)",
                                                   "FD proton momentum vs. W (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
                                                   numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
-    string hP_pFD_VS_W_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
+    string hP_pFD_VS_W_pFDpCD_Dir = directories.Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"];
 
     TH2D *hP_pCD_VS_W_pFDpCD = new TH2D("CD proton momentum vs. W (All Int., pFDpCD)",
                                               "CD proton momentum vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
@@ -2506,7 +2506,7 @@ void EventAnalyser() {
     TH2D *hP_pCD_VS_W_DIS_pFDpCD = new TH2D("CD proton momentum vs. W (DIS Only, pFDpCD)",
                                                   "CD proton momentum vs. W (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
                                                   numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
-    string hP_pCD_VS_W_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
+    string hP_pCD_VS_W_pFDpCD_Dir = directories.Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="nFD and pCD momentum plots (nFDpCD)">
@@ -2535,7 +2535,7 @@ void EventAnalyser() {
     TH2D *hP_nFD_VS_W_DIS_nFDpCD = new TH2D("FD neutron momentum vs. W (DIS Only, nFDpCD)",
                                             "FD neutron momentum vs. W (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
                                             numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
-    string hP_nFD_VS_W_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
+    string hP_nFD_VS_W_nFDpCD_Dir = directories.Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"];
 
     TH2D *hP_pCD_VS_W_nFDpCD = new TH2D("CD proton momentum vs. W (All Int., nFDpCD)",
                                         "CD proton momentum vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
@@ -2552,7 +2552,7 @@ void EventAnalyser() {
     TH2D *hP_pCD_VS_W_DIS_nFDpCD = new TH2D("CD proton momentum vs. W (DIS Only, nFDpCD)",
                                             "CD proton momentum vs. W (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
                                             numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
-    string hP_pCD_VS_W_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
+    string hP_pCD_VS_W_nFDpCD_Dir = directories.Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Total and relative nucleon momenta (pFDpCD)">
@@ -3377,7 +3377,7 @@ void EventAnalyser() {
     TH2D *hW_VS_q_3v_DIS_1e_cut = new TH2D("W vs. |#font[62]{q}| (DIS Only, 1e Cut)",
                                            "W vs. |#font[62]{q}| (DIS Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_q_3v_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
+    string hW_VS_q_3v_1e_cut_Dir = directories.W_Directory_map["W_1e_cut_Directory"];
 
     TH2D *hW_VS_omega_1e_cut = new TH2D("W vs. #omega (All Int., 1e Cut)",
                                         "W vs. #omega (All Int., 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
@@ -3394,7 +3394,7 @@ void EventAnalyser() {
     TH2D *hW_VS_omega_DIS_1e_cut = new TH2D("W vs. #omega (DIS Only, 1e Cut)",
                                             "W vs. #omega (DIS Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
                                             numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_omega_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
+    string hW_VS_omega_1e_cut_Dir = directories.W_Directory_map["W_1e_cut_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="W plots (1p, CD & FD)">
@@ -3431,7 +3431,7 @@ void EventAnalyser() {
     TH2D *hW_VS_q_3v_DIS_1p = new TH2D("W vs. |#font[62]{q}| (DIS Only, 1p)",
                                        "W vs. |#font[62]{q}| (DIS Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_q_3v_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+    string hW_VS_q_3v_1p_Dir = directories.W_Directory_map["W_1p_Directory"];
 
     TH2D *hW_VS_omega_1p = new TH2D("W vs. #omega (All Int., 1p)", "W vs. #omega (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
@@ -3443,7 +3443,7 @@ void EventAnalyser() {
                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
     TH2D *hW_VS_omega_DIS_1p = new TH2D("W vs. #omega (DIS Only, 1p)", "W vs. #omega (DIS Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_omega_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+    string hW_VS_omega_1p_Dir = directories.W_Directory_map["W_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="W plots (1n, CD & FD)">
@@ -3480,7 +3480,7 @@ void EventAnalyser() {
     TH2D *hW_VS_q_3v_DIS_1n = new TH2D("W vs. |#font[62]{q}| (DIS Only, 1n)",
                                        "W vs. |#font[62]{q}| (DIS Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_q_3v_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
+    string hW_VS_q_3v_1n_Dir = directories.W_Directory_map["W_1n_Directory"];
 
     TH2D *hW_VS_omega_1n = new TH2D("W vs. #omega (All Int., 1n)", "W vs. #omega (All Int., 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
@@ -3492,7 +3492,7 @@ void EventAnalyser() {
                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
     TH2D *hW_VS_omega_DIS_1n = new TH2D("W vs. #omega (DIS Only, 1n)", "W vs. #omega (DIS Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_omega_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
+    string hW_VS_omega_1n_Dir = directories.W_Directory_map["W_1n_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="W plots (2p, CD & FD)">
@@ -3529,7 +3529,7 @@ void EventAnalyser() {
     TH2D *hW_VS_q_3v_DIS_2p = new TH2D("W vs. |#font[62]{q}| (DIS Only, 2p)",
                                        "W vs. |#font[62]{q}| (DIS Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_q_3v_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
+    string hW_VS_q_3v_2p_Dir = directories.W_Directory_map["W_2p_Directory"];
 
     TH2D *hW_VS_omega_2p = new TH2D("W vs. #omega (All Int., 2p)", "W vs. #omega (All Int., 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
@@ -3541,7 +3541,7 @@ void EventAnalyser() {
                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
     TH2D *hW_VS_omega_DIS_2p = new TH2D("W vs. #omega (DIS Only, 2p)", "W vs. #omega (DIS Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_omega_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
+    string hW_VS_omega_2p_Dir = directories.W_Directory_map["W_2p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="W plots (pFDpCD, CD & FD)">
@@ -3578,7 +3578,7 @@ void EventAnalyser() {
     TH2D *hW_VS_q_3v_DIS_pFDpCD = new TH2D("W vs. |#font[62]{q}| (DIS Only, pFDpCD)",
                                            "W vs. |#font[62]{q}| (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_q_3v_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
+    string hW_VS_q_3v_pFDpCD_Dir = directories.W_Directory_map["W_pFDpCD_Directory"];
 
     TH2D *hW_VS_omega_pFDpCD = new TH2D("W vs. #omega (All Int., pFDpCD)",
                                         "W vs. #omega (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
@@ -3595,7 +3595,7 @@ void EventAnalyser() {
     TH2D *hW_VS_omega_DIS_pFDpCD = new TH2D("W vs. #omega (DIS Only, pFDpCD)",
                                             "W vs. #omega (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
                                             numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_omega_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
+    string hW_VS_omega_pFDpCD_Dir = directories.W_Directory_map["W_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="W plots (nFDpCD, CD & FD)">
@@ -3632,7 +3632,7 @@ void EventAnalyser() {
     TH2D *hW_VS_q_3v_DIS_nFDpCD = new TH2D("W vs. |#font[62]{q}| (DIS Only, nFDpCD)",
                                            "W vs. |#font[62]{q}| (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_q_3v_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
+    string hW_VS_q_3v_nFDpCD_Dir = directories.W_Directory_map["W_nFDpCD_Directory"];
 
     TH2D *hW_VS_omega_nFDpCD = new TH2D("W vs. #omega (All Int., nFDpCD)",
                                         "W vs. #omega (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
@@ -3649,7 +3649,7 @@ void EventAnalyser() {
     TH2D *hW_VS_omega_DIS_nFDpCD = new TH2D("W vs. #omega (DIS Only, nFDpCD)",
                                             "W vs. #omega (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
                                             numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
-    string hW_VS_omega_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
+    string hW_VS_omega_nFDpCD_Dir = directories.W_Directory_map["W_nFDpCD_Directory"];
     //</editor-fold>
 
     //</editor-fold>
