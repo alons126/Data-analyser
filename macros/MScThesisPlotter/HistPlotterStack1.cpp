@@ -571,6 +571,11 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
                      "#theta_{#font[62]{q},#font[62]{P}_{nuc,FD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{nucFD}} [Deg]");
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "#theta_{#font[62]{q},#font[62]{P}_{nuc,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#deltaP_{T,tot} by Momentum Sum", "Transverse momentum imbalance");
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#delta#alpha_{T,tot} by Momentum Sum", "Transverse boosting angle");
+
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                      "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
@@ -626,6 +631,18 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
 
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[Deg]", "[#circ]");
 
+//        if (findSubstring(Histogram1DNameCopy, "W ")) {
+//            double Sim_Xmin = Sim_Histogram1D->GetXaxis()->GetXmin();
+//            double Sim_Xmax = Sim_Histogram1D->GetXaxis()->GetXmax();
+//            Sim_Histogram1D->GetXaxis()->SetRangeUser(0.25, Sim_Xmax);
+//            Sim_Histogram1D_QE->GetXaxis()->SetRangeUser(0.25, Sim_Xmax);
+//            Sim_Histogram1D_MEC->GetXaxis()->SetRangeUser(0.25, Sim_Xmax);
+//            Sim_Histogram1D_RES->GetXaxis()->SetRangeUser(0.25, Sim_Xmax);
+//            Sim_Histogram1D_DIS->GetXaxis()->SetRangeUser(0.25, Sim_Xmax);
+//
+//            Data_Histogram1D->GetXaxis()->SetRangeUser(0.25, Sim_Xmax);
+//        }
+
 ////        Stack1D->Draw("nostack");
 //        Sim_Histogram1D->Draw();
 //        Sim_Histogram1D_QE->Draw("same"), Sim_Histogram1D_MEC->Draw("same"), Sim_Histogram1D_RES->Draw("same"), Sim_Histogram1D_DIS->Draw("same");
@@ -649,27 +666,15 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
 
             Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025, Legend_y1_TwoLines + yOffset,
                                             Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset - 0.15);
-        } else if (findSubstring(Histogram1D_Title, "#deltaP_{T,tot}")) {
-            double Custom_xOffset = 0;
-
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset - 0.15);
         } else {
             Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
+                                            Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset + 0.025, Legend_y2_TwoLines + yOffset - 0.15);
         }
 
-        /*
-        if (!findSubstring(Histogram1D_Title, "W ")) {
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
-        } else {
-            double Custom_xOffset = -0.41;
-
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
-        }
-*/
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#deltaP_{T,tot} by Momentum Sum", "Transverse momentum imbalance");
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+                     "#delta#alpha_{T,tot} by Momentum Sum", "Transverse boosting angle");
 
         if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
             TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "All int. (simulation; scaled)", "l");

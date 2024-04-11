@@ -480,9 +480,13 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) { Custom_x1Offset = -0.085; }
 
         if (findSubstring(Histogram1D_Title, "W ") ||
-            findSubstring(Histogram1D_Title, "#theta_{nFD}") ||
-            findSubstring(Histogram1D_Title, "#theta_{pFD}") ||
+            findSubstring(Histogram1D_Title, "#theta_{nFD}") || findSubstring(Histogram1D_Title, "#theta_{pFD}") ||
             findSubstring(Histogram1D_Title, "E_{cal}")) {
+            double Custom_xOffset = -0.41;
+
+            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
+        } else if (findSubstring(Histogram1D_Title, "#delta#alpha_{T,tot}") && !findSubstring(Histogram1DNameCopy, "FSRatio")) {
             double Custom_xOffset = -0.41;
 
             Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,

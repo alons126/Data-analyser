@@ -265,10 +265,10 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1nFD, FD)", " in 1nFD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1pFD1pCD, FD)", " in 1pFD1pCD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1nFD1pCD, FD)", " in 1nFD1pCD");
-        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e_cut, FD)", " in ^{12}C(e,e')");
-        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e cut, FD)", " in ^{12}C(e,e')");
-        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e_cut)", " in ^{12}C(e,e')");
-        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e cut)", " in ^{12}C(e,e')");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e_cut, FD)", "");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e cut, FD)", "");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e_cut)", "");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e cut)", "");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "(1pFD1pCD)", "in 1pFD1pCD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "(1nFD1pCD)", "in 1nFD1pCD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[Deg]", "[#circ]");
@@ -303,9 +303,9 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             }
 
             if (ParticleShort == "e") {
-                Histogram1D->SetTitle(("V_{z}^{" + ParticleShort + "} of " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+                Histogram1D->SetTitle(("V_{z}^{" + ParticleShort + "} of " + ParticlesLC + "").c_str());
             } else {
-                Histogram1D->SetTitle(("V_{z}^{" + ParticleShort + "} of " + Region + " " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+                Histogram1D->SetTitle(("V_{z}^{" + ParticleShort + "} of " + Region + " " + ParticlesLC + "").c_str());
             }
 
             Histogram1D->Draw(), gPad->Update();
@@ -337,9 +337,9 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats), UpperCut = 4., LowerCut = -5.;
 
             if (ParticleShort == "e") {
-                Histogram1D->SetTitle(("dV_{z}^{" + ParticleShort + "} of " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+                Histogram1D->SetTitle(("dV_{z}^{" + ParticleShort + "} of " + ParticlesLC + "").c_str());
             } else {
-                Histogram1D->SetTitle(("dV_{z}^{" + ParticleShort + "} of " + Region + " " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+                Histogram1D->SetTitle(("dV_{z}^{" + ParticleShort + "} of " + Region + " " + ParticlesLC + "").c_str());
             }
 
             Histogram1D->Draw(), gPad->Update();
@@ -379,7 +379,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             if (ParticleShort == "e") {
                 string ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, true);
-                Histogram1D->SetTitle(("#chi^{2}_{" + ParticleShort + "} of " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+                Histogram1D->SetTitle(("#chi^{2}_{" + ParticleShort + "} of " + ParticlesLC + "").c_str());
             } else {
                 if ((ParticleShort != "p") || (ParticleShort != "D")) {
                     ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, false);
@@ -387,7 +387,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                     ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, true);
                 }
 
-                Histogram1D->SetTitle(("#chi^{2}_{" + ParticleShort + "} of " + Region + " " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+                Histogram1D->SetTitle(("#chi^{2}_{" + ParticleShort + "} of " + Region + " " + ParticlesLC + "").c_str());
 
                 if (findSubstring(Histogram1DNameCopy, "{D}") ||
                     findSubstring(Histogram1DNameCopy, "{K^{+}}") || findSubstring(Histogram1DNameCopy, "{K^{-}}")) {
@@ -409,7 +409,7 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             double LowerMomentumTh = 0.4;
 
             Histogram1D->GetYaxis()->SetRangeUser(0., 1.);
-            Histogram1D->SetTitle(("Momentum efficiency of " + Region + " " + ParticlesLC + " in ^{12}C(e,e')").c_str());
+            Histogram1D->SetTitle(("Momentum efficiency of " + Region + " " + ParticlesLC + "").c_str());
             Histogram1D->GetYaxis()->SetTitle("#epsilon_{eff}");
             Histogram1D->Draw(), gPad->Update();
 
@@ -457,6 +457,10 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TLegendEntry *UpperdPhiCutEntry = Legend->AddEntry(UpperdPhiCut, ("Upper cut = " + to_string_with_precision(UpperCut, 1) + "#circ").c_str(), "l");
             TLegendEntry *LowerdPhiCutEntry = Legend->AddEntry(LowerdPhiCut, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + "#circ").c_str(), "l");
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
+
+//            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFD", "#tilde{pFD}");
+//            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pCD", "#tilde{pCD}");
+
         } else if ((Histogram1DNameCopy == "FD Leading neutron momentum #epsilon_{eff} (1e cut)") ||
                    (Histogram1DNameCopy == "FD Neutron momentum #epsilon_{eff} (1e cut)")) {
             double UpperCut = beamE, LowerCut = 0.4;

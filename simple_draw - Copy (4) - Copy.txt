@@ -1,0 +1,142 @@
+TCanvas *c_2p = new TCanvas("c1_2p", "c2_2p", 1000 * 1.25, 750 * 1.25); // normal res
+
+c_2p->cd()->SetGrid();
+c_2p->cd()->SetBottomMargin(0.14), c_2p->cd()->SetLeftMargin(0.16), c_2p->cd()->SetRightMargin(0.16), c_2p->cd()->SetTopMargin(0.12);
+c_2p->cd();
+
+double Legend_x1_BaseLine = gStyle->GetStatX(), Legend_y1_BaseLine = gStyle->GetStatY(); // Top right
+double Legend_x2_BaseLine = gStyle->GetStatX(), Legend_y2_BaseLine = gStyle->GetStatY(); // Bottom left
+
+double Legend_x1_OneLine = Legend_x1_BaseLine, Legend_y1_OneLine = Legend_y1_BaseLine - 0.2; // Top right
+double Legend_x2_OneLine = Legend_x2_BaseLine - 0.2, Legend_y2_OneLine = Legend_y2_BaseLine - 0.25; // Bottom left
+
+double Legend_x1_TwoLines = Legend_x1_BaseLine, Legend_y1_TwoLines = Legend_y1_BaseLine - 0.2; // Top right
+double Legend_x2_TwoLines = Legend_x2_BaseLine - 0.2, Legend_y2_TwoLines = Legend_y2_BaseLine - 0.3; // Bottom left
+
+double Legend_x1_ThreeLines = Legend_x1_BaseLine, Legend_y1_ThreeLines = Legend_y1_BaseLine - 0.2; // Top right
+double Legend_x2_ThreeLines = Legend_x2_BaseLine - 0.2, Legend_y2_ThreeLines = Legend_y2_BaseLine - 0.35; // Bottom left
+
+TH1D *hEcal_2p = (TH1D *) _file0->Get("E_{cal} reco. (All Int., pFDpCD)");
+hEcal_2p->Draw();
+double Ecal_2p_max = hEcal_2p->GetBinCenter(hEcal_2p->GetMaximumBin());
+c_2p->Clear()
+cout << "\nEcal_2p_max = " << hEcal_2p_max << "\n";
+
+TH1D *dP_T_tot_2p = (TH1D *) _file0->Get("#deltaP_{T,tot} (pFDpCD)");
+dP_T_tot_2p->Draw();
+double dP_T_tot_2p_max = dP_T_tot_2p->GetBinCenter(dP_T_tot_2p->GetMaximumBin());
+c_2p->Clear()
+cout << "\ndP_T_tot_2p_max = " << dP_T_tot_2p_max << "\n";
+
+TH2D *hEcal_vs_dP_T_tot_2p = (TH2D *) _file0->Get("E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)");
+hEcal_vs_dP_T_tot_2p->Draw("colz"), gPad->Update();
+
+TLine *Ecal_peak_2p = new TLine(gPad->GetUxmin(), Ecal_2p_max, gPad->GetUxmax(), Ecal_2p_max);
+Ecal_peak_2p->SetLineWidth(3);
+Ecal_peak_2p->SetLineColor(kRed + 1);
+Ecal_peak_2p->SetLineStyle(2);
+Ecal_peak_2p->Draw("same");
+
+TLine *dP_T_tot_peak_2p = new TLine(dP_T_tot_2p_max, gPad->GetUymin(), dP_T_tot_2p_max, gPad->GetUymax());
+dP_T_tot_peak_2p->SetLineWidth(3);
+dP_T_tot_peak_2p->SetLineColor(kRed);
+dP_T_tot_peak_2p->Draw("same");
+
+TLine *beamE_2p = new TLine(gPad->GetUxmin(), 5.98636, gPad->GetUxmax(), 5.98636);
+beamE_2p->SetLineWidth(3);
+beamE_2p->SetLineColor(kBlack);
+beamE_2p->Draw("same");
+
+TLine *QE_lim_2p = new TLine(gPad->GetUxmin(), 5., gPad->GetUxmax(), 5.);
+QE_lim_2p->SetLineWidth(3);
+QE_lim_2p->SetLineColor(kAzure + 10);
+QE_lim_2p->Draw("same");
+
+TLine *RES_lim_2p = new TLine(gPad->GetUxmin(), 4., gPad->GetUxmax(), 4.);
+RES_lim_2p->SetLineWidth(3);
+RES_lim_2p->SetLineColor(kGreen + 1);
+RES_lim_2p->Draw("same");
+
+double yOffset = 0.05;
+
+TLegend *Legend_2p = new TLegend(Legend_x1_OneLine + -0.15 + 0.04- 0.04, Legend_y1_OneLine -0.15 + yOffset,
+                                  Legend_x2_OneLine - 0.05 + -0.15 + 0.04, Legend_y2_OneLine + 0.125 - 0.01 + yOffset);
+TLegendEntry *Ecal_peak_2pEntry = Legend_2p->AddEntry(Ecal_peak_2p, "Ecal_peak_2p","l");
+TLegendEntry *dP_T_tot_peak_2pEntry = Legend_2p->AddEntry(dP_T_tot_peak_2p, "dP_T_tot_peak_2p","l");
+TLegendEntry *beamE_2pEntry = Legend_2p->AddEntry(beamE_2p, "beamE_2p","l");
+TLegendEntry *QE_lim_2pEntry = Legend_2p->AddEntry(QE_lim_2p, "QE_lim_2p","l");
+TLegendEntry *RES_lim_2pEntry = Legend_2p->AddEntry(RES_lim_2p, "RES_lim_2p","l");
+Legend_2p->SetTextSize(0.03), Legend_2p->SetTextAlign(12), Legend_2p->Draw("same");
+
+cout << "\n";
+
+
+TCanvas *c_1n1p = new TCanvas("c1_1n1p", "c2_1n1p", 1000 * 1.25, 750 * 1.25); // normal res
+
+c_1n1p->cd()->SetGrid();
+c_1n1p->cd()->SetBottomMargin(0.14), c_1n1p->cd()->SetLeftMargin(0.16), c_1n1p->cd()->SetRightMargin(0.16), c_1n1p->cd()->SetTopMargin(0.12);
+c_1n1p->cd();
+
+TH1D *hEcal_1n1p = (TH1D *) _file0->Get("E_{cal} reco. (All Int., nFDpCD)");
+hEcal_1n1p->Draw();
+double Ecal_1n1p_max = hEcal_1n1p->GetBinCenter(hEcal_1n1p->GetMaximumBin());
+c_1n1p->Clear()
+cout << "\nEcal_1n1p_max = " << hEcal_1n1p_max << "\n";
+
+TH1D *dP_T_tot_1n1p = (TH1D *) _file0->Get("#deltaP_{T,tot} (nFDpCD)");
+dP_T_tot_1n1p->Draw();
+double dP_T_tot_1n1p_max = dP_T_tot_1n1p->GetBinCenter(dP_T_tot_1n1p->GetMaximumBin());
+c_1n1p->Clear()
+cout << "\ndP_T_tot_1n1p_max = " << dP_T_tot_1n1p_max << "\n";
+
+TH2D *hEcal_vs_dP_T_tot_1n1p = (TH2D *) _file0->Get("E_{cal} vs. #deltaP_{T,tot} (All Int., nFDpCD)");
+hEcal_vs_dP_T_tot_1n1p->Draw("colz"), gPad->Update();
+
+TLine *Ecal_peak_1n1p = new TLine(gPad->GetUxmin(), Ecal_1n1p_max, gPad->GetUxmax(), Ecal_1n1p_max);
+Ecal_peak_1n1p->SetLineWidth(3);
+Ecal_peak_1n1p->SetLineColor(kRed + 1);
+Ecal_peak_1n1p->SetLineStyle(2);
+Ecal_peak_1n1p->Draw("same");
+
+TLine *dP_T_tot_peak_1n1p = new TLine(dP_T_tot_1n1p_max, gPad->GetUymin(), dP_T_tot_1n1p_max, gPad->GetUymax());
+dP_T_tot_peak_1n1p->SetLineWidth(3);
+dP_T_tot_peak_1n1p->SetLineColor(kRed);
+dP_T_tot_peak_1n1p->Draw("same");
+
+TLine *beamE_1n1p = new TLine(gPad->GetUxmin(), 5.98636, gPad->GetUxmax(), 5.98636);
+beamE_1n1p->SetLineWidth(3);
+beamE_1n1p->SetLineColor(kBlack);
+beamE_1n1p->Draw("same");
+
+TLine *QE_lim_1n1p = new TLine(gPad->GetUxmin(), 5., gPad->GetUxmax(), 5.);
+QE_lim_1n1p->SetLineWidth(3);
+QE_lim_1n1p->SetLineColor(kAzure + 10);
+QE_lim_1n1p->Draw("same");
+
+TLine *RES_lim_1n1p = new TLine(gPad->GetUxmin(), 4., gPad->GetUxmax(), 4.);
+RES_lim_1n1p->SetLineWidth(3);
+RES_lim_1n1p->SetLineColor(kGreen + 1);
+RES_lim_1n1p->Draw("same");
+
+TLegend *Legend_1n1p = new TLegend(Legend_x1_OneLine + -0.15 + 0.04- 0.04, Legend_y1_OneLine -0.15 + yOffset,
+                                  Legend_x2_OneLine - 0.05 + -0.15 + 0.04, Legend_y2_OneLine + 0.125 - 0.01 + yOffset);
+TLegendEntry *Ecal_peak_1n1pEntry = Legend_1n1p->AddEntry(Ecal_peak_1n1p, "Ecal_peak_1n1p","l");
+TLegendEntry *dP_T_tot_peak_1n1pEntry = Legend_1n1p->AddEntry(dP_T_tot_peak_1n1p, "dP_T_tot_peak_1n1p","l");
+TLegendEntry *beamE_1n1pEntry = Legend_1n1p->AddEntry(beamE_1n1p, "beamE_1n1p","l");
+TLegendEntry *QE_lim_1n1pEntry = Legend_1n1p->AddEntry(QE_lim_1n1p, "QE_lim_1n1p","l");
+TLegendEntry *RES_lim_1n1pEntry = Legend_1n1p->AddEntry(RES_lim_1n1p, "RES_lim_1n1p","l");
+Legend_1n1p->SetTextSize(0.03), Legend_1n1p->SetTextAlign(12), Legend_1n1p->Draw("same");
+
+double Zmax0 = 1.1 * max(hEcal_vs_dP_T_tot_2p->GetMaximum(), hEcal_vs_dP_T_tot_1n1p->GetMaximum());
+
+cout << "Zmax = " << Zmax << "\n";
+
+c_2p->cd();
+hEcal_vs_dP_T_tot_2p->SetMaximum(Zmax);
+c_1n1p->cd();
+hEcal_vs_dP_T_tot_1n1p->SetMaximum(Zmax);
+
+c_2p->SaveAs("hEcal_vs_dP_T_tot_2p_analysis.png");
+c_1n1p->SaveAs("hEcal_vs_dP_T_tot_1n1p_analysis.png");
+
+cout << "\n";

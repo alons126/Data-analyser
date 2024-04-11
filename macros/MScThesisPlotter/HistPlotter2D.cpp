@@ -159,10 +159,10 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (All Int., 1nFD1pCD, FD)", " in 1nFD1pCD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1pFD, FD)", " in 1pFD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1nFD, FD)", " in 1nFD");
-        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e_cut, FD)", " in ^{12}C(e,e')");
-        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e cut, FD)", " in ^{12}C(e,e')");
-        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e_cut)", " in ^{12}C(e,e')");
-        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e cut)", " in ^{12}C(e,e')");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e_cut, FD)", "");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e cut, FD)", "");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e_cut)", "");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e cut)", "");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "[Deg]", "[#circ]");
 
         if (findSubstring(Histogram2DNameCopy, "dc_hitmap")) {
@@ -186,7 +186,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 EquiLine->Draw("same");
             }
         } else if ((Histogram2DNameCopy == "SF vs. P_{e} BC (1e cut, FD)") || (Histogram2DNameCopy == "SF vs. P_{e} (1e cut, FD)")) {
-            Histogram2D->SetTitle("Electron sampling fraction vs. momentum in ^{12}C(e,e')");
+            Histogram2D->SetTitle("Electron sampling fraction vs. momentum");
             Histogram2D->GetYaxis()->SetTitle("f_{e}");
             Histogram2D->Draw("colz"), gPad->Update();
 
@@ -202,10 +202,10 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         } else if ((Histogram2DNameCopy == "Vcal vs. SF BC (1e cut, PCAL)" || Histogram2DNameCopy == "Wcal vs. SF BC (1e cut, PCAL)") ||
                    (Histogram2DNameCopy == "Vcal vs. SF (1e cut, PCAL)" || Histogram2DNameCopy == "Wcal vs. SF (1e cut, PCAL)")) {
             if ((Histogram2DNameCopy == "Vcal vs. SF BC (1e cut, PCAL)") || (Histogram2DNameCopy == "Vcal vs. SF (1e cut, PCAL)")) {
-                Histogram2D->SetTitle("PCAL #font[12]{l}_{V} coordinate vs. SF in ^{12}C(e,e')");
+                Histogram2D->SetTitle("PCAL #font[12]{l}_{V} coordinate vs. SF");
                 Histogram2D->GetXaxis()->SetTitle("#font[12]{l}_{V} [cm]");
             } else if ((Histogram2DNameCopy == "Wcal vs. SF BC (1e cut, PCAL)") || (Histogram2DNameCopy == "Wcal vs. SF (1e cut, PCAL)")) {
-                Histogram2D->SetTitle("PCAL #font[12]{l}_{W} coordinate vs. SF in ^{12}C(e,e')");
+                Histogram2D->SetTitle("PCAL #font[12]{l}_{W} coordinate vs. SF");
                 Histogram2D->GetXaxis()->SetTitle("#font[12]{l}_{W} [cm]");
             }
 
@@ -217,7 +217,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerECALcoorCut->SetLineColor(kRed);
             LowerECALcoorCut->Draw("same");
         } else if (Histogram2DNameCopy == "#beta vs. P (electrons only, 1e cut)") {
-            Histogram2D->SetTitle("Electron #beta_{e} vs. momentum in ^{12}C(e,e')");
+            Histogram2D->SetTitle("Electron #beta_{e} vs. momentum");
             Histogram2D->GetXaxis()->SetTitle("P_{e} [GeV/c]");
             Histogram2D->GetYaxis()->SetTitle("#beta_{e}");
             Histogram2D->Draw("colz"), gPad->Update();
@@ -263,6 +263,12 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             TLine *LowerThetapCDcut = new TLine(35., gPad->GetUymin(), 35., gPad->GetUymax());
             LowerThetapCDcut->SetLineWidth(3), LowerThetapCDcut->SetLineColor(kRed), LowerThetapCDcut->Draw("same");
+
+//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+//                         "pFD", "#tilde{pFD}");
+//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+//                         "pCD", "#tilde{pCD}");
+
         } else if (findSubstring(Histogram2DNameCopy, "P_{p} vs. #theta_{p}")) {
             ShowStats = false;
 
@@ -270,9 +276,9 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             double LowerMomentumTh = 0.4;
 
             if (findSubstring(Histogram2DNameCopy, "FD")) {
-                Histogram2D->SetTitle("Forward-going proton momentum vs. scattering angle in ^{12}C(e,e')");
+                Histogram2D->SetTitle("Forward-going proton momentum vs. scattering angle");
             } else if (findSubstring(Histogram2DNameCopy, "CD")) {
-                Histogram2D->SetTitle("Central-going proton momentum vs. scattering angle in ^{12}C(e,e')");
+                Histogram2D->SetTitle("Central-going proton momentum vs. scattering angle");
             }
 
             Histogram2D->Draw("colz"), gPad->Update();
@@ -299,15 +305,15 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             if (findSubstring(Histogram2DNameCopy, "P_{#pi^{+}} vs. #theta_{#pi^{+}}")) {
                 if (findSubstring(Histogram2DNameCopy, "FD")) {
-                    Histogram2D->SetTitle("Forward-going #pi^{+} momentum vs. scattering angle in ^{12}C(e,e')");
+                    Histogram2D->SetTitle("Forward-going #pi^{+} momentum vs. scattering angle");
                 } else if (findSubstring(Histogram2DNameCopy, "CD")) {
-                    Histogram2D->SetTitle("Central-going #pi^{+} momentum vs. scattering angle in ^{12}C(e,e')");
+                    Histogram2D->SetTitle("Central-going #pi^{+} momentum vs. scattering angle");
                 }
             } else if (findSubstring(Histogram2DNameCopy, "P_{#pi^{-}} vs. #theta_{#pi^{-}}")) {
                 if (findSubstring(Histogram2DNameCopy, "FD")) {
-                    Histogram2D->SetTitle("Forward-going #pi^{-} momentum vs. scattering angle in ^{12}C(e,e')");
+                    Histogram2D->SetTitle("Forward-going #pi^{-} momentum vs. scattering angle");
                 } else if (findSubstring(Histogram2DNameCopy, "CD")) {
-                    Histogram2D->SetTitle("Central-going #pi^{-} momentum vs. scattering angle in ^{12}C(e,e')");
+                    Histogram2D->SetTitle("Central-going #pi^{-} momentum vs. scattering angle");
                 }
             }
 
@@ -350,9 +356,10 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TLine *LowerThetaLim = new TLine(35., gPad->GetUymin(), 35., gPad->GetUymax());
             LowerThetaLim->SetLineWidth(5), LowerThetaLim->SetLineColor(kRed), LowerThetaLim->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.15 + xOffset, Legend_y2_TwoLines + yOffset);
+            auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset,
+                                      Legend_x2_TwoLines - 0.15 + xOffset + 0.025*4, Legend_y2_TwoLines + yOffset);
             TLegendEntry *BeamELineEntry = Legend->AddEntry(BeamELine, ("E_{beam} = " + to_string_with_precision(beamE, 3) + " [GeV]").c_str(), "l");
-            TLegendEntry *LowerThetaLimEntry = Legend->AddEntry(LowerThetaLim, ("#theta_{pCD} = " + to_string(35.) + " [#circ]").c_str(), "l");
+            TLegendEntry *LowerThetaLimEntry = Legend->AddEntry(LowerThetaLim, ("#theta_{pCD} = " + to_string(35) + " [#circ]").c_str(), "l");
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else if (findSubstring(Histogram2DNameCopy, "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e}}") ||
                    findSubstring(Histogram2DNameCopy, "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD}") ||
@@ -399,7 +406,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             //<editor-fold desc="Align Z axis of denominators and numerator">
             if (!findSubstring(Histogram2D_Title, "Veto")) {
-                bool Equi_z_2D = true;
+                bool Equi_z_2D = false;
 
                 if (!findSubstring(Histogram2DName, "FSRatio")) {
                     TH2D *Histogram2D_Denominator = Histofinder2D(file, HistName_Denominator.c_str(), false);
