@@ -5372,9 +5372,9 @@ public:
     int numTH2Dbins_Electron_Ang_Plots = 100;
     int numTH2Dbins_Nucleon_Ang_Plots = 75;
 
-    /* Q2 plots */
-    int numTH1Dbins_Q2_Plots = 50;
-    int numTH2Dbins_Q2_Plots = 65;
+    /* Momentum transfer plots */
+    int numTH1Dbins_Momentum_transfer_plots = 50;
+    int numTH2Dbins_Momentum_transfer_plots = 65;
 
     /* E_e plots */
     int numTH1Dbins_E_e_Plots = 50;

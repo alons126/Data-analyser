@@ -594,8 +594,8 @@ private:
     bool Angle_plots_master; // Master angle plots selector
     bool Theta_e_plots, Phi_e_plots;
 
-    /* Q2 plots */
-    bool Q2_plots;
+    /* Momentum transfer plots */
+    bool Momentum_transfer_plots;
 
     /* E_e plots */
     bool E_e_plots;
@@ -651,8 +651,8 @@ private:
         Angle_plots_master = true; // Master angle plots selector
         Theta_e_plots = true, Phi_e_plots = true;
 
-        /* Q2 plots */
-        Q2_plots = true;
+        /* Momentum transfer plots */
+        Momentum_transfer_plots = true;
 
         /* E_e plots */
         E_e_plots = true;
@@ -716,9 +716,9 @@ private:
 //        Angle_plots_master = false; // Master angle plots selector
 //        Theta_e_plots = false, Phi_e_plots = false;
 
-        /* Q2 plots */
-//     Q2_plots = true;
-        Q2_plots = false;
+        /* Momentum transfer plots */
+//     Momentum_transfer_plots = true;
+        Momentum_transfer_plots = false;
 
         /* E_e plots */
 //     E_e_plots = true;
@@ -773,7 +773,7 @@ private:
 
     //<editor-fold desc="Auto-disable plot selector variables">
     if (!Plot_selector_master) {
-        Cut_plots_master = W_plots = Beta_plots = Beta_vs_P_plots = Angle_plots_master = Q2_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
+        Cut_plots_master = W_plots = Beta_plots = Beta_vs_P_plots = Angle_plots_master = Momentum_transfer_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
         TKI_plots = ToF_plots = Efficiency_plots = AMaps_plots = Resolution_plots = false;
         FSR_1D_plots = FSR_2D_plots = false;
     }
@@ -805,13 +805,13 @@ private:
 
     bool norm_Nphe_plots = false, norm_Chi2_plots = false, norm_Vertex_plots = false, norm_SF_plots = false, norm_Fiducial_plots = false, norm_Momentum_plots = false;
 
-    bool norm_W_plots = false, norm_Beta_plots = false, norm_Angle_plots_master = false, norm_Q2_plots = false, norm_E_e_plots = false, norm_ET_plots = false;
+    bool norm_W_plots = false, norm_Beta_plots = false, norm_Angle_plots_master = false, norm_Momentum_transfer_plots = false, norm_E_e_plots = false, norm_ET_plots = false;
     bool norm_Ecal_plots = false, norm_TKI_plots = false;
 
     //<editor-fold desc="Auto-disable plot normalization variables">
     if (!normalize_master) { // Disable all normalizations if normalize_master == false
         norm_Nphe_plots = norm_Chi2_plots = norm_Vertex_plots = norm_SF_plots = norm_Fiducial_plots = norm_Momentum_plots = false;
-        norm_Angle_plots_master = norm_Q2_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TKI_plots = false;
+        norm_Angle_plots_master = norm_Momentum_transfer_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TKI_plots = false;
     }
     //</editor-fold>
 
@@ -875,9 +875,9 @@ private:
     int numTH2Dbins_Electron_Ang_Plots = 100;
     int numTH2Dbins_Nucleon_Ang_Plots = 75;
 
-    /* Q2 plots */
-    int numTH1Dbins_Q2_Plots = 50;
-    int numTH2Dbins_Q2_Plots = 65;
+    /* Momentum transfer plots */
+    int numTH1Dbins_Momentum_transfer_plots = 50;
+    int numTH2Dbins_Momentum_transfer_plots = 65;
 
     /* E_e plots */
     int numTH1Dbins_E_e_Plots = 50;
@@ -1770,8 +1770,8 @@ public:
         bool Angle_plots_master; // Master angle plots selector
         bool Theta_e_plots, Phi_e_plots;
 
-        /* Q2 plots */
-        bool Q2_plots;
+        /* Momentum transfer plots */
+        bool Momentum_transfer_plots;
 
         /* E_e plots */
         bool E_e_plots;
@@ -1827,8 +1827,8 @@ public:
             Angle_plots_master = true; // Master angle plots selector
             Theta_e_plots = true, Phi_e_plots = true;
 
-            /* Q2 plots */
-            Q2_plots = true;
+            /* Momentum transfer plots */
+            Momentum_transfer_plots = true;
 
             /* E_e plots */
             E_e_plots = true;
@@ -1892,9 +1892,9 @@ public:
 //        Angle_plots_master = false; // Master angle plots selector
 //        Theta_e_plots = false, Phi_e_plots = false;
 
-            /* Q2 plots */
-//     Q2_plots = true;
-            Q2_plots = false;
+            /* Momentum transfer plots */
+//     Momentum_transfer_plots = true;
+            Momentum_transfer_plots = false;
 
             /* E_e plots */
 //     E_e_plots = true;
@@ -1949,7 +1949,7 @@ public:
 
         //<editor-fold desc="Auto-disable plot selector variables">
         if (!Plot_selector_master) {
-            Cut_plots_master = W_plots = Beta_plots = Beta_vs_P_plots = Angle_plots_master = Q2_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
+            Cut_plots_master = W_plots = Beta_plots = Beta_vs_P_plots = Angle_plots_master = Momentum_transfer_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
             TKI_plots = ToF_plots = Efficiency_plots = AMaps_plots = Resolution_plots = false;
             FSR_1D_plots = FSR_2D_plots = false;
         }
@@ -1981,13 +1981,13 @@ public:
 
         bool norm_Nphe_plots = false, norm_Chi2_plots = false, norm_Vertex_plots = false, norm_SF_plots = false, norm_Fiducial_plots = false, norm_Momentum_plots = false;
 
-        bool norm_W_plots = false, norm_Beta_plots = false, norm_Angle_plots_master = false, norm_Q2_plots = false, norm_E_e_plots = false, norm_ET_plots = false;
+        bool norm_W_plots = false, norm_Beta_plots = false, norm_Angle_plots_master = false, norm_Momentum_transfer_plots = false, norm_E_e_plots = false, norm_ET_plots = false;
         bool norm_Ecal_plots = false, norm_TKI_plots = false;
 
         //<editor-fold desc="Auto-disable plot normalization variables">
         if (!normalize_master) { // Disable all normalizations if normalize_master == false
             norm_Nphe_plots = norm_Chi2_plots = norm_Vertex_plots = norm_SF_plots = norm_Fiducial_plots = norm_Momentum_plots = false;
-            norm_Angle_plots_master = norm_Q2_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TKI_plots = false;
+            norm_Angle_plots_master = norm_Momentum_transfer_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TKI_plots = false;
         }
         //</editor-fold>
 
@@ -2051,9 +2051,9 @@ public:
         int numTH2Dbins_Electron_Ang_Plots = 100;
         int numTH2Dbins_Nucleon_Ang_Plots = 75;
 
-        /* Q2 plots */
-        int numTH1Dbins_Q2_Plots = 50;
-        int numTH2Dbins_Q2_Plots = 65;
+        /* Momentum transfer plots */
+        int numTH1Dbins_Momentum_transfer_plots = 50;
+        int numTH2Dbins_Momentum_transfer_plots = 65;
 
         /* E_e plots */
         int numTH1Dbins_E_e_Plots = 50;

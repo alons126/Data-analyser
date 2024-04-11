@@ -510,8 +510,8 @@ private:
     bool Angle_plots_master; // Master angle plots selector
     bool Theta_e_plots, Phi_e_plots;
 
-    /* Q2 plots */
-    bool Q2_plots;
+    /* Momentum transfer plots */
+    bool Momentum_transfer_plots;
 
     /* E_e plots */
     bool E_e_plots;
@@ -569,8 +569,8 @@ private:
         Angle_plots_master = true; // Master angle plots selector
         Theta_e_plots = true, Phi_e_plots = true;
 
-        /* Q2 plots */
-        Q2_plots = true;
+        /* Momentum transfer plots */
+        Momentum_transfer_plots = true;
 
         /* E_e plots */
         E_e_plots = true;
@@ -636,9 +636,9 @@ private:
         Angle_plots_master = false; // Master angle plots selector
         Theta_e_plots = false, Phi_e_plots = false;
 
-        /* Q2 plots */
-//     Q2_plots = true;
-        Q2_plots = false;
+        /* Momentum transfer plots */
+//     Momentum_transfer_plots = true;
+        Momentum_transfer_plots = false;
 
         /* E_e plots */
 //     E_e_plots = true;
@@ -697,7 +697,7 @@ private:
 
     //<editor-fold desc="Auto-disable plot selector variables">
     if (!Plot_selector_master) {
-        Cut_plots_master = W_plots = Beta_plots = Beta_vs_P_plots = Angle_plots_master = Q2_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
+        Cut_plots_master = W_plots = Beta_plots = Beta_vs_P_plots = Angle_plots_master = Momentum_transfer_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
         TKI_plots = ToF_plots = Efficiency_plots = AMaps_plots = Resolution_plots = Multiplicity_plots = false;
         FSR_1D_plots = FSR_2D_plots = false;
     }
@@ -729,13 +729,13 @@ private:
 
     bool norm_Nphe_plots = false, norm_Chi2_plots = false, norm_Vertex_plots = false, norm_SF_plots = false, norm_Fiducial_plots = false, norm_Momentum_plots = false;
 
-    bool norm_W_plots = false, norm_Beta_plots = false, norm_Angle_plots_master = false, norm_Q2_plots = false, norm_E_e_plots = false, norm_ET_plots = false;
+    bool norm_W_plots = false, norm_Beta_plots = false, norm_Angle_plots_master = false, norm_Momentum_transfer_plots = false, norm_E_e_plots = false, norm_ET_plots = false;
     bool norm_Ecal_plots = false, norm_TKI_plots = false;
 
     //<editor-fold desc="Auto-disable plot normalization variables">
     if (!normalize_master) { // Disable all normalizations if normalize_master == false
         norm_Nphe_plots = norm_Chi2_plots = norm_Vertex_plots = norm_SF_plots = norm_Fiducial_plots = norm_Momentum_plots = false;
-        norm_Angle_plots_master = norm_Q2_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TKI_plots = false;
+        norm_Angle_plots_master = norm_Momentum_transfer_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TKI_plots = false;
     }
     //</editor-fold>
 
@@ -801,9 +801,9 @@ private:
     int numTH2Dbins_Electron_Ang_Plots = 100;
     int numTH2Dbins_Nucleon_Ang_Plots = 75;
 
-    /* Q2 plots */
-    int numTH1Dbins_Q2_Plots = 50;
-    int numTH2Dbins_Q2_Plots = 65;
+    /* Momentum transfer plots */
+    int numTH1Dbins_Momentum_transfer_plots = 50;
+    int numTH2Dbins_Momentum_transfer_plots = 65;
 
     /* E_e plots */
     int numTH1Dbins_E_e_Plots = 50;
@@ -6042,54 +6042,54 @@ private:
 
     //<editor-fold desc="Q2 histograms (no #(e) cut)">
     THStack *sQ2_All_e = new THStack("Q^{2} (no #(e) cut, CD & FD)", "Q^{2} Histogram (no #(e) cut, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_All_e = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_All_e_Dir = directories.Q2_Directory_map["Q2_All_e_Directory"];
+    TH1D *hQ2_All_e = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_All_e_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_All_e_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (1e cut)">
     THStack *sQ2_1e_cut = new THStack("Q^{2} (1e Cut ,CD & FD)", "Q^{2} Histogram (1e Cut, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_1e_cut = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_1e_cut_Dir = directories.Q2_Directory_map["Q2_1e_cut_Directory"];
+    TH1D *hQ2_1e_cut = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (1p)">
     THStack *sQ2_1p = new THStack("Q^{2} (1p, CD & FD)", "Q^{2} (1p, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_1p = new TH1D("Q^{2} (1p, FD)", "Q^{2} (1p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_1p_Dir = directories.Q2_Directory_map["Q2_1p_Directory"];
+    TH1D *hQ2_1p = new TH1D("Q^{2} (1p, FD)", "Q^{2} (1p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (1n)">
     THStack *sQ2_1n = new THStack("Q^{2} (1n, CD & FD)", "Q^{2} (1n, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_1n = new TH1D("Q^{2} (1n, FD)", "Q^{2} (1n, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_1n_Dir = directories.Q2_Directory_map["Q2_1n_Directory"];
+    TH1D *hQ2_1n = new TH1D("Q^{2} (1n, FD)", "Q^{2} (1n, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (2p)">
     THStack *sQ2_2p = new THStack("Q^{2} (2p, CD & FD)", "Q^{2} (2p, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_2p = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_2p_Dir = directories.Q2_Directory_map["Q2_2p_Directory"];
+    TH1D *hQ2_2p = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (pFDpCD)">
     THStack *sQ2_pFDpCD = new THStack("Q^{2} (pFDpCD, CD & FD)", "Q^{2} (pFDpCD, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_pFDpCD = new TH1D("Q^{2} (pFDpCD, FD)", "Q^{2} (pFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_pFDpCD_Dir = directories.Q2_Directory_map["Q2_pFDpCD_Directory"];
+    TH1D *hQ2_pFDpCD = new TH1D("Q^{2} (pFDpCD, FD)", "Q^{2} (pFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
 
     TH2D *hQ2_VS_W_pFDpCD = new TH2D("Q^{2} vs. W (All Int., pFDpCD)",
                                      "Q^{2} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];Q^{2} [GeV^{2}/c^{2}]",
-                                     numTH2Dbins_Q2_Plots, W_lboundary, W_uboundary, numTH2Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_VS_W_pFDpCD_Dir = directories.Q2_Directory_map["Q2_pFDpCD_Directory"];
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_W_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (nFDpCD)">
     THStack *sQ2_nFDpCD = new THStack("Q^{2} (nFDpCD, CD & FD)", "Q^{2} (nFDpCD, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_nFDpCD = new TH1D("Q^{2} (nFDpCD, FD)", "Q^{2} (nFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_nFDpCD_Dir = directories.Q2_Directory_map["Q2_nFDpCD_Directory"];
+    TH1D *hQ2_nFDpCD = new TH1D("Q^{2} (nFDpCD, FD)", "Q^{2} (nFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
 
     TH2D *hQ2_VS_W_nFDpCD = new TH2D("Q^{2} vs. W (All Int., nFDpCD)",
                                      "Q^{2} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];Q^{2} [GeV^{2}/c^{2}]",
-                                     numTH2Dbins_Q2_Plots, W_lboundary, W_uboundary, numTH2Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_VS_W_nFDpCD_Dir = directories.Q2_Directory_map["Q2_nFDpCD_Directory"];
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_W_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
     //</editor-fold>
 
     //</editor-fold>

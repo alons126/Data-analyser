@@ -459,7 +459,6 @@ Directories::Directories(const string &plots_path, const bool Clear_Old_Director
         MakeDirectory(create_W_Dir, W_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
-    W_Directory_map["W_All_e_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "00_All_e") + "/";
     W_Directory_map["W_1e_cut_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "01_1e_cut") + "/";
     W_Directory_map["W_1p_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "02_1p") + "/";
     W_Directory_map["W_1n_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "03_1n") + "/";
@@ -671,26 +670,24 @@ Directories::Directories(const string &plots_path, const bool Clear_Old_Director
                                                          Find(Angle_Daughter_Folders, "07_1e2pXy/04_Phi_Proton_1e2pXy_plots") + "/";
     //</editor-fold>
 
-    //<editor-fold desc="Q2 plots directories">
-    for (string folders_name: Q2_Daughter_Folders) {
-        MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name, false, Plots_Folder);
+    //<editor-fold desc="Momentum transfer directories">
+    for (string folders_name: Momentum_transfer_Daughter_Folders) {
+        MakeDirectory(create_Momentum_transfer_Dir, Momentum_transfer_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
-    Q2_Directory_map["Q2_All_e_Directory"] = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Find(Q2_Daughter_Folders, "00_All_e") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_All_e_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "00_All_e") + "/";
 
-    Q2_Directory_map["Q2_1e_cut_Directory"] = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Find(Q2_Daughter_Folders, "01_1e_cut") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "01_1e_cut") + "/";
 
-    Q2_Directory_map["Q2_1p_Directory"] = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Find(Q2_Daughter_Folders, "02_1p") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "02_1p") + "/";
 
-    Q2_Directory_map["Q2_1n_Directory"] = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Find(Q2_Daughter_Folders, "03_1n") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "03_1n") + "/";
 
-//    Q2_Directory_map["Q2_1e2p_Directory"] = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Find(Q2_Daughter_Folders, "04_1e2p") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "04_2p") + "/";
 
-    Q2_Directory_map["Q2_2p_Directory"] = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Find(Q2_Daughter_Folders, "04_2p") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "05_pFDpCD") + "/";
 
-    Q2_Directory_map["Q2_pFDpCD_Directory"] = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Find(Q2_Daughter_Folders, "05_pFDpCD") + "/";
-
-    Q2_Directory_map["Q2_nFDpCD_Directory"] = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Find(Q2_Daughter_Folders, "06_nFDpCD") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "06_nFDpCD") + "/";
     //</editor-fold>
 
     //<editor-fold desc="E_e plots directories">

@@ -522,8 +522,8 @@ void EventAnalyser() {
     bool Angle_plots_master; // Master angle plots selector
     bool Theta_e_plots, Phi_e_plots;
 
-    /* Q2 plots */
-    bool Q2_plots;
+    /* Momentum transfer plots */
+    bool Momentum_transfer_plots;
 
     /* E_e plots */
     bool E_e_plots;
@@ -582,8 +582,8 @@ void EventAnalyser() {
         Angle_plots_master = true; // Master angle plots selector
         Theta_e_plots = true, Phi_e_plots = true;
 
-        /* Q2 plots */
-        Q2_plots = true;
+        /* Momentum transfer plots */
+        Momentum_transfer_plots = true;
 
         /* E_e plots */
         E_e_plots = true;
@@ -649,9 +649,9 @@ void EventAnalyser() {
         Angle_plots_master = false; // Master angle plots selector
         Theta_e_plots = false, Phi_e_plots = false;
 
-        /* Q2 plots */
-//     Q2_plots = true;
-        Q2_plots = false;
+        /* Momentum transfer plots */
+//     Momentum_transfer_plots = true;
+        Momentum_transfer_plots = false;
 
         /* E_e plots */
 //     E_e_plots = true;
@@ -711,7 +711,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Auto-disable plot selector variables">
     if (!Plot_selector_master) {
-        Cut_plots_master = W_plots = Beta_plots = Beta_vs_P_plots = Angle_plots_master = Q2_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
+        Cut_plots_master = W_plots = Beta_plots = Beta_vs_P_plots = Angle_plots_master = Momentum_transfer_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
         TKI_plots = ToF_plots = Efficiency_plots = AMaps_plots = Resolution_plots = Multiplicity_plots = false;
         FSR_1D_plots = FSR_2D_plots = false;
     }
@@ -743,13 +743,13 @@ void EventAnalyser() {
 
     bool norm_Nphe_plots = false, norm_Chi2_plots = false, norm_Vertex_plots = false, norm_SF_plots = false, norm_Fiducial_plots = false, norm_Momentum_plots = false;
 
-    bool norm_W_plots = false, norm_Beta_plots = false, norm_Angle_plots_master = false, norm_Q2_plots = false, norm_E_e_plots = false, norm_ET_plots = false;
+    bool norm_W_plots = false, norm_Beta_plots = false, norm_Angle_plots_master = false, norm_Momentum_transfer_plots = false, norm_E_e_plots = false, norm_ET_plots = false;
     bool norm_Ecal_plots = false, norm_TKI_plots = false, norm_MomRes_plots = false, norm_Multi_plots = false;
 
     //<editor-fold desc="Auto-disable plot normalization variables">
     if (!normalize_master) { // Disable all normalizations if normalize_master == false
         norm_Nphe_plots = norm_Chi2_plots = norm_Vertex_plots = norm_SF_plots = norm_Fiducial_plots = norm_Momentum_plots = false;
-        norm_Angle_plots_master = norm_Q2_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TKI_plots = false;
+        norm_Angle_plots_master = norm_Momentum_transfer_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TKI_plots = false;
         norm_MomRes_plots = norm_Multi_plots = false;
     }
     //</editor-fold>
@@ -818,9 +818,9 @@ void EventAnalyser() {
     int numTH2Dbins_Electron_Ang_Plots = 100;
     int numTH2Dbins_Nucleon_Ang_Plots = 75;
 
-    /* Q2 plots */
-    int numTH1Dbins_Q2_Plots = numTH1Dbins;
-    int numTH2Dbins_Q2_Plots = numTH2Dbins;
+    /* Momentum transfer plots */
+    int numTH1Dbins_Momentum_transfer_plots = numTH1Dbins;
+    int numTH2Dbins_Momentum_transfer_plots = numTH2Dbins;
 
     /* E_e plots */
     int numTH1Dbins_E_e_Plots = numTH1Dbins;
@@ -2090,6 +2090,23 @@ void EventAnalyser() {
                                           directories.Momentum_Directory_map["Analysis_plots_momentum_1p_Directory"], "01b_P_pFD_APIDandPS_1p_FD", FDMomentum_lboundary,
                                           FDMomentum_uboundary, numTH1Dbins);
 
+    TH2D *hP_pFD_APIDandPS_VS_W_1p = new TH2D("FD proton momentum APID vs. W (All Int., 1p)",
+                                              "FD proton momentum APID vs. W (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{p} [GeV/c]",
+                                              numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hP_pFD_APIDandPS_VS_W_QEL_1p = new TH2D("FD proton momentum APID vs. W (QE Only, 1p)",
+                                                  "FD proton momentum APID vs. W (QE Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{p} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hP_pFD_APIDandPS_VS_W_MEC_1p = new TH2D("FD proton momentum APID vs. W (MEC Only, 1p)",
+                                                  "FD proton momentum APID vs. W (MEC Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{p} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hP_pFD_APIDandPS_VS_W_RES_1p = new TH2D("FD proton momentum APID vs. W (RES Only, 1p)",
+                                                  "FD proton momentum APID vs. W (RES Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{p} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hP_pFD_APIDandPS_VS_W_DIS_1p = new TH2D("FD proton momentum APID vs. W (DIS Only, 1p)",
+                                                  "FD proton momentum APID vs. W (DIS Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{p} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hP_pFD_APIDandPS_VS_W_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+
     hPlot1D hP_piplus_APID_1p_CD = hPlot1D("1p", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1p_Directory"], "03a_P_piplus_APID_1p_CD", Momentum_lboundary, Momentum_uboundary,
                                            numTH1Dbins);
@@ -2162,6 +2179,23 @@ void EventAnalyser() {
     hPlot1D hP_nFD_APIDandNS_1n_ZOOMOUT = hPlot1D("1n", "FD", "Leading FD neutron momentum APID&NC - ZOOMOUT", "Leading FD neutron momentum APID&NC - ZOOMOUT",
                                                   "P_{n} [GeV/c]", directories.Momentum_Directory_map["Analysis_plots_momentum_1n_Directory"],
                                                   "01d_P_nFD_APIDandNS_1n_ZOOMOUT_FD", Momentum_lboundary, 15., numTH1Dbins);
+
+    TH2D *hP_nFD_APIDandNS_VS_W_1n = new TH2D("Leading FD neutron momentum APID&NC vs. W (All Int., 1n)",
+                                              "Leading FD neutron momentum APID&NC vs. W (All Int., 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{n} [GeV/c]",
+                                              numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hP_nFD_APIDandNS_VS_W_QEL_1n = new TH2D("Leading FD neutron momentum APID&NC vs. W (QE Only, 1n)",
+                                                  "Leading FD neutron momentum APID&NC vs. W (QE Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{n} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hP_nFD_APIDandNS_VS_W_MEC_1n = new TH2D("Leading FD neutron momentum APID&NC vs. W (MEC Only, 1n)",
+                                                  "Leading FD neutron momentum APID&NC vs. W (MEC Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{n} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hP_nFD_APIDandNS_VS_W_RES_1n = new TH2D("Leading FD neutron momentum APID&NC vs. W (RES Only, 1n)",
+                                                  "Leading FD neutron momentum APID&NC vs. W (RES Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{n} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hP_nFD_APIDandNS_VS_W_DIS_1n = new TH2D("Leading FD neutron momentum APID&NC vs. W (DIS Only, 1n)",
+                                                  "Leading FD neutron momentum APID&NC vs. W (DIS Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{n} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hP_nFD_APIDandNS_VS_W_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
 
     hPlot1D hP_p_APID_1n_CD = hPlot1D("1n", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "03a_P_p_APID_1n_CD", Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
@@ -2439,6 +2473,40 @@ void EventAnalyser() {
     hPlot2D hP_pFD_vs_P_pCD_pFDpCD = hPlot2D("pFDpCD", "", "P_{pFD} vs. P_{pCD}", "P_{pFD} vs. P_{pCD}", "P_{pFD} [GeV/c]", "P_{pCD} [GeV/c]",
                                              directories.Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"], "05_P_pFD_vs_P_pCD", P_nucFD_lboundary,
                                              P_nucFD_uboundary, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_Mom_Plots, numTH2Dbins_Mom_Plots);
+
+    TH2D *hP_pFD_VS_W_pFDpCD = new TH2D("FD proton momentum vs. W (All Int., pFDpCD)",
+                                              "FD proton momentum vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
+                                              numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+    TH2D *hP_pFD_VS_W_QEL_pFDpCD = new TH2D("FD proton momentum vs. W (QE Only, pFDpCD)",
+                                                  "FD proton momentum vs. W (QE Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+    TH2D *hP_pFD_VS_W_MEC_pFDpCD = new TH2D("FD proton momentum vs. W (MEC Only, pFDpCD)",
+                                                  "FD proton momentum vs. W (MEC Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+    TH2D *hP_pFD_VS_W_RES_pFDpCD = new TH2D("FD proton momentum vs. W (RES Only, pFDpCD)",
+                                                  "FD proton momentum vs. W (RES Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+    TH2D *hP_pFD_VS_W_DIS_pFDpCD = new TH2D("FD proton momentum vs. W (DIS Only, pFDpCD)",
+                                                  "FD proton momentum vs. W (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+    string hP_pFD_VS_W_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
+
+    TH2D *hP_pCD_VS_W_pFDpCD = new TH2D("CD proton momentum vs. W (All Int., pFDpCD)",
+                                              "CD proton momentum vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                              numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+    TH2D *hP_pCD_VS_W_QEL_pFDpCD = new TH2D("CD proton momentum vs. W (QE Only, pFDpCD)",
+                                                  "CD proton momentum vs. W (QE Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+    TH2D *hP_pCD_VS_W_MEC_pFDpCD = new TH2D("CD proton momentum vs. W (MEC Only, pFDpCD)",
+                                                  "CD proton momentum vs. W (MEC Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+    TH2D *hP_pCD_VS_W_RES_pFDpCD = new TH2D("CD proton momentum vs. W (RES Only, pFDpCD)",
+                                                  "CD proton momentum vs. W (RES Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+    TH2D *hP_pCD_VS_W_DIS_pFDpCD = new TH2D("CD proton momentum vs. W (DIS Only, pFDpCD)",
+                                                  "CD proton momentum vs. W (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+    string hP_pCD_VS_W_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="nFD and pCD momentum plots (nFDpCD)">
@@ -2451,6 +2519,40 @@ void EventAnalyser() {
     hPlot2D hP_nFD_vs_P_pCD_nFDpCD = hPlot2D("nFDpCD", "", "P_{nFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD}", "P_{nFD} [GeV/c]", "P_{pCD} [GeV/c]",
                                              directories.Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"], "05_P_nFD_vs_P_pCD", P_nucFD_lboundary,
                                              P_nucFD_uboundary, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_Mom_Plots, numTH2Dbins_Mom_Plots);
+
+    TH2D *hP_nFD_VS_W_nFDpCD = new TH2D("FD neutron momentum vs. W (All Int., nFDpCD)",
+                                        "FD neutron momentum vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+    TH2D *hP_nFD_VS_W_QEL_nFDpCD = new TH2D("FD neutron momentum vs. W (QE Only, nFDpCD)",
+                                            "FD neutron momentum vs. W (QE Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+    TH2D *hP_nFD_VS_W_MEC_nFDpCD = new TH2D("FD neutron momentum vs. W (MEC Only, nFDpCD)",
+                                            "FD neutron momentum vs. W (MEC Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+    TH2D *hP_nFD_VS_W_RES_nFDpCD = new TH2D("FD neutron momentum vs. W (RES Only, nFDpCD)",
+                                            "FD neutron momentum vs. W (RES Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+    TH2D *hP_nFD_VS_W_DIS_nFDpCD = new TH2D("FD neutron momentum vs. W (DIS Only, nFDpCD)",
+                                            "FD neutron momentum vs. W (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+    string hP_nFD_VS_W_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
+
+    TH2D *hP_pCD_VS_W_nFDpCD = new TH2D("CD proton momentum vs. W (All Int., nFDpCD)",
+                                        "CD proton momentum vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+    TH2D *hP_pCD_VS_W_QEL_nFDpCD = new TH2D("CD proton momentum vs. W (QE Only, nFDpCD)",
+                                            "CD proton momentum vs. W (QE Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+    TH2D *hP_pCD_VS_W_MEC_nFDpCD = new TH2D("CD proton momentum vs. W (MEC Only, nFDpCD)",
+                                            "CD proton momentum vs. W (MEC Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+    TH2D *hP_pCD_VS_W_RES_nFDpCD = new TH2D("CD proton momentum vs. W (RES Only, nFDpCD)",
+                                            "CD proton momentum vs. W (RES Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+    TH2D *hP_pCD_VS_W_DIS_nFDpCD = new TH2D("CD proton momentum vs. W (DIS Only, nFDpCD)",
+                                            "CD proton momentum vs. W (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+    string hP_pCD_VS_W_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Total and relative nucleon momenta (pFDpCD)">
@@ -3241,6 +3343,207 @@ void EventAnalyser() {
 
     //<editor-fold desc="W histograms">
 
+    //<editor-fold desc="W plots (1e cut, CD & FD)">
+    THStack *sW_1e_cut = new THStack("W distribution (All Int., 1e Cut)", "W distribution (1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];");
+    TH1D *hW_All_Int_1e_cut = new TH1D("W distribution (All Int., 1e Cut)", "W distribution (All Int., 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                                       numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_QEL_1e_cut = new TH1D("W distribution (QEL only, 1e Cut)", "W distribution (QEL only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                                   numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_MEC_1e_cut = new TH1D("W distribution (MEC only, 1e Cut)", "W distribution (MEC only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                                   numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_RES_1e_cut = new TH1D("W distribution (RES only, 1e Cut)", "W distribution (RES only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                                   numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_DIS_1e_cut = new TH1D("W distribution (DIS only, 1e Cut)", "W distribution (DIS only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                                   numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    string sW_1e_cut_Dir = directories.W_Directory_map["W_1e_cut_Directory"];
+    string hW_All_Int_1e_cut_Dir = directories.W_Directory_map["W_1e_cut_Directory"];
+    string hW_QEL_1e_cut_Dir = directories.W_Directory_map["W_1e_cut_Directory"];
+    string hW_MEC_1e_cut_Dir = directories.W_Directory_map["W_1e_cut_Directory"];
+    string hW_RES_1e_cut_Dir = directories.W_Directory_map["W_1e_cut_Directory"];
+    string hW_DIS_1e_cut_Dir = directories.W_Directory_map["W_1e_cut_Directory"];
+
+    TH2D *hW_VS_q_3v_1e_cut = new TH2D("W vs. |#font[62]{q}| (All Int., 1e Cut)",
+                                       "W vs. |#font[62]{q}| (All Int., 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_QEL_1e_cut = new TH2D("W vs. |#font[62]{q}| (QE Only, 1e Cut)",
+                                           "W vs. |#font[62]{q}| (QE Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_MEC_1e_cut = new TH2D("W vs. |#font[62]{q}| (MEC Only, 1e Cut)",
+                                           "W vs. |#font[62]{q}| (MEC Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_RES_1e_cut = new TH2D("W vs. |#font[62]{q}| (RES Only, 1e Cut)",
+                                           "W vs. |#font[62]{q}| (RES Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_DIS_1e_cut = new TH2D("W vs. |#font[62]{q}| (DIS Only, 1e Cut)",
+                                           "W vs. |#font[62]{q}| (DIS Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_q_3v_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
+
+    TH2D *hW_VS_omega_1e_cut = new TH2D("W vs. #omega (All Int., 1e Cut)",
+                                        "W vs. #omega (All Int., 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_QEL_1e_cut = new TH2D("W vs. #omega (QE Only, 1e Cut)",
+                                            "W vs. #omega (QE Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_MEC_1e_cut = new TH2D("W vs. #omega (MEC Only, 1e Cut)",
+                                            "W vs. #omega (MEC Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_RES_1e_cut = new TH2D("W vs. #omega (RES Only, 1e Cut)",
+                                            "W vs. #omega (RES Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_DIS_1e_cut = new TH2D("W vs. #omega (DIS Only, 1e Cut)",
+                                            "W vs. #omega (DIS Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_omega_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="W plots (1p, CD & FD)">
+    THStack *sW_1p = new THStack("W distribution (All Int., 1p)", "W distribution (1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];");
+    TH1D *hW_All_Int_1p = new TH1D("W distribution (All Int., 1p)", "W distribution (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                                   numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_QEL_1p = new TH1D("W distribution (QEL only, 1p)", "W distribution (QEL only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_MEC_1p = new TH1D("W distribution (MEC only, 1p)", "W distribution (MEC only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_RES_1p = new TH1D("W distribution (RES only, 1p)", "W distribution (RES only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_DIS_1p = new TH1D("W distribution (DIS only, 1p)", "W distribution (DIS only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    string sW_1p_Dir = directories.W_Directory_map["W_1p_Directory"];
+    string hW_All_Int_1p_Dir = directories.W_Directory_map["W_1p_Directory"];
+    string hW_QEL_1p_Dir = directories.W_Directory_map["W_1p_Directory"];
+    string hW_MEC_1p_Dir = directories.W_Directory_map["W_1p_Directory"];
+    string hW_RES_1p_Dir = directories.W_Directory_map["W_1p_Directory"];
+    string hW_DIS_1p_Dir = directories.W_Directory_map["W_1p_Directory"];
+
+    TH2D *hW_VS_q_3v_1p = new TH2D("W vs. |#font[62]{q}| (All Int., 1p)",
+                                   "W vs. |#font[62]{q}| (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                   numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_QEL_1p = new TH2D("W vs. |#font[62]{q}| (QE Only, 1p)",
+                                       "W vs. |#font[62]{q}| (QE Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_MEC_1p = new TH2D("W vs. |#font[62]{q}| (MEC Only, 1p)",
+                                       "W vs. |#font[62]{q}| (MEC Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_RES_1p = new TH2D("W vs. |#font[62]{q}| (RES Only, 1p)",
+                                       "W vs. |#font[62]{q}| (RES Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_DIS_1p = new TH2D("W vs. |#font[62]{q}| (DIS Only, 1p)",
+                                       "W vs. |#font[62]{q}| (DIS Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_q_3v_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+
+    TH2D *hW_VS_omega_1p = new TH2D("W vs. #omega (All Int., 1p)", "W vs. #omega (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                    numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_QEL_1p = new TH2D("W vs. #omega (QE Only, 1p)", "W vs. #omega (QE Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_MEC_1p = new TH2D("W vs. #omega (MEC Only, 1p)", "W vs. #omega (MEC Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_RES_1p = new TH2D("W vs. #omega (RES Only, 1p)", "W vs. #omega (RES Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_DIS_1p = new TH2D("W vs. #omega (DIS Only, 1p)", "W vs. #omega (DIS Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_omega_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="W plots (1n, CD & FD)">
+    THStack *sW_1n = new THStack("W distribution (All Int., 1n)", "W distribution (1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];");
+    TH1D *hW_All_Int_1n = new TH1D("W distribution (All Int., 1n)", "W distribution (All Int., 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                                   numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_QEL_1n = new TH1D("W distribution (QEL only, 1n)", "W distribution (QEL only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_MEC_1n = new TH1D("W distribution (MEC only, 1n)", "W distribution (MEC only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_RES_1n = new TH1D("W distribution (RES only, 1n)", "W distribution (RES only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_DIS_1n = new TH1D("W distribution (DIS only, 1n)", "W distribution (DIS only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    string sW_1n_Dir = directories.W_Directory_map["W_1n_Directory"];
+    string hW_All_Int_1n_Dir = directories.W_Directory_map["W_1n_Directory"];
+    string hW_QEL_1n_Dir = directories.W_Directory_map["W_1n_Directory"];
+    string hW_MEC_1n_Dir = directories.W_Directory_map["W_1n_Directory"];
+    string hW_RES_1n_Dir = directories.W_Directory_map["W_1n_Directory"];
+    string hW_DIS_1n_Dir = directories.W_Directory_map["W_1n_Directory"];
+
+    TH2D *hW_VS_q_3v_1n = new TH2D("W vs. |#font[62]{q}| (All Int., 1n)",
+                                   "W vs. |#font[62]{q}| (All Int., 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                   numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_QEL_1n = new TH2D("W vs. |#font[62]{q}| (QE Only, 1n)",
+                                       "W vs. |#font[62]{q}| (QE Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_MEC_1n = new TH2D("W vs. |#font[62]{q}| (MEC Only, 1n)",
+                                       "W vs. |#font[62]{q}| (MEC Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_RES_1n = new TH2D("W vs. |#font[62]{q}| (RES Only, 1n)",
+                                       "W vs. |#font[62]{q}| (RES Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_DIS_1n = new TH2D("W vs. |#font[62]{q}| (DIS Only, 1n)",
+                                       "W vs. |#font[62]{q}| (DIS Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_q_3v_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
+
+    TH2D *hW_VS_omega_1n = new TH2D("W vs. #omega (All Int., 1n)", "W vs. #omega (All Int., 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                    numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_QEL_1n = new TH2D("W vs. #omega (QE Only, 1n)", "W vs. #omega (QE Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_MEC_1n = new TH2D("W vs. #omega (MEC Only, 1n)", "W vs. #omega (MEC Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_RES_1n = new TH2D("W vs. #omega (RES Only, 1n)", "W vs. #omega (RES Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_DIS_1n = new TH2D("W vs. #omega (DIS Only, 1n)", "W vs. #omega (DIS Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_omega_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="W plots (2p, CD & FD)">
+    THStack *sW_2p = new THStack("W distribution (All Int., 2p)", "W distribution (2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];");
+    TH1D *hW_All_Int_2p = new TH1D("W distribution (All Int., 2p)", "W distribution (All Int., 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                                   numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_QEL_2p = new TH1D("W distribution (QEL only, 2p)", "W distribution (QEL only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_MEC_2p = new TH1D("W distribution (MEC only, 2p)", "W distribution (MEC only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_RES_2p = new TH1D("W distribution (RES only, 2p)", "W distribution (RES only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    TH1D *hW_DIS_2p = new TH1D("W distribution (DIS only, 2p)", "W distribution (DIS only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
+                               numTH1Dbins_W_Plots, W_lboundary, W_uboundary);
+    string sW_2p_Dir = directories.W_Directory_map["W_2p_Directory"];
+    string hW_All_Int_2p_Dir = directories.W_Directory_map["W_2p_Directory"];
+    string hW_QEL_2p_Dir = directories.W_Directory_map["W_2p_Directory"];
+    string hW_MEC_2p_Dir = directories.W_Directory_map["W_2p_Directory"];
+    string hW_RES_2p_Dir = directories.W_Directory_map["W_2p_Directory"];
+    string hW_DIS_2p_Dir = directories.W_Directory_map["W_2p_Directory"];
+
+    TH2D *hW_VS_q_3v_2p = new TH2D("W vs. |#font[62]{q}| (All Int., 2p)",
+                                   "W vs. |#font[62]{q}| (All Int., 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                   numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_QEL_2p = new TH2D("W vs. |#font[62]{q}| (QE Only, 2p)",
+                                       "W vs. |#font[62]{q}| (QE Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_MEC_2p = new TH2D("W vs. |#font[62]{q}| (MEC Only, 2p)",
+                                       "W vs. |#font[62]{q}| (MEC Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_RES_2p = new TH2D("W vs. |#font[62]{q}| (RES Only, 2p)",
+                                       "W vs. |#font[62]{q}| (RES Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_DIS_2p = new TH2D("W vs. |#font[62]{q}| (DIS Only, 2p)",
+                                       "W vs. |#font[62]{q}| (DIS Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_q_3v_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
+
+    TH2D *hW_VS_omega_2p = new TH2D("W vs. #omega (All Int., 2p)", "W vs. #omega (All Int., 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                    numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_QEL_2p = new TH2D("W vs. #omega (QE Only, 2p)", "W vs. #omega (QE Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_MEC_2p = new TH2D("W vs. #omega (MEC Only, 2p)", "W vs. #omega (MEC Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_RES_2p = new TH2D("W vs. #omega (RES Only, 2p)", "W vs. #omega (RES Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_DIS_2p = new TH2D("W vs. #omega (DIS Only, 2p)", "W vs. #omega (DIS Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_omega_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
+    //</editor-fold>
+
     //<editor-fold desc="W plots (pFDpCD, CD & FD)">
     THStack *sW_pFDpCD = new THStack("W distribution (All Int., pFDpCD)", "W distribution (pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];");
     TH1D *hW_All_Int_pFDpCD = new TH1D("W distribution (All Int., pFDpCD)", "W distribution (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];",
@@ -3259,6 +3562,40 @@ void EventAnalyser() {
     string hW_MEC_pFDpCD_Dir = directories.W_Directory_map["W_pFDpCD_Directory"];
     string hW_RES_pFDpCD_Dir = directories.W_Directory_map["W_pFDpCD_Directory"];
     string hW_DIS_pFDpCD_Dir = directories.W_Directory_map["W_pFDpCD_Directory"];
+
+    TH2D *hW_VS_q_3v_pFDpCD = new TH2D("W vs. |#font[62]{q}| (All Int., pFDpCD)",
+                                       "W vs. |#font[62]{q}| (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_QEL_pFDpCD = new TH2D("W vs. |#font[62]{q}| (QE Only, pFDpCD)",
+                                           "W vs. |#font[62]{q}| (QE Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_MEC_pFDpCD = new TH2D("W vs. |#font[62]{q}| (MEC Only, pFDpCD)",
+                                           "W vs. |#font[62]{q}| (MEC Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_RES_pFDpCD = new TH2D("W vs. |#font[62]{q}| (RES Only, pFDpCD)",
+                                           "W vs. |#font[62]{q}| (RES Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_DIS_pFDpCD = new TH2D("W vs. |#font[62]{q}| (DIS Only, pFDpCD)",
+                                           "W vs. |#font[62]{q}| (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_q_3v_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
+
+    TH2D *hW_VS_omega_pFDpCD = new TH2D("W vs. #omega (All Int., pFDpCD)",
+                                        "W vs. #omega (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_QEL_pFDpCD = new TH2D("W vs. #omega (QE Only, pFDpCD)",
+                                            "W vs. #omega (QE Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_MEC_pFDpCD = new TH2D("W vs. #omega (MEC Only, pFDpCD)",
+                                            "W vs. #omega (MEC Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_RES_pFDpCD = new TH2D("W vs. #omega (RES Only, pFDpCD)",
+                                            "W vs. #omega (RES Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_DIS_pFDpCD = new TH2D("W vs. #omega (DIS Only, pFDpCD)",
+                                            "W vs. #omega (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_omega_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="W plots (nFDpCD, CD & FD)">
@@ -3279,6 +3616,40 @@ void EventAnalyser() {
     string hW_MEC_nFDpCD_Dir = directories.W_Directory_map["W_nFDpCD_Directory"];
     string hW_RES_nFDpCD_Dir = directories.W_Directory_map["W_nFDpCD_Directory"];
     string hW_DIS_nFDpCD_Dir = directories.W_Directory_map["W_nFDpCD_Directory"];
+
+    TH2D *hW_VS_q_3v_nFDpCD = new TH2D("W vs. |#font[62]{q}| (All Int., nFDpCD)",
+                                       "W vs. |#font[62]{q}| (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_QEL_nFDpCD = new TH2D("W vs. |#font[62]{q}| (QE Only, nFDpCD)",
+                                           "W vs. |#font[62]{q}| (QE Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_MEC_nFDpCD = new TH2D("W vs. |#font[62]{q}| (MEC Only, nFDpCD)",
+                                           "W vs. |#font[62]{q}| (MEC Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_RES_nFDpCD = new TH2D("W vs. |#font[62]{q}| (RES Only, nFDpCD)",
+                                           "W vs. |#font[62]{q}| (RES Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_q_3v_DIS_nFDpCD = new TH2D("W vs. |#font[62]{q}| (DIS Only, nFDpCD)",
+                                           "W vs. |#font[62]{q}| (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_q_3v_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
+
+    TH2D *hW_VS_omega_nFDpCD = new TH2D("W vs. #omega (All Int., nFDpCD)",
+                                        "W vs. #omega (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_QEL_nFDpCD = new TH2D("W vs. #omega (QE Only, nFDpCD)",
+                                            "W vs. #omega (QE Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_MEC_nFDpCD = new TH2D("W vs. #omega (MEC Only, nFDpCD)",
+                                            "W vs. #omega (MEC Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_RES_nFDpCD = new TH2D("W vs. #omega (RES Only, nFDpCD)",
+                                            "W vs. #omega (RES Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hW_VS_omega_DIS_nFDpCD = new TH2D("W vs. #omega (DIS Only, nFDpCD)",
+                                            "W vs. #omega (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];#omega [GeV]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hW_VS_omega_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -5284,61 +5655,506 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Q2 histograms
+// Momentum transfer histograms
 // ======================================================================================================================================================================
 
-    //<editor-fold desc="Q2 histograms">
+    //<editor-fold desc="Momentum transfer histograms">
 
-    //<editor-fold desc="Q2 histograms (no #(e) cut)">
+    //<editor-fold desc="Momentum transfer histograms (no #(e) cut)">
     THStack *sQ2_All_e = new THStack("Q^{2} (no #(e) cut, CD & FD)", "Q^{2} Histogram (no #(e) cut, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_All_e = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_All_e_Dir = directories.Q2_Directory_map["Q2_All_e_Directory"];
+    TH1D *hQ2_All_e = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hQ2_QEL_All_e = new TH1D("Q^{2} (QE Only, no #(e) cut, FD)", "Q^{2} (QE Only, no #(e) cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                   beamE * 1.1);
+    TH1D *hQ2_MEC_All_e = new TH1D("Q^{2} (MEC Only, no #(e) cut, FD)", "Q^{2} (MEC Only, no #(e) cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                   beamE * 1.1);
+    TH1D *hQ2_RES_All_e = new TH1D("Q^{2} (RES Only, no #(e) cut, FD)", "Q^{2} (RES Only, no #(e) cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                   beamE * 1.1);
+    TH1D *hQ2_DIS_All_e = new TH1D("Q^{2} (DIS Only, no #(e) cut, FD)", "Q^{2} (DIS Only, no #(e) cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                   beamE * 1.1);
+    string hQ2_All_e_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_All_e_Directory"];
+
+    THStack *sq_3v_All_e = new THStack("q = |#font[62]{q}| (no #(e) cut, CD & FD)", "q = |#font[62]{q}| Histogram (no #(e) cut, CD & FD);q [GeV/c];");
+    TH1D *hq_3v_All_e = new TH1D("q = |#font[62]{q}| (no #(e) cut, FD)", "q = |#font[62]{q}| (no #(e) cut, FD);q [GeV/c];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                 beamE * 1.1);
+    TH1D *hq_3v_QEL_All_e = new TH1D("q = |#font[62]{q}| (QE Only, no #(e) cut, FD)", "q = |#font[62]{q}| (QE Only, no #(e) cut, FD);q [GeV/c];",
+                                     numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_MEC_All_e = new TH1D("q = |#font[62]{q}| (MEC Only, no #(e) cut, FD)", "q = |#font[62]{q}| (MEC Only, no #(e) cut, FD);q [GeV/c];",
+                                     numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_RES_All_e = new TH1D("q = |#font[62]{q}| (RES Only, no #(e) cut, FD)", "q = |#font[62]{q}| (RES Only, no #(e) cut, FD);q [GeV/c];",
+                                     numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_DIS_All_e = new TH1D("q = |#font[62]{q}| (DIS Only, no #(e) cut, FD)", "q = |#font[62]{q}| (DIS Only, no #(e) cut, FD);q [GeV/c];",
+                                     numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_All_e_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_All_e_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="Q2 histograms (1e cut)">
+    //<editor-fold desc="Momentum transfer histograms (1e cut)">
     THStack *sQ2_1e_cut = new THStack("Q^{2} (1e Cut ,CD & FD)", "Q^{2} Histogram (1e Cut, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_1e_cut = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_1e_cut_Dir = directories.Q2_Directory_map["Q2_1e_cut_Directory"];
+    TH1D *hQ2_1e_cut = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hQ2_QEL_1e_cut = new TH1D("Q^{2} (QE Only, 1e Cut, FD)", "Q^{2} (QE Only, 1e Cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    TH1D *hQ2_MEC_1e_cut = new TH1D("Q^{2} (MEC Only, 1e Cut, FD)", "Q^{2} (MEC Only, 1e Cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    TH1D *hQ2_RES_1e_cut = new TH1D("Q^{2} (RES Only, 1e Cut, FD)", "Q^{2} (RES Only, 1e Cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    TH1D *hQ2_DIS_1e_cut = new TH1D("Q^{2} (DIS Only, 1e Cut, FD)", "Q^{2} (DIS Only, 1e Cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    string hQ2_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
+
+    THStack *sq_3v_1e_cut = new THStack("q = |#font[62]{q}| (1e Cut, CD & FD)", "q = |#font[62]{q}| Histogram (1e Cut, CD & FD);q [GeV/c];");
+    TH1D *hq_3v_1e_cut = new TH1D("q = |#font[62]{q}| (1e Cut, FD)", "q = |#font[62]{q}| (1e Cut, FD);q [GeV/c];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_QEL_1e_cut = new TH1D("q = |#font[62]{q}| (QE Only, 1e Cut, FD)", "q = |#font[62]{q}| (QE Only, 1e Cut, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_MEC_1e_cut = new TH1D("q = |#font[62]{q}| (MEC Only, 1e Cut, FD)", "q = |#font[62]{q}| (MEC Only, 1e Cut, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_RES_1e_cut = new TH1D("q = |#font[62]{q}| (RES Only, 1e Cut, FD)", "q = |#font[62]{q}| (RES Only, 1e Cut, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_DIS_1e_cut = new TH1D("q = |#font[62]{q}| (DIS Only, 1e Cut, FD)", "q = |#font[62]{q}| (DIS Only, 1e Cut, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
+
+    TH2D *hQ2_VS_W_1e_cut = new TH2D("Q^{2} vs. W (All Int., 1e Cut)",
+                                     "Q^{2} vs. W (All Int., 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_QEL_1e_cut = new TH2D("Q^{2} vs. W (QE Only, 1e Cut)",
+                                         "Q^{2} vs. W (QE Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_MEC_1e_cut = new TH2D("Q^{2} vs. W (MEC Only, 1e Cut)",
+                                         "Q^{2} vs. W (MEC Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_RES_1e_cut = new TH2D("Q^{2} vs. W (RES Only, 1e Cut)",
+                                         "Q^{2} vs. W (RES Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_DIS_1e_cut = new TH2D("Q^{2} vs. W (DIS Only, 1e Cut)",
+                                         "Q^{2} vs. W (DIS Only, 1e Cut);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_W_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
+
+    TH2D *hQ2_VS_q_3v_1e_cut = new TH2D("Q^{2} vs. |#font[62]{q}| (All Int., 1e Cut)", "Q^{2} vs. |#font[62]{q}| (All Int., 1e Cut);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_QEL_1e_cut = new TH2D("Q^{2} vs. |#font[62]{q}| (QE Only, 1e Cut)", "Q^{2} vs. |#font[62]{q}| (QE Only, 1e Cut);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_MEC_1e_cut = new TH2D("Q^{2} vs. |#font[62]{q}| (MEC Only, 1e Cut)", "Q^{2} vs. |#font[62]{q}| (MEC Only, 1e Cut);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_RES_1e_cut = new TH2D("Q^{2} vs. |#font[62]{q}| (RES Only, 1e Cut)", "Q^{2} vs. |#font[62]{q}| (RES Only, 1e Cut);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_DIS_1e_cut = new TH2D("Q^{2} vs. |#font[62]{q}| (DIS Only, 1e Cut)", "Q^{2} vs. |#font[62]{q}| (DIS Only, 1e Cut);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_q_3v_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
+
+    TH2D *hQ2_VS_omega_1e_cut = new TH2D("Q^{2} vs. #omega (All Int., 1e Cut)", "Q^{2} vs. #omega (All Int., 1e Cut);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_QEL_1e_cut = new TH2D("Q^{2} vs. #omega (QE Only, 1e Cut)", "Q^{2} vs. #omega (QE Only, 1e Cut);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_MEC_1e_cut = new TH2D("Q^{2} vs. #omega (MEC Only, 1e Cut)", "Q^{2} vs. #omega (MEC Only, 1e Cut);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_RES_1e_cut = new TH2D("Q^{2} vs. #omega (RES Only, 1e Cut)", "Q^{2} vs. #omega (RES Only, 1e Cut);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_DIS_1e_cut = new TH2D("Q^{2} vs. #omega (DIS Only, 1e Cut)", "Q^{2} vs. #omega (DIS Only, 1e Cut);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_omega_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
+
+    TH2D *hq_3v_VS_omega_1e_cut = new TH2D("|#font[62]{q}| vs. #omega (All Int., 1e Cut)", "|#font[62]{q}| vs. #omega (All Int., 1e Cut);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_QEL_1e_cut = new TH2D("|#font[62]{q}| vs. #omega (QE Only, 1e Cut)", "|#font[62]{q}| vs. #omega (QE Only, 1e Cut);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_MEC_1e_cut = new TH2D("|#font[62]{q}| vs. #omega (MEC Only, 1e Cut)", "|#font[62]{q}| vs. #omega (MEC Only, 1e Cut);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_RES_1e_cut = new TH2D("|#font[62]{q}| vs. #omega (RES Only, 1e Cut)", "|#font[62]{q}| vs. #omega (RES Only, 1e Cut);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_DIS_1e_cut = new TH2D("|#font[62]{q}| vs. #omega (DIS Only, 1e Cut)", "|#font[62]{q}| vs. #omega (DIS Only, 1e Cut);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_VS_omega_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="Q2 histograms (1p)">
+    //<editor-fold desc="Momentum transfer histograms (1p)">
     THStack *sQ2_1p = new THStack("Q^{2} (1p, CD & FD)", "Q^{2} (1p, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_1p = new TH1D("Q^{2} (1p, FD)", "Q^{2} (1p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_1p_Dir = directories.Q2_Directory_map["Q2_1p_Directory"];
+    TH1D *hQ2_1p = new TH1D("Q^{2} (1p, FD)", "Q^{2} (1p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hQ2_QEL_1p = new TH1D("Q^{2} (QE Only, 1p, FD)", "Q^{2} (QE Only, 1p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hQ2_MEC_1p = new TH1D("Q^{2} (MEC Only, 1p, FD)", "Q^{2} (MEC Only, 1p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hQ2_RES_1p = new TH1D("Q^{2} (RES Only, 1p, FD)", "Q^{2} (RES Only, 1p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hQ2_DIS_1p = new TH1D("Q^{2} (DIS Only, 1p, FD)", "Q^{2} (DIS Only, 1p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+
+    THStack *sq_3v_1p = new THStack("q = |#font[62]{q}| (1p, CD & FD)", "q = |#font[62]{q}| Histogram (1p, CD & FD);q [GeV/c];");
+    TH1D *hq_3v_1p = new TH1D("q = |#font[62]{q}| (1p, FD)", "q = |#font[62]{q}| (1p, FD);q [GeV/c];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_QEL_1p = new TH1D("q = |#font[62]{q}| (QE Only, 1p, FD)", "q = |#font[62]{q}| (QE Only, 1p, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_MEC_1p = new TH1D("q = |#font[62]{q}| (MEC Only, 1p, FD)", "q = |#font[62]{q}| (MEC Only, 1p, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_RES_1p = new TH1D("q = |#font[62]{q}| (RES Only, 1p, FD)", "q = |#font[62]{q}| (RES Only, 1p, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_DIS_1p = new TH1D("q = |#font[62]{q}| (DIS Only, 1p, FD)", "q = |#font[62]{q}| (DIS Only, 1p, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+
+    TH2D *hQ2_VS_W_1p = new TH2D("Q^{2} vs. W (All Int., 1p)",
+                                 "Q^{2} vs. W (All Int., 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                 numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_QEL_1p = new TH2D("Q^{2} vs. W (QE Only, 1p)",
+                                     "Q^{2} vs. W (QE Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_MEC_1p = new TH2D("Q^{2} vs. W (MEC Only, 1p)",
+                                     "Q^{2} vs. W (MEC Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_RES_1p = new TH2D("Q^{2} vs. W (RES Only, 1p)",
+                                     "Q^{2} vs. W (RES Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_DIS_1p = new TH2D("Q^{2} vs. W (DIS Only, 1p)",
+                                     "Q^{2} vs. W (DIS Only, 1p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_W_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+
+    TH2D *hQ2_VS_q_3v_1p = new TH2D("Q^{2} vs. |#font[62]{q}| (All Int., 1p)", "Q^{2} vs. |#font[62]{q}| (All Int., 1p);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                    numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_QEL_1p = new TH2D("Q^{2} vs. |#font[62]{q}| (QE Only, 1p)", "Q^{2} vs. |#font[62]{q}| (QE Only, 1p);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_MEC_1p = new TH2D("Q^{2} vs. |#font[62]{q}| (MEC Only, 1p)", "Q^{2} vs. |#font[62]{q}| (MEC Only, 1p);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_RES_1p = new TH2D("Q^{2} vs. |#font[62]{q}| (RES Only, 1p)", "Q^{2} vs. |#font[62]{q}| (RES Only, 1p);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_DIS_1p = new TH2D("Q^{2} vs. |#font[62]{q}| (DIS Only, 1p)", "Q^{2} vs. |#font[62]{q}| (DIS Only, 1p);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_q_3v_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+
+    TH2D *hQ2_VS_omega_1p = new TH2D("Q^{2} vs. #omega (All Int., 1p)", "Q^{2} vs. #omega (All Int., 1p);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_QEL_1p = new TH2D("Q^{2} vs. #omega (QE Only, 1p)", "Q^{2} vs. #omega (QE Only, 1p);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_MEC_1p = new TH2D("Q^{2} vs. #omega (MEC Only, 1p)", "Q^{2} vs. #omega (MEC Only, 1p);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_RES_1p = new TH2D("Q^{2} vs. #omega (RES Only, 1p)", "Q^{2} vs. #omega (RES Only, 1p);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_DIS_1p = new TH2D("Q^{2} vs. #omega (DIS Only, 1p)", "Q^{2} vs. #omega (DIS Only, 1p);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_omega_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
+
+    TH2D *hq_3v_VS_omega_1p = new TH2D("|#font[62]{q}| vs. #omega (All Int., 1p)", "|#font[62]{q}| vs. #omega (All Int., 1p);#omega [GeV];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_QEL_1p = new TH2D("|#font[62]{q}| vs. #omega (QE Only, 1p)", "|#font[62]{q}| vs. #omega (QE Only, 1p);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_MEC_1p = new TH2D("|#font[62]{q}| vs. #omega (MEC Only, 1p)", "|#font[62]{q}| vs. #omega (MEC Only, 1p);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_RES_1p = new TH2D("|#font[62]{q}| vs. #omega (RES Only, 1p)", "|#font[62]{q}| vs. #omega (RES Only, 1p);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_DIS_1p = new TH2D("|#font[62]{q}| vs. #omega (DIS Only, 1p)", "|#font[62]{q}| vs. #omega (DIS Only, 1p);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_VS_omega_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="Q2 histograms (1n)">
+    //<editor-fold desc="Momentum transfer histograms (1n)">
     THStack *sQ2_1n = new THStack("Q^{2} (1n, CD & FD)", "Q^{2} (1n, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_1n = new TH1D("Q^{2} (1n, FD)", "Q^{2} (1n, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_1n_Dir = directories.Q2_Directory_map["Q2_1n_Directory"];
+    TH1D *hQ2_1n = new TH1D("Q^{2} (1n, FD)", "Q^{2} (1n, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hQ2_QEL_1n = new TH1D("Q^{2} (QE Only, 1n, FD)", "Q^{2} (QE Only, 1n, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                beamE * 1.1);
+    TH1D *hQ2_MEC_1n = new TH1D("Q^{2} (MEC Only, 1n, FD)", "Q^{2} (MEC Only, 1n, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                beamE * 1.1);
+    TH1D *hQ2_RES_1n = new TH1D("Q^{2} (RES Only, 1n, FD)", "Q^{2} (RES Only, 1n, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                beamE * 1.1);
+    TH1D *hQ2_DIS_1n = new TH1D("Q^{2} (DIS Only, 1n, FD)", "Q^{2} (DIS Only, 1n, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                beamE * 1.1);
+    TH1D *hq_3v_QEL_1n = new TH1D("q = |#font[62]{q}| (QE Only, 1n, FD)", "q = |#font[62]{q}| (QE Only, 1n, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_MEC_1n = new TH1D("q = |#font[62]{q}| (MEC Only, 1n, FD)", "q = |#font[62]{q}| (MEC Only, 1n, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_RES_1n = new TH1D("q = |#font[62]{q}| (RES Only, 1n, FD)", "q = |#font[62]{q}| (RES Only, 1n, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_DIS_1n = new TH1D("q = |#font[62]{q}| (DIS Only, 1n, FD)", "q = |#font[62]{q}| (DIS Only, 1n, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
+
+    THStack *sq_3v_1n = new THStack("q = |#font[62]{q}| (1n, CD & FD)", "q = |#font[62]{q}| Histogram (1n, CD & FD);q [GeV/c];");
+    TH1D *hq_3v_1n = new TH1D("q = |#font[62]{q}| (1n, FD)", "q = |#font[62]{q}| (1n, FD);q [GeV/c];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
+
+    TH2D *hQ2_VS_W_1n = new TH2D("Q^{2} vs. W (All Int., 1n)",
+                                 "Q^{2} vs. W (All Int., 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                 numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_QEL_1n = new TH2D("Q^{2} vs. W (QE Only, 1n)",
+                                     "Q^{2} vs. W (QE Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_MEC_1n = new TH2D("Q^{2} vs. W (MEC Only, 1n)",
+                                     "Q^{2} vs. W (MEC Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_RES_1n = new TH2D("Q^{2} vs. W (RES Only, 1n)",
+                                     "Q^{2} vs. W (RES Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_DIS_1n = new TH2D("Q^{2} vs. W (DIS Only, 1n)",
+                                     "Q^{2} vs. W (DIS Only, 1n);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_W_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
+
+    TH2D *hQ2_VS_q_3v_1n = new TH2D("Q^{2} vs. |#font[62]{q}| (All Int., 1n)", "Q^{2} vs. |#font[62]{q}| (All Int., 1n);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                    numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_QEL_1n = new TH2D("Q^{2} vs. |#font[62]{q}| (QE Only, 1n)", "Q^{2} vs. |#font[62]{q}| (QE Only, 1n);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_MEC_1n = new TH2D("Q^{2} vs. |#font[62]{q}| (MEC Only, 1n)", "Q^{2} vs. |#font[62]{q}| (MEC Only, 1n);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_RES_1n = new TH2D("Q^{2} vs. |#font[62]{q}| (RES Only, 1n)", "Q^{2} vs. |#font[62]{q}| (RES Only, 1n);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_DIS_1n = new TH2D("Q^{2} vs. |#font[62]{q}| (DIS Only, 1n)", "Q^{2} vs. |#font[62]{q}| (DIS Only, 1n);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_q_3v_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
+
+    TH2D *hQ2_VS_omega_1n = new TH2D("Q^{2} vs. #omega (All Int., 1n)", "Q^{2} vs. #omega (All Int., 1n);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_QEL_1n = new TH2D("Q^{2} vs. #omega (QE Only, 1n)", "Q^{2} vs. #omega (QE Only, 1n);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_MEC_1n = new TH2D("Q^{2} vs. #omega (MEC Only, 1n)", "Q^{2} vs. #omega (MEC Only, 1n);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_RES_1n = new TH2D("Q^{2} vs. #omega (RES Only, 1n)", "Q^{2} vs. #omega (RES Only, 1n);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_DIS_1n = new TH2D("Q^{2} vs. #omega (DIS Only, 1n)", "Q^{2} vs. #omega (DIS Only, 1n);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_omega_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
+
+    TH2D *hq_3v_VS_omega_1n = new TH2D("|#font[62]{q}| vs. #omega (All Int., 1n)", "|#font[62]{q}| vs. #omega (All Int., 1n);#omega [GeV];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_QEL_1n = new TH2D("|#font[62]{q}| vs. #omega (QE Only, 1n)", "|#font[62]{q}| vs. #omega (QE Only, 1n);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_MEC_1n = new TH2D("|#font[62]{q}| vs. #omega (MEC Only, 1n)", "|#font[62]{q}| vs. #omega (MEC Only, 1n);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_RES_1n = new TH2D("|#font[62]{q}| vs. #omega (RES Only, 1n)", "|#font[62]{q}| vs. #omega (RES Only, 1n);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_DIS_1n = new TH2D("|#font[62]{q}| vs. #omega (DIS Only, 1n)", "|#font[62]{q}| vs. #omega (DIS Only, 1n);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_VS_omega_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="Q2 histograms (2p)">
+    //<editor-fold desc="Momentum transfer histograms (2p)">
     THStack *sQ2_2p = new THStack("Q^{2} (2p, CD & FD)", "Q^{2} (2p, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_2p = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_2p_Dir = directories.Q2_Directory_map["Q2_2p_Directory"];
+    TH1D *hQ2_2p = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hQ2_QEL_2p = new TH1D("Q^{2} (QE Only, 2p, FD)", "Q^{2} (QE Only, 2p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                beamE * 1.1);
+    TH1D *hQ2_MEC_2p = new TH1D("Q^{2} (MEC Only, 2p, FD)", "Q^{2} (MEC Only, 2p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                beamE * 1.1);
+    TH1D *hQ2_RES_2p = new TH1D("Q^{2} (RES Only, 2p, FD)", "Q^{2} (RES Only, 2p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                beamE * 1.1);
+    TH1D *hQ2_DIS_2p = new TH1D("Q^{2} (DIS Only, 2p, FD)", "Q^{2} (DIS Only, 2p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                beamE * 1.1);
+    string hQ2_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
+
+    THStack *sq_3v_2p = new THStack("q = |#font[62]{q}| (2p, CD & FD)", "q = |#font[62]{q}| Histogram (2p, CD & FD);q [GeV/c];");
+    TH1D *hq_3v_2p = new TH1D("q = |#font[62]{q}| (2p, FD)", "q = |#font[62]{q}| (2p, FD);q [GeV/c];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_QEL_2p = new TH1D("q = |#font[62]{q}| (QE Only, 2p, FD)", "q = |#font[62]{q}| (QE Only, 2p, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_MEC_2p = new TH1D("q = |#font[62]{q}| (MEC Only, 2p, FD)", "q = |#font[62]{q}| (MEC Only, 2p, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_RES_2p = new TH1D("q = |#font[62]{q}| (RES Only, 2p, FD)", "q = |#font[62]{q}| (RES Only, 2p, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_DIS_2p = new TH1D("q = |#font[62]{q}| (DIS Only, 2p, FD)", "q = |#font[62]{q}| (DIS Only, 2p, FD);q [GeV/c];",
+                                  numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
+
+    TH2D *hQ2_VS_W_2p = new TH2D("Q^{2} vs. W (All Int., 2p)",
+                                 "Q^{2} vs. W (All Int., 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                 numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_QEL_2p = new TH2D("Q^{2} vs. W (QE Only, 2p)",
+                                     "Q^{2} vs. W (QE Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_MEC_2p = new TH2D("Q^{2} vs. W (MEC Only, 2p)",
+                                     "Q^{2} vs. W (MEC Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_RES_2p = new TH2D("Q^{2} vs. W (RES Only, 2p)",
+                                     "Q^{2} vs. W (RES Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_DIS_2p = new TH2D("Q^{2} vs. W (DIS Only, 2p)",
+                                     "Q^{2} vs. W (DIS Only, 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_W_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
+
+    TH2D *hQ2_VS_q_3v_2p = new TH2D("Q^{2} vs. |#font[62]{q}| (All Int., 2p)", "Q^{2} vs. |#font[62]{q}| (All Int., 2p);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                    numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_QEL_2p = new TH2D("Q^{2} vs. |#font[62]{q}| (QE Only, 2p)", "Q^{2} vs. |#font[62]{q}| (QE Only, 2p);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_MEC_2p = new TH2D("Q^{2} vs. |#font[62]{q}| (MEC Only, 2p)", "Q^{2} vs. |#font[62]{q}| (MEC Only, 2p);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_RES_2p = new TH2D("Q^{2} vs. |#font[62]{q}| (RES Only, 2p)", "Q^{2} vs. |#font[62]{q}| (RES Only, 2p);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_DIS_2p = new TH2D("Q^{2} vs. |#font[62]{q}| (DIS Only, 2p)", "Q^{2} vs. |#font[62]{q}| (DIS Only, 2p);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_q_3v_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
+
+    TH2D *hQ2_VS_omega_2p = new TH2D("Q^{2} vs. #omega (All Int., 2p)", "Q^{2} vs. #omega (All Int., 2p);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_QEL_2p = new TH2D("Q^{2} vs. #omega (QE Only, 2p)", "Q^{2} vs. #omega (QE Only, 2p);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_MEC_2p = new TH2D("Q^{2} vs. #omega (MEC Only, 2p)", "Q^{2} vs. #omega (MEC Only, 2p);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_RES_2p = new TH2D("Q^{2} vs. #omega (RES Only, 2p)", "Q^{2} vs. #omega (RES Only, 2p);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_DIS_2p = new TH2D("Q^{2} vs. #omega (DIS Only, 2p)", "Q^{2} vs. #omega (DIS Only, 2p);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_omega_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
+
+    TH2D *hq_3v_VS_omega_2p = new TH2D("|#font[62]{q}| vs. #omega (All Int., 2p)", "|#font[62]{q}| vs. #omega (All Int., 2p);#omega [GeV];q [GeV/c]",
+                                       numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_QEL_2p = new TH2D("|#font[62]{q}| vs. #omega (QE Only, 2p)", "|#font[62]{q}| vs. #omega (QE Only, 2p);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_MEC_2p = new TH2D("|#font[62]{q}| vs. #omega (MEC Only, 2p)", "|#font[62]{q}| vs. #omega (MEC Only, 2p);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_RES_2p = new TH2D("|#font[62]{q}| vs. #omega (RES Only, 2p)", "|#font[62]{q}| vs. #omega (RES Only, 2p);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_DIS_2p = new TH2D("|#font[62]{q}| vs. #omega (DIS Only, 2p)", "|#font[62]{q}| vs. #omega (DIS Only, 2p);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_VS_omega_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="Q2 histograms (pFDpCD)">
+    //<editor-fold desc="Momentum transfer histograms (pFDpCD)">
     THStack *sQ2_pFDpCD = new THStack("Q^{2} (pFDpCD, CD & FD)", "Q^{2} (pFDpCD, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_pFDpCD = new TH1D("Q^{2} (pFDpCD, FD)", "Q^{2} (pFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_pFDpCD_Dir = directories.Q2_Directory_map["Q2_pFDpCD_Directory"];
+    TH1D *hQ2_pFDpCD = new TH1D("Q^{2} (pFDpCD, FD)", "Q^{2} (pFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hQ2_QEL_pFDpCD = new TH1D("Q^{2} (QE Only, pFDpCD, FD)", "Q^{2} (QE Only, pFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    TH1D *hQ2_MEC_pFDpCD = new TH1D("Q^{2} (MEC Only, pFDpCD, FD)", "Q^{2} (MEC Only, pFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    TH1D *hQ2_RES_pFDpCD = new TH1D("Q^{2} (RES Only, pFDpCD, FD)", "Q^{2} (RES Only, pFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    TH1D *hQ2_DIS_pFDpCD = new TH1D("Q^{2} (DIS Only, pFDpCD, FD)", "Q^{2} (DIS Only, pFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    string hQ2_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
+
+    THStack *sq_3v_pFDpCD = new THStack("q = |#font[62]{q}| (pFDpCD, CD & FD)", "q = |#font[62]{q}| Histogram (pFDpCD, CD & FD);q [GeV/c];");
+    TH1D *hq_3v_pFDpCD = new TH1D("q = |#font[62]{q}| (pFDpCD, FD)", "q = |#font[62]{q}| (pFDpCD, FD);q [GeV/c];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_QEL_pFDpCD = new TH1D("q = |#font[62]{q}| (QE Only, pFDpCD, FD)", "q = |#font[62]{q}| (QE Only, pFDpCD, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_MEC_pFDpCD = new TH1D("q = |#font[62]{q}| (MEC Only, pFDpCD, FD)", "q = |#font[62]{q}| (MEC Only, pFDpCD, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_RES_pFDpCD = new TH1D("q = |#font[62]{q}| (RES Only, pFDpCD, FD)", "q = |#font[62]{q}| (RES Only, pFDpCD, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_DIS_pFDpCD = new TH1D("q = |#font[62]{q}| (DIS Only, pFDpCD, FD)", "q = |#font[62]{q}| (DIS Only, pFDpCD, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
 
     TH2D *hQ2_VS_W_pFDpCD = new TH2D("Q^{2} vs. W (All Int., pFDpCD)",
-                                     "Q^{2} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]", numTH2Dbins_Q2_Plots,
-                                     W_lboundary, W_uboundary, numTH2Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_VS_W_pFDpCD_Dir = directories.Q2_Directory_map["Q2_pFDpCD_Directory"];
+                                     "Q^{2} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_QEL_pFDpCD = new TH2D("Q^{2} vs. W (QE Only, pFDpCD)",
+                                         "Q^{2} vs. W (QE Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_MEC_pFDpCD = new TH2D("Q^{2} vs. W (MEC Only, pFDpCD)",
+                                         "Q^{2} vs. W (MEC Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_RES_pFDpCD = new TH2D("Q^{2} vs. W (RES Only, pFDpCD)",
+                                         "Q^{2} vs. W (RES Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_DIS_pFDpCD = new TH2D("Q^{2} vs. W (DIS Only, pFDpCD)",
+                                         "Q^{2} vs. W (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_W_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
+
+    TH2D *hQ2_VS_q_3v_pFDpCD = new TH2D("Q^{2} vs. |#font[62]{q}| (All Int., pFDpCD)", "Q^{2} vs. |#font[62]{q}| (All Int., pFDpCD);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_QEL_pFDpCD = new TH2D("Q^{2} vs. |#font[62]{q}| (QE Only, pFDpCD)", "Q^{2} vs. |#font[62]{q}| (QE Only, pFDpCD);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_MEC_pFDpCD = new TH2D("Q^{2} vs. |#font[62]{q}| (MEC Only, pFDpCD)", "Q^{2} vs. |#font[62]{q}| (MEC Only, pFDpCD);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_RES_pFDpCD = new TH2D("Q^{2} vs. |#font[62]{q}| (RES Only, pFDpCD)", "Q^{2} vs. |#font[62]{q}| (RES Only, pFDpCD);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_DIS_pFDpCD = new TH2D("Q^{2} vs. |#font[62]{q}| (DIS Only, pFDpCD)", "Q^{2} vs. |#font[62]{q}| (DIS Only, pFDpCD);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_q_3v_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
+
+    TH2D *hQ2_VS_omega_pFDpCD = new TH2D("Q^{2} vs. #omega (All Int., pFDpCD)", "Q^{2} vs. #omega (All Int., pFDpCD);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_QEL_pFDpCD = new TH2D("Q^{2} vs. #omega (QE Only, pFDpCD)", "Q^{2} vs. #omega (QE Only, pFDpCD);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_MEC_pFDpCD = new TH2D("Q^{2} vs. #omega (MEC Only, pFDpCD)", "Q^{2} vs. #omega (MEC Only, pFDpCD);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_RES_pFDpCD = new TH2D("Q^{2} vs. #omega (RES Only, pFDpCD)", "Q^{2} vs. #omega (RES Only, pFDpCD);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_DIS_pFDpCD = new TH2D("Q^{2} vs. #omega (DIS Only, pFDpCD)", "Q^{2} vs. #omega (DIS Only, pFDpCD);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_omega_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
+
+    TH2D *hq_3v_VS_omega_pFDpCD = new TH2D("|#font[62]{q}| vs. #omega (All Int., pFDpCD)", "|#font[62]{q}| vs. #omega (All Int., pFDpCD);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_QEL_pFDpCD = new TH2D("|#font[62]{q}| vs. #omega (QE Only, pFDpCD)", "|#font[62]{q}| vs. #omega (QE Only, pFDpCD);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_MEC_pFDpCD = new TH2D("|#font[62]{q}| vs. #omega (MEC Only, pFDpCD)", "|#font[62]{q}| vs. #omega (MEC Only, pFDpCD);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_RES_pFDpCD = new TH2D("|#font[62]{q}| vs. #omega (RES Only, pFDpCD)", "|#font[62]{q}| vs. #omega (RES Only, pFDpCD);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_DIS_pFDpCD = new TH2D("|#font[62]{q}| vs. #omega (DIS Only, pFDpCD)", "|#font[62]{q}| vs. #omega (DIS Only, pFDpCD);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_VS_omega_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="Q2 histograms (nFDpCD)">
+    //<editor-fold desc="Momentum transfer histograms (nFDpCD)">
     THStack *sQ2_nFDpCD = new THStack("Q^{2} (nFDpCD, CD & FD)", "Q^{2} (nFDpCD, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_nFDpCD = new TH1D("Q^{2} (nFDpCD, FD)", "Q^{2} (nFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_nFDpCD_Dir = directories.Q2_Directory_map["Q2_nFDpCD_Directory"];
+    TH1D *hQ2_nFDpCD = new TH1D("Q^{2} (nFDpCD, FD)", "Q^{2} (nFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hQ2_QEL_nFDpCD = new TH1D("Q^{2} (QE Only, nFDpCD, FD)", "Q^{2} (QE Only, nFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    TH1D *hQ2_MEC_nFDpCD = new TH1D("Q^{2} (MEC Only, nFDpCD, FD)", "Q^{2} (MEC Only, nFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    TH1D *hQ2_RES_nFDpCD = new TH1D("Q^{2} (RES Only, nFDpCD, FD)", "Q^{2} (RES Only, nFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    TH1D *hQ2_DIS_nFDpCD = new TH1D("Q^{2} (DIS Only, nFDpCD, FD)", "Q^{2} (DIS Only, nFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0,
+                                    beamE * 1.1);
+    string hQ2_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
+
+    THStack *sq_3v_nFDpCD = new THStack("q = |#font[62]{q}| (nFDpCD, CD & FD)", "q = |#font[62]{q}| Histogram (nFDpCD, CD & FD);q [GeV/c];");
+    TH1D *hq_3v_nFDpCD = new TH1D("q = |#font[62]{q}| (nFDpCD, FD)", "q = |#font[62]{q}| (nFDpCD, FD);q [GeV/c];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_QEL_nFDpCD = new TH1D("q = |#font[62]{q}| (QE Only, nFDpCD, FD)", "q = |#font[62]{q}| (QE Only, nFDpCD, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_MEC_nFDpCD = new TH1D("q = |#font[62]{q}| (MEC Only, nFDpCD, FD)", "q = |#font[62]{q}| (MEC Only, nFDpCD, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_RES_nFDpCD = new TH1D("q = |#font[62]{q}| (RES Only, nFDpCD, FD)", "q = |#font[62]{q}| (RES Only, nFDpCD, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH1D *hq_3v_DIS_nFDpCD = new TH1D("q = |#font[62]{q}| (DIS Only, nFDpCD, FD)", "q = |#font[62]{q}| (DIS Only, nFDpCD, FD);q [GeV/c];",
+                                      numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
 
     TH2D *hQ2_VS_W_nFDpCD = new TH2D("Q^{2} vs. W (All Int., nFDpCD)",
-                                     "Q^{2} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]", numTH2Dbins_Q2_Plots,
-                                     W_lboundary, W_uboundary, numTH2Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_VS_W_nFDpCD_Dir = directories.Q2_Directory_map["Q2_nFDpCD_Directory"];
+                                     "Q^{2} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_QEL_nFDpCD = new TH2D("Q^{2} vs. W (QE Only, nFDpCD)",
+                                         "Q^{2} vs. W (QE Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_MEC_nFDpCD = new TH2D("Q^{2} vs. W (MEC Only, nFDpCD)",
+                                         "Q^{2} vs. W (MEC Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_RES_nFDpCD = new TH2D("Q^{2} vs. W (RES Only, nFDpCD)",
+                                         "Q^{2} vs. W (RES Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_W_DIS_nFDpCD = new TH2D("Q^{2} vs. W (DIS Only, nFDpCD)",
+                                         "Q^{2} vs. W (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_W_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
+
+    TH2D *hQ2_VS_q_3v_nFDpCD = new TH2D("Q^{2} vs. |#font[62]{q}| (All Int., nFDpCD)", "Q^{2} vs. |#font[62]{q}| (All Int., nFDpCD);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                        numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_QEL_nFDpCD = new TH2D("Q^{2} vs. |#font[62]{q}| (QE Only, nFDpCD)", "Q^{2} vs. |#font[62]{q}| (QE Only, nFDpCD);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_MEC_nFDpCD = new TH2D("Q^{2} vs. |#font[62]{q}| (MEC Only, nFDpCD)", "Q^{2} vs. |#font[62]{q}| (MEC Only, nFDpCD);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_RES_nFDpCD = new TH2D("Q^{2} vs. |#font[62]{q}| (RES Only, nFDpCD)", "Q^{2} vs. |#font[62]{q}| (RES Only, nFDpCD);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_q_3v_DIS_nFDpCD = new TH2D("Q^{2} vs. |#font[62]{q}| (DIS Only, nFDpCD)", "Q^{2} vs. |#font[62]{q}| (DIS Only, nFDpCD);q [GeV/c];Q^{2} [GeV^{2}/c^{2}]",
+                                            numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_q_3v_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
+
+    TH2D *hQ2_VS_omega_nFDpCD = new TH2D("Q^{2} vs. #omega (All Int., nFDpCD)", "Q^{2} vs. #omega (All Int., nFDpCD);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                         numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_QEL_nFDpCD = new TH2D("Q^{2} vs. #omega (QE Only, nFDpCD)", "Q^{2} vs. #omega (QE Only, nFDpCD);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_MEC_nFDpCD = new TH2D("Q^{2} vs. #omega (MEC Only, nFDpCD)", "Q^{2} vs. #omega (MEC Only, nFDpCD);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_RES_nFDpCD = new TH2D("Q^{2} vs. #omega (RES Only, nFDpCD)", "Q^{2} vs. #omega (RES Only, nFDpCD);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hQ2_VS_omega_DIS_nFDpCD = new TH2D("Q^{2} vs. #omega (DIS Only, nFDpCD)", "Q^{2} vs. #omega (DIS Only, nFDpCD);#omega [GeV];Q^{2} [GeV^{2}/c^{2}]",
+                                             numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_omega_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
+
+    TH2D *hq_3v_VS_omega_nFDpCD = new TH2D("|#font[62]{q}| vs. #omega (All Int., nFDpCD)", "|#font[62]{q}| vs. #omega (All Int., nFDpCD);#omega [GeV];q [GeV/c]",
+                                           numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_QEL_nFDpCD = new TH2D("|#font[62]{q}| vs. #omega (QE Only, nFDpCD)", "|#font[62]{q}| vs. #omega (QE Only, nFDpCD);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_MEC_nFDpCD = new TH2D("|#font[62]{q}| vs. #omega (MEC Only, nFDpCD)", "|#font[62]{q}| vs. #omega (MEC Only, nFDpCD);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_RES_nFDpCD = new TH2D("|#font[62]{q}| vs. #omega (RES Only, nFDpCD)", "|#font[62]{q}| vs. #omega (RES Only, nFDpCD);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    TH2D *hq_3v_VS_omega_DIS_nFDpCD = new TH2D("|#font[62]{q}| vs. #omega (DIS Only, nFDpCD)", "|#font[62]{q}| vs. #omega (DIS Only, nFDpCD);#omega [GeV];q [GeV/c]",
+                                               numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hq_3v_VS_omega_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -10361,8 +11177,10 @@ void EventAnalyser() {
 
         //<editor-fold desc="Electron plots (no #(electron) cut, CD & FD)">
         for (int i = 0; i < Ne; i++) {
-            /* Definition of electron variables for all particles analysis.
-             * To be filled by region (CD or FD) */
+            TVector3 P_e_All_e_3v, q_All_e_3v;
+            P_e_All_e_3v.SetMagThetaPhi(electrons[i]->getP(), electrons[i]->getTheta(), electrons[i]->getPhi());
+            q_All_e_3v = TVector3(Pvx - P_e_All_e_3v.Px(), Pvy - P_e_All_e_3v.Py(), Pvz - P_e_All_e_3v.Pz()); // 3 momentum transfer
+
             Theta_e_tmp = electrons[i]->getTheta() * 180.0 / pi; // Theta_e_tmp in deg
             Phi_e_tmp = electrons[i]->getPhi() * 180.0 / pi;     // Phi_e_tmp in deg
             P_e_tmp = electrons[i]->par()->getP();               // temp electron momentum
@@ -10380,9 +11198,8 @@ void EventAnalyser() {
                 hPhi_e_All_e_FD->Fill(Phi_e_tmp);
                 hTheta_e_VS_Phi_e_All_e_FD->Fill(Phi_e_tmp, Theta_e_tmp);
 
-                hQ2_All_e->Fill(Q2);
-
-                if (Ne == 1) { hQ2_1e_cut->Fill(Q2); }
+                FillByInt(hQ2_All_e, hQ2_QEL_All_e, hQ2_MEC_All_e, hQ2_RES_All_e, hQ2_DIS_All_e, qel, mec, res, dis, Q2, Weight);
+                FillByInt(hq_3v_All_e, hq_3v_QEL_All_e, hq_3v_MEC_All_e, hq_3v_RES_All_e, hq_3v_DIS_All_e, qel, mec, res, dis, q_All_e_3v.Mag(), Weight);
             }
         } // end of loop over electrons vector
         //</editor-fold>
@@ -10575,12 +11392,21 @@ void EventAnalyser() {
         //</editor-fold>
 
         /* Electron 1e cut variables definitions */
-        TVector3 P_e_1e;
-        P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+        TVector3 P_e_1e_cut_3v, q_1e_cut_3v;
+        TLorentzVector e_out_1e_cut, Q_1e_cut;
 
-        double P_e = P_e_1e.Mag(), E_e = sqrt(m_e * m_e + P_e * P_e);
-        double Theta_e = P_e_1e.Theta() * 180.0 / pi, Phi_e = P_e_1e.Phi() * 180.0 / pi; // Theta_e, Phi_e in deg
+        P_e_1e_cut_3v.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+        q_1e_cut_3v = TVector3(Pvx - P_e_1e_cut_3v.Px(), Pvy - P_e_1e_cut_3v.Py(), Pvz - P_e_1e_cut_3v.Pz()); // 3 momentum transfer
+
+        e_out_1e_cut.SetPxPyPzE(electrons[0]->par()->getPx(), electrons[0]->par()->getPy(), electrons[0]->par()->getPz(), sqrt(m_e * m_e + P_e_1e_cut_3v.Mag2()));
+        Q_1e_cut = beam - e_out_1e_cut;                                    // definition of 4-momentum transfer
+        double Q2_1e_cut = fabs(Q_1e_cut.Mag2());
+
+        double P_e_1e_cut = P_e_1e_cut_3v.Mag(), E_e_1e_cut = sqrt(m_e * m_e + P_e_1e_cut * P_e_1e_cut);
+        double omega_1e_cut = beamE - E_e_1e_cut, W_1e_cut = sqrt((omega_1e_cut + m_p) * (omega_1e_cut + m_p) - q_1e_cut_3v.Mag2());
+        double Theta_e = P_e_1e_cut_3v.Theta() * 180.0 / pi, Phi_e = P_e_1e_cut_3v.Phi() * 180.0 / pi; // Theta_e, Phi_e in deg
         double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
+        double Weight_1e_cut = Weight;
 
         //<editor-fold desc="Fill momentum threshold plots (1e cut, CD & FD)">
         if (!Rec_wTL_ES || TL_Event_Selection_inclusive) {
@@ -10794,17 +11620,17 @@ void EventAnalyser() {
 
         //<editor-fold desc="Testing cuts">
         /* Testing SF cuts */
-        double EoP_e = (electrons[0]->cal(clas12::PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e;
+        double EoP_e = (electrons[0]->cal(clas12::PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e_cut;
 
         if (!apply_cuts) {
             /* SF plots before cuts */
-            hSF_1e_cut_BC_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1e_cut_BC_FD.hFill(P_e, EoP_e, Weight);
+            hSF_1e_cut_BC_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1e_cut_BC_FD.hFill(P_e_1e_cut, EoP_e, Weight);
 
             /* SF plots after cuts */
             if ((EoP_e >= clasAna.getEcalSFLowerCut()) && (EoP_e <= clasAna.getEcalSFUpperCut())) {
-                hSF_1e_cut_AC_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1e_cut_AC_FD.hFill(P_e, EoP_e, Weight);
+                hSF_1e_cut_AC_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1e_cut_AC_FD.hFill(P_e_1e_cut, EoP_e, Weight);
             }
-        } else { hSF_1e_cut_BC_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1e_cut_BC_FD.hFill(P_e, EoP_e, Weight); }
+        } else { hSF_1e_cut_BC_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1e_cut_BC_FD.hFill(P_e_1e_cut, EoP_e, Weight); }
 
         /* Testing fiducial cuts */
         if (!apply_cuts) {
@@ -10849,30 +11675,30 @@ void EventAnalyser() {
         hVy_Electron_1e_cut_FD.hFill(electrons[0]->par()->getVy(), Weight);
         hVz_Electron_1e_cut_FD.hFill(electrons[0]->par()->getVz(), Weight);
 
-        hBeta_vs_P_1e_cut_Electrons_Only_FD.hFill(P_e, electrons[0]->par()->getBeta(), Weight);
-        hBeta_vs_P_negative_part_1e_cut_FD.hFill(P_e, electrons[0]->par()->getBeta(), Weight);
+        hBeta_vs_P_1e_cut_Electrons_Only_FD.hFill(P_e_1e_cut, electrons[0]->par()->getBeta(), Weight);
+        hBeta_vs_P_negative_part_1e_cut_FD.hFill(P_e_1e_cut, electrons[0]->par()->getBeta(), Weight);
 
-        hP_e_1e_cut_FD.hFill(P_e, Weight);
+        hP_e_1e_cut_FD.hFill(P_e_1e_cut, Weight);
 
         hTheta_e_1e_cut_FD->Fill(Theta_e, Weight);
         hPhi_e_1e_cut_FD->Fill(Phi_e, Weight);
         hTheta_e_VS_Phi_e_1e_cut_FD->Fill(Phi_e, Theta_e, Weight);
 
-        hE_e_VS_Theta_e_All_Int_1e_cut_FD->Fill(Theta_e, E_e, Weight);
-        hE_e_All_Int_1e_cut_FD->Fill(E_e, Weight);
+        hE_e_VS_Theta_e_All_Int_1e_cut_FD->Fill(Theta_e, E_e_1e_cut, Weight);
+        hE_e_All_Int_1e_cut_FD->Fill(E_e_1e_cut, Weight);
 
         if (qel) {
-            hE_e_QEL_1e_cut_FD->Fill(E_e, Weight);
-            hE_e_VS_Theta_e_QEL_1e_cut_FD->Fill(Theta_e, E_e, Weight);
+            hE_e_QEL_1e_cut_FD->Fill(E_e_1e_cut, Weight);
+            hE_e_VS_Theta_e_QEL_1e_cut_FD->Fill(Theta_e, E_e_1e_cut, Weight);
         } else if (mec) {
-            hE_e_MEC_1e_cut_FD->Fill(E_e, Weight);
-            hE_e_VS_Theta_e_MEC_1e_cut_FD->Fill(Theta_e, E_e, Weight);
+            hE_e_MEC_1e_cut_FD->Fill(E_e_1e_cut, Weight);
+            hE_e_VS_Theta_e_MEC_1e_cut_FD->Fill(Theta_e, E_e_1e_cut, Weight);
         } else if (res) {
-            hE_e_RES_1e_cut_FD->Fill(E_e, Weight);
-            hE_e_VS_Theta_e_RES_1e_cut_FD->Fill(Theta_e, E_e, Weight);
+            hE_e_RES_1e_cut_FD->Fill(E_e_1e_cut, Weight);
+            hE_e_VS_Theta_e_RES_1e_cut_FD->Fill(Theta_e, E_e_1e_cut, Weight);
         } else if (dis) {
-            hE_e_DIS_1e_cut_FD->Fill(E_e, Weight);
-            hE_e_VS_Theta_e_DIS_1e_cut_FD->Fill(Theta_e, E_e, Weight);
+            hE_e_DIS_1e_cut_FD->Fill(E_e_1e_cut, Weight);
+            hE_e_VS_Theta_e_DIS_1e_cut_FD->Fill(Theta_e, E_e_1e_cut, Weight);
         }
         //</editor-fold>
 
@@ -10950,6 +11776,58 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
+        //</editor-fold>
+
+        //<editor-fold desc="Fill W (1e cut, CD & FD)">
+        FillByInt(hW_All_Int_1e_cut, hW_QEL_1e_cut, hW_MEC_1e_cut, hW_RES_1e_cut, hW_DIS_1e_cut, qel, mec, res, dis, W_1e_cut, Weight_1e_cut);
+        hW_VS_q_3v_1e_cut->Fill(W_1e_cut, q_1e_cut_3v.Mag(), Weight_1e_cut);
+        hW_VS_omega_1e_cut->Fill(W_1e_cut, omega_1e_cut, Weight_1e_cut);
+
+        if (qel) {
+            hW_VS_q_3v_QEL_1e_cut->Fill(W_1e_cut, q_1e_cut_3v.Mag(), Weight_1e_cut);
+            hW_VS_omega_QEL_1e_cut->Fill(W_1e_cut, omega_1e_cut, Weight_1e_cut);
+        } else if (mec) {
+            hW_VS_q_3v_MEC_1e_cut->Fill(W_1e_cut, q_1e_cut_3v.Mag(), Weight_1e_cut);
+            hW_VS_omega_MEC_1e_cut->Fill(W_1e_cut, omega_1e_cut, Weight_1e_cut);
+        } else if (res) {
+            hW_VS_q_3v_RES_1e_cut->Fill(W_1e_cut, q_1e_cut_3v.Mag(), Weight_1e_cut);
+            hW_VS_omega_RES_1e_cut->Fill(W_1e_cut, omega_1e_cut, Weight_1e_cut);
+        } else if (dis) {
+            hW_VS_q_3v_DIS_1e_cut->Fill(W_1e_cut, q_1e_cut_3v.Mag(), Weight_1e_cut);
+            hW_VS_omega_DIS_1e_cut->Fill(W_1e_cut, omega_1e_cut, Weight_1e_cut);
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Fill momentum transfer plots (1e cut, CD & FD)">
+        FillByInt(hQ2_1e_cut, hQ2_QEL_1e_cut, hQ2_MEC_1e_cut, hQ2_RES_1e_cut, hQ2_DIS_1e_cut, qel, mec, res, dis, Q2_1e_cut, Weight);
+        FillByInt(hq_3v_1e_cut, hq_3v_QEL_1e_cut, hq_3v_MEC_1e_cut, hq_3v_RES_1e_cut, hq_3v_DIS_1e_cut, qel, mec, res, dis, q_1e_cut_3v.Mag(), Weight);
+
+        hQ2_VS_W_1e_cut->Fill(W_1e_cut, Q2_1e_cut, Weight_1e_cut);
+        hQ2_VS_q_3v_1e_cut->Fill(q_1e_cut_3v.Mag(), Q2_1e_cut, Weight_1e_cut);
+        hQ2_VS_omega_1e_cut->Fill(omega_1e_cut, Q2_1e_cut, Weight_1e_cut);
+        hq_3v_VS_omega_1e_cut->Fill(omega_1e_cut, q_1e_cut_3v.Mag(), Weight_1e_cut);
+
+        if (qel) {
+            hQ2_VS_W_QEL_1e_cut->Fill(W_1e_cut, Q2_1e_cut, Weight_1e_cut);
+            hQ2_VS_q_3v_QEL_1e_cut->Fill(q_1e_cut_3v.Mag(), Q2_1e_cut, Weight_1e_cut);
+            hQ2_VS_omega_QEL_1e_cut->Fill(omega_1e_cut, Q2_1e_cut, Weight_1e_cut);
+            hq_3v_VS_omega_QEL_1e_cut->Fill(omega_1e_cut, q_1e_cut_3v.Mag(), Weight_1e_cut);
+        } else if (mec) {
+            hQ2_VS_W_MEC_1e_cut->Fill(W_1e_cut, Q2_1e_cut, Weight_1e_cut);
+            hQ2_VS_q_3v_MEC_1e_cut->Fill(q_1e_cut_3v.Mag(), Q2_1e_cut, Weight_1e_cut);
+            hQ2_VS_omega_MEC_1e_cut->Fill(omega_1e_cut, Q2_1e_cut, Weight_1e_cut);
+            hq_3v_VS_omega_MEC_1e_cut->Fill(omega_1e_cut, q_1e_cut_3v.Mag(), Weight_1e_cut);
+        } else if (res) {
+            hQ2_VS_W_RES_1e_cut->Fill(W_1e_cut, Q2_1e_cut, Weight_1e_cut);
+            hQ2_VS_q_3v_RES_1e_cut->Fill(q_1e_cut_3v.Mag(), Q2_1e_cut, Weight_1e_cut);
+            hQ2_VS_omega_RES_1e_cut->Fill(omega_1e_cut, Q2_1e_cut, Weight_1e_cut);
+            hq_3v_VS_omega_RES_1e_cut->Fill(omega_1e_cut, q_1e_cut_3v.Mag(), Weight_1e_cut);
+        } else if (dis) {
+            hQ2_VS_W_DIS_1e_cut->Fill(W_1e_cut, Q2_1e_cut, Weight_1e_cut);
+            hQ2_VS_q_3v_DIS_1e_cut->Fill(q_1e_cut_3v.Mag(), Q2_1e_cut, Weight_1e_cut);
+            hQ2_VS_omega_DIS_1e_cut->Fill(omega_1e_cut, Q2_1e_cut, Weight_1e_cut);
+            hq_3v_VS_omega_DIS_1e_cut->Fill(omega_1e_cut, q_1e_cut_3v.Mag(), Weight_1e_cut);
+        }
         //</editor-fold>
 
         //<editor-fold desc="Fill Beta vs. P for other particles (1e cut, CD & FD)">
@@ -11526,12 +12404,12 @@ void EventAnalyser() {
                 /* Fill reco electron acceptance maps */
 
                 hElectronAMapBC.hFill(Phi_e, Theta_e, Weight);
-                hReco_P_e_AMaps.hFill(P_e, Weight);
-                aMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
+                hReco_P_e_AMaps.hFill(P_e_1e_cut, Weight);
+                aMaps.hFillHitMaps("Reco", "Electron", P_e_1e_cut, Theta_e, Phi_e, Weight);
 
-                hReco_P_e_WMaps.hFill(P_e, Weight);
+                hReco_P_e_WMaps.hFill(P_e_1e_cut, Weight);
                 hElectronAMapBCwKC.hFill(Phi_e, Theta_e, Weight);
-                wMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
+                wMaps.hFillHitMaps("Reco", "Electron", P_e_1e_cut, Theta_e, Phi_e, Weight);
             }
             //</editor-fold>
 
@@ -11991,9 +12869,38 @@ void EventAnalyser() {
                         hE_e_15_DIS_1p_FD->Fill(E_e_1p, Weight_1p);
                     }
                 }
+                //</editor-fold>
 
-                /* Filling Q2 histograms (1p) */
-                hQ2_1p->Fill(Q2_1p, Weight_1p);
+                //<editor-fold desc="Fill momentum transfer plots (1p)">
+                FillByInt(hQ2_1p, hQ2_QEL_1p, hQ2_MEC_1p, hQ2_RES_1p, hQ2_DIS_1p, qel, mec, res, dis, Q2_1p, Weight_1p);
+                FillByInt(hq_3v_1p, hq_3v_QEL_1p, hq_3v_MEC_1p, hq_3v_RES_1p, hq_3v_DIS_1p, qel, mec, res, dis, q_1p_3v.Mag(), Weight_1p);
+
+                hQ2_VS_W_1p->Fill(W_1p, Q2_1p, Weight_1p);
+                hQ2_VS_q_3v_1p->Fill(q_1p_3v.Mag(), Q2_1p, Weight_1p);
+                hQ2_VS_omega_1p->Fill(omega_1p, Q2_1p, Weight_1p);
+                hq_3v_VS_omega_1p->Fill(omega_1p, q_1p_3v.Mag(), Weight_1p);
+
+                if (qel) {
+                    hQ2_VS_W_QEL_1p->Fill(W_1p, Q2_1p, Weight_1p);
+                    hQ2_VS_q_3v_QEL_1p->Fill(q_1p_3v.Mag(), Q2_1p, Weight_1p);
+                    hQ2_VS_omega_QEL_1p->Fill(omega_1p, Q2_1p, Weight_1p);
+                    hq_3v_VS_omega_QEL_1p->Fill(omega_1p, q_1p_3v.Mag(), Weight_1p);
+                } else if (mec) {
+                    hQ2_VS_W_MEC_1p->Fill(W_1p, Q2_1p, Weight_1p);
+                    hQ2_VS_q_3v_MEC_1p->Fill(q_1p_3v.Mag(), Q2_1p, Weight_1p);
+                    hQ2_VS_omega_MEC_1p->Fill(omega_1p, Q2_1p, Weight_1p);
+                    hq_3v_VS_omega_MEC_1p->Fill(omega_1p, q_1p_3v.Mag(), Weight_1p);
+                } else if (res) {
+                    hQ2_VS_W_RES_1p->Fill(W_1p, Q2_1p, Weight_1p);
+                    hQ2_VS_q_3v_RES_1p->Fill(q_1p_3v.Mag(), Q2_1p, Weight_1p);
+                    hQ2_VS_omega_RES_1p->Fill(omega_1p, Q2_1p, Weight_1p);
+                    hq_3v_VS_omega_RES_1p->Fill(omega_1p, q_1p_3v.Mag(), Weight_1p);
+                } else if (dis) {
+                    hQ2_VS_W_DIS_1p->Fill(W_1p, Q2_1p, Weight_1p);
+                    hQ2_VS_q_3v_DIS_1p->Fill(q_1p_3v.Mag(), Q2_1p, Weight_1p);
+                    hQ2_VS_omega_DIS_1p->Fill(omega_1p, Q2_1p, Weight_1p);
+                    hq_3v_VS_omega_DIS_1p->Fill(omega_1p, q_1p_3v.Mag(), Weight_1p);
+                }
                 //</editor-fold>
 
                 //<editor-fold desc="Filling Ecal plots (1p)">
@@ -12027,8 +12934,39 @@ void EventAnalyser() {
                                        hNeut_Multi_By_Redef_APID_BV_1p_FD, hNeut_Multi_By_Redef_APID_AV_1p_FD, NeutronsFD_ind);
                 //</editor-fold>
 
+                //<editor-fold desc="Fill W (1p)">
+                FillByInt(hW_All_Int_1p, hW_QEL_1p, hW_MEC_1p, hW_RES_1p, hW_DIS_1p, qel, mec, res, dis, W_1p, Weight_1p);
+                hW_VS_q_3v_1p->Fill(W_1p, q_1p_3v.Mag(), Weight_1p);
+                hW_VS_omega_1p->Fill(W_1p, omega_1p, Weight_1p);
+
+                if (qel) {
+                    hW_VS_q_3v_QEL_1p->Fill(W_1p, q_1p_3v.Mag(), Weight_1p);
+                    hW_VS_omega_QEL_1p->Fill(W_1p, omega_1p, Weight_1p);
+                } else if (mec) {
+                    hW_VS_q_3v_MEC_1p->Fill(W_1p, q_1p_3v.Mag(), Weight_1p);
+                    hW_VS_omega_MEC_1p->Fill(W_1p, omega_1p, Weight_1p);
+                } else if (res) {
+                    hW_VS_q_3v_RES_1p->Fill(W_1p, q_1p_3v.Mag(), Weight_1p);
+                    hW_VS_omega_RES_1p->Fill(W_1p, omega_1p, Weight_1p);
+                } else if (dis) {
+                    hW_VS_q_3v_DIS_1p->Fill(W_1p, q_1p_3v.Mag(), Weight_1p);
+                    hW_VS_omega_DIS_1p->Fill(W_1p, omega_1p, Weight_1p);
+                }
+                //</editor-fold>
+
                 hP_pFD_APID_1p.hFill(ProtonMomBKC_1p, Weight_1p); // FD proton (1p)
                 hP_pFD_APIDandPS_1p.hFill(P_p_1p_3v.Mag(), Weight_1p); // FD proton after smearing (1p)
+                hP_pFD_APIDandPS_VS_W_1p->Fill(W_1p, P_p_1p_3v.Mag(), Weight_1p);
+
+                if (qel) {
+                    hP_pFD_APIDandPS_VS_W_QEL_1p->Fill(W_1p, P_p_1p_3v.Mag(), Weight_1p);
+                } else if (mec) {
+                    hP_pFD_APIDandPS_VS_W_MEC_1p->Fill(W_1p, P_p_1p_3v.Mag(), Weight_1p);
+                } else if (res) {
+                    hP_pFD_APIDandPS_VS_W_RES_1p->Fill(W_1p, P_p_1p_3v.Mag(), Weight_1p);
+                } else if (dis) {
+                    hP_pFD_APIDandPS_VS_W_DIS_1p->Fill(W_1p, P_p_1p_3v.Mag(), Weight_1p);
+                }
 
                 dP_T_1p_3v = TVector3(P_T_e_1p_3v.Px() + P_T_p_1p_3v.Px(), P_T_e_1p_3v.Py() + P_T_p_1p_3v.Py(), 0);
                 dAlpha_T_1p = acos(-(P_e_1p_3v.Px() * dP_T_1p_3v.Px() + P_e_1p_3v.Py() * dP_T_1p_3v.Py() + P_e_1p_3v.Pz() * dP_T_1p_3v.Pz())
@@ -12879,9 +13817,38 @@ void EventAnalyser() {
                         hE_e_15_DIS_1n_FD->Fill(E_e_1n, Weight_1n);
                     }
                 }
+                //</editor-fold>
 
-                /* Filling Q2 histograms (1n) */
-                hQ2_1n->Fill(Q2_1n, Weight_1n);
+                //<editor-fold desc="Fill momentum transfer plots (1n)">
+                FillByInt(hQ2_1n, hQ2_QEL_1n, hQ2_MEC_1n, hQ2_RES_1n, hQ2_DIS_1n, qel, mec, res, dis, Q2_1n, Weight_1n);
+                FillByInt(hq_3v_1n, hq_3v_QEL_1n, hq_3v_MEC_1n, hq_3v_RES_1n, hq_3v_DIS_1n, qel, mec, res, dis, q_1n_3v.Mag(), Weight_1n);
+
+                hQ2_VS_W_1n->Fill(W_1n, Q2_1n, Weight_1n);
+                hQ2_VS_q_3v_1n->Fill(q_1n_3v.Mag(), Q2_1n, Weight_1n);
+                hQ2_VS_omega_1n->Fill(omega_1n, Q2_1n, Weight_1n);
+                hq_3v_VS_omega_1n->Fill(omega_1n, q_1n_3v.Mag(), Weight_1n);
+
+                if (qel) {
+                    hQ2_VS_W_QEL_1n->Fill(W_1n, Q2_1n, Weight_1n);
+                    hQ2_VS_q_3v_QEL_1n->Fill(q_1n_3v.Mag(), Q2_1n, Weight_1n);
+                    hQ2_VS_omega_QEL_1n->Fill(omega_1n, Q2_1n, Weight_1n);
+                    hq_3v_VS_omega_QEL_1n->Fill(omega_1n, q_1n_3v.Mag(), Weight_1n);
+                } else if (mec) {
+                    hQ2_VS_W_MEC_1n->Fill(W_1n, Q2_1n, Weight_1n);
+                    hQ2_VS_q_3v_MEC_1n->Fill(q_1n_3v.Mag(), Q2_1n, Weight_1n);
+                    hQ2_VS_omega_MEC_1n->Fill(omega_1n, Q2_1n, Weight_1n);
+                    hq_3v_VS_omega_MEC_1n->Fill(omega_1n, q_1n_3v.Mag(), Weight_1n);
+                } else if (res) {
+                    hQ2_VS_W_RES_1n->Fill(W_1n, Q2_1n, Weight_1n);
+                    hQ2_VS_q_3v_RES_1n->Fill(q_1n_3v.Mag(), Q2_1n, Weight_1n);
+                    hQ2_VS_omega_RES_1n->Fill(omega_1n, Q2_1n, Weight_1n);
+                    hq_3v_VS_omega_RES_1n->Fill(omega_1n, q_1n_3v.Mag(), Weight_1n);
+                } else if (dis) {
+                    hQ2_VS_W_DIS_1n->Fill(W_1n, Q2_1n, Weight_1n);
+                    hQ2_VS_q_3v_DIS_1n->Fill(q_1n_3v.Mag(), Q2_1n, Weight_1n);
+                    hQ2_VS_omega_DIS_1n->Fill(omega_1n, Q2_1n, Weight_1n);
+                    hq_3v_VS_omega_DIS_1n->Fill(omega_1n, q_1n_3v.Mag(), Weight_1n);
+                }
                 //</editor-fold>
 
                 //<editor-fold desc="Filling Ecal plots (1n)">
@@ -12915,10 +13882,41 @@ void EventAnalyser() {
                                        hNeut_Multi_By_Redef_APID_BV_1n_FD, hNeut_Multi_By_Redef_APID_AV_1n_FD, NeutronsFD_ind);
                 //</editor-fold>
 
+                //<editor-fold desc="Fill W (1n)">
+                FillByInt(hW_All_Int_1n, hW_QEL_1n, hW_MEC_1n, hW_RES_1n, hW_DIS_1n, qel, mec, res, dis, W_1n, Weight_1n);
+                hW_VS_q_3v_1n->Fill(W_1n, q_1n_3v.Mag(), Weight_1n);
+                hW_VS_omega_1n->Fill(W_1n, omega_1n, Weight_1n);
+
+                if (qel) {
+                    hW_VS_q_3v_QEL_1n->Fill(W_1n, q_1n_3v.Mag(), Weight_1n);
+                    hW_VS_omega_QEL_1n->Fill(W_1n, omega_1n, Weight_1n);
+                } else if (mec) {
+                    hW_VS_q_3v_MEC_1n->Fill(W_1n, q_1n_3v.Mag(), Weight_1n);
+                    hW_VS_omega_MEC_1n->Fill(W_1n, omega_1n, Weight_1n);
+                } else if (res) {
+                    hW_VS_q_3v_RES_1n->Fill(W_1n, q_1n_3v.Mag(), Weight_1n);
+                    hW_VS_omega_RES_1n->Fill(W_1n, omega_1n, Weight_1n);
+                } else if (dis) {
+                    hW_VS_q_3v_DIS_1n->Fill(W_1n, q_1n_3v.Mag(), Weight_1n);
+                    hW_VS_omega_DIS_1n->Fill(W_1n, omega_1n, Weight_1n);
+                }
+                //</editor-fold>
+
                 hP_nFD_APID_1n.hFill(NeutronMomBKC_1n, Weight_1n); // Leading FD neutron (1n)
                 hP_nFD_APID_1n_ZOOMOUT.hFill(NeutronMomBKC_1n, Weight_1n); // Leading FD neutron (1n)
                 hP_nFD_APIDandNS_1n.hFill(P_n_1n_3v.Mag(), Weight_1n); // Leading FD neutron after shifting (1n)
                 hP_nFD_APIDandNS_1n_ZOOMOUT.hFill(P_n_1n_3v.Mag(), Weight_1n); // Leading FD neutron after shifting (1n)
+                hP_nFD_APIDandNS_VS_W_1n->Fill(W_1n, P_n_1n_3v.Mag(), Weight_1n);
+
+                if (qel) {
+                    hP_nFD_APIDandNS_VS_W_QEL_1n->Fill(W_1n, P_n_1n_3v.Mag(), Weight_1n);
+                } else if (mec) {
+                    hP_nFD_APIDandNS_VS_W_MEC_1n->Fill(W_1n, P_n_1n_3v.Mag(), Weight_1n);
+                } else if (res) {
+                    hP_nFD_APIDandNS_VS_W_RES_1n->Fill(W_1n, P_n_1n_3v.Mag(), Weight_1n);
+                } else if (dis) {
+                    hP_nFD_APIDandNS_VS_W_DIS_1n->Fill(W_1n, P_n_1n_3v.Mag(), Weight_1n);
+                }
 
                 dP_T_1n_3v = TVector3(P_T_e_1n_3v.Px() + P_T_n_1n_3v.Px(), P_T_e_1n_3v.Py() + P_T_n_1n_3v.Py(), 0);
                 dAlpha_T_1n = acos(-(P_e_1n_3v.Px() * dP_T_1n_3v.Px() + P_e_1n_3v.Py() * dP_T_1n_3v.Py() + P_e_1n_3v.Pz() * dP_T_1n_3v.Pz())
@@ -13182,12 +14180,17 @@ void EventAnalyser() {
             /* NOTE: p_first corresponds to protons[Protons_ind.at(0)] & p_second corresponds to protons[Protons_ind.at(1)] */
             TVector3 P_e_2p_3v, q_2p_3v, P_p_first_2p_3v, P_p_second_2p_3v, P_tot_2p_3v, P_1_2p_3v, P_2_2p_3v;
             TVector3 P_T_e_2p_3v, P_T_L_2p_3v, P_T_tot_2p_3v, dP_T_L_2p_3v, dP_T_tot_2p_3v;
+            TLorentzVector e_out_2p, Q_2p;
 
             P_e_2p_3v.SetMagThetaPhi(e_2p->getP(), e_2p->getTheta(), e_2p->getPhi());                                                              // electron 3 momentum
             q_2p_3v = TVector3(Pvx - P_e_2p_3v.Px(), Pvy - P_e_2p_3v.Py(), Pvz - P_e_2p_3v.Pz());                                                  // 3 momentum transfer
             P_T_e_2p_3v = TVector3(P_e_2p_3v.Px(), P_e_2p_3v.Py(), 0);                                                                    // electron transverse momentum
             P_p_first_2p_3v.SetMagThetaPhi(p_first_2p->getP(), p_first_2p->getTheta(), p_first_2p->getPhi());                           // first proton in protons vector
             P_p_second_2p_3v.SetMagThetaPhi(p_second_2p->getP(), p_second_2p->getTheta(), p_second_2p->getPhi());                      // second proton in protons vector
+
+            e_out_2p.SetPxPyPzE(electrons[0]->par()->getPx(), electrons[0]->par()->getPy(), electrons[0]->par()->getPz(), sqrt(m_e * m_e + P_e_2p_3v.Mag2()));
+            Q_2p = beam - e_out_2p;                                    // definition of 4-momentum transfer
+            double Q2_2p = fabs(Q_2p.Mag2());
 
             double E_e_2p = sqrt(m_e * m_e + P_e_2p_3v.Mag2()), omega_2p = beamE - E_e_2p, W_2p = sqrt((omega_2p + m_p) * (omega_2p + m_p) - q_2p_3v.Mag2());
             double E_1_2p, E_2_2p, Theta_p_e_p_tot_2p, Theta_q_p_tot_2p, Theta_q_p_L_2p, Theta_q_p_R_2p;
@@ -13247,7 +14250,7 @@ void EventAnalyser() {
             } // end of loop over protons vector
 
             /* Filling SF histograms (2p) */
-            hSF_2p_FD.hFill(EoP_e, Weight), hSF_VS_P_e_2p_FD.hFill(P_e, EoP_e, Weight);
+            hSF_2p_FD.hFill(EoP_e, Weight), hSF_VS_P_e_2p_FD.hFill(P_e_1e_cut, EoP_e, Weight);
 
             /* Filling fiducial plots (2p) */
             hVcal_VS_EoP_2p_PCAL.hFill(e_2p->cal(clas12::PCAL)->getLv(), EoP_e, Weight);
@@ -13259,10 +14262,10 @@ void EventAnalyser() {
             //<editor-fold desc="Filling momentum histograms (2p)">
 
             //<editor-fold desc="Electron momentum (2p)">
-            if (e_2p->getRegion() == FD) { hP_e_APID_2p_FD.hFill(P_e, Weight); }
+            if (e_2p->getRegion() == FD) { hP_e_APID_2p_FD.hFill(P_e_1e_cut, Weight); }
 
             for (int i = 0; i < Ne; i++) {
-                if (electrons[i]->getRegion() == FD) { hP_e_BPID_2p_FD.hFill(P_e, Weight); }
+                if (electrons[i]->getRegion() == FD) { hP_e_BPID_2p_FD.hFill(P_e_1e_cut, Weight); }
             } // before mom. th.
             //</editor-fold>
 
@@ -13431,65 +14434,119 @@ void EventAnalyser() {
                     hPhi_e_All_Int_2p_FD->Fill(Phi_e, Weight);
                     hTheta_e_VS_Phi_e_2p_FD->Fill(Phi_e, Theta_e, Weight);
 
-                    hE_e_All_Int_2p_FD->Fill(E_e, Weight);
-                    hE_e_VS_Theta_e_All_Int_2p_FD->Fill(Theta_e, E_e, Weight);
+                    hE_e_All_Int_2p_FD->Fill(E_e_1e_cut, Weight);
+                    hE_e_VS_Theta_e_All_Int_2p_FD->Fill(Theta_e, E_e_1e_cut, Weight);
 
-                    hET_All_Ang_All_Int_2p_FD->Fill(beamE - E_e, Weight);
+                    hET_All_Ang_All_Int_2p_FD->Fill(beamE - E_e_1e_cut, Weight);
                     if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) {
-                        hET15_All_Int_2p_FD->Fill(beamE - E_e, Weight);
-                        hE_e_15_All_Int_2p_FD->Fill(E_e, Weight);
+                        hET15_All_Int_2p_FD->Fill(beamE - E_e_1e_cut, Weight);
+                        hE_e_15_All_Int_2p_FD->Fill(E_e_1e_cut, Weight);
                     }
 
                     if (qel) {
                         hTheta_e_QEL_2p_FD->Fill(Theta_e, Weight);
                         hPhi_e_QEL_2p_FD->Fill(Phi_e, Weight);
-                        hE_e_QEL_2p_FD->Fill(E_e, Weight);
-                        hE_e_VS_Theta_e_QEL_2p_FD->Fill(Theta_e, E_e, Weight);
+                        hE_e_QEL_2p_FD->Fill(E_e_1e_cut, Weight);
+                        hE_e_VS_Theta_e_QEL_2p_FD->Fill(Theta_e, E_e_1e_cut, Weight);
 
-                        hET_All_Ang_QEL_2p_FD->Fill(beamE - E_e, Weight);
+                        hET_All_Ang_QEL_2p_FD->Fill(beamE - E_e_1e_cut, Weight);
                         if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) {
-                            hET15_QEL_2p_FD->Fill(beamE - E_e, Weight);
-                            hE_e_15_QEL_2p_FD->Fill(E_e, Weight);
+                            hET15_QEL_2p_FD->Fill(beamE - E_e_1e_cut, Weight);
+                            hE_e_15_QEL_2p_FD->Fill(E_e_1e_cut, Weight);
                         }
                     } else if (mec) {
                         hTheta_e_MEC_2p_FD->Fill(Theta_e, Weight);
                         hPhi_e_MEC_2p_FD->Fill(Phi_e, Weight);
-                        hE_e_MEC_2p_FD->Fill(E_e, Weight);
-                        hE_e_VS_Theta_e_MEC_2p_FD->Fill(Theta_e, E_e, Weight);
+                        hE_e_MEC_2p_FD->Fill(E_e_1e_cut, Weight);
+                        hE_e_VS_Theta_e_MEC_2p_FD->Fill(Theta_e, E_e_1e_cut, Weight);
 
-                        hET_All_Ang_MEC_2p_FD->Fill(beamE - E_e, Weight);
+                        hET_All_Ang_MEC_2p_FD->Fill(beamE - E_e_1e_cut, Weight);
                         if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) {
-                            hET15_MEC_2p_FD->Fill(beamE - E_e, Weight);
-                            hE_e_15_MEC_2p_FD->Fill(E_e, Weight);
+                            hET15_MEC_2p_FD->Fill(beamE - E_e_1e_cut, Weight);
+                            hE_e_15_MEC_2p_FD->Fill(E_e_1e_cut, Weight);
                         }
                     } else if (res) {
                         hTheta_e_RES_2p_FD->Fill(Theta_e, Weight);
                         hPhi_e_RES_2p_FD->Fill(Phi_e, Weight);
-                        hE_e_RES_2p_FD->Fill(E_e, Weight);
-                        hE_e_VS_Theta_e_RES_2p_FD->Fill(Theta_e, E_e, Weight);
+                        hE_e_RES_2p_FD->Fill(E_e_1e_cut, Weight);
+                        hE_e_VS_Theta_e_RES_2p_FD->Fill(Theta_e, E_e_1e_cut, Weight);
 
-                        hET_All_Ang_RES_2p_FD->Fill(beamE - E_e, Weight);
+                        hET_All_Ang_RES_2p_FD->Fill(beamE - E_e_1e_cut, Weight);
                         if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) {
-                            hET15_RES_2p_FD->Fill(beamE - E_e, Weight);
-                            hE_e_15_RES_2p_FD->Fill(E_e, Weight);
+                            hET15_RES_2p_FD->Fill(beamE - E_e_1e_cut, Weight);
+                            hE_e_15_RES_2p_FD->Fill(E_e_1e_cut, Weight);
                         }
                     } else if (dis) {
                         hTheta_e_DIS_2p_FD->Fill(Theta_e, Weight);
                         hPhi_e_DIS_2p_FD->Fill(Phi_e, Weight);
-                        hE_e_DIS_2p_FD->Fill(E_e, Weight);
-                        hE_e_VS_Theta_e_DIS_2p_FD->Fill(Theta_e, E_e, Weight);
+                        hE_e_DIS_2p_FD->Fill(E_e_1e_cut, Weight);
+                        hE_e_VS_Theta_e_DIS_2p_FD->Fill(Theta_e, E_e_1e_cut, Weight);
 
-                        hET_All_Ang_DIS_2p_FD->Fill(beamE - E_e, Weight);
+                        hET_All_Ang_DIS_2p_FD->Fill(beamE - E_e_1e_cut, Weight);
                         if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) {
-                            hET15_DIS_2p_FD->Fill(beamE - E_e, Weight);
-                            hE_e_15_DIS_2p_FD->Fill(E_e, Weight);
+                            hET15_DIS_2p_FD->Fill(beamE - E_e_1e_cut, Weight);
+                            hE_e_15_DIS_2p_FD->Fill(E_e_1e_cut, Weight);
                         }
                     }
                 }
             } // end of loop over electrons vector
 
-            /* Filling Q2 histograms (2p) */
-            if (e_2p->getRegion() == FD) { hQ2_2p->Fill(Q2, Weight); }
+            /* Filling Momentum transfer histograms (2p) */
+            if (e_2p->getRegion() == FD) {
+
+                //<editor-fold desc="Fill momentum transfer plots (1n)">
+                FillByInt(hQ2_2p, hQ2_QEL_2p, hQ2_MEC_2p, hQ2_RES_2p, hQ2_DIS_2p, qel, mec, res, dis, Q2_2p, Weight);
+                FillByInt(hq_3v_2p, hq_3v_QEL_2p, hq_3v_MEC_2p, hq_3v_RES_2p, hq_3v_DIS_2p, qel, mec, res, dis, q_2p_3v.Mag(), Weight);
+
+                hQ2_VS_W_2p->Fill(W_2p, Q2_2p, Weight);
+                hQ2_VS_q_3v_2p->Fill(q_2p_3v.Mag(), Q2_2p, Weight);
+                hQ2_VS_omega_2p->Fill(omega_2p, Q2_2p, Weight);
+                hq_3v_VS_omega_2p->Fill(omega_2p, q_2p_3v.Mag(), Weight);
+
+                if (qel) {
+                    hQ2_VS_W_QEL_2p->Fill(W_2p, Q2_2p, Weight);
+                    hQ2_VS_q_3v_QEL_2p->Fill(q_2p_3v.Mag(), Q2_2p, Weight);
+                    hQ2_VS_omega_QEL_2p->Fill(omega_2p, Q2_2p, Weight);
+                    hq_3v_VS_omega_QEL_2p->Fill(omega_2p, q_2p_3v.Mag(), Weight);
+                } else if (mec) {
+                    hQ2_VS_W_MEC_2p->Fill(W_2p, Q2_2p, Weight);
+                    hQ2_VS_q_3v_MEC_2p->Fill(q_2p_3v.Mag(), Q2_2p, Weight);
+                    hQ2_VS_omega_MEC_2p->Fill(omega_2p, Q2_2p, Weight);
+                    hq_3v_VS_omega_MEC_2p->Fill(omega_2p, q_2p_3v.Mag(), Weight);
+                } else if (res) {
+                    hQ2_VS_W_RES_2p->Fill(W_2p, Q2_2p, Weight);
+                    hQ2_VS_q_3v_RES_2p->Fill(q_2p_3v.Mag(), Q2_2p, Weight);
+                    hQ2_VS_omega_RES_2p->Fill(omega_2p, Q2_2p, Weight);
+                    hq_3v_VS_omega_RES_2p->Fill(omega_2p, q_2p_3v.Mag(), Weight);
+                } else if (dis) {
+                    hQ2_VS_W_DIS_2p->Fill(W_2p, Q2_2p, Weight);
+                    hQ2_VS_q_3v_DIS_2p->Fill(q_2p_3v.Mag(), Q2_2p, Weight);
+                    hQ2_VS_omega_DIS_2p->Fill(omega_2p, Q2_2p, Weight);
+                    hq_3v_VS_omega_DIS_2p->Fill(omega_2p, q_2p_3v.Mag(), Weight);
+                }
+                //</editor-fold>
+
+            }
+
+            //<editor-fold desc="Fill W (2p)">
+            FillByInt(hW_All_Int_2p, hW_QEL_2p, hW_MEC_2p, hW_RES_2p, hW_DIS_2p, qel, mec, res, dis, W_2p, Weight);
+            hW_VS_q_3v_2p->Fill(W_2p, q_2p_3v.Mag(), Weight);
+            hW_VS_omega_2p->Fill(W_2p, omega_2p, Weight);
+
+            if (qel) {
+                hW_VS_q_3v_QEL_2p->Fill(W_2p, q_2p_3v.Mag(), Weight);
+                hW_VS_omega_QEL_2p->Fill(W_2p, omega_2p, Weight);
+            } else if (mec) {
+                hW_VS_q_3v_MEC_2p->Fill(W_2p, q_2p_3v.Mag(), Weight);
+                hW_VS_omega_MEC_2p->Fill(W_2p, omega_2p, Weight);
+            } else if (res) {
+                hW_VS_q_3v_RES_2p->Fill(W_2p, q_2p_3v.Mag(), Weight);
+                hW_VS_omega_RES_2p->Fill(W_2p, omega_2p, Weight);
+            } else if (dis) {
+                hW_VS_q_3v_DIS_2p->Fill(W_2p, q_2p_3v.Mag(), Weight);
+                hW_VS_omega_DIS_2p->Fill(W_2p, omega_2p, Weight);
+            }
+            //</editor-fold>
 
             hP_p_1_2p.hFill(P_1_2p_3v.Mag(), Weight); // Leading proton (2p)
             hP_p_2_2p.hFill(P_2_2p_3v.Mag(), Weight); // Recoil proton (2p)
@@ -14044,9 +15101,6 @@ void EventAnalyser() {
                 hTheta_e_VS_P_e_pFDpCD_FD->Fill(P_e_pFDpCD_3v.Mag(), Theta_e_pFDpCD, Weight_pFDpCD);
                 hTheta_e_VS_W_pFDpCD_FD->Fill(W_pFDpCD, Theta_e_pFDpCD, Weight_pFDpCD);
 
-                hQ2_pFDpCD->Fill(Q2_pFDpCD, Weight_pFDpCD);
-                hQ2_VS_W_pFDpCD->Fill(W_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
-
                 hE_e_All_Int_pFDpCD_FD->Fill(E_e_pFDpCD, Weight_pFDpCD);
                 hE_e_VS_Theta_e_All_Int_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight_pFDpCD);
 
@@ -14104,6 +15158,38 @@ void EventAnalyser() {
                         hET15_DIS_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight_pFDpCD);
                         hE_e_15_DIS_pFDpCD_FD->Fill(E_e_pFDpCD, Weight_pFDpCD);
                     }
+                }
+                //</editor-fold>
+
+                //<editor-fold desc="Fill momentum transfer plots (pFDpCD)">
+                FillByInt(hQ2_pFDpCD, hQ2_QEL_pFDpCD, hQ2_MEC_pFDpCD, hQ2_RES_pFDpCD, hQ2_DIS_pFDpCD, qel, mec, res, dis, Q2_pFDpCD, Weight_pFDpCD);
+                FillByInt(hq_3v_pFDpCD, hq_3v_QEL_pFDpCD, hq_3v_MEC_pFDpCD, hq_3v_RES_pFDpCD, hq_3v_DIS_pFDpCD, qel, mec, res, dis, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
+
+                hQ2_VS_W_pFDpCD->Fill(W_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
+                hQ2_VS_q_3v_pFDpCD->Fill(q_pFDpCD_3v.Mag(), Q2_pFDpCD, Weight_pFDpCD);
+                hQ2_VS_omega_pFDpCD->Fill(omega_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
+                hq_3v_VS_omega_pFDpCD->Fill(omega_pFDpCD, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
+
+                if (qel) {
+                    hQ2_VS_W_QEL_pFDpCD->Fill(W_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
+                    hQ2_VS_q_3v_QEL_pFDpCD->Fill(q_pFDpCD_3v.Mag(), Q2_pFDpCD, Weight_pFDpCD);
+                    hQ2_VS_omega_QEL_pFDpCD->Fill(omega_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
+                    hq_3v_VS_omega_QEL_pFDpCD->Fill(omega_pFDpCD, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                } else if (mec) {
+                    hQ2_VS_W_MEC_pFDpCD->Fill(W_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
+                    hQ2_VS_q_3v_MEC_pFDpCD->Fill(q_pFDpCD_3v.Mag(), Q2_pFDpCD, Weight_pFDpCD);
+                    hQ2_VS_omega_MEC_pFDpCD->Fill(omega_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
+                    hq_3v_VS_omega_MEC_pFDpCD->Fill(omega_pFDpCD, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                } else if (res) {
+                    hQ2_VS_W_RES_pFDpCD->Fill(W_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
+                    hQ2_VS_q_3v_RES_pFDpCD->Fill(q_pFDpCD_3v.Mag(), Q2_pFDpCD, Weight_pFDpCD);
+                    hQ2_VS_omega_RES_pFDpCD->Fill(omega_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
+                    hq_3v_VS_omega_RES_pFDpCD->Fill(omega_pFDpCD, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                } else if (dis) {
+                    hQ2_VS_W_DIS_pFDpCD->Fill(W_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
+                    hQ2_VS_q_3v_DIS_pFDpCD->Fill(q_pFDpCD_3v.Mag(), Q2_pFDpCD, Weight_pFDpCD);
+                    hQ2_VS_omega_DIS_pFDpCD->Fill(omega_pFDpCD, Q2_pFDpCD, Weight_pFDpCD);
+                    hq_3v_VS_omega_DIS_pFDpCD->Fill(omega_pFDpCD, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 }
                 //</editor-fold>
 
@@ -14173,7 +15259,25 @@ void EventAnalyser() {
                                        hNeut_Multi_By_Redef_APID_AV_pFDpCD_FD, NeutronsFD_ind);
                 //</editor-fold>
 
+                //<editor-fold desc="Fill W (pFDpCD)">
                 FillByInt(hW_All_Int_pFDpCD, hW_QEL_pFDpCD, hW_MEC_pFDpCD, hW_RES_pFDpCD, hW_DIS_pFDpCD, qel, mec, res, dis, W_pFDpCD, Weight_pFDpCD);
+                hW_VS_q_3v_pFDpCD->Fill(W_pFDpCD, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                hW_VS_omega_pFDpCD->Fill(W_pFDpCD, omega_pFDpCD, Weight_pFDpCD);
+
+                if (qel) {
+                    hW_VS_q_3v_QEL_pFDpCD->Fill(W_pFDpCD, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hW_VS_omega_QEL_pFDpCD->Fill(W_pFDpCD, omega_pFDpCD, Weight_pFDpCD);
+                } else if (mec) {
+                    hW_VS_q_3v_MEC_pFDpCD->Fill(W_pFDpCD, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hW_VS_omega_MEC_pFDpCD->Fill(W_pFDpCD, omega_pFDpCD, Weight_pFDpCD);
+                } else if (res) {
+                    hW_VS_q_3v_RES_pFDpCD->Fill(W_pFDpCD, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hW_VS_omega_RES_pFDpCD->Fill(W_pFDpCD, omega_pFDpCD, Weight_pFDpCD);
+                } else if (dis) {
+                    hW_VS_q_3v_DIS_pFDpCD->Fill(W_pFDpCD, q_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hW_VS_omega_DIS_pFDpCD->Fill(W_pFDpCD, omega_pFDpCD, Weight_pFDpCD);
+                }
+                //</editor-fold>
 
                 hP_tot_pFDpCD.hFill(P_tot_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 hP_rel_pFDpCD.hFill(P_rel_pFDpCD_3v.Mag(), Weight_pFDpCD);
@@ -14186,6 +15290,23 @@ void EventAnalyser() {
                 hP_pCD_pFDpCD.hFill(P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD); // CD proton (pFDpCD)
                 hP_pL_pFDpCD.hFill(P_pL_pFDpCD_3v.Mag(), Weight_pFDpCD); // Leading proton (pFDpCD)
                 hP_pR_pFDpCD.hFill(P_pR_pFDpCD_3v.Mag(), Weight_pFDpCD); // Recoil proton (pFDpCD)
+
+                hP_pFD_VS_W_pFDpCD->Fill(W_pFDpCD, P_pFD_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                hP_pCD_VS_W_pFDpCD->Fill(W_pFDpCD, P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD);
+
+                if (qel) {
+                    hP_pFD_VS_W_QEL_pFDpCD->Fill(W_pFDpCD, P_pFD_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hP_pCD_VS_W_QEL_pFDpCD->Fill(W_pFDpCD, P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                } else if (mec) {
+                    hP_pFD_VS_W_MEC_pFDpCD->Fill(W_pFDpCD, P_pFD_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hP_pCD_VS_W_MEC_pFDpCD->Fill(W_pFDpCD, P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                } else if (res) {
+                    hP_pFD_VS_W_RES_pFDpCD->Fill(W_pFDpCD, P_pFD_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hP_pCD_VS_W_RES_pFDpCD->Fill(W_pFDpCD, P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                } else if (dis) {
+                    hP_pFD_VS_W_DIS_pFDpCD->Fill(W_pFDpCD, P_pFD_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                    hP_pCD_VS_W_DIS_pFDpCD->Fill(W_pFDpCD, P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD);
+                }
 
                 hP_pL_vs_P_pR_pFDpCD.hFill(P_pL_pFDpCD_3v.Mag(), P_pR_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 hP_pFD_vs_P_pCD_pFDpCD.hFill(P_pFD_pFDpCD_3v.Mag(), P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD);
@@ -14893,9 +16014,6 @@ void EventAnalyser() {
                 hTheta_e_VS_P_e_nFDpCD_FD->Fill(P_e_nFDpCD_3v.Mag(), Theta_e_nFDpCD, Weight_nFDpCD);
                 hTheta_e_VS_W_nFDpCD_FD->Fill(W_nFDpCD, Theta_e_nFDpCD, Weight_nFDpCD);
 
-                hQ2_nFDpCD->Fill(Q2_nFDpCD, Weight_nFDpCD);
-                hQ2_VS_W_nFDpCD->Fill(W_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
-
                 hE_e_All_Int_nFDpCD_FD->Fill(E_e_nFDpCD, Weight_nFDpCD);
                 hE_e_VS_Theta_e_All_Int_nFDpCD_FD->Fill(Theta_e_nFDpCD, E_e_nFDpCD, Weight_nFDpCD);
 
@@ -14953,6 +16071,38 @@ void EventAnalyser() {
                         hET15_DIS_nFDpCD_FD->Fill(beamE - E_e_nFDpCD, Weight_nFDpCD);
                         hE_e_15_DIS_nFDpCD_FD->Fill(E_e_nFDpCD, Weight_nFDpCD);
                     }
+                }
+                //</editor-fold>
+
+                //<editor-fold desc="Fill momentum transfer plots (nFDpCD)">
+                FillByInt(hQ2_nFDpCD, hQ2_QEL_nFDpCD, hQ2_MEC_nFDpCD, hQ2_RES_nFDpCD, hQ2_DIS_nFDpCD, qel, mec, res, dis, Q2_nFDpCD, Weight_nFDpCD);
+                FillByInt(hq_3v_nFDpCD, hq_3v_QEL_nFDpCD, hq_3v_MEC_nFDpCD, hq_3v_RES_nFDpCD, hq_3v_DIS_nFDpCD, qel, mec, res, dis, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
+
+                hQ2_VS_W_nFDpCD->Fill(W_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
+                hQ2_VS_q_3v_nFDpCD->Fill(q_nFDpCD_3v.Mag(), Q2_nFDpCD, Weight_nFDpCD);
+                hQ2_VS_omega_nFDpCD->Fill(omega_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
+                hq_3v_VS_omega_nFDpCD->Fill(omega_nFDpCD, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
+
+                if (qel) {
+                    hQ2_VS_W_QEL_nFDpCD->Fill(W_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
+                    hQ2_VS_q_3v_QEL_nFDpCD->Fill(q_nFDpCD_3v.Mag(), Q2_nFDpCD, Weight_nFDpCD);
+                    hQ2_VS_omega_QEL_nFDpCD->Fill(omega_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
+                    hq_3v_VS_omega_QEL_nFDpCD->Fill(omega_nFDpCD, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                } else if (mec) {
+                    hQ2_VS_W_MEC_nFDpCD->Fill(W_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
+                    hQ2_VS_q_3v_MEC_nFDpCD->Fill(q_nFDpCD_3v.Mag(), Q2_nFDpCD, Weight_nFDpCD);
+                    hQ2_VS_omega_MEC_nFDpCD->Fill(omega_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
+                    hq_3v_VS_omega_MEC_nFDpCD->Fill(omega_nFDpCD, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                } else if (res) {
+                    hQ2_VS_W_RES_nFDpCD->Fill(W_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
+                    hQ2_VS_q_3v_RES_nFDpCD->Fill(q_nFDpCD_3v.Mag(), Q2_nFDpCD, Weight_nFDpCD);
+                    hQ2_VS_omega_RES_nFDpCD->Fill(omega_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
+                    hq_3v_VS_omega_RES_nFDpCD->Fill(omega_nFDpCD, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                } else if (dis) {
+                    hQ2_VS_W_DIS_nFDpCD->Fill(W_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
+                    hQ2_VS_q_3v_DIS_nFDpCD->Fill(q_nFDpCD_3v.Mag(), Q2_nFDpCD, Weight_nFDpCD);
+                    hQ2_VS_omega_DIS_nFDpCD->Fill(omega_nFDpCD, Q2_nFDpCD, Weight_nFDpCD);
+                    hq_3v_VS_omega_DIS_nFDpCD->Fill(omega_nFDpCD, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
                 }
                 //</editor-fold>
 
@@ -15022,7 +16172,25 @@ void EventAnalyser() {
                                        hNeut_Multi_By_Redef_APID_AV_nFDpCD_FD, NeutronsFD_ind);
                 //</editor-fold>
 
+                //<editor-fold desc="Fill W (nFDpCD)">
                 FillByInt(hW_All_Int_nFDpCD, hW_QEL_nFDpCD, hW_MEC_nFDpCD, hW_RES_nFDpCD, hW_DIS_nFDpCD, qel, mec, res, dis, W_nFDpCD, Weight_nFDpCD);
+                hW_VS_q_3v_nFDpCD->Fill(W_nFDpCD, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                hW_VS_omega_nFDpCD->Fill(W_nFDpCD, omega_nFDpCD, Weight_nFDpCD);
+
+                if (qel) {
+                    hW_VS_q_3v_QEL_nFDpCD->Fill(W_nFDpCD, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hW_VS_omega_QEL_nFDpCD->Fill(W_nFDpCD, omega_nFDpCD, Weight_nFDpCD);
+                } else if (mec) {
+                    hW_VS_q_3v_MEC_nFDpCD->Fill(W_nFDpCD, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hW_VS_omega_MEC_nFDpCD->Fill(W_nFDpCD, omega_nFDpCD, Weight_nFDpCD);
+                } else if (res) {
+                    hW_VS_q_3v_RES_nFDpCD->Fill(W_nFDpCD, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hW_VS_omega_RES_nFDpCD->Fill(W_nFDpCD, omega_nFDpCD, Weight_nFDpCD);
+                } else if (dis) {
+                    hW_VS_q_3v_DIS_nFDpCD->Fill(W_nFDpCD, q_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hW_VS_omega_DIS_nFDpCD->Fill(W_nFDpCD, omega_nFDpCD, Weight_nFDpCD);
+                }
+                //</editor-fold>
 
                 hP_tot_nFDpCD.hFill(P_tot_nFDpCD_3v.Mag(), Weight_nFDpCD);
                 hP_rel_nFDpCD.hFill(P_rel_nFDpCD_3v.Mag(), Weight_nFDpCD);
@@ -15035,6 +16203,23 @@ void EventAnalyser() {
                 hP_pCD_nFDpCD.hFill(P_pCD_nFDpCD_3v.Mag(), Weight_nFDpCD); // pCD momentum (nFDpCD)
                 hP_nL_nFDpCD.hFill(P_nL_nFDpCD_3v.Mag(), Weight_nFDpCD); // Leading nucleon (nFDpCD)
                 hP_nR_nFDpCD.hFill(P_nR_nFDpCD_3v.Mag(), Weight_nFDpCD); // Recoil nucleon (nFDpCD)
+
+                hP_nFD_VS_W_nFDpCD->Fill(W_nFDpCD, P_nFD_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                hP_pCD_VS_W_nFDpCD->Fill(W_nFDpCD, P_pCD_nFDpCD_3v.Mag(), Weight_nFDpCD);
+
+                if (qel) {
+                    hP_nFD_VS_W_QEL_nFDpCD->Fill(W_nFDpCD, P_nFD_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hP_pCD_VS_W_QEL_nFDpCD->Fill(W_nFDpCD, P_pCD_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                } else if (mec) {
+                    hP_nFD_VS_W_MEC_nFDpCD->Fill(W_nFDpCD, P_nFD_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hP_pCD_VS_W_MEC_nFDpCD->Fill(W_nFDpCD, P_pCD_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                } else if (res) {
+                    hP_nFD_VS_W_RES_nFDpCD->Fill(W_nFDpCD, P_nFD_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hP_pCD_VS_W_RES_nFDpCD->Fill(W_nFDpCD, P_pCD_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                } else if (dis) {
+                    hP_nFD_VS_W_DIS_nFDpCD->Fill(W_nFDpCD, P_nFD_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                    hP_pCD_VS_W_DIS_nFDpCD->Fill(W_nFDpCD, P_pCD_nFDpCD_3v.Mag(), Weight_nFDpCD);
+                }
 
                 hP_nL_vs_P_nR_nFDpCD.hFill(P_nL_nFDpCD_3v.Mag(), P_nR_nFDpCD_3v.Mag(), Weight_nFDpCD);
                 hP_nFD_vs_P_pCD_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), P_pCD_nFDpCD_3v.Mag(), Weight_nFDpCD);
@@ -16067,6 +17252,23 @@ void EventAnalyser() {
 
         hP_n_APID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
         hP_n_BPID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+
+        //<editor-fold desc="P_pFD vs. W plots (pFDpCD, FD)">
+        histPlotter2D(c1, hP_pFD_VS_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_VS_W_pFDpCD_Dir, "10_P_pFD_VS_W_pFDpCD");
+        histPlotter2D(c1, hP_pFD_VS_W_QEL_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_VS_W_pFDpCD_Dir, "10a_P_pFD_VS_W_QEL_pFDpCD");
+        histPlotter2D(c1, hP_pFD_VS_W_MEC_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_VS_W_pFDpCD_Dir, "10b_P_pFD_VS_W_MEC_pFDpCD");
+        histPlotter2D(c1, hP_pFD_VS_W_RES_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_VS_W_pFDpCD_Dir, "10c_P_pFD_VS_W_RES_pFDpCD");
+        histPlotter2D(c1, hP_pFD_VS_W_DIS_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_VS_W_pFDpCD_Dir, "10d_P_pFD_VS_W_DIS_pFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="P_pCD vs. W plots (pFDpCD, FD)">
+        histPlotter2D(c1, hP_pCD_VS_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pCD_VS_W_pFDpCD_Dir, "11_P_pCD_VS_W_pFDpCD");
+        histPlotter2D(c1, hP_pCD_VS_W_QEL_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pCD_VS_W_pFDpCD_Dir, "11a_P_pCD_VS_W_QEL_pFDpCD");
+        histPlotter2D(c1, hP_pCD_VS_W_MEC_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pCD_VS_W_pFDpCD_Dir, "11b_P_pCD_VS_W_MEC_pFDpCD");
+        histPlotter2D(c1, hP_pCD_VS_W_RES_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pCD_VS_W_pFDpCD_Dir, "11c_P_pCD_VS_W_RES_pFDpCD");
+        histPlotter2D(c1, hP_pCD_VS_W_DIS_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pCD_VS_W_pFDpCD_Dir, "11d_P_pCD_VS_W_DIS_pFDpCD");
+        //</editor-fold>
+
         //</editor-fold>
 
         //<editor-fold desc="Momentum plots (nFDpCD, CD & FD)">
@@ -16108,6 +17310,23 @@ void EventAnalyser() {
 //                                         FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
 //        hP_n_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
 //                                         FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+
+        //<editor-fold desc="P_nFD vs. W plots (nFDpCD, FD)">
+        histPlotter2D(c1, hP_nFD_VS_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_VS_W_nFDpCD_Dir, "10_P_nFD_VS_W_nFDpCD");
+        histPlotter2D(c1, hP_nFD_VS_W_QEL_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_VS_W_nFDpCD_Dir, "10a_P_nFD_VS_W_QEL_nFDpCD");
+        histPlotter2D(c1, hP_nFD_VS_W_MEC_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_VS_W_nFDpCD_Dir, "10b_P_nFD_VS_W_MEC_nFDpCD");
+        histPlotter2D(c1, hP_nFD_VS_W_RES_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_VS_W_nFDpCD_Dir, "10c_P_nFD_VS_W_RES_nFDpCD");
+        histPlotter2D(c1, hP_nFD_VS_W_DIS_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_VS_W_nFDpCD_Dir, "10d_P_nFD_VS_W_DIS_nFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="P_pCD vs. W plots (nFDpCD, FD)">
+        histPlotter2D(c1, hP_pCD_VS_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pCD_VS_W_nFDpCD_Dir, "11_P_pCD_VS_W_nFDpCD");
+        histPlotter2D(c1, hP_pCD_VS_W_QEL_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pCD_VS_W_nFDpCD_Dir, "11a_P_pCD_VS_W_QEL_nFDpCD");
+        histPlotter2D(c1, hP_pCD_VS_W_MEC_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pCD_VS_W_nFDpCD_Dir, "11b_P_pCD_VS_W_MEC_nFDpCD");
+        histPlotter2D(c1, hP_pCD_VS_W_RES_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pCD_VS_W_nFDpCD_Dir, "11c_P_pCD_VS_W_RES_nFDpCD");
+        histPlotter2D(c1, hP_pCD_VS_W_DIS_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pCD_VS_W_nFDpCD_Dir, "11d_P_pCD_VS_W_DIS_nFDpCD");
+        //</editor-fold>
+
         //</editor-fold>
 
         //<editor-fold desc="Leading and recoil momentum plots (2p)">
@@ -16256,7 +17475,144 @@ void EventAnalyser() {
     if (W_plots) {
         cout << "\n\nPlotting W histograms...\n\n";
 
-//  W plots (pFDpCD, CD & FD) -------------------------------------------------------------------------------------------------------------------------------------------
+//  W plots (CD & FD) ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="W plots (1e cut, CD & FD)">
+        double W_1e_cut_integral = hW_All_Int_1e_cut->Integral();
+
+        histPlotter1D(c1, hW_All_Int_1e_cut, norm_W_plots, true, W_1e_cut_integral, "W distribution", "All Int., 1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sW_1e_cut, "00_W_All_Int_1e_cut", hW_All_Int_1e_cut_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_QEL_1e_cut, norm_W_plots, true, W_1e_cut_integral, "W distribution", "QEL only, 1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1e_cut,
+                      "01_W_QEL_only_1e_cut", hW_QEL_1e_cut_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_MEC_1e_cut, norm_W_plots, true, W_1e_cut_integral, "W distribution", "MEC only, 1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1e_cut,
+                      "02_W_MEC_only_1e_cut", hW_MEC_1e_cut_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_RES_1e_cut, norm_W_plots, true, W_1e_cut_integral, "W distribution", "RES only, 1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1e_cut,
+                      "03_W_RES_only_1e_cut", hW_RES_1e_cut_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_DIS_1e_cut, norm_W_plots, true, W_1e_cut_integral, "W distribution", "DIS only, 1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1e_cut,
+                      "04_W_DIS_only_1e_cut", hW_DIS_1e_cut_Dir, "", kBlue, true, true, true, false);
+
+        stackPlotter1D(c1, sW_1e_cut, norm_W_plots, "W distribution", "1e Cut", plots, hW_All_Int_1e_cut, hW_QEL_1e_cut, hW_MEC_1e_cut, hW_RES_1e_cut, hW_DIS_1e_cut,
+                       "05_W_Stack_1e_cut", sW_1e_cut_Dir, "");
+
+        //<editor-fold desc="W vs. q_3v plots (1e cut, FD)">
+        histPlotter2D(c1, hW_VS_q_3v_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1e_cut_Dir, "06_W_VS_q_3v_1e_cut");
+        histPlotter2D(c1, hW_VS_q_3v_QEL_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1e_cut_Dir, "06a_W_VS_q_3v_QEL_1e_cut");
+        histPlotter2D(c1, hW_VS_q_3v_MEC_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1e_cut_Dir, "06b_W_VS_q_3v_MEC_1e_cut");
+        histPlotter2D(c1, hW_VS_q_3v_RES_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1e_cut_Dir, "06c_W_VS_q_3v_RES_1e_cut");
+        histPlotter2D(c1, hW_VS_q_3v_DIS_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1e_cut_Dir, "06d_W_VS_q_3v_DIS_1e_cut");
+        //</editor-fold>
+
+        //<editor-fold desc="W vs. omega plots (1e cut, FD)">
+        histPlotter2D(c1, hW_VS_omega_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1e_cut_Dir, "07_W_VS_omega_1e_cut");
+        histPlotter2D(c1, hW_VS_omega_QEL_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1e_cut_Dir, "07a_W_VS_omega_QEL_1e_cut");
+        histPlotter2D(c1, hW_VS_omega_MEC_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1e_cut_Dir, "07b_W_VS_omega_MEC_1e_cut");
+        histPlotter2D(c1, hW_VS_omega_RES_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1e_cut_Dir, "07c_W_VS_omega_RES_1e_cut");
+        histPlotter2D(c1, hW_VS_omega_DIS_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1e_cut_Dir, "07d_W_VS_omega_DIS_1e_cut");
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="W plots (1p, CD & FD)">
+        double W_1p_integral = hW_All_Int_1p->Integral();
+
+        histPlotter1D(c1, hW_All_Int_1p, norm_W_plots, true, W_1p_integral, "W distribution", "All Int., 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1p,
+                      "00_W_All_Int_1p", hW_All_Int_1p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_QEL_1p, norm_W_plots, true, W_1p_integral, "W distribution", "QEL only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1p,
+                      "01_W_QEL_only_1p", hW_QEL_1p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_MEC_1p, norm_W_plots, true, W_1p_integral, "W distribution", "MEC only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1p,
+                      "02_W_MEC_only_1p", hW_MEC_1p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_RES_1p, norm_W_plots, true, W_1p_integral, "W distribution", "RES only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1p,
+                      "03_W_RES_only_1p", hW_RES_1p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_DIS_1p, norm_W_plots, true, W_1p_integral, "W distribution", "DIS only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1p,
+                      "04_W_DIS_only_1p", hW_DIS_1p_Dir, "", kBlue, true, true, true, false);
+
+        stackPlotter1D(c1, sW_1p, norm_W_plots, "W distribution", "1p", plots, hW_All_Int_1p, hW_QEL_1p, hW_MEC_1p, hW_RES_1p, hW_DIS_1p, "05_W_Stack_1p", sW_1p_Dir, "");
+
+        //<editor-fold desc="W vs. q_3v plots (1p, FD)">
+        histPlotter2D(c1, hW_VS_q_3v_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1p_Dir, "06_W_VS_q_3v_1p");
+        histPlotter2D(c1, hW_VS_q_3v_QEL_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1p_Dir, "06a_W_VS_q_3v_QEL_1p");
+        histPlotter2D(c1, hW_VS_q_3v_MEC_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1p_Dir, "06b_W_VS_q_3v_MEC_1p");
+        histPlotter2D(c1, hW_VS_q_3v_RES_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1p_Dir, "06c_W_VS_q_3v_RES_1p");
+        histPlotter2D(c1, hW_VS_q_3v_DIS_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1p_Dir, "06d_W_VS_q_3v_DIS_1p");
+        //</editor-fold>
+
+        //<editor-fold desc="W vs. omega plots (1p, FD)">
+        histPlotter2D(c1, hW_VS_omega_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1p_Dir, "07_W_VS_omega_1p");
+        histPlotter2D(c1, hW_VS_omega_QEL_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1p_Dir, "07a_W_VS_omega_QEL_1p");
+        histPlotter2D(c1, hW_VS_omega_MEC_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1p_Dir, "07b_W_VS_omega_MEC_1p");
+        histPlotter2D(c1, hW_VS_omega_RES_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1p_Dir, "07c_W_VS_omega_RES_1p");
+        histPlotter2D(c1, hW_VS_omega_DIS_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1p_Dir, "07d_W_VS_omega_DIS_1p");
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="W plots (1n, CD & FD)">
+        double W_1n_integral = hW_All_Int_1n->Integral();
+
+        histPlotter1D(c1, hW_All_Int_1n, norm_W_plots, true, W_1n_integral, "W distribution", "All Int., 1n", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1n,
+                      "00_W_All_Int_1n", hW_All_Int_1n_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_QEL_1n, norm_W_plots, true, W_1n_integral, "W distribution", "QEL only, 1n", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1n,
+                      "01_W_QEL_only_1n", hW_QEL_1n_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_MEC_1n, norm_W_plots, true, W_1n_integral, "W distribution", "MEC only, 1n", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1n,
+                      "02_W_MEC_only_1n", hW_MEC_1n_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_RES_1n, norm_W_plots, true, W_1n_integral, "W distribution", "RES only, 1n", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1n,
+                      "03_W_RES_only_1n", hW_RES_1n_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_DIS_1n, norm_W_plots, true, W_1n_integral, "W distribution", "DIS only, 1n", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_1n,
+                      "04_W_DIS_only_1n", hW_DIS_1n_Dir, "", kBlue, true, true, true, false);
+
+        stackPlotter1D(c1, sW_1n, norm_W_plots, "W distribution", "1n", plots, hW_All_Int_1n, hW_QEL_1n, hW_MEC_1n, hW_RES_1n, hW_DIS_1n, "05_W_Stack_1n", sW_1n_Dir, "");
+
+        //<editor-fold desc="W vs. q_3v plots (1n, FD)">
+        histPlotter2D(c1, hW_VS_q_3v_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1n_Dir, "06_W_VS_q_3v_1n");
+        histPlotter2D(c1, hW_VS_q_3v_QEL_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1n_Dir, "06a_W_VS_q_3v_QEL_1n");
+        histPlotter2D(c1, hW_VS_q_3v_MEC_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1n_Dir, "06b_W_VS_q_3v_MEC_1n");
+        histPlotter2D(c1, hW_VS_q_3v_RES_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1n_Dir, "06c_W_VS_q_3v_RES_1n");
+        histPlotter2D(c1, hW_VS_q_3v_DIS_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_1n_Dir, "06d_W_VS_q_3v_DIS_1n");
+        //</editor-fold>
+
+        //<editor-fold desc="W vs. omega plots (1n, FD)">
+        histPlotter2D(c1, hW_VS_omega_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1n_Dir, "07_W_VS_omega_1n");
+        histPlotter2D(c1, hW_VS_omega_QEL_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1n_Dir, "07a_W_VS_omega_QEL_1n");
+        histPlotter2D(c1, hW_VS_omega_MEC_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1n_Dir, "07b_W_VS_omega_MEC_1n");
+        histPlotter2D(c1, hW_VS_omega_RES_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1n_Dir, "07c_W_VS_omega_RES_1n");
+        histPlotter2D(c1, hW_VS_omega_DIS_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_1n_Dir, "07d_W_VS_omega_DIS_1n");
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="W plots (2p, CD & FD)">
+        double W_2p_integral = hW_All_Int_2p->Integral();
+
+        histPlotter1D(c1, hW_All_Int_2p, norm_W_plots, true, W_2p_integral, "W distribution", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_2p,
+                      "00_W_All_Int_2p", hW_All_Int_2p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_QEL_2p, norm_W_plots, true, W_2p_integral, "W distribution", "QEL only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_2p,
+                      "01_W_QEL_only_2p", hW_QEL_2p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_MEC_2p, norm_W_plots, true, W_2p_integral, "W distribution", "MEC only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_2p,
+                      "02_W_MEC_only_2p", hW_MEC_2p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_RES_2p, norm_W_plots, true, W_2p_integral, "W distribution", "RES only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_2p,
+                      "03_W_RES_only_2p", hW_RES_2p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hW_DIS_2p, norm_W_plots, true, W_2p_integral, "W distribution", "DIS only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sW_2p,
+                      "04_W_DIS_only_2p", hW_DIS_2p_Dir, "", kBlue, true, true, true, false);
+
+        stackPlotter1D(c1, sW_2p, norm_W_plots, "W distribution", "2p", plots, hW_All_Int_2p, hW_QEL_2p, hW_MEC_2p, hW_RES_2p, hW_DIS_2p, "05_W_Stack_2p", sW_2p_Dir, "");
+
+        //<editor-fold desc="W vs. q_3v plots (2p, FD)">
+        histPlotter2D(c1, hW_VS_q_3v_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_2p_Dir, "06_W_VS_q_3v_2p");
+        histPlotter2D(c1, hW_VS_q_3v_QEL_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_2p_Dir, "06a_W_VS_q_3v_QEL_2p");
+        histPlotter2D(c1, hW_VS_q_3v_MEC_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_2p_Dir, "06b_W_VS_q_3v_MEC_2p");
+        histPlotter2D(c1, hW_VS_q_3v_RES_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_2p_Dir, "06c_W_VS_q_3v_RES_2p");
+        histPlotter2D(c1, hW_VS_q_3v_DIS_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_2p_Dir, "06d_W_VS_q_3v_DIS_2p");
+        //</editor-fold>
+
+        //<editor-fold desc="W vs. omega plots (2p, FD)">
+        histPlotter2D(c1, hW_VS_omega_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_2p_Dir, "07_W_VS_omega_2p");
+        histPlotter2D(c1, hW_VS_omega_QEL_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_2p_Dir, "07a_W_VS_omega_QEL_2p");
+        histPlotter2D(c1, hW_VS_omega_MEC_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_2p_Dir, "07b_W_VS_omega_MEC_2p");
+        histPlotter2D(c1, hW_VS_omega_RES_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_2p_Dir, "07c_W_VS_omega_RES_2p");
+        histPlotter2D(c1, hW_VS_omega_DIS_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_2p_Dir, "07d_W_VS_omega_DIS_2p");
+        //</editor-fold>
+
+        //</editor-fold>
 
         //<editor-fold desc="W plots (pFDpCD, CD & FD)">
         double W_pFDpCD_integral = hW_All_Int_pFDpCD->Integral();
@@ -16274,9 +17630,24 @@ void EventAnalyser() {
 
         stackPlotter1D(c1, sW_pFDpCD, norm_W_plots, "W distribution", "pFDpCD", plots, hW_All_Int_pFDpCD, hW_QEL_pFDpCD, hW_MEC_pFDpCD, hW_RES_pFDpCD, hW_DIS_pFDpCD,
                        "05_W_Stack_pFDpCD", sW_pFDpCD_Dir, "");
+
+        //<editor-fold desc="W vs. q_3v plots (pFDpCD, FD)">
+        histPlotter2D(c1, hW_VS_q_3v_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_pFDpCD_Dir, "06_W_VS_q_3v_pFDpCD");
+        histPlotter2D(c1, hW_VS_q_3v_QEL_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_pFDpCD_Dir, "06a_W_VS_q_3v_QEL_pFDpCD");
+        histPlotter2D(c1, hW_VS_q_3v_MEC_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_pFDpCD_Dir, "06b_W_VS_q_3v_MEC_pFDpCD");
+        histPlotter2D(c1, hW_VS_q_3v_RES_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_pFDpCD_Dir, "06c_W_VS_q_3v_RES_pFDpCD");
+        histPlotter2D(c1, hW_VS_q_3v_DIS_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_pFDpCD_Dir, "06d_W_VS_q_3v_DIS_pFDpCD");
         //</editor-fold>
 
-//  W (nFDpCD, CD & FD) -------------------------------------------------------------------------------------------------------------------------------------------------
+        //<editor-fold desc="W vs. omega plots (pFDpCD, FD)">
+        histPlotter2D(c1, hW_VS_omega_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_pFDpCD_Dir, "07_W_VS_omega_pFDpCD");
+        histPlotter2D(c1, hW_VS_omega_QEL_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_pFDpCD_Dir, "07a_W_VS_omega_QEL_pFDpCD");
+        histPlotter2D(c1, hW_VS_omega_MEC_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_pFDpCD_Dir, "07b_W_VS_omega_MEC_pFDpCD");
+        histPlotter2D(c1, hW_VS_omega_RES_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_pFDpCD_Dir, "07c_W_VS_omega_RES_pFDpCD");
+        histPlotter2D(c1, hW_VS_omega_DIS_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_pFDpCD_Dir, "07d_W_VS_omega_DIS_pFDpCD");
+        //</editor-fold>
+
+        //</editor-fold>
 
         //<editor-fold desc="W plots (nFDpCD, CD & FD)">
         double W_nFDpCD_integral = hW_All_Int_nFDpCD->Integral();
@@ -16294,6 +17665,23 @@ void EventAnalyser() {
 
         stackPlotter1D(c1, sW_nFDpCD, norm_W_plots, "W distribution", "nFDpCD", plots, hW_All_Int_nFDpCD, hW_QEL_nFDpCD, hW_MEC_nFDpCD, hW_RES_nFDpCD, hW_DIS_nFDpCD,
                        "05_W_Stack_nFDpCD", sW_nFDpCD_Dir, "");
+
+        //<editor-fold desc="W vs. q_3v plots (nFDpCD, FD)">
+        histPlotter2D(c1, hW_VS_q_3v_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_nFDpCD_Dir, "06_W_VS_q_3v_nFDpCD");
+        histPlotter2D(c1, hW_VS_q_3v_QEL_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_nFDpCD_Dir, "06a_W_VS_q_3v_QEL_nFDpCD");
+        histPlotter2D(c1, hW_VS_q_3v_MEC_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_nFDpCD_Dir, "06b_W_VS_q_3v_MEC_nFDpCD");
+        histPlotter2D(c1, hW_VS_q_3v_RES_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_nFDpCD_Dir, "06c_W_VS_q_3v_RES_nFDpCD");
+        histPlotter2D(c1, hW_VS_q_3v_DIS_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_q_3v_nFDpCD_Dir, "06d_W_VS_q_3v_DIS_nFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="W vs. omega plots (nFDpCD, FD)">
+        histPlotter2D(c1, hW_VS_omega_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_nFDpCD_Dir, "07_W_VS_omega_nFDpCD");
+        histPlotter2D(c1, hW_VS_omega_QEL_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_nFDpCD_Dir, "07a_W_VS_omega_QEL_nFDpCD");
+        histPlotter2D(c1, hW_VS_omega_MEC_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_nFDpCD_Dir, "07b_W_VS_omega_MEC_nFDpCD");
+        histPlotter2D(c1, hW_VS_omega_RES_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_nFDpCD_Dir, "07c_W_VS_omega_RES_nFDpCD");
+        histPlotter2D(c1, hW_VS_omega_DIS_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hW_VS_omega_nFDpCD_Dir, "07d_W_VS_omega_DIS_nFDpCD");
+        //</editor-fold>
+
         //</editor-fold>
 
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
@@ -18327,64 +19715,485 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Q2 histograms
+// Momentum transfer histograms
 // ======================================================================================================================================================================
 
-    //<editor-fold desc="Q2 histograms">
-    if (Q2_plots) {
-        cout << "\n\nPlotting Q2 histograms...\n\n";
+    //<editor-fold desc="Momentum transfer histograms">
+    if (Momentum_transfer_plots) {
+        cout << "\n\nPlotting Momentum transfer histograms...\n\n";
 
-//  Q2 plots (FD only) --------------------------------------------------------------------------------------------------------------------------------------------------
+//  Momentum transfer plots (FD only) --------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Momentum transfer plots (no #(e) cut, FD)">
 
         //<editor-fold desc="Q2 plots (no #(e) cut, FD)">
         double Q2_All_e_integral = hQ2_All_e->Integral();
 
-        histPlotter1D(c1, hQ2_All_e, norm_Q2_plots, true, Q2_All_e_integral, "Q^{2} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sQ2_All_e,
-                      "Q2_All_e", hQ2_All_e_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_All_e, norm_Momentum_transfer_plots, true, Q2_All_e_integral, "Q^{2} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sQ2_All_e, "01_Q2_All_e", hQ2_All_e_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_QEL_All_e, norm_Momentum_transfer_plots, true, Q2_All_e_integral, "Q^{2} Histogram", "QE Only, no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_All_e, "01a_Q2_QEL_All_e", hQ2_All_e_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_MEC_All_e, norm_Momentum_transfer_plots, true, Q2_All_e_integral, "Q^{2} Histogram", "MEC Only, no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_All_e, "01b_Q2_MEC_All_e", hQ2_All_e_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_RES_All_e, norm_Momentum_transfer_plots, true, Q2_All_e_integral, "Q^{2} Histogram", "RES Only, no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_All_e, "01c_Q2_RES_All_e", hQ2_All_e_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_DIS_All_e, norm_Momentum_transfer_plots, true, Q2_All_e_integral, "Q^{2} Histogram", "DIS Only, no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_All_e, "01d_Q2_DIS_All_e", hQ2_All_e_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sQ2_All_e, norm_Momentum_transfer_plots, "Q^{2} Histogram", "no #(e) cut", plots, hQ2_All_e, hQ2_QEL_All_e, hQ2_MEC_All_e, hQ2_RES_All_e,
+                       hQ2_DIS_All_e, "01e_Q2_All_e_Stack", hQ2_All_e_Dir, "");
         //</editor-fold>
 
-        //<editor-fold desc="Q2 plots (1e Cut, FD)">
-        double Q2_1e_integral = hQ2_1e_cut->Integral();
+        //<editor-fold desc="q_3v plots (no #(e) cut, FD)">
+        double q_3v_All_e_integral = hq_3v_All_e->Integral();
 
-        histPlotter1D(c1, hQ2_1e_cut, norm_Q2_plots, true, Q2_1e_integral, "Q^{2} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sQ2_1e_cut, "Q2_1e_cut",
-                      hQ2_1e_cut_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_All_e, norm_Momentum_transfer_plots, true, q_3v_All_e_integral, "q = |#font[62]{q}|", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sq_3v_All_e, "02_q_3v_All_e", hq_3v_All_e_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_QEL_All_e, norm_Momentum_transfer_plots, true, q_3v_All_e_integral, "q = |#font[62]{q}|", "QE Only, no #(e) cut", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_All_e, "02a_q_3v_QEL_All_e", hq_3v_All_e_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_MEC_All_e, norm_Momentum_transfer_plots, true, q_3v_All_e_integral, "q = |#font[62]{q}|", "MEC Only, no #(e) cut", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_All_e, "02b_q_3v_MEC_All_e", hq_3v_All_e_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_RES_All_e, norm_Momentum_transfer_plots, true, q_3v_All_e_integral, "q = |#font[62]{q}|", "RES Only, no #(e) cut", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_All_e, "02c_q_3v_RES_All_e", hq_3v_All_e_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_DIS_All_e, norm_Momentum_transfer_plots, true, q_3v_All_e_integral, "q = |#font[62]{q}|", "DIS Only, no #(e) cut", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_All_e, "02d_q_3v_DIS_All_e", hq_3v_All_e_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sq_3v_All_e, norm_Momentum_transfer_plots, "q = |#font[62]{q}|", "no #(e) cut", plots, hq_3v_All_e, hq_3v_QEL_All_e, hq_3v_MEC_All_e,
+                       hq_3v_RES_All_e, hq_3v_DIS_All_e, "02e_q_3v_All_e_Stack", hq_3v_All_e_Dir, "");
         //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum transfer plots (1e cut, FD)">
+
+        //<editor-fold desc="Q2 plots (1e cut, FD)">
+        double Q2_1e_cut_integral = hQ2_1e_cut->Integral();
+
+        histPlotter1D(c1, hQ2_1e_cut, norm_Momentum_transfer_plots, true, Q2_1e_cut_integral, "Q^{2} Histogram", "1e cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sQ2_1e_cut, "01_Q2_1e_cut", hQ2_1e_cut_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_QEL_1e_cut, norm_Momentum_transfer_plots, true, Q2_1e_cut_integral, "Q^{2} Histogram", "QE Only, 1e cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1e_cut, "01a_Q2_QEL_1e_cut", hQ2_1e_cut_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_MEC_1e_cut, norm_Momentum_transfer_plots, true, Q2_1e_cut_integral, "Q^{2} Histogram", "MEC Only, 1e cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1e_cut, "01b_Q2_MEC_1e_cut", hQ2_1e_cut_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_RES_1e_cut, norm_Momentum_transfer_plots, true, Q2_1e_cut_integral, "Q^{2} Histogram", "RES Only, 1e cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1e_cut, "01c_Q2_RES_1e_cut", hQ2_1e_cut_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_DIS_1e_cut, norm_Momentum_transfer_plots, true, Q2_1e_cut_integral, "Q^{2} Histogram", "DIS Only, 1e cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1e_cut, "01d_Q2_DIS_1e_cut", hQ2_1e_cut_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sQ2_1e_cut, norm_Momentum_transfer_plots, "Q^{2} Histogram", "1e cut", plots, hQ2_1e_cut, hQ2_QEL_1e_cut, hQ2_MEC_1e_cut, hQ2_RES_1e_cut,
+                       hQ2_DIS_1e_cut, "01e_Q2_1e_cut_Stack", hQ2_1e_cut_Dir, "");
+        //</editor-fold>
+
+        //<editor-fold desc="q_3v plots (1e cut, FD)">
+        double q_3v_1e_cut_integral = hq_3v_1e_cut->Integral();
+
+        histPlotter1D(c1, hq_3v_1e_cut, norm_Momentum_transfer_plots, true, q_3v_1e_cut_integral, "q = |#font[62]{q}|", "1e cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sq_3v_1e_cut, "02_q_3v_1e_cut", hq_3v_1e_cut_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_QEL_1e_cut, norm_Momentum_transfer_plots, true, q_3v_1e_cut_integral, "q = |#font[62]{q}|", "QE Only, 1e cut", 0.06, 0.0425, 0.0425, plots,
+                      2, false, true, sq_3v_1e_cut, "02a_q_3v_QEL_1e_cut", hq_3v_1e_cut_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_MEC_1e_cut, norm_Momentum_transfer_plots, true, q_3v_1e_cut_integral, "q = |#font[62]{q}|", "MEC Only, 1e cut", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_1e_cut, "02b_q_3v_MEC_1e_cut", hq_3v_1e_cut_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_RES_1e_cut, norm_Momentum_transfer_plots, true, q_3v_1e_cut_integral, "q = |#font[62]{q}|", "RES Only, 1e cut", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_1e_cut, "02c_q_3v_RES_1e_cut", hq_3v_1e_cut_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_DIS_1e_cut, norm_Momentum_transfer_plots, true, q_3v_1e_cut_integral, "q = |#font[62]{q}|", "DIS Only, 1e cut", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_1e_cut, "02d_q_3v_DIS_1e_cut", hq_3v_1e_cut_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sq_3v_1e_cut, norm_Momentum_transfer_plots, "q = |#font[62]{q}|", "1e cut", plots, hq_3v_1e_cut, hq_3v_QEL_1e_cut, hq_3v_MEC_1e_cut,
+                       hq_3v_RES_1e_cut, hq_3v_DIS_1e_cut, "02e_q_3v_1e_cut_Stack", hq_3v_1e_cut_Dir, "");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. W plots (1e cut, FD)">
+        histPlotter2D(c1, hQ2_VS_W_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1e_cut_Dir, "03_Q2_VS_W_1e_cut");
+        histPlotter2D(c1, hQ2_VS_W_QEL_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1e_cut_Dir, "03a_Q2_VS_W_QEL_1e_cut");
+        histPlotter2D(c1, hQ2_VS_W_MEC_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1e_cut_Dir, "03b_Q2_VS_W_MEC_1e_cut");
+        histPlotter2D(c1, hQ2_VS_W_RES_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1e_cut_Dir, "03c_Q2_VS_W_RES_1e_cut");
+        histPlotter2D(c1, hQ2_VS_W_DIS_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1e_cut_Dir, "03d_Q2_VS_W_DIS_1e_cut");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. q_3v plots (1e cut, FD)">
+        histPlotter2D(c1, hQ2_VS_q_3v_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1e_cut_Dir, "04_Q2_VS_q_3v_1e_cut");
+        histPlotter2D(c1, hQ2_VS_q_3v_QEL_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1e_cut_Dir, "04a_Q2_VS_q_3v_QEL_1e_cut");
+        histPlotter2D(c1, hQ2_VS_q_3v_MEC_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1e_cut_Dir, "04b_Q2_VS_q_3v_MEC_1e_cut");
+        histPlotter2D(c1, hQ2_VS_q_3v_RES_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1e_cut_Dir, "04c_Q2_VS_q_3v_RES_1e_cut");
+        histPlotter2D(c1, hQ2_VS_q_3v_DIS_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1e_cut_Dir, "04d_Q2_VS_q_3v_DIS_1e_cut");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. omega plots (1e cut, FD)">
+        histPlotter2D(c1, hQ2_VS_omega_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1e_cut_Dir, "05_Q2_VS_omega_1e_cut");
+        histPlotter2D(c1, hQ2_VS_omega_QEL_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1e_cut_Dir, "05a_Q2_VS_omega_QEL_1e_cut");
+        histPlotter2D(c1, hQ2_VS_omega_MEC_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1e_cut_Dir, "05b_Q2_VS_omega_MEC_1e_cut");
+        histPlotter2D(c1, hQ2_VS_omega_RES_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1e_cut_Dir, "05c_Q2_VS_omega_RES_1e_cut");
+        histPlotter2D(c1, hQ2_VS_omega_DIS_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1e_cut_Dir, "05d_Q2_VS_omega_DIS_1e_cut");
+        //</editor-fold>
+
+        //<editor-fold desc="q_3v vs. omega plots (1e cut, FD)">
+        histPlotter2D(c1, hq_3v_VS_omega_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1e_cut_Dir, "06_q_3v_VS_omega_1e_cut");
+        histPlotter2D(c1, hq_3v_VS_omega_QEL_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1e_cut_Dir, "06a_q_3v_VS_omega_QEL_1e_cut");
+        histPlotter2D(c1, hq_3v_VS_omega_MEC_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1e_cut_Dir, "06b_q_3v_VS_omega_MEC_1e_cut");
+        histPlotter2D(c1, hq_3v_VS_omega_RES_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1e_cut_Dir, "06c_q_3v_VS_omega_RES_1e_cut");
+        histPlotter2D(c1, hq_3v_VS_omega_DIS_1e_cut, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1e_cut_Dir, "06d_q_3v_VS_omega_DIS_1e_cut");
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum transfer plots (1p, FD)">
 
         //<editor-fold desc="Q2 plots (1p, FD)">
         double Q2_1p_integral = hQ2_1p->Integral();
 
-        histPlotter1D(c1, hQ2_1p, norm_Q2_plots, true, Q2_1p_integral, "Q^{2} Histogram", "1p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sQ2_1p, "Q2_1p", hQ2_1p_Dir, "FD",
-                      kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_1p, norm_Momentum_transfer_plots, true, Q2_1p_integral, "Q^{2} Histogram", "1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sQ2_1p, "01_Q2_1p", hQ2_1p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_QEL_1p, norm_Momentum_transfer_plots, true, Q2_1p_integral, "Q^{2} Histogram", "QE Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1p, "01a_Q2_QEL_1p", hQ2_1p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_MEC_1p, norm_Momentum_transfer_plots, true, Q2_1p_integral, "Q^{2} Histogram", "MEC Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1p, "01b_Q2_MEC_1p", hQ2_1p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_RES_1p, norm_Momentum_transfer_plots, true, Q2_1p_integral, "Q^{2} Histogram", "RES Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1p, "01c_Q2_RES_1p", hQ2_1p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_DIS_1p, norm_Momentum_transfer_plots, true, Q2_1p_integral, "Q^{2} Histogram", "DIS Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1p, "01d_Q2_DIS_1p", hQ2_1p_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sQ2_1p, norm_Momentum_transfer_plots, "Q^{2} Histogram", "1p", plots, hQ2_1p, hQ2_QEL_1p, hQ2_MEC_1p, hQ2_RES_1p,
+                       hQ2_DIS_1p, "01e_Q2_1p_Stack", hQ2_1p_Dir, "");
         //</editor-fold>
+
+        //<editor-fold desc="q_3v plots (1p, FD)">
+        double q_3v_1p_integral = hq_3v_1p->Integral();
+
+        histPlotter1D(c1, hq_3v_1p, norm_Momentum_transfer_plots, true, q_3v_1p_integral, "q = |#font[62]{q}|", "1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sq_3v_1p, "02_q_3v_1p", hq_3v_1p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_QEL_1p, norm_Momentum_transfer_plots, true, q_3v_1p_integral, "q = |#font[62]{q}|", "QE Only, 1p", 0.06, 0.0425, 0.0425, plots,
+                      2, false, true, sq_3v_1p, "02a_q_3v_QEL_1p", hq_3v_1p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_MEC_1p, norm_Momentum_transfer_plots, true, q_3v_1p_integral, "q = |#font[62]{q}|", "MEC Only, 1p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_1p, "02b_q_3v_MEC_1p", hq_3v_1p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_RES_1p, norm_Momentum_transfer_plots, true, q_3v_1p_integral, "q = |#font[62]{q}|", "RES Only, 1p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_1p, "02c_q_3v_RES_1p", hq_3v_1p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_DIS_1p, norm_Momentum_transfer_plots, true, q_3v_1p_integral, "q = |#font[62]{q}|", "DIS Only, 1p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_1p, "02d_q_3v_DIS_1p", hq_3v_1p_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sq_3v_1p, norm_Momentum_transfer_plots, "q = |#font[62]{q}|", "1p", plots, hq_3v_1p, hq_3v_QEL_1p, hq_3v_MEC_1p,
+                       hq_3v_RES_1p, hq_3v_DIS_1p, "02e_q_3v_1p_Stack", hq_3v_1p_Dir, "");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. W plots (1p, FD)">
+        histPlotter2D(c1, hQ2_VS_W_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1p_Dir, "03_Q2_VS_W_1p");
+        histPlotter2D(c1, hQ2_VS_W_QEL_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1p_Dir, "03a_Q2_VS_W_QEL_1p");
+        histPlotter2D(c1, hQ2_VS_W_MEC_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1p_Dir, "03b_Q2_VS_W_MEC_1p");
+        histPlotter2D(c1, hQ2_VS_W_RES_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1p_Dir, "03c_Q2_VS_W_RES_1p");
+        histPlotter2D(c1, hQ2_VS_W_DIS_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1p_Dir, "03d_Q2_VS_W_DIS_1p");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. q_3v plots (1p, FD)">
+        histPlotter2D(c1, hQ2_VS_q_3v_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1p_Dir, "04_Q2_VS_q_3v_1p");
+        histPlotter2D(c1, hQ2_VS_q_3v_QEL_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1p_Dir, "04a_Q2_VS_q_3v_QEL_1p");
+        histPlotter2D(c1, hQ2_VS_q_3v_MEC_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1p_Dir, "04b_Q2_VS_q_3v_MEC_1p");
+        histPlotter2D(c1, hQ2_VS_q_3v_RES_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1p_Dir, "04c_Q2_VS_q_3v_RES_1p");
+        histPlotter2D(c1, hQ2_VS_q_3v_DIS_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1p_Dir, "04d_Q2_VS_q_3v_DIS_1p");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. omega plots (1p, FD)">
+        histPlotter2D(c1, hQ2_VS_omega_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1p_Dir, "05_Q2_VS_omega_1p");
+        histPlotter2D(c1, hQ2_VS_omega_QEL_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1p_Dir, "05a_Q2_VS_omega_QEL_1p");
+        histPlotter2D(c1, hQ2_VS_omega_MEC_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1p_Dir, "05b_Q2_VS_omega_MEC_1p");
+        histPlotter2D(c1, hQ2_VS_omega_RES_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1p_Dir, "05c_Q2_VS_omega_RES_1p");
+        histPlotter2D(c1, hQ2_VS_omega_DIS_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1p_Dir, "05d_Q2_VS_omega_DIS_1p");
+        //</editor-fold>
+
+        //<editor-fold desc="q_3v vs. omega plots (1p, FD)">
+        histPlotter2D(c1, hq_3v_VS_omega_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1p_Dir, "06_q_3v_VS_omega_1p");
+        histPlotter2D(c1, hq_3v_VS_omega_QEL_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1p_Dir, "06a_q_3v_VS_omega_QEL_1p");
+        histPlotter2D(c1, hq_3v_VS_omega_MEC_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1p_Dir, "06b_q_3v_VS_omega_MEC_1p");
+        histPlotter2D(c1, hq_3v_VS_omega_RES_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1p_Dir, "06c_q_3v_VS_omega_RES_1p");
+        histPlotter2D(c1, hq_3v_VS_omega_DIS_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1p_Dir, "06d_q_3v_VS_omega_DIS_1p");
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum transfer plots (1n, FD)">
 
         //<editor-fold desc="Q2 plots (1n, FD)">
         double Q2_1n_integral = hQ2_1n->Integral();
 
-        histPlotter1D(c1, hQ2_1n, norm_Q2_plots, true, Q2_1n_integral, "Q^{2} Histogram", "1n", 0.06, 0.0425, 0.0425, plots, 2, false, true, sQ2_1n, "Q2_1n", hQ2_1n_Dir, "FD",
-                      kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_1n, norm_Momentum_transfer_plots, true, Q2_1n_integral, "Q^{2} Histogram", "1n", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sQ2_1n, "01_Q2_1n", hQ2_1n_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_QEL_1n, norm_Momentum_transfer_plots, true, Q2_1n_integral, "Q^{2} Histogram", "QE Only, 1n", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1n, "01a_Q2_QEL_1n", hQ2_1n_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_MEC_1n, norm_Momentum_transfer_plots, true, Q2_1n_integral, "Q^{2} Histogram", "MEC Only, 1n", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1n, "01b_Q2_MEC_1n", hQ2_1n_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_RES_1n, norm_Momentum_transfer_plots, true, Q2_1n_integral, "Q^{2} Histogram", "RES Only, 1n", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1n, "01c_Q2_RES_1n", hQ2_1n_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_DIS_1n, norm_Momentum_transfer_plots, true, Q2_1n_integral, "Q^{2} Histogram", "DIS Only, 1n", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_1n, "01d_Q2_DIS_1n", hQ2_1n_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sQ2_1n, norm_Momentum_transfer_plots, "Q^{2} Histogram", "1n", plots, hQ2_1n, hQ2_QEL_1n, hQ2_MEC_1n, hQ2_RES_1n,
+                       hQ2_DIS_1n, "01e_Q2_1n_Stack", hQ2_1n_Dir, "");
         //</editor-fold>
+
+        //<editor-fold desc="q_3v plots (1n, FD)">
+        double q_3v_1n_integral = hq_3v_1n->Integral();
+
+        histPlotter1D(c1, hq_3v_1n, norm_Momentum_transfer_plots, true, q_3v_1n_integral, "q = |#font[62]{q}|", "1n", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sq_3v_1n, "02_q_3v_1n", hq_3v_1n_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_QEL_1n, norm_Momentum_transfer_plots, true, q_3v_1n_integral, "q = |#font[62]{q}|", "QE Only, 1n", 0.06, 0.0425, 0.0425, plots,
+                      2, false, true, sq_3v_1n, "02a_q_3v_QEL_1n", hq_3v_1n_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_MEC_1n, norm_Momentum_transfer_plots, true, q_3v_1n_integral, "q = |#font[62]{q}|", "MEC Only, 1n", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_1n, "02b_q_3v_MEC_1n", hq_3v_1n_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_RES_1n, norm_Momentum_transfer_plots, true, q_3v_1n_integral, "q = |#font[62]{q}|", "RES Only, 1n", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_1n, "02c_q_3v_RES_1n", hq_3v_1n_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_DIS_1n, norm_Momentum_transfer_plots, true, q_3v_1n_integral, "q = |#font[62]{q}|", "DIS Only, 1n", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_1n, "02d_q_3v_DIS_1n", hq_3v_1n_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sq_3v_1n, norm_Momentum_transfer_plots, "q = |#font[62]{q}|", "1n", plots, hq_3v_1n, hq_3v_QEL_1n, hq_3v_MEC_1n,
+                       hq_3v_RES_1n, hq_3v_DIS_1n, "02e_q_3v_1n_Stack", hq_3v_1n_Dir, "");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. W plots (1n, FD)">
+        histPlotter2D(c1, hQ2_VS_W_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1n_Dir, "03_Q2_VS_W_1n");
+        histPlotter2D(c1, hQ2_VS_W_QEL_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1n_Dir, "03a_Q2_VS_W_QEL_1n");
+        histPlotter2D(c1, hQ2_VS_W_MEC_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1n_Dir, "03b_Q2_VS_W_MEC_1n");
+        histPlotter2D(c1, hQ2_VS_W_RES_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1n_Dir, "03c_Q2_VS_W_RES_1n");
+        histPlotter2D(c1, hQ2_VS_W_DIS_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_1n_Dir, "03d_Q2_VS_W_DIS_1n");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. q_3v plots (1n, FD)">
+        histPlotter2D(c1, hQ2_VS_q_3v_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1n_Dir, "04_Q2_VS_q_3v_1n");
+        histPlotter2D(c1, hQ2_VS_q_3v_QEL_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1n_Dir, "04a_Q2_VS_q_3v_QEL_1n");
+        histPlotter2D(c1, hQ2_VS_q_3v_MEC_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1n_Dir, "04b_Q2_VS_q_3v_MEC_1n");
+        histPlotter2D(c1, hQ2_VS_q_3v_RES_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1n_Dir, "04c_Q2_VS_q_3v_RES_1n");
+        histPlotter2D(c1, hQ2_VS_q_3v_DIS_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_1n_Dir, "04d_Q2_VS_q_3v_DIS_1n");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. omega plots (1n, FD)">
+        histPlotter2D(c1, hQ2_VS_omega_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1n_Dir, "05_Q2_VS_omega_1n");
+        histPlotter2D(c1, hQ2_VS_omega_QEL_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1n_Dir, "05a_Q2_VS_omega_QEL_1n");
+        histPlotter2D(c1, hQ2_VS_omega_MEC_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1n_Dir, "05b_Q2_VS_omega_MEC_1n");
+        histPlotter2D(c1, hQ2_VS_omega_RES_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1n_Dir, "05c_Q2_VS_omega_RES_1n");
+        histPlotter2D(c1, hQ2_VS_omega_DIS_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_1n_Dir, "05d_Q2_VS_omega_DIS_1n");
+        //</editor-fold>
+
+        //<editor-fold desc="q_3v vs. omega plots (1n, FD)">
+        histPlotter2D(c1, hq_3v_VS_omega_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1n_Dir, "06_q_3v_VS_omega_1n");
+        histPlotter2D(c1, hq_3v_VS_omega_QEL_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1n_Dir, "06a_q_3v_VS_omega_QEL_1n");
+        histPlotter2D(c1, hq_3v_VS_omega_MEC_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1n_Dir, "06b_q_3v_VS_omega_MEC_1n");
+        histPlotter2D(c1, hq_3v_VS_omega_RES_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1n_Dir, "06c_q_3v_VS_omega_RES_1n");
+        histPlotter2D(c1, hq_3v_VS_omega_DIS_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_1n_Dir, "06d_q_3v_VS_omega_DIS_1n");
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum transfer plots (2p, FD)">
 
         //<editor-fold desc="Q2 plots (2p, FD)">
         double Q2_2p_integral = hQ2_2p->Integral();
 
-        histPlotter1D(c1, hQ2_2p, norm_Q2_plots, true, Q2_2p_integral, "Q^{2} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sQ2_2p, "Q2_2p", hQ2_2p_Dir, "FD",
-                      kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_2p, norm_Momentum_transfer_plots, true, Q2_2p_integral, "Q^{2} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sQ2_2p, "01_Q2_2p", hQ2_2p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_QEL_2p, norm_Momentum_transfer_plots, true, Q2_2p_integral, "Q^{2} Histogram", "QE Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_2p, "01a_Q2_QEL_2p", hQ2_2p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_MEC_2p, norm_Momentum_transfer_plots, true, Q2_2p_integral, "Q^{2} Histogram", "MEC Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_2p, "01b_Q2_MEC_2p", hQ2_2p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_RES_2p, norm_Momentum_transfer_plots, true, Q2_2p_integral, "Q^{2} Histogram", "RES Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_2p, "01c_Q2_RES_2p", hQ2_2p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_DIS_2p, norm_Momentum_transfer_plots, true, Q2_2p_integral, "Q^{2} Histogram", "DIS Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_2p, "01d_Q2_DIS_2p", hQ2_2p_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sQ2_2p, norm_Momentum_transfer_plots, "Q^{2} Histogram", "2p", plots, hQ2_2p, hQ2_QEL_2p, hQ2_MEC_2p, hQ2_RES_2p,
+                       hQ2_DIS_2p, "01e_Q2_2p_Stack", hQ2_2p_Dir, "");
         //</editor-fold>
+
+        //<editor-fold desc="q_3v plots (2p, FD)">
+        double q_3v_2p_integral = hq_3v_2p->Integral();
+
+        histPlotter1D(c1, hq_3v_2p, norm_Momentum_transfer_plots, true, q_3v_2p_integral, "q = |#font[62]{q}|", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sq_3v_2p, "02_q_3v_2p", hq_3v_2p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_QEL_2p, norm_Momentum_transfer_plots, true, q_3v_2p_integral, "q = |#font[62]{q}|", "QE Only, 2p", 0.06, 0.0425, 0.0425, plots,
+                      2, false, true, sq_3v_2p, "02a_q_3v_QEL_2p", hq_3v_2p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_MEC_2p, norm_Momentum_transfer_plots, true, q_3v_2p_integral, "q = |#font[62]{q}|", "MEC Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_2p, "02b_q_3v_MEC_2p", hq_3v_2p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_RES_2p, norm_Momentum_transfer_plots, true, q_3v_2p_integral, "q = |#font[62]{q}|", "RES Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_2p, "02c_q_3v_RES_2p", hq_3v_2p_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_DIS_2p, norm_Momentum_transfer_plots, true, q_3v_2p_integral, "q = |#font[62]{q}|", "DIS Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_2p, "02d_q_3v_DIS_2p", hq_3v_2p_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sq_3v_2p, norm_Momentum_transfer_plots, "q = |#font[62]{q}|", "2p", plots, hq_3v_2p, hq_3v_QEL_2p, hq_3v_MEC_2p,
+                       hq_3v_RES_2p, hq_3v_DIS_2p, "02e_q_3v_2p_Stack", hq_3v_2p_Dir, "");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. W plots (2p, FD)">
+        histPlotter2D(c1, hQ2_VS_W_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_2p_Dir, "03_Q2_VS_W_2p");
+        histPlotter2D(c1, hQ2_VS_W_QEL_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_2p_Dir, "03a_Q2_VS_W_QEL_2p");
+        histPlotter2D(c1, hQ2_VS_W_MEC_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_2p_Dir, "03b_Q2_VS_W_MEC_2p");
+        histPlotter2D(c1, hQ2_VS_W_RES_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_2p_Dir, "03c_Q2_VS_W_RES_2p");
+        histPlotter2D(c1, hQ2_VS_W_DIS_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_2p_Dir, "03d_Q2_VS_W_DIS_2p");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. q_3v plots (2p, FD)">
+        histPlotter2D(c1, hQ2_VS_q_3v_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_2p_Dir, "04_Q2_VS_q_3v_2p");
+        histPlotter2D(c1, hQ2_VS_q_3v_QEL_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_2p_Dir, "04a_Q2_VS_q_3v_QEL_2p");
+        histPlotter2D(c1, hQ2_VS_q_3v_MEC_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_2p_Dir, "04b_Q2_VS_q_3v_MEC_2p");
+        histPlotter2D(c1, hQ2_VS_q_3v_RES_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_2p_Dir, "04c_Q2_VS_q_3v_RES_2p");
+        histPlotter2D(c1, hQ2_VS_q_3v_DIS_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_2p_Dir, "04d_Q2_VS_q_3v_DIS_2p");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. omega plots (2p, FD)">
+        histPlotter2D(c1, hQ2_VS_omega_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_2p_Dir, "05_Q2_VS_omega_2p");
+        histPlotter2D(c1, hQ2_VS_omega_QEL_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_2p_Dir, "05a_Q2_VS_omega_QEL_2p");
+        histPlotter2D(c1, hQ2_VS_omega_MEC_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_2p_Dir, "05b_Q2_VS_omega_MEC_2p");
+        histPlotter2D(c1, hQ2_VS_omega_RES_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_2p_Dir, "05c_Q2_VS_omega_RES_2p");
+        histPlotter2D(c1, hQ2_VS_omega_DIS_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_2p_Dir, "05d_Q2_VS_omega_DIS_2p");
+        //</editor-fold>
+
+        //<editor-fold desc="q_3v vs. omega plots (2p, FD)">
+        histPlotter2D(c1, hq_3v_VS_omega_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_2p_Dir, "06_q_3v_VS_omega_2p");
+        histPlotter2D(c1, hq_3v_VS_omega_QEL_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_2p_Dir, "06a_q_3v_VS_omega_QEL_2p");
+        histPlotter2D(c1, hq_3v_VS_omega_MEC_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_2p_Dir, "06b_q_3v_VS_omega_MEC_2p");
+        histPlotter2D(c1, hq_3v_VS_omega_RES_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_2p_Dir, "06c_q_3v_VS_omega_RES_2p");
+        histPlotter2D(c1, hq_3v_VS_omega_DIS_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_2p_Dir, "06d_q_3v_VS_omega_DIS_2p");
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum transfer plots (pFDpCD, FD)">
 
         //<editor-fold desc="Q2 plots (pFDpCD, FD)">
         double Q2_pFDpCD_integral = hQ2_pFDpCD->Integral();
 
-        histPlotter1D(c1, hQ2_pFDpCD, norm_Q2_plots, true, Q2_pFDpCD_integral, "Q^{2} Histogram", "pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sQ2_pFDpCD,
-                      "Q2_pFDpCD", hQ2_pFDpCD_Dir, "FD", kBlue, true, true, true);
-        histPlotter2D(c1, hQ2_VS_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_pFDpCD_Dir, "Q2_VS_W_pFDpCD");
+        histPlotter1D(c1, hQ2_pFDpCD, norm_Momentum_transfer_plots, true, Q2_pFDpCD_integral, "Q^{2} Histogram", "pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sQ2_pFDpCD, "01_Q2_pFDpCD", hQ2_pFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_QEL_pFDpCD, norm_Momentum_transfer_plots, true, Q2_pFDpCD_integral, "Q^{2} Histogram", "QE Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_pFDpCD, "01a_Q2_QEL_pFDpCD", hQ2_pFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_MEC_pFDpCD, norm_Momentum_transfer_plots, true, Q2_pFDpCD_integral, "Q^{2} Histogram", "MEC Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_pFDpCD, "01b_Q2_MEC_pFDpCD", hQ2_pFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_RES_pFDpCD, norm_Momentum_transfer_plots, true, Q2_pFDpCD_integral, "Q^{2} Histogram", "RES Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_pFDpCD, "01c_Q2_RES_pFDpCD", hQ2_pFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_DIS_pFDpCD, norm_Momentum_transfer_plots, true, Q2_pFDpCD_integral, "Q^{2} Histogram", "DIS Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_pFDpCD, "01d_Q2_DIS_pFDpCD", hQ2_pFDpCD_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sQ2_pFDpCD, norm_Momentum_transfer_plots, "Q^{2} Histogram", "pFDpCD", plots, hQ2_pFDpCD, hQ2_QEL_pFDpCD, hQ2_MEC_pFDpCD, hQ2_RES_pFDpCD,
+                       hQ2_DIS_pFDpCD, "01e_Q2_pFDpCD_Stack", hQ2_pFDpCD_Dir, "");
         //</editor-fold>
+
+        //<editor-fold desc="q_3v plots (pFDpCD, FD)">
+        double q_3v_pFDpCD_integral = hq_3v_pFDpCD->Integral();
+
+        histPlotter1D(c1, hq_3v_pFDpCD, norm_Momentum_transfer_plots, true, q_3v_pFDpCD_integral, "q = |#font[62]{q}|", "pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sq_3v_pFDpCD, "02_q_3v_pFDpCD", hq_3v_pFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_QEL_pFDpCD, norm_Momentum_transfer_plots, true, q_3v_pFDpCD_integral, "q = |#font[62]{q}|", "QE Only, pFDpCD", 0.06, 0.0425, 0.0425, plots,
+                      2, false, true, sq_3v_pFDpCD, "02a_q_3v_QEL_pFDpCD", hq_3v_pFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_MEC_pFDpCD, norm_Momentum_transfer_plots, true, q_3v_pFDpCD_integral, "q = |#font[62]{q}|", "MEC Only, pFDpCD", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_pFDpCD, "02b_q_3v_MEC_pFDpCD", hq_3v_pFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_RES_pFDpCD, norm_Momentum_transfer_plots, true, q_3v_pFDpCD_integral, "q = |#font[62]{q}|", "RES Only, pFDpCD", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_pFDpCD, "02c_q_3v_RES_pFDpCD", hq_3v_pFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_DIS_pFDpCD, norm_Momentum_transfer_plots, true, q_3v_pFDpCD_integral, "q = |#font[62]{q}|", "DIS Only, pFDpCD", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_pFDpCD, "02d_q_3v_DIS_pFDpCD", hq_3v_pFDpCD_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sq_3v_pFDpCD, norm_Momentum_transfer_plots, "q = |#font[62]{q}|", "pFDpCD", plots, hq_3v_pFDpCD, hq_3v_QEL_pFDpCD, hq_3v_MEC_pFDpCD,
+                       hq_3v_RES_pFDpCD, hq_3v_DIS_pFDpCD, "02e_q_3v_pFDpCD_Stack", hq_3v_pFDpCD_Dir, "");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. W plots (pFDpCD, FD)">
+        histPlotter2D(c1, hQ2_VS_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_pFDpCD_Dir, "03_Q2_VS_W_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_W_QEL_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_pFDpCD_Dir, "03a_Q2_VS_W_QEL_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_W_MEC_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_pFDpCD_Dir, "03b_Q2_VS_W_MEC_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_W_RES_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_pFDpCD_Dir, "03c_Q2_VS_W_RES_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_W_DIS_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_pFDpCD_Dir, "03d_Q2_VS_W_DIS_pFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. q_3v plots (pFDpCD, FD)">
+        histPlotter2D(c1, hQ2_VS_q_3v_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_pFDpCD_Dir, "04_Q2_VS_q_3v_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_q_3v_QEL_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_pFDpCD_Dir, "04a_Q2_VS_q_3v_QEL_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_q_3v_MEC_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_pFDpCD_Dir, "04b_Q2_VS_q_3v_MEC_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_q_3v_RES_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_pFDpCD_Dir, "04c_Q2_VS_q_3v_RES_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_q_3v_DIS_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_pFDpCD_Dir, "04d_Q2_VS_q_3v_DIS_pFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. omega plots (pFDpCD, FD)">
+        histPlotter2D(c1, hQ2_VS_omega_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_pFDpCD_Dir, "05_Q2_VS_omega_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_omega_QEL_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_pFDpCD_Dir, "05a_Q2_VS_omega_QEL_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_omega_MEC_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_pFDpCD_Dir, "05b_Q2_VS_omega_MEC_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_omega_RES_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_pFDpCD_Dir, "05c_Q2_VS_omega_RES_pFDpCD");
+        histPlotter2D(c1, hQ2_VS_omega_DIS_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_pFDpCD_Dir, "05d_Q2_VS_omega_DIS_pFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="q_3v vs. omega plots (pFDpCD, FD)">
+        histPlotter2D(c1, hq_3v_VS_omega_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_pFDpCD_Dir, "06_q_3v_VS_omega_pFDpCD");
+        histPlotter2D(c1, hq_3v_VS_omega_QEL_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_pFDpCD_Dir, "06a_q_3v_VS_omega_QEL_pFDpCD");
+        histPlotter2D(c1, hq_3v_VS_omega_MEC_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_pFDpCD_Dir, "06b_q_3v_VS_omega_MEC_pFDpCD");
+        histPlotter2D(c1, hq_3v_VS_omega_RES_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_pFDpCD_Dir, "06c_q_3v_VS_omega_RES_pFDpCD");
+        histPlotter2D(c1, hq_3v_VS_omega_DIS_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_pFDpCD_Dir, "06d_q_3v_VS_omega_DIS_pFDpCD");
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum transfer plots (nFDpCD, FD)">
 
         //<editor-fold desc="Q2 plots (nFDpCD, FD)">
         double Q2_nFDpCD_integral = hQ2_nFDpCD->Integral();
 
-        histPlotter1D(c1, hQ2_nFDpCD, norm_Q2_plots, true, Q2_nFDpCD_integral, "Q^{2} Histogram", "nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sQ2_nFDpCD,
-                      "Q2_nFDpCD", hQ2_nFDpCD_Dir, "FD", kBlue, true, true, true);
-        histPlotter2D(c1, hQ2_VS_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_nFDpCD_Dir, "Q2_VS_W_nFDpCD");
+        histPlotter1D(c1, hQ2_nFDpCD, norm_Momentum_transfer_plots, true, Q2_nFDpCD_integral, "Q^{2} Histogram", "nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sQ2_nFDpCD, "01_Q2_nFDpCD", hQ2_nFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_QEL_nFDpCD, norm_Momentum_transfer_plots, true, Q2_nFDpCD_integral, "Q^{2} Histogram", "QE Only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_nFDpCD, "01a_Q2_QEL_nFDpCD", hQ2_nFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_MEC_nFDpCD, norm_Momentum_transfer_plots, true, Q2_nFDpCD_integral, "Q^{2} Histogram", "MEC Only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_nFDpCD, "01b_Q2_MEC_nFDpCD", hQ2_nFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_RES_nFDpCD, norm_Momentum_transfer_plots, true, Q2_nFDpCD_integral, "Q^{2} Histogram", "RES Only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_nFDpCD, "01c_Q2_RES_nFDpCD", hQ2_nFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hQ2_DIS_nFDpCD, norm_Momentum_transfer_plots, true, Q2_nFDpCD_integral, "Q^{2} Histogram", "DIS Only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sQ2_nFDpCD, "01d_Q2_DIS_nFDpCD", hQ2_nFDpCD_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sQ2_nFDpCD, norm_Momentum_transfer_plots, "Q^{2} Histogram", "nFDpCD", plots, hQ2_nFDpCD, hQ2_QEL_nFDpCD, hQ2_MEC_nFDpCD, hQ2_RES_nFDpCD,
+                       hQ2_DIS_nFDpCD, "01e_Q2_nFDpCD_Stack", hQ2_nFDpCD_Dir, "");
+        //</editor-fold>
+
+        //<editor-fold desc="q_3v plots (nFDpCD, FD)">
+        double q_3v_nFDpCD_integral = hq_3v_nFDpCD->Integral();
+
+        histPlotter1D(c1, hq_3v_nFDpCD, norm_Momentum_transfer_plots, true, q_3v_nFDpCD_integral, "q = |#font[62]{q}|", "nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sq_3v_nFDpCD, "02_q_3v_nFDpCD", hq_3v_nFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_QEL_nFDpCD, norm_Momentum_transfer_plots, true, q_3v_nFDpCD_integral, "q = |#font[62]{q}|", "QE Only, nFDpCD", 0.06, 0.0425, 0.0425, plots,
+                      2, false, true, sq_3v_nFDpCD, "02a_q_3v_QEL_nFDpCD", hq_3v_nFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_MEC_nFDpCD, norm_Momentum_transfer_plots, true, q_3v_nFDpCD_integral, "q = |#font[62]{q}|", "MEC Only, nFDpCD", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_nFDpCD, "02b_q_3v_MEC_nFDpCD", hq_3v_nFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_RES_nFDpCD, norm_Momentum_transfer_plots, true, q_3v_nFDpCD_integral, "q = |#font[62]{q}|", "RES Only, nFDpCD", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_nFDpCD, "02c_q_3v_RES_nFDpCD", hq_3v_nFDpCD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hq_3v_DIS_nFDpCD, norm_Momentum_transfer_plots, true, q_3v_nFDpCD_integral, "q = |#font[62]{q}|", "DIS Only, nFDpCD", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sq_3v_nFDpCD, "02d_q_3v_DIS_nFDpCD", hq_3v_nFDpCD_Dir, "FD", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sq_3v_nFDpCD, norm_Momentum_transfer_plots, "q = |#font[62]{q}|", "nFDpCD", plots, hq_3v_nFDpCD, hq_3v_QEL_nFDpCD, hq_3v_MEC_nFDpCD,
+                       hq_3v_RES_nFDpCD, hq_3v_DIS_nFDpCD, "02e_q_3v_nFDpCD_Stack", hq_3v_nFDpCD_Dir, "");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. W plots (nFDpCD, FD)">
+        histPlotter2D(c1, hQ2_VS_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_nFDpCD_Dir, "03_Q2_VS_W_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_W_QEL_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_nFDpCD_Dir, "03a_Q2_VS_W_QEL_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_W_MEC_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_nFDpCD_Dir, "03b_Q2_VS_W_MEC_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_W_RES_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_nFDpCD_Dir, "03c_Q2_VS_W_RES_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_W_DIS_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_W_nFDpCD_Dir, "03d_Q2_VS_W_DIS_nFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. q_3v plots (nFDpCD, FD)">
+        histPlotter2D(c1, hQ2_VS_q_3v_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_nFDpCD_Dir, "04_Q2_VS_q_3v_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_q_3v_QEL_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_nFDpCD_Dir, "04a_Q2_VS_q_3v_QEL_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_q_3v_MEC_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_nFDpCD_Dir, "04b_Q2_VS_q_3v_MEC_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_q_3v_RES_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_nFDpCD_Dir, "04c_Q2_VS_q_3v_RES_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_q_3v_DIS_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_q_3v_nFDpCD_Dir, "04d_Q2_VS_q_3v_DIS_nFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 vs. omega plots (nFDpCD, FD)">
+        histPlotter2D(c1, hQ2_VS_omega_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_nFDpCD_Dir, "05_Q2_VS_omega_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_omega_QEL_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_nFDpCD_Dir, "05a_Q2_VS_omega_QEL_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_omega_MEC_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_nFDpCD_Dir, "05b_Q2_VS_omega_MEC_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_omega_RES_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_nFDpCD_Dir, "05c_Q2_VS_omega_RES_nFDpCD");
+        histPlotter2D(c1, hQ2_VS_omega_DIS_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hQ2_VS_omega_nFDpCD_Dir, "05d_Q2_VS_omega_DIS_nFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="q_3v vs. omega plots (nFDpCD, FD)">
+        histPlotter2D(c1, hq_3v_VS_omega_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_nFDpCD_Dir, "06_q_3v_VS_omega_nFDpCD");
+        histPlotter2D(c1, hq_3v_VS_omega_QEL_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_nFDpCD_Dir, "06a_q_3v_VS_omega_QEL_nFDpCD");
+        histPlotter2D(c1, hq_3v_VS_omega_MEC_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_nFDpCD_Dir, "06b_q_3v_VS_omega_MEC_nFDpCD");
+        histPlotter2D(c1, hq_3v_VS_omega_RES_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_nFDpCD_Dir, "06c_q_3v_VS_omega_RES_nFDpCD");
+        histPlotter2D(c1, hq_3v_VS_omega_DIS_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hq_3v_VS_omega_nFDpCD_Dir, "06d_q_3v_VS_omega_DIS_nFDpCD");
+        //</editor-fold>
+
         //</editor-fold>
 
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
@@ -18405,7 +20214,7 @@ void EventAnalyser() {
         //</editor-fold>
 
     } else {
-        cout << "\n\nQ2 plots are disabled by user.\n\n";
+        cout << "\n\nMomentum transfer plots are disabled by user.\n\n";
     }
     //</editor-fold>
 
@@ -20903,8 +22712,8 @@ void EventAnalyser() {
     myLogFile << "Theta_e_plots = " << BoolToString(Theta_e_plots) << "\n";
     myLogFile << "Phi_e_plots = " << BoolToString(Phi_e_plots) << "\n";
 
-    myLogFile << "\n-- Q2 plots ---------------------------------------------------------------" << "\n";
-    myLogFile << "Q2_plots = " << BoolToString(Q2_plots) << "\n";
+    myLogFile << "\n-- Momentum transfer plots ------------------------------------------------" << "\n";
+    myLogFile << "Momentum_transfer_plots = " << BoolToString(Momentum_transfer_plots) << "\n";
 
     myLogFile << "\n-- E_e plots --------------------------------------------------------------" << "\n";
     myLogFile << "E_e_plots = " << BoolToString(E_e_plots) << "\n";
@@ -20938,7 +22747,7 @@ void EventAnalyser() {
     myLogFile << "norm_W_plots = " << BoolToString(norm_W_plots) << "\n";
     myLogFile << "norm_Beta_plots = " << BoolToString(norm_Beta_plots) << "\n";
     myLogFile << "norm_Angle_plots_master = " << BoolToString(norm_Angle_plots_master) << "\n";
-    myLogFile << "norm_Q2_plots = " << BoolToString(norm_Q2_plots) << "\n";
+    myLogFile << "norm_Momentum_transfer_plots = " << BoolToString(norm_Momentum_transfer_plots) << "\n";
     myLogFile << "norm_E_e_plots = " << BoolToString(norm_E_e_plots) << "\n";
     myLogFile << "norm_ET_plots = " << BoolToString(norm_ET_plots) << "\n";
     myLogFile << "norm_Ecal_plots = " << BoolToString(norm_Ecal_plots) << "\n";

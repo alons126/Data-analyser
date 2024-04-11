@@ -4182,54 +4182,54 @@ HistogramsTemp(const Directories &directories, const bool apply_cuts, const bool
 
     //<editor-fold desc="Q2 histograms (no #(e) cut)">
     THStack *sQ2_All_e = new THStack("Q^{2} (no #(e) cut, CD & FD)", "Q^{2} Histogram (no #(e) cut, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_All_e = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_All_e_Dir = directories.Q2_Directory_map["Q2_All_e_Directory"];
+    TH1D *hQ2_All_e = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_All_e_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_All_e_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (1e cut)">
     THStack *sQ2_1e_cut = new THStack("Q^{2} (1e Cut ,CD & FD)", "Q^{2} Histogram (1e Cut, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_1e_cut = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_1e_cut_Dir = directories.Q2_Directory_map["Q2_1e_cut_Directory"];
+    TH1D *hQ2_1e_cut = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_1e_cut_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (1p)">
     THStack *sQ2_1p = new THStack("Q^{2} (1p, CD & FD)", "Q^{2} (1p, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_1p = new TH1D("Q^{2} (1p, FD)", "Q^{2} (1p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_1p_Dir = directories.Q2_Directory_map["Q2_1p_Directory"];
+    TH1D *hQ2_1p = new TH1D("Q^{2} (1p, FD)", "Q^{2} (1p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_1p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (1n)">
     THStack *sQ2_1n = new THStack("Q^{2} (1n, CD & FD)", "Q^{2} (1n, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_1n = new TH1D("Q^{2} (1n, FD)", "Q^{2} (1n, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_1n_Dir = directories.Q2_Directory_map["Q2_1n_Directory"];
+    TH1D *hQ2_1n = new TH1D("Q^{2} (1n, FD)", "Q^{2} (1n, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_1n_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (2p)">
     THStack *sQ2_2p = new THStack("Q^{2} (2p, CD & FD)", "Q^{2} (2p, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_2p = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_2p_Dir = directories.Q2_Directory_map["Q2_2p_Directory"];
+    TH1D *hQ2_2p = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_2p_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (pFDpCD)">
     THStack *sQ2_pFDpCD = new THStack("Q^{2} (pFDpCD, CD & FD)", "Q^{2} (pFDpCD, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_pFDpCD = new TH1D("Q^{2} (pFDpCD, FD)", "Q^{2} (pFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_pFDpCD_Dir = directories.Q2_Directory_map["Q2_pFDpCD_Directory"];
+    TH1D *hQ2_pFDpCD = new TH1D("Q^{2} (pFDpCD, FD)", "Q^{2} (pFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
 
     TH2D *hQ2_VS_W_pFDpCD = new TH2D("Q^{2} vs. W (All Int., pFDpCD)",
                                      "Q^{2} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];Q^{2} [GeV^{2}/c^{2}]",
-                                     numTH2Dbins_Q2_Plots, W_lboundary, W_uboundary, numTH2Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_VS_W_pFDpCD_Dir = directories.Q2_Directory_map["Q2_pFDpCD_Directory"];
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_W_pFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (nFDpCD)">
     THStack *sQ2_nFDpCD = new THStack("Q^{2} (nFDpCD, CD & FD)", "Q^{2} (nFDpCD, CD & FD);Q^{2} [GeV^{2}/c^{2}];");
-    TH1D *hQ2_nFDpCD = new TH1D("Q^{2} (nFDpCD, FD)", "Q^{2} (nFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_nFDpCD_Dir = directories.Q2_Directory_map["Q2_nFDpCD_Directory"];
+    TH1D *hQ2_nFDpCD = new TH1D("Q^{2} (nFDpCD, FD)", "Q^{2} (nFDpCD, FD);Q^{2} [GeV^{2}/c^{2}];", numTH1Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
 
     TH2D *hQ2_VS_W_nFDpCD = new TH2D("Q^{2} vs. W (All Int., nFDpCD)",
                                      "Q^{2} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];Q^{2} [GeV^{2}/c^{2}]",
-                                     numTH2Dbins_Q2_Plots, W_lboundary, W_uboundary, numTH2Dbins_Q2_Plots, 0, beamE * 1.1);
-    string hQ2_VS_W_nFDpCD_Dir = directories.Q2_Directory_map["Q2_nFDpCD_Directory"];
+                                     numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, 0, beamE * 1.1);
+    string hQ2_VS_W_nFDpCD_Dir = directories.Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"];
     //</editor-fold>
 
     //</editor-fold>

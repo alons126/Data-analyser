@@ -141,11 +141,10 @@ private:
     bool create_W_Dir = true;
     string W_Parent_Directory = "02_W_plots";
     vector <string> W_Daughter_Folders = {"",
-//                                                 "00_All_e",
-//                                                 "01_1e_cut",
-//                                                 "02_1p",
-//                                                 "03_1n",
-//                                                 "04_2p",
+                                          "01_1e_cut",
+                                          "02_1p",
+                                          "03_1n",
+                                          "04_2p",
                                           "05_pFDpCD",
                                           "06_nFDpCD"
     };
@@ -260,10 +259,10 @@ private:
     };
     //</editor-fold>
 
-    //<editor-fold desc="Q2 plots directories">
-    bool create_Q2_Dir = true;
-    string Q2_Parent_Directory = "05_Q2_plots";
-    vector <string> Q2_Daughter_Folders = {"",
+    //<editor-fold desc="Momentum transfer plots directories">
+    bool create_Momentum_transfer_Dir = true;
+    string Momentum_transfer_Parent_Directory = "05_Momentum_transfer_plots";
+    vector <string> Momentum_transfer_Daughter_Folders = {"",
                                            "00_All_e",
                                            "01_1e_cut",
                                            "02_1p",
@@ -525,7 +524,7 @@ public:
     map <string, string> W_Directory_map;
     map <string, string> Beta_Directory_map;
     map <string, string> Angle_Directory_map;
-    map <string, string> Q2_Directory_map;
+    map <string, string> Momentum_transfer_Directory_map;
     map <string, string> E_e_Directory_map;
     map <string, string> ETrans_Directory_map;
     map <string, string> Ecal_Directory_map;
