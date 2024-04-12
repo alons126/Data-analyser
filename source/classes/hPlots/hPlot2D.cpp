@@ -180,7 +180,7 @@ void hPlot2D::histPlotter2D(const std::string &SampleName, TCanvas *Histogram2DC
     gStyle->SetStatX(0.87);
     gStyle->SetStatY(0.875);
 
-    if (!ShowStats) { Histogram2D->SetStats(0); }
+    if (!showStats) { Histogram2D->SetStats(0); }
 
     if (ZLogScalePlot) {
         Histogram2DCanvas->SetLogz(1);
