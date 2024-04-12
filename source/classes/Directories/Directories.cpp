@@ -675,19 +675,26 @@ Directories::Directories(const string &plots_path, const bool Clear_Old_Director
         MakeDirectory(create_Momentum_transfer_Dir, Momentum_transfer_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
-    Momentum_transfer_Directory_map["Momentum_transfer_All_e_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "00_All_e") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_All_e_Directory"] =
+            Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "00_All_e") + "/";
 
-    Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "01_1e_cut") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_1e_cut_Directory"] =
+            Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "01_1e_cut") + "/";
 
-    Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "02_1p") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_1p_Directory"] =
+            Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "02_1p") + "/";
 
-    Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "03_1n") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_1n_Directory"] =
+            Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "03_1n") + "/";
 
-    Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "04_2p") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_2p_Directory"] =
+            Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "04_2p") + "/";
 
-    Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "05_pFDpCD") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_pFDpCD_Directory"] =
+            Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "05_pFDpCD") + "/";
 
-    Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"] = Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "06_nFDpCD") + "/";
+    Momentum_transfer_Directory_map["Momentum_transfer_nFDpCD_Directory"] =
+            Plots_Folder + "/" + Momentum_transfer_Parent_Directory + "/" + Find(Momentum_transfer_Daughter_Folders, "06_nFDpCD") + "/";
     //</editor-fold>
 
     //<editor-fold desc="E_e plots directories">
@@ -1187,11 +1194,27 @@ Directories::Directories(const string &plots_path, const bool Clear_Old_Director
                                                           Find(Resolution_Daughter_Folders, "02_1p") + "/";
     Resolution_Directory_map["pRes_plots_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                           Find(Resolution_Daughter_Folders, "02_1p/01_Proton_resolution_plots_1p") + "/";
+    Resolution_Directory_map["Monitoring_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+                                                          Find(Resolution_Daughter_Folders, "02_1p/02_Match_monitoring_plots_1p") + "/";
+    Resolution_Directory_map["Match_multi_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+                                                           Find(Resolution_Daughter_Folders, "02_1p/03_Match_multiplicity_plots_1p") + "/";
+    Resolution_Directory_map["Corr_just_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+                                                         Find(Resolution_Daughter_Folders, "02_1p/04_Fit_justification_plots_1p/01_Correction_1p") + "/";
+    Resolution_Directory_map["Corr_Smear_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+                                                          Find(Resolution_Daughter_Folders, "02_1p/04_Fit_justification_plots_1p/02_Smearing_1p") + "/";
 
     Resolution_Directory_map["Resolution_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                           Find(Resolution_Daughter_Folders, "03_1n") + "/";
     Resolution_Directory_map["nRes_plots_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                           Find(Resolution_Daughter_Folders, "03_1n/01_Neutron_resolution_plots_1n") + "/";
+    Resolution_Directory_map["Monitoring_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+                                                          Find(Resolution_Daughter_Folders, "03_1n/02_Match_monitoring_plots_1n") + "/";
+    Resolution_Directory_map["Match_multi_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+                                                           Find(Resolution_Daughter_Folders, "03_1n/03_Match_multiplicity_plots_1n") + "/";
+    Resolution_Directory_map["Corr_just_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+                                                         Find(Resolution_Daughter_Folders, "03_1n/04_Fit_justification_plots_1n/01_Correction_1n") + "/";
+    Resolution_Directory_map["Smear_just_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+                                                          Find(Resolution_Daughter_Folders, "03_1n/04_Fit_justification_plots_1n/02_Smearing_1n") + "/";
     //</editor-fold>
 
     //<editor-fold desc="Multiplicity plots directories">
