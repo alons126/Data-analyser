@@ -26,9 +26,7 @@ private:
 
     string Added_PreStatuses, Added_Statuses;
 
-//    string Global_Run_Status = "v3_reg";
-//    string Global_Run_Status = "v3_CalcwIn50";
-    string Global_Run_Status = "v3";
+    string Global_Run_Status = "v3_ReRun3";
 
 public:
 

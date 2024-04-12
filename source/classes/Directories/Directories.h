@@ -490,16 +490,18 @@ private:
                                                    "02_1p/02_Match_monitoring_plots_1p",
                                                    "02_1p/03_Match_multiplicity_plots_1p",
                                                    "02_1p/04_Fit_justification_plots_1p",
-                                                   "02_1p/04_Fit_justification_plots_1p/01_Correction_1p",
-                                                   "02_1p/04_Fit_justification_plots_1p/02_Smearing_1p",
+                                                   "02_1p/04_Fit_justification_plots_1p/01_Basic_variables_1p",
+                                                   "02_1p/04_Fit_justification_plots_1p/02_Correction_1p",
+                                                   "02_1p/04_Fit_justification_plots_1p/03_Smearing_1p",
 
                                                    "03_1n",
                                                    "03_1n/01_Neutron_resolution_plots_1n",
                                                    "03_1n/02_Match_monitoring_plots_1n",
                                                    "03_1n/03_Match_multiplicity_plots_1n",
                                                    "03_1n/04_Fit_justification_plots_1n",
-                                                   "03_1n/04_Fit_justification_plots_1n/01_Correction_1n",
-                                                   "03_1n/04_Fit_justification_plots_1n/02_Smearing_1n",
+                                                   "03_1n/04_Fit_justification_plots_1n/01_Basic_variables_1n",
+                                                   "03_1n/04_Fit_justification_plots_1n/02_Correction_1n",
+                                                   "03_1n/04_Fit_justification_plots_1n/03_Smearing_1n",
     };
     //</editor-fold>
 
