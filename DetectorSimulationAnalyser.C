@@ -131,15 +131,15 @@ void EventAnalyser() {
 
     /* Neutron resolution setup */
     //TODO: align neutron and proton momRes calculations!
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool Calculate_momResS2 = false; // Calculate momResS2 variables
     const double DeltaSlices = 0.05;
     const bool VaryingDelta = true; // 1st momResS1 w/ VaryingDelta = false
     bool ForceSmallpResLimits = true; // 1st momResS1 w/ VaryingDelta = false
     const string SmearMode = "pol1_wKC";
     const string CorrMode = "pol1_wKC";
-    bool Run_with_momResS2 = true; // Smear w/ momResS2 & correct w/ momResS1
-    bool momRes_test = false; // false by default
+    bool Run_with_momResS2 = false; // Smear w/ momResS2 & correct w/ momResS1
+    bool momRes_test = true; // false by default
     /*
     MomRes run order guide:
     1. momResS1 calculation 1:
@@ -194,10 +194,10 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndCorr = true;
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_weights = false;
+    bool apply_nucleon_SmearAndCorr = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -558,7 +558,7 @@ void EventAnalyser() {
     bool FSR_1D_plots, FSR_2D_plots; // FSR_2D_plots is disabled below if HipoChainLength is 2 or lower
     //</editor-fold>
 
-    bool TestRun = false; // set as false for a full run
+    bool TestRun = true; // set as false for a full run
 
     //<editor-fold desc="Set enabled plots">
     if (!TestRun) {
@@ -685,8 +685,8 @@ void EventAnalyser() {
         AMaps_plots = false;
 
         /* Resolution plots */
-//        Resolution_plots = true;
-        Resolution_plots = false;
+        Resolution_plots = true;
+//        Resolution_plots = false;
 
         /* Multiplicity plots */
 //        Multiplicity_plots = true;
@@ -2475,37 +2475,47 @@ void EventAnalyser() {
                                              P_nucFD_uboundary, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_Mom_Plots, numTH2Dbins_Mom_Plots);
 
     TH2D *hP_pFD_VS_W_pFDpCD = new TH2D("FD proton momentum vs. W (All Int., pFDpCD)",
-                                              "FD proton momentum vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
-                                              numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+                                        "FD proton momentum vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary,
+                                        P_nucFD_uboundary);
     TH2D *hP_pFD_VS_W_QEL_pFDpCD = new TH2D("FD proton momentum vs. W (QE Only, pFDpCD)",
-                                                  "FD proton momentum vs. W (QE Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
-                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+                                            "FD proton momentum vs. W (QE Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary,
+                                            P_nucFD_uboundary);
     TH2D *hP_pFD_VS_W_MEC_pFDpCD = new TH2D("FD proton momentum vs. W (MEC Only, pFDpCD)",
-                                                  "FD proton momentum vs. W (MEC Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
-                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+                                            "FD proton momentum vs. W (MEC Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary,
+                                            P_nucFD_uboundary);
     TH2D *hP_pFD_VS_W_RES_pFDpCD = new TH2D("FD proton momentum vs. W (RES Only, pFDpCD)",
-                                                  "FD proton momentum vs. W (RES Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
-                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+                                            "FD proton momentum vs. W (RES Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary,
+                                            P_nucFD_uboundary);
     TH2D *hP_pFD_VS_W_DIS_pFDpCD = new TH2D("FD proton momentum vs. W (DIS Only, pFDpCD)",
-                                                  "FD proton momentum vs. W (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
-                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+                                            "FD proton momentum vs. W (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pFD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary,
+                                            P_nucFD_uboundary);
     string hP_pFD_VS_W_pFDpCD_Dir = directories.Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"];
 
     TH2D *hP_pCD_VS_W_pFDpCD = new TH2D("CD proton momentum vs. W (All Int., pFDpCD)",
-                                              "CD proton momentum vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
-                                              numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+                                        "CD proton momentum vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary,
+                                        P_nucCD_uboundary);
     TH2D *hP_pCD_VS_W_QEL_pFDpCD = new TH2D("CD proton momentum vs. W (QE Only, pFDpCD)",
-                                                  "CD proton momentum vs. W (QE Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
-                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+                                            "CD proton momentum vs. W (QE Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary,
+                                            P_nucCD_uboundary);
     TH2D *hP_pCD_VS_W_MEC_pFDpCD = new TH2D("CD proton momentum vs. W (MEC Only, pFDpCD)",
-                                                  "CD proton momentum vs. W (MEC Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
-                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+                                            "CD proton momentum vs. W (MEC Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary,
+                                            P_nucCD_uboundary);
     TH2D *hP_pCD_VS_W_RES_pFDpCD = new TH2D("CD proton momentum vs. W (RES Only, pFDpCD)",
-                                                  "CD proton momentum vs. W (RES Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
-                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+                                            "CD proton momentum vs. W (RES Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary,
+                                            P_nucCD_uboundary);
     TH2D *hP_pCD_VS_W_DIS_pFDpCD = new TH2D("CD proton momentum vs. W (DIS Only, pFDpCD)",
-                                                  "CD proton momentum vs. W (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
-                                                  numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+                                            "CD proton momentum vs. W (DIS Only, pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary,
+                                            P_nucCD_uboundary);
     string hP_pCD_VS_W_pFDpCD_Dir = directories.Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -2522,36 +2532,46 @@ void EventAnalyser() {
 
     TH2D *hP_nFD_VS_W_nFDpCD = new TH2D("FD neutron momentum vs. W (All Int., nFDpCD)",
                                         "FD neutron momentum vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
-                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary,
+                                        P_nucFD_uboundary);
     TH2D *hP_nFD_VS_W_QEL_nFDpCD = new TH2D("FD neutron momentum vs. W (QE Only, nFDpCD)",
                                             "FD neutron momentum vs. W (QE Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
-                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary,
+                                            P_nucFD_uboundary);
     TH2D *hP_nFD_VS_W_MEC_nFDpCD = new TH2D("FD neutron momentum vs. W (MEC Only, nFDpCD)",
                                             "FD neutron momentum vs. W (MEC Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
-                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary,
+                                            P_nucFD_uboundary);
     TH2D *hP_nFD_VS_W_RES_nFDpCD = new TH2D("FD neutron momentum vs. W (RES Only, nFDpCD)",
                                             "FD neutron momentum vs. W (RES Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
-                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary,
+                                            P_nucFD_uboundary);
     TH2D *hP_nFD_VS_W_DIS_nFDpCD = new TH2D("FD neutron momentum vs. W (DIS Only, nFDpCD)",
                                             "FD neutron momentum vs. W (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{nFD} [GeV/c]",
-                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary, P_nucFD_uboundary);
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucFD_lboundary,
+                                            P_nucFD_uboundary);
     string hP_nFD_VS_W_nFDpCD_Dir = directories.Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"];
 
     TH2D *hP_pCD_VS_W_nFDpCD = new TH2D("CD proton momentum vs. W (All Int., nFDpCD)",
                                         "CD proton momentum vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
-                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+                                        numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary,
+                                        P_nucCD_uboundary);
     TH2D *hP_pCD_VS_W_QEL_nFDpCD = new TH2D("CD proton momentum vs. W (QE Only, nFDpCD)",
                                             "CD proton momentum vs. W (QE Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
-                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary,
+                                            P_nucCD_uboundary);
     TH2D *hP_pCD_VS_W_MEC_nFDpCD = new TH2D("CD proton momentum vs. W (MEC Only, nFDpCD)",
                                             "CD proton momentum vs. W (MEC Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
-                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary,
+                                            P_nucCD_uboundary);
     TH2D *hP_pCD_VS_W_RES_nFDpCD = new TH2D("CD proton momentum vs. W (RES Only, nFDpCD)",
                                             "CD proton momentum vs. W (RES Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
-                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary,
+                                            P_nucCD_uboundary);
     TH2D *hP_pCD_VS_W_DIS_nFDpCD = new TH2D("CD proton momentum vs. W (DIS Only, nFDpCD)",
                                             "CD proton momentum vs. W (DIS Only, nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV/c^{2}];P_{pCD} [GeV/c]",
-                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary, P_nucCD_uboundary);
+                                            numTH2Dbins_Momentum_transfer_plots, W_lboundary, W_uboundary, numTH2Dbins_Momentum_transfer_plots, P_nucCD_lboundary,
+                                            P_nucCD_uboundary);
     string hP_pCD_VS_W_nFDpCD_Dir = directories.Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -9172,35 +9192,203 @@ void EventAnalyser() {
                                         directories.Resolution_Directory_map["Resolution_1n_Directory"], "06b_TL_P_nFD_used_in_nRes_1n", Momentum_lboundary,
                                         Momentum_uboundary, numTH1Dbins);
 
-    hPlot1D hEff_dist_TL_1n = hPlot1D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT}", "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT}",
-                                      "#font[12]{l}_{eff}^{TL} [cm]", directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_Eff_dist_TL_1n", -6000, 6000,
-                                      numTH1Dbins);
-    hPlot2D hEff_dist_TL_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT} vs. P^{truth}_{nFD}",
-                                                  "Effective distance #font[12]{l}_{eff}^{TL} with #beta_{LT} vs. P^{truth}_{nFD}", "#font[12]{l}_{eff}^{TL} [cm]",
-                                                  "P^{truth}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                  "00XX_Eff_dist_TL_vs_TL_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
-    hPlot1D hddist_TL_1n = hPlot1D("1n", "FD", "#Delta#font[12]{l}_{eff}^{TL}", "#Delta#font[12]{l}_{eff}^{TL}",
-                                   "#Delta#font[12]{l}_{eff}^{TL} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{TL} [cm]",
-                                   directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_TL_1n", -6000, 6000, numTH1Dbins);
-    hPlot2D hddist_TL_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "#Delta#font[12]{l}_{eff}^{TL} vs. P^{truth}_{nFD}", "#Delta#font[12]{l}_{eff}^{TL} vs. P^{truth}_{nFD}",
-                                               "#Delta#font[12]{l}_{eff}^{TL} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{TL} [cm]", "P^{truth}_{nFD} [GeV/c]",
-                                               directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_TL_vs_TL_P_nFD_1n", -6000, 6000,
-                                               n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
 
-    hPlot1D hEff_dist_Reco_1n = hPlot1D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco}",
-                                        "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{LT}", "#font[12]{l}_{eff}^{reco} [cm]",
-                                        directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_Eff_dist_Reco_1n", -6000, 6000, numTH1Dbins);
-    hPlot2D hEff_dist_Reco_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco} vs. P^{truth}_{nFD}",
-                                                    "Effective distance #font[12]{l}_{eff}^{reco} with #beta_{reco} vs. P^{truth}_{nFD}", "#font[12]{l}_{eff}^{reco} [cm]",
-                                                    "P^{truth}_{nFD} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
-                                                    "00XX_Eff_dist_Reco_vs_TL_P_nFD_1n", -6000, 6000, n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
-    hPlot1D hddist_Reco_1n = hPlot1D("1n", "FD", "#Delta#font[12]{l}_{eff}^{reco}", "#Delta#font[12]{l}_{eff}^{reco}",
-                                     "#Delta#font[12]{l}_{eff}^{reco} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{reco} [cm]",
-                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_reco_1n", -6000, 6000, numTH1Dbins);
-    hPlot2D hddist_Reco_VS_TL_P_nFD_1n = hPlot2D("1n", "FD", "#Delta#font[12]{l}_{eff}^{reco} vs. P^{truth}_{nFD}", "#Delta#font[12]{l}_{eff}^{reco} vs. P^{truth}_{nFD}",
-                                                 "#Delta#font[12]{l}_{eff}^{reco} = #font[12]{l}_{path} - #font[12]{l}_{eff}^{reco} [cm]", "P^{truth}_{nFD} [GeV/c]",
-                                                 directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_ddist_reco_vs_reco_P_nFD_1n", -6000, 6000,
-                                                 n_mom_th.GetLowerCut() * 0.95, 4 * 1.05, numTH2Dbins, numTH2Dbins);
+    hPlot1D hReco_L_1n = hPlot1D("1n", "FD", "Reco neutron path #font[12]{L_{reco}}", "Reco neutron path #font[12]{L_{reco}}", "#font[12]{L_{reco}} [cm]",
+                                 directories.Resolution_Directory_map["Resolution_1n_Directory"], "0100a_Reco_L_1n", 700, 950, numTH1Dbins);
+    hPlot2D hReco_L_VS_reco_P_nFD_1n = hPlot2D("1n", "FD", "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{reco}_{nFD}}",
+                                               "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{reco}_{nFD}}", "#font[12]{L_{reco}} [cm]",
+                                               "#font[12]{P^{reco}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                               "0100b_Reco_L_VS_reco_P_nFD_1n", 700, 950, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hReco_L_VS_truth_P_nFD_1n = hPlot2D("1n", "FD", "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{truth}_{nFD}}",
+                                                "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{truth}_{nFD}}", "#font[12]{L_{reco}} [cm]",
+                                                "#font[12]{P^{truth}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                "0100c_Reco_L_VS_truth_P_nFD_1n", 700, 950, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hReco_L_VS_R_nFD_1n = hPlot2D("1n", "FD", "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{R_{nFD}}",
+                                          "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{R_{nFD}}", "#font[12]{L_{reco}} [cm]",
+                                          "#font[12]{R_{nFD} = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}} []",
+                                          directories.Resolution_Directory_map["Resolution_1n_Directory"], "0100d_Reco_L_VS_R_nFD_1n",
+                                          700, 950, -1, 1, numTH2Dbins * 3, numTH2Dbins * 3);
+
+    hPlot1D hReco_L_ECIN_1n = hPlot1D("1n", "ECIN", "Reco neutron path #font[12]{L_{reco}}", "Reco neutron path #font[12]{L_{reco}}", "#font[12]{L_{reco}} [cm]",
+                                      directories.Resolution_Directory_map["Resolution_1n_Directory"], "0100aa_Reco_L_ECIN_1n", 700, 950, numTH1Dbins);
+    hPlot2D hReco_L_VS_reco_P_nFD_ECIN_1n = hPlot2D("1n", "ECIN", "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{reco}_{nFD}}",
+                                                    "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{reco}_{nFD}}", "#font[12]{L_{reco}} [cm]",
+                                                    "#font[12]{P^{reco}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                    "0100ab_Reco_L_VS_reco_P_nFD_ECIN_1n",
+                                                    700, 950, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hReco_L_VS_truth_P_nFD_ECIN_1n = hPlot2D("1n", "ECIN", "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{truth}_{nFD}}",
+                                                     "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{truth}_{nFD}}", "#font[12]{L_{reco}} [cm]",
+                                                     "#font[12]{P^{truth}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                     "0100ac_Reco_L_VS_truth_P_nFD_ECIN_1n",
+                                                     700, 950, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hReco_L_VS_R_nFD_ECIN_1n = hPlot2D("1n", "ECIN", "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{R_{nFD}}",
+                                               "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{R_{nFD}}", "#font[12]{L_{reco}} [cm]",
+                                               "#font[12]{R_{nFD} = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}} []",
+                                               directories.Resolution_Directory_map["Resolution_1n_Directory"], "0100ad_Reco_L_VS_R_nFD_ECIN_1n",
+                                               700, 950, -1, 1, numTH2Dbins * 3, numTH2Dbins * 3);
+
+    hPlot1D hReco_L_ECOUT_1n = hPlot1D("1n", "ECOUT", "Reco neutron path #font[12]{L_{reco}}", "Reco neutron path #font[12]{L_{reco}}", "#font[12]{L_{reco}} [cm]",
+                                       directories.Resolution_Directory_map["Resolution_1n_Directory"], "0100ba_Reco_L_ECOUT_1n", 700, 950, numTH1Dbins);
+    hPlot2D hReco_L_VS_reco_P_nFD_ECOUT_1n = hPlot2D("1n", "ECOUT", "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{reco}_{nFD}}",
+                                                     "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{reco}_{nFD}}", "#font[12]{L_{reco}} [cm]",
+                                                     "#font[12]{P^{reco}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                     "0100bb_Reco_L_VS_reco_P_nFD_ECOUT_1n",
+                                                     700, 950, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hReco_L_VS_truth_P_nFD_ECOUT_1n = hPlot2D("1n", "ECOUT", "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{truth}_{nFD}}",
+                                                      "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{P^{truth}_{nFD}}", "#font[12]{L_{reco}} [cm]",
+                                                      "#font[12]{P^{truth}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                      "0100bc_Reco_L_VS_truth_P_nFD_ECOUT_1n",
+                                                      700, 950, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hReco_L_VS_R_nFD_ECOUT_1n = hPlot2D("1n", "ECOUT", "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{R_{nFD}}",
+                                                "Reco neutron path #font[12]{L_{reco}} vs. #font[12]{R_{nFD}}", "#font[12]{L_{reco}} [cm]",
+                                                "#font[12]{R_{nFD} = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}} []",
+                                                directories.Resolution_Directory_map["Resolution_1n_Directory"], "0100bd_Reco_L_VS_R_nFD_ECOUT_1n",
+                                                700, 950, -1, 1, numTH2Dbins * 3, numTH2Dbins * 3);
+
+    hPlot1D hReco_t_ToF_1n = hPlot1D("1n", "FD", "Reco neutron #font[12]{t_{ToF}}", "Reco neutron #font[12]{t_{ToF}}", "#font[12]{t_{ToF}} [ns]",
+                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "0101a_Reco_t_ToF_1n", 135, 220, numTH1Dbins);
+    hPlot2D hReco_t_ToF_VS_reco_P_nFD_1n = hPlot2D("1n", "FD", "Reco neutron #font[12]{t_{ToF}} vs. #font[12]{P^{reco}_{nFD}}",
+                                                   "Reco neutron #font[12]{t_{ToF}} vs. #font[12]{P^{reco}_{nFD}}", "#font[12]{t_{ToF}} [ns]",
+                                                   "#font[12]{P^{reco}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                   "0101b_Reco_t_ToF_VS_reco_P_nFD_1n",
+                                                   135, 220, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hReco_t_ToF_VS_truth_P_nFD_1n = hPlot2D("1n", "FD", "Reco neutron #font[12]{t_{ToF}} vs. #font[12]{P^{truth}_{nFD}}",
+                                                    "Reco neutron #font[12]{t_{ToF}} vs. #font[12]{P^{truth}_{nFD}}", "#font[12]{t_{ToF}} [ns]",
+                                                    "#font[12]{P^{truth}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                    "0101c_Reco_t_ToF_VS_truth_P_nFD_1n",
+                                                    135, 220, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hReco_t_ToF_VS_R_nFD_1n = hPlot2D("1n", "FD", "Reco neutron #font[12]{t_{ToF}} vs. #font[12]{R_{nFD}}", "Reco neutron #font[12]{t_{ToF}} vs. #font[12]{R_{nFD}}",
+                                              "#font[12]{t_{ToF}} [ns]", "#font[12]{R_{nFD} = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}} []",
+                                              directories.Resolution_Directory_map["Resolution_1n_Directory"], "0101d_Reco_beta_VS_R_nFD_1n",
+                                              135, 220, -1, 1, numTH2Dbins * 3, numTH2Dbins * 3);
+
+    hPlot1D hReco_beta_1n = hPlot1D("1n", "FD", "Reco neutron #font[12]{#beta^{reco}_{nFD}}", "Reco neutron #font[12]{#beta^{reco}_{nFD}}", "#font[12]{#beta^{reco}_{nFD}} []",
+                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "0102a_Reco_beta_1n", 0.35, 1.05, numTH1Dbins);
+    hPlot2D hReco_beta_VS_reco_P_nFD_1n = hPlot2D("1n", "FD", "Reco neutron #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{P^{reco}_{nFD}}",
+                                                  "Reco neutron #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{P^{reco}_{nFD}}", "#font[12]{P^{reco}_{nFD}} [GeV/c]",
+                                                  "#font[12]{#beta^{reco}_{nFD}} []", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                  "0102b_Reco_beta_VS_reco_P_nFD_1n", n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, 0.35, 1.05, numTH2Dbins * 3,
+                                                  numTH2Dbins * 3);
+    hPlot2D hReco_beta_VS_truth_P_nFD_1n = hPlot2D("1n", "FD", "Reco neutron #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{P^{truth}_{nFD}}",
+                                                   "Reco neutron #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{P^{truth}_{nFD}}", "#font[12]{P^{truth}_{nFD}} [GeV/c]",
+                                                   "#font[12]{#beta^{reco}_{nFD}} []", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                   "0102c_Reco_beta_VS_truth_P_nFD_1n", n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, 0.35, 1.05, numTH2Dbins * 3,
+                                                   numTH2Dbins * 3);
+    hPlot2D hReco_beta_VS_R_nFD_1n = hPlot2D("1n", "FD", "Reco neutron #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{R_{nFD}}",
+                                             "Reco neutron #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{R_{nFD}}", "#font[12]{#beta^{reco}_{nFD}} []",
+                                             "#font[12]{R_{nFD} = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}} []",
+                                             directories.Resolution_Directory_map["Resolution_1n_Directory"], "0102d_Reco_beta_VS_R_nFD_1n",
+                                             0.35, 1.05, -1, 1, numTH2Dbins * 3, numTH2Dbins * 3);
+
+    hPlot1D hReco_ToF_from_beta_1n = hPlot1D("1n", "FD", "Reco neutron ToF from #font[12]{#beta^{reco}_{nFD}} - #font[12]{t_{ToF}^{#beta^{reco}_{nFD}}}",
+                                             "Reco neutron ToF from #font[12]{#beta^{reco}_{nFD}} - #font[12]{t_{ToF}^{#beta^{reco}_{nFD}}}",
+                                             "#font[12]{t_{ToF}^{#beta^{reco}_{nFD}} = L_{reco}/#left(c#times#beta^{reco}_{nFD}#right)} [ns]",
+                                             directories.Resolution_Directory_map["Resolution_1n_Directory"], "0103a_Reco_ToF_from_beta_1n", 20, 75, numTH1Dbins);
+    hPlot2D hReco_ToF_from_beta_VS_reco_P_nFD_1n = hPlot2D("1n", "FD", "Reco neutron ToF from #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{P^{reco}_{nFD}}",
+                                                           "Reco neutron ToF from #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{P^{reco}_{nFD}}",
+                                                           "#font[12]{t_{ToF}^{#beta^{reco}_{nFD}} = L_{reco}/#left(c#times#beta^{reco}_{nFD}#right)} [ns]",
+                                                           "#font[12]{P^{reco}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                           "0103b_Reco_ToF_from_beta_VS_reco_P_nFD_1n",
+                                                           20, 75, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hReco_ToF_from_beta_VS_truth_P_nFD_1n = hPlot2D("1n", "FD", "Reco neutron ToF from #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{P^{truth}_{nFD}}",
+                                                            "Reco neutron ToF from #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{P^{truth}_{nFD}}",
+                                                            "#font[12]{t_{ToF}^{#beta^{reco}_{nFD}} = L_{reco}/#left(c#times#beta^{reco}_{nFD}#right)} [ns]",
+                                                            "#font[12]{P^{truth}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                            "0103c_Reco_ToF_from_beta_VS_truth_P_nFD_1n",
+                                                            20, 75, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hReco_ToF_from_beta_VS_R_nFD_1n = hPlot2D("1n", "FD", "Reco neutron ToF from #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{R_{nFD}}",
+                                                      "Reco neutron ToF from #font[12]{#beta^{reco}_{nFD}} vs. #font[12]{R_{nFD}}",
+                                                      "#font[12]{t_{ToF}^{#beta^{reco}_{nFD}} = L_{reco}/#left(c#times#beta^{reco}_{nFD}#right)} [ns]",
+                                                      "#font[12]{R_{nFD} = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}} []",
+                                                      directories.Resolution_Directory_map["Resolution_1n_Directory"], "0103d_Reco_ToF_from_beta_VS_R_nFD_1n",
+                                                      20, 75, -1, 1, numTH2Dbins * 3, numTH2Dbins * 3);
+
+    hPlot1D hEff_dist_TL_1n = hPlot1D("1n", "FD", "Effective distance #font[12]{L^{truth}_{eff}} from #font[12]{#beta^{truth}_{nFD}}",
+                                      "Effective distance #font[12]{L^{truth}_{eff}} from #font[12]{#beta^{truth}_{nFD}}",
+                                      "#font[12]{L^{truth}_{eff} = c#times#beta^{truth}_{nFD}#timest_{ToF}^{#beta^{reco}_{nFD}}} [cm]",
+                                      directories.Resolution_Directory_map["Resolution_1n_Directory"], "0104a_Eff_dist_TL_1n", 400, 1600, numTH1Dbins);
+    hPlot2D hEff_dist_TL_VS_reco_P_nFD_1n = hPlot2D("1n", "FD", "Effective distance #font[12]{L^{truth}_{eff}} vs. #font[12]{P^{reco}_{nFD}}",
+                                                    "Effective distance #font[12]{L^{truth}_{eff}} vs. #font[12]{P^{reco}_{nFD}}",
+                                                    "#font[12]{L^{truth}_{eff} = c#times#beta^{truth}_{nFD}#timest_{ToF}^{#beta^{reco}_{nFD}}} [cm]",
+                                                    "#font[12]{P^{reco}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                    "0104b_Eff_dist_TL_VS_reco_P_nFD_1n",
+                                                    400, 1600, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hEff_dist_TL_VS_truth_P_nFD_1n = hPlot2D("1n", "FD", "Effective distance #font[12]{L^{truth}_{eff}} vs. #font[12]{P^{truth}_{nFD}}",
+                                                     "Effective distance #font[12]{L^{truth}_{eff}} vs. #font[12]{P^{truth}_{nFD}}",
+                                                     "#font[12]{L^{truth}_{eff} = c#times#beta^{truth}_{nFD}#timest_{ToF}^{#beta^{reco}_{nFD}}} [cm]",
+                                                     "#font[12]{P^{truth}_{nFD}} [GeV/c]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                                     "0104c_Eff_dist_TL_VS_truth_P_nFD_1n",
+                                                     400, 1600, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hEff_dist_TL_VS_R_nFD_1n = hPlot2D("1n", "FD", "Effective distance #font[12]{L^{truth}_{eff}} vs. #font[12]{R_{nFD}}",
+                                               "Effective distance #font[12]{L^{truth}_{eff}} vs. #font[12]{R_{nFD}}",
+                                               "#font[12]{L^{truth}_{eff} = c#times#beta^{truth}_{nFD}#timest_{ToF}^{#beta^{reco}_{nFD}}} [cm]",
+                                               "#font[12]{R_{nFD} = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}} []",
+                                               directories.Resolution_Directory_map["Resolution_1n_Directory"], "0104d_Eff_dist_TL_VS_R_nFD_1n",
+                                               400, 1600, -1, 1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot1D hDeltaL_TL_1n = hPlot1D("1n", "FD", "Distance difference between #font[12]{L^{truth}_{eff}} and #font[12]{L_{reco}}",
+                                    "Distance difference between #font[12]{L^{truth}_{eff}} and #font[12]{L_{reco}}",
+                                    "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]", directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                    "0105a_DeltaL_TL_1n", -100, 400, numTH1Dbins);
+    hPlot2D hDeltaL_TL_VS_reco_P_nFD_1n = hPlot2D("1n", "FD", "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{reco}_{nFD}}",
+                                                  "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{reco}_{nFD}}",
+                                                  "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]", "#font[12]{P^{reco}_{nFD}} [GeV/c]",
+                                                  directories.Resolution_Directory_map["Resolution_1n_Directory"], "0105b_DeltaL_TL_VS_reco_P_nFD_1n",
+                                                  -100, 400, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hDeltaL_TL_VS_truth_P_nFD_1n = hPlot2D("1n", "FD", "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{truth}_{nFD}}",
+                                                   "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{truth}_{nFD}}",
+                                                   "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]", "#font[12]{P^{truth}_{nFD}} [GeV/c]",
+                                                   directories.Resolution_Directory_map["Resolution_1n_Directory"], "0105c_DeltaL_TL_VS_truth_P_nFD_1n",
+                                                   -100, 400, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hDeltaL_TL_VS_R_nFD_1n = hPlot2D("1n", "FD", "Distance difference #font[12]{#DeltaL} vs. #font[12]{R_{nFD}}",
+                                             "Distance difference #font[12]{#DeltaL} vs. #font[12]{R_{nFD}}",
+                                             "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]",
+                                             "#font[12]{R_{nFD} = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}} []",
+                                             directories.Resolution_Directory_map["Resolution_1n_Directory"], "0105d_DeltaL_TL_VS_R_nFD_1n",
+                                             -100, 400, -1, 1, numTH2Dbins * 3, numTH2Dbins * 3);
+
+    hPlot1D hDeltaL_TL_below_0_4_1n = hPlot1D("1n", "FD", "Distance difference between #font[12]{L^{truth}_{eff}} and #font[12]{L_{reco}} for #font[12]{R_{nFD}<0.4}",
+                                              "Distance difference between #font[12]{L^{truth}_{eff}} and #font[12]{L_{reco}} for #font[12]{R_{nFD}<0.4}",
+                                              "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]",
+                                              directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                              "0106a_DeltaL_TL_for_R_nFD_below_0_4_1n", -100, 400, numTH1Dbins);
+    hPlot2D hDeltaL_TL_VS_reco_P_nFD_below_0_4_1n = hPlot2D("1n", "FD", "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{reco}_{nFD}} for #font[12]{R_{nFD}<0.4}",
+                                                            "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{reco}_{nFD}} for #font[12]{R_{nFD}<0.4}",
+                                                            "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]", "#font[12]{P^{reco}_{nFD}} [GeV/c]",
+                                                            directories.Resolution_Directory_map["Resolution_1n_Directory"], "0106b_DeltaL_TL_VS_reco_P_nFD_below_0_4_1n",
+                                                            -100, 400, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hDeltaL_TL_VS_truth_P_nFD_below_0_4_1n = hPlot2D("1n", "FD", "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{truth}_{nFD}} for #font[12]{R_{nFD}<0.4}",
+                                                             "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{truth}_{nFD}} for #font[12]{R_{nFD}<0.4}",
+                                                             "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]", "#font[12]{P^{truth}_{nFD}} [GeV/c]",
+                                                             directories.Resolution_Directory_map["Resolution_1n_Directory"], "0106c_DeltaL_TL_VS_truth_P_nFD_below_0_4_1n",
+                                                             -100, 400, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hDeltaL_TL_VS_R_nFD_below_0_4_1n = hPlot2D("1n", "FD", "Distance difference #font[12]{#DeltaL} vs. #font[12]{R_{nFD}} for #font[12]{R_{nFD}<0.4}",
+                                                       "Distance difference #font[12]{#DeltaL} vs. #font[12]{R_{nFD}} for #font[12]{R_{nFD}<0.4}",
+                                                       "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]",
+                                                       "#font[12]{R_{nFD} = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}} []",
+                                                       directories.Resolution_Directory_map["Resolution_1n_Directory"], "0106d_DeltaL_TL_VS_R_nFD_below_0_4_1n",
+                                                       -100, 400, -1, 1, numTH2Dbins * 3, numTH2Dbins * 3);
+
+    hPlot1D hDeltaL_TL_above_0_4_1n = hPlot1D("1n", "FD", "Distance difference between #font[12]{L^{truth}_{eff}} and #font[12]{L_{reco}} for #font[12]{R_{nFD}>0.4}",
+                                              "Distance difference between #font[12]{L^{truth}_{eff}} and #font[12]{L_{reco}} for #font[12]{R_{nFD}>0.4}",
+                                              "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]",
+                                              directories.Resolution_Directory_map["Resolution_1n_Directory"],
+                                              "0107a_DeltaL_TL_for_R_nFD_above_0_4_1n", -100, 400, numTH1Dbins);
+    hPlot2D hDeltaL_TL_VS_reco_P_nFD_above_0_4_1n = hPlot2D("1n", "FD", "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{reco}_{nFD}} for #font[12]{R_{nFD}>0.4}",
+                                                            "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{reco}_{nFD}} for #font[12]{R_{nFD}>0.4}",
+                                                            "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]", "#font[12]{P^{reco}_{nFD}} [GeV/c]",
+                                                            directories.Resolution_Directory_map["Resolution_1n_Directory"], "0107b_DeltaL_TL_VS_reco_P_nFD_above_0_4_1n",
+                                                            -100, 400, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hDeltaL_TL_VS_truth_P_nFD_above_0_4_1n = hPlot2D("1n", "FD", "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{truth}_{nFD}} for #font[12]{R_{nFD}>0.4}",
+                                                             "Distance difference #font[12]{#DeltaL} vs. #font[12]{P^{truth}_{nFD}} for #font[12]{R_{nFD}>0.4}",
+                                                             "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]", "#font[12]{P^{truth}_{nFD}} [GeV/c]",
+                                                             directories.Resolution_Directory_map["Resolution_1n_Directory"], "0107c_DeltaL_TL_VS_truth_P_nFD_above_0_4_1n",
+                                                             -100, 400, n_mom_th.GetLowerCut() * 0.95, beamE * 1.1, numTH2Dbins * 3, numTH2Dbins * 3);
+    hPlot2D hDeltaL_TL_VS_R_nFD_above_0_4_1n = hPlot2D("1n", "FD", "Distance difference #font[12]{#DeltaL} vs. #font[12]{R_{nFD}} for #font[12]{R_{nFD}>0.4}",
+                                                       "Distance difference #font[12]{#DeltaL} vs. #font[12]{R_{nFD}} for #font[12]{R_{nFD}>0.4}",
+                                                       "#font[12]{#DeltaL = L^{truth}_{eff} - #font[12]{L_{reco}}} [cm]",
+                                                       "#font[12]{R_{nFD} = (P^{truth}_{nFD} - P^{reco}_{nFD})/P^{truth}_{nFD}} []",
+                                                       directories.Resolution_Directory_map["Resolution_1n_Directory"], "0107d_DeltaL_TL_VS_R_nFD_above_0_4_1n",
+                                                       -100, 400, -1, 1, numTH2Dbins * 3, numTH2Dbins * 3);
 
     hPlot1D hTOF_error_1n = hPlot1D("1n", "FD", "TOF Error #Deltat_{TOF}", "TOF Error #Deltat_{TOF}", "#Deltat_{TOF} [ns]",
                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TOF_error_1n", -10., 10., numTH1Dbins);
@@ -9216,6 +9404,7 @@ void EventAnalyser() {
                                                       "P^{truth}_{nFD} [GeV/c]", "Corrected P^{reco}_{nFD} [GeV/c]",
                                                       directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_TL_P_nFD_vs_Reco_P_nFD_1n", Momentum_lboundary,
                                                       Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins_nRes_Plots, numTH2Dbins_nRes_Plots);
+
 
     hPlot1D hnRes_Match_Multi_1n = hPlot1D("1n", "FD", "Neutron resolution match multiplicity", "Neutron resolution match multiplicity", "Match multiplicity",
                                            directories.Resolution_Directory_map["Resolution_1n_Directory"], "00XX_nRes_Match_Multi_1n", 0, 10., 10);
@@ -14058,46 +14247,204 @@ void EventAnalyser() {
                                 hTL_P_nFD_vs_Reco_P_nFD_1n.hFill(NeutronMomBKC_1n, RecoNeutronP, Weight);
                                 hTL_P_nFD_vs_Corr_Reco_P_nFD_1n.hFill(TLNeutronP, RecoNeutronP, Weight);
 
-                                //<editor-fold desc="TO FINISH!">
-                                bool ECIN_HIT = (n_1n->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
-                                bool ECOUT_HIT = (n_1n->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
-                                auto Detlayer_1n = ECIN_HIT ? clas12::ECIN : clas12::ECOUT; // determine the earliest layer of the neutral hit
-                                double ts = c12->event()->getStartTime();
-                                double RecoNeutronTOF = n_1n->getTime();
-//                                double RecoNeutronTOF = n_1n->sci(Detlayer_1n)->getTime();
-//                                double RecoNeutronTOF = n_1n->sci(Detlayer_1n)->getTime() - ts;
+                                double Reco_L = n_1n->getPath();
+
+                                if (true) {
+//                                if (Reco_L > 800.) {
+
+                                    //<editor-fold desc="TO FINISH!">
+
+                                    //<editor-fold desc="Basic reco variables">
+                                    bool ECIN_HIT = (n_1n->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+                                    bool ECOUT_HIT = (n_1n->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+                                    auto Detlayer_1n = ECIN_HIT ? clas12::ECIN : clas12::ECOUT; // determine the earliest layer of the neutral hit
+
+                                    /* Event start time */
+                                    double t_start = c12->event()->getStartTime();
+
+                                    /* Reco neutron path */
+                                    hReco_L_1n.hFill(Reco_L, Weight);
+                                    hReco_L_VS_reco_P_nFD_1n.hFill(Reco_L, RecoNeutronP, Weight);
+                                    hReco_L_VS_truth_P_nFD_1n.hFill(Reco_L, TLNeutronP, Weight);
+                                    hReco_L_VS_R_nFD_1n.hFill(Reco_L, nResolution, Weight);
+
+                                    if (ECIN_HIT) {
+                                        hReco_L_ECIN_1n.hFill(Reco_L, Weight);
+                                        hReco_L_VS_reco_P_nFD_ECIN_1n.hFill(Reco_L, RecoNeutronP, Weight);
+                                        hReco_L_VS_truth_P_nFD_ECIN_1n.hFill(Reco_L, TLNeutronP, Weight);
+                                        hReco_L_VS_R_nFD_ECIN_1n.hFill(Reco_L, nResolution, Weight);
+                                    }
+
+                                    if (ECOUT_HIT) {
+                                        hReco_L_ECOUT_1n.hFill(Reco_L, Weight);
+                                        hReco_L_VS_reco_P_nFD_ECOUT_1n.hFill(Reco_L, RecoNeutronP, Weight);
+                                        hReco_L_VS_truth_P_nFD_ECOUT_1n.hFill(Reco_L, TLNeutronP, Weight);
+                                        hReco_L_VS_R_nFD_ECOUT_1n.hFill(Reco_L, nResolution, Weight);
+                                    }
+
+                                    /* Reco neutron ToF */
+                                    double Reco_t_ToF = n_1n->getTime();
+                                    hReco_t_ToF_1n.hFill(Reco_t_ToF, Weight);
+                                    hReco_t_ToF_VS_reco_P_nFD_1n.hFill(Reco_t_ToF, RecoNeutronP, Weight);
+                                    hReco_t_ToF_VS_truth_P_nFD_1n.hFill(Reco_t_ToF, TLNeutronP, Weight);
+                                    hReco_t_ToF_VS_R_nFD_1n.hFill(Reco_t_ToF, nResolution, Weight);
+
+                                    /* Reco neutron beta */
+                                    double Reco_beta = n_1n->par()->getBeta();
+                                    hReco_beta_1n.hFill(Reco_beta, Weight);
+                                    hReco_beta_VS_reco_P_nFD_1n.hFill(RecoNeutronP, Reco_beta, Weight);
+                                    hReco_beta_VS_truth_P_nFD_1n.hFill(TLNeutronP, Reco_beta, Weight);
+                                    hReco_beta_VS_R_nFD_1n.hFill(Reco_beta, nResolution, Weight);
+
+                                    /* Reco neutron ToF from beta */
+//                                double Reco_t_ToF_from_beta = Reco_L / (Reco_beta);
+                                    double Reco_t_ToF_from_beta = Reco_L / (c * Reco_beta);
+                                    hReco_ToF_from_beta_1n.hFill(Reco_t_ToF_from_beta, Weight);
+                                    hReco_ToF_from_beta_VS_reco_P_nFD_1n.hFill(Reco_t_ToF_from_beta, RecoNeutronP, Weight);
+                                    hReco_ToF_from_beta_VS_truth_P_nFD_1n.hFill(Reco_t_ToF_from_beta, TLNeutronP, Weight);
+                                    hReco_ToF_from_beta_VS_R_nFD_1n.hFill(Reco_t_ToF_from_beta, nResolution, Weight);
+                                    //</editor-fold>
+
+                                    //<editor-fold desc="Basic truth variables">
+                                    double Truth_E_nFD = sqrt(m_n * m_n + TLNeutronP * TLNeutronP);
+                                    double Truth_beta = TLNeutronP / Truth_E_nFD;
+                                    //</editor-fold>
+
+                                    /* Effective distance */
+                                    double Eff_dist_TL = c * Truth_beta * Reco_t_ToF_from_beta;
+                                    hEff_dist_TL_1n.hFill(Eff_dist_TL, Weight);
+                                    hEff_dist_TL_VS_reco_P_nFD_1n.hFill(Eff_dist_TL, RecoNeutronP, Weight);
+                                    hEff_dist_TL_VS_truth_P_nFD_1n.hFill(Eff_dist_TL, TLNeutronP, Weight);
+                                    hEff_dist_TL_VS_R_nFD_1n.hFill(Eff_dist_TL, nResolution, Weight);
+
+                                    /* Distance difference */
+                                    double DeltaL_TL = Eff_dist_TL - Reco_L;
+                                    hDeltaL_TL_1n.hFill(DeltaL_TL, Weight);
+                                    hDeltaL_TL_VS_reco_P_nFD_1n.hFill(DeltaL_TL, RecoNeutronP, Weight);
+                                    hDeltaL_TL_VS_truth_P_nFD_1n.hFill(DeltaL_TL, TLNeutronP, Weight);
+                                    hDeltaL_TL_VS_R_nFD_1n.hFill(DeltaL_TL, nResolution, Weight);
+
+                                    if (nResolution < 0.4) {
+                                        hDeltaL_TL_below_0_4_1n.hFill(DeltaL_TL, Weight);
+                                        hDeltaL_TL_VS_reco_P_nFD_below_0_4_1n.hFill(DeltaL_TL, RecoNeutronP, Weight);
+                                        hDeltaL_TL_VS_truth_P_nFD_below_0_4_1n.hFill(DeltaL_TL, TLNeutronP, Weight);
+                                        hDeltaL_TL_VS_R_nFD_below_0_4_1n.hFill(DeltaL_TL, nResolution, Weight);
+                                    } else {
+                                        hDeltaL_TL_above_0_4_1n.hFill(DeltaL_TL, Weight);
+                                        hDeltaL_TL_VS_reco_P_nFD_above_0_4_1n.hFill(DeltaL_TL, RecoNeutronP, Weight);
+                                        hDeltaL_TL_VS_truth_P_nFD_above_0_4_1n.hFill(DeltaL_TL, TLNeutronP, Weight);
+                                        hDeltaL_TL_VS_R_nFD_above_0_4_1n.hFill(DeltaL_TL, nResolution, Weight);
+                                    }
+
+                                    /*
+                                    double path_n = n_1n->getPath();
+                                    double beta_n = n_1n->par()->getBeta();
+                                    double time_frombeta_n = path_n / (c * beta_n);
+                                    double TOF_error = -(time_frombeta_n * (1 - beta_n * beta_n)) * nResolution;
+    //                                double TOF_error = -(RecoNeutronTOF * (1 - beta_n * beta_n)) * nResolution;
+                                    hTOF_error_1n.hFill(TOF_error, Weight);
+                                    hTOF_error_VS_TL_P_nFD_1n.hFill(TOF_error, TLNeutronP, Weight);
+    */
+                                    //</editor-fold>
+
+                                }
 
 
-                                double TLNeutronE = sqrt(m_n * m_n + TLNeutronP * TLNeutronP);
-                                double TLNeutronBeta_From_TLNeutronP = TLNeutronP / TLNeutronE;
-                                double Eff_dist_TL = c * TLNeutronBeta_From_TLNeutronP * RecoNeutronTOF;
-                                hEff_dist_TL_1n.hFill(Eff_dist_TL, Weight);
-                                hEff_dist_TL_VS_TL_P_nFD_1n.hFill(Eff_dist_TL, TLNeutronP, Weight);
-                                hddist_TL_1n.hFill((n_1n->getPath() - Eff_dist_TL), Weight);
-                                hddist_TL_VS_TL_P_nFD_1n.hFill((n_1n->getPath() - Eff_dist_TL), TLNeutronP, Weight);
-
-
+//                                //<editor-fold desc="original">
+//
+//                                //<editor-fold desc="Basic reco variables">
+//                                bool ECIN_HIT = (n_1n->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+//                                bool ECOUT_HIT = (n_1n->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+//                                auto Detlayer_1n = ECIN_HIT ? clas12::ECIN : clas12::ECOUT; // determine the earliest layer of the neutral hit
+//
+//                                /* Event start time */
+//                                double t_start = c12->event()->getStartTime();
+//
+//                                /* Reco neutron path */
+//                                double Reco_L = n_1n->getPath();
+//                                hReco_L_1n.hFill(Reco_L, Weight);
+//                                hReco_L_VS_reco_P_nFD_1n.hFill(Reco_L, RecoNeutronP, Weight);
+//                                hReco_L_VS_truth_P_nFD_1n.hFill(Reco_L, TLNeutronP, Weight);
+//                                hReco_L_VS_R_nFD_1n.hFill(Reco_L, nResolution, Weight);
+//
+//                                if (ECIN_HIT) {
+//                                    hReco_L_ECIN_1n.hFill(Reco_L, Weight);
+//                                    hReco_L_VS_reco_P_nFD_ECIN_1n.hFill(Reco_L, RecoNeutronP, Weight);
+//                                    hReco_L_VS_truth_P_nFD_ECIN_1n.hFill(Reco_L, TLNeutronP, Weight);
+//                                    hReco_L_VS_R_nFD_ECIN_1n.hFill(Reco_L, nResolution, Weight);
+//                                }
+//
+//                                if (ECOUT_HIT) {
+//                                    hReco_L_ECOUT_1n.hFill(Reco_L, Weight);
+//                                    hReco_L_VS_reco_P_nFD_ECOUT_1n.hFill(Reco_L, RecoNeutronP, Weight);
+//                                    hReco_L_VS_truth_P_nFD_ECOUT_1n.hFill(Reco_L, TLNeutronP, Weight);
+//                                    hReco_L_VS_R_nFD_ECOUT_1n.hFill(Reco_L, nResolution, Weight);
+//                                }
+//
+//                                /* Reco neutron ToF */
+//                                double Reco_t_ToF = n_1n->getTime();
+//                                hReco_t_ToF_1n.hFill(Reco_t_ToF, Weight);
+//                                hReco_t_ToF_VS_reco_P_nFD_1n.hFill(Reco_t_ToF, RecoNeutronP, Weight);
+//                                hReco_t_ToF_VS_truth_P_nFD_1n.hFill(Reco_t_ToF, TLNeutronP, Weight);
+//                                hReco_t_ToF_VS_R_nFD_1n.hFill(Reco_t_ToF, nResolution, Weight);
+//
+//                                /* Reco neutron beta */
+//                                double Reco_beta = n_1n->par()->getBeta();
+//                                hReco_beta_1n.hFill(Reco_beta, Weight);
+//                                hReco_beta_VS_reco_P_nFD_1n.hFill(RecoNeutronP, Reco_beta, Weight);
+//                                hReco_beta_VS_truth_P_nFD_1n.hFill(TLNeutronP, Reco_beta, Weight);
+//                                hReco_beta_VS_R_nFD_1n.hFill(Reco_beta, nResolution, Weight);
+//
+//                                /* Reco neutron ToF from beta */
+////                                double Reco_t_ToF_from_beta = Reco_L / (Reco_beta);
+//                                double Reco_t_ToF_from_beta = Reco_L / (c * Reco_beta);
+//                                hReco_ToF_from_beta_1n.hFill(Reco_t_ToF_from_beta, Weight);
+//                                hReco_ToF_from_beta_VS_reco_P_nFD_1n.hFill(Reco_t_ToF_from_beta, RecoNeutronP, Weight);
+//                                hReco_ToF_from_beta_VS_truth_P_nFD_1n.hFill(Reco_t_ToF_from_beta, TLNeutronP, Weight);
+//                                hReco_ToF_from_beta_VS_R_nFD_1n.hFill(Reco_t_ToF_from_beta, nResolution, Weight);
+//                                //</editor-fold>
+//
+//                                //<editor-fold desc="Basic truth variables">
+//                                double Truth_E_nFD = sqrt(m_n * m_n + TLNeutronP * TLNeutronP);
+//                                double Truth_beta = TLNeutronP / Truth_E_nFD;
+//                                //</editor-fold>
+//
+//                                /* Effective distance */
+//                                double Eff_dist_TL = c * Truth_beta * Reco_t_ToF_from_beta;
+//                                hEff_dist_TL_1n.hFill(Eff_dist_TL, Weight);
+//                                hEff_dist_TL_VS_reco_P_nFD_1n.hFill(Eff_dist_TL, RecoNeutronP, Weight);
+//                                hEff_dist_TL_VS_truth_P_nFD_1n.hFill(Eff_dist_TL, TLNeutronP, Weight);
+//                                hEff_dist_TL_VS_R_nFD_1n.hFill(Eff_dist_TL, nResolution, Weight);
+//
+//                                /* Distance difference */
+//                                double DeltaL_TL = Eff_dist_TL - Reco_L;
+//                                hDeltaL_TL_1n.hFill(DeltaL_TL, Weight);
+//                                hDeltaL_TL_VS_reco_P_nFD_1n.hFill(DeltaL_TL, RecoNeutronP, Weight);
+//                                hDeltaL_TL_VS_truth_P_nFD_1n.hFill(DeltaL_TL, TLNeutronP, Weight);
+//                                hDeltaL_TL_VS_R_nFD_1n.hFill(DeltaL_TL, nResolution, Weight);
+//
+//                                if (nResolution < 0.4) {
+//                                    hDeltaL_TL_below_0_4_1n.hFill(DeltaL_TL, Weight);
+//                                    hDeltaL_TL_VS_reco_P_nFD_below_0_4_1n.hFill(DeltaL_TL, RecoNeutronP, Weight);
+//                                    hDeltaL_TL_VS_truth_P_nFD_below_0_4_1n.hFill(DeltaL_TL, TLNeutronP, Weight);
+//                                    hDeltaL_TL_VS_R_nFD_below_0_4_1n.hFill(DeltaL_TL, nResolution, Weight);
+//                                } else {
+//                                    hDeltaL_TL_above_0_4_1n.hFill(DeltaL_TL, Weight);
+//                                    hDeltaL_TL_VS_reco_P_nFD_above_0_4_1n.hFill(DeltaL_TL, RecoNeutronP, Weight);
+//                                    hDeltaL_TL_VS_truth_P_nFD_above_0_4_1n.hFill(DeltaL_TL, TLNeutronP, Weight);
+//                                    hDeltaL_TL_VS_R_nFD_above_0_4_1n.hFill(DeltaL_TL, nResolution, Weight);
+//                                }
+//
+//                                /*
 //                                double path_n = n_1n->getPath();
 //                                double beta_n = n_1n->par()->getBeta();
-//                                double time_frombeta_n = path_n / (c*beta_n);
-
-                                double RecoNeutronE = sqrt(m_n * m_n + RecoNeutronP * RecoNeutronP);
-                                double RecoNeutronBeta_From_RecoNeutronP = RecoNeutronP / RecoNeutronE;
-                                double Eff_dist_Reco = c * RecoNeutronBeta_From_RecoNeutronP * RecoNeutronTOF;
-                                hEff_dist_Reco_1n.hFill(Eff_dist_Reco, Weight);
-                                hEff_dist_Reco_VS_TL_P_nFD_1n.hFill(Eff_dist_Reco, TLNeutronP, Weight);
-                                hddist_Reco_1n.hFill((n_1n->getPath() - Eff_dist_Reco), Weight);
-                                hddist_Reco_VS_TL_P_nFD_1n.hFill((n_1n->getPath() - Eff_dist_Reco), TLNeutronP, Weight);
-
-
-                                double path_n = n_1n->getPath();
-                                double beta_n = n_1n->par()->getBeta();
-                                double time_frombeta_n = path_n / (c * beta_n);
-                                double TOF_error = -(time_frombeta_n * (1 - beta_n * beta_n)) * nResolution;
-//                                double TOF_error = -(RecoNeutronTOF * (1 - beta_n * beta_n)) * nResolution;
-                                hTOF_error_1n.hFill(TOF_error, Weight);
-                                hTOF_error_VS_TL_P_nFD_1n.hFill(TOF_error, TLNeutronP, Weight);
-                                //</editor-fold>
+//                                double time_frombeta_n = path_n / (c * beta_n);
+//                                double TOF_error = -(time_frombeta_n * (1 - beta_n * beta_n)) * nResolution;
+////                                double TOF_error = -(RecoNeutronTOF * (1 - beta_n * beta_n)) * nResolution;
+//                                hTOF_error_1n.hFill(TOF_error, Weight);
+//                                hTOF_error_VS_TL_P_nFD_1n.hFill(TOF_error, TLNeutronP, Weight);
+//*/
+//                                //</editor-fold>
 
                             }
                         }
@@ -16445,19 +16792,59 @@ void EventAnalyser() {
     c1->cd();
     //</editor-fold>
 
-//    hEff_dist_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-//    hEff_dist_TL_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
-//    hddist_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-//    hddist_TL_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
-//
-//    hEff_dist_Reco_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-//    hEff_dist_Reco_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
-//    hddist_Reco_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-//    hddist_Reco_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
-//
+    hReco_L_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+    hReco_L_VS_reco_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, true);
+    hReco_L_VS_truth_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, true);
+    hReco_L_VS_R_nFD_1n.hDrawAndSave(SampleName, c1, plots, true);
+
+    hReco_L_ECIN_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+    hReco_L_VS_reco_P_nFD_ECIN_1n.hDrawAndSave(SampleName, c1, plots, true);
+    hReco_L_VS_truth_P_nFD_ECIN_1n.hDrawAndSave(SampleName, c1, plots, true);
+    hReco_L_VS_R_nFD_ECIN_1n.hDrawAndSave(SampleName, c1, plots, true);
+
+    hReco_L_ECOUT_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+    hReco_L_VS_reco_P_nFD_ECOUT_1n.hDrawAndSave(SampleName, c1, plots, true);
+    hReco_L_VS_truth_P_nFD_ECOUT_1n.hDrawAndSave(SampleName, c1, plots, true);
+    hReco_L_VS_R_nFD_ECOUT_1n.hDrawAndSave(SampleName, c1, plots, true);
+
+    hReco_t_ToF_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+    hReco_t_ToF_VS_reco_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hReco_t_ToF_VS_truth_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hReco_t_ToF_VS_R_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+
+    hReco_beta_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+    hReco_beta_VS_reco_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hReco_beta_VS_truth_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hReco_beta_VS_R_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+
+    hReco_ToF_from_beta_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+    hReco_ToF_from_beta_VS_reco_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hReco_ToF_from_beta_VS_truth_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hReco_ToF_from_beta_VS_R_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+
+    hEff_dist_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+    hEff_dist_TL_VS_reco_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hEff_dist_TL_VS_truth_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hEff_dist_TL_VS_R_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+
+    hDeltaL_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+    hDeltaL_TL_VS_reco_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hDeltaL_TL_VS_truth_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hDeltaL_TL_VS_R_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
+
+    hDeltaL_TL_below_0_4_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+    hDeltaL_TL_VS_reco_P_nFD_below_0_4_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hDeltaL_TL_VS_truth_P_nFD_below_0_4_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hDeltaL_TL_VS_R_nFD_below_0_4_1n.hDrawAndSave(SampleName, c1, plots, false);
+
+    hDeltaL_TL_above_0_4_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+    hDeltaL_TL_VS_reco_P_nFD_above_0_4_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hDeltaL_TL_VS_truth_P_nFD_above_0_4_1n.hDrawAndSave(SampleName, c1, plots, false);
+    hDeltaL_TL_VS_R_nFD_above_0_4_1n.hDrawAndSave(SampleName, c1, plots, false);
+
 //    hTOF_error_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
 //    hTOF_error_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
-//    exit(0);
+    exit(0);
 
 // ======================================================================================================================================================================
 // Cut parameters plots
@@ -22358,19 +22745,6 @@ void EventAnalyser() {
             nRes.LogResDataToFile(SampleName, plots_path, MomentumResolutionDirectory);
             nRes.DrawAndSaveResSlices(SampleName, c1, plots_path, MomentumResolutionDirectory);
         }
-
-        hEff_dist_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
-        hEff_dist_TL_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
-        hddist_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
-        hddist_TL_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
-
-        hEff_dist_Reco_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
-        hEff_dist_Reco_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
-        hddist_Reco_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
-        hddist_Reco_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
-
-        hTOF_error_1n.hDrawAndSave(SampleName, c1, plots, norm_MomRes_plots, true, 1., 9999, 9999, 0, false);
-        hTOF_error_VS_TL_P_nFD_1n.hDrawAndSave(SampleName, c1, plots, false);
         //</editor-fold>
 
     } else {
