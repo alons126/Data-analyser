@@ -942,7 +942,7 @@ void MomentumResolution::PolyFitter(const string &MomentumType, const int &Polyn
 
     Graph1D->GetXaxis()->SetTitleSize(0.06), Graph1D->GetXaxis()->SetLabelSize(0.0425), Graph1D->GetXaxis()->CenterTitle(true);
     Graph1D->GetYaxis()->SetTitleSize(0.06), Graph1D->GetYaxis()->SetLabelSize(0.0425), Graph1D->GetYaxis()->CenterTitle(true);
-    Graph1D->GetXaxis()->SetTitle(("#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} [GeV/c]").c_str());
+    Graph1D->GetXaxis()->SetTitle(("#LTP^{" + MomentumType + "}_{" + FitterParticle + "}#GT [GeV/c]").c_str());
 
     if (FitType == "Smear") {
         if (isNeutron) {
@@ -1135,18 +1135,18 @@ void MomentumResolution::PolyFitter(const string &MomentumType, const int &Polyn
 
     if (PolynomialDegree == 1) {
         LegendPolyStruct = FittedVar + " = " +
-                           "A#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} + " +
+                           "A#LTP^{" + MomentumType + "}_{" + FitterParticle + "}#GT + " +
                            "B";
     } else if (PolynomialDegree == 2) {
         LegendPolyStruct = FittedVar + " = " +
-                           "A#left(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}#right)^{2} + " +
-                           "B#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} + " +
+                           "A#LTP^{" + MomentumType + "}_{" + FitterParticle + "}#GT^{2} + " +
+                           "B#LTP^{" + MomentumType + "}_{" + FitterParticle + "}#GT + " +
                            "C";
     } else if (PolynomialDegree == 3) {
         LegendPolyStruct = FittedVar + " = " +
-                           "A#left(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}#right)^{3} + " +
-                           "B#left(#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "}#right)^{2} + " +
-                           "C#bar{P}^{" + MomentumType + "}_{" + FitterParticle + "} + " +
+                           "A#LTP^{" + MomentumType + "}_{" + FitterParticle + "}#GT^{3} + " +
+                           "B#LTP^{" + MomentumType + "}_{" + FitterParticle + "}#GT^{2} + " +
+                           "C#LTP^{" + MomentumType + "}_{" + FitterParticle + "}#GT + " +
                            "D";
     }
 
