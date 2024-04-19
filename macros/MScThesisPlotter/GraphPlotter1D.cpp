@@ -174,6 +174,10 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
     TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{reco}_{pFD}", "#LTP^{reco}_{pFD}#GT");
     TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{truth}_{pFD}", "#LTP^{truth}_{pFD}#GT");
 
+    TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "[GeV/c]", "[GeV]");
+    TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "[GeV/c^{2}]", "[GeV]");
+    TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
+
     if (Graph1DNameCopy == "reco_f_Corr_pol1") {
         auto FuncList = Graph1D->GetListOfFunctions();
         FuncList->Clear();
@@ -185,7 +189,7 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
         double xOffset = SetxOffset1D(false), yOffset = SetyOffset1D(false);
         auto Legend = new TLegend(Legend_x1_OneLine + xOffset + 0.04, Legend_y1_OneLine + yOffset,
                                   Legend_x2_OneLine - 0.05 + xOffset + 0.04, Legend_y2_OneLine + yOffset - 0.01);
-        TLegendEntry *LowerMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("#LTP^{reco}_{pFD}#GT = " + to_string_with_precision(2.2, 1) + " [GeV/c]").c_str(), "l");
+        TLegendEntry *LowerMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("#LTP^{reco}_{pFD}#GT = " + to_string_with_precision(2.2, 1) + " [GeV]").c_str(), "l");
         Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
     } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") && findSubstring(Graph1D_Title1, "Proton") &&
                findSubstring(filename, "momResS1_v3")) {

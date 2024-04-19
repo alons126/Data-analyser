@@ -630,6 +630,11 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
                      "#theta_{#font[62]{q},#font[62]{P}_{p,CD}} [Deg]", "#theta_{#font[62]{q},#font[62]{P}_{pCD}} [Deg]");
 
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[Deg]", "[#circ]");
+        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[Deg]", "[#circ]");
+
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c]", "[GeV]");
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c^{2}]", "[GeV]");
+        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
 
 //        if (findSubstring(Histogram1DNameCopy, "W ")) {
 //            double Sim_Xmin = Sim_Histogram1D->GetXaxis()->GetXmin();

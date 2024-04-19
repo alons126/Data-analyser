@@ -425,6 +425,10 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
         TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#deltaP_{T,tot} by Momentum Sum", "Transverse momentum imbalance");
         TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#delta#alpha_{T,tot} by Momentum Sum", "Transverse boosting angle");
 
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "[GeV/c]", "[GeV]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "[GeV/c^{2}]", "[GeV]");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
+
         if ((findSubstring(Sim_Histogram1D->GetTitle(), "Electron") || findSubstring(Sim_Histogram1D->GetTitle(), "electron")) &&
             findSubstring(Sim_Histogram1D->GetTitle(), "#theta")) {
             TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta [Deg]", "#theta_{e} [#circ]");

@@ -292,8 +292,8 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             TLegendEntry *LowerMomThEntry;
 
-            LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
-            Histogram2D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
+            LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
+            Histogram2D->GetXaxis()->SetTitle("P_{p} [GeV]");
 
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else if (findSubstring(Histogram2DNameCopy, "P_{#pi^{+}} vs. #theta_{#pi^{+}}") ||
@@ -327,11 +327,11 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TLegendEntry *LowerMomThEntry;
 
             if (findSubstring(Histogram2DNameCopy, "#pi^{+}")) {
-                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
-                Histogram2D->GetXaxis()->SetTitle("P_{#pi^{+}} [GeV/c]");
+                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
+                Histogram2D->GetXaxis()->SetTitle("P_{#pi^{+}} [GeV]");
             } else if (findSubstring(Histogram2DNameCopy, "#pi^{-}")) {
-                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
-                Histogram2D->GetXaxis()->SetTitle("P_{#pi^{-}} [GeV/c]");
+                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
+                Histogram2D->GetXaxis()->SetTitle("P_{#pi^{-}} [GeV]");
             }
 
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
@@ -490,6 +490,13 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "ratio", "- histogram ratio");
+
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "[GeV/c]", "[GeV]");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "[GeV/c^{2}]", "[GeV]");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+                         "[GeV^{2}/c^{2}]", "[GeV^{2}]");
 
             Histogram2D->Draw("colz"), gPad->Update();
 
