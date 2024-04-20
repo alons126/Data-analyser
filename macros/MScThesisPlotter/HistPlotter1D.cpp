@@ -271,13 +271,19 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (1e cut)", "");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "(1pFD1pCD)", "in 1pFD1pCD");
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "(1nFD1pCD)", "in 1nFD1pCD");
+
         TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[Deg]", "[#circ]");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c]", "[GeV]");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c^{2}]", "[GeV]");
+        TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
 
         if (RatioTopology == "1N" && findSubstring(Histogram1D_Title, "truth")) {
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "FD proton", "Proton");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "FD neutron", "Neutron");
-            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{p} [GeV/c]", "P^{truth}_{pFD} [GeV/c]");
-            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{n} [GeV/c]", "P^{truth}_{nFD} [GeV/c]");
+//            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{p} [GeV/c]", "P^{truth}_{pFD} [GeV/c]");
+//            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{n} [GeV/c]", "P^{truth}_{nFD} [GeV/c]");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{p} [GeV]", "P^{truth}_{pFD} [GeV]");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{n} [GeV]", "P^{truth}_{nFD} [GeV]");
         }
 
         if (findSubstring(Histogram1DNameCopy, "V_{z}^{")) {
@@ -377,6 +383,9 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             string ParticlesLC;
             string Region = particles.GetDRegionExplicit(HistTitle, true);
 
+            ShowStats = false;
+            double xOffset = SetxOffset1D(ShowStats), yOffset = SetyOffset1D(ShowStats);
+
             if (ParticleShort == "e") {
                 string ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, true);
                 Histogram1D->SetTitle(("#chi^{2}_{" + ParticleShort + "} of " + ParticlesLC + "").c_str());
@@ -387,12 +396,21 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                     ParticlesLC = particles.GetParticleNameLCFromSubscript(HistTitle, true);
                 }
 
-                Histogram1D->SetTitle(("#chi^{2}_{" + ParticleShort + "} of " + Region + " " + ParticlesLC + "").c_str());
+                Histogram1D->SetTitle(("#chi^{2}_{" + ParticleShort + "} of " + Region + " hadrons").c_str());
 
                 if (findSubstring(Histogram1DNameCopy, "{D}") ||
                     findSubstring(Histogram1DNameCopy, "{K^{+}}") || findSubstring(Histogram1DNameCopy, "{K^{-}}")) {
                     auto FuncList = Histogram1D->GetListOfFunctions();
                     FuncList->Clear();
+                } else {
+                    auto ListOfFunctions = Histogram1D->GetListOfFunctions();
+                    auto *Legend = (TLegend *) ListOfFunctions->At(5);
+                    auto *FitParam = (TPaveText *) ListOfFunctions->At(6);
+
+                    Legend->SetX1NDC(Legend->GetX1NDC() + xOffset), Legend->SetX2NDC(Legend->GetX2NDC() + xOffset);
+                    Legend->SetY1NDC(Legend->GetY1NDC() + yOffset), Legend->SetY2NDC(Legend->GetY2NDC() + yOffset);
+                    FitParam->SetX1NDC(FitParam->GetX1NDC() + xOffset), FitParam->SetX2NDC(FitParam->GetX2NDC() + xOffset);
+                    FitParam->SetY1NDC(FitParam->GetY1NDC() + yOffset), FitParam->SetY2NDC(FitParam->GetY2NDC() + yOffset);
                 }
             }
 
@@ -655,8 +673,10 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                          " P_{pFD}", "");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                          " P_{pCD}", "");
+//            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
+//                         "Momentum [GeV/c]", "P^{truth}_{nucFD} [GeV/c]");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                         "Momentum [GeV/c]", "P^{truth}_{nucFD} [GeV/c]");
+                         "Momentum [GeV]", "P^{truth}_{nucFD} [GeV]");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                          " AC", "");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
@@ -697,15 +717,6 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                          "#vec{P}", "#font[62]{P}");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
                          "#vec{q}", "#font[62]{q}");
-            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                         "[Deg]", "[#circ]");
-
-            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                         "[GeV/c]", "[GeV]");
-            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                         "[GeV/c^{2}]", "[GeV]");
-            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                         "[GeV^{2}/c^{2}]", "[GeV^{2}]");
 
             Histogram1D->Draw(), gPad->Update();
 //            Histogram1D->Sumw2(), Histogram1D->Draw(), gPad->Update();

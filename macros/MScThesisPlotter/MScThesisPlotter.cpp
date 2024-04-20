@@ -96,17 +96,17 @@ void MScThesisPlotter() {
     //</editor-fold>
 
     //<editor-fold desc="momRes runs">
-    const char *plots_momResS1_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v3"
+    const char *plots_momResS1_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1T_v3_ReRun3"
                                      "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_momResS1_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v3"
+    const char *plots_momResS1_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1T_v3_ReRun3"
                                              "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-    const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v3"
+    const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1T_v3_ReRun3"
                                            "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-    const char *plots_momResS2_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v3"
+    const char *plots_momResS2_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2T_v3_ReRun3"
                                      "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_momResS2_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v3"
+    const char *plots_momResS2_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2T_v3_ReRun3"
                                              "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-    const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v3"
+    const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2T_v3_ReRun3"
                                            "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     const char *plots_momResS2RT_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3"
                                        "/C12x4_simulation_G18_Q204_6GeV_plots.root";
@@ -114,6 +114,24 @@ void MScThesisPlotter() {
                                                "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     const char *plots_pResS2RT_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3"
                                              "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    const char *plots_momResS1_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v3"
+//                                     "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+//    const char *plots_momResS1_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v3"
+//                                             "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    const char *plots_pResS1_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v3"
+//                                           "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    const char *plots_momResS2_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v3"
+//                                     "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+//    const char *plots_momResS2_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v3"
+//                                             "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    const char *plots_pResS2_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2_v3"
+//                                           "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    const char *plots_momResS2RT_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3"
+//                                       "/C12x4_simulation_G18_Q204_6GeV_plots.root";
+//    const char *plots_momResS2RT_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3"
+//                                               "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    const char *plots_pResS2RT_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3"
+//                                             "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     //</editor-fold>
 
     //<editor-fold desc="Final runs">
