@@ -169,6 +169,8 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "[GeV/c^{2}]", "[GeV]");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
 
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " - ZOOMIN", " zoom-in");
+
         if (findSubstring(Histogram2DNameCopy, "dc_hitmap")) {
 
             ShowStats = false;
@@ -185,7 +187,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 Histogram2D->Draw("colz"), gPad->Update();
 
                 TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
-                EquiLine->SetLineWidth(4);
+                EquiLine->SetLineWidth(5);
                 EquiLine->SetLineColor(kBlack);
                 EquiLine->Draw("same");
             }
@@ -195,12 +197,12 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram2D->Draw("colz"), gPad->Update();
 
             TLine *UpperFScut = new TLine(gPad->GetUxmin(), 0.28, gPad->GetUxmax(), 0.28);
-            UpperFScut->SetLineWidth(4);
+            UpperFScut->SetLineWidth(5);
             UpperFScut->SetLineColor(kRed);
             UpperFScut->Draw("same");
 
             TLine *LowerFScut = new TLine(gPad->GetUxmin(), 0.2, gPad->GetUxmax(), 0.2);
-            LowerFScut->SetLineWidth(4);
+            LowerFScut->SetLineWidth(5);
             LowerFScut->SetLineColor(kRed);
             LowerFScut->Draw("same");
         } else if ((Histogram2DNameCopy == "Vcal vs. SF BC (1e cut, PCAL)" || Histogram2DNameCopy == "Wcal vs. SF BC (1e cut, PCAL)") ||
@@ -217,7 +219,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram2D->Draw("colz"), gPad->Update();
 
             TLine *LowerECALcoorCut = new TLine(14., gPad->GetUymin(), 14., gPad->GetUymax());
-            LowerECALcoorCut->SetLineWidth(4);
+            LowerECALcoorCut->SetLineWidth(5);
             LowerECALcoorCut->SetLineColor(kRed);
             LowerECALcoorCut->Draw("same");
         } else if (Histogram2DNameCopy == "#beta vs. P (electrons only, 1e cut)") {
@@ -228,12 +230,12 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram2D->Draw("colz"), gPad->Update();
 
             TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
-            EquiLine->SetLineWidth(4);
+            EquiLine->SetLineWidth(5);
             EquiLine->SetLineColor(kBlack);
             EquiLine->Draw("same");
 
             TLine *UpperBetaElectronCut = new TLine(gPad->GetUxmin(), 1.2, gPad->GetUxmax(), 1.2);
-            UpperBetaElectronCut->SetLineWidth(4);
+            UpperBetaElectronCut->SetLineWidth(5);
             UpperBetaElectronCut->SetLineColor(kRed);
             UpperBetaElectronCut->Draw("same");
         } else if (Histogram2DNameCopy == "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC (2p, CD-CTOF)" ||
@@ -258,16 +260,16 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram2D->Draw("colz"), gPad->Update();
 
             TLine *UpperThetapFDcut = new TLine(gPad->GetUxmin(), 45., gPad->GetUxmax(), 45.);
-            UpperThetapFDcut->SetLineWidth(4), UpperThetapFDcut->SetLineColor(kGreen), UpperThetapFDcut->Draw("same");
+            UpperThetapFDcut->SetLineWidth(5), UpperThetapFDcut->SetLineColor(kGreen), UpperThetapFDcut->Draw("same");
 
             TLine *LowerThetapFDcut = new TLine(gPad->GetUxmin(), 35., gPad->GetUxmax(), 35.);
-            LowerThetapFDcut->SetLineWidth(4), LowerThetapFDcut->SetLineColor(kGreen), LowerThetapFDcut->Draw("same");
+            LowerThetapFDcut->SetLineWidth(5), LowerThetapFDcut->SetLineColor(kGreen), LowerThetapFDcut->Draw("same");
 
             TLine *UpperThetapCDcut = new TLine(45., gPad->GetUymin(), 45., gPad->GetUymax());
-            UpperThetapCDcut->SetLineWidth(4), UpperThetapCDcut->SetLineColor(kRed), UpperThetapCDcut->Draw("same");
+            UpperThetapCDcut->SetLineWidth(5), UpperThetapCDcut->SetLineColor(kRed), UpperThetapCDcut->Draw("same");
 
             TLine *LowerThetapCDcut = new TLine(35., gPad->GetUymin(), 35., gPad->GetUymax());
-            LowerThetapCDcut->SetLineWidth(4), LowerThetapCDcut->SetLineColor(kRed), LowerThetapCDcut->Draw("same");
+            LowerThetapCDcut->SetLineWidth(5), LowerThetapCDcut->SetLineColor(kRed), LowerThetapCDcut->Draw("same");
 
 //            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
 //                         "pFD", "#tilde{pFD}");
@@ -289,7 +291,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram2D->Draw("colz"), gPad->Update();
 
             TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, gPad->GetUymax());
-            LowerMomTh->SetLineWidth(4);
+            LowerMomTh->SetLineWidth(5);
             LowerMomTh->SetLineColor(kRed);
             LowerMomTh->Draw("same");
 
@@ -325,7 +327,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             Histogram2D->Draw("colz"), gPad->Update();
 
             TLine *LowerMomTh = new TLine(LowerMomentumTh, gPad->GetUymin(), LowerMomentumTh, gPad->GetUymax());
-            LowerMomTh->SetLineWidth(4), LowerMomTh->SetLineColor(kRed), LowerMomTh->Draw("same");
+            LowerMomTh->SetLineWidth(5), LowerMomTh->SetLineColor(kRed), LowerMomTh->Draw("same");
 
             auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.15 + xOffset, Legend_y2_OneLine + yOffset);
 
