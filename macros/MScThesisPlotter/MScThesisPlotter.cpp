@@ -110,9 +110,11 @@ void MScThesisPlotter() {
                                            "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
     const char *plots_momResS2RT_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3"
                                        "/C12x4_simulation_G18_Q204_6GeV_plots.root";
-    const char *plots_momResS2RT_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3"
+    const char *plots_momResS2RT_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3_ReRun3"
                                                "/Neutron_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
-    const char *plots_pResS2RT_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3"
+    const char *plots_pResS2RT_FittedPlots = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3_ReRun3"
+                                             "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
+    const char *plots_pResS2RT_FittedPlots2 = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_wNSaC_momResS2RT_v3_ReRun3"
                                              "/Proton_resolution_plots_-_C12x4_simulation_G18_Q204_6GeV.root";
 //    const char *plots_momResS1_Gen = "/mnt/e/C12x4_sim_G18_Q204_6GeV/03_momRes_runs/v3/C12x4_simulation_G18_Q204_6GeV_S03AC_NC_momResS1_v3"
 //                                     "/C12x4_simulation_G18_Q204_6GeV_plots.root";
@@ -1012,7 +1014,7 @@ void MScThesisPlotter() {
                    "07a_Proton_reco_f_Corr_pol1_wKC");
     GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted TL proton resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS2RTFolderSim,
                    "07b_Proton_truth_f_Corr_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2RTFolderSim,
+    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots2, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2RTFolderSim,
                    "07c_Proton_truth_f_Smear_pol1_sigma_pFD_test_wKC"); // For sigma_pFD after smearing!
     //</editor-fold>
 

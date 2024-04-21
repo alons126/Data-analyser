@@ -96,6 +96,24 @@ void TitleAligner(hData &Utilities, TGraph *Graph1D, string &Graph1D_Title, stri
     }
 }
 
+void TitleAligner(hData &Utilities, TGraph *Graph1D, string &Graph1D_Title, string &Graph1D_xLabel, string &Graph1D_yLabel,
+                  const string &OriginToreplace, const string &Replacement) {
+    if (findSubstring(Graph1D_Title, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Graph1D_Title, OriginToreplace, Replacement);
+        Graph1D->SetTitle(Graph1D_Title.c_str());
+    }
+
+    if (findSubstring(Graph1D_xLabel, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Graph1D_xLabel, OriginToreplace, Replacement);
+        Graph1D->GetXaxis()->SetTitle(Graph1D_xLabel.c_str());
+    }
+
+    if (findSubstring(Graph1D_yLabel, OriginToreplace)) {
+        Utilities.ReplaceSubStr(Graph1D_yLabel, OriginToreplace, Replacement);
+        Graph1D->GetYaxis()->SetTitle(Graph1D_yLabel.c_str());
+    }
+}
+
 void TitleAligner(TH2D *Histogram2D, string &Histogram2D_Title, string &Histogram2D_xLabel, string &Histogram2D_yLabel, const string &OriginToreplace,
              const string &Replacement) {
     hData Utilities;

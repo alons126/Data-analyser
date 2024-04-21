@@ -180,9 +180,23 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
 
     TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, " (wKC, linear fit)", "");
 
+    TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, Graph1D_yLabel, "mean", "slice mean");
+    TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, Graph1D_yLabel, "width", "slice width");
+
+    auto ListOfFunctions = Graph1D->GetListOfFunctions();
+    auto *LoadedLegend = (TLegend *) ListOfFunctions->At(1);
+    auto *LoadedFitParam = (TPaveText *) ListOfFunctions->At(2);
+
+    LoadedLegend->SetX2NDC(LoadedLegend->GetX2NDC() + 0.05);
+    LoadedLegend->SetY1NDC(LoadedLegend->GetY1NDC() - 0.01);
+    LoadedFitParam->SetX2NDC(LoadedFitParam->GetX2NDC() - 0.05);
+
     if (Graph1DNameCopy == "reco_f_Corr_pol1") {
+
         auto FuncList = Graph1D->GetListOfFunctions();
         FuncList->Clear();
+
+//        gStyle->SetTitleY(gStyle->GetTitleY() - 0.025);
         Graph1D->Draw("ap"), gPad->Update();
 
         TLine *UpperMomKCut = new TLine(2.2, gPad->GetUymin(), 2.2, gPad->GetUymax());
@@ -193,20 +207,46 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
                                   Legend_x2_OneLine - 0.05 + xOffset + 0.04, Legend_y2_OneLine + yOffset - 0.01);
         TLegendEntry *LowerMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("#LTP^{reco}_{pFD}#GT = " + to_string_with_precision(2.2, 1) + " [GeV]").c_str(), "l");
         Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
-    } else if ((Graph1DNameCopy == "reco_f_Corr_pol1_wKC") && findSubstring(filename, "momResS1T_v3")) {
-        string title0 = Graph1D->GetTitle();
-        string title = title0 + " - stage 1";
-        Graph1D->SetTitle(title.c_str());
-
-        Graph1D->Draw("ap"), gPad->Update();
-    } else if ((Graph1DNameCopy == "reco_f_Smear_pol1_wKC") && findSubstring(filename, "momResS2T_v3")) {
-        string title0 = Graph1D->GetTitle();
-        string title = title0 + " - stage 2";
-        Graph1D->SetTitle(title.c_str());
-
-        Graph1D->Draw("ap"), gPad->Update();
-    } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") && findSubstring(Graph1D_Title1, "Proton") &&
+    } else if ((Graph1DNameCopy == "reco_f_Corr_pol1_wKC") &&
                findSubstring(filename, "momResS1T_v3")) {
+
+        string part;
+
+        if (findSubstring(Graph1D->GetTitle(), "Neutron") || findSubstring(Graph1D->GetTitle(), "neutron")) {
+            part = "nFD";
+        } else if (findSubstring(Graph1D->GetTitle(), "Proton") || findSubstring(Graph1D->GetTitle(), "proton")) {
+            part = "pFD";
+        }
+
+        string title0 = Graph1D->GetTitle();
+        string title1 = " for 1 #leq#LTP^{reco}_{" + part + "}#GT#leq 2.2 [GeV]";
+        string title = title0 + title1 + " (stage 1)";
+        Graph1D->SetTitle(title.c_str());
+
+//        gStyle->SetTitleY(gStyle->GetTitleY() - 0.025);
+        Graph1D->Draw("ap"), gPad->Update();
+    } else if ((Graph1DNameCopy == "reco_f_Smear_pol1_wKC") &&
+               findSubstring(filename, "momResS2T_v3")) {
+
+        string part;
+
+        if (findSubstring(Graph1D->GetTitle(), "Neutron") || findSubstring(Graph1D->GetTitle(), "neutron")) {
+            part = "nFD";
+        } else if (findSubstring(Graph1D->GetTitle(), "Proton") || findSubstring(Graph1D->GetTitle(), "proton")) {
+            part = "pFD";
+        }
+
+        string title0 = Graph1D->GetTitle();
+        string title1 = " for 1 #leq#LTP^{reco}_{" + part + "}#GT#leq 2.2 [GeV]";
+        string title = title0 + title1 + " (stage 2)";
+        Graph1D->SetTitle(title.c_str());
+
+//        gStyle->SetTitleY(gStyle->GetTitleY() - 0.025);
+        Graph1D->Draw("ap"), gPad->Update();
+    } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") &&
+               findSubstring(Graph1D_Title1, "Proton") &&
+               findSubstring(filename, "momResS1T_v3")) {
+
         auto FuncList = Graph1D->GetListOfFunctions();
         FuncList->Clear();
         Graph1D->GetYaxis()->SetRangeUser(0., 0.02);
@@ -215,14 +255,17 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
         string title = title0 + " - before smearing";
         Graph1D->SetTitle(title.c_str());
 
+//        gStyle->SetTitleY(gStyle->GetTitleY() - 0.025);
         Graph1D->Draw("ap"), gPad->Update();
-    } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") && findSubstring(Graph1D_Title1, "Proton") &&
+    } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") &&
+               findSubstring(Graph1D_Title1, "Proton") &&
                findSubstring(filename, "momResS2RT_v3")) {
 
         string title0 = Graph1D->GetTitle();
         string title = title0 + " - after smearing";
         Graph1D->SetTitle(title.c_str());
 
+//        gStyle->SetTitleY(gStyle->GetTitleY() - 0.025);
         Graph1D->Draw("ap"), gPad->Update();
     } else {
         Graph1D->Draw("ap"), gPad->Update();
