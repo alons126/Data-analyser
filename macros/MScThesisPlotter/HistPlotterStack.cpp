@@ -438,6 +438,7 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
             TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta", "#theta_{nucFD}");
         } else if (findSubstring(Sim_Histogram1D->GetTitle(), "Central-going proton") &&
                    !findSubstring(Sim_Histogram1D->GetTitle(), "#theta_{pCD}") &&
+                   !findSubstring(Histogram1DNameCopy, "#theta_{#vec{q},#vec{P}_{pCD}}") &&
                    findSubstring(Sim_Histogram1D->GetTitle(), "#theta")) {
             TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "#theta", "#theta_{pCD}");
         }
