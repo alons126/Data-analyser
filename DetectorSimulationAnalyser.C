@@ -194,8 +194,8 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
     bool apply_nucleon_SmearAndCorr = false;
 
@@ -23660,13 +23660,22 @@ void EventAnalyser() {
         myLogFile << "num_of_RM_2p_events_sCTOFhp:\t\t\t" << pid.num_of_RM_2p_events_sCTOFhp << "\n";
         myLogFile << "num_of_AD_2p_events_from_3p_sCTOFhp:\t\t" << pid.num_of_AD_2p_events_from_3p_sCTOFhp << "\n";
         myLogFile << "num_of_AD_2p_events_from_4p_sCTOFhp:\t\t" << pid.num_of_AD_2p_events_from_4p_sCTOFhp << "\n";
+        myLogFile << "num_of_AD_2p_events_from_Xp_sCTOFhp:\t\t" << pid.num_of_AD_2p_events_from_Xp_sCTOFhp << "\n";
         myLogFile << "num_of_RM_2p_events_dCDaFDd:\t\t\t" << pid.num_of_RM_2p_events_dCDaFDd << "\n";
         myLogFile << "num_of_AD_2p_events_from_3p_dCDaFDd:\t\t" << pid.num_of_AD_2p_events_from_3p_dCDaFDd << "\n";
-        myLogFile << "num_of_AD_2p_events_from_4p_dCDaFDd:\t\t" << pid.num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
+        myLogFile << "num_of_AD_2p_events_from_4p_dCDaFDd:\t\t" << pid.num_of_AD_2p_events_from_4p_dCDaFDd << "\n";
+        myLogFile << "num_of_AD_2p_events_from_Xp_dCDaFDd:\t\t" << pid.num_of_AD_2p_events_from_Xp_dCDaFDd << "\n\n";
+
+        myLogFile << "num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd:\t\t" << pid.num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd << "\n\n";
 
         myLogFile << "num_of_events_2p (from monitoring):\t\t" << num_of_events_2p_wFakeProtons - pid.num_of_RM_2p_events_sCTOFhp - pid.num_of_RM_2p_events_dCDaFDd +
                                                                   pid.num_of_AD_2p_events_from_3p_sCTOFhp + pid.num_of_AD_2p_events_from_4p_sCTOFhp +
-                                                                  pid.num_of_AD_2p_events_from_3p_dCDaFDd + pid.num_of_AD_2p_events_from_4p_dCDaFDd << "\n";
+                                                                  pid.num_of_AD_2p_events_from_3p_dCDaFDd + pid.num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
+
+        myLogFile << "num_of_events_2p (from monitoring; no mixed):\t\t" << num_of_events_2p_wFakeProtons - pid.num_of_RM_2p_events_sCTOFhp - pid.num_of_RM_2p_events_dCDaFDd +
+                                                                            pid.num_of_AD_2p_events_from_3p_sCTOFhp + pid.num_of_AD_2p_events_from_4p_sCTOFhp +
+                                                                            pid.num_of_AD_2p_events_from_3p_dCDaFDd + pid.num_of_AD_2p_events_from_4p_dCDaFDd -
+                                                                            pid.num_of_RM_2p_events_dCDaFDd << "\n\n";
     }
 
     myLogFile << "#(events) 2p:\t\t\t\t\t" << num_of_events_2p << "\n\n";
@@ -23816,14 +23825,22 @@ void EventAnalyser() {
         cout << "num_of_RM_2p_events_sCTOFhp:\t\t" << pid.num_of_RM_2p_events_sCTOFhp << "\n";
         cout << "num_of_AD_2p_events_from_3p_sCTOFhp:\t" << pid.num_of_AD_2p_events_from_3p_sCTOFhp << "\n";
         cout << "num_of_AD_2p_events_from_4p_sCTOFhp:\t" << pid.num_of_AD_2p_events_from_4p_sCTOFhp << "\n";
+        cout << "num_of_AD_2p_events_from_Xp_sCTOFhp:\t" << pid.num_of_AD_2p_events_from_Xp_sCTOFhp << "\n";
         cout << "num_of_RM_2p_events_dCDaFDd:\t\t" << pid.num_of_RM_2p_events_dCDaFDd << "\n";
         cout << "num_of_AD_2p_events_from_3p_dCDaFDd:\t" << pid.num_of_AD_2p_events_from_3p_dCDaFDd << "\n";
-        cout << "num_of_AD_2p_events_from_4p_dCDaFDd:\t" << pid.num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
+        cout << "num_of_AD_2p_events_from_4p_dCDaFDd:\t" << pid.num_of_AD_2p_events_from_4p_dCDaFDd << "\n";
+        cout << "num_of_AD_2p_events_from_Xp_dCDaFDd:\t" << pid.num_of_AD_2p_events_from_Xp_dCDaFDd << "\n\n";
 
-        cout << "num_of_events_2p (from monitoring):\t"
-             << num_of_events_2p_wFakeProtons - pid.num_of_RM_2p_events_sCTOFhp - pid.num_of_RM_2p_events_dCDaFDd +
-                pid.num_of_AD_2p_events_from_3p_sCTOFhp + pid.num_of_AD_2p_events_from_4p_sCTOFhp +
-                pid.num_of_AD_2p_events_from_3p_dCDaFDd + pid.num_of_AD_2p_events_from_4p_dCDaFDd << "\n";
+        cout << "num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd:\t" << pid.num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd << "\n\n";
+
+        cout << "num_of_events_2p (from monitoring):\t" << num_of_events_2p_wFakeProtons - pid.num_of_RM_2p_events_sCTOFhp - pid.num_of_RM_2p_events_dCDaFDd +
+                                                             pid.num_of_AD_2p_events_from_3p_sCTOFhp + pid.num_of_AD_2p_events_from_4p_sCTOFhp +
+                                                             pid.num_of_AD_2p_events_from_3p_dCDaFDd + pid.num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
+
+        cout << "num_of_events_2p (from monitoring; no mixed):\t" << num_of_events_2p_wFakeProtons - pid.num_of_RM_2p_events_sCTOFhp - pid.num_of_RM_2p_events_dCDaFDd +
+                                                                       pid.num_of_AD_2p_events_from_3p_sCTOFhp + pid.num_of_AD_2p_events_from_4p_sCTOFhp +
+                                                                       pid.num_of_AD_2p_events_from_3p_dCDaFDd + pid.num_of_AD_2p_events_from_4p_dCDaFDd -
+                                                                       pid.num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd << "\n\n";
     }
 
     cout << "#(events) 2p:\t\t\t\t" << num_of_events_2p << "\n\n";

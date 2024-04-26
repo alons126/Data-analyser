@@ -765,6 +765,8 @@ void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <regio
                               const DSCuts &Theta_p1_cuts_2p, const DSCuts &Theta_p2_cuts_2p, const DSCuts &dphi_p1_p2_2p, const double &Weight) {
     if (GoodProtonsMonitorPlots) {
         for (int i = 0; i < IDProtons_ind.size(); i++) {
+            bool Is_sCTOFhp = false, Is_dCDaFDd = false; // variables to indicate which cut is applied
+
             auto proton_i_2p = protons[IDProtons_ind.at(i)];
             TVector3 proton_i_2p_2p_3v;
             proton_i_2p_2p_3v.SetMagThetaPhi(proton_i_2p->getP(), proton_i_2p->getTheta(), proton_i_2p->getPhi()); // proton i in protons vector
@@ -780,14 +782,11 @@ void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <regio
                 double Theta_pi_pj_2p = acos((proton_i_2p_2p_3v.Px() * proton_j_2p_2p_3v.Px() + proton_i_2p_2p_3v.Py() * proton_j_2p_2p_3v.Py() +
                                               proton_i_2p_2p_3v.Pz() * proton_j_2p_2p_3v.Pz()) /
                                              (proton_i_2p_2p_3v.Mag() * proton_j_2p_2p_3v.Mag())) * 180.0 / pi; // Theta_pi_pj_2p in deg
-                double dPhi_ij_2p = Phi_pi - Phi_pj; // dPhi_ij_2p in deg
 
                 if ((proton_i_2p->getRegion() == CD) && (proton_j_2p->getRegion() == CD)) { // if both 2p protons are in the CD
                     TVector3 pi_hit_pos, pj_hit_pos, pos_diff_ij;
-                    pi_hit_pos.SetXYZ(proton_i_2p->sci(clas12::CTOF)->getX(), proton_i_2p->sci(clas12::CTOF)->getY(),
-                                      proton_i_2p->sci(clas12::CTOF)->getZ());
-                    pj_hit_pos.SetXYZ(proton_j_2p->sci(clas12::CTOF)->getX(), proton_j_2p->sci(clas12::CTOF)->getY(),
-                                      proton_j_2p->sci(clas12::CTOF)->getZ());
+                    pi_hit_pos.SetXYZ(proton_i_2p->sci(clas12::CTOF)->getX(), proton_i_2p->sci(clas12::CTOF)->getY(), proton_i_2p->sci(clas12::CTOF)->getZ());
+                    pj_hit_pos.SetXYZ(proton_j_2p->sci(clas12::CTOF)->getX(), proton_j_2p->sci(clas12::CTOF)->getY(), proton_j_2p->sci(clas12::CTOF)->getZ());
 
                     pos_diff_ij.SetXYZ(pi_hit_pos.Px() - pj_hit_pos.Px(), pi_hit_pos.Py() - pj_hit_pos.Py(), pi_hit_pos.Pz() - pj_hit_pos.Pz());
                     double time_diff_ij = proton_i_2p->getTime() - proton_j_2p->getTime();
@@ -808,6 +807,7 @@ void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <regio
                         hTheta_pi_pj_VS_Posi_Posj_BC_3idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
 
                         if (pos_diff_ij.Mag() == 0) {
+                            Is_sCTOFhp = true;
                             ++num_of_AD_2p_events_from_3p_sCTOFhp;
                             hdTheta_pi_pj_VS_ToFi_ToFj_AE_3idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
                             hTheta_pi_pj_VS_Posi_Posj_AE_3idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
@@ -819,13 +819,22 @@ void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <regio
                         hTheta_pi_pj_VS_Posi_Posj_BC_4idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
 
                         if (pos_diff_ij.Mag() == 0) {
+                            Is_sCTOFhp = true;
                             ++num_of_AD_2p_events_from_4p_sCTOFhp;
                             hdTheta_pi_pj_VS_ToFi_ToFj_AE_4idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
                             hTheta_pi_pj_VS_Posi_Posj_AE_4idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
                         }
                     }
+
+                    if (IDProtons_ind.size() >= 5 && Protons_ind.size() == 2) {
+                        if (pos_diff_ij.Mag() == 0) {
+                            Is_sCTOFhp = true;
+                            ++num_of_AD_2p_events_from_Xp_sCTOFhp;
+                        }
+                    }
                 } else if (((proton_i_2p->getRegion() == FD) && (proton_j_2p->getRegion() == CD)) ||
                            ((proton_i_2p->getRegion() == CD) && (proton_j_2p->getRegion() == FD))) {
+                    double dPhi_ij_2p = CalcdPhi(protons[IDProtons_ind.at(i)], protons[IDProtons_ind.at(j)]); // dPhi_ij_2p in deg
 
                     bool p_i_around_40 = (fabs(Theta_pi - Theta_p1_cuts_2p.GetMeanConst()) < Theta_p1_cuts_2p.GetUpperCutConst());
                     bool p_j_around_40 = (fabs(Theta_pj - Theta_p2_cuts_2p.GetMeanConst()) < Theta_p2_cuts_2p.GetUpperCutConst());
@@ -860,6 +869,7 @@ void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <regio
                         hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p->Fill(Theta_pj, Theta_pi);
 
                         if ((p_i_around_40 && p_j_around_40) && small_dPhi) {
+                            Is_dCDaFDd = true;
                             ++num_of_AD_2p_events_from_3p_dCDaFDd;
                             hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_3idp_2p->Fill(Theta_pj, Theta_pi);
                         }
@@ -877,12 +887,22 @@ void ParticleID::GPMonitoring(const bool &GoodProtonsMonitorPlots, vector <regio
                         hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p->Fill(Theta_pj, Theta_pi);
 
                         if ((p_i_around_40 && p_j_around_40) && small_dPhi) {
+                            Is_dCDaFDd = true;
                             ++num_of_AD_2p_events_from_4p_dCDaFDd;
                             hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_4idp_2p->Fill(Theta_pj, Theta_pi);
                         }
                     }
+
+                    if (IDProtons_ind.size() >= 5 && Protons_ind.size() == 2) {
+                        if ((p_i_around_40 && p_j_around_40) && small_dPhi) {
+                            Is_dCDaFDd = true;
+                            ++num_of_AD_2p_events_from_Xp_dCDaFDd;
+                        }
+                    }
                 }
             } // end of second for loop over IDProtons_ind (with j)
+
+            if (Is_sCTOFhp && Is_dCDaFDd) { ++num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd; }
         } // end of first for loop over IDProtons_ind (with i)
     }
 }

@@ -93,7 +93,11 @@ public:
 
     /* Counting variables for good protons monitoring */
     int num_of_RM_2p_events_sCTOFhp = 0, num_of_AD_2p_events_from_3p_sCTOFhp = 0, num_of_AD_2p_events_from_4p_sCTOFhp = 0;
+    int num_of_AD_2p_events_from_Xp_sCTOFhp = 0; // events with 5p or more
     int num_of_RM_2p_events_dCDaFDd = 0, num_of_AD_2p_events_from_3p_dCDaFDd = 0, num_of_AD_2p_events_from_4p_dCDaFDd = 0;
+    int num_of_AD_2p_events_from_Xp_dCDaFDd = 0; // events with 5p or more
+
+    int num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd = 0; // events with mixed sCTOFhp dCDaFDd
     //</editor-fold>
 
 // Default constructor ---------------------------------------------------------------------------------------------------------------------------
