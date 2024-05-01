@@ -252,7 +252,8 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         } else if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)" ||
                    Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)") {
             if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)") {
-                Histogram2D->SetTitle("#theta_{pFD} vs. #theta_{pCD} for every #theta_{pFD,pCD} in 1pFD1pCD");
+                Histogram2D->SetTitle("#theta_{pFD} vs. #theta_{pCD} in 1pFD1pCD");
+//                Histogram2D->SetTitle("#theta_{pFD} vs. #theta_{pCD} for every #theta_{pFD,pCD} in 1pFD1pCD");
             } else if (Histogram2DNameCopy == "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)") {
                 Histogram2D->SetTitle("#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD} < 20#circ in 1pFD1pCD");
             }
