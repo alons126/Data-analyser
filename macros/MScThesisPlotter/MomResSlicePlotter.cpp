@@ -75,7 +75,7 @@ void MomResSlicePlotter(const char *filename, const string &ParticleNameShortInp
                         const string &OutputPathInput = "") {
     bool PrintOutHistName = false;
     bool PrintOut = false;
-    bool ShowStats = true;
+    bool ShowStats = false;
 
     string OutputPath = OutputPathInput + "/" + ParticleNameShortInput + "_" + MomentumTyp + "_MomResSlices";
     system(("mkdir -p " + OutputPath).c_str());
@@ -177,6 +177,13 @@ void MomResSlicePlotter(const char *filename, const string &ParticleNameShortInp
 
                     func->SetParameters(stod(Amp), stod(Mean), stod(Std)); // start fit with histogram's max and mean
                     func->SetLineWidth(LineWidth);
+
+                    double xOffset = SetxOffset1D(ShowStats) + 0.045, yOffset = SetyOffset1D(ShowStats) + 0.035;
+                    auto ListOfFunctionsTemp = Histogram1DTemp->GetListOfFunctions();
+                    auto *FitParamTemp = (TPaveText *) ListOfFunctions->At(0);
+
+                    FitParamTemp->SetX1NDC(FitParamTemp->GetX1NDC() + xOffset), FitParamTemp->SetX2NDC(FitParamTemp->GetX2NDC() + xOffset);
+                    FitParamTemp->SetY1NDC(FitParamTemp->GetY1NDC() + yOffset), FitParamTemp->SetY2NDC(FitParamTemp->GetY2NDC() + yOffset);
 
                     Histogram1DTemp->Draw(), gPad->Update();
                     func->Draw("same && c");

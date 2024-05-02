@@ -159,7 +159,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                         SliceVariant1 = "#epsilon_{eff}^{" + ParticleNameShort1 + "}";
 
                         TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel,
-                                     "Reco/TL ratio", (SliceVariant1 + "(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                                     "Reco/TL ratio", (SliceVariant1 + "(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
                     } else if (findSubstring(Histogram2DTempName, " AMap ")) {
                         SliceVariant1 = "reco", SliceVariant2 = "Filtered";
 
@@ -171,7 +171,8 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     }
 
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel,
-                                 "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                                 "(Reco./TL)", ("#epsilon_{eff}(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+//                                 "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
 
                     if (findSubstring(Histogram2DTempName, "TL ") && !findSubstring(Histogram2DTempName, "/TL")) {
@@ -245,7 +246,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                         SliceVariant1 = "#epsilon_{eff}^{" + ParticleNameShort1 + "}";
 
                         TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel,
-                                     "Reco/TL ratio", (SliceVariant1 + "(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                                     "Reco/TL ratio", (SliceVariant1 + "(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
                     } else if (findSubstring(Histogram2DTempName, " AMap ")) {
                         SliceVariant1 = "reco", SliceVariant2 = "Filtered";
 
@@ -257,7 +258,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     }
 
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel,
-                                 "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                                 "(Reco./TL)", ("#epsilon_{eff}(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
                     Histogram2DTemp->Draw("colz"), gPad->Update();
                 }
@@ -386,7 +387,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                         SliceVariant1 = "#epsilon_{eff}^{" + ParticleNameShort1 + "}";
 
                         TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel,
-                                     "Reco/TL ratio", (SliceVariant1 + "(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                                     "Reco/TL ratio", (SliceVariant1 + "(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
                     } else if (findSubstring(Histogram2DTempName, " AMap ")) {
                         SliceVariant1 = "reco", SliceVariant2 = "Filtered";
 
@@ -398,7 +399,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     }
 
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel,
-                                 "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                                 "(Reco./TL)", ("#epsilon_{eff}(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
                     if (findSubstring(Histogram2DTempName, "TL ") && !findSubstring(Histogram2DTempName, "/TL")) {
                         Sep_canv->cd();
@@ -471,7 +472,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                         SliceVariant1 = "#epsilon_{eff}^{" + ParticleNameShort1 + "}";
 
                         TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel,
-                                     "Reco/TL ratio", (SliceVariant1 + "(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                                     "Reco/TL ratio", (SliceVariant1 + "(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
                     } else if (findSubstring(Histogram2DTempName, " AMap ")) {
                         SliceVariant1 = "reco", SliceVariant2 = "Filtered";
 
@@ -483,7 +484,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     }
 
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel,
-                                 "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                                 "(Reco./TL)", ("#epsilon_{eff}(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
                     Histogram2DTemp->Draw("colz"), gPad->Update();
                 }
@@ -625,7 +626,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                 SliceVariant1 = "#epsilon_{eff}^{" + ParticleNameShort1 + "}";
 
                 TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel,
-                             "Reco/TL ratio", (SliceVariant1 + "(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                             "Reco/TL ratio", (SliceVariant1 + "(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
             } else if (findSubstring(TL_Histogram2DName, " AMap ")) {
                 SliceVariant1 = "reco", SliceVariant2 = "Filtered";
 
@@ -637,7 +638,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             }
 
             TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel,
-                         "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                         "(Reco./TL)", ("#epsilon_{eff}(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
             if (Sep_plots) {
                 Sep_canv->cd();
@@ -702,7 +703,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                 SliceVariant1 = "#epsilon_{eff}^{" + ParticleNameShort1 + "}";
 
                 TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel,
-                             "Reco/TL ratio", (SliceVariant1 + "(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                             "Reco/TL ratio", (SliceVariant1 + "(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
             } else if (findSubstring(Reco_Histogram2DName, " AMap ")) {
                 SliceVariant1 = "reco", SliceVariant2 = "Filtered";
 
@@ -714,7 +715,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             }
 
             TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel,
-                         "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                         "(Reco./TL)", ("#epsilon_{eff}(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
             if (Sep_plots) {
                 Sep_canv->cd();
@@ -777,7 +778,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                 SliceVariant1 = "#epsilon_{eff}^{" + ParticleNameShort1 + "}";
 
                 TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel,
-                             "Reco/TL ratio", (SliceVariant1 + "(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                             "Reco/TL ratio", (SliceVariant1 + "(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
             } else if (findSubstring(Ratio_Histogram2DName, " AMap ")) {
                 SliceVariant1 = "reco", SliceVariant2 = "Filtered";
 
@@ -789,7 +790,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             }
 
             TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel,
-                         "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                         "(Reco./TL)", ("#epsilon_{eff}(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
             if (Sep_plots) {
                 Sep_canv->cd();
@@ -860,7 +861,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                 SliceVariant1 = "#epsilon_{eff}^{" + ParticleNameShort1 + "}";
 
                 TitleAligner(Finalized_AMaps_Histogram2D, Finalized_AMaps_Histogram2D_Title, Finalized_AMaps_Histogram2D_xLabel, Finalized_AMaps_Histogram2D_yLabel,
-                             "Reco/TL ratio", (SliceVariant1 + "(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                             "Reco/TL ratio", (SliceVariant1 + "(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
             } else if (findSubstring(Finalized_AMaps_Histogram2DName, " AMap ")) {
                 SliceVariant1 = "reco", SliceVariant2 = "Filtered";
 
@@ -873,7 +874,7 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             }
 
             TitleAligner(Finalized_AMaps_Histogram2D, Finalized_AMaps_Histogram2D_Title, Finalized_AMaps_Histogram2D_xLabel, Finalized_AMaps_Histogram2D_yLabel,
-                         "(Reco./TL)", ("#epsilon_{eff}(#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
+                         "(Reco./TL)", ("#epsilon_{eff}(P_{" + ParticleNameShort1 + "},#theta_{" + ParticleNameShort1 + "},#phi_{" + ParticleNameShort1 + "})"));
 
             if (Sep_plots) {
                 Sep_canv->cd();
