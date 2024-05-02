@@ -165,7 +165,7 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    bool apply_cuts = false; // master ON/OFF switch for applying cuts
+    bool apply_cuts = true; // master ON/OFF switch for applying cuts
     bool clas12ana_particles = true; //TODO: move form here!
     bool only_preselection_cuts = false; // keep as false for regular runs!
     bool only_electron_quality_cuts = false; // keep as false for regular runs!
@@ -1734,7 +1734,9 @@ void EventAnalyser() {
     //<editor-fold desc="ECAL edge histograms (FD only)">
 
     //<editor-fold desc="ECAL coordinates vs. SF plots (1e cut, FD)">
-    hPlot2D hVcal_VS_EoP_1e_cut_BC_PCAL, hVcal_VS_EoP_1e_cut_AC_PCAL, hWcal_VS_EoP_1e_cut_BC_PCAL, hWcal_VS_EoP_1e_cut_AC_PCAL;
+    hPlot2D hVcal_VS_EoP_1e_cut_BC_PCAL, hVcal_VS_EoP_1e_cut_AC_PCAL;
+    hPlot2D hWcal_VS_EoP_1e_cut_BC_PCAL, hWcal_VS_EoP_1e_cut_AC_PCAL;
+    hPlot2D hUcal_VS_EoP_1e_cut_BC_PCAL, hUcal_VS_EoP_1e_cut_AC_PCAL; // TODO: add this to all final states
 
     if (!apply_cuts) {
         hVcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Vcal vs. SF BC", "ECAL V coordinate vs. SF - before cuts", "ECAL V coordinate [cm]", "Sampling Fraction (SF)",
@@ -1750,6 +1752,13 @@ void EventAnalyser() {
         hWcal_VS_EoP_1e_cut_AC_PCAL = hPlot2D("1e cut", "PCAL", "Wcal vs. SF AC", "ECAL W coordinate vs. SF - after cuts", "ECAL W coordinate [cm]", "Sampling Fraction (SF)",
                                               directories.Fiducial_Directory_map["Edge_1e_BC_PCAL_Directory"], "02_Wcal_VS_EoP_PCAL_1e_cut_AC", 0, 50, SF_lboundary,
                                               SF_uboundary, numTH2Dbins, numTH2Dbins);
+
+        hUcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Ucal vs. SF BC", "ECAL U coordinate vs. SF - before cuts", "ECAL U coordinate [cm]", "Sampling Fraction (SF)",
+                                              directories.Fiducial_Directory_map["Edge_1e_BC_PCAL_Directory"], "03_Ucal_VS_EoP_PCAL_1e_cut_BC", 0, 50, SF_lboundary,
+                                              SF_uboundary, 100, 100);
+        hUcal_VS_EoP_1e_cut_AC_PCAL = hPlot2D("1e cut", "PCAL", "Ucal vs. SF AC", "ECAL U coordinate vs. SF - after cuts", "ECAL U coordinate [cm]", "Sampling Fraction (SF)",
+                                              directories.Fiducial_Directory_map["Edge_1e_BC_PCAL_Directory"], "03_Ucal_VS_EoP_PCAL_1e_cut_AC", 0, 50, SF_lboundary,
+                                              SF_uboundary, 100, 100);
     } else {
         hVcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Vcal vs. SF", "ECAL V coordinate vs. SF", "ECAL V coordinate [cm]", "Sampling Fraction (SF)",
                                               directories.Fiducial_Directory_map["Edge_1e_BC_PCAL_Directory"], "01_Vcal_VS_EoP_PCAL_1e_cut", 0, 50, SF_lboundary, SF_uboundary,
@@ -1757,7 +1766,14 @@ void EventAnalyser() {
         hWcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Wcal vs. SF", "ECAL W coordinate vs. SF", "ECAL W coordinate [cm]", "Sampling Fraction (SF)",
                                               directories.Fiducial_Directory_map["Edge_1e_BC_PCAL_Directory"], "02_Wcal_VS_EoP_PCAL_1e_cut", 0, 50, SF_lboundary, SF_uboundary,
                                               numTH2Dbins, numTH2Dbins);
+        hUcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Ucal vs. SF", "ECAL U coordinate vs. SF", "ECAL U coordinate [cm]", "Sampling Fraction (SF)",
+                                              directories.Fiducial_Directory_map["Edge_1e_BC_PCAL_Directory"], "03_Ucal_VS_EoP_PCAL_1e_cut", 0, 50, SF_lboundary, SF_uboundary,
+                                              100, 100);
     }
+
+    hPlot2D hPCAL_acceptance_1e_cut = hPlot2D("1e cut", "PCAL", "Electron PCAL acceptance", "Electron PCAL acceptance", "x [cm]", "y [cm]",
+                                              directories.Fiducial_Directory_map["Edge_1e_BC_PCAL_Directory"], "04_Electron_PCAL_acceptance_1e_cut",
+                                              -400, 400, -400, 400, 100, 100); // TODO: add this to all final states
     //</editor-fold>
 
     //<editor-fold desc="ECAL coordinates vs. SF plots vs. SF plots (1p, FD)">
@@ -11944,18 +11960,27 @@ void EventAnalyser() {
             /* Fiducial plots before cuts */
             hVcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(clas12::PCAL)->getLv(), EoP_e, Weight);
             hWcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(clas12::PCAL)->getLw(), EoP_e, Weight);
+            hUcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(clas12::PCAL)->getLu(), EoP_e, Weight);
 
             /* Fiducial plots after cuts */
             if (electrons[0]->cal(clas12::PCAL)->getLv() >= clasAna.getEcalEdgeCuts()) {
                 hVcal_VS_EoP_1e_cut_AC_PCAL.hFill(electrons[0]->cal(clas12::PCAL)->getLv(), EoP_e, Weight);
             }
+
             if (electrons[0]->cal(clas12::PCAL)->getLw() >= clasAna.getEcalEdgeCuts()) {
                 hWcal_VS_EoP_1e_cut_AC_PCAL.hFill(electrons[0]->cal(clas12::PCAL)->getLw(), EoP_e, Weight);
+            }
+
+            if (electrons[0]->cal(clas12::PCAL)->getLu() >= clasAna.getEcalEdgeCuts()) {
+                hUcal_VS_EoP_1e_cut_AC_PCAL.hFill(electrons[0]->cal(clas12::PCAL)->getLu(), EoP_e, Weight);
             }
         } else {
             hVcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(clas12::PCAL)->getLv(), EoP_e, Weight);
             hWcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(clas12::PCAL)->getLw(), EoP_e, Weight);
+            hUcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(clas12::PCAL)->getLu(), EoP_e, Weight);
         }
+
+        hPCAL_acceptance_1e_cut.hFill(electrons[0]->cal(clas12::PCAL)->getX(), electrons[0]->cal(clas12::PCAL)->getY(), Weight);
 
         /* Testing Nphe cuts */
         int Nphe = electrons[0]->che(clas12::HTCC)->getNphe();
@@ -17312,13 +17337,18 @@ void EventAnalyser() {
         //<editor-fold desc="ECAL coordinates vs. SF plots (1e cut, FD only)">
         if (!apply_cuts) {
             hVcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
-            hWcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
             hVcal_VS_EoP_1e_cut_AC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+            hWcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
             hWcal_VS_EoP_1e_cut_AC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+            hUcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+            hUcal_VS_EoP_1e_cut_AC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
         } else {
             hVcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
             hWcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+            hUcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
         }
+
+        hPCAL_acceptance_1e_cut.hDrawAndSave(SampleName, c1, plots, false);
         //</editor-fold>
 
         //<editor-fold desc="ECAL coordinates vs. SF plots (1p, FD only)">
@@ -23834,13 +23864,13 @@ void EventAnalyser() {
         cout << "num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd:\t" << pid.num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd << "\n\n";
 
         cout << "num_of_events_2p (from monitoring):\t" << num_of_events_2p_wFakeProtons - pid.num_of_RM_2p_events_sCTOFhp - pid.num_of_RM_2p_events_dCDaFDd +
-                                                             pid.num_of_AD_2p_events_from_3p_sCTOFhp + pid.num_of_AD_2p_events_from_4p_sCTOFhp +
-                                                             pid.num_of_AD_2p_events_from_3p_dCDaFDd + pid.num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
+                                                           pid.num_of_AD_2p_events_from_3p_sCTOFhp + pid.num_of_AD_2p_events_from_4p_sCTOFhp +
+                                                           pid.num_of_AD_2p_events_from_3p_dCDaFDd + pid.num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
 
         cout << "num_of_events_2p (from monitoring; no mixed):\t" << num_of_events_2p_wFakeProtons - pid.num_of_RM_2p_events_sCTOFhp - pid.num_of_RM_2p_events_dCDaFDd +
-                                                                       pid.num_of_AD_2p_events_from_3p_sCTOFhp + pid.num_of_AD_2p_events_from_4p_sCTOFhp +
-                                                                       pid.num_of_AD_2p_events_from_3p_dCDaFDd + pid.num_of_AD_2p_events_from_4p_dCDaFDd -
-                                                                       pid.num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd << "\n\n";
+                                                                     pid.num_of_AD_2p_events_from_3p_sCTOFhp + pid.num_of_AD_2p_events_from_4p_sCTOFhp +
+                                                                     pid.num_of_AD_2p_events_from_3p_dCDaFDd + pid.num_of_AD_2p_events_from_4p_dCDaFDd -
+                                                                     pid.num_of_AD_2p_events_from_mixed_sCTOFhp_dCDaFDd << "\n\n";
     }
 
     cout << "#(events) 2p:\t\t\t\t" << num_of_events_2p << "\n\n";
