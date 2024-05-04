@@ -187,11 +187,12 @@ void EventAnalyser() {
     bool apply_chi2_cuts_1e_cut = true;
 
     // My analysis cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
+
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
+    bool apply_nucleon_cuts = false; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
     //TODO: automate adding upper mom. th. to nucleon cuts (for nRes calc)
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
     bool apply_fiducial_cuts = false;
@@ -220,7 +221,8 @@ void EventAnalyser() {
     if (!apply_nucleon_cuts) { apply_nucleon_physical_cuts = false; }
 
     if (!apply_nucleon_physical_cuts) {
-        apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndCorr = false;
+        apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndCorr = false;
+//        apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndCorr = false;
     } else {
         if (Calculate_momResS2) { apply_nucleon_SmearAndCorr = true; }
     }
@@ -9750,6 +9752,17 @@ void EventAnalyser() {
             /* Setting variables to log beta fit parameters into (i.e., no cut!) */
             Beta_max_cut_ABF_FD_n_from_ph = DSCuts("Beta_cut_ECAL", "FD-ECAL", "", "nFDpCD", 1, -9999, 9999);
             Beta_max_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_cut_ECAL_apprax", "FD-ECAL_apprax", "", "1n", 1, -9999, 9999);
+
+            if (apply_nBeta_fit_cuts) {
+                clasAna.readInputParam((NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName +
+                                        ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
+
+                n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
+                TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
+                Beta_cut.SetUpperCut(clasAna.getNeutralBetaCut());          // Log values of beta fit cut (for monitoring)
+                Beta_cut.SetMean(clasAna.getNeutralBetaCutMean());          // Log values of beta fit cut (for monitoring)
+            }
+
         } else {
             cout << "\n\nLoading fitted Beta cuts...\n\n";
             clasAna.readInputParam((NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName +
@@ -9777,6 +9790,16 @@ void EventAnalyser() {
 
         clasAna.printParams();
     } else if (only_preselection_cuts || only_electron_quality_cuts) {
+        if (apply_nBeta_fit_cuts) {
+            clasAna.readInputParam((NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName +
+                                    ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
+
+            n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
+            TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
+            Beta_cut.SetUpperCut(clasAna.getNeutralBetaCut());          // Log values of beta fit cut (for monitoring)
+            Beta_cut.SetMean(clasAna.getNeutralBetaCutMean());          // Log values of beta fit cut (for monitoring)
+        }
+
         // Cuts on all charged particles:
         if (only_preselection_cuts) {
             if (apply_Vz_cuts) {
