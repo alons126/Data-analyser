@@ -471,6 +471,13 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
         }
 
         TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "ratio", "- histogram ratio");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "nucCD", "pCD");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "{nuc,FD}", "{nucFD}");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "{p,CD}", "{pCD}");
+
+        if (findSubstring(Sim_Histogram1D->GetYaxis()->GetTitle(), "r_{#theta}") && findSubstring(Sim_Histogram1D->GetTitle(), "Electron")) {
+            TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "r_{#theta}", "r_{#theta_{e}}");
+        }
 
         Sim_Histogram1D->Draw(), gPad->Update();
         Data_Histogram1D->Draw("same"), gPad->Update();
@@ -534,6 +541,18 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
         Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 5);
         Data_Histogram1D->GetYaxis()->SetRangeUser(0., 5);
         DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range5");
+
+        Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 7);
+        Data_Histogram1D->GetYaxis()->SetRangeUser(0., 7);
+        DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range7");
+
+        Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 10);
+        Data_Histogram1D->GetYaxis()->SetRangeUser(0., 10);
+        DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range10");
+
+        Sim_Histogram1D->GetYaxis()->SetRangeUser(0., 20);
+        Data_Histogram1D->GetYaxis()->SetRangeUser(0., 20);
+        DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "Range20");
     } else {
         DrawPlot(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "");
     }

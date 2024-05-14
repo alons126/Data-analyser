@@ -70,7 +70,7 @@ double SetyOffset2D(const bool &ShowStats) {
 }
 
 void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *filename, const char *Histogram2DName,
-                   const string &SampleName, const string &SavePath, const string &SaveName,
+                   const string &SampleName, const string &SavePath, const string &SaveName, const bool &Results_plots = false,
                    const string &HistName_Denominator = "", const string &HistName_Numerator = "") {
     cout << "\n\n";
 
@@ -497,7 +497,24 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 //                         "#deltaP_{T,tot} [GeV]", "#deltaP_{T,tot} [GeV/c]");
 
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
-                         "ratio", "- histogram ratio");
+                         "ratio", "- 1nFD1pCD/1pFD1pCD");
+//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+//                         "ratio", "- #frac{1nFD1pCD}{1pFD1pCD}");
+//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
+//                         "ratio", "- histogram ratio");
+
+            if (Results_plots) {
+                string Filename = filename, Histogram2D_title_2 = Histogram2D->GetTitle();
+                string Histogram2D_title_2_replacement;
+
+                if (findSubstring(Filename, "simulation")) {
+                    Histogram2D_title_2_replacement = Histogram2D_title_2 + " (simulation)";
+                } else if (findSubstring(Filename, "data")) {
+                    Histogram2D_title_2_replacement = Histogram2D_title_2 + " (data)";
+                }
+
+                TitleAligner(Histogram2D, Histogram2D_title_2, Histogram2D_xLabel, Histogram2D_yLabel, Histogram2D_title_2, Histogram2D_title_2_replacement);
+            }
 
             Histogram2D->Draw("colz"), gPad->Update();
 
