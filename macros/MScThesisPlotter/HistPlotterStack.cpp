@@ -357,23 +357,30 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
         TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "(1pFD1pCD)", "in 1pFD1pCD");
         TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "(1nFD1pCD)", "in 1nFD1pCD");
 
-#if PresentationMode
-        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "1pFD1pCD", "2p");
-        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "1nFD1pCD", "1n1p");
-#endif
-
         if (RatioTopology == "1N") {
             TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "FD proton", "Proton");
             TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "Leading FD neutron", "Neutron");
             TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "FD nucleon", "Nucleon");
+
+#if PresentationMode
             TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{p} [GeV/c]", "P_{pFD} [GeV/c]");
             TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{n} [GeV/c]", "P_{nFD} [GeV/c]");
+#else
+            TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{p} [GeV/c]", "P_{pFD} [GeV]");
+            TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "P_{n} [GeV/c]", "P_{nFD} [GeV]");
+#endif
+
         }
 
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
             Sim_Histogram1D->GetYaxis()->SetTitle(FSRyLabel.c_str());
             Data_Histogram1D->GetYaxis()->SetTitle(FSRyLabel.c_str());
         }
+
+#if PresentationMode
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "1pFD1pCD", "2p");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "1nFD1pCD", "1n1p");
+#endif
 
         TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "FD neutron", "Forward-going neutron");
         TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "FD Neutron", "Forward-going neutron");

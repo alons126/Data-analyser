@@ -17,7 +17,6 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
-//#include "../../source/classes/hData/hData.cpp"
 #include "../../source/functions/GeneralFunctions.h"
 #include "../../source/constants.h"
 
@@ -71,12 +70,17 @@ double SetyOffset1D_(const bool &ShowStats) {
 
 void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char *filenameDir, const char *Graph1DName, const string &SampleName, const string &SavePath,
                     const string &SaveName) {
+    bool PresMode = false;
+
+#if PresentationMode
+    PresMode = true;
+#endif
+
     cout << "\n\n";
     hData utilities;
 
     const string Graph1DNameCopy = Graph1DName;
 
-//    HistogramCanvas->Clear();
     TCanvas *c1 = new TCanvas("can1", "can2", utilities.GetStandardCanvasWidth() * 2, utilities.GetStandardCanvasHeight() * 2); // normal res
     c1->cd()->SetGrid(), c1->cd()->SetBottomMargin(0.14), c1->cd()->SetLeftMargin(0.18), c1->cd()->SetRightMargin(0.12), c1->cd()->SetTopMargin(0.12), c1->cd();
 
@@ -155,18 +159,7 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
 
     Graph1D->SetMarkerSize(2);
 
-//    Graph1D->GetXaxis()->SetTitleSize(0.06);
-//    Graph1D->GetXaxis()->SetLabelSize(0.0425);
-//    Graph1D->GetXaxis()->CenterTitle(true);
-////    Graph1D->GetYaxis()->SetTitle("Number of events");
-//    Graph1D->GetYaxis()->SetTitleSize(0.06);
-//    Graph1D->GetYaxis()->SetLabelSize(0.0425);
-//    Graph1D->GetYaxis()->CenterTitle(true);
-//    Graph1D->SetLineWidth(LineWidth);
-//    MScThesisPlotsList->Add(Graph1D);
-
-    string Graph1D_Title = Graph1D->GetTitle();
-    string Graph1D_Title1 = Graph1D_Title;
+    string Graph1D_Title = Graph1D->GetTitle(), Graph1D_Title1 = Graph1D_Title;
     string Graph1D_xLabel = Graph1D->GetXaxis()->GetTitle(), Graph1D_yLabel = Graph1D->GetYaxis()->GetTitle();
 
     TitleAligner(utilities, Graph1D, Graph1D_Title, Graph1D_xLabel, "#bar{P}^{reco}_{nFD}", "#LTP^{reco}_{nFD}#GT");
@@ -196,7 +189,6 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
         auto FuncList = Graph1D->GetListOfFunctions();
         FuncList->Clear();
 
-//        gStyle->SetTitleY(gStyle->GetTitleY() - 0.025);
         Graph1D->Draw("ap"), gPad->Update();
 
         TLine *UpperMomKCut = new TLine(2.2, gPad->GetUymin(), 2.2, gPad->GetUymax());
@@ -223,7 +215,6 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
         string title = title0 + title1 + " (stage 1)";
         Graph1D->SetTitle(title.c_str());
 
-//        gStyle->SetTitleY(gStyle->GetTitleY() - 0.025);
         Graph1D->Draw("ap"), gPad->Update();
     } else if ((Graph1DNameCopy == "reco_f_Smear_pol1_wKC") &&
                findSubstring(filename, "momResS2T_v3")) {
@@ -241,7 +232,6 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
         string title = title0 + title1 + " (stage 2)";
         Graph1D->SetTitle(title.c_str());
 
-//        gStyle->SetTitleY(gStyle->GetTitleY() - 0.025);
         Graph1D->Draw("ap"), gPad->Update();
     } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") &&
                findSubstring(Graph1D_Title1, "Proton") &&
@@ -255,7 +245,6 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
         string title = title0 + " - before smearing";
         Graph1D->SetTitle(title.c_str());
 
-//        gStyle->SetTitleY(gStyle->GetTitleY() - 0.025);
         Graph1D->Draw("ap"), gPad->Update();
     } else if ((Graph1DNameCopy == "truth_f_Smear_pol1_wKC") &&
                findSubstring(Graph1D_Title1, "Proton") &&
@@ -265,7 +254,6 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
         string title = title0 + " - after smearing";
         Graph1D->SetTitle(title.c_str());
 
-//        gStyle->SetTitleY(gStyle->GetTitleY() - 0.025);
         Graph1D->Draw("ap"), gPad->Update();
     } else {
         Graph1D->Draw("ap"), gPad->Update();

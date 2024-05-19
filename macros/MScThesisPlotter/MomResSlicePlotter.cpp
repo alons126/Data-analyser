@@ -73,10 +73,15 @@ Double_t CFitFunction(Double_t *v, Double_t *par) {
 
 void MomResSlicePlotter(const char *filename, const string &ParticleNameShortInput, const int &InitialSlice, const int &FinalSlice, const string &MomentumTyp,
                         const string &OutputPathInput = "") {
+    bool PresMode = false;
+
+#if PresentationMode
+    PresMode = true;
+#endif
+
     bool PrintOutHistName = false;
     bool PrintOut = false;
     bool ShowStats = false;
-
     string OutputPath = OutputPathInput + "/" + ParticleNameShortInput + "_" + MomentumTyp + "_MomResSlices";
     system(("mkdir -p " + OutputPath).c_str());
 
