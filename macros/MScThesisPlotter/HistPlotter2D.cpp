@@ -148,26 +148,32 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
         string Histogram2D_xLabel = Histogram2D->GetXaxis()->GetTitle();
         string Histogram2D_yLabel = Histogram2D->GetYaxis()->GetTitle();
 
-        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1nFD, FD)", " in 1nFD");
-        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1p", "1pFD");
-        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1n", "1nFD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1nFD, FD)", " in 1nFD0pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1p", "1pFD0pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1n", "1nFD0pCD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "pFDpCD", "1pFD1pCD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "nFDpCD", "1nFD1pCD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (All Int., 1pFD1pCD)", " in 1pFD1pCD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (All Int., 1nFD1pCD)", " in 1nFD1pCD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (All Int., 1pFD1pCD, FD)", " in 1pFD1pCD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (All Int., 1nFD1pCD, FD)", " in 1nFD1pCD");
-        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1pFD, FD)", " in 1pFD");
-        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1nFD, FD)", " in 1nFD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1pFD, FD)", " in 1pFD0pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1nFD, FD)", " in 1nFD0pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1pFD0pCD, FD)", " in 1pFD0pCD");
+        TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1nFD0pCD, FD)", " in 1nFD0pCD");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e_cut, FD)", "");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e cut, FD)", "");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e_cut)", "");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " (1e cut)", "");
 
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "[Deg]", "[#circ]");
+
+#if PresentationMode
+#else
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "[GeV/c]", "[GeV]");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "[GeV/c^{2}]", "[GeV]");
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
+#endif
 
         TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, " - ZOOMIN", " zoom-in");
 
@@ -224,8 +230,13 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             LowerECALcoorCut->Draw("same");
         } else if (Histogram2DNameCopy == "#beta vs. P (electrons only, 1e cut)") {
             Histogram2D->SetTitle("Electron #beta_{e} vs. momentum");
-//            Histogram2D->GetXaxis()->SetTitle("P_{e} [GeV/c]");
+
+#if PresentationMode
+            Histogram2D->GetXaxis()->SetTitle("P_{e} [GeV/c]");
+#else
             Histogram2D->GetXaxis()->SetTitle("P_{e} [GeV]");
+#endif
+
             Histogram2D->GetYaxis()->SetTitle("#beta_{e}");
             Histogram2D->Draw("colz"), gPad->Update();
 
@@ -300,8 +311,13 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             TLegendEntry *LowerMomThEntry;
 
+#if PresentationMode
+            LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+            Histogram2D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
+#else
             LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
             Histogram2D->GetXaxis()->SetTitle("P_{p} [GeV]");
+#endif
 
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else if (findSubstring(Histogram2DNameCopy, "P_{#pi^{+}} vs. #theta_{#pi^{+}}") ||
@@ -334,6 +350,16 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             TLegendEntry *LowerMomThEntry;
 
+
+#if PresentationMode
+            if (findSubstring(Histogram2DNameCopy, "#pi^{+}")) {
+                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+                Histogram2D->GetXaxis()->SetTitle("P_{#pi^{+}} [GeV/c]");
+            } else if (findSubstring(Histogram2DNameCopy, "#pi^{-}")) {
+                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+                Histogram2D->GetXaxis()->SetTitle("P_{#pi^{-}} [GeV/c]");
+            }
+#else
             if (findSubstring(Histogram2DNameCopy, "#pi^{+}")) {
                 LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
                 Histogram2D->GetXaxis()->SetTitle("P_{#pi^{+}} [GeV]");
@@ -341,6 +367,7 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
                 Histogram2D->GetXaxis()->SetTitle("P_{#pi^{-}} [GeV]");
             }
+#endif
 
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else if (findSubstring(Histogram2DNameCopy, "R_{nFD} vs. P^{reco}_{nFD}") ||
@@ -366,7 +393,14 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
             auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset,
                                       Legend_x2_TwoLines - 0.15 + xOffset + 0.025 * 4, Legend_y2_TwoLines + yOffset);
-            TLegendEntry *BeamELineEntry = Legend->AddEntry(BeamELine, ("E_{beam} = " + to_string_with_precision(beamE, 3) + " [GeV]").c_str(), "l");
+            TLegendEntry *BeamELineEntry;
+
+#if PresentationMode
+            BeamELineEntry = Legend->AddEntry(BeamELine, ("E_{beam} = " + to_string_with_precision(beamE, 3) + " [GeV/c]").c_str(), "l");
+#else
+            BeamELineEntry = Legend->AddEntry(BeamELine, ("E_{beam} = " + to_string_with_precision(beamE, 3) + " [GeV]").c_str(), "l");
+#endif
+
             TLegendEntry *LowerThetaLimEntry = Legend->AddEntry(LowerThetaLim, ("#theta_{pCD} = " + to_string(35) + " [#circ]").c_str(), "l");
             Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
         } else if (findSubstring(Histogram2DNameCopy, "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e}}") ||
@@ -483,25 +517,15 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                          "#vec{q}", "#font[62]{q}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "[Deg]", "[#circ]");
-//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
-//                         "W [GeV]", "W [GeV/c^{2}]");
-//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
-//                         "W  [GeV]", "W  [GeV/c^{2}]");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "vs. W", "vs. hadronic mass");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "E_{cal} vs. #delta#alpha_{T,tot}", "#delta#alpha_{T,tot} vs. E_{cal}");
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "E_{cal} vs. #deltaP_{T,tot}", "#deltaP_{T,tot} vs. E_{cal}");
-//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
-//                         "#deltaP_{T,tot} [GeV]", "#deltaP_{T,tot} [GeV/c]");
 
             TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
                          "ratio", "- 1nFD1pCD/1pFD1pCD");
-//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
-//                         "ratio", "- #frac{1nFD1pCD}{1pFD1pCD}");
-//            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel,
-//                         "ratio", "- histogram ratio");
 
             if (Results_plots) {
                 string Filename = filename, Histogram2D_title_2 = Histogram2D->GetTitle();
@@ -515,6 +539,13 @@ void HistPlotter2D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
 
                 TitleAligner(Histogram2D, Histogram2D_title_2, Histogram2D_xLabel, Histogram2D_yLabel, Histogram2D_title_2, Histogram2D_title_2_replacement);
             }
+
+#if PresentationMode
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1pFD0pCD", "1p");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1nFD0pCD", "1n");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1pFD1pCD", "2p");
+            TitleAligner(Histogram2D, Histogram2D_Title, Histogram2D_xLabel, Histogram2D_yLabel, "1nFD1pCD", "1n1p");
+#endif
 
             Histogram2D->Draw("colz"), gPad->Update();
 

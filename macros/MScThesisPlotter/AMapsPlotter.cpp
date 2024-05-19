@@ -133,8 +133,13 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (75x75) (AMaps)", "");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (AMaps)", "");
 
+#if PresentationMode
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[GeV/c]", "[GeV/c]");
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "#leq6.00 [GeV/c]", "#leq5.986 [GeV/c]");
+#else
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[GeV/c]", "[GeV]");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "#leq6.00 [GeV]", "#leq5.986 [GeV]");
+#endif
 
                     string SliceVariant1, SliceVariant2, TitleInitial2Replace, TitleInitial2Replacment;
 
@@ -220,8 +225,13 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (75x75) (AMaps)", "");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (AMaps)", "");
 
+#if PresentationMode
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[GeV/c]", "[GeV/c]");
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "#leq6.00 [GeV/c]", "#leq5.986 [GeV/c]");
+#else
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[GeV/c]", "[GeV]");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "#leq6.00 [GeV]", "#leq5.986 [GeV]");
+#endif
 
                     string SliceVariant1, SliceVariant2, TitleInitial2Replace, TitleInitial2Replacment;
 
@@ -362,8 +372,14 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (75x75) (AMaps)", "");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (AMaps)", "");
 
+#if PresentationMode
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[GeV/c]", "[GeV/c]");
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "#leq6.00 [GeV/c]", "#leq5.986 [GeV/c]");
+#else
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[GeV/c]", "[GeV]");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "#leq6.00 [GeV]", "#leq5.986 [GeV]");
+#endif
+
                     string SliceVariant1, SliceVariant2, TitleInitial2Replace, TitleInitial2Replacment;
 
                     if (findSubstring(Histogram2DTempName, "TL ") && !findSubstring(Histogram2DTempName, "/TL")) {
@@ -446,8 +462,13 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (75x75) (AMaps)", "");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, " (AMaps)", "");
 
+#if PresentationMode
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[GeV/c]", "[GeV/c]");
+                    TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "#leq6.00 [GeV/c]", "#leq5.986 [GeV/c]");
+#else
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "[GeV/c]", "[GeV]");
                     TitleAligner(Histogram2DTemp, Histogram2DTemp_Title, Histogram2DTemp_xLabel, Histogram2DTemp_yLabel, "#leq6.00 [GeV]", "#leq5.986 [GeV]");
+#endif
 
                     string SliceVariant1, SliceVariant2, TitleInitial2Replace, TitleInitial2Replacment;
 
@@ -600,8 +621,13 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel,
                          "TL Neutron Hit Map", (TitlenFDReplacment + " of TL neutrons"));
 
+#if PresentationMode
+            TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel, "[GeV/c]", "[GeV/c]");
+            TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel, "#leq6.00 [GeV/c]", "#leq5.986 [GeV/c]");
+#else
             TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel, "[GeV/c]", "[GeV]");
             TitleAligner(TL_Histogram2D, TL_Histogram2D_Title, TL_Histogram2D_xLabel, TL_Histogram2D_yLabel, "#leq6.00 [GeV]", "#leq5.986 [GeV]");
+#endif
 
             string SliceVariant1, SliceVariant2, TitleInitial2Replace, TitleInitial2Replacment;
 
@@ -677,8 +703,13 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel,
                          "Reco Neutron Hit Map", (TitlenFDReplacment + " of reco neutrons"));
 
+#if PresentationMode
+            TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel, "[GeV/c]", "[GeV/c]");
+            TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel, "#leq6.00 [GeV/c]", "#leq5.986 [GeV/c]");
+#else
             TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel, "[GeV/c]", "[GeV]");
             TitleAligner(Reco_Histogram2D, Reco_Histogram2D_Title, Reco_Histogram2D_xLabel, Reco_Histogram2D_yLabel, "#leq6.00 [GeV]", "#leq5.986 [GeV]");
+#endif
 
             string SliceVariant1, SliceVariant2, TitleInitial2Replace, TitleInitial2Replacment;
 
@@ -752,8 +783,13 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel, " (75x75) (AMaps)", "");
             TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel, " (AMaps)", "");
 
+#if PresentationMode
+            TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel, "[GeV/c]", "[GeV/c]");
+            TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel, "#leq6.00 [GeV/c]", "#leq5.986 [GeV/c]");
+#else
             TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel, "[GeV/c]", "[GeV]");
             TitleAligner(Ratio_Histogram2D, Ratio_Histogram2D_Title, Ratio_Histogram2D_xLabel, Ratio_Histogram2D_yLabel, "#leq6.00 [GeV]", "#leq5.986 [GeV]");
+#endif
 
             string SliceVariant1, SliceVariant2, TitleInitial2Replace, TitleInitial2Replacment;
 
@@ -833,8 +869,13 @@ void plotHistograms(const char *filename, const string &ParticleNameShort1, cons
             TitleAligner(Finalized_AMaps_Histogram2D, Finalized_AMaps_Histogram2D_Title, Finalized_AMaps_Histogram2D_xLabel, Finalized_AMaps_Histogram2D_yLabel,
                          "Neutron AMap for", ("Filtered " + TitlenFDReplacment + " of reco neutrons for"));
 
+#if PresentationMode
+            TitleAligner(Finalized_AMaps_Histogram2D, Finalized_AMaps_Histogram2D_Title, Finalized_AMaps_Histogram2D_xLabel, Finalized_AMaps_Histogram2D_yLabel,
+                         "[GeV/c]", "[GeV/c]");
+#else
             TitleAligner(Finalized_AMaps_Histogram2D, Finalized_AMaps_Histogram2D_Title, Finalized_AMaps_Histogram2D_xLabel, Finalized_AMaps_Histogram2D_yLabel,
                          "[GeV/c]", "[GeV]");
+#endif
 
             string SliceVariant1, SliceVariant2, TitleInitial2Replace, TitleInitial2Replacment;
 

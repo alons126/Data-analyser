@@ -504,15 +504,22 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
 
 //        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
 //        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "nFDpCD", "1nFD1pCD");
-//        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD");
-//        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD");
+//        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD0pCD");
+//        TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD0pCD");
 //        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "pFDpCD", "1pFD1pCD");
 //        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "nFDpCD", "1nFD1pCD");
-//        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD");
-//        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD");
+//        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1p", "1pFD0pCD");
+//        TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "1n", "1nFD0pCD");
 
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (All Int., nFDpCD)", " in 1nFD1pCD");
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, " (All Int., pFDpCD)", " in 1pFD1pCD");
+
+#if PresentationMode
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "1pFD0pCD", "1p");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "1nFD0pCD", "1n");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "1pFD1pCD", "2p");
+        TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, "1nFD1pCD", "1n1p");
+#endif
 
         if (findSubstring(Histogram1DNameCopy, "FSRatio")) {
             Sim_Histogram1D->GetYaxis()->SetTitle(FSRyLabel.c_str());
@@ -632,9 +639,12 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[Deg]", "[#circ]");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[Deg]", "[#circ]");
 
+#if PresentationMode
+#else
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c]", "[GeV]");
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c^{2}]", "[GeV]");
         TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
+#endif
 
 //        if (findSubstring(Histogram1DNameCopy, "W ")) {
 //            double Sim_Xmin = Sim_Histogram1D->GetXaxis()->GetXmin();

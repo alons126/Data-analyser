@@ -26,6 +26,8 @@
 #define IndependentStack1draw false
 #define Independent2Ddraw false
 
+#define PresentationMode true
+
 #include "HistPlotter1D.cpp"
 #include "HistPlotterStack.cpp"
 #include "HistPlotterStack1.cpp"

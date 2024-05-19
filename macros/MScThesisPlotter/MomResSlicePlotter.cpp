@@ -88,11 +88,11 @@ void MomResSlicePlotter(const char *filename, const string &ParticleNameShortInp
 
     string SaveName, SaveNamePrefix, Filename = filename;
 
-    if (findSubstring(Filename,"momResS1T") || findSubstring(Filename,"momResS1")) {
+    if (findSubstring(Filename, "momResS1T") || findSubstring(Filename, "momResS1")) {
         SaveNamePrefix = "momResS1";
-    } else if (findSubstring(Filename,"momResS2T") || findSubstring(Filename,"momResS2")) {
+    } else if (findSubstring(Filename, "momResS2T") || findSubstring(Filename, "momResS2")) {
         SaveNamePrefix = "momResS2";
-    } else if (findSubstring(Filename,"momResS2RT")) {
+    } else if (findSubstring(Filename, "momResS2RT")) {
         SaveNamePrefix = "momResS2RT";
     }
 
@@ -155,10 +155,19 @@ void MomResSlicePlotter(const char *filename, const string &ParticleNameShortInp
 
                     TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, " (1n, FD)", " in 1nFD");
                     TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, " (1p, FD)", " in 1pFD");
+                    TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, "1pFD", "1pFD0pCD");
+                    TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, "1nFD", "1nFD0pCD");
                     TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, "[GeV/c]", "[GeV]");
                     TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, xLabel_2Replace, xLabel_Replacement);
                     TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, "Proton resolution", "R_{pFD}");
                     TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, "Neutron resolution", "R_{nFD}");
+
+#if PresentationMode
+                    TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, "1pFD0pCD", "1p");
+                    TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, "1nFD0pCD", "1n");
+                    TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, "1pFD1pCD", "2p");
+                    TitleAligner(particles, Histogram1DTemp, Histogram1DTemp_Title, Histogram1DTemp_xLabel, "1nFD1pCD", "1n1p");
+#endif
 
                     auto *ListOfFunctions = Histogram1DTemp->GetListOfFunctions();
                     auto *FitParam = (TPaveText *) ListOfFunctions->At(0);
