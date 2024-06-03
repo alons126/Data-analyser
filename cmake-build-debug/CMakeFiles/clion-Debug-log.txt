@@ -5,7 +5,7 @@
 -- Detecting C compiler ABI info - failed
 -- Check for working C compiler: C:/Program Files/JetBrains/CLion 2023.3.2/bin/mingw/bin/gcc.exe
 -- Check for working C compiler: C:/Program Files/JetBrains/CLion 2023.3.2/bin/mingw/bin/gcc.exe - broken
-CMake Error at C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.27/Modules/CMakeTestCCompiler.cmake:67 (message):
+CMake Error at C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:67 (message):
   The C compiler
 
     "C:/Program Files/JetBrains/CLion 2023.3.2/bin/mingw/bin/gcc.exe"
@@ -14,10 +14,15 @@ CMake Error at C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share
 
   It fails with the following output:
 
-    Change Dir: '//wsl.localhost/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-ziv304'
+    Change Dir: '//wsl.localhost/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-3n6yio'
     
-    Run Build Command(s): "C:/Program Files/JetBrains/CLion 2023.3.2/bin/ninja/win/x64/ninja.exe" -v cmTC_14f5e
-    ninja: error: '//wsl.localhost/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-ziv304/testCCompiler.c', needed by 'CMakeFiles/cmTC_14f5e.dir/testCCompiler.c.obj', missing and no known rule to make it
+    Run Build Command(s): "C:/Program Files/JetBrains/CLion 2023.3.2/bin/ninja/win/x64/ninja.exe" -v cmTC_f63f2
+    [1/2] C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe    -o CMakeFiles\cmTC_f63f2.dir\testCCompiler.c.obj -c \\wsl.localhost\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles\CMakeScratch\TryCompile-3n6yio\testCCompiler.c
+    FAILED: CMakeFiles/cmTC_f63f2.dir/testCCompiler.c.obj 
+    C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe    -o CMakeFiles\cmTC_f63f2.dir\testCCompiler.c.obj -c \\wsl.localhost\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles\CMakeScratch\TryCompile-3n6yio\testCCompiler.c
+    Assembler messages:
+    Fatal error: can't create CMakeFiles\cmTC_f63f2.dir\testCCompiler.c.obj: Invalid argument
+    ninja: build stopped: subcommand failed.
     
     
 
