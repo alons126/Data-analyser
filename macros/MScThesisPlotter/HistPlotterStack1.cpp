@@ -140,10 +140,18 @@ void DrawPlot1(TCanvas *HistogramCanvas, const bool LogScalePlot, const bool Lin
 
 void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *Sim_filename, const char *Data_filename, const char *Histogram1DName,
                        const string &SampleName, const string &SavePath, const string &SaveName, const bool TLmom = false) {
-    bool PresMode = false;
+    bool PresMode = false, PosterModePlots = false, PosterModePlotsColorblind = false;
 
 #if PresentationMode
     PresMode = true;
+#endif
+
+#if PosterMode
+    PosterModePlots = true;
+#endif
+
+#if ColorblindMode
+    PosterModePlotsColorblind = true;
 #endif
 
     cout << "\n\n";
@@ -306,7 +314,12 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
 
     /* Histogram appearance setup */
     const string Histogram1DNameCopy = Histogram1DName;
-    int LineWidth = 6;
+    int LineWidth;
+    if (!PosterModePlots) {
+        LineWidth = 6;
+    } else {
+        LineWidth = 12;
+    }
     vector<double> Histogram1DTitleSizes = {0.06, 0.0425, 0.0425}; // {TitleSize, LabelSizex, LabelSizey}
     bool CenterTitle = true;
     bool ShowStats = true;
@@ -344,7 +357,24 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D->SetLineWidth(LineWidth);
     Sim_Histogram1D->SetLineStyle(0);
-    Sim_Histogram1D->SetLineColor(kBlue);
+    if (PosterModePlots) {
+        Sim_Histogram1D->SetMarkerStyle(22);
+        Sim_Histogram1D->SetMarkerSize(7.5);
+    }
+    int colorIndex_Sim = TColor::GetFreeColorIndex();  // Get a free color index
+    TColor *color_Sim = new TColor(colorIndex_Sim, 0, 0.45, 0.7);  // RGB (Blue)
+    if (!PosterModePlots || !PosterModePlotsColorblind) {
+        Sim_Histogram1D->SetLineColor(kBlue);
+        Sim_Histogram1D->SetMarkerColor(kBlue);
+    } else if (PosterModePlotsColorblind) {
+        Sim_Histogram1D->SetLineColor(colorIndex_Sim);
+        Sim_Histogram1D->SetMarkerColor(colorIndex_Sim);
+    }
+    if (!PosterModePlots || !PosterModePlotsColorblind) {
+        Sim_Histogram1D->SetLineColor(kBlue);
+    } else if (PosterModePlotsColorblind) {
+        Sim_Histogram1D->SetLineColor(colorIndex_Sim);
+    }
     Sim_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D);
     const double Sim_Scale = Sim_Histogram1D->Integral();
@@ -362,7 +392,13 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_QE->GetYaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D_QE->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D_QE->SetLineWidth(LineWidth);
-    Sim_Histogram1D_QE->SetLineColor(kAzure + 10);
+    if (!PosterModePlots || !PosterModePlotsColorblind) {
+        Sim_Histogram1D_QE->SetLineColor(kAzure + 10);
+    } else if (PosterModePlotsColorblind) {
+        int colorIndex_Sim_QE = TColor::GetFreeColorIndex();  // Get a free color index
+        TColor *color_Sim_QE = new TColor(colorIndex_Sim_QE, 0.35, 0.7, 0.9);  // RGB (Sky blue)
+        Sim_Histogram1D_QE->SetLineColor(colorIndex_Sim_QE);
+    }
     Sim_Histogram1D_QE->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_QE);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
@@ -379,7 +415,13 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_MEC->GetYaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D_MEC->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D_MEC->SetLineWidth(LineWidth);
-    Sim_Histogram1D_MEC->SetLineColor(kViolet);
+    if (!PosterModePlots || !PosterModePlotsColorblind) {
+        Sim_Histogram1D_MEC->SetLineColor(kViolet);
+    } else if (PosterModePlotsColorblind) {
+        int colorIndex_Sim_MEC = TColor::GetFreeColorIndex();  // Get a free color index
+        TColor *color_Sim_MEC = new TColor(colorIndex_Sim_MEC, 0.8, 0.6, 0.7);  // RGB (Reddish purple)
+        Sim_Histogram1D_MEC->SetLineColor(colorIndex_Sim_MEC);
+    }
     Sim_Histogram1D_MEC->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_MEC);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
@@ -396,7 +438,13 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_RES->GetYaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D_RES->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D_RES->SetLineWidth(LineWidth);
-    Sim_Histogram1D_RES->SetLineColor(kGreen + 1);
+    if (!PosterModePlots || !PosterModePlotsColorblind) {
+        Sim_Histogram1D_RES->SetLineColor(kGreen + 1);
+    } else if (PosterModePlotsColorblind) {
+        int colorIndex_Sim_RES = TColor::GetFreeColorIndex();  // Get a free color index
+        TColor *color_Sim_RES = new TColor(colorIndex_Sim_RES, 0., 0.6, 0.5);  // RGB (Bluish green)
+        Sim_Histogram1D_RES->SetLineColor(colorIndex_Sim_RES);
+    }
     Sim_Histogram1D_RES->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_RES);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
@@ -413,7 +461,13 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Sim_Histogram1D_DIS->GetYaxis()->SetLabelSize(0.0425);
     Sim_Histogram1D_DIS->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D_DIS->SetLineWidth(LineWidth);
-    Sim_Histogram1D_DIS->SetLineColor(kOrange + 7);
+    if (!PosterModePlots || !PosterModePlotsColorblind) {
+        Sim_Histogram1D_DIS->SetLineColor(kOrange + 7);
+    } else if (PosterModePlotsColorblind) {
+        int colorIndex_Sim_DIS = TColor::GetFreeColorIndex();  // Get a free color index
+        TColor *color_Sim_DIS = new TColor(colorIndex_Sim_DIS, 0.9, 0.6, 0.0);  // RGB (Orange)
+        Sim_Histogram1D_DIS->SetLineColor(colorIndex_Sim_DIS);
+    }
     Sim_Histogram1D_DIS->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D_DIS);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
@@ -429,12 +483,29 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Data_Histogram1D->GetYaxis()->SetTitleSize(0.06);
     Data_Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Data_Histogram1D->GetYaxis()->CenterTitle(true);
-    Data_Histogram1D->SetLineWidth(LineWidth + 2);
+    if (!PosterModePlots) {
+        Data_Histogram1D->SetLineWidth(LineWidth + 2);
+    } else {
+        Data_Histogram1D->SetLineWidth(LineWidth + 4);
+    }
     Data_Histogram1D->SetLineStyle(0);
-    Data_Histogram1D->SetLineColor(kRed + 1);
     Data_Histogram1D->SetMarkerStyle(8);
-    Data_Histogram1D->SetMarkerSize(2.5);
-    Data_Histogram1D->SetMarkerColor(kRed + 1);
+    if (!PosterModePlots) {
+        Data_Histogram1D->SetMarkerSize(2.5);
+    } else {
+        Data_Histogram1D->SetMarkerSize(7.5);
+    }
+    if (!PosterModePlots || !PosterModePlotsColorblind) {
+        Data_Histogram1D->SetLineColor(kRed + 1);
+        Data_Histogram1D->SetMarkerColor(kRed + 1);
+    } else if (PosterModePlotsColorblind) {
+        int colorIndex_Data = TColor::GetFreeColorIndex();  // Get a free color index
+        TColor *color_Data = new TColor(colorIndex_Data, 0.8, 0.4, 0.0);  // RGB (Vermilion)
+        Data_Histogram1D->SetLineColor(kBlack);
+        Data_Histogram1D->SetMarkerColor(kBlack);
+//        Data_Histogram1D->SetLineColor(colorIndex_Data);
+//        Data_Histogram1D->SetMarkerColor(colorIndex_Data);
+    }
     Data_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Data_Histogram1D);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
@@ -602,29 +673,58 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
             findSubstring(Histogram1D_Title, "#delta#alpha_{T,tot}")) {
             double Custom_xOffset = -0.41;
 
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset - 0.15);
+            if (!PosterModePlots) {
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025, Legend_y1_TwoLines + yOffset,
+                                                Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset - 0.15);
+            } else {
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025 + 0.06, Legend_y1_TwoLines + yOffset,
+                                                Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset - 0.15);
+            }
         } else {
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset + 0.025, Legend_y2_TwoLines + yOffset - 0.15);
+            if (!PosterModePlots) {
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                                Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset + 0.025, Legend_y2_TwoLines + yOffset - 0.15);
+            } else {
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset + 0.06, Legend_y1_TwoLines + yOffset,
+                                                Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset + 0.025, Legend_y2_TwoLines + yOffset - 0.15);
+            }
         }
 
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "#deltaP_{T,tot} by Momentum Sum", "Transverse momentum imbalance");
         TitleAligner(particles, Data_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "#delta#alpha_{T,tot} by Momentum Sum", "Transverse boosting angle");
 
-        if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
-            TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "All int. (simulation; scaled)", "l");
-            TLegendEntry *Sim_Entry_QE = Comparison_legend->AddEntry(Sim_Histogram1D_QE, "QE (simulation; scaled)", "l");
-            TLegendEntry *Sim_Entry_MEC = Comparison_legend->AddEntry(Sim_Histogram1D_MEC, "MEC (simulation; scaled)", "l");
-            TLegendEntry *Sim_Entry_RES = Comparison_legend->AddEntry(Sim_Histogram1D_RES, "RES (simulation; scaled)", "l");
-            TLegendEntry *Sim_Entry_DIS = Comparison_legend->AddEntry(Sim_Histogram1D_DIS, "DIS (simulation; scaled)", "l");
-            TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data");
+        if (!PosterModePlots) {
+            if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+                TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "All int. (simulation; scaled)", "l");
+                TLegendEntry *Sim_Entry_QE = Comparison_legend->AddEntry(Sim_Histogram1D_QE, "QE (simulation; scaled)", "l");
+                TLegendEntry *Sim_Entry_MEC = Comparison_legend->AddEntry(Sim_Histogram1D_MEC, "MEC (simulation; scaled)", "l");
+                TLegendEntry *Sim_Entry_RES = Comparison_legend->AddEntry(Sim_Histogram1D_RES, "RES (simulation; scaled)", "l");
+                TLegendEntry *Sim_Entry_DIS = Comparison_legend->AddEntry(Sim_Histogram1D_DIS, "DIS (simulation; scaled)", "l");
+                TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data");
+            } else {
+                TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation", "l");
+                TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l");
+            }
         } else {
-            TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation", "l");
-            TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l");
+            if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
+                TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "All int. (sim.; scaled)");
+                TLegendEntry *Sim_Entry_QE = Comparison_legend->AddEntry(Sim_Histogram1D_QE, "QE (sim.; scaled)", "l");
+                TLegendEntry *Sim_Entry_MEC = Comparison_legend->AddEntry(Sim_Histogram1D_MEC, "MEC (sim.; scaled)", "l");
+                TLegendEntry *Sim_Entry_RES = Comparison_legend->AddEntry(Sim_Histogram1D_RES, "RES (sim.; scaled)", "l");
+                TLegendEntry *Sim_Entry_DIS = Comparison_legend->AddEntry(Sim_Histogram1D_DIS, "DIS (sim.; scaled)", "l");
+                TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data");
+            } else {
+                TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation", "l");
+                TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data", "l");
+            }
         }
 
-        Comparison_legend->SetTextSize(0.02), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
+
+        if (!PosterModePlots) {
+            Comparison_legend->SetTextSize(0.02), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
+        } else {
+            Comparison_legend->SetTextSize(0.03), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
+        }
     }
 
     DrawPlot1(HistogramCanvas, LogScalePlot, LinearScalePlot, SavePath, SaveName, "");

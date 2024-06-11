@@ -142,6 +142,16 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
                       const string &SampleName, const string &SavePath, const string &SaveName, const bool TLmom = false) {
     cout << "\n\n";
 
+    bool PosterModePlots = false, PosterModePlotsColorblind = false;
+
+#if PosterMode
+    PosterModePlots = true;
+#endif
+
+#if ColorblindMode
+    PosterModePlotsColorblind = true;
+#endif
+
     HistogramCanvas->Clear();
 
     TFile *Sim_file = TFile::Open(Sim_filename);
@@ -196,8 +206,12 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
 
     /* Histogram appearance setup */
     const string Histogram1DNameCopy = Histogram1DName;
-    int LineWidth = 6;
-//    int LineWidth = 3; // Original
+    int LineWidth;
+    if (!PosterModePlots) {
+        LineWidth = 6;
+    } else {
+        LineWidth = 12;
+    }
     vector<double> Histogram1DTitleSizes = {0.06, 0.0425, 0.0425}; // {TitleSize, LabelSizex, LabelSizey}
     bool CenterTitle = true;
     bool ShowStats = true;
@@ -235,8 +249,13 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
     Sim_Histogram1D->GetYaxis()->CenterTitle(true);
     Sim_Histogram1D->SetLineWidth(LineWidth);
     Sim_Histogram1D->SetLineStyle(0); // Original
-    Sim_Histogram1D->SetLineColor(kBlue); // Original
-//    Sim_Histogram1D->SetLineColor(kBlue + 1);
+    if (!PosterModePlots || !PosterModePlotsColorblind) {
+        Sim_Histogram1D->SetLineColor(kBlue); // Original
+    } else if (PosterModePlotsColorblind) {
+        int colorIndex_Sim = TColor::GetFreeColorIndex();  // Get a free color index
+        TColor *color_Sim = new TColor(colorIndex_Sim, 0, 0.45, 0.7);  // RGB (Blue)
+        Sim_Histogram1D->SetLineColor(colorIndex_Sim);
+    }
     Sim_Histogram1D->SetStats(0);
     MScThesisPlotsList->Add(Sim_Histogram1D);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
@@ -251,14 +270,30 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
     Data_Histogram1D->GetYaxis()->SetTitleSize(0.06);
     Data_Histogram1D->GetYaxis()->SetLabelSize(0.0425);
     Data_Histogram1D->GetYaxis()->CenterTitle(true);
-    Data_Histogram1D->SetLineWidth(LineWidth + 2);
+    if (!PosterModePlots) {
+        Data_Histogram1D->SetLineWidth(LineWidth + 2);
+    } else {
+        Data_Histogram1D->SetLineWidth(LineWidth + 4);
+    }
     Data_Histogram1D->SetLineStyle(0); // Original
-//    Data_Histogram1D->SetLineColor(kRed); // Original
-//    Data_Histogram1D->SetLineColor(kBlack);
-    Data_Histogram1D->SetLineColor(kRed + 1);
     Data_Histogram1D->SetMarkerStyle(8);
-    Data_Histogram1D->SetMarkerSize(2.5);
-    Data_Histogram1D->SetMarkerColor(kRed + 1);
+    if (!PosterModePlots) {
+        Data_Histogram1D->SetMarkerSize(2.5);
+    } else {
+        Data_Histogram1D->SetMarkerSize(5);
+    }
+    if (!PosterModePlots || !PosterModePlotsColorblind) {
+        Data_Histogram1D->SetLineColor(kRed + 1);
+        Data_Histogram1D->SetMarkerColor(kRed + 1);
+    } else if (PosterModePlotsColorblind) {
+        int colorIndex2 = TColor::GetFreeColorIndex();  // Get a free color index
+        TColor *color_Data = new TColor(colorIndex2, 0.8, 0.4, 0.0);  // RGB (Vermilion)
+//        TColor *color_Data = new TColor(colorIndex2, 0.8, 0.6, 0.7);  // RGB (Reddish purple)
+        Data_Histogram1D->SetLineColor(kBlack);
+        Data_Histogram1D->SetMarkerColor(kBlack);
+//        Data_Histogram1D->SetLineColor(colorIndex2);
+//        Data_Histogram1D->SetMarkerColor(colorIndex2);
+    }
     Data_Histogram1D->SetStats(0);
     if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
         Data_Histogram1D->GetYaxis()->SetRangeUser(0., 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum()));
@@ -524,16 +559,31 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
             findSubstring(Histogram1D_Title, "E_{cal}")) {
             double Custom_xOffset = -0.41;
 
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
+            if (!PosterModePlots) {
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                                Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
+            } else {
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                                Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
+            }
         } else if (findSubstring(Histogram1D_Title, "#delta#alpha_{T,tot}") && !findSubstring(Histogram1DNameCopy, "FSRatio")) {
             double Custom_xOffset = -0.41;
 
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
+            if (!PosterModePlots) {
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                                Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
+            } else {
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                                Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset, Legend_y2_TwoLines + yOffset);
+            }
         } else {
-            Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
-                                            Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
+            if (!PosterModePlots) {
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                                Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
+            } else {
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_x1Offset - Custom_x1Offset, Legend_y1_TwoLines + yOffset,
+                                                Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
+            }
         }
 
         if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
@@ -547,6 +597,79 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
         }
 
         Comparison_legend->SetTextSize(0.03), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
+
+        /*
+        if (PosterModePlots) {
+            if (findSubstring(Sim_Histogram1D->GetTitle(), "Central-going proton momentum")) {
+                if (findSubstring(Sim_Histogram1D->GetTitle(), "1n1p")) {
+                    string Sim_Histogram1D_CloneName = Sim_Histogram1D->GetName();
+                    TH1D *Sim_Histogram1D_ZoomClone = (TH1D *) Sim_Histogram1D->Clone((Sim_Histogram1D_CloneName + "_zoomin").c_str());
+                    string Sim_Histogram1D_CloneTitle = Sim_Histogram1D_ZoomClone->GetTitle();
+                    Sim_Histogram1D_ZoomClone->SetTitle((Sim_Histogram1D_CloneTitle + " (zoom-in)").c_str());
+                    Sim_Histogram1D_ZoomClone->SetLineWidth(3);
+
+                    string Data_Histogram1D_CloneName = Data_Histogram1D->GetName();
+                    TH1D *Data_Histogram1D_ZoomClone = (TH1D *) Data_Histogram1D->Clone((Data_Histogram1D_CloneName + "_zoomin").c_str());
+                    string Data_Histogram1D_CloneTitle = Data_Histogram1D_ZoomClone->GetTitle();
+                    Data_Histogram1D_ZoomClone->SetTitle((Data_Histogram1D_CloneTitle + " (zoom-in)").c_str());
+                    Data_Histogram1D_ZoomClone->SetLineWidth(3);
+                    Data_Histogram1D_ZoomClone->SetMarkerSize(1.5);
+
+                    // Define the region to zoom in
+                    Double_t x1 = 1.0;  // x-axis lower bound
+                    Double_t x2 = 3.0;  // x-axis upper bound
+                    Double_t y1 = 0.0;  // y-axis lower bound
+                    Double_t y2 = 100.0; // y-axis upper bound
+
+                    // Coordinates of the pad in the main canvas
+                    double y_max = 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum());
+                    double x_max = 3.0;
+
+                    Double_t padX1 = (Comparison_legend->GetX1() - 0.125 + 0.01) * x_max;
+//                    Double_t padX1 = (Comparison_legend->GetX1() - 0.10) * 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum());
+                    Double_t padY1 = (Comparison_legend->GetY1() - 0.35 - 0.15 + 0.045) * y_max;
+                    Double_t padX2 = (Comparison_legend->GetX2() + 0.15 + 0.01) * x_max;
+//                    Double_t padX2 = (Comparison_legend->GetX2() - 0.00) * 1.1 * max(Data_Histogram1D->GetMaximum(), Sim_Histogram1D->GetMaximum());
+                    Double_t padY2 = (Comparison_legend->GetY2() - 0.15 - 0.10 + 0.025) * y_max;
+
+                    // Draw a box around the TPad to simulate a frame
+                    TBox *box = new TBox(padX1, padY1, padX2, padY2);
+                    box->SetLineColor(kRed);  // Set box color to red
+                    box->SetLineWidth(2);     // Set box line width
+                    box->SetFillStyle(0);     // No fill
+                    box->Draw();
+
+                    // Create a new pad for the zoomed-in area
+                    TPad *pad = new TPad("pad", "Zoomed-In Region",
+                                         Comparison_legend->GetX1() - 0.1, Comparison_legend->GetY1() - 0.35,
+                                         Comparison_legend->GetX2(), Comparison_legend->GetY2() - 0.15);
+//                    TPad *pad = new TPad("pad", "Zoomed-In Region",
+//                                         Comparison_legend->GetX1() - 0.1, Comparison_legend->GetX2() - 0.1,
+//                                         Comparison_legend->GetY1() - 0.1, Comparison_legend->GetY2() - 0.1);
+//                    pad->SetFillColor(0);  // Set pad color to white
+                    pad->Draw("same");
+                    pad->cd();
+                    pad->cd()->SetGrid();
+                    pad->cd()->SetBottomMargin(0.14), pad->cd()->SetLeftMargin(0.16), pad->cd()->SetTopMargin(0.12);
+
+                    double yMax = max(Sim_Histogram1D_ZoomClone->GetMaximum(), Data_Histogram1D_ZoomClone->GetMaximum());
+
+                    // Draw the zoomed-in histogram
+                    Sim_Histogram1D_ZoomClone->GetXaxis()->SetRangeUser(x1, x2);
+                    Sim_Histogram1D_ZoomClone->GetYaxis()->SetRangeUser(0., yMax * 0.1);
+                    Data_Histogram1D_ZoomClone->GetXaxis()->SetRangeUser(x1, x2);
+                    Data_Histogram1D_ZoomClone->GetYaxis()->SetRangeUser(0., yMax * 0.1);
+
+                    Sim_Histogram1D_ZoomClone->Draw(), gPad->Update();;
+                    Data_Histogram1D_ZoomClone->Draw("same"), gPad->Update();;
+                    Sim_Histogram1D_ZoomClone->Draw("same"), gPad->Update();;
+
+                    // Return to the main canvas
+                    HistogramCanvas->cd();
+                }
+            }
+        }
+*/
     }
 
     if (findSubstring(Histogram1DNameCopy, "FSRatio")) {

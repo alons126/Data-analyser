@@ -1,0 +1,55 @@
+    double upper_lim = 8, lower_lim = 0;
+
+    TCanvas *c = new TCanvas("canvas", "canvas", 1000, 750); // normal res
+    c->SetGrid();
+    c->SetBottomMargin(0.14);
+    c->SetLeftMargin(0.16);
+    c->SetRightMargin(0.12);
+    c->cd();
+
+    TDirectoryFile *mydir1 = (TDirectoryFile *) _file0->Get("e-_C12");
+
+    TGraph *graph1 = (TGraph *) mydir1->Get("tot_em");
+
+    graph1->SetLineColor(kBlue);
+    graph1->SetLineWidth(4);
+    graph1->GetXaxis()->SetRangeUser(lower_lim, upper_lim);
+//    graph1->GetYaxis()->SetRangeUser(0, 625E6);
+    graph1->GetXaxis()->SetTitleSize(0.05);
+    graph1->GetYaxis()->SetTitleSize(0.05);
+    graph1->GetXaxis()->CenterTitle(true);
+    graph1->GetYaxis()->CenterTitle(true);
+
+    graph1->Draw("AL");
+
+    double yValue = graph1->Eval(6.);
+
+    TLine *E_beam = new TLine(6., gPad->GetUymin(), 6., gPad->GetUymax());
+    E_beam->SetLineWidth(5), E_beam->SetLineColor(kRed), E_beam->Draw("same");
+    TLine *xsec = new TLine(gPad->GetUxmin(), yValue, gPad->GetUxmax(), yValue);
+    xsec->SetLineWidth(5), xsec->SetLineColor(kGreen), xsec->Draw("same");
+
+    double Legend_x1_BaseLine = gStyle->GetStatX(), Legend_y1_BaseLine = gStyle->GetStatY(); // Top right
+    double Legend_x2_BaseLine = gStyle->GetStatX(), Legend_y2_BaseLine = gStyle->GetStatY(); // Bottom left
+
+    double Legend_x1_OneLine = Legend_x1_BaseLine, Legend_y1_OneLine = Legend_y1_BaseLine - 0.2; // Top right
+    double Legend_x2_OneLine = Legend_x2_BaseLine - 0.2, Legend_y2_OneLine = Legend_y2_BaseLine - 0.25; // Bottom left
+
+    double Legend_x1_TwoLines = Legend_x1_BaseLine, Legend_y1_TwoLines = Legend_y1_BaseLine - 0.2; // Top right
+    double Legend_x2_TwoLines = Legend_x2_BaseLine - 0.2, Legend_y2_TwoLines = Legend_y2_BaseLine - 0.3; // Bottom left
+
+    double Legend_x1_ThreeLines = Legend_x1_BaseLine, Legend_y1_ThreeLines = Legend_y1_BaseLine - 0.2; // Top right
+    double Legend_x2_ThreeLines = Legend_x2_BaseLine - 0.2, Legend_y2_ThreeLines = Legend_y2_BaseLine - 0.35; // Bottom left
+
+    TLegend *Comparison_legend = new TLegend(Legend_x1_TwoLines, Legend_y1_TwoLines, Legend_x2_TwoLines - 0.05, Legend_y2_TwoLines);
+    TLegendEntry *E_beam_Entry = Comparison_legend->AddEntry(E_beam, "E_beam", "l");
+    TLegendEntry *xsec_Entry = Comparison_legend->AddEntry(xsec, "xsec(E_beam)", "l");
+    //TLegendEntry *xsec_Entry = Comparison_legend->AddEntry(xsec, ("xsec(E_beam) = " + dtos(yValue).c_str());
+    TLegendEntry *graph1_Entry = Comparison_legend->AddEntry(graph1, "xsec", "l");
+    Comparison_legend->SetTextSize(0.03), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
+
+    cout << "\n";
+    cout << "xsec(E_beam) = " << to_string(yValue) << "\n";
+    cout << "\n";
+
+    c->SaveAs("Total_cross_section.png");

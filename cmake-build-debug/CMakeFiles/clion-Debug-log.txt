@@ -14,14 +14,14 @@ CMake Error at C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share
 
   It fails with the following output:
 
-    Change Dir: '//wsl.localhost/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-3n6yio'
+    Change Dir: '//wsl.localhost/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-tmutue'
     
-    Run Build Command(s): "C:/Program Files/JetBrains/CLion 2023.3.2/bin/ninja/win/x64/ninja.exe" -v cmTC_f63f2
-    [1/2] C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe    -o CMakeFiles\cmTC_f63f2.dir\testCCompiler.c.obj -c \\wsl.localhost\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles\CMakeScratch\TryCompile-3n6yio\testCCompiler.c
-    FAILED: CMakeFiles/cmTC_f63f2.dir/testCCompiler.c.obj 
-    C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe    -o CMakeFiles\cmTC_f63f2.dir\testCCompiler.c.obj -c \\wsl.localhost\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles\CMakeScratch\TryCompile-3n6yio\testCCompiler.c
+    Run Build Command(s): "C:/Program Files/JetBrains/CLion 2023.3.2/bin/ninja/win/x64/ninja.exe" -v cmTC_8fda3
+    [1/2] C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe    -o CMakeFiles\cmTC_8fda3.dir\testCCompiler.c.obj -c \\wsl.localhost\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles\CMakeScratch\TryCompile-tmutue\testCCompiler.c
+    FAILED: CMakeFiles/cmTC_8fda3.dir/testCCompiler.c.obj 
+    C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe    -o CMakeFiles\cmTC_8fda3.dir\testCCompiler.c.obj -c \\wsl.localhost\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles\CMakeScratch\TryCompile-tmutue\testCCompiler.c
     Assembler messages:
-    Fatal error: can't create CMakeFiles\cmTC_f63f2.dir\testCCompiler.c.obj: Invalid argument
+    Fatal error: can't create CMakeFiles\cmTC_8fda3.dir\testCCompiler.c.obj: Invalid argument
     ninja: build stopped: subcommand failed.
     
     

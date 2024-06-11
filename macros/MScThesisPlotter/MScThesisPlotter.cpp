@@ -27,6 +27,8 @@
 #define Independent2Ddraw false
 
 #define PresentationMode true
+#define PosterMode true
+#define ColorblindMode true
 
 #include "HistPlotter1D.cpp"
 #include "HistPlotterStack.cpp"
@@ -519,516 +521,531 @@ void MScThesisPlotter() {
 
     //</editor-fold>
 
-    TCanvas *Canv = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 2, utilities.GetStandardCanvasHeight() * 2); // normal res
-//    Canv->cd()->SetBottomMargin(0.14), Canv->cd()->SetLeftMargin(0.16), Canv->cd()->SetRightMargin(0.16), Canv->cd()->SetTopMargin(0.12), Canv->cd();
+    TCanvas *Canv;
+
+#if PosterMode
+    Canv = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 4, 850 * 4); // Double resolution for poster
+//    Canv = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 4, utilities.GetStandardCanvasHeight() * 4); // Double resolution for poster
+//    Canv = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 2, 850 * 2); // Double resolution for poster
+////    Canv = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 4, utilities.GetStandardCanvasHeight() * 4); // Double resolution for poster
+#else
+    Canv = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 2, utilities.GetStandardCanvasHeight() * 2); // Normal resolution for poster
+#endif
+
+
+#if PosterMode
+    Canv->cd()->SetGrid(), Canv->cd()->SetBottomMargin(0.14), Canv->cd()->SetLeftMargin(0.16), Canv->cd()->SetRightMargin(0.01), Canv->cd()->SetTopMargin(0.12), Canv->cd();
+//    Canv->cd()->SetGrid(), Canv->cd()->SetBottomMargin(0.14), Canv->cd()->SetLeftMargin(0.16), Canv->cd()->SetRightMargin(0.01), Canv->cd()->SetTopMargin(0.12), Canv->cd();
+#else
     Canv->cd()->SetGrid(), Canv->cd()->SetBottomMargin(0.14), Canv->cd()->SetLeftMargin(0.16), Canv->cd()->SetRightMargin(0.16), Canv->cd()->SetTopMargin(0.12), Canv->cd();
+#endif
 
     TList *MScThesisPlots = new TList();
     string listName = EventSelectionSimFolder + "/" + SampleName + ".root";
     const char *TListName = listName.c_str();
 
-    //<editor-fold desc="Preselection">
-    cout << "\n\n\nPlotting preselection cut plots\n";
-
-    //<editor-fold desc="Vertex plots">
-    cout << "\n\n\nPlotting vertex cuts plots\n";
-
-    /* Before cuts */
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{e} (1e cut)", SampleName, VertexCutsFolderSimBC, "01_Vz_e_FD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{p} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "02_Vz_p_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{p} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "02_Vz_p_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{D} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "03_Vz_D_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{D} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "03_Vz_D_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{#pi^{+}} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "04_Vz_pip_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{#pi^{+}} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "04_Vz_pip_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{#pi^{-}} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "05_Vz_pim_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{#pi^{-}} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "05_Vz_pim_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{K^{+}} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "06_Vz_Kp_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{K^{+}} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "06_Vz_Kp_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{K^{-}} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "07_Vz_Km_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{K^{-}} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "07_Vz_Km_CD");
-
-    /* After cuts */
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{e} (1e cut)", SampleName, VertexCutsFolderSimAC, "01_Vz_e_FD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{p} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "02_Vz_p_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{p} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "02_Vz_p_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{D} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "03_Vz_D_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{D} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "03_Vz_D_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{#pi^{+}} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "04_Vz_pip_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{#pi^{+}} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "04_Vz_pip_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{#pi^{-}} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "05_Vz_pim_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{#pi^{-}} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "05_Vz_pim_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{K^{+}} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "06_Vz_Kp_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{K^{+}} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "06_Vz_Kp_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{K^{-}} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "07_Vz_Km_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{K^{-}} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "07_Vz_Km_CD");
-    //</editor-fold>
-
-    //<editor-fold desc="Vertex correlation plots">
-    cout << "\n\n\nPlotting vertex correlation cuts plots\n";
-
-    /* Before cuts */
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{p}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "01_dVz_p_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{p}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "01_dVz_p_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{D}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "02_dVz_D_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{D}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "02_dVz_D_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{#pi^{+}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "03_dVz_pip_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{#pi^{+}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "03_dVz_pip_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{#pi^{-}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "04_dVz_pim_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{#pi^{-}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "04_dVz_pim_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{K^{+}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "05_dVz_Kp_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{K^{+}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "05_dVz_Kp_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{K^{-}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "06_dVz_Km_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{K^{-}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "06_dVz_Km_CD");
-
-    /* After cuts */
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{p}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "01_dVz_p_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{p}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "01_dVz_p_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{D}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "02_dVz_D_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{D}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "02_dVz_D_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{#pi^{+}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "03_dVz_pip_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{#pi^{+}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "03_dVz_pip_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{#pi^{-}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "04_dVz_pim_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{#pi^{-}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "04_dVz_pim_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{K^{+}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "05_dVz_Kp_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{K^{+}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "05_dVz_Kp_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{K^{-}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "06_dVz_Km_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{K^{-}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "06_dVz_Km_CD");
-    //</editor-fold>
-
-    //<editor-fold desc="DC fiducial cuts">
-    cout << "\n\n\nPlotting vertex DC fiducial cuts plots\n";
-
-    /* Before cuts */
-    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_1", SampleName, DCFiducialCutsFolderSimBC, "01_dc_hitmap_e_R1");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_2", SampleName, DCFiducialCutsFolderSimBC, "01_dc_hitmap_e_R2");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_3", SampleName, DCFiducialCutsFolderSimBC, "01_dc_hitmap_e_R3");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_proton_1", SampleName, DCFiducialCutsFolderSimBC, "02_dc_hitmap_p_R1");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_proton_2", SampleName, DCFiducialCutsFolderSimBC, "02_dc_hitmap_p_R2");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_proton_3", SampleName, DCFiducialCutsFolderSimBC, "02_dc_hitmap_p_R3");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_pion_1", SampleName, DCFiducialCutsFolderSimBC, "03_dc_hitmap_pi_R1");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_pion_2", SampleName, DCFiducialCutsFolderSimBC, "03_dc_hitmap_pi_R2");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_pion_3", SampleName, DCFiducialCutsFolderSimBC, "03_dc_hitmap_pi_R3");
-
-    /* After cuts */
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_1", SampleName, DCFiducialCutsFolderSimAC, "01_dc_hitmap_e_R1");
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_2", SampleName, DCFiducialCutsFolderSimAC, "01_dc_hitmap_e_R2");
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_3", SampleName, DCFiducialCutsFolderSimAC, "01_dc_hitmap_e_R3");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_proton_1", SampleName, DCFiducialCutsFolderSimAC, "02_dc_hitmap_p_R1");
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_proton_2", SampleName, DCFiducialCutsFolderSimAC, "02_dc_hitmap_p_R2");
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_proton_3", SampleName, DCFiducialCutsFolderSimAC, "02_dc_hitmap_p_R3");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_pion_1", SampleName, DCFiducialCutsFolderSimAC, "03_dc_hitmap_pi_R1");
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_pion_2", SampleName, DCFiducialCutsFolderSimAC, "03_dc_hitmap_pi_R2");
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_pion_3", SampleName, DCFiducialCutsFolderSimAC, "03_dc_hitmap_pi_R3");
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //<editor-fold desc="Electron ID">
-    cout << "\n\n\nPlotting Electron ID plots\n";
-
-    /* Before cuts */
-    HistPlotter2D(Canv, MScThesisPlots, NO_CUTS_beta_VS_P_no_clas12ana, "#beta vs. P (all particles, no #(e) cut, CD)", SampleName, ElectronIDFolderSimBC,
-                  "01_Beta_vs_P_CD_all_par_no_cuts");
-    HistPlotter2D(Canv, MScThesisPlots, NO_CUTS_beta_VS_P_no_clas12ana, "#beta vs. P (all particles, no #(e) cut, FD)", SampleName, ElectronIDFolderSimBC,
-                  "01_Beta_vs_P_FD_all_par_no_cuts");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "#beta vs. P (all particles, 1e cut, CD)", SampleName, ElectronIDFolderSimBC,
-                  "02_Beta_vs_P_CD_all_par_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "#beta vs. P (all particles, 1e cut, FD)", SampleName, ElectronIDFolderSimBC,
-                  "02_Beta_vs_P_FD_all_par_1e_cut");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "N_{phe} in HTCC BC (1e cut)", SampleName, ElectronIDFolderSimBC, "03a_Nphe_in_HTCC_1e_cut");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "SF vs. P_{e} BC (1e cut, FD)", SampleName, ElectronIDFolderSimBC, "03_SF_vs_P_FD_1e_cut");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "Vcal vs. SF BC (1e cut, PCAL)", SampleName, ElectronIDFolderSimBC, "04_Vcal_vs_SF_FD_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "Wcal vs. SF BC (1e cut, PCAL)", SampleName, ElectronIDFolderSimBC, "04_Wcal_vs_FS_FD_1e_cut");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "#beta vs. P (electrons only, 1e cut)", SampleName, ElectronIDFolderSimBC,
-                  "05_Beta_e_vs_P_FD_electrons_only_1e_cut");
-
-    /* After cuts */
-    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "#beta vs. P (all particles, 1e cut, CD)", SampleName, ElectronIDFolderSimAC,
-                  "02_Beta_vs_P_CD_all_par_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "#beta vs. P (all particles, 1e cut, FD)", SampleName, ElectronIDFolderSimAC,
-                  "02_Beta_vs_P_FD_all_par_1e_cut");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "N_{phe} in HTCC BC (1e cut)", SampleName, ElectronIDFolderSimAC, "03a_Nphe_in_HTCC_1e_cut");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "SF vs. P_{e} BC (1e cut, FD)", SampleName, ElectronIDFolderSimAC, "03_SF_vs_P_FD_1e_cut");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "Vcal vs. SF BC (1e cut, PCAL)", SampleName, ElectronIDFolderSimAC, "04_Vcal_vs_SF_FD_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "Wcal vs. SF BC (1e cut, PCAL)", SampleName, ElectronIDFolderSimAC, "04_Wcal_vs_FS_FD_1e_cut");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "#beta vs. P (electrons only, 1e cut)", SampleName, ElectronIDFolderSimAC,
-                  "05_Beta_e_vs_P_FD_electrons_only_1e_cut");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#beta vs. P (all particles, 1e cut, CD)", SampleName, ElectronIDFolderSimAC, "06_Beta_vs_P_CD_all_par_all_cuts_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#beta vs. P (all particles, 1e cut, FD)", SampleName, ElectronIDFolderSimAC, "06_Beta_vs_P_FD_all_par_all_cuts_1e_cut");
-    //</editor-fold>
-
-    //<editor-fold desc="Proton ID">
-    cout << "\n\n\nPlotting Proton ID plots\n";
-
-    /* Before cuts */
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{p} (1e cut, FD)", SampleName, ProtonIDFolderSimBC, "01_chi2_p_FD_1e_cut");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{p} (1e cut, CD)", SampleName, ProtonIDFolderSimBC, "01_chi2_p_CD_1e_cut");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "FD Proton momentum #epsilon_{eff} (1e cut)", SampleName, ProtonIDFolderSimBC, "02_P_pFD_eff_1e_cut_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "CD Proton momentum #epsilon_{eff} (1e cut)", SampleName, ProtonIDFolderSimBC, "02_P_pCD_eff_1e_cut_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_noNC, "#theta_{p_{1},p_{2}} (All Int., 2p)", SampleName, ProtonIDFolderSimBC, "02_Theta_p1_p2_2p");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC (2p, CD-CTOF)", SampleName, ProtonIDFolderSimBC, "03_theta_p1_p2_vd_dToF_2p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC (2p, CD-CTOF)", SampleName, ProtonIDFolderSimBC,
-                  "03_theta_p1_p2_vd_dPos_2p");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)", SampleName, ProtonIDFolderSimBC,
-                  "04_theta_pFD_vs_pCD_for_all_theta_pFD_pCD");
-//    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName, ProtonIDFolderSimBC,
-//                  "04_theta_pFD_vs_pCD_for_small_theta_pFD_pCD_2p");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_noNC, "#Delta#phi for small #Delta#theta_{pFD/pCD} - ZOOMIN", SampleName, ProtonIDFolderSimBC,
-                  "05_dPhi_pFD_pCD_for_small_dTheta_pFD_pCD_2p");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{p} vs. #theta_{p} (1e cut, FD)", SampleName, ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_FD");
-    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{p} vs. #theta_{p} (1e cut, CD)", SampleName, ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_CD");
-
-    /* After cuts */
-    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "#theta_{p_{1},p_{2}} (All Int., 2p)", SampleName, ProtonIDFolderSimAC, "02_Theta_p1_p2_2p");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC (2p, CD-CTOF)", SampleName, ProtonIDFolderSimAC, "03_theta_p1_p2_vd_dToF_2p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC (2p, CD-CTOF)", SampleName, ProtonIDFolderSimAC,
-                  "03_theta_p1_p2_vd_dPos_2p");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)", SampleName, ProtonIDFolderSimAC,
-                  "04_theta_pFD_vs_pCD_for_all_theta_pFD_pCD");
-//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName, ProtonIDFolderSimAC,
-//                  "04_theta_pFD_vs_pCD_for_small_theta_pFD_pCD_2p");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "P_{p} vs. #theta_{p} (1e cut, FD)", SampleName, ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_FD");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "P_{p} vs. #theta_{p} (1e cut, CD)", SampleName, ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_CD");
-    //</editor-fold>
-
-    //<editor-fold desc="Neutrals ID">
-    cout << "\n\n\nPlotting Neutrals ID plots\n";
-
-    /* ECAL veto before cuts */
-    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e} BV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimBC,
-                  "01_ECAL_veto_LnFD_e_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} BV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimBC,
-                  "01_ECAL_veto_LnFD_pDF_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e} BV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimBC,
-                  "02_ECAL_veto_nFD_e_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD} BV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimBC,
-                  "02_ECAL_veto_nFD_pFD_1e_cut");
-
-    /* ECAL veto after cuts */
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e} AV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimAC,
-                  "01_ECAL_veto_LnFD_e_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} AV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimAC,
-                  "01_ECAL_veto_LnFD_pDF_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e} AV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimAC,
-                  "02_ECAL_veto_nFD_e_1e_cut");
-    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD} AV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimAC,
-                  "02_ECAL_veto_nFD_pFD_1e_cut");
-
-    /* Before nFD momentum threshold */
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "FD neutron momentum BPID (1e_cut, FD)", SampleName, NeutralsFDIDFolderSimBC, "03a_P_nFD_BPID_1e_cut_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "FD neutron momentum BPID - ZOOMOUT (1e_cut, FD)", SampleName, NeutralsFDIDFolderSimBC,
-                  "03b_P_nFD_ZOOMOUT_BPID_1e_cut_FD");
-
-    /* After nFD momentum threshold */
-    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "FD neutron momentum APID (1e_cut, FD)", SampleName, NeutralsFDIDFolderSimAC, "03a_P_nFD_APID_1e_cut_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "FD neutron momentum APID - ZOOMOUT (1e_cut, FD)", SampleName, NeutralsFDIDFolderSimAC, "03b_P_nFD_ZOOMOUT_APID_1e_cut_FD");
-
-//    /* Redef. FD neutron multiplicity BPID */
-//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&BV (1p, FD)", SampleName, NeutralsFDIDFolderSimBC,
-//                  "04a_FD_neut_Multi_BPID_BV_1p_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&AV (1p, FD)", SampleName, NeutralsFDIDFolderSimBC,
-//                  "04b_FD_neut_Multi_BPID_AV_1p_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&BV (1n, FD)", SampleName, NeutralsFDIDFolderSimBC,
-//                  "04c_FD_neut_Multi_BPID_BV_1n_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&AV (1n, FD)", SampleName, NeutralsFDIDFolderSimBC,
-//                  "04d_FD_neut_Multi_BPID_AV_1n_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&BV (pFDpCD, FD)", SampleName, NeutralsFDIDFolderSimBC,
-//                  "05a_FD_neut_Multi_BPID_BV_pFDpCD_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&AV (pFDpCD, FD)", SampleName, NeutralsFDIDFolderSimBC,
-//                  "05b_FD_neut_Multi_BPID_AV_pFDpCD_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&BV (nFDpCD, FD)", SampleName, NeutralsFDIDFolderSimBC,
-//                  "05c_FD_neut_Multi_BPID_BV_nFDpCD_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&AV (nFDpCD, FD)", SampleName, NeutralsFDIDFolderSimBC,
-//                  "05d_FD_neut_Multi_BPID_AV_nFDpCD_FD");
-
-    /* Redef. FD neutron multiplicity APID */
-//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&BV (1p, FD)", SampleName, NeutralsFDIDFolderSimAC,
-//                  "04a_FD_neut_Multi_APID_BV_1p_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&AV (1p, FD)", SampleName, NeutralsFDIDFolderSimAC,
-                  "04b_FD_neut_Multi_APID_AV_1p_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&BV (1n, FD)", SampleName, NeutralsFDIDFolderSimAC,
-//                  "04c_FD_neut_Multi_APID_BV_1n_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&AV (1n, FD)", SampleName, NeutralsFDIDFolderSimAC,
-                  "04d_FD_neut_Multi_APID_AV_1n_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&BV (pFDpCD, FD)", SampleName, NeutralsFDIDFolderSimAC,
-//                  "05a_FD_neut_Multi_APID_BV_pFDpCD_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&AV (pFDpCD, FD)", SampleName, NeutralsFDIDFolderSimAC,
-                  "05b_FD_neut_Multi_APID_AV_pFDpCD_FD");
-//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&BV (nFDpCD, FD)", SampleName, NeutralsFDIDFolderSimAC,
-//                  "05c_FD_neut_Multi_APID_BV_nFDpCD_FD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&AV (nFDpCD, FD)", SampleName, NeutralsFDIDFolderSimAC,
-                  "05d_FD_neut_Multi_APID_AV_nFDpCD_FD");
-    //</editor-fold>
-
-    //<editor-fold desc="Pions ID">
-    cout << "\n\n\nPlotting Pions ID plots\n";
-
-    /* Before cuts */
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{#pi^{+}} (1e cut, FD)", SampleName, PionsIDFolderSimBC, "01_chi2_pip_FD_1e_cut");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{#pi^{+}} (1e cut, CD)", SampleName, PionsIDFolderSimBC, "01_chi2_pip_CD_1e_cut");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{#pi^{-}} (1e cut, FD)", SampleName, PionsIDFolderSimBC, "02_chi2_pim_FD_1e_cut");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{#pi^{-}} (1e cut, CD)", SampleName, PionsIDFolderSimBC, "02_chi2_pim_CD_1e_cut");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{#pi^{+}} vs. #theta_{#pi^{+}} (1e cut, FD)", SampleName, PionsIDFolderSimBC, "05_P_pip_vs_Theta_pip_1e_cut_FD");
-    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{#pi^{+}} vs. #theta_{#pi^{+}} (1e cut, CD)", SampleName, PionsIDFolderSimBC, "05_P_pip_vs_Theta_pip_1e_cut_CD");
-    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{#pi^{-}} vs. #theta_{#pi^{-}} (1e cut, FD)", SampleName, PionsIDFolderSimBC, "05_P_pim_vs_Theta_pim_1e_cut_FD");
-    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{#pi^{-}} vs. #theta_{#pi^{-}} (1e cut, CD)", SampleName, PionsIDFolderSimBC, "05_P_pim_vs_Theta_pim_1e_cut_CD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "CD & FD Piplus momentum #epsilon_{eff} (1e cut)", SampleName, PionsIDFolderSimBC, "03_P_pip_eff_1e_cut");
-    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "CD & FD Piminus momentum #epsilon_{eff} (1e cut)", SampleName, PionsIDFolderSimBC, "04_P_pim_eff_1e_cut");
-    //</editor-fold>
-
-    //<editor-fold desc="Other particles ID">
-    cout << "\n\n\nPlotting Other particles ID plots\n";
-
-    /* Before cuts */
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{D} (1e cut, FD)", SampleName, OtherPartIDFolderSimBC, "01_chi2_D_FD_1e_cut");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{D} (1e cut, CD)", SampleName, OtherPartIDFolderSimBC, "01_chi2_D_CD_1e_cut");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{K^{+}} (1e cut, FD)", SampleName, OtherPartIDFolderSimBC, "01_chi2_Kp_FD_1e_cut");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{K^{+}} (1e cut, CD)", SampleName, OtherPartIDFolderSimBC, "01_chi2_Kp_CD_1e_cut");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{K^{-}} (1e cut, FD)", SampleName, OtherPartIDFolderSimBC, "02_chi2_Km_FD_1e_cut");
-    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{K^{-}} (1e cut, CD)", SampleName, OtherPartIDFolderSimBC, "02_chi2_Km_CD_1e_cut");
-    //</editor-fold>
-
-    //<editor-fold desc="AMaps">
-    cout << "\n\n\nPlotting AMaps plots\n";
-
-    string TL_root_file_prefix = "01_AMap_TL_-_C12x4_simulation_G18_Q204_6GeV.root";
-    string Reco_root_file_prefix = "02_AMap_Reco_-_C12x4_simulation_G18_Q204_6GeV.root";
-    string Ratio_root_file_prefix = "03_AMap_Ratio_-_C12x4_simulation_G18_Q204_6GeV.root";
-    string cPart_Sep_AMaps_root_file_prefix = "04_cPart_Sep_AMaps_-_C12x4_simulation_G18_Q204_6GeV.root";
-    string Finalized_AMaps_root_file_prefix = "05_AMaps_-_C12x4_simulation_G18_Q204_6GeV.root";
-
-    AMapsPlotter(plots_AMaps_plotsPath, true, (AMapsFolderMapsSim + "/"));
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "Reco P_{e} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "01_reco_P_e");
-    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "TL P_{e} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "01_TL_P_e");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "Reco P_{pFD} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "02_reco_P_pFD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "TL P_{pFD} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "02_TL_P_pFD");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "Reco P_{nFD} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "03_reco_P_nFD");
-    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "TL P_{nFD} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "03_TL_P_nFD");
-    //</editor-fold>
-
-    //<editor-fold desc="Efficiency">
-    cout << "\n\n\nPlotting Efficiency plots\n";
-
-    /* No fiducial cuts & with momentum th. */
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Electron momentum #epsilon_{eff} (1p)", SampleName, EfficiencyRegFolderSim, "01_electron_mom_eff_1p_wMomTh");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Electron theta #epsilon_{eff} (1p)", SampleName, EfficiencyRegFolderSim, "01_electron_theta_eff_1p_wMomTh");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "FD Proton momentum #epsilon_{eff} (1p)", SampleName, EfficiencyRegFolderSim, "02_proton_mom_eff_1p_wMomTh");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Proton theta #epsilon_{eff} (1p)", SampleName, EfficiencyRegFolderSim, "02_proton_theta_eff_1p_wMomTh");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Electron momentum #epsilon_{eff} (1n)", SampleName, EfficiencyRegFolderSim, "03_electron_mom_eff_1n_wMomTh");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Electron theta #epsilon_{eff} (1n)", SampleName, EfficiencyRegFolderSim, "03_electron_theta_eff_1n_wMomTh");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName, EfficiencyRegFolderSim,
-                  "04_neutron_mom_eff_1n_wMomTh");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Neutron theta #epsilon_{eff} (1n)", SampleName, EfficiencyRegFolderSim, "04_neutron_theta_eff_1n_wMomTh");
-
-    /* With fiducial cuts & with momentum th. */
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Electron momentum #epsilon_{eff} (1p)", SampleName, EfficiencyWithFCFolderSim,
-                  "01_electron_mom_eff_1p_wMomTh");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Electron theta #epsilon_{eff} (1p)", SampleName, EfficiencyWithFCFolderSim,
-                  "01_electron_theta_eff_1p_wMomTh");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "FD Proton momentum #epsilon_{eff} (1p)", SampleName, EfficiencyWithFCFolderSim,
-                  "02_proton_mom_eff_1p_wMomTh");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Proton theta #epsilon_{eff} (1p)", SampleName, EfficiencyWithFCFolderSim,
-                  "02_proton_theta_eff_1p_wMomTh");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Electron momentum #epsilon_{eff} (1n)", SampleName, EfficiencyWithFCFolderSim,
-                  "03_electron_mom_eff_1n_wMomTh");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Electron theta #epsilon_{eff} (1n)", SampleName, EfficiencyWithFCFolderSim,
-                  "03_electron_theta_eff_1n_wMomTh");
-
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName, EfficiencyWithFCFolderSim,
-                  "04_neutron_mom_eff_1n_wMomTh");
-    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Neutron theta #epsilon_{eff} (1n)", SampleName, EfficiencyWithFCFolderSim,
-                  "04_neutron_theta_eff_1n_wMomTh");
-    //</editor-fold>
-
-    //<editor-fold desc="momRes">
-    cout << "\n\n\nPlotting Momentum Resolution plots\n";
-
-    //<editor-fold desc="MomResS1">
-    /* Mean fit before correction */
-    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted reco neutron resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
-                   "01a_Neutron_reco_f_Smear_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted TL neutron resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
-                   "01b_Neutron_truth_f_Smear_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted reco neutron resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS1FolderSim,
-                   "02a_Neutron_reco_f_Corr_pol1_wKC_Important"); // Important! (correction!)
-    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted TL neutron resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS1FolderSim,
-                   "02b_Neutron_truth_f_Corr_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted reco neutron resolution slice mean", "reco_f_Corr_pol1", SampleName, MomResS1FolderSim,
-                   "02c_Neutron_reco_f_Corr_pol1_noKC_Important"); // For KC explanation!
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{nFD} vs. P^{reco}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
-                  "03a_P_nFD_Res_VS_Reco_P_nFD_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{nFD} vs. P^{truth}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
-                  "03a_P_nFD_Res_VS_TL_P_nFD_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{nFD} vs. P^{reco}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS1FolderSim,
-                  "03b_P_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{nFD} vs. P^{truth}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS1FolderSim,
-                  "03b_P_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{pFD} vs. P^{reco}_{pFD} (1p, FD)", SampleName, MomResS1FolderSim,
-                  "04a_P_pFD_Res_VS_Reco_P_pFD_1p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{pFD} vs. P^{truth}_{pFD} (1p, FD)", SampleName, MomResS1FolderSim,
-                  "04a_P_pFD_Res_VS_TL_P_pFD_1p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{pFD} vs. P^{reco}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS1FolderSim,
-                  "04b_P_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{pFD} vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS1FolderSim,
-                  "04b_P_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p");
-
-    /* Resolution match multiplicity (neutron) */
-    HistPlotter1D(Canv, MScThesisPlots, plots_momResS1_Gen, "Neutron resolution match multiplicity (1n, FD)", SampleName, MomResS1FolderSim,
-                  "05a_Neut_nRes_match_multi_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "Match multiplicity vs. P^{reco}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
-                  "05b_Neut_nRes_match_multi_vs_P_nFD_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "Match multiplicity vs. #phi^{reco}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
-                  "05c_Neut_nRes_match_multi_vs_phi_nFD_1n");
-    HistPlotter1D(Canv, MScThesisPlots, plots_momResS1_Gen, "TL P_{nFD} used in nRes (1n, FD)", SampleName, MomResS1FolderSim, "05d_matched_truth_P_nFD_1n");
-    HistPlotter1D(Canv, MScThesisPlots, plots_momResS1_Gen, "Reco P_{nFD} used in nRes (1n, FD)", SampleName, MomResS1FolderSim, "05e_matched_reco_P_nFD_1n");
-
-    GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted reco proton resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
-                   "06a_Proton_reco_f_Smear_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
-                   "06b_Proton_truth_f_Smear_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted reco proton resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS1FolderSim,
-                   "07a_Proton_reco_f_Corr_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted TL proton resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS1FolderSim,
-                   "07b_Proton_truth_f_Corr_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
-                   "07c_Proton_truth_f_Smear_pol1_wKC_sigma_pFD_test"); // For sigma_pFD before smearing!
-
-    /* Resplution slice fits (momResS1) */
-    MomResSlicePlotter(plots_momResS1_FittedPlots, "n", 7, 24, "reco", MomResS1FolderSim);
-    //</editor-fold>
-
-    //<editor-fold desc="MomResS2">
-    /* Width fit after correction (neutron) */
-    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
-                   "01a_Neutron_reco_f_Smear_pol1_wKC_Important"); // Important! (smearing!)
-    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
-                   "01b_Neutron_truth_f_Smear_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
-                   "02a_Neutron_reco_f_Corr_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
-                   "02b_Neutron_truth_f_Corr_pol1_wKC");
-
-    /* Width fit after correction (neutron) */
-    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
-                   "01_Neutron_reco_f_Smear_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
-                   "01_Neutron_truth_f_Smear_pol1_wKC_Important"); // Important! (smearing!)
-    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
-                   "02_Neutron_reco_f_Corr_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
-                   "02_Neutron_truth_f_Corr_pol1_wKC");
-
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{nFD} vs. P^{reco}_{nFD} (1n, FD)", SampleName, MomResS2FolderSim,
-                  "03a_P_nFD_Res_VS_Reco_P_nFD_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{nFD} vs. P^{truth}_{nFD} (1n, FD)", SampleName, MomResS2FolderSim,
-                  "03a_P_nFD_Res_VS_TL_P_nFD_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{nFD} vs. P^{reco}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS2FolderSim,
-                  "03b_P_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{nFD} vs. P^{truth}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS2FolderSim,
-                  "03b_P_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{pFD} vs. P^{reco}_{pFD} (1p, FD)", SampleName, MomResS2FolderSim,
-                  "04a_P_pFD_Res_VS_Reco_P_pFD_1p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{pFD} vs. P^{truth}_{pFD} (1p, FD)", SampleName, MomResS2FolderSim,
-                  "04a_P_pFD_Res_VS_TL_P_pFD_1p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{pFD} vs. P^{reco}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS2FolderSim,
-                  "04b_P_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{pFD} vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS2FolderSim,
-                  "04b_P_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p");
-
-    /* Resplution slice fits (momResS2) */
-    MomResSlicePlotter(plots_momResS2_FittedPlots, "n", 7, 24, "reco", MomResS2FolderSim);
-    //</editor-fold>
-
-    //<editor-fold desc="MomResS2RT">
-    /* momRes test */
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{nFD} vs. P^{reco}_{nFD} (1n, FD)", SampleName, MomResS2RTFolderSim,
-                  "03a_P_nFD_Res_VS_Reco_P_nFD_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{nFD} vs. P^{truth}_{nFD} (1n, FD)", SampleName, MomResS2RTFolderSim,
-                  "03a_P_nFD_Res_VS_TL_P_nFD_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{nFD} vs. P^{reco}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS2RTFolderSim,
-                  "03b_P_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{nFD} vs. P^{truth}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS2RTFolderSim,
-                  "03b_P_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{pFD} vs. P^{reco}_{pFD} (1p, FD)", SampleName, MomResS2RTFolderSim,
-                  "04a_P_pFD_Res_VS_Reco_P_pFD_1p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{pFD} vs. P^{truth}_{pFD} (1p, FD)", SampleName, MomResS2RTFolderSim,
-                  "04a_P_pFD_Res_VS_TL_P_pFD_1p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{pFD} vs. P^{reco}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS2RTFolderSim,
-                  "04b_P_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p");
-    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{pFD} vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS2RTFolderSim,
-                  "04b_P_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p");
-
-    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted reco proton resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS2RTFolderSim,
-                   "06a_Proton_reco_f_Smear_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2RTFolderSim,
-                   "06b_Proton_truth_f_Smear_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted reco proton resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS2RTFolderSim,
-                   "07a_Proton_reco_f_Corr_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted TL proton resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS2RTFolderSim,
-                   "07b_Proton_truth_f_Corr_pol1_wKC");
-    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots2, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2RTFolderSim,
-                   "07c_Proton_truth_f_Smear_pol1_sigma_pFD_test_wKC"); // For sigma_pFD after smearing!
-    //</editor-fold>
-
-    //</editor-fold>
+//    //<editor-fold desc="Preselection">
+//    cout << "\n\n\nPlotting preselection cut plots\n";
+//
+//    //<editor-fold desc="Vertex plots">
+//    cout << "\n\n\nPlotting vertex cuts plots\n";
+//
+//    /* Before cuts */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{e} (1e cut)", SampleName, VertexCutsFolderSimBC, "01_Vz_e_FD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{p} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "02_Vz_p_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{p} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "02_Vz_p_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{D} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "03_Vz_D_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{D} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "03_Vz_D_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{#pi^{+}} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "04_Vz_pip_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{#pi^{+}} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "04_Vz_pip_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{#pi^{-}} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "05_Vz_pim_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{#pi^{-}} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "05_Vz_pim_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{K^{+}} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "06_Vz_Kp_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{K^{+}} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "06_Vz_Kp_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{K^{-}} (1e cut, FD)", SampleName, VertexCutsFolderSimBC, "07_Vz_Km_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "V_{z}^{K^{-}} (1e cut, CD)", SampleName, VertexCutsFolderSimBC, "07_Vz_Km_CD");
+//
+//    /* After cuts */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{e} (1e cut)", SampleName, VertexCutsFolderSimAC, "01_Vz_e_FD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{p} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "02_Vz_p_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{p} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "02_Vz_p_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{D} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "03_Vz_D_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{D} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "03_Vz_D_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{#pi^{+}} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "04_Vz_pip_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{#pi^{+}} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "04_Vz_pip_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{#pi^{-}} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "05_Vz_pim_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{#pi^{-}} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "05_Vz_pim_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{K^{+}} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "06_Vz_Kp_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{K^{+}} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "06_Vz_Kp_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{K^{-}} (1e cut, FD)", SampleName, VertexCutsFolderSimAC, "07_Vz_Km_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "V_{z}^{K^{-}} (1e cut, CD)", SampleName, VertexCutsFolderSimAC, "07_Vz_Km_CD");
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Vertex correlation plots">
+//    cout << "\n\n\nPlotting vertex correlation cuts plots\n";
+//
+//    /* Before cuts */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{p}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "01_dVz_p_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{p}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "01_dVz_p_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{D}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "02_dVz_D_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{D}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "02_dVz_D_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{#pi^{+}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "03_dVz_pip_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{#pi^{+}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "03_dVz_pip_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{#pi^{-}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "04_dVz_pim_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{#pi^{-}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "04_dVz_pim_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{K^{+}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "05_dVz_Kp_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{K^{+}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "05_dVz_Kp_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{K^{-}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimBC, "06_dVz_Km_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NO_CUTS, "Vertex corr. dV^{K^{-}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimBC, "06_dVz_Km_CD");
+//
+//    /* After cuts */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{p}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "01_dVz_p_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{p}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "01_dVz_p_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{D}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "02_dVz_D_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{D}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "02_dVz_D_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{#pi^{+}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "03_dVz_pip_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{#pi^{+}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "03_dVz_pip_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{#pi^{-}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "04_dVz_pim_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{#pi^{-}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "04_dVz_pim_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{K^{+}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "05_dVz_Kp_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{K^{+}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "05_dVz_Kp_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{K^{-}}_{z} (1e cut, FD)", SampleName, VertexCorrCutsFolderSimAC, "06_dVz_Km_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "Vertex corr. dV^{K^{-}}_{z} (1e cut, CD)", SampleName, VertexCorrCutsFolderSimAC, "06_dVz_Km_CD");
+//    //</editor-fold>
+//
+//    //<editor-fold desc="DC fiducial cuts">
+//    cout << "\n\n\nPlotting vertex DC fiducial cuts plots\n";
+//
+//    /* Before cuts */
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_1", SampleName, DCFiducialCutsFolderSimBC, "01_dc_hitmap_e_R1");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_2", SampleName, DCFiducialCutsFolderSimBC, "01_dc_hitmap_e_R2");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_3", SampleName, DCFiducialCutsFolderSimBC, "01_dc_hitmap_e_R3");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_proton_1", SampleName, DCFiducialCutsFolderSimBC, "02_dc_hitmap_p_R1");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_proton_2", SampleName, DCFiducialCutsFolderSimBC, "02_dc_hitmap_p_R2");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_proton_3", SampleName, DCFiducialCutsFolderSimBC, "02_dc_hitmap_p_R3");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_pion_1", SampleName, DCFiducialCutsFolderSimBC, "03_dc_hitmap_pi_R1");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_pion_2", SampleName, DCFiducialCutsFolderSimBC, "03_dc_hitmap_pi_R2");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NO_CUTS_DC, "dc_hitmap_before_pion_3", SampleName, DCFiducialCutsFolderSimBC, "03_dc_hitmap_pi_R3");
+//
+//    /* After cuts */
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_1", SampleName, DCFiducialCutsFolderSimAC, "01_dc_hitmap_e_R1");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_2", SampleName, DCFiducialCutsFolderSimAC, "01_dc_hitmap_e_R2");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_3", SampleName, DCFiducialCutsFolderSimAC, "01_dc_hitmap_e_R3");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_proton_1", SampleName, DCFiducialCutsFolderSimAC, "02_dc_hitmap_p_R1");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_proton_2", SampleName, DCFiducialCutsFolderSimAC, "02_dc_hitmap_p_R2");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_proton_3", SampleName, DCFiducialCutsFolderSimAC, "02_dc_hitmap_p_R3");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_pion_1", SampleName, DCFiducialCutsFolderSimAC, "03_dc_hitmap_pi_R1");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_pion_2", SampleName, DCFiducialCutsFolderSimAC, "03_dc_hitmap_pi_R2");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only_DC, "dc_hitmap_after_pion_3", SampleName, DCFiducialCutsFolderSimAC, "03_dc_hitmap_pi_R3");
+//    //</editor-fold>
+//
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Electron ID">
+//    cout << "\n\n\nPlotting Electron ID plots\n";
+//
+//    /* Before cuts */
+//    HistPlotter2D(Canv, MScThesisPlots, NO_CUTS_beta_VS_P_no_clas12ana, "#beta vs. P (all particles, no #(e) cut, CD)", SampleName, ElectronIDFolderSimBC,
+//                  "01_Beta_vs_P_CD_all_par_no_cuts");
+//    HistPlotter2D(Canv, MScThesisPlots, NO_CUTS_beta_VS_P_no_clas12ana, "#beta vs. P (all particles, no #(e) cut, FD)", SampleName, ElectronIDFolderSimBC,
+//                  "01_Beta_vs_P_FD_all_par_no_cuts");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "#beta vs. P (all particles, 1e cut, CD)", SampleName, ElectronIDFolderSimBC,
+//                  "02_Beta_vs_P_CD_all_par_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "#beta vs. P (all particles, 1e cut, FD)", SampleName, ElectronIDFolderSimBC,
+//                  "02_Beta_vs_P_FD_all_par_1e_cut");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Preselection_only, "N_{phe} in HTCC BC (1e cut)", SampleName, ElectronIDFolderSimBC, "03a_Nphe_in_HTCC_1e_cut");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "SF vs. P_{e} BC (1e cut, FD)", SampleName, ElectronIDFolderSimBC, "03_SF_vs_P_FD_1e_cut");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "Vcal vs. SF BC (1e cut, PCAL)", SampleName, ElectronIDFolderSimBC, "04_Vcal_vs_SF_FD_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "Wcal vs. SF BC (1e cut, PCAL)", SampleName, ElectronIDFolderSimBC, "04_Wcal_vs_FS_FD_1e_cut");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_Preselection_only, "#beta vs. P (electrons only, 1e cut)", SampleName, ElectronIDFolderSimBC,
+//                  "05_Beta_e_vs_P_FD_electrons_only_1e_cut");
+//
+//    /* After cuts */
+//    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "#beta vs. P (all particles, 1e cut, CD)", SampleName, ElectronIDFolderSimAC,
+//                  "02_Beta_vs_P_CD_all_par_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "#beta vs. P (all particles, 1e cut, FD)", SampleName, ElectronIDFolderSimAC,
+//                  "02_Beta_vs_P_FD_all_par_1e_cut");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "N_{phe} in HTCC BC (1e cut)", SampleName, ElectronIDFolderSimAC, "03a_Nphe_in_HTCC_1e_cut");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "SF vs. P_{e} BC (1e cut, FD)", SampleName, ElectronIDFolderSimAC, "03_SF_vs_P_FD_1e_cut");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "Vcal vs. SF BC (1e cut, PCAL)", SampleName, ElectronIDFolderSimAC, "04_Vcal_vs_SF_FD_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "Wcal vs. SF BC (1e cut, PCAL)", SampleName, ElectronIDFolderSimAC, "04_Wcal_vs_FS_FD_1e_cut");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_PreselectionAndeQC_only, "#beta vs. P (electrons only, 1e cut)", SampleName, ElectronIDFolderSimAC,
+//                  "05_Beta_e_vs_P_FD_electrons_only_1e_cut");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#beta vs. P (all particles, 1e cut, CD)", SampleName, ElectronIDFolderSimAC, "06_Beta_vs_P_CD_all_par_all_cuts_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#beta vs. P (all particles, 1e cut, FD)", SampleName, ElectronIDFolderSimAC, "06_Beta_vs_P_FD_all_par_all_cuts_1e_cut");
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Proton ID">
+//    cout << "\n\n\nPlotting Proton ID plots\n";
+//
+//    /* Before cuts */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{p} (1e cut, FD)", SampleName, ProtonIDFolderSimBC, "01_chi2_p_FD_1e_cut");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{p} (1e cut, CD)", SampleName, ProtonIDFolderSimBC, "01_chi2_p_CD_1e_cut");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "FD Proton momentum #epsilon_{eff} (1e cut)", SampleName, ProtonIDFolderSimBC, "02_P_pFD_eff_1e_cut_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "CD Proton momentum #epsilon_{eff} (1e cut)", SampleName, ProtonIDFolderSimBC, "02_P_pCD_eff_1e_cut_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_noNC, "#theta_{p_{1},p_{2}} (All Int., 2p)", SampleName, ProtonIDFolderSimBC, "02_Theta_p1_p2_2p");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC (2p, CD-CTOF)", SampleName, ProtonIDFolderSimBC, "03_theta_p1_p2_vd_dToF_2p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC (2p, CD-CTOF)", SampleName, ProtonIDFolderSimBC,
+//                  "03_theta_p1_p2_vd_dPos_2p");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)", SampleName, ProtonIDFolderSimBC,
+//                  "04_theta_pFD_vs_pCD_for_all_theta_pFD_pCD");
+////    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName, ProtonIDFolderSimBC,
+////                  "04_theta_pFD_vs_pCD_for_small_theta_pFD_pCD_2p");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_noNC, "#Delta#phi for small #Delta#theta_{pFD/pCD} - ZOOMIN", SampleName, ProtonIDFolderSimBC,
+//                  "05_dPhi_pFD_pCD_for_small_dTheta_pFD_pCD_2p");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{p} vs. #theta_{p} (1e cut, FD)", SampleName, ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_FD");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{p} vs. #theta_{p} (1e cut, CD)", SampleName, ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_CD");
+//
+//    /* After cuts */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "#theta_{p_{1},p_{2}} (All Int., 2p)", SampleName, ProtonIDFolderSimAC, "02_Theta_p1_p2_2p");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC (2p, CD-CTOF)", SampleName, ProtonIDFolderSimAC, "03_theta_p1_p2_vd_dToF_2p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC (2p, CD-CTOF)", SampleName, ProtonIDFolderSimAC,
+//                  "03_theta_p1_p2_vd_dPos_2p");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD} (All Int., 2p)", SampleName, ProtonIDFolderSimAC,
+//                  "04_theta_pFD_vs_pCD_for_all_theta_pFD_pCD");
+////    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)", SampleName, ProtonIDFolderSimAC,
+////                  "04_theta_pFD_vs_pCD_for_small_theta_pFD_pCD_2p");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "P_{p} vs. #theta_{p} (1e cut, FD)", SampleName, ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_FD");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "P_{p} vs. #theta_{p} (1e cut, CD)", SampleName, ProtonIDFolderSimBC, "06_P_p_vs_Theta_p_1e_cut_CD");
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Neutrals ID">
+//    cout << "\n\n\nPlotting Neutrals ID plots\n";
+//
+//    /* ECAL veto before cuts */
+//    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e} BV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimBC,
+//                  "01_ECAL_veto_LnFD_e_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} BV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimBC,
+//                  "01_ECAL_veto_LnFD_pDF_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e} BV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimBC,
+//                  "02_ECAL_veto_nFD_e_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_noNC, "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD} BV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimBC,
+//                  "02_ECAL_veto_nFD_pFD_1e_cut");
+//
+//    /* ECAL veto after cuts */
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#Delta#theta_{LnFD,e} vs. #Delta#phi_{LnFD,e} AV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimAC,
+//                  "01_ECAL_veto_LnFD_e_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#Delta#theta_{LnFD,pFD} vs. #Delta#phi_{LnFD,pFD} AV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimAC,
+//                  "01_ECAL_veto_LnFD_pDF_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#Delta#theta_{nFD,e} vs. #Delta#phi_{nFD,e} AV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimAC,
+//                  "02_ECAL_veto_nFD_e_1e_cut");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_NC, "#Delta#theta_{nFD,pFD} vs. #Delta#phi_{nFD,pFD} AV (1e cut, FD)", SampleName, NeutralsFDIDFolderSimAC,
+//                  "02_ECAL_veto_nFD_pFD_1e_cut");
+//
+//    /* Before nFD momentum threshold */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "FD neutron momentum BPID (1e_cut, FD)", SampleName, NeutralsFDIDFolderSimBC, "03a_P_nFD_BPID_1e_cut_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "FD neutron momentum BPID - ZOOMOUT (1e_cut, FD)", SampleName, NeutralsFDIDFolderSimBC,
+//                  "03b_P_nFD_ZOOMOUT_BPID_1e_cut_FD");
+//
+//    /* After nFD momentum threshold */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "FD neutron momentum APID (1e_cut, FD)", SampleName, NeutralsFDIDFolderSimAC, "03a_P_nFD_APID_1e_cut_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "FD neutron momentum APID - ZOOMOUT (1e_cut, FD)", SampleName, NeutralsFDIDFolderSimAC, "03b_P_nFD_ZOOMOUT_APID_1e_cut_FD");
+//
+////    /* Redef. FD neutron multiplicity BPID */
+////    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&BV (1p, FD)", SampleName, NeutralsFDIDFolderSimBC,
+////                  "04a_FD_neut_Multi_BPID_BV_1p_FD");
+////    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&AV (1p, FD)", SampleName, NeutralsFDIDFolderSimBC,
+////                  "04b_FD_neut_Multi_BPID_AV_1p_FD");
+////    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&BV (1n, FD)", SampleName, NeutralsFDIDFolderSimBC,
+////                  "04c_FD_neut_Multi_BPID_BV_1n_FD");
+////    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&AV (1n, FD)", SampleName, NeutralsFDIDFolderSimBC,
+////                  "04d_FD_neut_Multi_BPID_AV_1n_FD");
+////    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&BV (pFDpCD, FD)", SampleName, NeutralsFDIDFolderSimBC,
+////                  "05a_FD_neut_Multi_BPID_BV_pFDpCD_FD");
+////    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&AV (pFDpCD, FD)", SampleName, NeutralsFDIDFolderSimBC,
+////                  "05b_FD_neut_Multi_BPID_AV_pFDpCD_FD");
+////    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&BV (nFDpCD, FD)", SampleName, NeutralsFDIDFolderSimBC,
+////                  "05c_FD_neut_Multi_BPID_BV_nFDpCD_FD");
+////    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "Multiplicity of FD neutrons by redef. BPID&AV (nFDpCD, FD)", SampleName, NeutralsFDIDFolderSimBC,
+////                  "05d_FD_neut_Multi_BPID_AV_nFDpCD_FD");
+//
+//    /* Redef. FD neutron multiplicity APID */
+////    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&BV (1p, FD)", SampleName, NeutralsFDIDFolderSimAC,
+////                  "04a_FD_neut_Multi_APID_BV_1p_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&AV (1p, FD)", SampleName, NeutralsFDIDFolderSimAC,
+//                  "04b_FD_neut_Multi_APID_AV_1p_FD");
+////    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&BV (1n, FD)", SampleName, NeutralsFDIDFolderSimAC,
+////                  "04c_FD_neut_Multi_APID_BV_1n_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&AV (1n, FD)", SampleName, NeutralsFDIDFolderSimAC,
+//                  "04d_FD_neut_Multi_APID_AV_1n_FD");
+////    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&BV (pFDpCD, FD)", SampleName, NeutralsFDIDFolderSimAC,
+////                  "05a_FD_neut_Multi_APID_BV_pFDpCD_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&AV (pFDpCD, FD)", SampleName, NeutralsFDIDFolderSimAC,
+//                  "05b_FD_neut_Multi_APID_AV_pFDpCD_FD");
+////    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&BV (nFDpCD, FD)", SampleName, NeutralsFDIDFolderSimAC,
+////                  "05c_FD_neut_Multi_APID_BV_nFDpCD_FD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "Multiplicity of FD neutrons by redef. APID&AV (nFDpCD, FD)", SampleName, NeutralsFDIDFolderSimAC,
+//                  "05d_FD_neut_Multi_APID_AV_nFDpCD_FD");
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Pions ID">
+//    cout << "\n\n\nPlotting Pions ID plots\n";
+//
+//    /* Before cuts */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{#pi^{+}} (1e cut, FD)", SampleName, PionsIDFolderSimBC, "01_chi2_pip_FD_1e_cut");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{#pi^{+}} (1e cut, CD)", SampleName, PionsIDFolderSimBC, "01_chi2_pip_CD_1e_cut");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{#pi^{-}} (1e cut, FD)", SampleName, PionsIDFolderSimBC, "02_chi2_pim_FD_1e_cut");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{#pi^{-}} (1e cut, CD)", SampleName, PionsIDFolderSimBC, "02_chi2_pim_CD_1e_cut");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{#pi^{+}} vs. #theta_{#pi^{+}} (1e cut, FD)", SampleName, PionsIDFolderSimBC, "05_P_pip_vs_Theta_pip_1e_cut_FD");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{#pi^{+}} vs. #theta_{#pi^{+}} (1e cut, CD)", SampleName, PionsIDFolderSimBC, "05_P_pip_vs_Theta_pip_1e_cut_CD");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{#pi^{-}} vs. #theta_{#pi^{-}} (1e cut, FD)", SampleName, PionsIDFolderSimBC, "05_P_pim_vs_Theta_pim_1e_cut_FD");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_woChi2, "P_{#pi^{-}} vs. #theta_{#pi^{-}} (1e cut, CD)", SampleName, PionsIDFolderSimBC, "05_P_pim_vs_Theta_pim_1e_cut_CD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "CD & FD Piplus momentum #epsilon_{eff} (1e cut)", SampleName, PionsIDFolderSimBC, "03_P_pip_eff_1e_cut");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_NC, "CD & FD Piminus momentum #epsilon_{eff} (1e cut)", SampleName, PionsIDFolderSimBC, "04_P_pim_eff_1e_cut");
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Other particles ID">
+//    cout << "\n\n\nPlotting Other particles ID plots\n";
+//
+//    /* Before cuts */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{D} (1e cut, FD)", SampleName, OtherPartIDFolderSimBC, "01_chi2_D_FD_1e_cut");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{D} (1e cut, CD)", SampleName, OtherPartIDFolderSimBC, "01_chi2_D_CD_1e_cut");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{K^{+}} (1e cut, FD)", SampleName, OtherPartIDFolderSimBC, "01_chi2_Kp_FD_1e_cut");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{K^{+}} (1e cut, CD)", SampleName, OtherPartIDFolderSimBC, "01_chi2_Kp_CD_1e_cut");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{K^{-}} (1e cut, FD)", SampleName, OtherPartIDFolderSimBC, "02_chi2_Km_FD_1e_cut");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_woChi2, "#chi^{2}_{K^{-}} (1e cut, CD)", SampleName, OtherPartIDFolderSimBC, "02_chi2_Km_CD_1e_cut");
+//    //</editor-fold>
+//
+//    //<editor-fold desc="AMaps">
+//    cout << "\n\n\nPlotting AMaps plots\n";
+//
+//    string TL_root_file_prefix = "01_AMap_TL_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    string Reco_root_file_prefix = "02_AMap_Reco_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    string Ratio_root_file_prefix = "03_AMap_Ratio_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    string cPart_Sep_AMaps_root_file_prefix = "04_cPart_Sep_AMaps_-_C12x4_simulation_G18_Q204_6GeV.root";
+//    string Finalized_AMaps_root_file_prefix = "05_AMaps_-_C12x4_simulation_G18_Q204_6GeV.root";
+//
+//    AMapsPlotter(plots_AMaps_plotsPath, true, (AMapsFolderMapsSim + "/"));
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "Reco P_{e} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "01_reco_P_e");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "TL P_{e} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "01_TL_P_e");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "Reco P_{pFD} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "02_reco_P_pFD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "TL P_{pFD} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "02_TL_P_pFD");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "Reco P_{nFD} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "03_reco_P_nFD");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_AMaps, "TL P_{nFD} used in AMaps (1e cut, FD)", SampleName, AMapsFolderMomentumPlotsSim, "03_TL_P_nFD");
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Efficiency">
+//    cout << "\n\n\nPlotting Efficiency plots\n";
+//
+//    /* No fiducial cuts & with momentum th. */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Electron momentum #epsilon_{eff} (1p)", SampleName, EfficiencyRegFolderSim, "01_electron_mom_eff_1p_wMomTh");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Electron theta #epsilon_{eff} (1p)", SampleName, EfficiencyRegFolderSim, "01_electron_theta_eff_1p_wMomTh");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "FD Proton momentum #epsilon_{eff} (1p)", SampleName, EfficiencyRegFolderSim, "02_proton_mom_eff_1p_wMomTh");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Proton theta #epsilon_{eff} (1p)", SampleName, EfficiencyRegFolderSim, "02_proton_theta_eff_1p_wMomTh");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Electron momentum #epsilon_{eff} (1n)", SampleName, EfficiencyRegFolderSim, "03_electron_mom_eff_1n_wMomTh");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Electron theta #epsilon_{eff} (1n)", SampleName, EfficiencyRegFolderSim, "03_electron_theta_eff_1n_wMomTh");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName, EfficiencyRegFolderSim,
+//                  "04_neutron_mom_eff_1n_wMomTh");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_reg, "Neutron theta #epsilon_{eff} (1n)", SampleName, EfficiencyRegFolderSim, "04_neutron_theta_eff_1n_wMomTh");
+//
+//    /* With fiducial cuts & with momentum th. */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Electron momentum #epsilon_{eff} (1p)", SampleName, EfficiencyWithFCFolderSim,
+//                  "01_electron_mom_eff_1p_wMomTh");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Electron theta #epsilon_{eff} (1p)", SampleName, EfficiencyWithFCFolderSim,
+//                  "01_electron_theta_eff_1p_wMomTh");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "FD Proton momentum #epsilon_{eff} (1p)", SampleName, EfficiencyWithFCFolderSim,
+//                  "02_proton_mom_eff_1p_wMomTh");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Proton theta #epsilon_{eff} (1p)", SampleName, EfficiencyWithFCFolderSim,
+//                  "02_proton_theta_eff_1p_wMomTh");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Electron momentum #epsilon_{eff} (1n)", SampleName, EfficiencyWithFCFolderSim,
+//                  "03_electron_mom_eff_1n_wMomTh");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Electron theta #epsilon_{eff} (1n)", SampleName, EfficiencyWithFCFolderSim,
+//                  "03_electron_theta_eff_1n_wMomTh");
+//
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "FD Leading neutron momentum #epsilon_{eff} (1n)", SampleName, EfficiencyWithFCFolderSim,
+//                  "04_neutron_mom_eff_1n_wMomTh");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_Efficiency_wFC_wMomTh, "Neutron theta #epsilon_{eff} (1n)", SampleName, EfficiencyWithFCFolderSim,
+//                  "04_neutron_theta_eff_1n_wMomTh");
+//    //</editor-fold>
+//
+//    //<editor-fold desc="momRes">
+//    cout << "\n\n\nPlotting Momentum Resolution plots\n";
+//
+//    //<editor-fold desc="MomResS1">
+//    /* Mean fit before correction */
+//    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted reco neutron resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
+//                   "01a_Neutron_reco_f_Smear_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted TL neutron resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
+//                   "01b_Neutron_truth_f_Smear_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted reco neutron resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS1FolderSim,
+//                   "02a_Neutron_reco_f_Corr_pol1_wKC_Important"); // Important! (correction!)
+//    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted TL neutron resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS1FolderSim,
+//                   "02b_Neutron_truth_f_Corr_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_momResS1_FittedPlots, "Fitted reco neutron resolution slice mean", "reco_f_Corr_pol1", SampleName, MomResS1FolderSim,
+//                   "02c_Neutron_reco_f_Corr_pol1_noKC_Important"); // For KC explanation!
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{nFD} vs. P^{reco}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
+//                  "03a_P_nFD_Res_VS_Reco_P_nFD_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{nFD} vs. P^{truth}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
+//                  "03a_P_nFD_Res_VS_TL_P_nFD_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{nFD} vs. P^{reco}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS1FolderSim,
+//                  "03b_P_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{nFD} vs. P^{truth}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS1FolderSim,
+//                  "03b_P_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{pFD} vs. P^{reco}_{pFD} (1p, FD)", SampleName, MomResS1FolderSim,
+//                  "04a_P_pFD_Res_VS_Reco_P_pFD_1p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{pFD} vs. P^{truth}_{pFD} (1p, FD)", SampleName, MomResS1FolderSim,
+//                  "04a_P_pFD_Res_VS_TL_P_pFD_1p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{pFD} vs. P^{reco}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS1FolderSim,
+//                  "04b_P_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "R_{pFD} vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS1FolderSim,
+//                  "04b_P_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p");
+//
+//    /* Resolution match multiplicity (neutron) */
+//    HistPlotter1D(Canv, MScThesisPlots, plots_momResS1_Gen, "Neutron resolution match multiplicity (1n, FD)", SampleName, MomResS1FolderSim,
+//                  "05a_Neut_nRes_match_multi_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "Match multiplicity vs. P^{reco}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
+//                  "05b_Neut_nRes_match_multi_vs_P_nFD_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS1_Gen, "Match multiplicity vs. #phi^{reco}_{nFD} (1n, FD)", SampleName, MomResS1FolderSim,
+//                  "05c_Neut_nRes_match_multi_vs_phi_nFD_1n");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_momResS1_Gen, "TL P_{nFD} used in nRes (1n, FD)", SampleName, MomResS1FolderSim, "05d_matched_truth_P_nFD_1n");
+//    HistPlotter1D(Canv, MScThesisPlots, plots_momResS1_Gen, "Reco P_{nFD} used in nRes (1n, FD)", SampleName, MomResS1FolderSim, "05e_matched_reco_P_nFD_1n");
+//
+//    GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted reco proton resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
+//                   "06a_Proton_reco_f_Smear_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
+//                   "06b_Proton_truth_f_Smear_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted reco proton resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS1FolderSim,
+//                   "07a_Proton_reco_f_Corr_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted TL proton resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS1FolderSim,
+//                   "07b_Proton_truth_f_Corr_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_pResS1_FittedPlots, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS1FolderSim,
+//                   "07c_Proton_truth_f_Smear_pol1_wKC_sigma_pFD_test"); // For sigma_pFD before smearing!
+//
+//    /* Resplution slice fits (momResS1) */
+//    MomResSlicePlotter(plots_momResS1_FittedPlots, "n", 7, 24, "reco", MomResS1FolderSim);
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MomResS2">
+//    /* Width fit after correction (neutron) */
+//    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
+//                   "01a_Neutron_reco_f_Smear_pol1_wKC_Important"); // Important! (smearing!)
+//    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
+//                   "01b_Neutron_truth_f_Smear_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
+//                   "02a_Neutron_reco_f_Corr_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
+//                   "02b_Neutron_truth_f_Corr_pol1_wKC");
+//
+//    /* Width fit after correction (neutron) */
+//    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
+//                   "01_Neutron_reco_f_Smear_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2FolderSim,
+//                   "01_Neutron_truth_f_Smear_pol1_wKC_Important"); // Important! (smearing!)
+//    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted reco neutron resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
+//                   "02_Neutron_reco_f_Corr_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_momResS2_FittedPlots, "Fitted TL neutron resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS2FolderSim,
+//                   "02_Neutron_truth_f_Corr_pol1_wKC");
+//
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{nFD} vs. P^{reco}_{nFD} (1n, FD)", SampleName, MomResS2FolderSim,
+//                  "03a_P_nFD_Res_VS_Reco_P_nFD_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{nFD} vs. P^{truth}_{nFD} (1n, FD)", SampleName, MomResS2FolderSim,
+//                  "03a_P_nFD_Res_VS_TL_P_nFD_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{nFD} vs. P^{reco}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS2FolderSim,
+//                  "03b_P_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{nFD} vs. P^{truth}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS2FolderSim,
+//                  "03b_P_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{pFD} vs. P^{reco}_{pFD} (1p, FD)", SampleName, MomResS2FolderSim,
+//                  "04a_P_pFD_Res_VS_Reco_P_pFD_1p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{pFD} vs. P^{truth}_{pFD} (1p, FD)", SampleName, MomResS2FolderSim,
+//                  "04a_P_pFD_Res_VS_TL_P_pFD_1p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{pFD} vs. P^{reco}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS2FolderSim,
+//                  "04b_P_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2_Gen, "R_{pFD} vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS2FolderSim,
+//                  "04b_P_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p");
+//
+//    /* Resplution slice fits (momResS2) */
+//    MomResSlicePlotter(plots_momResS2_FittedPlots, "n", 7, 24, "reco", MomResS2FolderSim);
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MomResS2RT">
+//    /* momRes test */
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{nFD} vs. P^{reco}_{nFD} (1n, FD)", SampleName, MomResS2RTFolderSim,
+//                  "03a_P_nFD_Res_VS_Reco_P_nFD_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{nFD} vs. P^{truth}_{nFD} (1n, FD)", SampleName, MomResS2RTFolderSim,
+//                  "03a_P_nFD_Res_VS_TL_P_nFD_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{nFD} vs. P^{reco}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS2RTFolderSim,
+//                  "03b_P_nFD_Res_VS_Reco_P_nFD_ZOOMIN_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{nFD} vs. P^{truth}_{nFD} - ZOOMIN (1n, FD)", SampleName, MomResS2RTFolderSim,
+//                  "03b_P_nFD_Res_VS_TL_P_nFD_ZOOMIN_1n");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{pFD} vs. P^{reco}_{pFD} (1p, FD)", SampleName, MomResS2RTFolderSim,
+//                  "04a_P_pFD_Res_VS_Reco_P_pFD_1p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{pFD} vs. P^{truth}_{pFD} (1p, FD)", SampleName, MomResS2RTFolderSim,
+//                  "04a_P_pFD_Res_VS_TL_P_pFD_1p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{pFD} vs. P^{reco}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS2RTFolderSim,
+//                  "04b_P_pFD_Res_VS_Reco_P_pFD_ZOOMIN_1p");
+//    HistPlotter2D(Canv, MScThesisPlots, plots_momResS2RT_Gen, "R_{pFD} vs. P^{truth}_{pFD} - ZOOMIN (1p, FD)", SampleName, MomResS2RTFolderSim,
+//                  "04b_P_pFD_Res_VS_TL_P_pFD_ZOOMIN_1p");
+//
+//    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted reco proton resolution slice width", "reco_f_Smear_pol1_wKC", SampleName, MomResS2RTFolderSim,
+//                   "06a_Proton_reco_f_Smear_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2RTFolderSim,
+//                   "06b_Proton_truth_f_Smear_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted reco proton resolution slice mean", "reco_f_Corr_pol1_wKC", SampleName, MomResS2RTFolderSim,
+//                   "07a_Proton_reco_f_Corr_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots, "Fitted TL proton resolution slice mean", "truth_f_Corr_pol1_wKC", SampleName, MomResS2RTFolderSim,
+//                   "07b_Proton_truth_f_Corr_pol1_wKC");
+//    GraphPlotter1D(MScThesisPlots, plots_pResS2RT_FittedPlots2, "Fitted TL proton resolution slice width", "truth_f_Smear_pol1_wKC", SampleName, MomResS2RTFolderSim,
+//                   "07c_Proton_truth_f_Smear_pol1_sigma_pFD_test_wKC"); // For sigma_pFD after smearing!
+//    //</editor-fold>
+//
+//    //</editor-fold>
 
     //<editor-fold desc="Results">
     cout << "\n\n\nPlotting results plots\n";
