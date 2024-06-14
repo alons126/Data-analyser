@@ -703,16 +703,6 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
         Sim_Histogram1D_QE->Draw("same"), Sim_Histogram1D_MEC->Draw("same"), Sim_Histogram1D_RES->Draw("same"), Sim_Histogram1D_DIS->Draw("same");
         gPad->Update();
 
-//        if (PosterModePlots) {
-//            Sim_Histogram1D->GetXaxis()->SetRangeUser(0.0,3.5);
-//            Sim_Histogram1D_QE->GetXaxis()->SetRangeUser(0.0,3.5);
-//            Sim_Histogram1D_MEC->GetXaxis()->SetRangeUser(0.0,3.5);
-//            Sim_Histogram1D_RES->GetXaxis()->SetRangeUser(0.0,3.5);
-//            Sim_Histogram1D_DIS->GetXaxis()->SetRangeUser(0.0,3.5);
-//            Data_Histogram1D->GetXaxis()->SetRangeUser(0.0,3.5);
-////            gPad->Update();
-//        }
-
         double xOffset = SetxOffset1D(false), yOffset = SetyOffset1D(false);
 
         TLegend *Comparison_legend;
@@ -733,17 +723,14 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
                 double Custom_xOffset_poster = 0.04;
                 double Custom_yOffset_poster = 0.01;
 
-                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025 + 0.035 + Custom_xOffset_poster - 0.05,
+                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025 + 0.035 + Custom_xOffset_poster,
                                                 Legend_y1_TwoLines + yOffset + Custom_yOffset_poster,
                                                 Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset + Custom_xOffset_poster,
-                                                Legend_y2_TwoLines + yOffset - 0.15 + Custom_yOffset_poster - 0.175 - 0.01);
+                                                Legend_y2_TwoLines + yOffset - 0.15 + Custom_yOffset_poster);
+//                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025 + 0.06 + Custom_xOffset_poster,
 //                                                Legend_y1_TwoLines + yOffset + Custom_yOffset_poster,
 //                                                Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset + Custom_xOffset_poster,
 //                                                Legend_y2_TwoLines + yOffset - 0.15 + Custom_yOffset_poster);
-////                Comparison_legend = new TLegend(Legend_x1_TwoLines + xOffset + Custom_xOffset + Custom_x1Offset - 0.025 + 0.06 + Custom_xOffset_poster,
-////                                                Legend_y1_TwoLines + yOffset + Custom_yOffset_poster,
-////                                                Legend_x2_TwoLines - 0.05 + xOffset + Custom_xOffset + Custom_xOffset_poster,
-////                                                Legend_y2_TwoLines + yOffset - 0.15 + Custom_yOffset_poster);
             }
         } else {
             if (!PosterModePlots) {
@@ -772,21 +759,11 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
             }
         } else {
             if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
-//                TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "All int. \n(sim.; scaled)");
-                TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "All int. (sim.; ");
-                Comparison_legend->AddEntry((TObject*)0, "scaled)", "");
-//                TLegendEntry *Sim_Entry_QE = Comparison_legend->AddEntry(Sim_Histogram1D_QE, "QE \n(sim.; scaled)", "l");
-                TLegendEntry *Sim_Entry_QE = Comparison_legend->AddEntry(Sim_Histogram1D_QE, "QE (sim.; ");
-                Comparison_legend->AddEntry((TObject*)0, "scaled)", "");
-//                TLegendEntry *Sim_Entry_MEC = Comparison_legend->AddEntry(Sim_Histogram1D_MEC, "MEC \n(sim.; scaled)", "l");
-                TLegendEntry *Sim_Entry_MEC = Comparison_legend->AddEntry(Sim_Histogram1D_MEC, "MEC (sim.; ");
-                Comparison_legend->AddEntry((TObject*)0, "scaled)", "");
-//                TLegendEntry *Sim_Entry_RES = Comparison_legend->AddEntry(Sim_Histogram1D_RES, "RES \n(sim.; scaled)", "l");
-                TLegendEntry *Sim_Entry_RES = Comparison_legend->AddEntry(Sim_Histogram1D_RES, "RES (sim.; ");
-                Comparison_legend->AddEntry((TObject*)0, "scaled)", "");
-//                TLegendEntry *Sim_Entry_DIS = Comparison_legend->AddEntry(Sim_Histogram1D_DIS, "DIS \n(sim.; scaled)", "l");
-                TLegendEntry *Sim_Entry_DIS = Comparison_legend->AddEntry(Sim_Histogram1D_DIS, "DIS (sim.; ");
-                Comparison_legend->AddEntry((TObject*)0, "scaled)", "");
+                TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "All int. (sim.; scaled)");
+                TLegendEntry *Sim_Entry_QE = Comparison_legend->AddEntry(Sim_Histogram1D_QE, "QE (sim.; scaled)", "l");
+                TLegendEntry *Sim_Entry_MEC = Comparison_legend->AddEntry(Sim_Histogram1D_MEC, "MEC (sim.; scaled)", "l");
+                TLegendEntry *Sim_Entry_RES = Comparison_legend->AddEntry(Sim_Histogram1D_RES, "RES (sim.; scaled)", "l");
+                TLegendEntry *Sim_Entry_DIS = Comparison_legend->AddEntry(Sim_Histogram1D_DIS, "DIS (sim.; scaled)", "l");
                 TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data");
             } else {
                 TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation", "l");
@@ -798,8 +775,7 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
         if (!PosterModePlots) {
             Comparison_legend->SetTextSize(0.02), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
         } else {
-            Comparison_legend->SetTextSize(0.035), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
-//            Comparison_legend->SetTextSize(0.0275), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
+            Comparison_legend->SetTextSize(0.0275), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
 //            Comparison_legend->SetTextSize(0.03), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
         }
     }

@@ -607,7 +607,7 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
                     double Custom_xOffset_poster = 0.21;
                     double Custom_yOffset_poster = 0.01;
 
-                    Comparison_legend = new TLegend(Legend_x1_TwoLines + Custom_xOffset + Custom_xOffset_poster - 0.02,
+                    Comparison_legend = new TLegend(Legend_x1_TwoLines + Custom_xOffset + Custom_xOffset_poster,
                                                     Legend_y1_TwoLines + yOffset + Custom_yOffset_poster,
                                                     Legend_x2_TwoLines - 0.05 + Custom_xOffset_poster,
                                                     Legend_y2_TwoLines + yOffset + Custom_yOffset_poster);
@@ -636,15 +636,11 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
                                                 Legend_x2_TwoLines - 0.05 + xOffset - Custom_x1Offset, Legend_y2_TwoLines + yOffset);
             } else {
                 if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
-                    Comparison_legend = new TLegend(Legend_x1_TwoLines + Custom_x1Offset - Custom_x1Offset - 0.04,
-                                                    Legend_y1_TwoLines + yOffset + 0.01,
-                                                    Legend_x2_TwoLines - 0.05 - Custom_x1Offset - 0.06 - 0.02 - 0.02 - 0.02,
-                                                    Legend_y2_TwoLines + yOffset + 0.01);
+                    Comparison_legend = new TLegend(Legend_x1_TwoLines + Custom_x1Offset - Custom_x1Offset - 0.04, Legend_y1_TwoLines + yOffset + 0.01,
+                                                    Legend_x2_TwoLines - 0.05 - Custom_x1Offset - 0.06, Legend_y2_TwoLines + yOffset + 0.01);
                 } else {
-                    Comparison_legend = new TLegend(Legend_x1_TwoLines + Custom_x1Offset - Custom_x1Offset - 0.04,
-                                                    Legend_y1_TwoLines + yOffset + 0.01,
-                                                    Legend_x2_TwoLines - 0.05 - Custom_x1Offset - 0.04 - 0.02 - 0.02,
-                                                    Legend_y2_TwoLines + yOffset + 0.01);
+                    Comparison_legend = new TLegend(Legend_x1_TwoLines + Custom_x1Offset - Custom_x1Offset - 0.04, Legend_y1_TwoLines + yOffset + 0.01,
+                                                    Legend_x2_TwoLines - 0.05 - Custom_x1Offset - 0.04, Legend_y2_TwoLines + yOffset + 0.01);
                 }
             }
         }
@@ -657,8 +653,6 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
                 TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation", "l");
                 TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data");
             }
-
-            Comparison_legend->SetTextSize(0.03), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
         } else {
             if (!findSubstring(Histogram1DNameCopy, "FSRatio")) {
                 TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation (scaled)");
@@ -667,10 +661,9 @@ void HistPlotterStack(hData &particles, TCanvas *HistogramCanvas, TList *MScThes
                 TLegendEntry *Sim_Entry = Comparison_legend->AddEntry(Sim_Histogram1D, "Simulation");
                 TLegendEntry *Data_Entry = Comparison_legend->AddEntry(Data_Histogram1D, "Data");
             }
-
-            Comparison_legend->SetTextSize(0.035), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
         }
 
+        Comparison_legend->SetTextSize(0.03), Comparison_legend->SetTextAlign(12), Comparison_legend->Draw("same");
 
         /*
         if (PosterModePlots) {
