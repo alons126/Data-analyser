@@ -2296,7 +2296,7 @@ double MomentumResolution::PSmear(const bool &apply_nucleon_SmearAndCorr, const 
             } else if (RandomNumGenerator == "TRandom2") {
                 Smearing = Rand2->Gaus(1, Arg);
             } else if (RandomNumGenerator == "TRandom3") {
-                Smearing = Rand3->Gaus(1, Arg);
+                Smearing = Rand3->Gaus(1, Arg); //TODO: recheck if this smearing can be negative!
             } else {
                 cout << "\n\nMomentumResolution::PSmear: RandomNumGenerator illegal! Exiting...\n", exit(0);
             }

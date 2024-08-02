@@ -26,9 +26,7 @@ private:
 
     string Added_PreStatuses, Added_Statuses;
 
-    string Global_Run_Status = "v3_ECALvetoFALSEprotons";
-//    string Global_Run_Status = "v3_wBetaTh";
-//    string Global_Run_Status = "v3_ReRun3";
+    string Global_Run_Status = "v3_Redo4exam";
 
 public:
 

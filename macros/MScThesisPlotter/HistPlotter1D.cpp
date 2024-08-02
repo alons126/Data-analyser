@@ -105,10 +105,14 @@ void DrawPlot(TCanvas *HistogramCanvas, TH1D *Histogram1D, const bool LogScalePl
 
 void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *filename, const char *Histogram1DName,
                    const string &SampleName, const string &SavePath, const string &SaveName, const bool TLmom = false) {
-    bool PresMode = false;
+    bool PresMode = false, ExamPresMode = false;
 
 #if PresentationMode
     PresMode = true;
+#endif
+
+#if ExamPresentationMode
+    ExamPresMode = true;
 #endif
 
     cout << "\n\n";
@@ -157,7 +161,8 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
     int LineColor = 1;
 //    int LineWidth = 3; // original
 //    int LineWidth = 6; // size used in results part
-    int LineWidth = 4;
+    int LineWidth = 3;
+//    int LineWidth = 4;
     vector<double> Histogram1DTitleSizes = {0.06, 0.0425, 0.0425}; // {TitleSize, LabelSizex, LabelSizey}
     bool CenterTitle = true;
     bool ShowStats = true;
@@ -223,12 +228,23 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             }
 
             if (PresMode) {
-                if (findSubstring(Histogram1D_xLabel, "Momentum [GeV/c]")) { RatioVar = "P^{truth}_{nucFD}"; }
+                if (ExamPresMode) {
+                    if (findSubstring(Histogram1D_xLabel, "Momentum [GeV]")) { RatioVar = "P^{truth}_{nucFD}"; }
 
-                if (RatioTopology == "1N") {
-                    FSRyLabel = "r^{" + RatioVar + "}_{" + RatioTopology + "} = #frac{1n}{1p}";
-                } else if (RatioTopology == "2N") {
-                    FSRyLabel = "r_{" + RatioVar + "} = #frac{1n1p}{2p}";
+                    if (RatioTopology == "1N") {
+                        FSRyLabel = "r^{" + RatioVar + "}_{" + RatioTopology + "} = #frac{1nFD}{1pFD}";
+                    } else if (RatioTopology == "2N") {
+                        FSRyLabel = "r_{" + RatioVar + "} = #frac{1nFD1pCD}{1pFD1pCD}";
+                    }
+                } else {
+                    if (findSubstring(Histogram1D_xLabel, "Momentum [GeV/c]")) { RatioVar = "P^{truth}_{nucFD}"; }
+
+                    if (RatioTopology == "1N") {
+                        FSRyLabel = "r^{" + RatioVar + "}_{" + RatioTopology + "} = #frac{1n}{1p}";
+                    } else if (RatioTopology == "2N") {
+                        FSRyLabel = "r_{" + RatioVar + "} = #frac{1n1p}{2p}";
+                    }
+
                 }
             } else {
                 if (findSubstring(Histogram1D_xLabel, "Momentum [GeV]")) { RatioVar = "P^{truth}_{nucFD}"; }
@@ -293,6 +309,10 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c]", "[GeV]");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c^{2}]", "[GeV]");
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
+        } else if (PresMode && ExamPresMode) {
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c]", "[GeV]");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c^{2}]", "[GeV]");
+            TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
         }
 
         if (RatioTopology == "1N" && findSubstring(Histogram1D_Title, "truth")) {
@@ -300,8 +320,13 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "FD neutron", "Neutron");
 
             if (PresMode) {
-                TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{p} [GeV/c]", "P^{truth}_{pFD} [GeV/c]");
-                TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{n} [GeV/c]", "P^{truth}_{nFD} [GeV/c]");
+                if (ExamPresMode) {
+                    TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{p} [GeV]", "P^{truth}_{pFD} [GeV]");
+                    TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{n} [GeV]", "P^{truth}_{nFD} [GeV]");
+                } else {
+                    TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{p} [GeV/c]", "P^{truth}_{pFD} [GeV/c]");
+                    TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{n} [GeV/c]", "P^{truth}_{nFD} [GeV/c]");
+                }
             } else {
                 TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{p} [GeV]", "P^{truth}_{pFD} [GeV]");
                 TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P^{truth}_{n} [GeV]", "P^{truth}_{nFD} [GeV]");
@@ -463,8 +488,13 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TLegendEntry *LowerMomThEntry;
 
             if (PresMode) {
-                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
-                Histogram1D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
+                if (ExamPresMode) {
+                    LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
+                    Histogram1D->GetXaxis()->SetTitle("P_{p} [GeV]");
+                } else {
+                    LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+                    Histogram1D->GetXaxis()->SetTitle("P_{p} [GeV/c]");
+                }
             } else {
                 LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{p} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
                 Histogram1D->GetXaxis()->SetTitle("P_{p} [GeV]");
@@ -525,7 +555,11 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TLegendEntry *LowerMomThEntry;
 
             if (PresMode) {
-                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
+                if (ExamPresMode) {
+                    LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV]").c_str(), "l");
+                } else {
+                    LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
+                }
             } else {
                 LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV]").c_str(), "l");
             }
@@ -554,12 +588,18 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TLine *LowerMomTh = new TLine(LowerCut, gPad->GetUymin(), LowerCut, gPad->GetUymax());
             LowerMomTh->SetLineWidth(5), LowerMomTh->SetLineColor(kRed), LowerMomTh->Draw("same");
 
-            auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines + xOffset - 0.135, Legend_y2_TwoLines + yOffset);
+            auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines + xOffset - 0.135 + 0.05 - 0.015, Legend_y2_TwoLines +
+            yOffset);
+//            auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines + xOffset - 0.135, Legend_y2_TwoLines + yOffset);
             TLegendEntry *UpperMomThEntry = Legend->AddEntry(UpperMomTh, "Upper P_{n} th. = E_{beam}", "l");
             TLegendEntry *LowerMomThEntry;
 
             if (PresMode) {
-                LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
+                if (ExamPresMode) {
+                    LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV]").c_str(), "l");
+                } else {
+                    LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
+                }
             } else {
                 LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{n} th. = " + to_string_with_precision(LowerCut, 1) + " [GeV]").c_str(), "l");
             }
@@ -592,7 +632,11 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 TLegendEntry *LowerMomThEntry;
 
                 if (PresMode) {
-                    LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+                    if (ExamPresMode) {
+                        LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
+                    } else {
+                        LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+                    }
                 } else {
                     LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{+}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
                 }
@@ -600,7 +644,11 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 TLegendEntry *LowerMomThEntry;
 
                 if (PresMode) {
-                    LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+                    if (ExamPresMode) {
+                        LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
+                    } else {
+                        LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV/c]").c_str(), "l");
+                    }
                 } else {
                     LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower P_{#pi^{-}} th. = " + to_string_with_precision(LowerMomentumTh, 1) + " [GeV]").c_str(), "l");
                 }
@@ -625,7 +673,11 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 TLegendEntry *LowerMomThEntry;
 
                 if (PresMode) {
-                    LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
+                    if (ExamPresMode) {
+                        LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV]").c_str(), "l");
+                    } else {
+                        LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
+                    }
                 } else {
                     LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV]").c_str(), "l");
                 }
@@ -649,8 +701,13 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 TLegendEntry *UpperMomThEntry, *LowerMomThEntry;
 
                 if (PresMode) {
-                    UpperMomThEntry = Legend->AddEntry(UpperMomTh, ("Upper cut = " + to_string_with_precision(UpperCut, 3) + " [GeV/c]").c_str(), "l");
-                    LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
+                    if (ExamPresMode) {
+                        UpperMomThEntry = Legend->AddEntry(UpperMomTh, ("Upper cut = " + to_string_with_precision(UpperCut, 3) + " [GeV]").c_str(), "l");
+                        LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV]").c_str(), "l");
+                    } else {
+                        UpperMomThEntry = Legend->AddEntry(UpperMomTh, ("Upper cut = " + to_string_with_precision(UpperCut, 3) + " [GeV/c]").c_str(), "l");
+                        LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV/c]").c_str(), "l");
+                    }
                 } else {
                     UpperMomThEntry = Legend->AddEntry(UpperMomTh, ("Upper cut = " + to_string_with_precision(UpperCut, 3) + " [GeV]").c_str(), "l");
                     LowerMomThEntry = Legend->AddEntry(LowerMomTh, ("Lower cut = " + to_string_with_precision(LowerCut, 1) + " [GeV]").c_str(), "l");
@@ -684,12 +741,19 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 TLine *LowerMomKCut = new TLine(LowerMomentumKCut, gPad->GetUymin(), LowerMomentumKCut, upperLim);
                 LowerMomKCut->SetLineWidth(5), LowerMomKCut->SetLineColor(kRed), LowerMomKCut->Draw("same");
 
-                auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.1 + xOffset, Legend_y2_TwoLines + yOffset);
+                auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.1 + 0.05 - 0.015 + xOffset, Legend_y2_TwoLines +
+                yOffset);
+//                auto Legend = new TLegend(Legend_x1_TwoLines + xOffset, Legend_y1_TwoLines + yOffset, Legend_x2_TwoLines - 0.1 + xOffset, Legend_y2_TwoLines + yOffset);
                 TLegendEntry *LowerMomKCutEntry, *UpperMomKCutEntry;
 
                 if (PresMode) {
-                    LowerMomKCutEntry = Legend->AddEntry(LowerMomKCut, ("Lower cut = " + to_string_with_precision(LowerMomentumKCut, 1) + " [GeV/c]").c_str(), "l");
-                    UpperMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("Upper cut = " + to_string_with_precision(UpperMomentumKCut, 1) + " [GeV/c]").c_str(), "l");
+                    if (ExamPresMode) {
+                        LowerMomKCutEntry = Legend->AddEntry(LowerMomKCut, ("Lower cut = " + to_string_with_precision(LowerMomentumKCut, 1) + " [GeV]").c_str(), "l");
+                        UpperMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("Upper cut = " + to_string_with_precision(UpperMomentumKCut, 1) + " [GeV]").c_str(), "l");
+                    } else {
+                        LowerMomKCutEntry = Legend->AddEntry(LowerMomKCut, ("Lower cut = " + to_string_with_precision(LowerMomentumKCut, 1) + " [GeV/c]").c_str(), "l");
+                        UpperMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("Upper cut = " + to_string_with_precision(UpperMomentumKCut, 1) + " [GeV/c]").c_str(), "l");
+                    }
                 } else {
                     LowerMomKCutEntry = Legend->AddEntry(LowerMomKCut, ("Lower cut = " + to_string_with_precision(LowerMomentumKCut, 1) + " [GeV]").c_str(), "l");
                     UpperMomKCutEntry = Legend->AddEntry(UpperMomKCut, ("Upper cut = " + to_string_with_precision(UpperMomentumKCut, 1) + " [GeV]").c_str(), "l");
@@ -716,7 +780,8 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                 TLine *upperThetaKCut = new TLine(UpperThetaKCut, gPad->GetUymin(), UpperThetaKCut, upperLim);
                 upperThetaKCut->SetLineWidth(5), upperThetaKCut->SetLineColor(kRed), upperThetaKCut->Draw("same");
 
-                auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.05 + xOffset, Legend_y2_OneLine + yOffset);
+                auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.05 + 0.05 - 0.015 + xOffset, Legend_y2_OneLine + yOffset);
+//                auto Legend = new TLegend(Legend_x1_OneLine + xOffset, Legend_y1_OneLine + yOffset, Legend_x2_OneLine - 0.05 + xOffset, Legend_y2_OneLine + yOffset);
                 TLegendEntry *UpperThetaKCutEntry = Legend->AddEntry(upperThetaKCut, ("Upper cut = " + to_string_with_precision(UpperThetaKCut, 0) + " [#circ]").c_str(), "l");
                 Legend->SetTextSize(0.03), Legend->SetTextAlign(12), Legend->Draw("same");
             } else if ((findSubstring(Histogram1DNameCopy, "Electron") || findSubstring(Histogram1DNameCopy, "{e}}"))) {
@@ -741,7 +806,11 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "TL P_{nFD} used in nRes", "Matched P^{truth}_{nFD} used in R_{nFD} calculation");
 
             if (PresMode) {
-                TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P_{nFD} [GeV/c]", "P^{truth}_{nFD} [GeV/c]");
+                if (ExamPresMode) {
+                    TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P_{nFD} [GeV]", "P^{truth}_{nFD} [GeV]");
+                } else {
+                    TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P_{nFD} [GeV/c]", "P^{truth}_{nFD} [GeV/c]");
+                }
             } else {
                 TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "P_{nFD} [GeV]", "P^{truth}_{nFD} [GeV]");
             }
@@ -771,11 +840,13 @@ void HistPlotter1D(TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const ch
                          " P_{pCD}", "");
 
             if (PresMode) {
-                TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                             "Momentum [GeV/c]", "P^{truth}_{nucFD} [GeV/c]");
+                if (ExamPresMode) {
+                    TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "Momentum [GeV]", "P^{truth}_{nucFD} [GeV]");
+                } else {
+                    TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "Momentum [GeV/c]", "P^{truth}_{nucFD} [GeV/c]");
+                }
             } else {
-                TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,
-                             "Momentum [GeV]", "P^{truth}_{nucFD} [GeV]");
+                TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "Momentum [GeV]", "P^{truth}_{nucFD} [GeV]");
             }
 
             TitleAligner(particles, Histogram1D, Histogram1D_Title, Histogram1D_xLabel,

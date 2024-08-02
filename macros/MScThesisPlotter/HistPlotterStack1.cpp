@@ -140,10 +140,14 @@ void DrawPlot1(TCanvas *HistogramCanvas, const bool LogScalePlot, const bool Lin
 
 void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThesisPlotsList, const char *Sim_filename, const char *Data_filename, const char *Histogram1DName,
                        const string &SampleName, const string &SavePath, const string &SaveName, const bool TLmom = false) {
-    bool PresMode = false, PosterModePlots = false, PosterModePlotsColorblind = false;
+    bool PresMode = false, ExamPresMode = false, PosterModePlots = false, PosterModePlotsColorblind = false;
 
 #if PresentationMode
     PresMode = true;
+#endif
+
+#if ExamPresentationMode
+    ExamPresMode = true;
 #endif
 
 #if PosterMode
@@ -316,7 +320,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     const string Histogram1DNameCopy = Histogram1DName;
     int LineWidth;
     if (!PosterModePlots) {
-        LineWidth = 6;
+        LineWidth = 4;
+//        LineWidth = 6;
     } else {
         LineWidth = 12;
     }
@@ -502,7 +507,8 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
     Data_Histogram1D->SetLineStyle(0);
     Data_Histogram1D->SetMarkerStyle(8);
     if (!PosterModePlots) {
-        Data_Histogram1D->SetMarkerSize(2.5);
+        Data_Histogram1D->SetMarkerSize(1.5);
+//        Data_Histogram1D->SetMarkerSize(2.5);
     } else {
         Data_Histogram1D->SetMarkerSize(6.5);
     }
@@ -669,6 +675,10 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
             TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c]", "[GeV]");
             TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c^{2}]", "[GeV]");
             TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
+        } else if (PresMode && ExamPresMode) {
+            TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c]", "[GeV]");
+            TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV/c^{2}]", "[GeV]");
+            TitleAligner(particles, Sim_Histogram1D, Histogram1D_Title, Histogram1D_xLabel, "[GeV^{2}/c^{2}]", "[GeV^{2}]");
         }
 
         if (PosterModePlots && findSubstring(Histogram1DNameCopy, "FSRatio")) {
@@ -690,6 +700,26 @@ void HistPlotterStack1(hData &particles, TCanvas *HistogramCanvas, TList *MScThe
                 CustomColor2p = new TColor(CustomColor2p_index, 0.9, 0.6, 0); // Color index 1000, with RGB (0.5, 0.2, 0.7)
                 CustomColorRatio = new TColor(CustomColorRatio_index, 0, 0.6, 0.5); // Color index 1000, with RGB (0.5, 0.2, 0.7)
             }
+
+            string Poster_y_label_temp = Sim_Histogram1D->GetYaxis()->GetTitle();
+            string Poster_y_label_temp_ratio_indicator = Poster_y_label_temp.substr(0, Poster_y_label_temp.find_last_of(" =") - 2);
+
+            string Poster_y_label = "#font[62]{#color[" + to_string(CustomColorRatio_index) + "]{" + Poster_y_label_temp_ratio_indicator + "}} = " +
+                                    "#font[62]{#frac{#color[" + to_string(CustomColor1n1p_index) + "]{1n1p}}{#color[" + to_string(CustomColor2p_index) + "]{2p}}}";
+            TitleAligner(particles, Sim_Histogram1D, Data_Histogram1D, (Poster_y_label_temp_ratio_indicator + " = " + "#frac{1n1p}{2p}").c_str(), Poster_y_label);
+        } else if (ExamPresMode && findSubstring(Histogram1DNameCopy, "FSRatio")) {
+            int CustomColor1n1p_index = 9997;
+            TColor *CustomColor1n1p;
+
+            int CustomColor2p_index = 9998;
+            TColor *CustomColor2p;
+
+            int CustomColorRatio_index = 9999;
+            TColor *CustomColorRatio;
+
+            CustomColor1n1p = new TColor(CustomColor1n1p_index, 68, 114, 196); // Color index 1000, with RGB (0.5, 0.2, 0.7)
+            CustomColor2p = new TColor(CustomColor2p_index, 237, 125, 49); // Color index 1000, with RGB (0.5, 0.2, 0.7)
+            CustomColorRatio = new TColor(CustomColorRatio_index, 112, 173, 71); // Color index 1000, with RGB (0.5, 0.2, 0.7)
 
             string Poster_y_label_temp = Sim_Histogram1D->GetYaxis()->GetTitle();
             string Poster_y_label_temp_ratio_indicator = Poster_y_label_temp.substr(0, Poster_y_label_temp.find_last_of(" =") - 2);

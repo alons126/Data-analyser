@@ -73,10 +73,14 @@ Double_t CFitFunction(Double_t *v, Double_t *par) {
 
 void MomResSlicePlotter(const char *filename, const string &ParticleNameShortInput, const int &InitialSlice, const int &FinalSlice, const string &MomentumTyp,
                         const string &OutputPathInput = "") {
-    bool PresMode = false;
+    bool PresMode = false, ExamPresMode = false;
 
 #if PresentationMode
     PresMode = true;
+#endif
+
+#if ExamPresentationMode
+    ExamPresMode = true;
 #endif
 
     bool PrintOutHistName = false;
@@ -89,7 +93,8 @@ void MomResSlicePlotter(const char *filename, const string &ParticleNameShortInp
 
     double x_1 = 0.2, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
-    int LineWidth = 4;
+    int LineWidth = 3;
+//    int LineWidth = 4;
 
     string SaveName, SaveNamePrefix, Filename = filename;
 
@@ -110,7 +115,8 @@ void MomResSlicePlotter(const char *filename, const string &ParticleNameShortInp
     }
 
 //    // Create a canvas to plot histograms in a 3x3 grid
-    TCanvas *canvas = new TCanvas("c", "c", 1000 * 3 * 1.5, 750 * 6 * 1.5);
+    TCanvas *canvas = new TCanvas("c", "c", 1000 * 3 * 1.5 * 0.6, 750 * 6 * 1.5 * 0.6);
+//    TCanvas *canvas = new TCanvas("c", "c", 1000 * 3 * 1.5, 750 * 6 * 1.5);
 
     canvas->Divide(3, 6); // Divide the canvas into a 4x16 grid
 

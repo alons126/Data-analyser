@@ -26,8 +26,10 @@
 #define IndependentStack1draw false
 #define Independent2Ddraw false
 
-#define PresentationMode true
-#define PosterMode true
+#define PresentationMode false
+#define ExamPresentationMode false
+
+#define PosterMode false
 #define ColorblindMode false
 
 #include "HistPlotter1D.cpp"
@@ -38,6 +40,10 @@
 #include "MomResSlicePlotter.cpp"
 #include "GraphPlotter1D.cpp"
 #include "FSRPlotter.cpp"
+
+#if !PresentationMode
+#define ExamPresentationMode false
+#endif
 
 using namespace std;
 
@@ -526,7 +532,8 @@ void MScThesisPlotter() {
 #if PosterMode
     Canv = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 4, 850 * 4); // Double resolution for poster
 #else
-    Canv = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 2, utilities.GetStandardCanvasHeight() * 2); // Normal resolution for poster
+    Canv = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 2 * 0.6, utilities.GetStandardCanvasHeight() * 2 * 0.6); // Normal resolution for poster
+//    Canv = new TCanvas("c1", "c2", utilities.GetStandardCanvasWidth() * 2, utilities.GetStandardCanvasHeight() * 2); // Normal resolution for poster
 #endif
 
 
@@ -1192,7 +1199,7 @@ void MScThesisPlotter() {
     //<editor-fold desc="02_Inv_mass_comp_Sim">
     FSRPlotterStack(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "W distribution (All Int., pFDpCD)",
                     "W distribution (All Int., nFDpCD)", "W distribution (All Int., nFDpCD)", InvMassComp_Sim_FolderData, "W_All_Int_pFDpCD", "W_All_Int_nFDpCD",
- "W_FSR", 1);
+                    "W_FSR", 1);
     FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, Final_wSaC_Data, SampleName, "2N", "FD", "Q^{2} (pFDpCD, FD)", "Q^{2} (nFDpCD, FD)",
                "Q^{2} (nFDpCD, FD)", InvMassComp_Sim_FolderData, "Q2_pFDpCD", "Q2_nFDpCD", "Q2_FSR", 2);
     FSRPlotter(utilities, Canv, MScThesisPlots, Final_wSaC_Sim, SampleName, "2N", "TH2D", "FD", "Q^{2} vs. W (All Int., pFDpCD)", "Q^{2} vs. W (All Int., nFDpCD)",

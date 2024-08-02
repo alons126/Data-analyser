@@ -70,10 +70,14 @@ double SetyOffset1D_(const bool &ShowStats) {
 
 void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char *filenameDir, const char *Graph1DName, const string &SampleName, const string &SavePath,
                     const string &SaveName) {
-    bool PresMode = false;
+    bool PresMode = false, ExamPresMode = false;
 
 #if PresentationMode
     PresMode = true;
+#endif
+
+#if ExamPresentationMode
+    ExamPresMode = true;
 #endif
 
     cout << "\n\n";
@@ -81,7 +85,8 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
 
     const string Graph1DNameCopy = Graph1DName;
 
-    TCanvas *c1 = new TCanvas("can1", "can2", utilities.GetStandardCanvasWidth() * 2, utilities.GetStandardCanvasHeight() * 2); // normal res
+    TCanvas *c1 = new TCanvas("can1", "can2", utilities.GetStandardCanvasWidth() * 2 * 0.6, utilities.GetStandardCanvasHeight() * 2 * 0.6); // normal res
+//    TCanvas *c1 = new TCanvas("can1", "can2", utilities.GetStandardCanvasWidth() * 2, utilities.GetStandardCanvasHeight() * 2); // normal res
     c1->cd()->SetGrid(), c1->cd()->SetBottomMargin(0.14), c1->cd()->SetLeftMargin(0.18), c1->cd()->SetRightMargin(0.12), c1->cd()->SetTopMargin(0.12), c1->cd();
 
     TFile *file = new TFile(filename);
@@ -157,7 +162,8 @@ void GraphPlotter1D(TList *MScThesisPlotsList, const char *filename, const char 
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
-    Graph1D->SetMarkerSize(2);
+    Graph1D->SetMarkerSize(1.5);
+//    Graph1D->SetMarkerSize(2);
 
     string Graph1D_Title = Graph1D->GetTitle(), Graph1D_Title1 = Graph1D_Title;
     string Graph1D_xLabel = Graph1D->GetXaxis()->GetTitle(), Graph1D_yLabel = Graph1D->GetYaxis()->GetTitle();
